@@ -402,6 +402,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(changes: SimpleChanges) {
     //console.log('onchange order');
+    this.selectedRow = -1;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.matSort;
     this._portal = this.myTemplate;
