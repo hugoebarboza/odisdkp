@@ -1,0 +1,42 @@
+<div class="container">
+  <div id="sidebar-wrapper" >
+
+  <mat-nav-list>
+    <a mat-list-item  style="font-size:15px;  color: rgb(0,122,217);  " >
+    <i class="material-icons md-14-padding-color">business</i> PROYECTOS 
+    </a>
+  </mat-nav-list>
+
+  <mat-divider></mat-divider>
+    <mat-accordion multi="true" [displayMode]="displayMode" *ngFor="let k of proyectos | keys;" >
+        <mat-expansion-panel class="no-shadow" >
+          <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
+            <mat-panel-title style="color:#000000; font-weight: normal;">
+              {{proyectos[k].project_name}}
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+
+          <mat-nav-list dense *ngFor="let service of proyectos[k].service" style="color:#585858" (click)="navigate(service.id)">
+            <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" >
+              <a class="nav-link" [routerLink]="['/serviceorder', service.id]" > 
+              <i class="material-icons md-14-color" *ngIf="service.id === selected">launch</i> 
+              <i class="material-icons md-14" *ngIf="service.id != selected">launch</i> 
+              {{service.service_name}} 
+              </a>
+            </div>
+          </mat-nav-list>
+        </mat-expansion-panel>   
+   <mat-divider></mat-divider>
+   </mat-accordion>
+
+<div class="bottomright">
+      <a  class="nav-link active" href="javascript:void(0)" onClick="func(1);" >
+        <i class="material-icons">keyboard_arrow_left</i> 
+      </a>
+</div>    
+
+</div>
+</div>
+
+
+

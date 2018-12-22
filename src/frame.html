@@ -1,0 +1,526 @@
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.required == 0" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" >
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.required == 1" class="full-width" >
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+              <span matSuffix class="lbl" >
+              <mat-chip-list>
+                <mat-chip >Requerido</mat-chip>
+              </mat-chip-list>                
+              </span>
+            </mat-form-field>
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' && detailatributo.required == 0" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" >
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' && detailatributo.required == 1" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+              <span matSuffix class="lbl" >
+              <mat-chip-list>
+                <mat-chip >Requerido</mat-chip>
+              </mat-chip-list>                
+              </span>
+            </mat-form-field>
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'double' && detailatributo.required == 0" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" >
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'double' && detailatributo.required == 1" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+              <span matSuffix class="lbl" >
+              <mat-chip-list>
+                <mat-chip >Requerido</mat-chip>
+              </mat-chip-list>                
+              </span>
+            </mat-form-field>            
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.required == 0" class="full-width">
+              <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}"></textarea>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.required == 1" class="full-width">
+              <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required></textarea>
+              <span matSuffix class="lbl" >
+              <mat-chip-list>
+                <mat-chip >Requerido</mat-chip>
+              </mat-chip-list>                
+              </span>
+            </mat-form-field>   
+
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import url('//fonts.googleapis.com/icon?family=Material+Icons');
+
+
+              "ngswConfigPath": "ngsw-config.json"
+
+/////EDIT
+  <div class="form">
+  <mat-form-field>
+    <mat-select class="form-control" placeholder="Asignar orden" [(ngModel)]="data.assigned_to" name="assigned_to">  
+    <mat-option *ngFor="let u of users | keys;" [value]="users[u].id">
+      {{users[u].usuario}}
+    </mat-option>
+
+    </mat-select>
+    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+  </div>
+
+//ADDDD
+  <div class="form">
+  <mat-form-field>
+    <mat-select  placeholder="Asignar orden" [(ngModel)]="data.assigned_to" name="assigned_to" >
+    <mat-option *ngFor="let u of users | keys;" [value]="users[u].id">
+      {{users[u].usuario}}
+    </mat-option>
+    </mat-select>
+    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+  </div>
+
+
+  private iconusertracking = {
+    url: '../../../assets/img/marker-red-tod.png', 
+    scaledSize: {
+      height: 45,
+      width: 35
+    }
+  };
+
+
+      <agm-marker *ngFor="let usertrackingadvance of usertrackingadvancemarcadores"
+      [markerClickable]="true"
+      [iconUrl]="usertrackingadvance.icon"
+      [latitude]="usertrackingadvance.lat" 
+      [longitude]="usertrackingadvance.lng"
+      [label]="{color: '#ffffff',
+              fontSize: '10px',
+              fontWeight: 'bold',
+              text: (usertrackingadvance.label).toString()
+            }"  
+      >
+        <agm-info-window>      
+          <strong>{{usertrackingadvance.titulo}}</strong>
+          <p>
+          {{usertrackingadvance.subtitulo}}
+          </p>
+          {{usertrackingadvance.create_at}}
+           </agm-info-window>     
+
+      </agm-marker>
+
+
+
+          <mat-form-field class="geo-select-width" >
+          <mat-select placeholder="Seleccione" [(ngModel)]="selectedColumnnAdvance.fieldValue" >
+            <mat-option *ngFor="let user of users" [value]="user.id">{{user.usuario}}</mat-option>
+            <p></p>
+
+          </mat-select>
+        </mat-form-field>
+
+
+          <mat-form-field class="geo-select-width">
+          <mat-select placeholder="Seleccione" [(ngModel)]="selectedColumnn.fieldValue" (selectionChange)="loadusertracking(this.project_id, selectedColumnn.fieldValue)">
+            <mat-option *ngFor="let user of users" [value]="user.id">{{user.usuario}}</mat-option>
+            <p></p>
+
+            <div class="container" *ngIf="selectedColumnn.fieldValue">
+        <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+          <div class="btn-group mr-2" role="group" aria-label="First group">
+           <button type="button" class="btn btn-primary btn-sm" (click)="loadusertracking(this.project_id, selectedColumnn.fieldValue)">Buscar</button>
+          </div>
+
+          <div class="btn-group mr-2" role="group" aria-label="Second group">
+           <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnn.fieldValue=''">Limpiar</button>
+          </div>
+        </div>            
+            </div>      
+      <p></p>
+          </mat-select>
+        </mat-form-field>
+
+
+           <a class="dropdown-item" [routerLink]="['logout', 1]"><i class="fas fa-sign-out-alt"></i> Salir</a>
+           
+/*# sourceMappingURL=bootstrap.min.css.map */
+
+/*# sourceMappingURL=bootstrap.css.map */
+@import 'node_modules/bootstrap/dist/css/bootstrap.min.css';
+    [label]="{color: '#ffffff',
+          fontSize: '10px',
+          fontWeight: 'bold',
+          text: (marcador.label).toString()
+        }"  
+
+
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                <div class="btn-toolbar mb-2 mb-md-0">
+                  <div class="btn-group mr-2">
+                    <button class="btn btn-sm btn-outline-secondary">Share</button>
+                    <button class="btn btn-sm btn-outline-secondary">Export</button>
+                  </div>
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                    <span data-feather="calendar"></span>
+                    This week
+                  </button>
+                </div>
+              </div>
+
+
+
+
+   <button mat-icon-button  *ngIf="order.label==1">
+   <mat-icon aria-label="label_important" color="warn">label_important</mat-icon> {{order.estatus}}
+   </button>
+
+   <button mat-icon-button  *ngIf="order.label==2">
+   <mat-icon aria-label="label_important" color="primary">label_important</mat-icon> {{order.estatus}}
+   </button>
+
+   <button mat-icon-button  *ngIf="order.label==3">
+   <mat-icon aria-label="label_important" color="accent">label_important</mat-icon> {{order.estatus}}
+   </button>
+
+
+
+
+  <button mat-raised-button color="warn" >
+    {{order.estatus}}
+  </button>
+  <button mat-raised-button color="primary" *ngIf="order.label==2">{{order.estatus}}</button>
+  <button mat-raised-button color="accent" *ngIf="order.label==3">{{order.estatus}}</button>
+
+
+<i [ngClass]="{ 'fas fa-save':!loading , 'fas fa-sync fas fa-spinner':loading }" ></i>
+
+        <div *ngIf="changeForm.controls['currentpassword'].errors?.required"
+        class="form-control-feedback">
+        La clave actual es requerida.
+        </div>
+
+
+{{changeForm.valid}}
+  <div class="alert alert-danger" *ngIf="email.errors?.required" role="alert">
+    Error !! Email es re.
+  </div>
+</div>
+
+
+<mat-form-field>
+  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+</mat-form-field>
+
+
+
+<div class="example-container mat-elevation-z8">
+
+      
+<mat-table  #table [dataSource]="dataSource" matSort matSortActive="order_id" matSortDirection="asc" matSortDisableClear>
+<ng-container matColumnDef="order_id">
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Name </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.order_id}} </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="customer_id" matSort>
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.customer_id}} </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="service_id" matSort>
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.service_id}} </mat-cell>
+</ng-container>
+
+
+<ng-container matColumnDef="create_by" matSort>
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Email </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.create_by}} </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="create_at" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header> employee </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.create_at}} </mat-cell>
+</ng-container>
+
+ 
+
+<mat-header-row *matHeaderRowDef="displayedColumns" color="primary"></mat-header-row>
+<mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+</mat-table>
+
+<mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>
+
+<usertable></usertable>
+
+<div class="loading" *ngIf="!proyectos">
+  Cargando...
+</div>
+
+
+<main role="main" class="col-md-2 ml-sm-auto col-lg-10 pt-3 px-4" *ngIf="proyectos">
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+        <h6 class="border-bottom border-gray pb-2 mb-0"> Proyectos</h6>
+        <div class="media text-muted pt-3" *ngFor="let proyecto of proyectos">
+          <div class="media-body pb-3 mb-0 small lh-125 border-bottom border-gray">
+            <div class="d-flex justify-content-between align-items-center w-100">
+              <strong class="text-gray-dark"><span data-feather="layers"></span> {{proyecto.project_name}}</strong>
+              <a href="#">Acceder</a>
+            </div>
+            <span class="d-block">@ {{proyecto.observation}}</span>
+          </div>
+        </div>
+        <small class="d-block text-right mt-3">
+          <a href="#">All suggestions</a>
+        </small>
+      </div>
+    </main>
+
+
+
+
+          <h2>Section title</h2>
+          <div class="table-responsive">
+            <table class="table table-striped table-sm">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                  <th>Header</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1,001</td>
+                  <td>Lorem</td>
+                  <td>ipsum</td>
+                  <td>dolor</td>
+                  <td>sit</td>
+                </tr>
+                <tr>
+                  <td>1,002</td>
+                  <td>amet</td>
+                  <td>consectetur</td>
+                  <td>adipiscing</td>
+                  <td>elit</td>
+                </tr>
+                <tr>
+                  <td>1,003</td>
+                  <td>Integer</td>
+                  <td>nec</td>
+                  <td>odio</td>
+                  <td>Praesent</td>
+                </tr>
+                <tr>
+                  <td>1,003</td>
+                  <td>libero</td>
+                  <td>Sed</td>
+                  <td>cursus</td>
+                  <td>ante</td>
+                </tr>
+                <tr>
+                  <td>1,004</td>
+                  <td>dapibus</td>
+                  <td>diam</td>
+                  <td>Sed</td>
+                  <td>nisi</td>
+                </tr>
+                <tr>
+                  <td>1,005</td>
+                  <td>Nulla</td>
+                  <td>quis</td>
+                  <td>sem</td>
+                  <td>at</td>
+                </tr>
+                <tr>
+                  <td>1,006</td>
+                  <td>nibh</td>
+                  <td>elementum</td>
+                  <td>imperdiet</td>
+                  <td>Duis</td>
+                </tr>
+                <tr>
+                  <td>1,007</td>
+                  <td>sagittis</td>
+                  <td>ipsum</td>
+                  <td>Praesent</td>
+                  <td>mauris</td>
+                </tr>
+                <tr>
+                  <td>1,008</td>
+                  <td>Fusce</td>
+                  <td>nec</td>
+                  <td>tellus</td>
+                  <td>sed</td>
+                </tr>
+                <tr>
+                  <td>1,009</td>
+                  <td>augue</td>
+                  <td>semper</td>
+                  <td>porta</td>
+                  <td>Mauris</td>
+                </tr>
+                <tr>
+                  <td>1,010</td>
+                  <td>massa</td>
+                  <td>Vestibulum</td>
+                  <td>lacinia</td>
+                  <td>arcu</td>
+                </tr>
+                <tr>
+                  <td>1,011</td>
+                  <td>eget</td>
+                  <td>nulla</td>
+                  <td>Class</td>
+                  <td>aptent</td>
+                </tr>
+                <tr>
+                  <td>1,012</td>
+                  <td>taciti</td>
+                  <td>sociosqu</td>
+                  <td>ad</td>
+                  <td>litora</td>
+                </tr>
+                <tr>
+                  <td>1,013</td>
+                  <td>torquent</td>
+                  <td>per</td>
+                  <td>conubia</td>
+                  <td>nostra</td>
+                </tr>
+                <tr>
+                  <td>1,014</td>
+                  <td>per</td>
+                  <td>inceptos</td>
+                  <td>himenaeos</td>
+                  <td>Curabitur</td>
+                </tr>
+                <tr>
+                  <td>1,015</td>
+                  <td>sodales</td>
+                  <td>ligula</td>
+                  <td>in</td>
+                  <td>libero</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                <h1 class="h4">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                  <div class="btn-group mr-2">
+                    <button class="btn btn-sm btn-outline-secondary">Share</button>
+                    <button class="btn btn-sm btn-outline-secondary">Export</button>
+                  </div>
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                    <span data-feather="calendar"></span>
+                    This week
+                  </button>
+                </div>
+              </div>
+
+
+    <div id="wrapper" *ngIf="proyectos">
+        <!-- Sidebar -->
+        <div id="sidebar-wrapper">
+            <ul class="sidebar-nav">
+                <li class="sidebar-brand">
+                    <a [routerLink]="['/dashboard']">
+                        <i class="fas fa-th-large"></i> Proyectos
+                    </a>
+                </li>
+                <li *ngFor="let proyecto of proyectos">                    
+                    <a [routerLink]="['/dashboard']">
+                    <div >                      
+                      {{proyecto.project_name}}
+                      <div class="d-block" *ngFor="let service of proyecto.service">
+                            <a class="nav-link" [routerLink]="['/serviceorder', service.id]">                  
+                           <i class="fas fa-database"></i>  {{service.service_name}} 
+                            </a>
+                      </div>
+
+                      
+                    </div>                    
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper">
+            <div class="container-fluid">               
+
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                <h1 class="h4">Dashboardd</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                  <div class="btn-group mr-2">
+                    <button class="btn btn-sm btn-outline-secondary">Share</button>
+                    <button class="btn btn-sm btn-outline-secondary">Export</button>
+                  </div>
+                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle">
+                    <span data-feather="calendar"></span>
+                    This week
+                  </button>
+                </div>
+              </div>
+
+
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+              <li class="nav-item">    
+                <a class="nav-link active" id="ordenes-tab" data-toggle="tab" href="#ordenes" role="tab" aria-controls="ordenes" aria-selected="true"><i class="far fa-list-alt"></i> Ordenes</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="registro-tab" data-toggle="tab" href="#registro" role="tab" aria-controls="registro" aria-selected="false"><i class="fas fa-edit"></i> Registro</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="geo-tab" data-toggle="tab" href="#geo" role="tab" aria-controls="geo" aria-selected="false"><i class="fas fa-map-marker-alt"></i> Georeferencia</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" id="chart-tab" data-toggle="tab" href="#chart" role="tab" aria-controls="chart" aria-selected="false"><i class="fas fa-chart-area"></i> Reporte</a>
+              </li>
+            </ul>
+
+
+
+          <div class="tab-content">
+            <div class="tab-pane fade show active" id="ordenes" role="tabpanel" aria-labelledby="ordenes-tab">
+              
+           ...........
+
+            </div>
+
+            <div class="tab-pane fade" id="registro" role="tabpanel" aria-labelledby="registro-tab">...</div>
+            <div class="tab-pane fade" id="geo" role="tabpanel" aria-labelledby="geo-tab">...</div>
+            <div class="tab-pane fade" id="chart" role="tabpanel" aria-labelledby="chart-tab">...</div>
+          </div>
+
+
+            <script>
+            $('#myTab a').on('click', function (e) {
+              e.preventDefault()
+              $(this).tab('show')
+            })
+            </script>
+                
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>

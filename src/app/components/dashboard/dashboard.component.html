@@ -1,0 +1,44 @@
+<meta name="Description" content="Dashboard">
+<!--CONTENT-->
+<div class="loading" *ngIf="!proyectos">
+<app-loading></app-loading>  
+</div>
+
+    <div id="wrapper" *ngIf="proyectos">
+
+        <!-- Sidebar -->
+        <app-menu [proyectos]="proyectos"></app-menu>    
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()">
+<div class="container m-2">
+<!-- SPACE -->  
+</div>
+
+
+            <div class="container-fluid">               
+
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                <h1 class="h4">Dashboard</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                  <div class="btn-group mr-2">
+                  </div>
+                </div>
+              </div>
+
+
+
+            <script>
+            $('#myTab a').on('click', function (e) {
+              e.preventDefault()
+              $(this).tab('show')
+            })
+            </script>
+                
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+    </div>
+
+

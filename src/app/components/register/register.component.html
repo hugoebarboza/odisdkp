@@ -1,0 +1,107 @@
+
+<div class="col-lg-12 ">  
+  <div class="alert alert-success" *ngIf="status == 'success'">
+    Exito !! Registro completado exitosamente. <a class="btn btn-primary btn-sm" [routerLink]="['login']" role="button">Accede</a>
+  </div>
+       
+  <div class="alert alert-danger" *ngIf="status == 'error'">
+    Error !! Registro no completado.
+  </div>
+</div>
+
+
+
+ <main role="main" class="container animated fadeIn Fast">
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+        <h6 class="border-bottom border-gray pb-2 mb-0"><h2><i class="material-icons">person</i> {{title}}</h2></h6>
+        <div class="media text-muted pt-3">
+
+<div class="col-lg-12 animated fadeIn">
+        
+<form name="registerForm" #registerForm="ngForm" class="col-md-12" (ngSubmit)="onSubmit(registerForm)" id="registerForm">
+      <div class="text-center mb-4">
+        <h1 class="h3 mb-3 font-weight-normal">Ingrese sus datos</h1>
+        <p>Por favor ingrese sus datos de registro, por seguridad <code>solo se permite</code> el uso de correo OCA Global. <a href=""></a></p>
+      </div>
+
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+    <label for="nombre">Primer Nombre</label>
+    <input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required="" >
+    <span  *ngIf="!name.valid && name.touched" >El Primer Nombre es Obligatorio.
+    </span>
+
+    </div>
+    
+    <div class="form-group col-md-6">
+      <label for="apellido">Primer Apellido</label>
+      <input type="text" name="surname" #surname="ngModel" [(ngModel)]="user.surname" class="form-control" required="">
+      <span  *ngIf="!surname.valid && surname.touched" >El Primer Apellido es Obligatorio.
+      </span>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputEmail4">Email</label>      
+      <input type="email" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+      <span  *ngIf="!email.valid && email.touched" >El Email es Obligatorio.
+      </span>
+    </div>
+
+    <div class="form-group col-md-6">
+      <label for="inputPassword4">Password</label>
+      <input type="password" id="inputPassword6" aria-describedby="passwordHelpBlock" name="password" #password="ngModel" [(ngModel)]="user.password" class="form-control" required="">
+      <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>
+      <span  *ngIf="!password.valid && password.touched" >El Password es Obligatorio.</span>
+    </div>
+  </div>
+  <div class="form-group">
+    <label for="inputAddress">Direccion</label>
+    <input type="text" class="form-control" id="inputAddress" placeholder="Calle, numero">
+  </div>
+  <div class="form-group">
+    <label for="inputAddress2">Direccion 2</label>
+    <input type="text" class="form-control" id="inputAddress2" placeholder="Apartamento, estudio, o piso">
+  </div>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <label for="inputCity">Ciudad</label>
+      <input type="text" class="form-control" id="inputCity">
+    </div>
+    <div class="form-group col-md-4">
+      <label for="inputState">Estado</label>
+      <select id="inputState" class="form-control">
+        <option selected>Seleccione...</option>
+        <option>...</option>
+      </select>
+    </div>
+    <div class="form-group col-md-2">
+      <label for="inputZip">Zip</label>
+      <input type="text" class="form-control" id="inputZip">
+    </div>
+  </div>
+  
+  <button type="submit" class="btn btn-primary btn-md" [(disabled)]="!registerForm.form.valid">Sign in</button>
+</form>
+
+</div>
+
+
+
+          </div>
+      </div>
+    </main>
+    
+<style>
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
+</style>        
+
+

@@ -1,0 +1,372 @@
+<div class="example-container mat-elevation-z8" >
+<mat-drawer-container class="drawer-container" autosize>
+
+  <div class="relative">
+    <div class="topright">
+    	<a href="javascript:void(0)" (click)="handledrawer()" >                  
+        <i class="material-icons md-18" *ngIf="!showdrawer">play_arrow</i> 
+        <i class="material-icons md-18" *ngIf="showdrawer">navigate_before</i> 
+        </a>	    	
+    </div>                    
+
+
+	  <div class="example-loading-shade" *ngIf="isLoadingResults">
+	    <app-loading *ngIf="isLoadingResults"></app-loading>  
+	  </div>
+
+	  	<ng-container *ngIf="renderMap">
+		<agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="15" >
+
+		  <agm-marker *ngFor="let market of homemarcador"
+		  [markerClickable]="true"
+		  [iconUrl]="market.icon"
+		  [latitude]="market.lat" 
+		  [longitude]="market.lng"
+		  >
+			  <agm-info-window>      
+			  	<strong>{{market.titulo}}</strong>
+			  	<p>
+			  	{{market.subtitulo}}
+			  	</p>
+		       </agm-info-window>	  	
+		  </agm-marker>
+
+		  <agm-marker *ngFor="let user of usermarcadores"
+		  [markerClickable]="true"
+		  [iconUrl]="user.icon"
+		  [latitude]="user.lat" 
+		  [longitude]="user.lng"
+		  >
+			  <agm-info-window>      
+			  	<strong>{{user.titulo}}</strong>
+			  	<p>
+			  	{{user.subtitulo}}
+			  	</p>
+			  	{{user.create_at}}
+		       </agm-info-window>	  	
+		  </agm-marker>	  
+
+
+		  <agm-marker *ngFor="let marcador of marcadores"
+		  [markerClickable]="true"
+		  [iconUrl]="marcador.icon"
+		  [latitude]="marcador.lat" 
+		  [longitude]="marcador.lng"
+		  >
+			  <agm-info-window>      
+			  	<strong>{{marcador.titulo}}</strong>
+			  	<br>
+			  	{{marcador.subtitulo}}
+			  	<br>
+			  	{{marcador.direccion}}		  				  	
+			  	<hr>
+			  	{{marcador.create_by}}			  	
+			  	<br>
+			  	{{marcador.create_at}}
+			  	<hr>
+			  	{{marcador.update_by}}
+			  	<br>
+			  	{{marcador.update_at}}
+			  	<hr>
+			  	<strong>{{marcador.estatus}}</strong>
+		       </agm-info-window>	  	
+		  </agm-marker>
+
+		  <agm-marker *ngFor="let usertracking of usertrackingmarcadores"
+		  [markerClickable]="true"
+		  [iconUrl]="iconusertracking"
+		  [latitude]="usertracking.lat" 
+		  [longitude]="usertracking.lng"
+		  [label]="{color: '#ffffff',
+		          fontSize: '10px',
+		          fontWeight: 'bold',
+		          text: (usertracking.label).toString()
+		        }"  
+		  >
+			  <agm-info-window>      
+			  	<strong>{{usertracking.titulo}}</strong>
+			  	<p>
+			  	{{usertracking.subtitulo}}
+			  	</p>
+			  	{{usertracking.create_at}}
+		       </agm-info-window>	  	
+
+		  </agm-marker>
+
+
+		  <agm-marker *ngFor="let userordenes of userordenesmarcadores"
+		  [markerClickable]="true"
+		  [iconUrl]="userordenes.icon"
+		  [latitude]="userordenes.lat" 
+		  [longitude]="userordenes.lng"
+		  [label]="{color: '#ffffff',
+		          fontSize: '10px',
+		          fontWeight: 'bold',
+		          text: (userordenes.label).toString()
+		        }"  
+
+		  >
+			  <agm-info-window>      
+			  	<strong>{{userordenes.titulo}}</strong>
+			  	<br>
+			  	{{userordenes.subtitulo}}
+			  	<hr>
+			  	{{userordenes.create_at}}
+			  	<hr>
+			  	{{userordenes.update_at}}
+			  	<br>
+			  	{{userordenes.update_by}}
+			  	<hr>
+			  	<strong>{{userordenes.estatus}}</strong>
+		       </agm-info-window>	  	
+		  </agm-marker>
+
+
+			<agm-direction 
+			*ngIf="datadirections" 
+			[origin]="datadirections.destination" 
+			[destination]="datadirections.origin" 
+			[waypoints]="wayspoints" 
+			[infoWindow]="infoWindow"
+			[renderOptions]="renderOptions"
+			[optimizeWaypoints]="optimizeWaypoints"
+			></agm-direction>
+
+		</agm-map>
+		</ng-container>
+
+  </div>
+
+  <mat-drawer #drawer class="drawer-sidenav" mode="side" position="end" opened >
+
+
+	<div class="btn-toolbar"  role="toolbar" aria-label="Toolbar with button groups">
+	    <div class="btn-group mr-2" role="group" aria-label="First group">
+		<mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggle()" id="bt"  *ngIf="!show">
+		  <mat-button-toggle value="bold">Filtros<i class="material-icons">arrow_right</i></mat-button-toggle>
+		</mat-button-toggle-group>
+
+		<mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggle()" id="bt"  *ngIf="show">
+		  <mat-button-toggle value="bold">Filtros<i class="material-icons">arrow_drop_down</i></mat-button-toggle>
+		</mat-button-toggle-group>
+	    </div>
+
+	    <div class="btn-group mr-2" role="group" aria-label="Second group">
+		<mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="refresh()">
+		  <mat-button-toggle value="bold"><i class="material-icons">refresh</i></mat-button-toggle>
+		</mat-button-toggle-group>
+	    </div>
+
+	    <div class="btn-group mr-2" role="group" aria-label="Tird group">
+		<mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="reset()">
+		  <mat-button-toggle value="bold"><i class="material-icons">delete_sweep</i></mat-button-toggle>
+		</mat-button-toggle-group>
+	    </div>
+
+	</div>            
+
+
+
+
+	<div class="animated fadeIn" style="visibility: visible; z-index: 1;" *ngIf="show">
+
+	<table >
+	  <tr>
+	    <td width="50%"><strong>Tracking:</strong></td>
+	    <td width="50%">
+
+
+
+	    <mat-form-field class="geo-select-width" >
+	      <mat-select [formControl]="userFullCtrl"  placeholder="Usuario" #singleSelect  (selectionChange)="loadusertracking(this.project_id, selected)" [(value)]="selected">
+	        <ngx-mat-select-search [formControl]="userMultiFilter" ></ngx-mat-select-search>
+	        <mat-option *ngFor="let user of filteredUserMultiFull | async" [value]="user.id">
+	          {{user.name}}
+	        </mat-option>
+	        <p></p>
+
+            <div class="container" *ngIf="userFullCtrl.value">
+			  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+
+			    <div class="btn-group mr-2" role="group" aria-label="First group">
+			     <button type="button" class="btn btn-primary btn-sm" (click)="loadusertracking(this.project_id, selected)">Buscar</button>
+			    </div>
+
+			    <div class="btn-group mr-2" role="group" aria-label="Second group">
+			     <button type="button" class="btn btn-secondary btn-sm" (click)="resetUserFilters()">Limpiar</button>
+			    </div>
+			  </div>            
+            </div>			
+
+	        <p></p>
+	      </mat-select>
+	    </mat-form-field>
+
+	    	
+	    </td>
+	  </tr>
+
+	  <tr>
+	    <td width="50%"><strong>Ordenes:</strong></td>
+	    <td width="50%">
+
+
+
+
+          <mat-form-field class="geo-select-width">
+          <mat-select placeholder="Seleccione" [(ngModel)]="selectedColumnnOrdenes.fieldValue" (selectionChange)="loaduserordenes(this.project_id, selectedColumnnOrdenes.fieldValue)">
+            <mat-option *ngFor="let user of users" [value]="user.id">{{user.usuario}}</mat-option>
+            <p></p>
+
+            <div class="container" *ngIf="selectedColumnnOrdenes.fieldValue">
+			  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+
+			    <div class="btn-group mr-2" role="group" aria-label="First group">
+			     <button type="button" class="btn btn-primary btn-sm" (click)="loaduserordenes(this.project_id, selectedColumnnOrdenes.fieldValue)">Buscar</button>
+			    </div>
+
+			    <div class="btn-group mr-2" role="group" aria-label="Second group">
+			     <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnnOrdenes.fieldValue=''">Limpiar</button>
+			    </div>
+			  </div>            
+            </div>			
+			<p></p>
+          </mat-select>
+        </mat-form-field>
+	    	
+	    </td>
+	  </tr>
+
+	  <tr>
+	    <td width="50%"><strong>Estatus:</strong></td>
+	    <td width="50%">
+          <mat-form-field class="geo-select-width">
+          <mat-select placeholder="Seleccione" [(ngModel)]="selectedColumnnEstatus.fieldValue" (selectionChange)="loadordenesestatus(this.project_id, selectedColumnnEstatus.fieldValue)">
+            <mat-option *ngFor="let status of serviceestatus" [value]="status.id">{{status.name}}</mat-option>
+            <p></p>
+
+            <div class="container" *ngIf="selectedColumnnEstatus.fieldValue">
+			  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+			    <div class="btn-group mr-2" role="group" aria-label="First group">
+			     <button type="button" class="btn btn-primary btn-sm" (click)="loadordenesestatus(this.project_id, selectedColumnnEstatus.fieldValue)">Buscar</button>
+			    </div>
+
+
+			    <div class="btn-group mr-2" role="group" aria-label="Second group">
+			     <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnnEstatus.fieldValue=''">Limpiar</button>
+			    </div>
+			  </div>            
+            </div>			
+			<p></p>
+          </mat-select>
+        </mat-form-field>
+	    	
+	    </td>
+	  </tr>
+	</table>
+	
+	  <div class="alert alert-danger" *ngIf="message == 'error' " role="alert">
+	    Sin registros.
+	  </div>
+	
+	</div>
+
+	<br>
+
+	<div role="toolbar" aria-label="Toolbar with button groups">
+	    <div class="btn-group mr-2" role="group" aria-label="First group">
+		<mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggleadvance()" id="bt"  *ngIf="!showadvance">
+		  <mat-button-toggle value="bold">Otros Filtros<i class="material-icons">arrow_right</i></mat-button-toggle>
+		</mat-button-toggle-group>
+
+		<mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggleadvance()" id="bt"  *ngIf="showadvance">
+		  <mat-button-toggle value="bold">Otros Filtros<i class="material-icons">arrow_drop_down</i></mat-button-toggle>
+		</mat-button-toggle-group>
+	    </div>
+
+	</div>            
+
+
+	<div class="animated fadeIn" style="visibility: visible; z-index: 1;" *ngIf="showadvance">
+	<table >
+	  <tr>
+	    <td width="50%"><strong>Tracking:</strong></td>
+	    <td width="50%">
+
+
+	    <mat-form-field class="geo-select-width" >
+	      <mat-select [formControl]="userAdvanceCtrl"  placeholder="Usuario" #singleSelect  [(value)]="selectedValue">
+	        <ngx-mat-select-search [formControl]="userAdvanceMultiFilterCtrl" ></ngx-mat-select-search>
+	        <mat-option *ngFor="let userdvance of filteredUserAdvanceMulti | async" [value]="userdvance.id">
+	          {{userdvance.name}}
+	        </mat-option>
+
+	        <p></p>
+	      </mat-select>
+	    </mat-form-field>
+
+
+	    	
+	    </td>
+	  </tr>
+
+	  <tr *ngIf="userAdvanceCtrl.value">
+	    <td width="50%"><strong>Fecha:</strong></td>
+	    <td width="50%">
+        <mat-form-field *ngIf="userAdvanceCtrl.value" class="geo-select-width" >
+          <input matInput [matDatepicker]="fecha1" placeholder="Fecha" [(ngModel)]="selectedColumnnDate.columnValueDesde"disabled>
+          <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
+          <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
+        </mat-form-field>	    	
+	    </td>
+	  </tr>
+
+	  <tr *ngIf="selectedColumnnDate.columnValueDesde">
+	    <td width="50%"><strong>Desde:</strong></td>
+	    <td width="50%">
+		<div class="geo-select-width">
+		  <ngb-timepicker [(ngModel)]="timefrom" [hourStep]="hourStep" [minuteStep]="minuteStep" [spinners]="spinners"></ngb-timepicker>
+		</div>
+	    </td>
+	  </tr>
+
+	  <tr *ngIf="selectedColumnnDate.columnValueDesde">
+	    <td width="50%"><strong>Hasta:</strong></td>
+	    <td width="50%">
+		<div class="geo-select-width">
+		  <ngb-timepicker [(ngModel)]="timeuntil" [hourStep]="hourStep" [minuteStep]="minuteStep" [spinners]="spinners"></ngb-timepicker>
+		</div>
+	    </td>
+	  </tr>
+
+
+	</table>	
+
+
+     <div class="p-2" *ngIf="userAdvanceCtrl.value || selectedColumnnDate.columnValueDesde">
+	  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+	    <div class="btn-group mr-2" role="group" aria-label="First group">
+	     <button type="button" class="btn btn-primary btn-sm" (click)="loadusertrackingdate(this.project_id, selectedValue)">Buscar</button>
+	    </div>
+
+		<div class="btn-group mr-2" role="group" aria-label="Second group">
+		<button type="button" class="btn btn-secondary btn-sm" (click)="resetUserAdvanceFilters()">Limpiar</button>
+	   </div>
+	  </div>            
+     </div>			
+
+	<div class="p-2">
+	  <div class="alert alert-danger" *ngIf="messageadvance == 'error'" role="alert">
+	    Sin registros.
+	  </div>
+	</div>
+	</div>
+	
+  	<div class="bottomright">
+    <button type="button" ngbAutofocus class="btn btn-danger" (click)="activeModal.close('Cerrar')">Cerrar</button>
+  	</div>
+  </mat-drawer>
+</mat-drawer-container>
+</div>
+
+

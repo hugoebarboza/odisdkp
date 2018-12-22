@@ -1,0 +1,1 @@
+export interface Item { id: any, nombre: string; type: string; url: string; created: any; }

@@ -1,0 +1,56 @@
+.active-link{
+    background-color: #F3F3F3;
+    color: rgb(0,122,217);    
+    font-weight: bold;
+}
+.example-headers-align .mat-expansion-panel-header-title, 
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
+
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+.material-icons.md-14 { font-size: 14px; color: #585858;}
+.material-icons.md-14-padding { font-size: 14px; color: #585858; padding: 2px;}
+.material-icons.md-14-padding-color { font-size: 14px; color: rgb(0,122,217); padding: 2px;}
+.material-icons.md-14-color { font-size: 14px; color: rgb(0,122,217);}
+.material-icons.md-17 { font-size: 17px; }
+
+
+
+
+.no-shadow {
+  box-shadow: none !important;
+  background-color: #FFFFFF;
+}
+
+
+
+::ng-deep .mat-expansion-panel-header {
+  padding: 17px !important;
+  padding-left: 17px !important;
+  background-color: transparent;
+}
+::ng-deep .mat-expansion-panel-body {
+  padding: 0px !important;
+  padding-left: 0px !important;
+  background-color: transparent;
+}
+.header-box-shadow {
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+}
+
+.container {
+    position: relative;
+}
+.bottomright {
+
+    position: absolute;
+    top: 80%;
+    right: 0px;
+    font-size: 18px;
+}
+
+

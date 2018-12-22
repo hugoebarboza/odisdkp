@@ -1,0 +1,142 @@
+<!--CONTENT-->
+<div [class.alternative]="otherTheme">
+
+    <div id="wrapper" *ngIf="proyectos">
+        <!-- Sidebar -->
+        <app-menu [proyectos]="proyectos"></app-menu>    
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->        
+        <div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()" >
+        <!-- TAB Content ------------------------------------------------------------------------------------------>
+
+<div class="container m-2">
+<!-- SPACE -->  
+</div>
+
+        <mat-sidenav-container class="all-wrap" >        
+  <div class="page-wrap">
+    <header role="banner">
+            <mat-toolbar color="primary">
+              <h1>{{project_name}} / {{service}}</h1>
+              <button mat-icon-button  (click)="changeTheme()">
+                <mat-icon class="material-icons md-15">format_color_fill</mat-icon>
+              </button>
+            </mat-toolbar>      
+      </header>
+
+
+
+      <main class="content">
+
+        <mat-tab-group backgroundColor="primary" 
+        [selectedIndex]="selected.value"
+        (selectedIndexChange)="selected.setValue($event)"
+        animationDuration="0ms"
+        >
+          <mat-tab label="Ordenes">
+            <ng-template mat-tab-label *ngIf="selected.value==0">
+              <mat-icon  class="material-icons md-24">move_to_inbox</mat-icon> Ordenes
+            </ng-template>
+            
+            <ng-template mat-tab-label *ngIf="selected.value!=0">
+              <mat-icon *ngIf="selected.value!=0" class="material-icons md-dark md-inactive">inbox</mat-icon> Ordenes
+            </ng-template>
+
+            <!-- /#page-content -->
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >
+              <app-vieworderservice (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-vieworderservice>  
+            </div>            
+            <!-- /#end page-content -->
+          </mat-tab>
+
+
+
+          <mat-tab >
+            <ng-template mat-tab-label *ngIf="selected.value != 1">
+              <mat-icon>description</mat-icon> Registro 
+            </ng-template>
+            <ng-template mat-tab-label *ngIf="selected.value == 1">
+              <mat-icon>archive</mat-icon> Registro 
+            </ng-template>
+
+            <!-- /#page-content -->
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==1">
+                <app-excel (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-excel>  
+            </div>
+            <!-- /#end page-content -->
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label *ngIf="selected.value==2">            
+              <mat-icon>group_add</mat-icon> Clientes
+            </ng-template>
+
+            <ng-template mat-tab-label *ngIf="selected.value!=2">
+              <mat-icon *ngIf="selected.value!=2" class="material-icons md-dark md-inactive">group</mat-icon> Clientes
+            </ng-template>
+
+            <!-- /#page-content -->
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==2">
+              <app-viewprojectcustomer (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-viewprojectcustomer>  
+            </div>
+
+            <!-- /#end page-content -->
+          </mat-tab>
+
+
+
+          <mat-tab>
+            <ng-template mat-tab-label *ngIf="selected.value!=3">
+              <mat-icon>place</mat-icon> Georeferencias
+            </ng-template>
+            <!-- /#page-content -->
+            <ng-template mat-tab-label *ngIf="selected.value==3">
+              <mat-icon>person_pin_circle</mat-icon> Georeferencias
+            </ng-template>
+
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==3">
+            <app-mapa (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-mapa>
+            </div>
+            <!-- /#end page-content -->
+          </mat-tab>
+
+
+          <mat-tab>
+            <ng-template mat-tab-label >
+              <mat-icon>insert_chart_outlined</mat-icon> Reportes
+            </ng-template>
+            <!-- /#page-content -->
+            <div class="mx-auto" style="width: 99%;" *ngIf="selected.value==4">
+            <p>...</p>
+          </div>
+            <!-- /#end page-content -->
+          </mat-tab>
+
+
+        </mat-tab-group>
+        
+
+      <!-- END TAB Content ------------------------------------------------------------------------------------------>
+      </main>
+
+        <footer *ngIf="_userService.isAuthenticated()">
+          <app-footermain></app-footermain>
+        </footer>
+
+
+        </div>
+
+        </mat-sidenav-container>         
+        
+
+
+
+
+        </div>
+            
+    </div>
+
+
+
+</div>

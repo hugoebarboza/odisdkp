@@ -1,0 +1,160 @@
+<!--HEADER-->
+
+<HEADER id="header" >
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark" >  
+<ul class="navbar-nav mr-auto">
+   <li class="nav-item " [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+    <a class="nav-link" [routerLink]="['home']">HOME <span class="sr-only">(current)</span></a>
+   </li>
+ </ul>
+
+  
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent" >
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <a class="nav-link" href="https://ocaglobal.com" target="_blank" rel="noopener">OCA</a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <a class="nav-link" href="https://play.google.com/store/apps/details?id=com.nicolas.erick.oca" target="_blank" rel="noopener">APP</a>
+      </li>
+
+
+      <li class="nav-item dropdown" *ngIf="identity" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
+        <a class="nav-link dropdown-toggle"   id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          Dashboard
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <li >
+          <a class="dropdown-item" >Dashboard</a> 
+          </li>                  
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" >Dashboard</a>
+        </div>
+      </li>
+    </ul>
+
+  <ul class="nav navbar-nav navbar-right" *ngIf="!identity">
+  <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+    <div class="btn-group mr-2" role="group" aria-label="First group">
+      <a [routerLink]="['login']" class="btn btn-primary btn-sm" role="button">Log in</a>
+    </div>
+    <div class="btn-group mr-2" role="group" aria-label="Second group">
+      <a [routerLink]="['register']" class="btn btn-outline-secondary btn-sm" role="button">Registro</a>      
+    </div>
+  </div>
+  </ul>
+
+    
+
+  <ul class="nav navbar-nav navbar-right" *ngIf="identity">     
+
+            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+              <div class="btn-group mr-2" role="group" aria-label="Cero group">              
+              <button mat-icon-button><mat-icon class="material-icons md-14">apps</mat-icon></button>
+              </div>
+
+              <div class="btn-group mr-1" role="group" aria-label="First group">
+              <button mat-icon-button><mat-icon class="material-icons md-14">notifications</mat-icon></button>
+              </div>
+              <div class="btn-group mr-1" role="group" aria-label="Second group">
+
+                <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon class="material-icons md-14">account_circle</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+                  <button mat-menu-item disabled>
+                    <mat-icon>person</mat-icon>
+                    <span>{{identity.name + ' ' + identity.surname}}</span>
+                  </button>
+                  <button mat-menu-item disabled>
+                    <mat-icon>language</mat-icon>
+                    <span>{{identity.country_name}}</span>
+                  </button>
+                  <button mat-menu-item (click)="logout(1)">
+                    <mat-icon>exit_to_app</mat-icon>
+                    <span>Salir</span>
+                  </button>
+
+                  <button mat-menu-item [routerLink]="['change']">
+                  <mat-icon>vpn_key</mat-icon>
+                  <span>Cambiar</span>
+                  </button>
+
+                </mat-menu>
+
+
+
+              </div>
+            </div> 
+
+
+
+  </ul>
+
+
+  </div>
+</nav>
+
+      <div id="headerbar-wrapper">
+         <div class="nav-scroller bg-white box-shadow" *ngIf="identity">
+            <nav class="nav nav-underline">
+              <div class="col-md-12">        
+              <div class="row ">                
+                <div class="col-md-12">
+
+                  <div class="btn-group mr-2" role="group" aria-label="Cero group">
+                  <a  class="nav-link active" href="javascript:void(0)" onClick="func(1);" ><i class="material-icons">menu</i> </a>                                      
+                  </div>
+
+                  <div class="btn-group mr-1" role="group" aria-label="First group">
+                  <a class="nav-link active" href="https://mail.google.com" target="_blank"><i class="material-icons">email</i></a>
+                  </div>
+
+
+                  <div class="btn-group mr-1" role="group" aria-label="Tird group">
+                <a class="nav-link active" [routerLink]="['dashboard']"><i class="material-icons">dashboard</i></a>
+                  </div>
+
+
+                  <div  style="float:right">
+                    <div class="btn-group mr-1" role="group" aria-label="Third group">
+                     <button mat-icon-button><mat-icon class="material-icons md-link">help</mat-icon></button>
+                    </div>
+                  </div>        
+                
+                </div>  
+                      
+
+              </div>
+              </div>
+            </nav>
+          </div>
+      </div>
+
+
+</HEADER>
+
+<!--HEADER
+ <ul>bb
+      <li *ngFor="let item of items | async">
+        {{ item.id }}
+      </li>
+    </ul>
+-->
+
+<!--HEADER
+<div style="max-width:777px;max-height:650px; ">
+<p>
+  filelist works!
+</p>
+   <ul>bb
+      <li *ngFor="let item of items | async">
+        {{ item.url }}
+      </li>
+    </ul>
+</div>
+-->

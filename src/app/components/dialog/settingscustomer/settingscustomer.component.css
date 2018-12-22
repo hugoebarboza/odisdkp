@@ -1,0 +1,16 @@
+
+.mat-toolbar {
+    margin: -24px;
+    margin-bottom: 0;
+    width: auto;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 70px !important;
+}
+.mat-icon {
+  padding: 0 7px;
+}
+.mat-spacer {
+  flex: 1 1 auto;
+}

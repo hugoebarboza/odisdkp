@@ -1,0 +1,62 @@
+/* You can add global styles to this file, and also import other style files */
+@import '~normalize.css/normalize.css';
+@import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
+@import './assets/simple-sidebar.css';
+@import './assets/animate.css';
+@import "~@ng-select/ng-select/themes/material.theme.css";
+@import "~ng-pick-datetime/assets/style/picker.min.css";
+@import url(./assets/css/spinners.css);
+
+
+
+
+html{
+	margin: 0px;
+}
+
+.body{
+	margin: 0px;
+	padding-bottom: 50px;
+}
+
+.main-container {
+	margin-top: 20px;	
+}
+
+/* label style */
+.mat-tab-label{  
+  color:white;
+}
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
+  height: 4px;
+} 
+
+/* focus style */
+.mat-tab-group.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, .mat-tab-group.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus, .mat-tab-nav-bar.mat-primary .mat-tab-label:not(.mat-tab-disabled):focus, .mat-tab-nav-bar.mat-primary .mat-tab-link:not(.mat-tab-disabled):focus{
+  background: #3949AB;
+}
+
+.mat-toolbar.mat-primary {
+  background: #3949AB;
+  color: #3949AB;
+}
+
+.xlModal > .modal-dialog {
+    max-width: 1490px !important;
+    min-width: 971px !important;   
+    width: 95% !important;
+    position: relative;
+    height: auto;
+    animation-name: example;
+    animation-duration: 0.3s;
+}
+
+@keyframes example {
+    0%   {transform: scale(0.5)}
+    100% {transform: scale(1)}
+}  
+
+.xlModal.cdk-global-overlay-wrapper, .cdk-overlay-container {
+     z-index: 99999 !important;
+}
+

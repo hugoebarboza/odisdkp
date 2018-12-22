@@ -1,0 +1,17 @@
+
+<div mat-dialog-title><h6><strong>¿ Está seguro de <span class="text-primary">salir</span> ?</strong></h6></div>
+<mat-divider></mat-divider>
+
+<div  mat-dialog-actions>
+
+	<div class="box" >
+	    <div class="selected">
+  		<button mat-raised-button [mat-dialog-close]="data.id" [routerLink]="['logout', 1]" cdkFocusInitial>Salir</button>	  
+  		<button mat-raised-button (click)="onNoClick()" >Cerrar</button>  
+	    </div>
+
+	</div>            
+
+
+</div>
+

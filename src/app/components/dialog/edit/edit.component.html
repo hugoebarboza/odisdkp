@@ -1,0 +1,436 @@
+<mat-toolbar color="primary">
+     <h3>{{title}} {{data.order_number}}</h3>            
+     <span class="mat-spacer"></span>
+     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+     <mat-icon class="mat-icon">close</mat-icon>       
+     </button>
+</mat-toolbar>
+<p></p>
+<div class="example-loading-shade" *ngIf="loading">
+  <app-loading *ngIf="loading"></app-loading>  
+</div>
+
+ 
+  <form class="mat-dialog-content" #formControl="ngForm"  novalidate="novalidate">
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Proyecto" [(ngModel)]="data.project" name="project" required [value]="project" disabled>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+
+    <div class="form" hidden="true">             
+      <mat-form-field color="accent">
+        <input matInput class="form-control" placeholder="OrderId" [(ngModel)]="data.order_id" name="order_id" required >
+      </mat-form-field>
+    </div>
+
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput class="form-control" placeholder="N. Orden" [(ngModel)]="data.order_number" name="order_number" required >
+        <mat-icon matSuffix>mode_edit</mat-icon>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <!--Textarea for demo purposes-->
+    <div class="form" hidden="true">
+        <input matInput #customer_id class="form-control" placeholder="N. Cliente" [(ngModel)]="data.customer_id" name="customer_id" required >
+    </div>
+
+
+    <div class="form">
+      <mat-form-field class="example-full-width">
+        <input matInput [(ngModel)]="data.cc_number" class="form-control" placeholder="Num. Cliente" [matAutocomplete]="auto" (keyup)="searchCustomer(cc_number.value)" name="cc_number" #cc_number required>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>                        
+        <mat-autocomplete #auto="matAutocomplete" >
+          <mat-option *ngFor="let result of results" [value]="result.cc_number" >        
+            <span>{{result.cc_number}}</span>       
+          </mat-option>
+        </mat-autocomplete>
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+
+    <div class="form" hidden="true">
+        <input matInput #service_id class="form-control" placeholder="Servicio" [(ngModel)]="data.service_id" name="service_id" required >
+    </div>
+
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #inputstate class="form-control" placeholder="Servicio" [(ngModel)]="service_name" name="service_name" maxlength="10" required disabled>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>        
+      </mat-form-field>
+    </div>
+
+
+  <div class="form">
+  <mat-form-field>
+    <mat-select class="form-control" placeholder="Tipo de Servicio" [(ngModel)]="data.servicetype_id" name="servicetype_id" required>  
+
+    <mat-option *ngFor="let servicestype of servicetype" [value]="servicestype.id">
+      {{servicestype.name}}
+    </mat-option>
+
+    </mat-select>
+    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+  </mat-form-field>
+  </div>
+
+
+
+    <div class="form">
+    <mat-form-field>
+    <mat-select class="form-control" placeholder="Estatus del Servicio" [(ngModel)]="data.status_id" name="status_id" required>  
+    <mat-option *ngFor="let status of serviceestatus" [value]="status.id">
+      {{status.name}}
+    </mat-option>
+    </mat-select>
+    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+    </mat-form-field>
+    </div>
+
+
+  <div >
+  <ng-select [items]="users"
+             bindLabel="usuario"
+             bindValue="id"
+             name="assigned_to"
+             placeholder="Asignar orden"
+             [(ngModel)]="data.assigned_to">
+  </ng-select>
+  </div>
+
+
+
+
+
+    <!--Contains mat-hint for characters count and has maxLengt set-->
+    <div class="form">
+      <mat-form-field color="accent">
+        <textarea matInput #inputstate class="form-control" placeholder="Observación" [(ngModel)]="data.observation" name="observation" maxlength="277"  ></textarea>        
+        <mat-hint align="end">{{inputstate.value?.length || 0}}/177</mat-hint>
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput type="datetime" placeholder="Fecha de Solicitud" [(ngModel)]="data.order_date" name="order_date" 
+      >
+          <mat-icon matSuffix>date_range</mat-icon>
+      </mat-form-field>    
+    </div>
+
+    
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput type="datetime" placeholder="Fecha Requerida" [(ngModel)]="data.required_date" name="required_date" 
+        >
+        <mat-icon matSuffix>date_range</mat-icon>
+      </mat-form-field>        
+    </div>
+
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput type="datetime" placeholder="Fecha Vencimiento" [(ngModel)]="data.vencimiento_date" name="vencimiento_date" 
+        >
+        <mat-icon matSuffix>date_range</mat-icon>
+      </mat-form-field>        
+    </div>    
+
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput placeholder="Creada El" [(ngModel)]="data.create_at" name="created_at" disabled>
+      </mat-form-field>
+    </div>
+
+<div class="example-loading-shade" *ngIf="isOrderLoading && show">
+  <app-loading *ngIf="isOrderLoading"></app-loading>  
+</div>
+
+
+<div *ngIf="orderatributo.length == 0 && atributo.length > 0">
+  <mat-button-toggle-group  name="fontStyle" aria-label="Font Style" (click)="toggle()" id="bt"  *ngIf="!show">
+       <mat-button-toggle color="primary" value="bold">Más Datos<i class="material-icons">arrow_right</i></mat-button-toggle>
+  </mat-button-toggle-group>
+
+  <mat-button-toggle-group  name="fontStyle" aria-label="Font Style" (click)="toggle()" id="bt"  *ngIf="show">
+     <mat-button-toggle color="primary" value="bold">Más Datos<i class="material-icons" style="color:blue">arrow_drop_down</i></mat-button-toggle>
+  </mat-button-toggle-group>              
+</div>
+
+    <div class="animated fadeIn" *ngIf="this.orderatributo.length > 0 && this.atributo.length > 0">          
+    <div *ngFor="let detailatributo of atributo">
+    <div class="form" *ngIf="detailatributo.type == 'label' ">
+      <label>{{detailatributo.descripcion}}</label>
+    </div>
+    
+      <div *ngFor="let detailorderatributo of orderatributo">
+        <div  *ngIf="detailatributo.id == detailorderatributo.atributo_id " >
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && (detailatributo.required == 0 || role >= 7)" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" >
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.required == 1 && role < 7" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}"  required>
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>
+              <span matSuffix class="lbl" >
+              <mat-chip-list>
+                <mat-chip >Requerido</mat-chip>
+              </mat-chip-list>                
+              </span>
+            </mat-form-field>
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' && (detailatributo.required == 0 || role >= 7)" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" >
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' && detailatributo.required == 1 && role < 7 " class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}"  required>
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>
+              <span matSuffix class="lbl" >
+              <mat-chip-list>
+                <mat-chip >Requerido</mat-chip>
+              </mat-chip-list>                
+              </span>
+            </mat-form-field>
+
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'double' && (detailatributo.required == 0 || role >= 7)" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" >
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>              
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'double' && detailatributo.required == 1 && role < 7" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" required>
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>              
+              <span matSuffix class="lbl" >
+              <mat-chip-list>
+                <mat-chip >Requerido</mat-chip>
+              </mat-chip-list>                
+              </span>
+            </mat-form-field>            
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && (detailatributo.required == 0 || role >= 7)" class="full-width">
+              <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" ></textarea>
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>              
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.required == 1 && role < 7" class="full-width">
+              <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" required ></textarea>
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>              
+              <span matSuffix class="lbl" >
+              <mat-chip-list>
+                <mat-chip >Requerido</mat-chip>
+              </mat-chip-list>                
+              </span>
+            </mat-form-field>            
+
+
+
+
+            <div class="form" *ngIf="detailatributo.type == 'date' ">
+              <div >
+              <label>{{detailatributo.descripcion}}</label>
+              </div>
+              <div class="form">
+              <p-calendar [(ngModel)]="detailorderatributo.valor"  name="{{detailatributo.id}}" dateFormat="dd/mm/yy" *ngIf="detailorderatributo.valor != 'S/N'"                          
+              [showIcon]="true"
+              >
+              </p-calendar>
+
+              <p-calendar placeholder="dd/mm/yy" [(ngModel)]="myDate"  name="{{detailatributo.id}}" dateFormat="dd/mm/yy" [locale]="en" *ngIf="detailorderatributo.valor == 'S/N'"
+              [showIcon]="true"
+              (onSelect)="onSelectMethod($event)"               
+              >
+              </p-calendar>
+              </div>
+            </div>            
+
+
+            <div class="form" *ngIf="detailatributo.type == 'timepicker' ">
+              <div >{{detailatributo.descripcion}}: </div>
+              <mat-form-field color="accent">
+              <input matInput [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" class="form-control">
+              <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
+                <mat-icon>close</mat-icon>
+              </button>
+              <mat-icon matSuffix>timer</mat-icon>
+              </mat-form-field>
+            </div>            
+
+
+
+          <div class="form" *ngIf="detailatributo.type == 'radio' ">
+          <div class="example-selected-value">{{detailatributo.descripcion}}: </div>
+          <div  class="example-selected-value" *ngFor="let items of detailatributo.datos | split">
+
+            <mat-radio-group class="example-radio-group" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}">
+              <mat-radio-button class="example-radio-button" *ngFor="let item of items" [value]="item.value">
+                {{item.value}}
+              </mat-radio-button>
+            </mat-radio-group>
+
+          </div>
+          </div>          
+
+          <div class="form" *ngIf="detailatributo.type == 'spinner' ">
+            <div>
+              <mat-form-field>
+
+                <mat-select placeholder="{{detailatributo.descripcion}}"  [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" class="form-control">
+                  
+                  <div *ngFor="let items of detailatributo.datos | split: detailorderatributo.valor">
+
+                    <mat-option *ngFor="let item of items" [value]="item.value" >                    
+                        {{item.value}}                    
+                    </mat-option>
+
+
+                  </div>
+                </mat-select>
+
+              </mat-form-field>
+            </div>
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+
+
+    <div class="animated fadeIn" style="visibility: visible; position: sticky; z-index: 1;" *ngIf="show && orderatributo.length == 0 && atributo.length > 0">          
+    <div *ngFor="let detailatributo of atributo">
+    <div class="form" *ngIf="detailatributo.type == 'label' ">
+      <label>{{detailatributo.descripcion}}</label>
+    </div>
+    
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' ">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" class="form-control">
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' ">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" class="form-control">
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'double' ">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" class="form-control">
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' ">
+              <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}"></textarea>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+
+
+            <div  *ngIf="detailatributo.type == 'date' ">
+              <div >
+              <label>{{detailatributo.descripcion}}</label>
+              </div>              
+              <div class="form">
+              <p-calendar placeholder="dd/mm/yy"  [(ngModel)]="myDate" name="{{detailatributo.id}}" (onSelect)="onSelectMethod($event)" 
+              dateFormat="dd/mm/yy"
+              [showIcon]="true"
+              >
+              </p-calendar>
+              </div>              
+            </div>            
+
+
+            <div  *ngIf="detailatributo.type == 'timepicker' ">
+              <div >{{detailatributo.descripcion}}: </div>
+              <mat-form-field color="accent">
+              <input matInput value="" class="form-control" ngModel name="{{detailatributo.id}}">
+              <mat-icon matSuffix>timer</mat-icon>
+              </mat-form-field>
+            </div>            
+
+
+
+          <div *ngIf="detailatributo.type == 'radio' ">
+          <div class="example-selected-value">{{detailatributo.descripcion}}: </div>
+          <div  class="example-selected-value" *ngFor="let items of detailatributo.datos | split">
+            <mat-radio-group class="example-radio-group" ngModel name="{{detailatributo.id}}">
+              <mat-radio-button class="example-radio-button" *ngFor="let item of items" [value]="item.value">
+                {{item.value}}
+              </mat-radio-button>
+            </mat-radio-group>
+          </div>
+          </div>          
+
+
+          <div *ngIf="detailatributo.type == 'spinner' ">
+            <div>
+              <mat-form-field>
+                <mat-select placeholder="{{detailatributo.descripcion}}"  ngModel name="{{detailatributo.id}}" class="form-control">
+                  <div *ngFor="let items of detailatributo.datos | split">
+                    <mat-option *ngFor="let item of items" [value]="item.value" >
+                      {{item.value}}
+                    </mat-option>
+
+                  </div>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+
+
+    </div>
+  </div>
+
+
+
+
+  </form>
+    <div mat-dialog-actions>      
+      <button mat-button color="primary" [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmEdit(formControl)" mat-raised-button color="primary" class="btnsave">Guardar</button>
+
+      <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cerrar</button>
+    </div>
+    <br>

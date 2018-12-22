@@ -1,0 +1,37 @@
+<form>
+  <h1 mat-dialog-title>{{title}}</h1>
+  <div mat-dialog-content disableClose="true">
+    <div class="mat-app-background basic-container" >
+      <mat-form-field>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="data.date" name="data.date" placeholder="Fecha Desde" required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+      <mat-form-field>
+        <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" placeholder="Fecha Hasta">
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+      </mat-form-field>
+        <ng-select placeholder="Tipo de Servicio *" [(ngModel)]="data.selectedValueservicio" name="data.selectedValueservicio" required>
+          <ng-option *ngFor="let type of tiposervicio" [value]="type.id">
+            {{type.name}}
+          </ng-option>
+        </ng-select>
+      <mat-form-field>
+        <mat-select placeholder="Zona" [(ngModel)]="data.selectedValuezona" name="data.selectedValuezona" >
+          <mat-option *ngFor="let z of zona" [value]="z.id">
+            {{z.descripcion}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <div class="container">
+       <div class="row justify-content-center">
+      <button mat-raised-button color="primary"  [mat-dialog-close]="data" [disabled]="data.date === null || data.selectedValueservicio === null" >Descargar</button>
+      <button mat-button (click)="onNoClick()" >Cerrar</button>
+      </div>
+    </div>
+  </div>
+</form>
