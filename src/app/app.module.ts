@@ -238,7 +238,7 @@ registerLocaleData(localeEs);
     }),   
     AngularFireDatabaseModule,
     AngularFireStorageModule,
-    AngularSplitModule,    
+    AngularSplitModule.forRoot(),    
     BrowserModule,    
     BrowserAnimationsModule,
     CalendarModule,    
@@ -320,5 +320,6 @@ registerLocaleData(localeEs);
 
 
 export class AppModule { 
+    
 
 }
