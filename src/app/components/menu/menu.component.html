@@ -11,14 +11,17 @@
     <mat-accordion multi="true" [displayMode]="displayMode" *ngFor="let k of proyectos | keys;" >
         <mat-expansion-panel class="no-shadow" >
           <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
-            <mat-panel-title style="color:#000000; font-weight: normal;">
-              {{proyectos[k].project_name}}
+            <mat-panel-title style="color:#000000; font-weight: normal; ">      
+            {{proyectos[k].project_name}}
             </mat-panel-title>
+            <mat-panel-description >
+            <mat-chip style="font-weight: normal; font-size: 14px;">{{ proyectos[k].service.length }}</mat-chip>
+            </mat-panel-description>
           </mat-expansion-panel-header>
 
           <mat-nav-list dense *ngFor="let service of proyectos[k].service" style="color:#585858" (click)="navigate(service.id)">
             <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" >
-              <a class="nav-link" [routerLink]="['/serviceorder', service.id]" > 
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['/serviceorder', service.id]" > 
               <i class="material-icons md-14-color" *ngIf="service.id === selected">launch</i> 
               <i class="material-icons md-14" *ngIf="service.id != selected">launch</i> 
               {{service.service_name}} 

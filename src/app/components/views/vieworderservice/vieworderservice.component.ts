@@ -349,6 +349,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   }
 
+
+log(x) {
+   //console.log(x);
+  }
+
   onChange(event, category_id:number, orden:number) {
     this.label = event.checked;
    

@@ -8,13 +8,12 @@ import { OnDestroy } from "@angular/core";
 
 
 
-
-
 //SERVICES
-import { UserService } from '../../services/user.service';
-import { OrderserviceService } from '../../services/orderservice.service';
 import { CustomerService } from '../../services/customer.service';
 import { CountriesService } from '../../services/countries.service';
+import { OrderserviceService } from '../../services/orderservice.service';
+import { SettingsService } from '../../services/service.index';
+import { UserService } from '../../services/user.service';
 
 //MODELS
 import { Proyecto } from '../../models/proyecto';
@@ -51,7 +50,9 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
   private services: Service[] = [];
   public region: Region;
   private subscription: ISubscription;
-  otherTheme: boolean = false;
+  otherTheme: boolean = true;
+  theme: string;
+  color: number;
   options: FormGroup;
 
   isLoading: boolean;
@@ -75,6 +76,12 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
   mode = new FormControl('side');
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
 
+  ajustes: Ajustes = {
+    idtema: 0,
+    tema: ''
+  };
+
+
 
   constructor(	
   private _route: ActivatedRoute,
@@ -84,11 +91,12 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
   private _orderService: OrderserviceService,
   private _customerService: CustomerService,
   private _regionService: CountriesService,
+  public _ajustes: SettingsService,
   fb: FormBuilder
 
   ) 
   { 
-  
+
 	this.identity = this._userService.getIdentity();
 	this.token = this._userService.getToken();
 	this.proyectos = this._proyectoService.getProyectos();
@@ -121,9 +129,13 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() {    
-    this.order = null; 
-    this.dataSource = null;    
+  ngOnInit() {
+    if ( localStorage.getItem('ajustes') ) {
+      this.ajustes = JSON.parse( localStorage.getItem('ajustes') );
+      this.theme = this.ajustes.tema;      
+    }
+    this.order = []; 
+    this.dataSource = [];    
   }
 
   ngOnDestroy(){
@@ -145,7 +157,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
 
 
 toggleActive(event:any){
-  console.log(event);
+  //console.log(event);
     //debugger;
     event.preventDefault();
     if(this.element !== undefined){
@@ -156,10 +168,29 @@ toggleActive(event:any){
     this.element = target;
   }
 
-  changeTheme(){
-    this.otherTheme = !this.otherTheme;
+  changeTheme(tcolor: number){
+    
+    if(tcolor == 0){
+      this.theme = '';  
+    }
+
+    if(tcolor == 1){
+      this.theme = 'alternative_green';  
+    }
+    
+    if(tcolor == 2){
+      this.theme = 'alternative_dark';  
+    }
+
+    this._ajustes.aplicarTema( this.theme, tcolor );
+
 
   }
 
 
+}
+
+interface Ajustes {
+  idtema: number;
+  tema: string;
 }

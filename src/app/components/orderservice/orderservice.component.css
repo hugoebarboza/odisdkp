@@ -19,6 +19,9 @@ main {
     background-color: #FFFFFF;
 }
 .material-icons.md-15 { font-size: 15px; }
+.material-icons.md-15-colorblue { font-size: 15px; color: #1A237E; }
+.material-icons.md-15-colorgreen { font-size: 15px; color: #00796B; }
+.material-icons.md-15-colordark { font-size: 15px; color: #424242; }
 .material-icons.md-24 { font-size: 24px; color: #FFFFFF;}
 .material-icons.md-dark.md-inactive { font-size: 24px; color: #F3E5F5; }
 

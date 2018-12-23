@@ -7,6 +7,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+//ROUTER
+import { RouterModule } from '@angular/router';
+import { routing, appRoutingProviders } from './app.routing';
+
 //CDK MATERIAL
 import { PortalModule } from '@angular/cdk/portal';
 
@@ -23,7 +27,6 @@ import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 //PROGRESS BAR
 //import { NgProgressModule } from '@ngx-progressbar/core';
-//import { RouterModule } from '@angular/router';
 //import { NgProgressRouterModule } from '@ngx-progressbar/router';
 
 //UTILITYS
@@ -35,7 +38,7 @@ import { AngularSplitModule } from 'angular-split';
 
 
 //ANGULAR MATERIAL
-import { MatTableModule, MatPaginatorModule } from '@angular/material';
+import { MatBadgeModule, MatTableModule, MatPaginatorModule } from '@angular/material';
 import { MatNativeDateModule, MatFormField, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { MatButtonModule, MatDialogModule, MatButtonToggleModule } from '@angular/material';
 import { MatProgressSpinnerModule, MatSortModule, MatSidenavModule, MatListModule, MatIconModule } from "@angular/material";
@@ -66,11 +69,6 @@ import { MatRippleModule, MatSliderModule } from '@angular/material';
 //MOMENT
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
-
-//ROUTER
-import { routing, appRoutingProviders } from './app.routing';
-
 
 //COMPONENT
 import { AppComponent } from './app.component';
@@ -119,6 +117,9 @@ import { SettingsComponent } from './components/dialog/settings/settings.compone
 import { SettingscustomerComponent } from './components/dialog/settingscustomer/settingscustomer.component';
 import { ZipComponent } from './components/dialog/zip/zip.component';
 
+
+//MODULES
+import { ServiceModule } from './services/service.module';
 
 //SERVICES
 import { AuthguardService } from './services/authguard.service';
@@ -240,13 +241,14 @@ registerLocaleData(localeEs);
     AngularFireStorageModule,
     AngularSplitModule.forRoot(),    
     BrowserModule,    
-    BrowserAnimationsModule,
+    BrowserAnimationsModule,    
     CalendarModule,    
     CommonModule,
     FormsModule,    
     HttpModule,
     HttpClientModule,    
-    LoadingBarModule,       
+    LoadingBarModule,  
+    MatBadgeModule,     
     MatTableModule,
     MatToolbarModule,
     MatTooltipModule,
@@ -290,6 +292,8 @@ registerLocaleData(localeEs);
     PortalModule,
     ReactiveFormsModule,      
     routing,
+    RouterModule,
+    ServiceModule,
     ToastModule,    
     ToastrModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })

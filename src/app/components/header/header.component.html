@@ -24,12 +24,12 @@
 
 
       <li class="nav-item dropdown" *ngIf="identity" [routerLinkActive]="['active']" [routerLinkActiveOptions]="{exact:true}">
-        <a class="nav-link dropdown-toggle"   id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        <a class="nav-link dropdown-toggle"  id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
           Dashboard
         </a>
         <div class="dropdown-menu" aria-labelledby="navbarDropdown">
           <li >
-          <a class="dropdown-item" >Dashboard</a> 
+          <a class="dropdown-item" routerLinkActive="active" routerLink="/dashboard">Dashboard</a> 
           </li>                  
           <div class="dropdown-divider"></div>
           <a class="dropdown-item" >Dashboard</a>

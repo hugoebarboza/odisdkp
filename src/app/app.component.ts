@@ -1,7 +1,8 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 
-
+//SERVICES
+import { SettingsService } from './services/service.index';
 
 import * as $ from 'jquery';
 import { UserService } from './services/user.service';
@@ -26,6 +27,7 @@ export class AppComponent implements OnInit, DoCheck {
   constructor(
   	private _userService: UserService,
     private _proyectos: UserService,
+    public _ajustes: SettingsService,
     updates: SwUpdate
   	){
   	this.identity = this._userService.getIdentity();

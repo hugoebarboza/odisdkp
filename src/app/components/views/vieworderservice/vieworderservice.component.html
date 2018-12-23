@@ -558,13 +558,13 @@
 
 <ng-template cdkPortal #myTemplate2="cdkPortal" >
 <div style="height: 100%">
-    <as-split direction="horizontal">
+    <as-split  direction="horizontal" unit="percent" restrictMove="false" (dragEnd)="log($event)">
         
-        <as-split-area size="70">
+        <as-split-area size="70" minsize="50" >
         <ng-container [cdkPortalOutlet]="_home" ></ng-container>
         </as-split-area>
         
-        <as-split-area size="30">
+        <as-split-area size="30" minsize="30" maxsize="30">
         <div class="p-2">
         <app-vieworderdetail [orderid]="order_id"></app-vieworderdetail>
         </div>
