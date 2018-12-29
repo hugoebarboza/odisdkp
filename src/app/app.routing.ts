@@ -24,23 +24,23 @@ const appRoute: Routes = [
 	{ path:'dashboard', 
 	component: DashboardComponent, 
 	canActivate: [AuthguardService],
-	data: { titulo: 'OCA Global - ODIS Dashboard', descripcion: 'OCA Global - ODIS Dashboard' }
+	data: { titulo: 'OCA Global - ODIS Gestion', descripcion: 'OCA Global - ODIS Dashboard' }
 	},
-	{ path:'login', component: LoginComponent, data: { titulo: 'OCA Global - ODIS Login', descripcion: 'OCA Global - ODIS User Login' }},
-	{ path:'logout/:sure', component: LoginComponent, data: { titulo: 'OCA Global - ODIS Login', descripcion: 'OCA Global - ODIS User Login' }},
-	{ path:'register', component: RegisterComponent, data: { titulo: 'OCA Global - ODIS Register', descripcion: 'OCA Global - ODIS User Register' }},	
+	{ path:'login', component: LoginComponent, data: { titulo: 'OCA Global - ODIS Acceso', descripcion: 'OCA Global - ODIS User Login' }},
+	{ path:'logout/:sure', component: LoginComponent, data: { titulo: 'OCA Global - ODIS Acceso', descripcion: 'OCA Global - ODIS User Login' }},
+	{ path:'register', component: RegisterComponent, data: { titulo: 'OCA Global - ODIS Registro', descripcion: 'OCA Global - ODIS User Register' }},	
 	{ path:'projectorder/:id', 
 	component: OrderserviceComponent,
 	canActivate: [AuthguardService],
-	data: { titulo: 'OCA Global - ODIS Projects', descripcion: 'OCA Global - ODIS Projects Managment' }
+	data: { titulo: 'OCA Global - ODIS Proyectos', descripcion: 'OCA Global - ODIS Projects Managment' }
 	},
 	{ path:'serviceorder/:id', 
 	component: OrderserviceComponent,
 	canActivate: [AuthguardService],
-	data: { titulo: 'OCA Global - ODIS Services', descripcion: 'OCA Global - ODIS Services Managment' }
+	data: { titulo: 'OCA Global - ODIS Servicios', descripcion: 'OCA Global - ODIS Services Managment' }
 	},
-	{ path:'forgot', component: ForgotpasswordComponent, data: { titulo: 'OCA Global - ODIS Forgot', descripcion: 'OCA Global - ODIS User Forgot Password' }},	
-	{ path:'change', component: ChangepasswordComponent, data: { titulo: 'OCA Global - ODIS Change', descripcion: 'OCA Global - ODIS User Change Password'  }},	
+	{ path:'forgot', component: ForgotpasswordComponent, data: { titulo: 'OCA Global - ODIS Acceso', descripcion: 'OCA Global - ODIS User Forgot Password' }},	
+	{ path:'change', component: ChangepasswordComponent, data: { titulo: 'OCA Global - ODIS Acceso', descripcion: 'OCA Global - ODIS User Change Password'  }},	
 	{ path:'notfound', component: NotfoundComponent, data: { titulo: 'OCA Global - ODIS 404', descripcion: 'OCA Global - ODIS User 404'  }},	
 	{ path:'**', pathMatch: 'full', redirectTo: 'notfound', data: { titulo: 'OCA Global - ODIS 404', descripcion: 'OCA Global - ODIS User 404'  } }
 

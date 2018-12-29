@@ -1,0 +1,16 @@
+<form>
+  <h1 mat-dialog-title>{{data.title}}</h1>
+  <div mat-dialog-content>
+    <div class="mat-app-background basic-container">
+      <mat-form-field>
+        <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" cdkFocusInitial placeholder="Fecha vencimiento">
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+      </mat-form-field>
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="onNoClick()">Sin vencimiento</button>
+    <button mat-raised-button color="primary"  [mat-dialog-close]="data" [disabled]="data.dateend === null" >Guardar</button>
+  </div>
+</form>

@@ -3,7 +3,7 @@ import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, Eve
 import { NavigationStart, Router, ActivatedRoute, Params } from '@angular/router';
 import { DataSource } from '@angular/cdk/collections';
 import { Sort, MatDialog, MatPaginator, MatSort, MatSortable, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
-import {merge, Observable, of as observableOf,  ReplaySubject ,  Subject ,  SubscriptionLike as ISubscription } from 'rxjs';
+import {merge, Observable, of as observableOf,  ReplaySubject ,  Subject ,  SubscriptionLike as ISubscription, Subscription } from 'rxjs';
 import { asapScheduler, pipe, of, from,  interval, fromEvent } from 'rxjs';
 import {catchError, scan, map, startWith, switchMap,  take, takeUntil , takeWhile, debounceTime, tap, finalize, filter} from 'rxjs/operators';
 import {HttpHeaders, HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
@@ -125,7 +125,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public columnselect: string[] = new Array();
   public datedesde: FormControl;
   public datehasta: FormControl;
-  private subscription: ISubscription;
   private results = [];
 
 
@@ -299,6 +298,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public _portal: Portal<any>;
   public _home:Portal<any>;
 
+  //private subscription: ISubscription;
+  subscription: Subscription;
+
   constructor(  
     private _route: ActivatedRoute,
     private _router: Router,        
@@ -350,7 +352,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-log(x) {
+  log(x) {
    //console.log(x);
   }
 
@@ -408,6 +410,7 @@ log(x) {
   ngOnChanges(changes: SimpleChanges) {
     //console.log('onchange order');
     this.selectedRow = -1;
+    this.order_id = 0;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.matSort;
     this._portal = this.myTemplate;
@@ -427,8 +430,10 @@ log(x) {
 
 
   ngOnDestroy() {
+    //console.log('La página se va a cerrar');
     this._onDestroy.next();
-    this._onDestroy.complete();    
+    this._onDestroy.complete();
+    this.subscription.unsubscribe();
      //this.subscription.unsubscribe();     
      //this.unsubscribe.next();
      //this.unsubscribe.complete();
@@ -478,7 +483,7 @@ log(x) {
 
 
   getProject(id) {
-    this._orderService.getService(this.token.token, id).subscribe(
+   this.subscription = this._orderService.getService(this.token.token, id).subscribe(
     response => {
               if (response.status == 'success'){         
               this.project_id = response.datos['project_id'];
@@ -491,7 +496,7 @@ log(x) {
 
 
   getEstatus(id) {    
-    this._orderService.getServiceEstatus(this.token.token, id).subscribe(
+   this.subscription = this._orderService.getServiceEstatus(this.token.token, id).subscribe(
     response => {
               if(!response){
                 return;
@@ -598,6 +603,7 @@ log(x) {
   public refreshTable() { 
     //console.log('paso refresch');   
     //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.order_id = 0;
     this.regionMultiCtrl.reset();
     this.inspectorMultiFilterCtrl.reset();
     this.inspectorCtrl = new FormControl('');
@@ -964,7 +970,7 @@ log(x) {
 
   public loadInfo(){
     //console.log(this.identity.country);
-    this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
+   this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                 response => {
                   //console.log(response);
                    if(response.status == 'success'){
@@ -1283,7 +1289,7 @@ private filterRegionMulti() {
 
     const dialogRef = this.dialog.open(CsvComponent, {
       width: '450px',
-      height: '750px',
+      height: '780px',
       disableClose: true,                          
       data: { project: this.project_id,
               servicio: this.id,

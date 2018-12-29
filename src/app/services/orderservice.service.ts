@@ -62,6 +62,14 @@ import { ToastrService } from 'ngx-toastr';
 		}));		
   	}
 
+  getOrderDetail(orderid: number, token){
+    if(!orderid || !token){
+      return;
+    }
+    
+    return this.getOrderData('orderdetail/'+orderid, token);
+  }
+
 
 
   getServiceOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, sort: string, order: string, pageSize: number, page: number, id:number, token){

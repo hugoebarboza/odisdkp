@@ -11,6 +11,16 @@
             <mat-option value="orders.update_at">Editado El</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field class="middle-width" >
+          <mat-select placeholder="Limite" [(ngModel)]="pageSize" name="limit" required>
+            <mat-option *ngFor="let limit of limits" [value]="limit.value">
+              {{limit.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>          
+        </mat-form-field>
+
         <br>
 
 
@@ -121,10 +131,10 @@
     <div class="container">      
       <div class="row justify-content-center">
       <div class="footer-button-row">
-      <mat-bar-button [options]="barButtonOptionsDisabled" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="!selectedColumnnDate.columnValueDesde || !selectedColumnnDate.columnValueHasta || !selectedValueFormat || !selectedColumnnDate.fieldValue">
+      <mat-bar-button [options]="barButtonOptionsDisabled" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="!selectedColumnnDate.columnValueDesde || !selectedColumnnDate.columnValueHasta || !selectedValueFormat || !selectedColumnnDate.fieldValue || pageSize < 0">
       </mat-bar-button>
 
-      <mat-bar-button [options]="barButtonOptions" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="selectedColumnnDate.columnValueHasta  && selectedColumnnDate.columnValueDesde && selectedValueFormat && selectedColumnnDate.fieldValue">
+      <mat-bar-button [options]="barButtonOptions" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="selectedColumnnDate.columnValueHasta  && selectedColumnnDate.columnValueDesde && selectedValueFormat && selectedColumnnDate.fieldValue && pageSize >= 0">
       </mat-bar-button>
       
       <button mat-raised-button color="warn" (click)="reset()" [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde || !selectedValueFormat" >Limpiar</button>

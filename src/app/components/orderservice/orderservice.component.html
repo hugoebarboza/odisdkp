@@ -76,9 +76,17 @@
             </ng-template>
 
             <!-- /#page-content -->
-            <div class="p-2" style="width: 100%;" *ngIf="selected.value==1">
-                <app-excel (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-excel>  
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==1 && table != null">
+
+              <app-excel (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'address' ">
+              </app-excel>
+
+
+              <app-excel-vehiculo (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'vehiculos'">                
+              </app-excel-vehiculo> 
+
             </div>
+
             <!-- /#end page-content -->
           </mat-tab>
 

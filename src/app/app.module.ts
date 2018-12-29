@@ -77,6 +77,7 @@ import { DefaultComponent } from './components/default/default.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DateDialogComponent } from './components/date-dialog/date-dialog.component';
 import { ExcelComponent, DialogOverviewDialog } from './components/excel/excel.component';
+import { ExcelVehiculoComponent } from './components/excel-vehiculo/excel-vehiculo.component';
 import { FileComponent } from './components/dialog/file/file.component';
 import { FilelistComponent } from './components/dialog/filelist/filelist.component';
 import { FootermainComponent } from './components/shared/footermain/footermain.component';
@@ -115,6 +116,7 @@ import { ShowComponent } from './components/dialog/show/show.component';
 import { ShowcustomerComponent } from './components/dialog/showcustomer/showcustomer.component';
 import { SettingsComponent } from './components/dialog/settings/settings.component';
 import { SettingscustomerComponent } from './components/dialog/settingscustomer/settingscustomer.component';
+import { VehiculoOverviewDialog } from './components/excel-vehiculo/excel-vehiculo.component';
 import { ZipComponent } from './components/dialog/zip/zip.component';
 
 
@@ -136,13 +138,16 @@ import { ProjectsService } from './services/projects.service';
 import { UserService } from './services/user.service';
 import { ZipService } from './services/zip.service';
 
-
+//SLIDE MODULE
+import { Ng5SliderModule } from 'ng5-slider';
+import { VerticalTimelineModule } from 'angular-vertical-timeline';
 
 
 
 //Import toast module
 import { ToastModule } from 'primeng/toast';
 import { ToastrModule } from 'ngx-toastr';
+//import {ToasterModule, ToasterService} from 'angular2-toaster';
 
 //ESPAÑOL DATE
 import localeEs from '@angular/common/locales/es';
@@ -175,6 +180,7 @@ import { NgDropFilesDirective } from './directives/ng-drop-files.directive';
 
 
 
+
 registerLocaleData(localeEs);
 
 
@@ -195,7 +201,8 @@ registerLocaleData(localeEs);
     DownloadComponent, 
     EditcustomerComponent,
     EditComponent,
-    ExcelComponent,  
+    ExcelComponent,
+    ExcelVehiculoComponent,
     FileComponent,
     FilelistComponent,  
     FooterComponent,
@@ -227,7 +234,8 @@ registerLocaleData(localeEs);
     VieworderserviceComponent,
     ViewprojectorderComponent,
     ViewprojectcustomerComponent, 
-    ZipComponent
+    VehiculoOverviewDialog,
+    ZipComponent, 
   ],
   imports: [    
     AgmDirectionModule,
@@ -285,6 +293,7 @@ registerLocaleData(localeEs);
     MatTabsModule,
     MatButtonModule,
     MatMenuModule,    
+    Ng5SliderModule,    
     NgbModule,
     NgSelectModule,    
     OwlDateTimeModule,
@@ -296,7 +305,8 @@ registerLocaleData(localeEs);
     ServiceModule,
     ToastModule,    
     ToastrModule.forRoot(),
-    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    VerticalTimelineModule
   ],
   entryComponents: [
     AddComponent, AddcustomerComponent, EditComponent, EditcustomerComponent, CsvComponent, 
@@ -305,6 +315,7 @@ registerLocaleData(localeEs);
     LogoutComponent,
     ModalMapaComponent, ModalImageComponent, 
     ShowComponent, ShowcustomerComponent, SettingsComponent, SettingscustomerComponent, 
+    VehiculoOverviewDialog,
     ZipComponent    
   ],
   providers: [

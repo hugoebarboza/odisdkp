@@ -1,8 +1,9 @@
-import { Component, Inject, ViewChild, ElementRef } from '@angular/core';
+import { Component, Inject, ViewChild, ElementRef, OnInit, OnDestroy  } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { MatTableDataSource} from '@angular/material';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { trigger, state, style, animate, transition } from '@angular/animations';
+import { Observable, Subscription } from 'rxjs';
 
 
 // material
@@ -31,7 +32,7 @@ import html2canvas from 'html2canvas';
 
 
 
-export class ShowComponent  {
+export class ShowComponent implements OnInit, OnDestroy {
 	public title: string;
   public identity;
   public token;
@@ -56,6 +57,7 @@ margins = {
   width: 550
 };
 
+  subscription: Subscription;
 
   constructor(
     private _userService: UserService,        
@@ -82,10 +84,20 @@ margins = {
   }
 
 
+  ngOnInit() {
+  }
+
+  ngOnDestroy() {
+    //console.log('La página se va a cerrar');
+    this.subscription.unsubscribe();
+  }
+
+
+
   public loadData(){
       this.loading = true;
       this.order = null; 
-      this._orderService.getShowOrderService(this.token.token, this.data['service_id'], this.data['order_id']).subscribe(
+      this.subscription = this._orderService.getShowOrderService(this.token.token, this.data['service_id'], this.data['order_id']).subscribe(
       response => {
       if(!response){
         return;
@@ -119,7 +131,7 @@ margins = {
 
   public getListImage(){     
       this.isImageLoading = true;
-      this._orderService.getListImageOrder(this.token.token, this.data['order_id']).subscribe(
+      this.subscription = this._orderService.getListImageOrder(this.token.token, this.data['order_id']).subscribe(
       response => {        
         if(!response){
           this.isImageLoading = false;

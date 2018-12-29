@@ -1,0 +1,138 @@
+mat-form-field{
+    margin-right: 20px;
+}
+.loadExcel {
+    display:inline-block;
+    margin-right: 20px;
+}
+.excel-selector{
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+table {
+    width: 100%;
+    margin-bottom: 20px;
+  }
+.mat-elevation-z8 {
+    margin-bottom: 20px;
+}
+
+mat-checkbox{
+    margin-right: 20px;
+}
+
+.titulo_key{
+    margin-left: 20px;
+}
+
+.btnUpload{
+    margin-left: 20px;
+}
+
+.marginLeftX2{
+  margin-left: 40px;
+}
+
+.loading-shade {
+    position: absolute;
+    top: 0;
+    left: 0;
+    bottom:70px;
+    right: 0;
+    background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .example-container {
+    position: relative;
+  }
+  
+  .table-container {
+    position: relative;
+    max-height: 400px;
+    overflow: auto;
+  }
+  
+  table {
+    width: 100%;
+  }
+
+  .rate-limit-reached {
+    color: #980000;
+    max-width: 360px;
+    text-align: center;
+  }
+  .checkbox-margin{
+    margin-left: 10px;
+    font-size: initial;
+  }
+
+ 
+
+  .mat-row,
+  .mat-header-row {
+    min-width: 1123px;
+    width: 100%;
+    width: max-content;
+  }
+  
+  .mat-table {
+    overflow: scroll;
+    max-height: 500px;
+  }
+  
+  .mat-cell,
+  .mat-header-cell {
+    min-width: 90px;
+  }
+  /*unnecessary to make table header fixed text-align: center;*/
+  .mat-header-row {    
+    background: #f2f4f7;
+    min-height: 15px;
+    font-family: Verdana,sans-serif;
+    font-weight: bold;
+    font-size: 14px;
+    color: #1a084c;
+    margin-bottom: 5px;
+    top: 0;
+    position: -webkit-sticky;
+    position: sticky;
+    z-index: 1;
+  }
+
+ .mat-header-cell {
+    padding-left: 10px;
+  }
+
+  .mat-cell{
+    padding-left: 10px;
+  }
+
+.mat-cell,
+.mat-header-cell {
+    flex: 0 0 30%;
+    white-space: nowrap;
+}
+.marginLeft{
+  margin-left: 10px;
+}
+.colorError{
+  color: #F44336;
+}
+
+.none {
+  display: none;
+}
+
+.mat-form-field-custom {
+  font-size: 14px;
+  width: 98%;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 10px;
+  margin-bottom: -10px;
+}

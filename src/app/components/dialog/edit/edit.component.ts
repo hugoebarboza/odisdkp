@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators, NgForm} from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Observable } from 'rxjs/';
+import { Observable, Subscription } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import {CalendarModule} from 'primeng/calendar';
 //import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -39,7 +39,7 @@ import { User } from '../../../models/User';
     //{provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
 })
-export class EditComponent implements OnInit {
+export class EditComponent implements OnInit, OnDestroy {
   public title: string;
   public identity;
   public token;
@@ -76,7 +76,7 @@ export class EditComponent implements OnInit {
   orderatributo = new Array();
   role: number;
   //orderatributo:Object;
-
+  subscription: Subscription;
 
   constructor(
 
@@ -148,6 +148,12 @@ export class EditComponent implements OnInit {
     this.dialogRef.close();
   }
 
+  ngOnDestroy() {
+    //console.log('La página se va a cerrar');
+    this.subscription.unsubscribe();
+  }
+
+
   confirmEdit(form:NgForm): void {
     var editform = form;    
     var j = 0;
@@ -201,7 +207,7 @@ export class EditComponent implements OnInit {
   public loadData(){
       this.loading = true;
       this.order = null; 
-      this._orderService.getShowOrderService(this.token.token, this.data['service_id'], this.data['order_id']).subscribe(
+      this.subscription = this._orderService.getShowOrderService(this.token.token, this.data['service_id'], this.data['order_id']).subscribe(
       response => {
       if(!response){
         return;
@@ -232,7 +238,7 @@ export class EditComponent implements OnInit {
   public getOrderAtributo(){
       this.isOrderLoading = true;
       this.order = null; 
-      this._orderService.getShowOrderService(this.token.token, this.data['service_id'], this.data['order_id']).subscribe(
+      this.subscription = this._orderService.getShowOrderService(this.token.token, this.data['service_id'], this.data['order_id']).subscribe(
       response => {
       if(!response){
         this.isOrderLoading = false;
@@ -258,7 +264,7 @@ export class EditComponent implements OnInit {
 
   public loadService(){      
     this.servicetype = null;
-    this._orderService.getService(this.token.token, this.data['service_id']).subscribe(
+    this.subscription = this._orderService.getService(this.token.token, this.data['service_id']).subscribe(
     response => {
               if(!response){
                 return;
@@ -280,7 +286,7 @@ export class EditComponent implements OnInit {
 
   public loadServiceType(){  
     this.servicetype = null;
-    this._orderService.getServiceType(this.token.token, this.data['service_id']).subscribe(
+    this.subscription = this._orderService.getServiceType(this.token.token, this.data['service_id']).subscribe(
     response => {
               if(!response){
                 return;
@@ -294,7 +300,7 @@ export class EditComponent implements OnInit {
 
   public loadServiceEstatus(){  
     this.servicetype = null;
-    this._orderService.getServiceEstatus(this.token.token, this.data['service_id']).subscribe(
+    this.subscription = this._orderService.getServiceEstatus(this.token.token, this.data['service_id']).subscribe(
     response => {
               if(!response){
                 return;
@@ -307,7 +313,7 @@ export class EditComponent implements OnInit {
 
 
    public loadUserProject(id){
-    this._projectService.getUserProject(this.token.token, id, 5).subscribe(
+    this.subscription = this._projectService.getUserProject(this.token.token, id, 5).subscribe(
     response => {
               if(!response){
                 return;
@@ -323,7 +329,7 @@ export class EditComponent implements OnInit {
    public searchCustomer(termino: string){
      this.termino = termino;     
      if(this.termino.length > 2){
-       this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
+       this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
         response => {
               if(!response){
                 return;

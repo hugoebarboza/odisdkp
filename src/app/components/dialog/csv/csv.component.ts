@@ -127,6 +127,14 @@ export class CsvComponent implements OnInit, OnDestroy {
   };
 
 
+ limits: Array<Object> = [
+    {value: '500', name: '< 500'},
+    {value: '1000', name: '< 1000'},
+    {value: '2000', name: '< 2000'},
+    {value: '0', name: 'Todo'}
+  ];
+
+
  formatos: Array<Object> = [
     {value: '0', name: 'Original'},
     {value: '1', name: 'Mayúscula'},
@@ -146,7 +154,7 @@ export class CsvComponent implements OnInit, OnDestroy {
 
 
   // MatPaginator Inputs
-  pageSize = 1000;
+  pageSize: number;
 
 
   barButtonOptionsDisabled: MatProgressButtonOptions = {
@@ -187,6 +195,7 @@ export class CsvComponent implements OnInit, OnDestroy {
       this.tiposervicio = data['tiposervicio'];
       this.estatus = data['estatus'];
       this.token = data['token'];
+      this.pageSize = -1;
       this.role = 5; //USUARIOS INSPECTORES
     }
 
@@ -290,6 +299,7 @@ export class CsvComponent implements OnInit, OnDestroy {
     this.selectedColumnnDate.columnValueHasta = '';
     this.selectedColumnnDate.columnValueDesde = '';
     this.selectedValueFormat = 0;
+    this.pageSize = -1;
     this.selectedColumnnUsuario.fieldValue = '';
     this.selectedColumnnUsuario.columnValue = '';
   }
@@ -345,6 +355,7 @@ export class CsvComponent implements OnInit, OnDestroy {
     }      
 
 
+    //console.log(this.pageSize);
     this.dataService.getProjectShareOrder(      
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 

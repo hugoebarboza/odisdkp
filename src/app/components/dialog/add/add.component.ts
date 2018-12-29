@@ -1,9 +1,9 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl, Validators, FormBuilder, FormGroup, NgForm, ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { MatAutocompleteModule} from '@angular/material/autocomplete';
-import { merge, Observable, of as observableOf } from 'rxjs';
+import { merge, Observable, of as observableOf, Subscription } from 'rxjs';
 import { catchError, map, startWith, switchMap, debounceTime, tap, finalize } from 'rxjs/operators';
 import { CalendarModule } from 'primeng/calendar';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -38,7 +38,7 @@ interface ObjectServiceType {
   styleUrls: ['./add.component.css']
 })
 
-export class AddComponent implements OnInit{
+export class AddComponent implements OnInit, OnDestroy {
   public title: string;
   public identity;
   public token;
@@ -73,6 +73,7 @@ export class AddComponent implements OnInit{
   en: any;
 
 
+  subscription: Subscription;
 
  constructor(
   private _route: ActivatedRoute,
@@ -118,6 +119,12 @@ export class AddComponent implements OnInit{
   getErrorMessage() {
     return this.formControl.hasError('required') ? 'Dato Requerido' : '';
   }
+
+  ngOnDestroy() {
+    //console.log('La página se va a cerrar');
+    this.subscription.unsubscribe();
+  }
+
 
   submit() {
   // emppty stuff
@@ -182,7 +189,7 @@ export class AddComponent implements OnInit{
 
   public loadService(){      
     this.servicetype = null;
-    this._orderService.getService(this.token.token, this.data['service_id']).subscribe(
+    this.subscription = this._orderService.getService(this.token.token, this.data['service_id']).subscribe(
     response => {
               if(!response){
                 return;
@@ -203,7 +210,7 @@ export class AddComponent implements OnInit{
 
   public loadServiceType(){  
     this.servicetype = null;    
-    this._orderService.getServiceType(this.token.token, this.data['service_id']).subscribe(
+    this.subscription = this._orderService.getServiceType(this.token.token, this.data['service_id']).subscribe(
     response => {
               if(!response){
                 return;
@@ -216,7 +223,7 @@ export class AddComponent implements OnInit{
     }
 
    public loadUserProject(id){
-    this._projectService.getUserProject(this.token.token, id, 5).subscribe(
+    this.subscription = this._projectService.getUserProject(this.token.token, id, 5).subscribe(
     response => {
               if(!response){
                 return;
@@ -238,7 +245,7 @@ export class AddComponent implements OnInit{
      }
      if(this.termino.length > 0){       
 
-       this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
+       this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
         response => {
               if(!response){
                 this.isLoading = true
@@ -259,7 +266,7 @@ export class AddComponent implements OnInit{
     if(event > 0) {
     this.show = true;
     this.isOrderLoading = true;
-    this._orderService.getAtributoServiceType(this.token.token, event).subscribe(
+    this.subscription = this._orderService.getAtributoServiceType(this.token.token, event).subscribe(
     response => {
       //console.log(response);
               if(!response){

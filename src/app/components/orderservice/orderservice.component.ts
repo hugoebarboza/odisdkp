@@ -60,6 +60,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
   project_name: string;
   project: string;
   service: string;
+  table: string = null;
   id: number;
   category_id: number; 
   dataSource;
@@ -116,11 +117,14 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
                     //GET SERVICE
                     this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
                     response => {
-                      if (response.status == 'success'){         
+                      if (response.status == 'success'){   
                         this.project_name = response.datos.project['project_name'];       
                         this.services = response.datos;                
                         this.category_id = this.services['projects_categories_customers']['id'];
-
+                        if(this.table){
+                          this.table = null;
+                        }
+                        this.table = this.services['projects_categories_customers']['name_table'];
                       }
                     });   
                     }

@@ -53,3 +53,13 @@
     font-size: 18px;
 }
 
+h6 { 
+  display: block;
+  margin-top: 0.33em;
+  font-size: .77em;
+  font-weight: bold;
+  margin-left: 7px;
+}
+.spacer {
+  flex: 1 1 auto;
+}
