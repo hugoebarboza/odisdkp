@@ -1,19 +1,16 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { NavigationStart, Router, ActivatedRoute, Params } from '@angular/router';
-import { DataSource } from '@angular/cdk/collections';
-import { Sort, MatDialog, MatPaginator, MatSort, MatSortable, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
-import {merge, Observable, of as observableOf,  ReplaySubject ,  Subject ,  SubscriptionLike as ISubscription, Subscription } from 'rxjs';
-import { asapScheduler, pipe, of, from,  interval, fromEvent } from 'rxjs';
-import {catchError, scan, map, startWith, switchMap,  take, takeUntil , takeWhile, debounceTime, tap, finalize, filter} from 'rxjs/operators';
-import {HttpHeaders, HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
+import { Router } from '@angular/router';
+import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { ReplaySubject ,  Subject ,  Subscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { HttpClient} from '@angular/common/http';
+import { FormControl, Validators} from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
 import { PageEvent } from '@angular/material';
-import { ThemePalette } from '@angular/material/core';
 import { MatSnackBar } from '@angular/material';
 import { MatSelect } from '@angular/material';
-import { MatBottomSheet, MatBottomSheetRef } from '@angular/material';
+import { MatBottomSheet } from '@angular/material';
 
 //CDK
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
@@ -33,23 +30,19 @@ import { UserService } from '../../../services/user.service';
 import { ZipService } from '../../../services/zip.service';
 
 //MODELS
-import { User } from '../../../models/user';
 import { Proyecto } from '../../../models/proyecto';
-import { Service } from '../../../models/service';
 import { ServiceType } from '../../../models/ServiceType';
 import { ServiceEstatus } from '../../../models/ServiceEstatus';
 import { Order } from '../../../models/order';
 
 
 //COMPONENTS
-import { ViewOrderDetailComponent } from '../../views/vieworderdetail/vieworderdetail.component';
 
 //DIALOG
 import { AddComponent } from '../../dialog/add/add.component';
 import { FileComponent } from '../../dialog/file/file.component';
 import { CsvComponent } from '../../dialog/csv/csv.component';
 import { DeleteComponent } from '../../dialog/delete/delete.component';
-import { DownloadComponent } from '../../dialog/download/download.component';
 import { EditComponent } from '../../dialog/edit/edit.component';
 import { ShowComponent } from '../../dialog/show/show.component';
 import { SettingsComponent } from '../../dialog/settings/settings.component';
@@ -96,17 +89,15 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public title = "Órdenes de trabajo";
   public subtitle = "Listado de órdenes de trabajo. Agregue, edite, elimine y ordene los datos de acuerdo a su preferencia.";
   public url:string;
-  public identity;
-  public token;
-  public servicename;
-  public projectname;
+  public identity: any;
+  public token: any;
+  public servicename: string;
+  public projectname: string;
   public proyectos: Array<Proyecto>;
   public order: Order[] = [];
   public servicetype: ServiceType[] = [];
   public estatus: ServiceEstatus[] = [];
-  private sub: any;   
   public service_id:number;
-  private active: boolean = false;
   open: boolean = false;
   loading: boolean;
   label: boolean;
@@ -125,11 +116,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public columnselect: string[] = new Array();
   public datedesde: FormControl;
   public datehasta: FormControl;
-  private results = [];
+  
 
 
   selectedRow : Number;
-  setClickedRow : Function;
 
   direction: string = 'vertical'
   //TIME VALUE
@@ -192,6 +182,12 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     fieldValue: 'orders_details.status_id',
     criteria: '',
     columnValue: ''
+  };
+
+ selectedColumnnZona = {
+    fieldValue: 'ma_zona.id',
+    criteria: '',
+    columnValue: 0
   };
 
 
@@ -259,8 +255,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   ];  
 
 
-  dataSourceEmpty;    
-  displayedColumns: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
+  dataSourceEmpty: any;    
+  displayedColumns: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'userupdate', 'userassigned','create_at', 'actions']; 
   columnsOrderToDisplay: string[] = this.columns.map(column => column.name);
   columnsOrderSettingsToDisplay: string[] = this.columns.map(column => column.name);
   //columnsOrderToDisplay: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
@@ -298,13 +294,12 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public _portal: Portal<any>;
   public _home:Portal<any>;
 
-  //private subscription: ISubscription;
+
   subscription: Subscription;
 
   constructor(  
-    private _route: ActivatedRoute,
     private _router: Router,        
-    private _userService: UserService,    
+    public _userService: UserService,    
     private _proyectoService: UserService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
@@ -334,19 +329,13 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.role = 5; //USUARIOS INSPECTORES
     this.open = false;
 
-    this.setClickedRow = function(index, orderid){
-            this.selectedRow = index;
-            this.order_id = orderid;
-            //console.log(this.orderid);
-    }    
-
   }
 
-  hoverIn(index){
+  hoverIn(index:number){
     this.indexitem = index;
   }
 
-  hoverOut(index){
+  hoverOut(index:number){
     this.indexitem = -1;
 
   }
@@ -356,7 +345,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
    //console.log(x);
   }
 
-  onChange(event, category_id:number, orden:number) {
+  onChange(event:any, category_id:number, orden:number) {
     this.label = event.checked;
    
     if(this.label == true){
@@ -374,7 +363,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
 
-  add(indexcolumn) {
+  add(indexcolumn:any) {
     const indexarray = this.displayedColumns.indexOf(indexcolumn);
     if (this.columnsOrderToDisplay.length) {
         if (indexarray !== -1) {
@@ -383,7 +372,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }    
   }
 
-  remove(indexcolumn) {
+  remove(indexcolumn:any) {
     const indexarray = this.columnsOrderToDisplay.indexOf(indexcolumn);
     if (this.columnsOrderToDisplay.length) {
         if (indexarray !== -1) {
@@ -392,7 +381,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }    
   }
 
-
+  setClickedRow(index:number, orderid:number){
+    this.selectedRow = index;
+    this.order_id = orderid;
+  }
 
   ngOnInit() {
     //this._portal = this.myTemplate;
@@ -449,15 +441,15 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
 
-  getTipoServicio(id) {
+  getTipoServicio(id:number) {
     this.zipService.getTipoServicio(id, this.token.token).then(
       (res: any) => {
         res.subscribe(
-          (some) => {
+          (some: any) => {
             this.tipoServicio = some['datos'];
             // console.log(this.tipoServicio);
           },
-          (error) => {
+          (error: any) => {
             console.log(<any>error);
           }
         );
@@ -465,7 +457,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  getZona(id) {
+  getZona(id:number) {
     this.zipService.getZona(id, this.token.token).then(
       (res: any) => {
         res.subscribe(
@@ -482,7 +474,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  getProject(id) {
+  getProject(id:number) {
    this.subscription = this._orderService.getService(this.token.token, id).subscribe(
     response => {
               if (response.status == 'success'){         
@@ -495,7 +487,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  getEstatus(id) {    
+  getEstatus(id:number) {    
    this.subscription = this._orderService.getServiceEstatus(this.token.token, id).subscribe(
     response => {
               if(!response){
@@ -564,7 +556,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public getData(response: any){
     if(response){
         response.subscribe(
-          (some) => 
+          (some: any) => 
           {
             if(some.datos.data){            
             this.resultsLength = some.datos.total;
@@ -603,6 +595,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public refreshTable() { 
     //console.log('paso refresch');   
     //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.selectedRow = -1;
     this.order_id = 0;
     this.regionMultiCtrl.reset();
     this.inspectorMultiFilterCtrl.reset();
@@ -1328,7 +1321,6 @@ private filterRegionMulti() {
     this.selectedColumnnUsuario.columnValue = '';
     this.filtersregion.fieldValue = '';
     this.regionMultiCtrl.reset();
-    this.active = false;
     this.step = 0;
   }
 
@@ -1434,6 +1426,7 @@ private filterRegionMulti() {
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.selectedColumnnEstatus.fieldValue, this.selectedColumnnEstatus.columnValue,
       newtimefrom, newtimeuntil,
+      this.selectedColumnnZona.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.project_id, this.id, this.token.token).then(
       (res: any) => 
       {

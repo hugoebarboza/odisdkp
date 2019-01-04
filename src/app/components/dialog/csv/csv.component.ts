@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Sort, MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { FormControl, Validators, FormBuilder, FormGroup, NgForm, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { ReplaySubject, Subject } from 'rxjs';
+import { ReplaySubject, Subject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
 
@@ -13,10 +13,13 @@ const moment = _moment;
 //MODELS
 import { Order } from '../../../models/order';
 import { ServiceEstatus } from '../../../models/ServiceEstatus';
+import { Zona } from '../../../models/Zona';
 
 //SERVICES
+import { CustomerService } from '../../../services/customer.service';
 import { OrderserviceService } from '../../../services/orderservice.service';
 import { ProjectsService } from '../../../services/projects.service';
+
 
 import * as FileSaver from 'file-saver';
 
@@ -63,6 +66,7 @@ export class CsvComponent implements OnInit, OnDestroy {
   public datedesde: FormControl;
   public datehasta: FormControl;
   public regionMultiCtrl: FormControl = new FormControl('', Validators.required );
+  public zonas: Zona;
 
 
 /** control for the selected user for multi-selection */
@@ -118,6 +122,11 @@ export class CsvComponent implements OnInit, OnDestroy {
     columnValue: ''
   };
 
+  selectedColumnnZona = {
+    fieldValue: 'ma_zona.id',
+    criteria: '',
+    columnValue: 0
+  };
 
 
   filtersregion = {
@@ -131,7 +140,7 @@ export class CsvComponent implements OnInit, OnDestroy {
     {value: '500', name: '< 500'},
     {value: '1000', name: '< 1000'},
     {value: '2000', name: '< 2000'},
-    {value: '0', name: 'Todo'}
+    {value: '0', name: 'Todo (No Recomendado)'}
   ];
 
 
@@ -182,11 +191,14 @@ export class CsvComponent implements OnInit, OnDestroy {
     disabled: false
   }
 
+  subscription: Subscription;
+
   constructor(
   	public dialogRef: MatDialogRef<CsvComponent>,
   	public dataService: OrderserviceService,
+    private _customerService: CustomerService,
     private _proyectoService: ProjectsService,
-    private toasterService: ToastrService,
+    private toasterService: ToastrService,    
     @Inject(MAT_DIALOG_DATA) public data
 
     ) {
@@ -204,6 +216,7 @@ export class CsvComponent implements OnInit, OnDestroy {
   this.user = [];
   this.loaduser(this.project_id);
   this.getServiceEstatus();
+  this.getZona();
   this.userMultiFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
@@ -215,6 +228,7 @@ export class CsvComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
+    this.subscription.unsubscribe();
   }
 
   onNoClick(): void {
@@ -260,6 +274,21 @@ export class CsvComponent implements OnInit, OnDestroy {
               }
               });        
     }
+
+  getZona(){  
+    this.subscription = this._customerService.getZona(this.token, this.serviceid).subscribe(
+      response => {
+       if(response.status == 'success' && response.datos.zona.length > 0){                  
+       this.zonas = response.datos.zona;
+       //console.log(this.zonas);
+       }else{
+       this.zonas = null;
+       }
+    });
+
+
+
+  }
 
 
   public loaduser(projectid:number){
@@ -332,6 +361,12 @@ export class CsvComponent implements OnInit, OnDestroy {
       this.selectedColumnnEstatus.fieldValue = 'orders_details.status_id'
     }
 
+    if(!this.selectedColumnnUsuario.fieldValue){
+      this.selectedColumnnUsuario.fieldValue = '';
+      this.selectedColumnnUsuario.columnValue = '';
+    }
+
+
 
     if(!this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
        this.selectedColumnn.fieldValue = '';
@@ -362,7 +397,8 @@ export class CsvComponent implements OnInit, OnDestroy {
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.selectedColumnnEstatus.fieldValue, this.selectedColumnnEstatus.columnValue,
-      newtimefrom, newtimeuntil,      
+      newtimefrom, newtimeuntil,
+      this.selectedColumnnZona.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, 0, this.project_id, this.serviceid, this.token).then(
       (res: any) => 
       {
@@ -399,7 +435,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                     if(arraydata[i] == this.exportDataSource.data[j]['servicetype_id']){ //FIRST IF                                           
                       if(Object.keys(this.exportDataSource.data[j]['atributo_share']).length > 0 && banderatitulo == true){
                         if(this.exportDataSource.data[j]['name_table'] == 'address'){
-                           valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";
+                           valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";
                         }
                         for(let key in this.exportDataSource.data[j]['atributo_share']){
                           let newarray = this.exportDataSource.data[j]['atributo_share'][key];
@@ -411,7 +447,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                         valuearrayexcel = valuearrayexcel +'\n';
                       }else{
                         if(Object.keys(this.exportDataSource.data[j]['atributo_share']).length == 0 && banderatitulo == true){
-                          valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
+                          valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
                           banderatitulo = false;
                         }
 
@@ -423,9 +459,9 @@ export class CsvComponent implements OnInit, OnDestroy {
                           var ubicacion = this.exportDataSource.data[j]['patio']+'-'+this.exportDataSource.data[j]['espiga']+'-'+this.exportDataSource.data[j]['posicion'];
                         }
 
-                        valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
+                        valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
                                               +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion                                              
-                                              +';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']
+                                              +';'+this.exportDataSource.data[j]['ruta']+';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']
                                               +';'+this.exportDataSource.data[j]['medidor']+';'+this.exportDataSource.data[j]['tarifa']+';'+this.exportDataSource.data[j]['constante']
                                               +';'+this.exportDataSource.data[j]['giro']+';'+this.exportDataSource.data[j]['sector']+';'+this.exportDataSource.data[j]['zona']+';'+this.exportDataSource.data[j]['mercado']
                                               +';'+this.exportDataSource.data[j]['marca']+';'+this.exportDataSource.data[j]['modelo']+';'+this.exportDataSource.data[j]['color']+';'+this.exportDataSource.data[j]['description']+';'+this.exportDataSource.data[j]['secondcolor']

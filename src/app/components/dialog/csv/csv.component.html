@@ -100,7 +100,7 @@
         </mat-form-field>
 
 
-        <mat-form-field class="middle-width">
+        <mat-form-field class="middle-width" *ngIf="selectedColumnnUsuario.fieldValue">
           <mat-select [formControl]="userCtrl"  placeholder="Inspector" #singleSelect   [(value)]="selectedColumnnUsuario.columnValue" >
           <ngx-mat-select-search [formControl]="userMultiFilterCtrl" ></ngx-mat-select-search>
           <mat-option *ngFor="let user of filteredUserMulti | async" [value]="user.id">
@@ -108,6 +108,17 @@
           </mat-option>
           </mat-select>
         </mat-form-field>
+
+        <br>
+        <mat-form-field class="middle-width" *ngIf="zonas != null">
+          <mat-select placeholder="Zona (Opcional): " [(ngModel)]="selectedColumnnZona.columnValue" name="zona_id">
+            <mat-option>Seleccione</mat-option>
+            <mat-option *ngFor="let zona of zonas" [value]="zona.id">
+              {{zona.descripcion}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
 
         <h4 style="color:#747474; font-size: 14px;">Ordenar datos (Opcional):</h4>
         <mat-radio-group [(ngModel)]="selectedValueOrdeno" name="ordenado"  class="order-radio-group" [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde || !selectedValueFormat">

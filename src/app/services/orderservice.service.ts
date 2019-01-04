@@ -9,9 +9,7 @@ import {BehaviorSubject} from 'rxjs';
 
 //MODELS
 import { Order } from '../models/order';
-import { Service } from '../models/service';
 import { ServiceType } from '../models/ServiceType';
-import { Status } from '../models/status';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
@@ -44,7 +42,7 @@ import { ToastrService } from 'ngx-toastr';
   	}
 
 
-  	getQuery( query:string, token ): Observable<any>{
+  	getQuery( query:string, token: string | string[] ): Observable<any>{
   	//console.log(query);
   	//const body = JSON.stringify({data});
 	//const headers = new Headers({'Content-Type':'application/json'});
@@ -62,7 +60,7 @@ import { ToastrService } from 'ngx-toastr';
 		}));		
   	}
 
-  getOrderDetail(orderid: number, token){
+  getOrderDetail(orderid: number, token: any){
     if(!orderid || !token){
       return;
     }
@@ -72,7 +70,7 @@ import { ToastrService } from 'ngx-toastr';
 
 
 
-  getServiceOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, sort: string, order: string, pageSize: number, page: number, id:number, token){
+  getServiceOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, sort: string, order: string, pageSize: number, page: number, id:number, token: any){
     //console.log(sort);
     if(!fieldValue){
       fieldValue = '';
@@ -93,7 +91,7 @@ import { ToastrService } from 'ngx-toastr';
 
 
 
-  getProjectShareOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, fieldValueEstatus:string, columnValueEstatus:string, columnTimeFromValue:any, columnTimeUntilValue:any, sort: string, order: string, pageSize: number, page: number, id:number, idservice:number, token) {
+  getProjectShareOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, fieldValueEstatus:string, columnValueEstatus:string, columnTimeFromValue:any, columnTimeUntilValue:any, columnValueZona:number, sort: string, order: string, pageSize: number, page: number, id:number, idservice:number, token: any) {
     //console.log(sort);
     if(!fieldValue){
       fieldValue = '';
@@ -106,7 +104,7 @@ import { ToastrService } from 'ngx-toastr';
       sort = 'create_at';
     }
     
-    const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&fieldValueEstatus=${fieldValueEstatus}&columnValueEstatus=${columnValueEstatus}&columnTimeFromValue=${columnTimeFromValue}&columnTimeUntilValue=${columnTimeUntilValue}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
+    const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&fieldValueEstatus=${fieldValueEstatus}&columnValueEstatus=${columnValueEstatus}&columnTimeFromValue=${columnTimeFromValue}&columnTimeUntilValue=${columnTimeUntilValue}&columnValueZona=${columnValueZona}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
     //console.log('-----------------------------');
     //console.log(paginate);
     //const paginate = `?page=${page + 1}`;
@@ -114,7 +112,7 @@ import { ToastrService } from 'ngx-toastr';
   }
 
 
-   getOrderData(query:string, token): Promise<any> {
+   getOrderData(query:string, token: any): Promise<any> {
     const url = this.url;
     const href = url+query;
     const requestUrl = href;
@@ -134,46 +132,46 @@ import { ToastrService } from 'ngx-toastr';
 
     }
 
-	getOrderService(token, id): Observable<any> {								  
+	getOrderService(token: any, id: string): Observable<any> {								  
 		return this.getQuery('service/'+id+'/order', token);
 	}
 
-	getShowOrderService(token, id, orderid): Observable<any> {								  
+	getShowOrderService(token: any, id: string, orderid: string): Observable<any> {								  
 		return this.getQuery('service/'+id+'/order/'+orderid, token);
 	}
 
-	getListImageOrder(token, id): Observable<any> {								  
+	getListImageOrder(token: any, id: string): Observable<any> {								  
 		return this.getQuery('order/'+id+'/listimage', token);
 	}
 
-	getShowImageOrder(token, id): Observable<any> {								  
+	getShowImageOrder(token: any, id: string): Observable<any> {								  
 		return this.getQuery('image/'+id, token);
 	}
 
 
-	getService(token, id): Observable <any> {	
+	getService(token: any, id: string | number): Observable <any> {	
 		return this.getQuery('service/'+id, token);		
 	}
 
-	getAtributoServiceType (token, id): Observable<any> {
+	getAtributoServiceType (token: any, id: string): Observable<any> {
 		return this.getQuery('servicetype/'+id+'/atributo', token);
 	}
 
 
-	getServiceType (token, id): Observable<any> {
+	getServiceType (token: any, id: string | number): Observable<any> {
 		return this.getQuery('service/'+id+'/servicetype', token);
 	}
 
-	getServiceEstatus (token, id): Observable<any> {
+	getServiceEstatus (token: any, id: string | number): Observable<any> {
 		return this.getQuery('service/'+id+'/estatus', token);
 	}
 
-	getCustomer(token, termino:string, id:number): Observable<any> {
+	getCustomer(token: any, termino:string, id:number): Observable<any> {
 		return this.getQuery('search/'+termino+'/'+id, token);		
 	}
 
 
-    add(token, order: Order, id:number): void {	
+    add(token: any, order: Order, id:number): void {	
 		let json = JSON.stringify(order);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -191,7 +189,7 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
 
-    update(token, orderid:number, order: Order, id:number): void {	
+    update(token: any, orderid:number, order: Order, id:number): void {	
 		let json = JSON.stringify(order);
 		let params = 'json='+json;
 
@@ -212,7 +210,7 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
 
-    important(token, id:number, orderid:number, label:number): void {	
+    important(token: any, id:number, orderid:number, label:number): void {	
 		let json = JSON.stringify(label);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -231,7 +229,7 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
 
- 	delete(token, orderid:number, id: number): void { 	 	
+ 	delete(token: any, orderid:number, id: number): void { 	 	
 	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 								   .set('Authorization', token);							      
     

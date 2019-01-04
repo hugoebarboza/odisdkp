@@ -34,8 +34,8 @@ import html2canvas from 'html2canvas';
 
 export class ShowComponent implements OnInit, OnDestroy {
 	public title: string;
-  public identity;
-  public token;
+  public identity: any;
+  public token: any;
   public order: Order[] = [];
   public show:boolean = false;
   isImageLoading: boolean = false;
@@ -186,7 +186,7 @@ margins = {
 
 
 
-  public print(divName) {
+  public print(divName: any) {
     var innerContents = document.getElementById(divName).innerHTML;
     var popupWinindow = window.open('', '_blank', 'width=600,height=700,scrollbars=no,menubar=no,toolbar=no,location=no,status=no,titlebar=no');
     popupWinindow.document.open();
@@ -199,7 +199,7 @@ margins = {
 
 
 
-  public downloadPDF(divName){
+  public downloadPDF(divName:any){
 
 /*
  var doc = new jsPDF();

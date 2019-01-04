@@ -154,6 +154,8 @@ table {
 .material-icons.md-20-color { font-size: 20px; color: #FB8C00;}
 .material-icons.md-24 { font-size: 24px; color: #FB8C00;}
 .material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
+.material-icons.md-13-color { font-size: 13px; color: #809c13; padding: 1px;}
+.material-icons.md-13-nocolor { font-size: 13px; color: #CFCFCF; padding: 1px;}
 
 .no-shadow {
   box-shadow: none !important;

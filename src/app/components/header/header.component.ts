@@ -29,8 +29,8 @@ export class HeaderComponent {
 
 	public title: string;
 	public titlelogout: string;
-	public identity;
-	public token;
+	public identity: any;
+	public token: any;
 
   //private itemsCollection: AngularFirestoreCollection<Item>;
 

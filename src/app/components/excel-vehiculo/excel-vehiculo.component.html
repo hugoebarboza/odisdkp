@@ -1,3 +1,11 @@
+<div class="p-2">
+  <mat-card [ngStyle]="{'padding':'0px'}">
+    <mat-card-header [ngClass]="{'custom-card':true}">
+      <mat-card-title>Modulo de Carga</mat-card-title>
+      <mat-card-subtitle>Siga los pasos 1, 2 y 3 que aparecen en la pantalla</mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+
 <div class="mat-app-background basic-container">
   <mat-horizontal-stepper linear #stepper>
       <mat-step [stepControl]="firtsFormGroup">
@@ -6,7 +14,7 @@
             <div class="excel-selector">
                 <button mat-mini-fab color="accent" (click)="fileInput.click()">
                     <mat-icon>attachment</mat-icon>
-                    <input hidden type="file" #fileInput class="none" (change)="incomingfile($event)" (click)="$event.target.value = null " accept=".xlsx" required formControlName="inputCtrl" >                  
+                    <input hidden type="file" #fileInput class="none" (change)="incomingfile($event)" accept=".xlsx" required formControlName="inputCtrl" >                  
                 </button>
                 <mat-form-field class="marginLeft">
                     <input matInput placeholder="Seleccione archivo" value="{{nombreFile}}"  (click)="fileInput.click()">
@@ -153,7 +161,7 @@
                           <mat-card *ngIf="countSuccess>0">
                               Registros validados {{countSuccess}}  
                               <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)" md-colors="{background: 'indigo'}" formControlName="confirmarCtrl"  required>  Confirmar</mat-checkbox>
-                              <button mat-raised-button matStepperNext [disabled]="!checkValidation" (click)="fulltable()">Continuar</button>
+                              <button mat-raised-button matStepperNext  (click)="fulltable()">Continuar</button>
                           </mat-card>
                       </th>
                     </tr>
@@ -455,4 +463,8 @@
     </form>
   </mat-step>
   </mat-horizontal-stepper>
+</div>
+
+</mat-card-content>
+</mat-card>
 </div>

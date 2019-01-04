@@ -7,6 +7,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+
 //ROUTER
 import { RouterModule } from '@angular/router';
 import { routing, appRoutingProviders } from './app.routing';
@@ -30,6 +31,7 @@ import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 //import { NgProgressRouterModule } from '@ngx-progressbar/router';
 
 //UTILITYS
+import { AngularEditorModule } from '@kolkov/angular-editor';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 
@@ -38,6 +40,8 @@ import { AngularSplitModule } from 'angular-split';
 
 
 //ANGULAR MATERIAL
+import {CalendarModule} from 'primeng/calendar';
+import 'hammerjs';
 import { MatBadgeModule, MatTableModule, MatPaginatorModule } from '@angular/material';
 import { MatNativeDateModule, MatFormField, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { MatButtonModule, MatDialogModule, MatButtonToggleModule } from '@angular/material';
@@ -46,24 +50,22 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
 import { MatStepperModule } from '@angular/material/stepper';
-import { LayoutModule } from '@angular/cdk/layout';
 import { MatProgressBarModule} from '@angular/material/progress-bar';
 import { MatChipsModule, MatTabsModule } from '@angular/material';
 import { MatSelectModule, MatMenuModule } from '@angular/material';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import 'hammerjs';
-import {MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule} from '@angular/material/expansion';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
-import {CalendarModule} from 'primeng/calendar';
-import {MatCheckboxModule} from '@angular/material/checkbox';
+import { MatCheckboxModule} from '@angular/material/checkbox';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatSnackBarModule} from '@angular/material/snack-bar';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatGridListModule} from '@angular/material/grid-list';
-import {MatBottomSheetModule} from '@angular/material/bottom-sheet';
+import { MatDatepickerModule} from '@angular/material/datepicker';
+import { MatSnackBarModule} from '@angular/material/snack-bar';
+import { MatRadioModule} from '@angular/material/radio';
+import { MatGridListModule} from '@angular/material/grid-list';
+import { MatBottomSheetModule} from '@angular/material/bottom-sheet';
 import { MatRippleModule, MatSliderModule } from '@angular/material';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
 //MOMENT
@@ -158,7 +160,7 @@ import { SplitPipe } from './pipes/split.pipe';
 import { KeysPipe } from './pipes/keys.pipe';
 
 //ROUTE FOR LOADING
-import { RouterResolver } from './router.resolver';
+//import { RouterResolver } from './router.resolver';
 
 
 //MAPS
@@ -237,7 +239,8 @@ registerLocaleData(localeEs);
     VehiculoOverviewDialog,
     ZipComponent, 
   ],
-  imports: [    
+  imports: [
+    AngularEditorModule,
     AgmDirectionModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
@@ -302,6 +305,7 @@ registerLocaleData(localeEs);
     ReactiveFormsModule,      
     routing,
     RouterModule,
+    ScrollingModule,
     ServiceModule,
     ToastModule,    
     ToastrModule.forRoot(),

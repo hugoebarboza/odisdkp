@@ -30,14 +30,12 @@ export class ItemFirebaseService {
 
   constructor(
     private afs: AngularFirestore,
-    private db: AngularFireDatabase,
-    private afStorage: AngularFireStorage,
     public _http: HttpClient,
 
   	) { 
   }
 
-  getItems(path){
+  getItems(path:any){
 
     this.itemsCollection = this.afs.collection<Item>(path, ref => ref.orderBy('nombre','asc'));
     

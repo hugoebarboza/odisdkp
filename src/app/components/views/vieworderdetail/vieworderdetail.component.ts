@@ -1,4 +1,9 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { FormControl, FormsModule  } from '@angular/forms';
+
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { Observable } from 'rxjs';
 
 //SERVICES
 import { OrderserviceService } from '../../../services/orderservice.service';
@@ -15,6 +20,7 @@ import { Options, LabelType } from 'ng5-slider';
 import * as _moment from 'moment';
 const moment = _moment;
 
+export interface Item { id: any, comment: string; created: any, identity: string}
 
 @Component({
   selector: 'app-vieworderdetail',
@@ -27,7 +33,9 @@ const moment = _moment;
 export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
 
   public show:boolean = false;
-  private token;
+  public identity: any;
+  private token: any;
+  private path = '';
   data: Order[] = [];
   isLoadingResults = false;
   isRateLimitReached = false;
@@ -36,6 +44,13 @@ export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
   minValue: any;
   maxValue: any;
   options: Options;
+  orderContent: Item[];
+  toggleContent: boolean = false;
+  projectid:number;
+  created: FormControl;
+  private itemsCollection: AngularFirestoreCollection<Item>;
+  private itemDoc: AngularFirestoreDocument<Item>;
+  items: Observable<Item[]>;
 
   models: any[] = [
         {id:0, name:'Detalles', description:'Detalles de OT', expand: true},
@@ -46,19 +61,49 @@ export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
         {id:5, name:'Tiempos Atención', description:'Tiempo de OT', expand: true}
   ];
 
+  editorConfig: AngularEditorConfig = {
+    editable: true,
+    spellcheck: true,
+    height: '15rem',
+    minHeight: '5rem',
+    placeholder: 'Escriba aqui...',
+    translate: 'no',
+    uploadUrl: 'v1/images', // if needed
+    customClasses: [ // optional
+      {
+        name: "quote",
+        class: "quote",
+      },
+      {
+        name: 'redText',
+        class: 'redText'
+      },
+      {
+        name: "titleText",
+        class: "titleText",
+        tag: "h1",
+      },
+    ]
+  };  
+
 	row: any = {expand: false};
 
   @Input() orderid : number;
 
   constructor(
+    private _afs: AngularFirestore,
+    private _orderService: OrderserviceService,
     private _userService: UserService,
-    private _orderService: OrderserviceService
+
     ) { 
+    this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:MM:SS'));
+    this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+    
+    
   }
 
   ngOnInit() {
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -97,13 +142,15 @@ export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
   getData(response: any){
     if(response){
         response.subscribe(
-          (some) => 
+          (some:any) => 
           {           
             if(some.datos){
             this.data = some.datos;
+            this.projectid = this.data[0]['project_id'];
             this.isRateLimitReached = false;          
             this.isLoadingResults = false;
-
+            //Determinar ruta de Firebase
+            this.getRouteFirebase(this.projectid)
             //Determinar tiempo transcurrido
             if(this.data[0].create_at && this.data[0].update_at){
               this.getSpentTime();
@@ -150,5 +197,40 @@ export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
 
   }
 
+  getRouteFirebase(id:number){
+    
+    if (this.orderid > 0 && id > 0){
+      this.path = 'comments/'+id+'/'+this.orderid;
+      this.itemsCollection = this._afs.collection<Item>(this.path, ref => ref.orderBy('created','desc'));      
+      this.items = this.itemsCollection.valueChanges();
+    }        
+  }
+
+  addComment(value:any) { 
+    const docid = this._afs.createId();
+    this.itemsCollection.doc(docid).set(
+      {
+        id: docid,
+        comment: value,
+        created: this.created.value,
+        identity: this.identity.name + ' ' + this.identity.surname
+      }      
+    );
+    if(this.toggleContent){
+      this.toggleContent=false;
+    }   
+  }
+
+  deleteCommentDatabase(value$: any) {    
+    this.itemsCollection.doc(value$).delete();
+    if(this.toggleContent){
+      this.toggleContent=false;
+    }   
+  }  
+
+  toggle() {
+    this.toggleContent = !this.toggleContent;
+    this.orderContent = null;
+  }
 
 }

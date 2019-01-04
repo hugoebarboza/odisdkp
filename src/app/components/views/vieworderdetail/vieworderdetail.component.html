@@ -163,7 +163,29 @@
                                     </div>                  
                                     </div>
                                 <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                   
+                                  <div class="p-3">
+                                    <div *ngIf="!toggleContent">
+                                        <li *ngFor="let item of items | async" >
+                                            {{ item.comment }}, {{item.identity}} ({{item.created}}) 
+                                            <button mat-icon-button color="warn"  (click)="deleteCommentDatabase(item.id)"                                                                                         
+                                            >
+                                              <div>
+                                              <mat-icon aria-label="Delete">clear</mat-icon>
+                                              </div>
+                                            </button>
+                                        </li>                                       
+                                    </div>
+                                       
+                                  <button mat-flat-button style=" background:#F8F8F8;" (click)="toggle()" *ngIf="!toggleContent">
+                                    <mat-icon class="material-icons md-14-color" >comment</mat-icon>
+                                    Comentar
+                                  </button>
+                                  <angular-editor [(ngModel)]="orderContent" [config]="editorConfig" *ngIf="toggleContent"></angular-editor>
+                                  <div class="button-row p-2" *ngIf="toggleContent">
+                                      <button mat-raised-button color="primary" (click)="addComment(orderContent)">Guardar</button>                                    
+                                      <button mat-raised-button (click)="toggle()">Cancelar</button>
+                                  </div>
+                                  </div>
                                 </div>
                                 </div>
                             </div>

@@ -7,7 +7,6 @@ import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 //SERVICES
 import { SettingsService } from './services/service.index';
 
-import * as $ from 'jquery';
 import { UserService } from './services/user.service';
 import { Proyecto } from './models/proyecto';
 
@@ -19,8 +18,8 @@ import { Proyecto } from './models/proyecto';
   providers: [UserService]
 })
 export class AppComponent implements OnInit, DoCheck {
-  public identity;
-  public token;
+  public identity: any;
+  public token: any;
   public proyectos: Array<Proyecto>;
   titulo: string;
   description: string;

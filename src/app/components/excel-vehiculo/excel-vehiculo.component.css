@@ -1,6 +1,10 @@
 mat-form-field{
     margin-right: 20px;
 }
+.custom-card {
+  background-color: #f2f4f7;
+}
+
 .loadExcel {
     display:inline-block;
     margin-right: 20px;

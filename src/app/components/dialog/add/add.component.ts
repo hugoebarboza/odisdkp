@@ -40,8 +40,8 @@ interface ObjectServiceType {
 
 export class AddComponent implements OnInit, OnDestroy {
   public title: string;
-  public identity;
-  public token;
+  public identity: any;
+  public token: any;
   public services: Service[] = [];
   public project: string;  
   public servicetype: ServiceType[] = [];
@@ -52,6 +52,7 @@ export class AddComponent implements OnInit, OnDestroy {
   public results: Object = [];  
   public show:boolean = false;
   public showdate:boolean = false;
+  myDate: any;
   service_name:string;
   isLoading = false;
   loading: boolean;

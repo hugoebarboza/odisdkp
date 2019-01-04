@@ -26,6 +26,7 @@
     "@angular/pwa": "^0.11.4",
     "@angular/router": "^7.1.4",
     "@angular/service-worker": "^7.1.4",
+    "@kolkov/angular-editor": "^0.13.1",
     "@ng-bootstrap/ng-bootstrap": "^4.0.1",
     "@ng-select/ng-select": "^2.13.3",
     "@ngx-loading-bar/core": "^3.0.0",

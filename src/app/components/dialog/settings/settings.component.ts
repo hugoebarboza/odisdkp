@@ -12,7 +12,9 @@ export class SettingsComponent implements OnInit {
   public columnselect: string[] = new Array();
   lastAction: string;
   checked = false;
-  displayedColumns: string[] = ['order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
+  
+  displayedColumns: string[] = ['important','order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'userupdate', 'userassigned','create_at', 'actions']; 
+  //displayedColumns: string[] = ['order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
   dataColumns = new Array();
 
   constructor(

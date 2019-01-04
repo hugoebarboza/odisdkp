@@ -331,11 +331,11 @@
 
 <ng-container matColumnDef="order_number"  >  
   <mat-header-cell *matHeaderCellDef mat-sort-header > N. Orden </mat-header-cell>
-    <mat-cell *matCellDef="let order; let i = index" >
-
-      {{order.order_number}}             
-
-  </mat-cell>
+    <mat-cell *matCellDef="let order; let i = index" >      
+        {{order.order_number}}
+        <mat-icon class="material-icons md-13-color" *ngIf="order.imagen">image</mat-icon>        
+        <mat-icon class="material-icons md-13-nocolor" *ngIf="!order.imagen">image</mat-icon>                
+      </mat-cell>
 </ng-container>
 
 
@@ -400,8 +400,18 @@
 </ng-container>
 
 <ng-container matColumnDef="user" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Creado Por </mat-header-cell>
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Creado </mat-header-cell>
     <mat-cell *matCellDef="let order"> {{order.user}} </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="userupdate" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Editado </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.userupdate}} </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="userassigned" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Asignado </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.userassigned}} </mat-cell>
 </ng-container>
 
 

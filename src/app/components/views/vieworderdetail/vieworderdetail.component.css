@@ -50,3 +50,8 @@
     color: #333;
     font-weight: 600;
 }
+
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+}

@@ -1,16 +1,13 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Params } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material';
-import {FormControl, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {switchMap, debounceTime, tap, finalize} from 'rxjs/operators';
-import {Observable,  SubscriptionLike as ISubscription } from 'rxjs'
+import { FormControl, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import { SubscriptionLike as ISubscription } from 'rxjs'
 import { OnDestroy } from "@angular/core";
 
 
 
 //SERVICES
-import { CustomerService } from '../../services/customer.service';
-import { CountriesService } from '../../services/countries.service';
 import { OrderserviceService } from '../../services/orderservice.service';
 import { SettingsService } from '../../services/service.index';
 import { UserService } from '../../services/user.service';
@@ -18,7 +15,6 @@ import { UserService } from '../../services/user.service';
 //MODELS
 import { Proyecto } from '../../models/proyecto';
 import { Order } from '../../models/order';
-import { Comuna } from '../../models/Comuna';
 import { Tarifa } from '../../models/Tarifa';
 import { Constante } from '../../models/Constante';
 import { Giro } from '../../models/Giro';
@@ -37,8 +33,8 @@ import { Region } from '../../models/Region';
 })
 export class OrderserviceComponent implements OnInit, OnDestroy {
   public title: string;
-  public identity;
-  public token;
+  public identity:any;
+  public token:any;
   public proyectos: Array<Proyecto>;
   public order: Order[] = [];
   public tarifas: Tarifa;
@@ -86,12 +82,9 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
 
   constructor(	
   private _route: ActivatedRoute,
-	private _router: Router,		  	
 	private _userService: UserService,  
 	private _proyectoService: UserService,
   private _orderService: OrderserviceService,
-  private _customerService: CustomerService,
-  private _regionService: CountriesService,
   public _ajustes: SettingsService,
   fb: FormBuilder
 

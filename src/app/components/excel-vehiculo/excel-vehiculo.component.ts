@@ -1,4 +1,4 @@
-import { Component, OnInit , ViewChild, Inject, Input, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit , ViewChild, Inject, Input, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
 import * as XLSX from 'xlsx';
 import { DataService } from '../../services/data.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
@@ -8,22 +8,19 @@ import * as FileSaver from 'file-saver';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 
-import { Observable, Subscription } from 'rxjs';
-
-import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
-
 //MODEL
 import { Service } from '../../models/Service';
-
 
 //SERVICES
 import { UserService } from '../../services/user.service';
 import { OrderserviceService } from '../../services/orderservice.service';
+import { Subscription } from 'rxjs';
 
-
+import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
 const EXCEL_EXTENSION = '.xlsx';
+
 
 @Component({
   selector: 'app-excel-vehiculo',
@@ -39,6 +36,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
   project_id:number;
   servicename:string;
   service_id: number;
+
 
   dateend: any = undefined;
 
@@ -104,27 +102,17 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
   @Input() table : string;
 
   constructor(
-    private activatedRoute: ActivatedRoute,
     public dataService: DataService,
     private _formBuilder: FormBuilder,
     public snackBar: MatSnackBar,
     public dialog: MatDialog,
     private _orderService: OrderserviceService,
-    private _userService: UserService,  
-
-
+    private _userService: UserService,
   ) {
-
     this.token = this._userService.getToken();
     this.ServicioSeleccionado = new EventEmitter(); 
-    this.firtsFormGroup = this._formBuilder.group({
-      confirmarCtrl: ['', Validators.required],
-      inputCtrl: ['', Validators.required]
-    });
 
-    this.secondFormGroup = this._formBuilder.group({
-      confirmarCli: ['', Validators.required]
-    });
+
 
   }
 
@@ -151,17 +139,25 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    //console.log('onchange excelvehiculo');
-    //console.log(this.table);
-    this.resetAll(1);
-    this.service_id = this.id;    
-    //this.dataSource.paginator = this.paginator;
-    //this.dataSourceClientes.paginator = this.paginatorClientes;
-    //this.dataSourceOrdenes.paginator = this.paginatorOrdenes;
+    this.service_id = this.id;
     this.getServices(this.service_id);
+    this.dataSource.paginator = this.paginator;
+    this.dataSourceClientes.paginator = this.paginatorClientes;
+    this.dataSourceOrdenes.paginator = this.paginatorOrdenes;
+    this.firtsFormGroup = this._formBuilder.group({
+      confirmarCtrl: ['', Validators.required],
+      inputCtrl: ['', Validators.required]
+    });
+
+    this.secondFormGroup = this._formBuilder.group({
+      confirmarCli: ['', Validators.required]
+    });
+
     this.getColor();
     this.getMarca();
     this.getTipoServicio(this.service_id);
+    this.getInspectores();
+    this.resetAll();
   }
 
 
@@ -187,7 +183,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-   getServices(id){      
+  getServices(id){      
     this.subscription = this._orderService.getService(this.token.token, id).subscribe(
     response => {
               if(!response){
@@ -207,7 +203,6 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
               });        
     }
 
-
   incomingfile(event) {
     this.file = event.target.files[0];
     if (this.file == null) {
@@ -218,15 +213,13 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
       this.countSuccess = 0;
       this.checkValidation = false;
       this.dateend = undefined;
-      this.resetAll(1);
+      this.resetAll();
     } else {
-      this.resetAll(0);
       this.nombreFile = this.file.name;
       this.bandera = true;
       this.openDialogDate();
     }
   }
-
 
   openDialogDate(): void {
 
@@ -549,7 +542,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
                 (res: any) => {
                   res.subscribe(
                     (some) => {
-                      console.log(some['datos']);
+                      //console.log(some['datos']);
                       if (some['datos'].length > 1) {
                         const obj: Object = {
                           'estatus' : 'Error: Cliente Duplicado',
@@ -562,7 +555,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
                         this.countError = this.countError + 1;
                         this.refreshTable();
                       } else {
-                        console.log(some['datos'][0]['id']);
+                        // console.log(some['datos'][0]['id']);
                         const obj: Object = {
                           'cc_id': some['datos'][0]['cc_id'],
                           'estatus': 'VIN registrado',
@@ -579,7 +572,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
                     },
                     (error) => {
-                      console.log(error);
+                      console.log(<any>error);
                       if (error['error']['mensaje'] === 'no se encuentra cliente') {
                         const obj: Object = {
                           'estatus' : 'Registro valido',
@@ -665,7 +658,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
       (res: any) => {
         res.subscribe(
           (some) => {
-            console.log(some);
+            //console.log(some);
             this.color = some['color'];
           },
           (error) => {
@@ -681,7 +674,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
       (res: any) => {
         res.subscribe(
           (some) => {
-            //console.log(some);
+            // console.log(some);
             this.usuarios = some['datos'];
           },
           (error) => {
@@ -812,14 +805,14 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
     this.arrayExcelSuccess.forEach(function(valor, indice, array) {
 
-      console.log(JSON.stringify(valor));
+      //console.log(JSON.stringify(valor));
 
       if (this.arrayExcelSuccess[indice]['parametro'] === 2) {
         this.dataService.postDataBD(this.arrayExcelSuccess[indice], this.project_id, this.token.token).then(
           (res: any) => {
             res.subscribe(
               (some) => {
-                console.log(some);
+                //console.log(some);
                 this.countSuccessPost = this.countSuccessPost + 1;
                 this.arrayExcelSuccess[indice]['estatus'] = some['message'];
                 this.arrayExcelSuccess[indice]['label'] = 'green';
@@ -847,7 +840,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
           (res: any) => {
             res.subscribe(
               (some) => {
-                console.log(some);
+                //console.log(some);
                 this.countSuccessPost = this.countSuccessPost + 1;
                 this.arrayExcelSuccess[indice]['estatus'] = some['mensaje'];
                 this.arrayExcelSuccess[indice]['label'] = 'green';
@@ -904,7 +897,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
           (res: any) => {
             res.subscribe(
               (some) => {
-                console.log(some);
+                //console.log(some);
                 this.countSuccessOrdenes = this.countSuccessOrdenes + 1;
                 this.arrayExcelSuccess[indice]['estatus'] = some['message'];
                 this.arrayExcelSuccess[indice]['label'] = 'green';
@@ -958,7 +951,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
               (res: any) => {
                 res.subscribe(
                   (some) => {
-                    console.log(some);
+                    //console.log(some);
                     this.countSuccessPost = this.countSuccessPost + 1;
                     this.arrayExcelSuccess[indice]['estatus'] = some['message'];
                     this.arrayExcelSuccess[indice]['label'] = 'green';
@@ -990,7 +983,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed ' + result);
+     // console.log('The dialog was closed ' + result);
 
       if ( result === true ) {
 
@@ -1009,7 +1002,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
               (res: any) => {
                 res.subscribe(
                   (some) => {
-                    console.log(some);
+                    //console.log(some);
                     this.countSuccessOrdenes = this.countSuccessOrdenes + 1;
                     this.arrayExcelSuccess[indice]['estatus'] = some['message'];
                     this.arrayExcelSuccess[indice]['label'] = 'green';
@@ -1063,12 +1056,9 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
     FileSaver.saveAs(data, fileName + '_export_' + new Date().getTime() + EXCEL_EXTENSION);
   }
 
-  resetAll(fil) {
+  resetAll() {
 
-    if(fil == 1){
-      this.file = null;
-    }
-
+    this.file = null;
     this.bandera = false;
     this.nombreFile = null;
     this.firtsFormGroup.controls['confirmarCtrl'].setValue('');
@@ -1094,6 +1084,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
     this.arrayExcelSuccess = [];
     this.arrayExcelError = [];
     this.arrayExcelErrorPost = [];
+    this.countExiste = 0;
 
   }
 }
@@ -1109,5 +1100,4 @@ export class VehiculoOverviewDialog {
     public dialogRef: MatDialogRef<VehiculoOverviewDialog>
     ) {}
 }
-
 
