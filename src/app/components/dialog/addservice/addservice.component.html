@@ -1,0 +1,549 @@
+<meta name="Description" content="Component">
+<div class="app">
+<mat-toolbar role="heading" color="primary">
+     <h3>{{title}} </h3>
+     <span class="mat-spacer"></span>
+     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+     <mat-icon class="mat-icon">close</mat-icon>       
+     </button>
+</mat-toolbar>
+
+
+ <p></p>
+  
+<div *ngIf="loading">
+    <app-loading *ngIf="loading"></app-loading>  
+</div>
+
+<div *ngIf="!loading">
+  <form class="mat-dialog-content" #formControl="ngForm" novalidate="novalidate" >
+    <div class="form">
+      <mat-form-field color="accent">
+        <input matInput #input class="form-control" placeholder="Proyecto" [(ngModel)]="project" name="project" required [value]="project" disabled>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field color="accent">
+         <input matInput #input  placeholder="Num. OT" [(ngModel)]="data.order_number" name="order_number" required  >
+         <button mat-button *ngIf="data.order_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.order_number=''">
+             <mat-icon>close</mat-icon>
+          </button>
+         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+         <mat-icon matSuffix>mode_edit</mat-icon>
+       </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Nombre Corto del Proyecto" [(ngModel)]="data.service_name" name="service_name" required  >
+        <button mat-button *ngIf="data.service_name" matSuffix mat-icon-button aria-label="Clear" (click)="data.service_name=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+
+
+    <div class="form">
+      <mat-form-field >
+        <textarea matInput #inputstate  placeholder="Descripción Amplia del Proyecto" [(ngModel)]="data.description" name="description" maxlength="177"  ></textarea>
+        <button mat-button *ngIf="data.description" matSuffix mat-icon-button aria-label="Clear" (click)="data.description=''">
+            <mat-icon>close</mat-icon>
+          </button>        
+        <mat-hint  align="end">{{inputstate.value?.length || 0}}/177</mat-hint>
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form" *ngIf="projectservicetype && projectservicetype.length > 0">
+    <mat-form-field>
+        <mat-select placeholder="Tipo" [(ngModel)]="data.type_id" name="type_id" required>
+          <mat-option *ngFor="let value of projectservicetype" [value]="value.id">
+            {{value.descripcion}}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+        <mat-form-field color="accent">
+           <input matInput #input  placeholder="Num. GOM" [(ngModel)]="data.gom_number" name="gom_number"  >
+           <button mat-button *ngIf="data.gom_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.gom_number=''">
+               <mat-icon>close</mat-icon>
+            </button>
+           <mat-icon matSuffix>mode_edit</mat-icon>
+         </mat-form-field>
+    </div>
+      
+
+
+    <div class="form" *ngIf="projectservicecategorie && projectservicecategorie.length > 0">
+        <mat-form-field>
+            <mat-select placeholder="Tipo Proyecto" [(ngModel)]="data.category_id" name="category_id" required>
+              <mat-option *ngFor="let value of projectservicecategorie" [value]="value.id">
+                {{value.descripcion}}
+              </mat-option>
+            </mat-select>
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+    </div>
+    
+    <div class="form">
+        <mat-form-field >
+          <textarea matInput #inputaddress  placeholder="Dirección del Proyecto" [(ngModel)]="data.address" name="address" maxlength="177"  ></textarea>
+          <button mat-button *ngIf="data.address" matSuffix mat-icon-button aria-label="Clear" (click)="data.address=''">
+              <mat-icon>close</mat-icon>
+            </button>        
+          <mat-hint  align="end">{{inputaddress.value?.length || 0}}/177</mat-hint>
+          <mat-icon matSuffix>mode_edit</mat-icon>
+        </mat-form-field>
+    </div>
+  
+    <div class="form" *ngIf="regiones && regiones.length > 0">
+      <mat-form-field>
+          <mat-select placeholder="Región del Proyecto" [(ngModel)]="data.region_id" name="region_id" required (selectionChange)="onSelectRegion(data.region_id)">
+            <mat-option *ngFor="let region of regiones" [value]="region.id">
+              {{region.region_name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="form" *ngIf="provincias && provincias.length > 0">
+      <mat-form-field>
+          <mat-select placeholder="Provincia del Proyecto" [(ngModel)]="data.provincia_id" name="provincia_id" required (selectionChange)="onSelectProvincia(data.provincia_id)">
+            <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">
+              {{provincia.province_name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="form" *ngIf="comunas && comunas.length > 0">
+      <mat-form-field>
+          <mat-select placeholder="Comuna del Proyecto" [(ngModel)]="data.comuna_id" name="comuna_id" required>
+            <mat-option *ngFor="let comuna of comunas" [value]="comuna.id">
+              {{comuna.commune_name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+        </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field class="example-full-width">
+        <input matInput [(ngModel)]="data.cc_number"  placeholder="Num. Cliente" [matAutocomplete]="auto" (keyup)="searchCustomer(data.cc_number)" name="cc_number" #cc_number >
+
+        <button mat-button *ngIf="data.cc_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.cc_number=''">
+            <mat-icon>close</mat-icon>
+        </button>
+
+        <mat-autocomplete #auto="matAutocomplete" >
+          <mat-option *ngIf="isLoading" class="is-loading">
+            <mat-spinner style="margin:0 auto;" mode="indeterminate" [strokeWidth]="4" diameter="50"></mat-spinner>
+          </mat-option>          
+          <mat-option *ngFor="let customer of customers" [value]="customer.cc_number" >        
+            <span>{{customer.cc_number}}</span>       
+          </mat-option>
+        </mat-autocomplete>
+      <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Ejecutivo" [(ngModel)]="data.ejecutivo" name="ejecutivo"   >
+        <button mat-button *ngIf="data.ejecutivo" matSuffix mat-icon-button aria-label="Clear" (click)="data.ejecutivo=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Unidad Responsable" [(ngModel)]="data.unidad_responsable" name="unidad_responsable"   >
+        <button mat-button *ngIf="data.unidad_responsable" matSuffix mat-icon-button aria-label="Clear" (click)="data.unidad_responsable=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+    
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Area Solicitante" [(ngModel)]="data.area_solicitante" name="area_solicitante"   >
+        <button mat-button *ngIf="data.area_solicitante" matSuffix mat-icon-button aria-label="Clear" (click)="data.area_solicitante=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Gestor" [(ngModel)]="data.gestor" name="gestor"   >
+        <button mat-button *ngIf="data.gestor" matSuffix mat-icon-button aria-label="Clear" (click)="data.gestor=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Contratista" [(ngModel)]="data.contratista" name="contratista"   >
+        <button mat-button *ngIf="data.contratista" matSuffix mat-icon-button aria-label="Clear" (click)="data.contratista=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Num. Contrato Inspección" [(ngModel)]="data.contract_number" name="contract_number"   >
+        <button mat-button *ngIf="data.contract_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.contract_number=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Nombre Responsable Obra" [(ngModel)]="data.responsable_obra" name="responsable_obra"   >
+        <button mat-button *ngIf="data.responsable_obra" matSuffix mat-icon-button aria-label="Clear" (click)="data.responsable_obra=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Telf. Responsable Obra" [(ngModel)]="data.responsable_phone" name="responsable_phone"   >
+        <button mat-button *ngIf="data.responsable_phone" matSuffix mat-icon-button aria-label="Clear" (click)="data.responsable_phone=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input type="email" placeholder="Correo Responsable Obra" [(ngModel)]="data.responsable_email" name="responsable_email"  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" >
+        <button mat-button *ngIf="data.responsable_email" matSuffix mat-icon-button aria-label="Clear" (click)="data.responsable_email=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Nombre Responsable Unidad" [(ngModel)]="data.responsable_unidad" name="responsable_unidad"   >
+        <button mat-button *ngIf="data.responsable_unidad" matSuffix mat-icon-button aria-label="Clear" (click)="data.responsable_unidad=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Telf. Responsable Unidad" [(ngModel)]="data.responsable_unidad_phone" name="responsable_unidad_phone"   >
+        <button mat-button *ngIf="data.responsable_unidad_phone" matSuffix mat-icon-button aria-label="Clear" (click)="data.responsable_unidad_phone=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  type="email" placeholder="Correo Responsable Unidad" [(ngModel)]="data.responsable_unidad_email" name="responsable_unidad_email"   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+        <button mat-button *ngIf="data.responsable_unidad_email" matSuffix mat-icon-button aria-label="Clear" (click)="data.responsable_unidad_email=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <h6>Fecha de Recepción</h6>
+    </div>
+  
+    <div class="form">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.reception_date" name="reception_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true"></p-calendar>
+    </div>
+  
+  
+    <div class="form">
+      <h6>Fecha Term. Estimada</h6>    
+    </div>
+  
+    <div class="form">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.required_date" name="required_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>
+  
+  
+    <div class="form">
+      <h6>Fecha Vencimiento</h6>    
+    </div>
+  
+    <div class="form">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.reception_date" [(ngModel)]="data.due_date" name="due_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>
+
+
+    <div >
+      <ng-select [items]="users"
+                 bindLabel="usuario"
+                 name="user_informador"
+                 placeholder="Informa Proyecto"
+                 [(ngModel)]="user_informador">
+      </ng-select>
+    </div>
+
+    <div >
+      <ng-select [items]="users"
+                 bindLabel="usuario"
+                 name="user_responsable"
+                 placeholder="Responsable Proyecto"
+                 [(ngModel)]="user_responsable">
+      </ng-select>
+    </div>
+
+    <div >
+      <ng-select [items]="users_ito"
+                 bindLabel="usuario"
+                 name="user_itocivil_assigned_to"
+                 placeholder="ITO Civil"
+                 [(ngModel)]="user_itocivil_assigned_to">
+      </ng-select>
+    </div>
+
+    <div class="form" *ngIf="user_itocivil_assigned_to">
+      <h6>Fecha Asignación ITO Civil</h6>    
+    </div>
+
+    <div class="form" *ngIf="user_itocivil_assigned_to">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.assigned_date_touser1" [(ngModel)]="data.assigned_date_touser1" name="assigned_date_touser1" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>
+
+
+    <div >
+      <ng-select [items]="users_ito"
+                 bindLabel="usuario"
+                 name="user_itoelec_assigned_to"
+                 placeholder="ITO Eléctrico"
+                 [(ngModel)]="user_itoelec_assigned_to">
+      </ng-select>
+    </div>
+
+
+    <div class="form" *ngIf="user_itoelec_assigned_to">
+      <h6>Fecha Asignación ITO Eléctrico</h6>    
+    </div>
+
+    <div class="form" *ngIf="user_itoelec_assigned_to">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.assigned_date_touser2" [(ngModel)]="data.assigned_date_touser2" name="assigned_date_touser2" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>
+
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Nombre ITO Civil Externo" [(ngModel)]="data.other_ito_civil" name="other_ito_civil"   >
+        <button mat-button *ngIf="data.other_ito_civil" matSuffix mat-icon-button aria-label="Clear" (click)="data.other_ito_civil=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form" *ngIf="data.other_ito_civil">
+      <h6>Fecha Asignación ITO Civil Externo</h6>    
+    </div>
+
+    <div class="form" *ngIf="data.other_ito_civil">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.other_assigned_date_toitocivil" [(ngModel)]="data.other_assigned_date_toitocivil" name="other_assigned_date_toitocivil" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>
+
+    
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Nombre ITO Eléctrico Externo" [(ngModel)]="data.other_ito_electrico" name="other_ito_electrico"   >
+        <button mat-button *ngIf="data.other_ito_electrico" matSuffix mat-icon-button aria-label="Clear" (click)="data.other_ito_electrico=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+
+    <div class="form" *ngIf="data.other_ito_electrico">
+      <h6>Fecha Asignación ITO Eléctrico Externo</h6>    
+    </div>
+
+    <div class="form" *ngIf="data.other_ito_electrico">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.other_assigned_date_toitoelec" [(ngModel)]="data.other_assigned_date_toitoelec" name="other_assigned_date_toitoelec" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>    
+
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Num. CRO" [(ngModel)]="data.cro_number" name="cro_number"   >
+        <button mat-button *ngIf="data.cro_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.cro_number=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+
+    <div class="form" *ngIf="data.cro_number">
+      <h6>Fecha Recepción CRO</h6>    
+    </div>
+
+    <div class="form" *ngIf="data.cro_number">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.reception_crodate" [(ngModel)]="data.reception_crodate" name="reception_crodate" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>    
+
+    <div class="form" *ngIf="data.cro_number">
+      <h6>Fecha Revisión CRO</h6>    
+    </div>
+
+    <div class="form" *ngIf="data.cro_number">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.checked_crodate" [(ngModel)]="data.checked_crodate" name="checked_crodate" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>    
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="CRO Estatus" [(ngModel)]="data.cro_status" name="cro_status"   >
+        <button mat-button *ngIf="data.cro_status" matSuffix mat-icon-button aria-label="Clear" (click)="data.cro_status=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="MO (Mayor Obra)" [(ngModel)]="data.mo_number" name="mo_number"   >
+        <button mat-button *ngIf="data.mo_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.mo_number=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="Num. EDP" [(ngModel)]="data.edp_number" name="edp_number"   >
+        <button mat-button *ngIf="data.edp_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.edp_number=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <input matInput #input  placeholder="EDP Estatus" [(ngModel)]="data.edp_status" name="edp_status"   >
+        <button mat-button *ngIf="data.edp_status" matSuffix mat-icon-button aria-label="Clear" (click)="data.edp_status=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form" *ngIf="data.edp_number">
+      <h6>Fecha Envío EDP</h6>    
+    </div>
+
+    <div class="form" *ngIf="data.edp_number">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.send_edpdate" [(ngModel)]="data.send_edpdate" name="send_edpdate" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>    
+
+    <div class="form" *ngIf="data.edp_number && data.send_edpdate">
+      <h6>Fecha Aceptación EDP</h6>    
+    </div>
+
+    <div class="form" *ngIf="data.edp_number && data.send_edpdate">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.accept_edpdate" [(ngModel)]="data.accept_edpdate" name="accept_edpdate" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>    
+
+    <div class="form" *ngIf="data.edp_number && data.send_edpdate">
+      <h6>Fecha Rechazo EDP</h6>    
+    </div>
+
+    <div class="form" *ngIf="data.edp_number && data.send_edpdate">
+      <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="data.reject_edpdate" [(ngModel)]="data.reject_edpdate" name="reject_edpdate" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+      </p-calendar>
+    </div>    
+
+    <div class="form">      
+      <mat-form-field >
+        <input matInput #input  placeholder="EDP Monto" [(ngModel)]="data.edp_amount" name="edp_amount"   >
+        <button mat-button *ngIf="data.edp_amount" matSuffix mat-icon-button aria-label="Clear" (click)="data.edp_amount=''">
+            <mat-icon>close</mat-icon>
+        </button>        
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>
+
+    <div class="form">
+      <mat-form-field >
+        <textarea matInput #inputstate  placeholder="Observación del Proyecto" [(ngModel)]="data.observation" name="observation" maxlength="177"  ></textarea>
+        <button mat-button *ngIf="data.observation" matSuffix mat-icon-button aria-label="Clear" (click)="data.observation=''">
+            <mat-icon>close</mat-icon>
+          </button>        
+        <mat-hint  align="end">{{inputstate.value?.length || 0}}/177</mat-hint>
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>    
+
+    <div class="form">
+      <mat-form-field >
+        <textarea matInput #inputstate  placeholder="Otra Observación del Proyecto" [(ngModel)]="data.other_observation" name="other_observation" maxlength="177"  ></textarea>
+        <button mat-button *ngIf="data.other_observation" matSuffix mat-icon-button aria-label="Clear" (click)="data.other_observation=''">
+            <mat-icon>close</mat-icon>
+          </button>        
+        <mat-hint  align="end">{{inputstate.value?.length || 0}}/177</mat-hint>
+        <mat-icon matSuffix>mode_edit</mat-icon>
+      </mat-form-field>
+    </div>    
+
+
+<br>
+  </form>
+<br>
+
+<div mat-dialog-actions *ngIf="!loading">
+  <button mat-button color="primary" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmAdd(formControl)" mat-raised-button color="primary" class="btnsave">Guardar</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cerrar</button>
+</div>
+</div>
+</div>
+
+<br>
+

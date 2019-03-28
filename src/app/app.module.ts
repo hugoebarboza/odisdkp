@@ -30,21 +30,31 @@ import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 //import { NgProgressModule } from '@ngx-progressbar/core';
 //import { NgProgressRouterModule } from '@ngx-progressbar/router';
 
+
 //UTILITYS
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
+import { MarkdownModule } from 'ngx-markdown';
+import { Ng5SliderModule } from 'ng5-slider';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { TableModule } from 'ngx-easy-table';
+import { VerticalTimelineModule } from 'angular-vertical-timeline';
+
+
 
 //ANGULAR SPLIT
 import { AngularSplitModule } from 'angular-split';
 
 
 //ANGULAR MATERIAL
-import {CalendarModule} from 'primeng/calendar';
+import { CalendarModule } from 'primeng/calendar';
+import { CalendarModule as AngularCalendar, DateAdapter as AngularDateAdapter } from 'angular-calendar';
+import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import 'hammerjs';
 import { MatBadgeModule, MatTableModule, MatPaginatorModule } from '@angular/material';
 import { MatNativeDateModule, MatFormField, MatFormFieldModule, MatInputModule } from '@angular/material';
 import { MatButtonModule, MatDialogModule, MatButtonToggleModule } from '@angular/material';
+import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatProgressSpinnerModule, MatSortModule, MatSidenavModule, MatListModule, MatIconModule } from "@angular/material";
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -74,6 +84,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 
 //COMPONENT
 import { AppComponent } from './app.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
 import { ChangepasswordComponent } from './components/changepassword/changepassword.component';
 import { DefaultComponent } from './components/default/default.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
@@ -82,9 +93,12 @@ import { ExcelComponent, DialogOverviewDialog } from './components/excel/excel.c
 import { ExcelVehiculoComponent } from './components/excel-vehiculo/excel-vehiculo.component';
 import { FileComponent } from './components/dialog/file/file.component';
 import { FilelistComponent } from './components/dialog/filelist/filelist.component';
+import { FileListComponent } from './components/file-list/file-list.component';
+import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FootermainComponent } from './components/shared/footermain/footermain.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
+import { GestionComponent } from './components/gestion/gestion.component';
 import { HeaderComponent } from './components/header/header.component';
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { LoginComponent } from './components/login/login.component';
@@ -96,23 +110,33 @@ import { NotfoundComponent } from './components/shared/notfound/notfound.compone
 import { OrderserviceComponent } from './components/orderservice/orderservice.component';
 import { ProgressSpinnerComponent } from './components/shared/progress-spinner/progress-spinner.component';
 import { RegisterComponent } from './components/register/register.component';
+import { ServiceComponent } from './components/service/service.component';
+import { TableroComponent } from './components/tablero/tablero.component';
 import { UsertableComponent } from './components/usertable/usertable.component';
 import { ViewOrderDetailComponent } from './components/views/vieworderdetail/vieworderdetail.component';
 import { VieworderserviceComponent } from './components/views/vieworderservice/vieworderservice.component';
+import { ViewOrderTimeSpentComponent } from './components/views/viewordertimespent/viewordertimespent.component';
 import { ViewprojectcustomerComponent } from './components/views/viewprojectcustomer/viewprojectcustomer.component';
 import { ViewprojectorderComponent } from './components/views/viewprojectorder/viewprojectorder.component';
+import { ViewProjectDetailComponent } from './components/views/viewprojectdetail/viewprojectdetail.component';
 
 
 //DIALOG
 import { AddComponent } from './components/dialog/add/add.component';
+import { AddCalendarComponent } from './components/dialog/addcalendar/addcalendar.component';
 import { AddcustomerComponent } from './components/dialog/addcustomer/addcustomer.component';
+import { AddServiceComponent } from './components/dialog/addservice/addservice.component';
+import { AddSupportComponent } from './components/dialog/widget/addsupport/addsupport.component';
 import { CargaComponent } from './components/dialog/carga/carga.component';
 import { CsvComponent } from './components/dialog/csv/csv.component';
+import { CsvCustomerComponentComponent } from './components/dialog/csvcustomercomponent/csvcustomercomponent.component';
 import { DeleteComponent } from './components/dialog/delete/delete.component';
 import { DeletecustomerComponent } from './components/dialog/deletecustomer/deletecustomer.component';
+import { DeleteServiceComponent } from './components/dialog/deleteservice/deleteservice.component';
 import { DownloadComponent } from './components/dialog/download/download.component';
 import { EditComponent } from './components/dialog/edit/edit.component';
 import { EditcustomerComponent } from './components/dialog/editcustomer/editcustomer.component';
+import { EditServiceComponent } from './components/dialog/editservice/editservice.component';
 import { LogoutComponent } from './components/dialog/logout/logout.component';
 import { ShowComponent } from './components/dialog/show/show.component';
 import { ShowcustomerComponent } from './components/dialog/showcustomer/showcustomer.component';
@@ -140,11 +164,6 @@ import { ProjectsService } from './services/projects.service';
 import { UserService } from './services/user.service';
 import { ZipService } from './services/zip.service';
 
-//SLIDE MODULE
-import { Ng5SliderModule } from 'ng5-slider';
-import { VerticalTimelineModule } from 'angular-vertical-timeline';
-
-
 
 //Import toast module
 import { ToastModule } from 'primeng/toast';
@@ -156,8 +175,13 @@ import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
 //PIPE
-import { SplitPipe } from './pipes/split.pipe';
+import { FileSizePipe } from './pipes/file-size.pipe';
+import { HighlightSearch } from './pipes/highlight.pipe';
 import { KeysPipe } from './pipes/keys.pipe';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { SearchPipe } from './pipes/search.pipe';
+import { SplitPipe } from './pipes/split.pipe';
+
 
 //ROUTE FOR LOADING
 //import { RouterResolver } from './router.resolver';
@@ -176,10 +200,8 @@ import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
 //DIRECTIVES
+import { DropZoneDirective } from './directives/drop-zone.directive';
 import { NgDropFilesDirective } from './directives/ng-drop-files.directive';
-
-
-
 
 
 
@@ -190,27 +212,40 @@ registerLocaleData(localeEs);
   declarations: [
     AppComponent,
     AddComponent,
+    AddCalendarComponent,
     AddcustomerComponent,
+    AddServiceComponent,
+    AddSupportComponent,
+    CalendarComponent,
     CargaComponent,
     ChangepasswordComponent,    
     CsvComponent,
+    CsvCustomerComponentComponent,
     DashboardComponent,
     DateDialogComponent,
     DefaultComponent,
     DeletecustomerComponent,
     DeleteComponent,
+    DeleteServiceComponent,
     DialogOverviewDialog,
-    DownloadComponent, 
+    DownloadComponent,
+    DropZoneDirective,
     EditcustomerComponent,
     EditComponent,
+    EditServiceComponent,    
     ExcelComponent,
     ExcelVehiculoComponent,
     FileComponent,
-    FilelistComponent,  
+    FilelistComponent,
+    FileListComponent,
+    FileUploadComponent,
+    FileSizePipe,
     FooterComponent,
     ForgotpasswordComponent,
-    FootermainComponent, 
+    FootermainComponent,
+    GestionComponent,
     HeaderComponent,
+    HighlightSearch,
     KeysPipe, 
     LoadingComponent,
     LoginComponent,
@@ -229,7 +264,9 @@ registerLocaleData(localeEs);
     SettingsComponent, 
     SettingscustomerComponent, 
     ShowComponent,
-    ShowcustomerComponent, 
+    ShowcustomerComponent,
+    ServiceComponent,
+    SearchPipe,
     SplitPipe, 
     UsertableComponent,
     ViewOrderDetailComponent,
@@ -237,7 +274,10 @@ registerLocaleData(localeEs);
     ViewprojectorderComponent,
     ViewprojectcustomerComponent, 
     VehiculoOverviewDialog,
-    ZipComponent, 
+    ZipComponent,
+    TableroComponent,
+    ViewOrderTimeSpentComponent,
+    ViewProjectDetailComponent,            
   ],
   imports: [
     AngularEditorModule,
@@ -245,16 +285,21 @@ registerLocaleData(localeEs);
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
+    AngularFireDatabaseModule,
+    AngularFireStorageModule,
     AgmCoreModule.forRoot({
       apiKey: 'AIzaSyAg5Y0POCb-IZd3KgqFHW51BT_7lJGFNwg'
     }),   
-    AngularFireDatabaseModule,
-    AngularFireStorageModule,
-    AngularSplitModule.forRoot(),    
+    AngularSplitModule.forRoot(),
+    AngularCalendar.forRoot({
+      provide: AngularDateAdapter,
+      useFactory: adapterFactory
+    }),   
     BrowserModule,    
     BrowserAnimationsModule,    
     CalendarModule,    
     CommonModule,
+    FlexLayoutModule,
     FormsModule,    
     HttpModule,
     HttpClientModule,    
@@ -266,6 +311,7 @@ registerLocaleData(localeEs);
     MatPaginatorModule,
     MatFormFieldModule,
     NgxMatSelectSearchModule,
+    MarkdownModule.forRoot(),
     MatInputModule,
     MatIconModule,     
     MatCardModule,    
@@ -295,7 +341,8 @@ registerLocaleData(localeEs);
     MatDialogModule,
     MatTabsModule,
     MatButtonModule,
-    MatMenuModule,    
+    MatMenuModule,
+    Ng2SearchPipeModule,
     Ng5SliderModule,    
     NgbModule,
     NgSelectModule,    
@@ -307,25 +354,56 @@ registerLocaleData(localeEs);
     RouterModule,
     ScrollingModule,
     ServiceModule,
+    TableModule,
     ToastModule,    
     ToastrModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     VerticalTimelineModule
   ],
   entryComponents: [
-    AddComponent, AddcustomerComponent, EditComponent, EditcustomerComponent, CsvComponent, 
+    AddComponent, 
+    AddCalendarComponent, 
+    AddcustomerComponent, 
+    AddServiceComponent,
+    AddSupportComponent,
+    CsvComponent,
+    CsvCustomerComponentComponent,
     DateDialogComponent,
-    DeleteComponent, DialogOverviewDialog, DownloadComponent, FileComponent, DeletecustomerComponent, 
+    DeleteComponent, 
+    DeletecustomerComponent, 
+    DeleteServiceComponent, 
+    DialogOverviewDialog, 
+    DownloadComponent, 
+    EditComponent,
+    EditcustomerComponent, 
+    EditServiceComponent,
+    FileComponent, 
     LogoutComponent,
-    ModalMapaComponent, ModalImageComponent, 
-    ShowComponent, ShowcustomerComponent, SettingsComponent, SettingscustomerComponent, 
+    ModalMapaComponent, 
+    ModalImageComponent, 
+    ShowComponent, 
+    ShowcustomerComponent, 
+    SettingsComponent, 
+    SettingscustomerComponent, 
     VehiculoOverviewDialog,
     ZipComponent    
   ],
   providers: [
-  	appRoutingProviders, UserService, AuthguardService, CargaImagenesService, CountriesService, CustomerService, 
-    DashboardService, DataService, ExcelService, ItemFirebaseService, MapaService, NgbActiveModal, 
-    OrderserviceService, ProjectsService, ZipService,
+    appRoutingProviders, 
+    AuthguardService, 
+    CargaImagenesService, 
+    CountriesService, 
+    CustomerService, 
+    DashboardService, 
+    DataService, 
+    ExcelService, 
+    ItemFirebaseService, 
+    MapaService, 
+    NgbActiveModal, 
+    OrderserviceService, 
+    ProjectsService,
+    UserService,    
+    ZipService,
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

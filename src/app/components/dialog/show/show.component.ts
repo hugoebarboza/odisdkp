@@ -16,8 +16,10 @@ import { OrderserviceService } from '../../../services/orderservice.service';
 
 
 //MODELS
+import { AtributoFirma } from '../../../models/atributofirma';
 import { Order } from '../../../models/order';
-import {Column} from '../../../models/columns';
+import { OrderAtributoFirma } from '../../../models/orderatributofirma';
+
 
 //PDF
 import * as jsPDF from 'jspdf';
@@ -41,8 +43,11 @@ export class ShowComponent implements OnInit, OnDestroy {
   isImageLoading: boolean = false;
   loading: boolean;
   atributo= new Array();  
-  orderatributo= new Array();  
+  atributofirma: AtributoFirma[] = [];
+  orderatributo= new Array();
+  orderatributofirma: OrderAtributoFirma[] = [];
   listimageorder = new Array();
+  listfirmaimageorder = new Array();
   displayedColumns: string[] = ['id', 'valor'];  
   counter;
   count = 0;
@@ -68,7 +73,7 @@ margins = {
   	) 
   { 
 
-  	this.title = "Ver Orden N.";
+  	this.title = "Ver Orden";
     this.loading = true;
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -76,6 +81,7 @@ margins = {
 
 
     if(this.token.token != null){
+      //console.log(this.data);
       //console.log(this.data['order_id']);
       //console.log(this.data['service_id']);
        this.loadData();    
@@ -85,6 +91,7 @@ margins = {
 
 
   ngOnInit() {
+    //console.log(this.data);
   }
 
   ngOnDestroy() {
@@ -103,10 +110,20 @@ margins = {
         return;
          }       
           this.order = response.datos;
-          //console.log(this.order);
         if(this.order.length > 0){
+          //console.log(this.order);
               this.atributo = response.atributo;
               this.orderatributo = response.orderatributo;
+
+              if(this.order[0].orderatributofirma.length > 0){
+                this.orderatributofirma = this.order[0].orderatributofirma;
+                this.getFirmaImage(this.orderatributofirma);
+                //console.log(this.orderatributofirma);
+              }
+              if(this.order[0].atributo_firma.length > 0){
+                this.atributofirma = this.order[0].atributo_firma;
+                //console.log(this.atributofirma);
+              }
                 //console.log(this.orderatributo);
                 this.loading = false;
           } else{        
@@ -127,6 +144,25 @@ margins = {
   }
 
 
+  public getFirmaImage(datafirma: any){   
+    this.subscription = this._orderService.getFirmaImageOrder(this.token.token, this.data['order_id']).subscribe(
+      response => {        
+        if(!response){
+          return;        
+        }
+          if(response.status == 'success'){ 
+            this.listfirmaimageorder = response.datos;
+            if(this.listfirmaimageorder.length>0){
+              //console.log(this.listfirmaimageorder);
+            }
+
+          }
+      },
+          error => {
+          console.log(<any>error);
+          }   
+      );
+}
 
 
   public getListImage(){     

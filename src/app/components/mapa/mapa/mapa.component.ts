@@ -136,7 +136,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
   estatus: string;
   label:number;
   icon:string;
-  servicename: string;  
+  servicename: string;
   country_id: number;
   //id : number;
   project_id: number;
@@ -434,7 +434,10 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
               {
                 if(some.datos){
                   this.ordenes = some.datos;  
+                  //console.log(this.ordenes);
+                  //console.log(this.ordenes.length);
                   for (var i=0; i<this.ordenes.length; i++){
+                    //console.log('paso');
                     //console.log(this.ordenes[i]);
                     if(this.ordenes[i]['latitud'] && this.ordenes[i]['longitud']){
                       this.titulo = String('N.Cliente: '+ this.ordenes[i]['cc_number']);
@@ -463,6 +466,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                     
                     
                   }
+                  //console.log(this.marcadores);
                   
                 }else{
                 }

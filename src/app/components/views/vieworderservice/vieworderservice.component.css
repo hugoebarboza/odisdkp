@@ -1,6 +1,11 @@
 .portalHost {
           border: 0px solid red;
-          height: 600px;
+          height: 100%;
+}
+
+.portalHostSplit {
+  border: 0px solid red;
+  height: 700px;
 }
 
 .main-container{
@@ -33,9 +38,9 @@
 }
 
 mat-table {
-  overflow: scroll;
-  max-height: 768px;  
+  height: 100%;  
 }
+
 mat-header-cell, mat-header-row, .mat-header-cell-def{
     background:#f2f4f7;
     min-height:15px;
@@ -82,18 +87,20 @@ mat-chip {
 .mat-column-cc_number {
   justify-content: center;
 }
+.mat-column-region {
+  flex: 0 0 4%;
+}
 
 
 .material-icons.md-color { color: #CFCFCF;}
 /* Structure */
 .example-container {
   position: relative;
+  height: 100%;
 }
 
 .example-table-container {
   position: relative;
-  max-height: 400px;
-  overflow: auto;
 }
 .margin {
 margin: 1px;
@@ -101,14 +108,9 @@ margin: 1px;
 
 .main-table{
   width: 97%;
-  overflow: auto;
-  max-height: 768px;  
-
 }
 table {
   width: 100%;
-  overflow: auto;
-  max-height: 768px;  
 }
 
 .example-loading-shade {

@@ -1,0 +1,184 @@
+<mat-card  [ngStyle]="{'padding':'0px'}">
+    <mat-card-header [ngClass]="{'custom-card':true}">     
+      <mat-card-title>
+          {{title}}
+          <button mat-button color="primary" (click)="refreshCalendar()"> <mat-icon >sync</mat-icon></button>
+      </mat-card-title>
+      <mat-card-subtitle>{{subtitle}}
+      </mat-card-subtitle>
+    </mat-card-header>
+
+
+    <mat-card-content>
+        <div class="container-fluid p-2">
+
+                <div class="row justify-content-md-center">
+                        <div class="col-md-auto">
+                                        <mat-form-field>
+                                            <mat-select placeholder="Mes" [(value)]="selectedMonth">
+                                                <mat-option *ngFor="let month of months" [value]="month.value">
+                                                {{month.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>
+        
+                        </div>
+                        <div class="col-md-auto">
+                                        <mat-form-field>
+                                            <mat-select placeholder="Año" [(value)]="selectedYear">
+                                                <mat-option *ngFor="let year of years" [value]="year.name">
+                                                {{year.name}}
+                                                </mat-option>
+                                            </mat-select>
+                                            </mat-form-field>
+                        </div>
+                        <div class="col-md-auto">
+                            <div class="btn-group">
+                              <div>
+                                  <button mat-icon-button color="primary" (click)="buildSimpleFilters(selectedMonth, selectedYear, true)">
+                                    <mat-icon  >search</mat-icon>
+                                  </button>                                
+                              </div>  
+                              <div><button mat-raised-button color="primary" (click)="addNew()">Agregar Evento</button></div>
+                                
+                            </div>
+                        </div>
+                </div>
+        </div>
+
+        <div class="container-fluid p2">
+          <div class="row">
+
+              <div class="col-4 text-center">
+                  <div class="btn-group" >
+                      <div 
+                        class="btn btn-primary"
+                        mwlCalendarPreviousView
+                        [view]="view"
+                        [(viewDate)]="viewDate"
+                        (viewDateChange)="activeDayIsOpen = false">
+                        {{dateTerm}} Aterior
+                      </div>
+                      <div 
+                        class="btn btn-outline-secondary"
+                        mwlCalendarToday
+                        [(viewDate)]="viewDate">
+                         {{dateTerm}} Actual
+                      </div>
+                      <div 
+                        class="btn btn-primary"
+                        mwlCalendarNextView
+                        [view]="view"
+                        [(viewDate)]="viewDate"
+                        (viewDateChange)="activeDayIsOpen = false">
+                        Siguiente {{dateTerm}}
+                      </div>
+                  </div>    
+              </div>
+              <div class="col-4 text-center">
+                  <h3 class="text-uppercase text-center">{{ viewDate | calendarDate:(view + 'ViewTitle'):'es-CL' }}</h3>                
+              </div>
+              <div class="col-4 text-center">
+                  <div class="btn-group">
+                  <div  
+                  [ngClass]="active_m ? 'btn-success' : 'btn-primary'"
+                  [ngClass]="!active_m ? 'btn-primary' : 'btn-success'"
+                  class="btn btn-primary"
+                  (click)="view = CalendarView.Month; dateTerm = 'Mes'; active_w = false; active_d = false; active_m = true; "
+                  [class.active]="view === CalendarView.Month">
+                  Mes
+                </div>
+                <div
+                  [ngClass]="active_w ? 'btn-success' : 'btn-primary'"
+                  [ngClass]="!active_w ? 'btn-primary' : 'btn-success'"
+                  class="btn btn-primary"
+                  (click)="view = CalendarView.Week ; dateTerm = 'Semana'; active_m = false; active_d = false; active_w = true; "
+                  [class.active]="view === CalendarView.Week">
+                  Semana
+                </div>
+                <div
+                  [ngClass]="active_d ? 'btn-success' : 'btn-primary'"
+                  [ngClass]="!active_d ? 'btn-primary' : 'btn-success'"
+                  class="btn btn-primary"
+                  (click)="view = CalendarView.Day ; dateTerm = 'Día'; active_m = false; active_w = false; active_d = true; "
+                  [class.active]="view === CalendarView.Day">
+                  Día
+                </div>
+              </div>
+
+              </div>
+
+          </div>
+        </div>
+
+        <div class="container-fluid p-2">
+      <!-- CALENDARIO -->
+      <div class="row">
+        <div class="col">
+          <div widget class="card">
+            <div class="card-header">
+              <span class="text-uppercase text-center">Calendario</span>
+            </div>
+            <div class="row">
+              <div class="col">
+                  <!--<h4>{{getNombreMes()}}</h4>-->
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <mat-spinner *ngIf="loadingResults"></mat-spinner>
+              </div>
+            </div>
+            <div class="row" *ngIf="!loadingResults">
+              <div class="col">
+                <ng-template #customCellTemplate let-day="day" let-locale="locale">
+                  <div class="cal-cell-top">
+                    <span class="cal-day-number">{{ day.date | calendarDate:'monthViewDayNumber':'es' }}</span>
+                  </div>
+                  <small style="margin: 5px">
+                    <small *ngFor="let item of day.events" class="cal-day-badge">
+                      {{item.title}}
+                    </small>
+                  </small>
+                </ng-template>
+
+                <div [ngSwitch]="view">
+                  <mwl-calendar-month-view
+                    *ngSwitchCase="CalendarView.Month"
+                    [viewDate]="viewDate"
+                    [events]="events_calendar"
+                    [refresh]="refresh"
+                    [activeDayIsOpen]="activeDayIsOpen"
+                    (dayClicked)="dayClicked($event.day)"
+                    (eventClicked)="handleEvent('Clicked', $event.event)"
+                    (eventTimesChanged)="eventTimesChanged($event)">
+                  </mwl-calendar-month-view>
+                  <mwl-calendar-week-view
+                    *ngSwitchCase="CalendarView.Week"
+                    [viewDate]="viewDate"
+                    [events]="events_calendar"
+                    [refresh]="refresh"
+                    (eventClicked)="handleEvent('Clicked', $event.event)"
+                    (eventTimesChanged)="eventTimesChanged($event)">
+                  </mwl-calendar-week-view>
+                  <mwl-calendar-day-view
+                    *ngSwitchCase="CalendarView.Day"
+                    [viewDate]="viewDate"
+                    [events]="events_calendar"
+                    [refresh]="refresh"
+                    (eventClicked)="handleEvent('Clicked', $event.event)"
+                    (eventTimesChanged)="eventTimesChanged($event)">
+                  </mwl-calendar-day-view>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- /CALENDARIO -->
+        </div>
+
+    </mat-card-content>
+    <mat-card-actions>
+    </mat-card-actions>
+  </mat-card>

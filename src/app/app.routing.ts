@@ -2,12 +2,14 @@ import { ModuleWithProviders } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 //COMPONENT
-import { LoginComponent } from './components/login/login.component';
-import { RegisterComponent } from './components/register/register.component';
+import { CalendarComponent } from './components/calendar/calendar.component';
+import { ChangepasswordComponent } from './components/changepassword/changepassword.component';
 import { DefaultComponent } from './components/default/default.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
-import { ChangepasswordComponent } from './components/changepassword/changepassword.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { ServiceComponent } from './components/service/service.component';
 
 import { NotfoundComponent } from './components/shared/notfound/notfound.component';
 import { OrderserviceComponent } from './components/orderservice/orderservice.component';
@@ -34,10 +36,29 @@ const appRoute: Routes = [
 	canActivate: [AuthguardService],
 	data: { titulo: 'OCA Global - ODIS Proyectos', descripcion: 'OCA Global - ODIS Projects Managment' }
 	},
+	{ path:'projectcalendar/:id', 
+	component: OrderserviceComponent,
+	canActivate: [AuthguardService],
+	data: { titulo: 'OCA Global - ODIS Calendario', descripcion: 'OCA Global - ODIS Calendar Managment' }
+	},
+
+	{ path:'project/:id', 
+	component: ServiceComponent,
+	canActivate: [AuthguardService],
+	data: { titulo: 'OCA Global - ODIS Proyectos', descripcion: 'OCA Global - ODIS Project Managment' }
+	},
+
+	{ path:'projectservice/:id', 
+	component: OrderserviceComponent,
+	canActivate: [AuthguardService],
+	data: { titulo: 'OCA Global - ODIS Proyectos', descripcion: 'OCA Global - ODIS Project Services Managment' }
+	},
+
+
 	{ path:'serviceorder/:id', 
 	component: OrderserviceComponent,
 	canActivate: [AuthguardService],
-	data: { titulo: 'OCA Global - ODIS Servicios', descripcion: 'OCA Global - ODIS Services Managment' }
+	data: { titulo: 'OCA Global - ODIS Ordenes', descripcion: 'OCA Global - ODIS Services Managment' }
 	},
 	{ path:'forgot', component: ForgotpasswordComponent, data: { titulo: 'OCA Global - ODIS Acceso', descripcion: 'OCA Global - ODIS User Forgot Password' }},	
 	{ path:'change', component: ChangepasswordComponent, data: { titulo: 'OCA Global - ODIS Acceso', descripcion: 'OCA Global - ODIS User Change Password'  }},	

@@ -223,7 +223,7 @@ export class AddComponent implements OnInit, OnDestroy {
               });        
     }
 
-   public loadUserProject(id){
+   public loadUserProject(id: number){
     this.subscription = this._projectService.getUserProject(this.token.token, id, 5).subscribe(
     response => {
               if(!response){
@@ -231,7 +231,6 @@ export class AddComponent implements OnInit, OnDestroy {
               }
               if(response.status == 'success'){    
                 this.users = response.datos;
-                //console.log(this.users);
               }
               });        
 
@@ -263,7 +262,7 @@ export class AddComponent implements OnInit, OnDestroy {
       }
    }
 
-  public loadAtributo(event){
+  public loadAtributo(event: any){
     if(event > 0) {
     this.show = true;
     this.isOrderLoading = true;

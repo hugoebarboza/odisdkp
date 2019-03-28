@@ -11,6 +11,7 @@ import { PageEvent } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MatSelect } from '@angular/material';
 import { MatBottomSheet } from '@angular/material';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 
 //CDK
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
@@ -88,16 +89,29 @@ interface Time {
 export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public title = "Órdenes de trabajo";
   public subtitle = "Listado de órdenes de trabajo. Agregue, edite, elimine y ordene los datos de acuerdo a su preferencia.";
-  public url:string;
+  public columnselect: string[] = new Array();
+  public datedesde: FormControl;
+  public datehasta: FormControl;
+  public filterValue = '';
+  public debouncedInputValue = this.filterValue;
+  public estatus: ServiceEstatus[] = [];  
+  public filterChanged: Subject<any> = new Subject();
   public identity: any;
-  public token: any;
-  public servicename: string;
-  public projectname: string;
-  public proyectos: Array<Proyecto>;
   public order: Order[] = [];
-  public servicetype: ServiceType[] = [];
-  public estatus: ServiceEstatus[] = [];
+  public order_id: number;
+  public projectname: string;
+  private project_id: number;
+  public proyectos: Array<Proyecto>;
+  private searchDecouncer$: Subject<string> = new Subject();
   public service_id:number;
+  public servicename: string;
+  public servicetypeid: number = 0;
+  public servicetype: ServiceType[] = [];
+  public token: any;
+  public url:string;
+
+
+  portal:number=0;
   open: boolean = false;
   loading: boolean;
   label: boolean;
@@ -105,18 +119,12 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   index: number;    
   indexitem:number;
   category_id: number;
-  private project_id: number;
   order_date: string;
   required_date: string;  
   counter: any;
   count:any;
   error: string; 
   role:number; 
-  public order_id: number;
-  public columnselect: string[] = new Array();
-  public datedesde: FormControl;
-  public datehasta: FormControl;
-  
 
 
   selectedRow : Number;
@@ -155,8 +163,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   };
 
 
-  //FILTERS
-  filterValue = '';
 
   selectedColumnn = {
     fieldValue: '',
@@ -228,19 +234,20 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   
   private _onDestroy = new Subject<void>();
-  private unsubscribe: Subject<void> = new Subject();
 
   columns: Array<any> = [
     { name: 'important', label: 'Destacar' },
     { name: 'order_number', label: 'N. Orden' },
     { name: 'cc_number', label: 'N. Cliente' },
-    { name: 'region', label: 'Región' },
-    { name: 'provincia', label: 'Provincia' },
-    { name: 'direccion', label: 'Dirección' },
+    { name: 'orderdetail_direccion', label: 'Realizado En' },
+    { name: 'direccion', label: 'Ubicación' },
     { name: 'servicetype', label: 'Servicio' },
-    { name: 'estatus', label: 'Estatus' },
-    { name: 'user', label: 'Usuario' },
+    { name: 'user', label: 'Informador' },
     { name: 'create_at', label: 'Creado El' },
+    { name: 'userassigned', label: 'Responsable' },
+    { name: 'time', label: 'T. Ejecución' },
+    { name: 'update_at', label: 'T. Atención' },
+    { name: 'estatus', label: 'Estatus' },
     { name: 'actions', label: 'Acciones' }
   ];  
   
@@ -248,15 +255,15 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   columnsHide: Array<any> = [
     { name: 'order_number', label: 'N. Orden' },
     { name: 'cc_number', label: 'N. Cliente' },
-    { name: 'estatus', label: 'Estatus' },
-    { name: 'user', label: 'Usuario' },
+    { name: 'user', label: 'Informador' },
     { name: 'create_at', label: 'Creado El' },
+    { name: 'estatus', label: 'Estatus' },
     { name: 'actions', label: 'Acciones' }
   ];  
 
 
   dataSourceEmpty: any;    
-  displayedColumns: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'userupdate', 'userassigned','create_at', 'actions']; 
+  displayedColumns: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned','create_at', 'time', 'update_at', 'estatus', 'actions']; 
   columnsOrderToDisplay: string[] = this.columns.map(column => column.name);
   columnsOrderSettingsToDisplay: string[] = this.columns.map(column => column.name);
   //columnsOrderToDisplay: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
@@ -274,7 +281,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   resultsLength = 0;
   pageIndex:number;
   public show:boolean = false;
-  public showtemplate:boolean = false;
   public showcell:boolean = true;
   public buttonName:any = 'Show';
   private alive = true;
@@ -291,6 +297,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   //CDK PORTAL
   @ViewChild('myTemplate') myTemplate: TemplatePortal<any>;
   @ViewChild('myTemplate2') myTemplate2: TemplatePortal<any>;
+  @ViewChild('myTemplate3') myTemplate3: TemplatePortal<any>;
   public _portal: Portal<any>;
   public _home:Portal<any>;
 
@@ -390,24 +397,25 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     //this._portal = this.myTemplate;
     //this.dataSource.paginator = this.paginator;
     //this.dataSource.sort = this.matSort;
+    this.setupSearchDebouncer();
 
     this.inspectorMultiFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filterInspector();
       });    
-
   }
+
 
   ngOnChanges(changes: SimpleChanges) {
     //console.log('onchange order');
+    this.portal = 0;
     this.selectedRow = -1;
     this.order_id = 0;
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.matSort;
     this._portal = this.myTemplate;
     this._home = this.myTemplate;
-    this.showtemplate = false;
     this.showcell = true;
     this.loadInfo();
     this.getZona(this.id);
@@ -558,12 +566,12 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         response.subscribe(
           (some: any) => 
           {
-            if(some.datos.data){            
+            if(some.datos.data){  
             this.resultsLength = some.datos.total;
             this.servicename = some.datos.data[0]['service_name'];
             this.category_id =  some.datos.data[0]['category_id'];
             this.project_id = some.datos.data[0]['project_id'];
-            this.isRateLimitReached = false;          
+            this.isRateLimitReached = false;
             }else{
             this.resultsLength = 0;
             this.servicename = some.datos['service_name'];
@@ -573,6 +581,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.ServicioSeleccionado.emit(this.servicename);
             this.dataSource = new MatTableDataSource(some.datos.data);
+            //console.log(this.dataSource);
             //this.dataSource.paginator = this.paginator;
             //this.dataSource.sort = this.matSort;            
             this.isLoadingResults = false;
@@ -756,9 +765,109 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  applyFilter() {
+  search() {
     this.isLoadingResults = true;
-    this.getParams();
+    if(this.filterValue){
+       this.selectedColumnn.fieldValue = '';
+       this.selectedColumnn.columnValue = '';
+       this.selectedColumnnDate.fieldValue = '';
+       this.selectedColumnnDate.columnValueDesde = '';
+       this.selectedColumnnDate.columnValueHasta = '';
+       this.filtersregion.fieldValue = '';
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';       
+       this.datedesde = new FormControl('');
+       this.datehasta = new FormControl('');
+       this.regionMultiCtrl = new FormControl('');
+       //console.log('paso000')      
+    }
+
+    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue){
+       this.selectedColumnnDate.fieldValue = '';
+       this.selectedColumnnDate.columnValueDesde = '';
+       this.selectedColumnnDate.columnValueHasta = '';
+       this.filtersregion.fieldValue = '';
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';              
+       this.datedesde = new FormControl('');
+       this.datehasta = new FormControl('');
+       this.regionMultiCtrl = new FormControl('');
+       //console.log('paso111')
+    }
+
+    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+       this.selectedColumnn.fieldValue = '';
+       this.selectedColumnn.columnValue = '';
+       this.filtersregion.fieldValue = '';
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';              
+       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
+       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
+       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
+       //console.log('paso222')
+    }
+
+    if(this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
+       this.selectedColumnn.fieldValue = '';
+       this.selectedColumnn.columnValue = '';
+       this.selectedColumnnDate.fieldValue = '';       
+       this.selectedColumnnDate.columnValueDesde = '';
+       this.selectedColumnnDate.columnValueHasta = '';
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';
+       this.datedesde = new FormControl('');
+       this.datehasta = new FormControl('');
+       this.filtersregion.fieldValue= 'regions.region_name';
+       //console.log('paso333') 
+    }
+
+    if(this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+       this.selectedColumnn.fieldValue = '';
+       this.selectedColumnn.columnValue = '';
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';
+       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
+       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
+       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
+       this.filtersregion.fieldValue = 'regions.region_name';
+       //console.log('paso444') 
+    }
+
+    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+       this.selectedColumnn.fieldValue = '';
+       this.selectedColumnn.columnValue = '';
+       this.filtersregion.fieldValue = '';
+       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
+       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
+       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
+       //console.log('paso777')
+    }
+
+    
+    this.dataService.getServiceOrder(
+      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+      this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
+      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
+      .then(response => {this.getData(response)})
+      .catch(error => {                      
+            this.isLoadingResults = false;
+            this.isRateLimitReached = true;
+            console.log(<any>error);          
+      });
+  }  
+
+  applyFilter() {
+    if(this.filterValue.length > 0 && this.filterValue.trim() !== ''){
+      this.isLoadingResults = true;
+      this.getParams();
+      this.searchDecouncer$.next(this.filterValue);
+    }
+    //console.log('paso');
     /*
     if(this.filterValue){
        this.selectedColumnn.fieldValue = '';
@@ -839,7 +948,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        //console.log('paso777')
     }*/
 
-
+    /*
     this.dataService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
@@ -851,10 +960,38 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             console.log(<any>error);          
-      });
+      });*/    
+      //this.filterChanged.next(this.filterValue);
   }
 
 
+  private setupSearchDebouncer(): void {
+    this.searchDecouncer$.pipe(
+      debounceTime(3000),
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      // Remember value after debouncing
+      //console.log('viene');
+      this.debouncedInputValue = term;
+      this.dataService.getServiceOrder(
+        this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
+        this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+        this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+        this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
+        this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
+        .then(response => {
+          this.getData(response);
+          //console.log(<any>response);
+        })
+        .catch(error => {                      
+              this.isLoadingResults = false;
+              this.isRateLimitReached = true;
+              console.log(<any>error);          
+        });
+      // Do the actual search
+    });    
+  }
+  
 
 
  handleSortChange(sort: Sort): void {
@@ -1012,21 +1149,27 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.regionMultiCtrl.reset();
   }
 
-  toggleTemplate(event) {
+  toggleTemplate(event:number) {
     //this.showtemplate = !this.showtemplate;
     if(event == 0){     
       this._portal = this.myTemplate;
-      this.showtemplate = false;
       this.showcell = true;
+      this.portal = 0;
       this.columnsOrderToDisplay = this.columns.map(column => column.name);
     }
-    else if (event == 1){
+    if (event == 1){
       this._portal = this.myTemplate2;
-      this.showtemplate = true;      
       this.showcell = false;
+      this.portal = 1;
       this.columnsOrderToDisplay = this.columnsHide.map(column => column.name);      
     }
     
+    if (event == 2){
+      this._portal = this.myTemplate3;
+      this.showcell = false;
+      this.portal = 2;
+    }
+
 
   }
 
@@ -1034,7 +1177,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   addNew(id:number, category_id:number, order: Order[]) {
      const dialogRef = this.dialog.open(AddComponent, {
-     height: '650px',
      width: '777px',
      disableClose: true,        
      data: { service_id: id, category_id: category_id, order: Order }
@@ -1053,17 +1195,16 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
   
 
-  startEdit(order_id: number, order_number: string, category_id:number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, assigned_to:number, order_date: string, required_date: string, vencimiento_date: string, observation: string, create_at: string) {
+  startEdit(order_id: number, order_number: string, category_id:number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, assigned_to:number, order_date: string, required_date: string, vencimiento_date: string, leido_por:string, observation: string, create_at: string) {
     let service_id = this.id;    
     //console.log(assigned_to);    
     const dialogRef = this.dialog.open(EditComponent, {
-      height: '650px',
       width: '777px',
       disableClose: true,  
       data: {order_id: order_id, order_number: order_number, service_id: service_id, category_id: category_id, customer_id: customer_id, cc_number: cc_number, 
         servicetype_id: servicetype_id, status_id: status_id, 
         assigned_to: assigned_to,        
-        order_date: order_date, required_date: required_date, vencimiento_date: vencimiento_date, observation: observation, create_at: create_at}
+        order_date: order_date, required_date: required_date, vencimiento_date: vencimiento_date, leido_por:leido_por, observation: observation, create_at: create_at}
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -1083,7 +1224,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   deleteItem(order_id: number, order_number: string, category_id:number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, estatus: string, order_date: string, required_date: string, observation: string, create_at: string, project_name: string, service_name: string, servicetype:string) {
     let service_id = this.id;    
     const dialogRef = this.dialog.open(DeleteComponent, {
-      height: '650px',
       width: '777px',
       disableClose: true,      
       data: {order_id: order_id, order_number: order_number, service_id: service_id, category_id: category_id, customer_id: customer_id, cc_number: cc_number, servicetype_id: servicetype_id, status_id: status_id, estatus:estatus, order_date: order_date, required_date: required_date, observation: observation, create_at: create_at, project_name: project_name, service_name: service_name, servicetype:servicetype}
@@ -1102,8 +1242,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   showItem(order_id: number, order_number: string, category_id:number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, estatus: string, order_date: string, required_date: string, vencimiento_date: string, observation: string, create_at: string, usercreate:string, project_name: string, service_name: string, servicetype:string, update_at: string, userupdate:string, region:string, provincia:string, comuna:string, direccion:string) {
     let service_id = this.id;    
-    const dialogRef = this.dialog.open(ShowComponent, {
-      height: '768px',
+    const dialogRef = this.dialog.open(ShowComponent, {      
       width: '1024px',
       disableClose: true,
       data: {order_id: order_id, order_number: order_number, service_id: service_id, 
@@ -1154,7 +1293,6 @@ private filterRegionMulti() {
     //console.log(dysplaycolumns); 
 
     const dialogRef = this.dialog.open(SettingsComponent, {
-      height: '650px',
       width: '777px',            
       //data: {dysplaycolumns: columns}
       data: {columnsOrderToDisplay: columns}
@@ -1198,7 +1336,6 @@ private filterRegionMulti() {
 
   publish(columns:string) {
     const dialogRef = this.dialog.open(FileComponent, {
-      height: '700px',
       width: '777px',
       disableClose: true,                 
       data: { project: this.project_id,
@@ -1219,7 +1356,6 @@ private filterRegionMulti() {
 
   publishOrder(order_id: any) {
     const dialogRef = this.dialog.open(FileComponent, {
-      height: '650px',
       width: '777px',
       disableClose: true,                 
       data: { project: this.project_id,
@@ -1281,8 +1417,7 @@ private filterRegionMulti() {
   openDialogCsv(): void {
 
     const dialogRef = this.dialog.open(CsvComponent, {
-      width: '450px',
-      height: '780px',
+      width: '777px',
       disableClose: true,                          
       data: { project: this.project_id,
               servicio: this.id,
@@ -1331,7 +1466,8 @@ private filterRegionMulti() {
 
 
  ExportTOExcelClient($event):void {
-   //console.log($event);
+    //console.log($event);
+    console.log('pasooo');
     var arraydata = new Array();
     var arrayexcel = new Array();
     var orderatributovalue = [];
@@ -1427,6 +1563,7 @@ private filterRegionMulti() {
       this.selectedColumnnEstatus.fieldValue, this.selectedColumnnEstatus.columnValue,
       newtimefrom, newtimeuntil,
       this.selectedColumnnZona.columnValue,
+      this.servicetypeid,
       this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.project_id, this.id, this.token.token).then(
       (res: any) => 
       {
@@ -1495,7 +1632,8 @@ private filterRegionMulti() {
                         }
 
                         valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
-                                              +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion
+                                              +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']
+                                              +';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion
                                               +';'+this.exportDataSource.data[j]['patio']+';'+this.exportDataSource.data[j]['espiga']+';'+this.exportDataSource.data[j]['posicion']+';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']+';'+this.exportDataSource.data[j]['tarifa']+';'+this.exportDataSource.data[j]['constante']
                                               +';'+this.exportDataSource.data[j]['giro']+';'+this.exportDataSource.data[j]['sector']+';'+this.exportDataSource.data[j]['zona']+';'+this.exportDataSource.data[j]['mercado']+';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
                         

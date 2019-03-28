@@ -3,7 +3,7 @@
 
     <div id="wrapper" *ngIf="proyectos">
         <!-- Sidebar -->
-        <app-menu [proyectos]="proyectos"></app-menu>    
+        <app-menu [proyectos]="proyectos" (RefreshMenu) = "refresh( $event )"></app-menu>    
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->        
@@ -18,7 +18,9 @@
   <div class="page-wrap">
     <header role="banner">
             <mat-toolbar color="primary">
-              <h1 class="text-uppercase">{{project_name}} / {{service}}</h1>
+              <h1 class="text-uppercase" *ngIf="url === 'projectcalendar'">{{project_name}} / Calendario</h1>
+              <h1 class="text-uppercase" *ngIf="url === 'projectservice'">{{project_name}} / Proyectos</h1>
+              <h1 class="text-uppercase" *ngIf="url === 'serviceorder'">{{project_name}} / {{service}}</h1>
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon class="material-icons md-15">format_color_fill</mat-icon>
               </button>
@@ -44,100 +46,118 @@
 
       <main class="content">
 
-        <mat-tab-group backgroundColor="primary" 
-        [selectedIndex]="selected.value"
-        (selectedIndexChange)="selected.setValue($event)"
-        animationDuration="0ms"
-        >
-          <mat-tab label="Ordenes">
-            <ng-template mat-tab-label *ngIf="selected.value==0">
-              <mat-icon  class="material-icons md-24">move_to_inbox</mat-icon> Ordenes
-            </ng-template>
-            
-            <ng-template mat-tab-label *ngIf="selected.value!=0">
-              <mat-icon *ngIf="selected.value!=0" class="material-icons md-dark md-inactive">inbox</mat-icon> Ordenes
-            </ng-template>
+        <div *ngIf="url === 'projectcalendar'" class="p-2" style="width: 100%;">
+          <app-calendar [id]="id" [calendarID]="calendarID" [apikey]="apikey" [clientid]="clientid" *ngIf="calendarID"></app-calendar>
+        </div>
+        
+        <div *ngIf="url === 'projectservice'" class="p-2" style="width: 100%;">
+          <app-service [id]="id" ></app-service>
+        </div>
+        
+        <div *ngIf="url === 'serviceorder'">
 
-            <!-- /#page-content -->
-            <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >
-              <app-vieworderservice (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-vieworderservice>  
-            </div>            
-            <!-- /#end page-content -->
-          </mat-tab>
-
-
-
-          <mat-tab >
-            <ng-template mat-tab-label *ngIf="selected.value != 1">
-              <mat-icon>description</mat-icon> Registro 
-            </ng-template>
-            <ng-template mat-tab-label *ngIf="selected.value == 1">
-              <mat-icon>archive</mat-icon> Registro 
-            </ng-template>
-
-            <!-- /#page-content -->
-            <div class="p-2" style="width: 100%;" *ngIf="selected.value==1 && table != null">
-
-              <app-excel (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'address' ">
-              </app-excel>
-
-
-              <app-excel-vehiculo (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'vehiculos'">                
-              </app-excel-vehiculo> 
-
-            </div>
-
-            <!-- /#end page-content -->
-          </mat-tab>
-
-          <mat-tab>
-            <ng-template mat-tab-label *ngIf="selected.value==2">            
-              <mat-icon>group_add</mat-icon> Clientes
-            </ng-template>
-
-            <ng-template mat-tab-label *ngIf="selected.value!=2">
-              <mat-icon *ngIf="selected.value!=2" class="material-icons md-dark md-inactive">group</mat-icon> Clientes
-            </ng-template>
-
-            <!-- /#page-content -->
-            <div class="p-2" style="width: 100%;" *ngIf="selected.value==2">
-              <app-viewprojectcustomer (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-viewprojectcustomer>  
-            </div>
-
-            <!-- /#end page-content -->
-          </mat-tab>
-
-
-
-          <mat-tab>
-            <ng-template mat-tab-label *ngIf="selected.value!=3">
-              <mat-icon>place</mat-icon> Georeferencias
-            </ng-template>
-            <!-- /#page-content -->
-            <ng-template mat-tab-label *ngIf="selected.value==3">
-              <mat-icon>person_pin_circle</mat-icon> Georeferencias
-            </ng-template>
-
-            <div class="p-2" style="width: 100%;" *ngIf="selected.value==3">
-            <app-mapa (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-mapa>
-            </div>
-            <!-- /#end page-content -->
-          </mat-tab>
-
-
-          <mat-tab>
-            <ng-template mat-tab-label >
-              <mat-icon>insert_chart_outlined</mat-icon> Reportes
-            </ng-template>
-            <!-- /#page-content -->
-            <div class="mx-auto" style="width: 99%;" *ngIf="selected.value==4">
-            <p>...</p>
-          </div>
-            <!-- /#end page-content -->
-          </mat-tab>
-
-
-        </mat-tab-group>
+          <mat-tab-group backgroundColor="primary" 
+          [selectedIndex]="selected.value"
+          (selectedIndexChange)="selected.setValue($event)"
+          animationDuration="0ms"
+          >
+            <mat-tab label="Ordenes">
+              <ng-template mat-tab-label *ngIf="selected.value==0">
+                <mat-icon  class="material-icons md-24">move_to_inbox</mat-icon> Ordenes
+              </ng-template>
+              
+              <ng-template mat-tab-label *ngIf="selected.value!=0">
+                <mat-icon *ngIf="selected.value!=0" class="material-icons md-dark md-inactive">inbox</mat-icon> Ordenes
+              </ng-template>
+  
+              <!-- /#page-content -->
+              <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >
+                <app-vieworderservice (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-vieworderservice>  
+              </div>            
+              <!-- /#end page-content -->
+            </mat-tab>
+  
+  
+  
+            <mat-tab >
+              <ng-template mat-tab-label *ngIf="selected.value != 1">
+                <mat-icon>description</mat-icon> Registro 
+              </ng-template>
+              <ng-template mat-tab-label *ngIf="selected.value == 1">
+                <mat-icon>archive</mat-icon> Registro 
+              </ng-template>
+  
+              <!-- /#page-content -->
+              <div class="p-2" style="width: 100%;" *ngIf="selected.value==1 && table != null">
+  
+                <app-excel (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'address' ">
+                </app-excel>
+  
+  
+                <app-excel-vehiculo (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'vehiculos'">                
+                </app-excel-vehiculo> 
+  
+              </div>
+  
+              <!-- /#end page-content -->
+            </mat-tab>
+  
+            <mat-tab>
+              <ng-template mat-tab-label *ngIf="selected.value==2">            
+                <mat-icon>group_add</mat-icon> Clientes
+              </ng-template>
+  
+              <ng-template mat-tab-label *ngIf="selected.value!=2">
+                <mat-icon *ngIf="selected.value!=2" class="material-icons md-dark md-inactive">group</mat-icon> Clientes
+              </ng-template>
+  
+              <!-- /#page-content -->
+              <div class="p-2" style="width: 100%;" *ngIf="selected.value==2">
+                <app-viewprojectcustomer (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-viewprojectcustomer>  
+              </div>
+  
+              <!-- /#end page-content -->
+            </mat-tab>
+  
+  
+  
+            <mat-tab>
+              <ng-template mat-tab-label *ngIf="selected.value!=3">
+                <mat-icon>place</mat-icon> Georeferencias
+              </ng-template>
+              <!-- /#page-content -->
+              <ng-template mat-tab-label *ngIf="selected.value==3">
+                <mat-icon>person_pin_circle</mat-icon> Georeferencias
+              </ng-template>
+  
+              <div class="p-2" style="width: 100%;" *ngIf="selected.value==3">
+              <app-mapa (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-mapa>
+              </div>
+              <!-- /#end page-content -->
+            </mat-tab>
+  
+  
+            <mat-tab>
+              <ng-template mat-tab-label *ngIf="selected.value!=4">
+                <mat-icon>insert_chart_outlined</mat-icon> Gestión
+              </ng-template>
+              <ng-template mat-tab-label *ngIf="selected.value==4">
+                  <mat-icon>insert_chart</mat-icon> Gestión
+              </ng-template>
+  
+              <!-- /#page-content -->
+              <div class="p-2" style="width: 100%;" *ngIf="selected.value==4">
+              <app-gestion (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"> </app-gestion>
+              </div>
+              <!-- /#end page-content -->
+            </mat-tab>
+  
+  
+  
+  
+          </mat-tab-group>
+  
+        </div>
         
 
       <!-- END TAB Content ------------------------------------------------------------------------------------------>

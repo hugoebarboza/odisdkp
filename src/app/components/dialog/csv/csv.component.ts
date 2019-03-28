@@ -13,7 +13,9 @@ const moment = _moment;
 //MODELS
 import { Order } from '../../../models/order';
 import { ServiceEstatus } from '../../../models/ServiceEstatus';
+import { ServiceType } from '../../../models/ServiceType';
 import { Zona } from '../../../models/Zona';
+
 
 //SERVICES
 import { CustomerService } from '../../../services/customer.service';
@@ -38,6 +40,23 @@ interface Time {
   minute: any
 }
 
+export interface Limit {
+  value: any;
+  name: string;
+}
+
+
+export interface Formato {
+  value: string;
+  name: string;
+}
+
+export interface Sorter {
+  active: any;
+  direction: string;
+  name: string;
+}
+
 
 @Component({
   selector: 'app-csv',
@@ -47,18 +66,23 @@ interface Time {
 export class CsvComponent implements OnInit, OnDestroy {
 
   title = "Csv de Órdenes";
-  tiposervicio: Array<Object> = [];
+
   estatus: Array<Object> = [];
-  tipoServicio_id = 0;
-  isLoadingResults = false;
-  isRateLimitReached = false;
-  serviceid: number;
-  project_id: number;
   error: string; 
   exportDataSource: MatTableDataSource<Order[]>; 
-  token: any;
+  isLoadingResults = false;
+  isRateLimitReached = false;
+  project_id: number;
+  serviceid: number;
+  servicetypeid: number = 0;
   selectedValueFormat: number;
+  public servicetype: ServiceType[] = [];
+  tipoServicio_id = 0;
+  tiposervicio: Array<Object> = [];
+  token: any;
+
   userSelected: number;
+
   selectedValueOrdeno: string;
   role:number;
   public serviceestatus: ServiceEstatus[] = [];
@@ -136,7 +160,7 @@ export class CsvComponent implements OnInit, OnDestroy {
   };
 
 
- limits: Array<Object> = [
+ limits: Limit[] = [
     {value: '500', name: '< 500'},
     {value: '1000', name: '< 1000'},
     {value: '2000', name: '< 2000'},
@@ -144,19 +168,19 @@ export class CsvComponent implements OnInit, OnDestroy {
   ];
 
 
- formatos: Array<Object> = [
+ formatos: Formato[] = [
     {value: '0', name: 'Original'},
     {value: '1', name: 'Mayúscula'},
     {value: '2', name: 'Datos de Inspección'}
   ];
 
 
- sortdate: Array<Object> = [
+ sortdate: Sorter[] = [
     {active: 'create_at', direction: 'asc', name: 'Creado el, ascendente.'},
     {active: 'create_at', direction: 'desc', name: 'Creado el, descendente.'}
   ];
 
- sortdateupdate: Array<Object> = [
+ sortdateupdate: Sorter[] = [
     {active: 'update_at', direction: 'asc', name: 'Editado el, ascendente.'},
     {active: 'update_at', direction: 'desc', name: 'Editato el, descendente.'}
   ];
@@ -214,6 +238,7 @@ export class CsvComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
   this.user = [];
+  this.loadServiceType();
   this.loaduser(this.project_id);
   this.getServiceEstatus();
   this.getZona();
@@ -321,6 +346,23 @@ export class CsvComponent implements OnInit, OnDestroy {
     }
   }
 
+  public loadServiceType(){  
+    this.servicetype = null;    
+    this.subscription = this.dataService.getServiceType(this.token, this.serviceid).subscribe(
+    (response: any) => {
+              if(!response){
+                return;
+              }
+              if(response.status == 'success'){                  
+                this.servicetype = response.datos;
+                //console.log(this.servicetype);
+              }
+              },
+    (error) => { 
+                console.log(<any>error);
+                }            
+              );        
+    }  
 
   reset(){
     this.selectedValueOrdeno ='';
@@ -389,7 +431,7 @@ export class CsvComponent implements OnInit, OnDestroy {
         var newtimeuntil = '';
     }      
 
-
+    //console.log(this.servicetypeid);
     //console.log(this.pageSize);
     this.dataService.getProjectShareOrder(      
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
@@ -399,6 +441,7 @@ export class CsvComponent implements OnInit, OnDestroy {
       this.selectedColumnnEstatus.fieldValue, this.selectedColumnnEstatus.columnValue,
       newtimefrom, newtimeuntil,
       this.selectedColumnnZona.columnValue,
+      this.servicetypeid,
       this.sort.active, this.sort.direction, this.pageSize, 0, this.project_id, this.serviceid, this.token).then(
       (res: any) => 
       {
@@ -406,7 +449,7 @@ export class CsvComponent implements OnInit, OnDestroy {
           (some) => 
           { 
             if(some.datos){
-             //console.log(some.datos);
+            //console.log(some.datos);
             this.exportDataSource = new MatTableDataSource(some.datos);
 
 
@@ -432,25 +475,32 @@ export class CsvComponent implements OnInit, OnDestroy {
                 for (var i=0; i<arraydata.length; i++){//FIRSTFOR
                   var banderatitulo: boolean = true;
                   for (var j=0; j<this.exportDataSource.data.length; j++){//SECONDFORD
-                    if(arraydata[i] == this.exportDataSource.data[j]['servicetype_id']){ //FIRST IF                                           
+                    if(arraydata[i] == this.exportDataSource.data[j]['servicetype_id']){ //FIRST IF    
                       if(Object.keys(this.exportDataSource.data[j]['atributo_share']).length > 0 && banderatitulo == true){
                         if(this.exportDataSource.data[j]['name_table'] == 'address'){
-                           valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";
+                           valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";
+                        }else{
+                           valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";                          
                         }
                         for(let key in this.exportDataSource.data[j]['atributo_share']){
                           let newarray = this.exportDataSource.data[j]['atributo_share'][key];
-                          if(newarray['type']  !== 'label'){    
+                          if(newarray['type']  !== 'label' && newarray['type']  !== 'layout_line'){  
                              valuearrayexcel = valuearrayexcel+newarray['descripcion']+';';
                           }
                         }
                         banderatitulo = false;
                         valuearrayexcel = valuearrayexcel +'\n';
-                      }else{
-                        if(Object.keys(this.exportDataSource.data[j]['atributo_share']).length == 0 && banderatitulo == true){
-                          valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
-                          banderatitulo = false;
-                        }
 
+                      }else{
+                        if(Object.keys(this.exportDataSource.data[j]['atributo_share']).length == 0 && banderatitulo == true && this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
+                          valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
+                          banderatitulo = false;
+                        }else{
+                          if(Object.keys(this.exportDataSource.data[j]['atributo_share']).length == 0 && banderatitulo == true && this.exportDataSource.data[j]['name_table'] == 'address'){
+                          valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
+                          banderatitulo = false;
+                          }
+                        }
                       }
                         if(this.exportDataSource.data[j]['name_table'] == 'address'){
                           var ubicacion = this.exportDataSource.data[j]['direccion'];
@@ -459,14 +509,23 @@ export class CsvComponent implements OnInit, OnDestroy {
                           var ubicacion = this.exportDataSource.data[j]['patio']+'-'+this.exportDataSource.data[j]['espiga']+'-'+this.exportDataSource.data[j]['posicion'];
                         }
 
+                        if(this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
                         valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
-                                              +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion                                              
-                                              +';'+this.exportDataSource.data[j]['ruta']+';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']
-                                              +';'+this.exportDataSource.data[j]['medidor']+';'+this.exportDataSource.data[j]['tarifa']+';'+this.exportDataSource.data[j]['constante']
-                                              +';'+this.exportDataSource.data[j]['giro']+';'+this.exportDataSource.data[j]['sector']+';'+this.exportDataSource.data[j]['zona']+';'+this.exportDataSource.data[j]['mercado']
+                                              +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']
+                                              +';'+this.exportDataSource.data[j]['orderdetail_direccion']+';'+ubicacion                                                    
                                               +';'+this.exportDataSource.data[j]['marca']+';'+this.exportDataSource.data[j]['modelo']+';'+this.exportDataSource.data[j]['color']+';'+this.exportDataSource.data[j]['description']+';'+this.exportDataSource.data[j]['secondcolor']
                                               +';'+this.exportDataSource.data[j]['patio']+';'+this.exportDataSource.data[j]['espiga']+';'+this.exportDataSource.data[j]['posicion']
                                               +';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
+                        }else{
+                          valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
+                          +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']
+                          +';'+this.exportDataSource.data[j]['leido_por']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion                                              
+                          +';'+this.exportDataSource.data[j]['ruta']+';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']
+                          +';'+this.exportDataSource.data[j]['transformador']+';'+this.exportDataSource.data[j]['medidor']+';'+this.exportDataSource.data[j]['tarifa']+';'+this.exportDataSource.data[j]['constante']
+                          +';'+this.exportDataSource.data[j]['giro']+';'+this.exportDataSource.data[j]['sector']+';'+this.exportDataSource.data[j]['zona']+';'+this.exportDataSource.data[j]['mercado']                          
+                          +';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
+                        }
+
                         
 
                         if(Object.keys(this.exportDataSource.data[j]['orderatributo']).length > 0){
@@ -483,7 +542,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                                  valuearrayexcel = valuearrayexcel + ordervalue + ';';
                                  banderasindato = false;
                              }
-                             if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label'){
+                             if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'layout_line'){
                                 banderasindato = false;
                              }
                             }
@@ -519,7 +578,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                         }
                         for(let key in this.exportDataSource.data[j]['atributo_share']){
                           let newarray = this.exportDataSource.data[j]['atributo_share'][key];
-                          if(newarray['type']  !== 'label'){    
+                          if(newarray['type']  !== 'label' && newarray['type']  !== 'layout_line'){    
                              valuearrayexcel = valuearrayexcel+newarray['descripcion']+';';
                           }
                         }
@@ -551,7 +610,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                                  valuearrayexcel = valuearrayexcel + ordervalue + ';';
                                  banderasindato = false;
                              }
-                             if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label'){
+                             if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'layout_line'){
                                 banderasindato = false;
                              }
                             }

@@ -46,6 +46,7 @@ export class CustomerService {
 
   	getQuery( query:string, token ){  		
 		const url = this.url+query;
+		//console.log(url);
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json',
 			'Authorization': token
@@ -75,7 +76,25 @@ export class CustomerService {
     //console.log(paginate);
     //const paginate = `?page=${page + 1}`;
     return this.getCustomerData('project/'+id+'/customer'+paginate, token);
+	}
+	
+
+	getCustomerShare(patio: string, sort: string, order: string, pageSize: number, idservice:number, token: any) {
+    //console.log(sort);
+    if(!order){
+      order = 'asc';
+    }
+    if(!sort){
+      sort = 'create_at';
+    }
+    
+    const paginate = `?patio=${patio}&sort=${sort}&order=${order}&limit=${pageSize}`;
+    //console.log('-----------------------------');
+    //console.log(paginate);
+    //const paginate = `?page=${page + 1}`;
+    return this.getCustomerData('project/'+idservice+'/customershare/'+paginate, token);
   }
+
 
    getCustomerData(query:string, token) {
     const url = this.url;

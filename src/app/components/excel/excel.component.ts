@@ -12,14 +12,14 @@ import { Observable, Subscription } from 'rxjs';
 
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 
-//SERVICES
+// SERVICES
 import { UserService } from '../../services/user.service';
 import { OrderserviceService } from '../../services/orderservice.service';
 
-//MODEL
+// MODEL
 import { Service } from '../../models/Service';
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
@@ -39,6 +39,8 @@ const EXCEL_EXTENSION = '.xlsx';
 // @Input() id : number;
 export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
+  forTime = 1000;
+
   public token;
   public services: Service[] = [];
   public project: string;
@@ -57,10 +59,9 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   checkValidationPost = false;
   checkboxAuto = false;
   checkOrdenes = false;
-  
-  
-  project_id:number;
-  servicename:string;
+
+  project_id: number;
+  servicename: string;
 
 
   arrayBuffer: any;
@@ -99,14 +100,13 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   options: string[] = [ 'Número CC' ];
   toppings = new FormControl(this.options);
 
-
-  toppingList: string[] = ['Nombre CC', 'Ruta', 'Calle', 'Número',
-  'Block', 'Depto', 'Región', 'Provincia', 'Comuna', 'Medidor',
-  'Modelo medidor', 'Tarifa', 'Constante', 'Giro', 'Zona', 'Sector', 'Mercado'];
+  toppingList: string[] = ['Medidor', 'Zona'];
+  // tslint:disable-next-line:max-line-length
+  // toppingList: string[] = ['Nombre CC', 'Ruta', 'Calle', 'Número',  'Block', 'Depto', 'Región', 'Provincia', 'Comuna', 'Medidor',  'Modelo medidor', 'Tarifa', 'Constante', 'Giro', 'Zona', 'Sector', 'Mercado'];
 
   displayedColumns: string[] = ['cc_number', 'nombrecc', 'ruta', 'calle', 'numero',
   'block', 'depto', 'region', 'provincia', 'comuna', 'latitud', 'longitud', 'medidor',
-  'modelo_medidor', 'tarifa', 'constante', 'giro', 'zona', 'sector', 'mercado', 'observacion',
+  'modelo_medidor', 'transformador', 'tarifa', 'constante', 'giro', 'zona', 'sector', 'mercado', 'observacion',
   'order_number', 'tipo_servicio', 'asignado_a', 'required_date', 'observation', 'estatus'];
 
   dataSource = new MatTableDataSource();
@@ -119,27 +119,28 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('paginatorClientes') paginatorClientes: MatPaginator;
   @ViewChild('paginatorOrdenes') paginatorOrdenes: MatPaginator;
   @Output() ServicioSeleccionado: EventEmitter<string>;
-  @Input() id : number;
-  @Input() table : string;
+  @Input() id: number;
+  @Input() table: string;
 
   constructor(
     public dataService: DataService,
     private _formBuilder: FormBuilder,
     public snackBar: MatSnackBar,
     public dialog: MatDialog,
-    private activatedRoute: ActivatedRoute,
-   	private _userService: UserService,  
-   	private _orderService: OrderserviceService
+    // private activatedRoute: ActivatedRoute,
+    private _userService: UserService,
+    private _orderService: OrderserviceService
   ) {
 
     this.token = this._userService.getToken();
-    this.ServicioSeleccionado = new EventEmitter(); 
+    this.ServicioSeleccionado = new EventEmitter();
 
     const currentDate = new Date();
 
     this.firtsFormGroup = this._formBuilder.group({
       confirmarCtrl: ['', Validators.required],
-      inputCtrl: ['', Validators.required]
+      inputCtrl: ['', Validators.required],
+      inputDate: [{value: '', disabled: true}]
     });
 
     this.secondFormGroup = this._formBuilder.group({
@@ -149,7 +150,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-  	/*
+    /*
     this.dataSource.paginator = this.paginator;
     this.dataSourceClientes.paginator = this.paginatorClientes;
     this.dataSourceOrdenes.paginator = this.paginatorOrdenes;
@@ -171,18 +172,18 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     this.getTipoServicio(this.service_id);
     this.getInspectores();
     */
-	
+
   }
 
 
   ngOnChanges(changes: SimpleChanges) {
-    //console.log('onchange exceladdress');
-    //console.log(this.table);
-  	this.resetAll();
-  	this.service_id = this.id;
-    //this.dataSource.paginator = this.paginator;
-    //this.dataSourceClientes.paginator = this.paginatorClientes;
-    //this.dataSourceOrdenes.paginator = this.paginatorOrdenes;
+    // console.log('onchange exceladdress');
+    // console.log(this.table);
+    this.resetAll();
+    this.service_id = this.id;
+    // this.dataSource.paginator = this.paginator;
+    // this.dataSourceClientes.paginator = this.paginatorClientes;
+    // this.dataSourceOrdenes.paginator = this.paginatorOrdenes;
     this.getServices(this.service_id);
     this.getTarifa(this.service_id);
     this.getConstante(this.service_id);
@@ -197,7 +198,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
 
   ngOnDestroy() {
-    //console.log('La página se va a cerrar');
+    // console.log('La página se va a cerrar');
     this.subscription.unsubscribe();
   }
 
@@ -219,7 +220,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   incomingfile(event) {
-  	this.file = null;
+    this.file = null;
     this.file = event.target.files[0];
     if (this.file == null) {
       this.bandera = false;
@@ -228,7 +229,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       this.countError = 0;
       this.countSuccess = 0;
       this.checkValidation = false;
-      this.dateend = undefined;      
+      this.dateend = undefined;
       this.resetAll();
     } else {
       this.nombreFile = this.file.name;
@@ -250,9 +251,10 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             }
     });
     dialogRef.afterClosed().subscribe(result => {
-    	console.log(result);
+      // console.log(result);
 
       if (result !== undefined) {
+        this.firtsFormGroup.controls['inputDate'].setValue(result['dateend']);
         this.dateend = new FormControl(result['dateend']);
       }
 
@@ -284,79 +286,99 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
       fileReader.onload = (e) => {
 
-          this.arrayBuffer = fileReader.result;
-          const data = new Uint8Array(this.arrayBuffer);
-          const arr = new Array();
+        this.arrayBuffer = fileReader.result;
+        const data = new Uint8Array(this.arrayBuffer);
+        const arr = new Array();
 
-          for (let i = 0; i !== data.length; ++i) {
-            arr[i] = String.fromCharCode(data[i]);
-          }
+        for (let i = 0; i !== data.length; ++i) {
+          arr[i] = String.fromCharCode(data[i]);
+        }
 
-          const bstr = arr.join('');
-          const workbook = XLSX.read(bstr, {type: 'binary'});
-          const first_sheet_name = workbook.SheetNames[0];
-          const worksheet = workbook.Sheets[first_sheet_name];
-          this.arrayCarga = XLSX.utils.sheet_to_json(worksheet, {raw: true});
+        const bstr = arr.join('');
+        let workbook;
+        try {
+          workbook = XLSX.read(bstr, {type: 'binary'});
+        } catch (e) {
+          this.msj_snack = 'Error: Archivo Excel de carga';
+          this.openSnackBar(this.msj_snack, 'Validar archivo');
+          this.resetAll();
+          return;
+        }
+        const first_sheet_name = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[first_sheet_name];
+        this.arrayCarga = XLSX.utils.sheet_to_json(worksheet, {raw: true});
 
-          if (this.arrayCarga.length === 0) {
-            this.msj_snack = 'Carga sin registros validos!';
-            this.openSnackBar(this.msj_snack, 'Min 1 Registro');
-            this.isLoadingResults = false;
-            this.isRateLimitReached = false;
-            this.show_table = false;
-            return;
-          }
+        if (this.arrayCarga.length === 0) {
+          this.msj_snack = 'Carga sin registros validos!';
+          this.openSnackBar(this.msj_snack, 'Min 1 Registro');
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.show_table = false;
+          return;
+        }
 
-          if (this.arrayCarga.length > 501) {
-            this.msj_snack = 'Carga supera limite de registros permitidos!';
-            this.openSnackBar(this.msj_snack, 'Max 500 Registros');
-            this.isLoadingResults = false;
-            this.isRateLimitReached = false;
-            this.show_table = false;
-            return;
-          }
+        if (this.arrayCarga.length > 501) {
+          this.msj_snack = 'Carga supera limite de registros permitidos!';
+          this.openSnackBar(this.msj_snack, 'Max 500 Registros');
+          this.isLoadingResults = false;
+          this.isRateLimitReached = false;
+          this.show_table = false;
+          return;
+        }
 
-          this.arrayCarga.forEach(function(valor, indice, array) {
+        const delay = (amount: number) => {
+          return new Promise((resolve) => {
+            setTimeout(resolve, amount);
+          });
+        };
+
+        const that = this;
+
+        async function loop() {
+
+          for (let ii = 0; ii < that.arrayCarga.length; ii++) {
 
             let banderaJson: Boolean = false;
             let concatError = '';
 
             // ------------------ Cliente
-            let cc_number: String = '' + valor['cc_number'];
-            let nombrecc: String = '' + valor['nombrecc'];
-            let ruta: String = '' + valor['ruta'];
-            let calle: String = '' + valor['calle'];
-            let numero: String = '' + valor['numero'];
-            let block: String = '' + valor['block'];
-            let depto: String = '' + valor['depto'];
-            let region: String = '' + valor['region'];
-            let provincia: String = '' + valor['provincia'];
-            let comuna: String = '' + valor['comuna'];
-            let medidor: String = '' + valor['medidor'];
-            let modelo_medidor: String = '' + valor['modelo_medidor'];
-            let observacion: String = '' + valor['observacion'];
-            let tarifa: String = '' + valor['tarifa'];
+            let cc_number: String = '' + that.arrayCarga[ii]['cc_number'];
+            let nombrecc: String = '' + that.arrayCarga[ii]['nombrecc'];
+            let ruta: String = '' + that.arrayCarga[ii]['ruta'];
+            let calle: String = '' + that.arrayCarga[ii]['calle'];
+            let numero: String = '' + that.arrayCarga[ii]['numero'];
+            let block: String = '' + that.arrayCarga[ii]['block'];
+            let depto: String = '' + that.arrayCarga[ii]['depto'];
+            let region: String = '' + that.arrayCarga[ii]['region'];
+            let provincia: String = '' + that.arrayCarga[ii]['provincia'];
+            let comuna: String = '' + that.arrayCarga[ii]['comuna'];
+            let medidor: String = '' + that.arrayCarga[ii]['medidor'];
+            let modelo_medidor: String = '' + that.arrayCarga[ii]['modelo_medidor'];
+            let transformador: String = '' + that.arrayCarga[ii]['transformador'];
+            let leido_por: String = '' + that.arrayCarga[ii]['leido_por'];
+            let observacion: String = '' + that.arrayCarga[ii]['observacion'];
+            let tarifa: String = '' + that.arrayCarga[ii]['tarifa'];
             let id_tarifa: Number = 0;
-            let constante: String = '' + valor['constante'];
+            let constante: String = '' + that.arrayCarga[ii]['constante'];
             let id_constante: Number = 0;
-            let giro: String = '' + valor['giro'];
+            let giro: String = '' + that.arrayCarga[ii]['giro'];
             let id_giro: Number = 0;
-            let zona: String = '' + valor['zona'];
+            let zona: String = '' + that.arrayCarga[ii]['zona'];
             let id_zona: Number = 0;
-            let sector: String = '' + valor['sector'];
+            let sector: String = '' + that.arrayCarga[ii]['sector'];
             let id_sector: Number = 0;
-            let mercado: String = '' + valor['mercado'];
+            let mercado: String = '' + that.arrayCarga[ii]['mercado'];
             let id_mercado: Number = 0;
-            let latitud: String = '' + '' + valor['latitud'];
-            let longitud: String = '' + '' + valor['longitud'];
+            let latitud: String = '' + '' + that.arrayCarga[ii]['latitud'];
+            let longitud: String = '' + '' + that.arrayCarga[ii]['longitud'];
             // ------------------ Orden
-            let order_number: String = '' + valor['order_number'];
-            let tipo_servicio: String = '' + valor['tipo_servicio'];
+            let order_number: String = '' + that.arrayCarga[ii]['order_number'];
+            let tipo_servicio: String = '' + that.arrayCarga[ii]['tipo_servicio'];
             let servicetype_id: Number = 0;
-            let asignado_a: String = '' + valor['asignado_a'];
+            let asignado_a: String = '' + that.arrayCarga[ii]['asignado_a'];
             let assigned_to: Number = 0;
-            let required_date: String = '' + valor['required_date'];
-            let observation: String = '' + valor['observation'];
+            let required_date: String = '' + that.arrayCarga[ii]['required_date'];
+            let observation: String = '' + that.arrayCarga[ii]['observation'];
 
             // Validar campos
 
@@ -450,13 +472,18 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
             // Medidor validación
             let checkboxMedidor = false;
+            let checkboxZona = false;
 
-            if (this.toppings !== undefined && this.toppings.value !== null) {
-              const arrayItem: [] = this.toppings.value;
+            if (that.toppings !== undefined && that.toppings.value !== null) {
+              const arrayItem: [] = that.toppings.value;
               for (let i = 0; i !== arrayItem.length; ++i) {
 
                 if (arrayItem[i] === 'Medidor') {
                   checkboxMedidor = true;
+                }
+
+                if (arrayItem[i] === 'Zona') {
+                  checkboxZona = true;
                 }
               }
             }
@@ -477,6 +504,18 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               modelo_medidor = modelo_medidor.trim();
             }
 
+            if (transformador === 'undefined' || transformador.trim().length > 0) {
+              transformador = '';
+            } else {
+              transformador =  transformador.trim();
+            }
+
+            if (leido_por === 'undefined' || leido_por.trim().length > 0) {
+              leido_por = '';
+            } else {
+              leido_por = leido_por.trim();
+            }
+
             if (observacion === 'undefined' || observacion.trim().length === 0) {
               observacion = 'S/N';
             } else {
@@ -494,7 +533,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               tarifa = '';
               } else {
                 tarifa = tarifa.trim();
-                const response: number = this.validarSelect(tarifa, this.tarifa);
+                const response: number = that.validarSelect(tarifa, that.tarifa);
                 if (response > 0) {
                     id_tarifa = response;
                 } else {
@@ -507,7 +546,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               constante = '';
               } else {
                 constante = constante.trim();
-                const response: number = this.validarSelect(constante, this.constante);
+                const response: number = that.validarSelect(constante, that.constante);
                 if (response > 0) {
                     id_constante = response;
                 } else {
@@ -520,7 +559,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               giro = '';
               } else {
                 giro = giro.trim();
-                const response: number = this.validarSelect(giro, this.giro);
+                const response: number = that.validarSelect(giro, that.giro);
                 if (response > 0) {
                     id_giro = response;
                 } else {
@@ -531,9 +570,13 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
             if (zona === 'undefined' || zona.trim().length === 0) {
               zona = '';
-              } else {
+              if (checkboxZona) {
+                banderaJson = true;
+                concatError = concatError + 'Zona; ';
+              }
+            } else {
                 zona = zona.trim();
-                const response: number = this.validarSelect(zona, this.zona);
+                const response: number = that.validarSelect(zona, that.zona);
                 if (response > 0) {
                     id_zona = response;
                 } else {
@@ -546,7 +589,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               sector = '';
               } else {
                 sector = sector.trim();
-                const response: number = this.validarSelect(sector, this.sector);
+                const response: number = that.validarSelect(sector, that.sector);
                 if (response > 0) {
                     id_sector = response;
                 } else {
@@ -559,7 +602,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               mercado = '';
               } else {
                 mercado = mercado.trim();
-                const response: number = this.validarSelect(mercado, this.mercado);
+                const response: number = that.validarSelect(mercado, that.mercado);
                 if (response > 0) {
                     id_mercado = response;
                 } else {
@@ -582,11 +625,11 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
             // ----- ORDEN
 
-            if (this.checkboxAuto) {
+            if (that.checkboxAuto) {
               const date: Date = new Date();
-              const newDate = this.getDateFormar(date);
+              const newDate = that.getDateFormar(date);
               const random = Math.floor((Math.random() * 100) + 1);
-              order_number = newDate + '' + random + '' + indice;
+              order_number = newDate + '' + random + '' + ii;
             } else {
               if (order_number === 'undefined' || order_number.trim().length === 0) {
                 order_number = '';
@@ -603,7 +646,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               banderaJson = true;
             } else {
               tipo_servicio = tipo_servicio.trim();
-              const response: number = this.validarTipoServicio(tipo_servicio, this.tipoServicio);
+              const response: number = that.validarTipoServicio(tipo_servicio, that.tipoServicio);
               if ( response > 0) {
                   servicetype_id =  response;
               } else {
@@ -616,7 +659,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               asignado_a = '';
             } else {
               asignado_a = asignado_a.trim();
-              const response: number = this.validarSelectUser(asignado_a, this.usuarios);
+              const response: number = that.validarSelectUser(asignado_a, that.usuarios);
               if ( response > 0) {
                 assigned_to =  response;
               } else {
@@ -625,11 +668,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               }
             }
 
-            console.log(required_date);
-            console.log(required_date.trim().length);
-
             if (required_date === 'undefined' || required_date.trim().length === 0) {
-              console.log(required_date);
               required_date = '';
             } else {
               required_date = required_date.replace(/ /g, '');
@@ -666,6 +705,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'longitud': longitud,
               'medidor': medidor,
               'modelo_medidor': modelo_medidor,
+              'transformador': transformador,
+              'leido_por': leido_por,
               'observacion': observacion,
               'region': region,
               'id_region': 0,
@@ -687,7 +728,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'id_mercado': id_mercado,
               'bandera': checkboxMedidor,
               'order_number': order_number,
-              'service_id': this.service_id,
+              'service_id': that.service_id,
               'tipo_servicio': tipo_servicio,
               'servicetype_id': servicetype_id,
               'asignado_a': asignado_a,
@@ -702,10 +743,9 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'estatus': ''
             };
 
-            if (this.dateend !== undefined) {
-              //console.log(this.dateend.value);
-        	  var newdateend = moment(this.dateend.value).format("YYYY-MM-DD HH:mm:ss");
-              objectJson['vencimiento_date'] = newdateend;
+            if (that.dateend !== undefined) {
+              const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
+              objectJson['vencimiento_date'] = newdateend + ' 23:59:59';
             }
 
             if (banderaJson) {
@@ -715,24 +755,34 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                 'parametro': 0
               };
               objectJson = Object.assign(objectJson, success);
-              this.arrayExcel.push(objectJson);
-              this.arrayExcelError.push(objectJson);
-              this.countError = this.countError + 1;
-              this.refreshTable();
+              that.arrayExcel.push(objectJson);
+              that.arrayExcelError.push(objectJson);
+              that.countError = that.countError + 1;
+              that.refreshTable();
             } else {
+
+              await delay(that.forTime);
+
               const link: String = 'searchcustomer/project/service/' +
-              this.service_id + '?region=' + region + '&provincia=' + provincia +
-               '&comuna=' + comuna;
-              this.dataService.getValidateExisteCLiente(this.service_id, cc_number, medidor, checkboxMedidor, this.token.token).then(
+              that.service_id + '?region=' + region + '&provincia=' + provincia + '&comuna=' + comuna;
+
+               // tslint:disable-next-line:max-line-length
+               that.dataService.getValidateExisteCLiente(that.service_id, cc_number, medidor, id_zona, checkboxMedidor, checkboxZona, that.token.token).then(
                 (res: any) => {
                   res.subscribe(
                     (some) => {
                       console.log(some['datos']);
                       if (some['datos'].length > 1) {
-                        this.arrayExcel.push(objectJson);
-                        this.arrayExcelError.push(objectJson);
-                        this.countError = this.countError + 1;
-                        this.refreshTable();
+                        const obj: Object = {
+                          'estatus' : 'Error: Cliente duplicado',
+                          'label': 'red',
+                          'parametro': 0,
+                        };
+                        objectJson = Object.assign(objectJson, obj);
+                        that.arrayExcel.push(objectJson);
+                        that.arrayExcelError.push(objectJson);
+                        that.countError = that.countError + 1;
+                        that.refreshTable();
                       } else {
                         // console.log(some['datos'][0]['id']);
                         const obj: Object = {
@@ -742,18 +792,18 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                           'label': 'green'
                         };
                         objectJson = Object.assign(objectJson, obj);
-                        this.arrayExcel.push(objectJson);
-                        this.arrayExcelSuccess.push(objectJson);
-                        this.countSuccess = this.countSuccess + 1;
-                        this.countExiste = this.countExiste + 1;
-                        this.refreshTable();
+                        that.arrayExcel.push(objectJson);
+                        that.arrayExcelSuccess.push(objectJson);
+                        that.countSuccess = that.countSuccess + 1;
+                        that.countExiste = that.countExiste + 1;
+                        that.refreshTable();
                       }
 
                     },
                     (error) => {
                       console.log(<any>error);
                       if (error['error']['mensaje'] === 'no se encuentra cliente') {
-                        this.dataService.getSearchcustomer(link, this.token.token).then(
+                        that.dataService.getSearchcustomer(link, that.token.token).then(
                           (respuesta: any) => {
                             respuesta.subscribe(
                               (resSome) => {
@@ -769,13 +819,13 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                                   'label': 'green'
                                   };
                                 objectJson = Object.assign(objectJson, localidad);
-                                this.countSuccess = this.countSuccess + 1;
-                                this.arrayExcel.push(objectJson);
-                                this.arrayExcelSuccess.push(objectJson);
-                                this.refreshTable();
+                                that.countSuccess = that.countSuccess + 1;
+                                that.arrayExcel.push(objectJson);
+                                that.arrayExcelSuccess.push(objectJson);
+                                that.refreshTable();
                               },
                               (resError) => {
-                              	 //console.log(resError);
+                                // console.log(resError);
                                 // console.log(<any>resError);
                                 const estatus: Object = {
                                   'estatus' : 'Error: Campos Localidad',
@@ -783,22 +833,25 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                                   'parametro': 0,
                                   };
                                 objectJson = Object.assign(objectJson, estatus);
-                                this.arrayExcel.push(objectJson);
-                                this.arrayExcelError.push(objectJson);
-                                this.countError = this.countError + 1;
-                                this.refreshTable();
+                                that.arrayExcel.push(objectJson);
+                                that.arrayExcelError.push(objectJson);
+                                that.countError = that.countError + 1;
+                                that.refreshTable();
                               }
                             );
                           }
                         );
                       }
-
                     }
                   );
                 }
               );
             }
-          }, this);
+          }
+        }
+
+        loop();
+
       };
       fileReader.readAsArrayBuffer(this.file);
     }
@@ -818,7 +871,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       (res: any) => {
         res.subscribe(
           (some) => {
-            //console.log(some);
+            // console.log(some);
             this.tipoServicio = some['datos'];
           },
           (error) => {
@@ -859,27 +912,25 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-
-   getServices(id){      
+   getServices(id) {
    this.subscription = this._orderService.getService(this.token.token, id).subscribe(
     response => {
-              if(!response){
+              if (!response) {
                 return;
               }
-              if(response.status == 'success'){    
-                this.services = response.datos; 
+              if (response.status === 'success') {
+                this.services = response.datos;
                 this.servicename = this.services['service_name'];
                 this.project = this.services['project']['project_name'];
                 this.project_id = this.services['project']['id'];
-            	this.ServicioSeleccionado.emit(this.servicename);
-            	if(this.project_id > 0){
-            	this.getInspectores();                          		
-            	}
+                this.ServicioSeleccionado.emit(this.servicename);
+                if (this.project_id > 0) {
+                  this.getInspectores();
+                }
 
               }
-              });        
+              });
     }
-
 
   getConstante(id) {
     this.dataService.getConstante(id, this.token.token).then(
@@ -967,7 +1018,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     return dia + '' + mes + '' + year + '' + minutos + '' + segundos + '' + milisegundos;
   }
 
-  validarTipoServicio(termino: string, array_val: Array<object>) {
+  validarTipoServicio(termino: any, array_val: Array<object>) {
     let id = 0;
     if ( array_val.length > 0 ) {
       array_val.forEach(function(valor, indice, array) {
@@ -979,7 +1030,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     return id;
   }
 
-  validarSelectUser(termino: string, array_val: Array<object>) {
+  validarSelectUser(termino: any, array_val: Array<object>) {
     let id = 0;
     if ( array_val.length > 0 ) {
       array_val.forEach(function(valor, indice, array) {
@@ -991,7 +1042,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     return id;
   }
 
-  validarSelect(termino: string, arrayObject: Array<object>) {
+  validarSelect(termino: any, arrayObject: Array<object>) {
     let id = 0;
     if (arrayObject.length > 0) {
       arrayObject.forEach(function(valor, indice, array) {
@@ -1087,41 +1138,54 @@ applyFilterCliente(filterValue: string) {
     this.checkPost = true;
     this.msj = 'registrados';
 
-    this.arrayExcelSuccess.forEach(function(valor, indice, array) {
+    const delay = (amount: number) => {
+      return new Promise((resolve) => {
+        setTimeout(resolve, amount);
+      });
+    };
 
-      // console.log(JSON.stringify(valor));
+    const that = this;
 
-      if (this.arrayExcelSuccess[indice]['parametro'] === 2) {
-        this.dataService.postDataBD(this.arrayExcelSuccess[indice], this.project_id, this.token.token).then(
-          (res: any) => {
-            res.subscribe(
-              (some) => {
-                console.log(some);
-                this.countSuccessPost = this.countSuccessPost + 1;
-                this.arrayExcelSuccess[indice]['estatus'] = some['message'];
-                this.arrayExcelSuccess[indice]['label'] = 'green';
-                this.arrayExcelSuccess[indice]['cc_id'] = some['lastInsertedId'];
-                this.refreshTableClientes();
-              },
-              (error) => {
-                console.log(<any>error);
-                this.countErrorPost = this.countErrorPost + 1;
-                this.arrayExcelSuccess[indice]['estatus'] = error['error']['message'];
-                this.arrayExcelErrorPost.push(this.arrayExcelSuccess[indice]);
-                this.arrayExcelSuccess[indice]['label'] = 'red';
-                this.arrayExcelSuccess[indice]['parametro'] = 0;
-                this.refreshTableClientes();
-              }
-            );
-          }
-        );
-      } else {
-        this.countJokerPost = this.countJokerPost + 1;
-        this.refreshTableClientes();
+    async function loop() {
+
+      for (let ii = 0; ii < that.arrayExcelSuccess.length; ii++) {
+
+        if (that.arrayExcelSuccess[ii]['parametro'] === 2) {
+
+          await delay(that.forTime);
+
+          that.dataService.postDataBD(that.arrayExcelSuccess[ii], that.project_id, that.token.token).then(
+            (res: any) => {
+              res.subscribe(
+                (some) => {
+                  console.log(some);
+                  that.countSuccessPost = that.countSuccessPost + 1;
+                  that.arrayExcelSuccess[ii]['estatus'] = some['message'];
+                  that.arrayExcelSuccess[ii]['label'] = 'green';
+                  that.arrayExcelSuccess[ii]['cc_id'] = some['lastInsertedId'];
+                  that.refreshTableClientes();
+                },
+                (error) => {
+                  console.log(<any>error);
+                  that.countErrorPost = that.countErrorPost + 1;
+                  that.arrayExcelSuccess[ii]['estatus'] = error['error']['message'];
+                  that.arrayExcelErrorPost.push(that.arrayExcelSuccess[ii]);
+                  that.arrayExcelSuccess[ii]['label'] = 'red';
+                  that.arrayExcelSuccess[ii]['parametro'] = 0;
+                  that.refreshTableClientes();
+                }
+              );
+            }
+          );
+        } else {
+          that.countJokerPost = that.countJokerPost + 1;
+          that.refreshTableClientes();
+        }
       }
 
-    }, this);
+    }
 
+    loop();
   }
 
   uploadExcelPostOrdenes() {
@@ -1134,38 +1198,51 @@ applyFilterCliente(filterValue: string) {
     this.checkOrdenes = true;
     this.msj_ordenes = 'registradas';
 
-    this.arrayExcelSuccess.forEach(function(valor, indice, array) {
-      // console.log(JSON.stringify(valor));
-      this.arrayExcelSuccess[indice]['latitud'] = '';
-      this.arrayExcelSuccess[indice]['longitud'] = '';
-      // console.log(JSON.stringify(valor));
-      if (this.arrayExcelSuccess[indice]['parametro'] !== 0) {
-        this.dataService.postOrder(this.arrayExcelSuccess[indice], this.project_id, this.token.token).then(
-          (res: any) => {
-            res.subscribe(
-              (some) => {
-                console.log(some);
-                this.countSuccessOrdenes = this.countSuccessOrdenes + 1;
-                this.arrayExcelSuccess[indice]['estatus'] = some['message'];
-                this.arrayExcelSuccess[indice]['label'] = 'green';
-                this.arrayExcelSuccess[indice]['orden_id'] = some['lastInsertedId'];
-                this.refreshTableOdernes();
-              },
-              (error) => {
-                console.log(<any>error);
-                this.countErrorOrdenes = this.countErrorOrdenes + 1;
-                this.arrayExcelSuccess[indice]['estatus'] = error['error']['message'];
-                this.arrayExcelErrorPost.push(this.arrayExcelSuccess[indice]);
-                this.arrayExcelSuccess[indice]['label'] = 'red';
-                this.arrayExcelSuccess[indice]['parametro'] = 0;
-                this.refreshTableOdernes();
-              }
-            );
-          }
-        );
-      }
+    const delay = (amount: number) => {
+      return new Promise((resolve) => {
+        setTimeout(resolve, amount);
+      });
+    };
 
-    }, this);
+    const that = this;
+
+    async function loop() {
+
+      for (let ii = 0; ii < that.arrayExcelSuccess.length; ii++) {
+
+        await delay(that.forTime);
+
+        that.arrayExcelSuccess[ii]['latitud'] = '';
+        that.arrayExcelSuccess[ii]['longitud'] = '';
+        if (that.arrayExcelSuccess[ii]['parametro'] !== 0) {
+          that.dataService.postOrder(that.arrayExcelSuccess[ii], that.project_id, that.token.token).then(
+            (res: any) => {
+              res.subscribe(
+                (some) => {
+                  console.log(some);
+                  that.countSuccessOrdenes = that.countSuccessOrdenes + 1;
+                  that.arrayExcelSuccess[ii]['estatus'] = some['message'];
+                  that.arrayExcelSuccess[ii]['label'] = 'green';
+                  that.arrayExcelSuccess[ii]['orden_id'] = some['lastInsertedId'];
+                  that.refreshTableOdernes();
+                },
+                (error) => {
+                  console.log(<any>error);
+                  that.countErrorOrdenes = that.countErrorOrdenes + 1;
+                  that.arrayExcelSuccess[ii]['estatus'] = error['error']['message'];
+                  that.arrayExcelErrorPost.push(that.arrayExcelSuccess[ii]);
+                  that.arrayExcelSuccess[ii]['label'] = 'red';
+                  that.arrayExcelSuccess[ii]['parametro'] = 0;
+                  that.refreshTableOdernes();
+                }
+              );
+            }
+          );
+        }
+      }
+    }
+
+    loop();
 
   }
 
@@ -1176,6 +1253,7 @@ applyFilterCliente(filterValue: string) {
   }
 
   openDialog(): void {
+
     const dialogRef = this.dialog.open(DialogOverviewDialog, {
       width: '350px'
     });
@@ -1191,37 +1269,61 @@ applyFilterCliente(filterValue: string) {
         this.isRateLimitReached = true;
         this.msj = 'eliminados';
 
-        this.arrayExcelSuccess.forEach(function(valor, indice, array) {
-          const id: string = '' + valor['cc_id'];
-          if (id.trim().length > 0  && valor['parametro']  === 2) {
-            this.dataService.deleteCustomer(valor['cc_id'], this.project_id, this.token.token).then(
-              (res: any) => {
-                res.subscribe(
-                  (some) => {
-                    console.log(some);
-                    this.countSuccessPost = this.countSuccessPost + 1;
-                    this.arrayExcelSuccess[indice]['estatus'] = some['message'];
-                    this.arrayExcelSuccess[indice]['label'] = 'green';
-                    this.refreshTableClientes();
-                  },
-                  (error) => {
-                    console.log(<any>error);
-                    this.countErrorPost = this.countErrorPost + 1;
-                    this.arrayExcelSuccess[indice]['estatus'] = error['error']['message'];
-                    this.arrayExcelSuccess[indice]['parametro'] = 0;
-                    this.refreshTableClientes();
-                  }
-                );
-              }
-            );
-          } else {
-            this.countJokerPost = this.countJokerPost + 1;
-            this.refreshTableClientes();
-          }
-        }, this);
-        this.checkPost = false;
+        this.deleteCliente();
       }
     });
+  }
+
+  deleteCliente(): any {
+
+    const delay = (amount: number) => {
+      return new Promise((resolve) => {
+        setTimeout(resolve, amount);
+      });
+    };
+
+    const that = this;
+
+    async function loop() {
+
+      for (let ii = 0; ii < that.arrayExcelSuccess.length; ii++) {
+
+        const id: string = '' + that.arrayExcelSuccess[ii]['cc_id'];
+        if (id.trim().length > 0  && that.arrayExcelSuccess[ii]['parametro']  === 2) {
+
+          await delay(that.forTime);
+
+          that.dataService.deleteCustomer(that.arrayExcelSuccess[ii]['cc_id'], that.project_id, that.token.token).then(
+            (res: any) => {
+              res.subscribe(
+                (some) => {
+                  console.log(some);
+                  that.countSuccessPost = that.countSuccessPost + 1;
+                  that.arrayExcelSuccess[ii]['estatus'] = some['message'];
+                  that.arrayExcelSuccess[ii]['label'] = 'green';
+                  that.refreshTableClientes();
+                },
+                (error) => {
+                  console.log(<any>error);
+                  that.countErrorPost = that.countErrorPost + 1;
+                  that.arrayExcelSuccess[ii]['estatus'] = error['error']['message'];
+                  that.arrayExcelSuccess[ii]['parametro'] = 0;
+                  that.refreshTableClientes();
+                }
+              );
+            }
+          );
+        } else {
+          that.countJokerPost = that.countJokerPost + 1;
+          that.refreshTableClientes();
+        }
+      }
+    }
+
+    loop();
+
+    this.checkPost = false;
+
   }
 
   openDialogRollbackOrdenes(): void {
@@ -1241,43 +1343,63 @@ applyFilterCliente(filterValue: string) {
         this.isRateLimitReached = true;
         this.msj_ordenes = 'eliminadas';
 
-        this.arrayExcelSuccess.forEach(function(valor, indice, array) {
-
-          const lastInsertedId: string = '' + valor['orden_id'];
-          if ( lastInsertedId.trim().length > 0 && valor['parametro'] > 0) {
-            this.dataService.deleteOrdenBD(valor['orden_id'], this.project_id, this.token.token).then(
-              (res: any) => {
-                res.subscribe(
-                  (some) => {
-                    console.log(some);
-                    this.countSuccessOrdenes = this.countSuccessOrdenes + 1;
-                    this.arrayExcelSuccess[indice]['estatus'] = some['message'];
-                    this.arrayExcelSuccess[indice]['label'] = 'green';
-                    this.refreshTableOdernes();
-                  },
-                  (error) => {
-                    console.log(<any>error);
-                    this.countErrorOrdenes = this.countErrorOrdenes + 1;
-                    this.arrayExcelSuccess[indice]['estatus'] = error['error']['message'];
-                    this.arrayExcelSuccess[indice]['label'] = 'red';
-                    this.arrayExcelSuccess[indice]['parametro'] = 0;
-                    this.refreshTableOdernes();
-                  }
-                );
-              }
-            );
-
-          } else {
-            this.countJokerOrdenes = this.countJokerOrdenes + 1;
-            this.refreshTableOdernes();
-          }
-
-        }, this);
-
-        this.checkOrdenes = false;
+        this.deleteOrdenes();
       }
 
     });
+  }
+
+  deleteOrdenes(): any {
+
+    const delay = (amount: number) => {
+      return new Promise((resolve) => {
+        setTimeout(resolve, amount);
+      });
+    };
+
+    const that = this;
+
+    async function loop() {
+
+      for (let ii = 0; ii < that.arrayExcelSuccess.length; ii++) {
+
+        await delay(that.forTime);
+
+        const lastInsertedId: string = '' +  that.arrayExcelSuccess[ii]['orden_id'];
+        if ( lastInsertedId.trim().length > 0 &&  that.arrayExcelSuccess[ii]['parametro'] > 0) {
+          that.dataService.deleteOrdenBD( that.arrayExcelSuccess[ii]['orden_id'], that.project_id, that.token.token).then(
+            (res: any) => {
+              res.subscribe(
+                (some) => {
+                  console.log(some);
+                  that.countSuccessOrdenes = that.countSuccessOrdenes + 1;
+                  that.arrayExcelSuccess[ii]['estatus'] = some['message'];
+                  that.arrayExcelSuccess[ii]['label'] = 'green';
+                  that.refreshTableOdernes();
+                },
+                (error) => {
+                  console.log(<any>error);
+                  that.countErrorOrdenes = that.countErrorOrdenes + 1;
+                  that.arrayExcelSuccess[ii]['estatus'] = error['error']['message'];
+                  that.arrayExcelSuccess[ii]['label'] = 'red';
+                  that.arrayExcelSuccess[ii]['parametro'] = 0;
+                  that.refreshTableOdernes();
+                }
+              );
+            }
+          );
+
+        } else {
+          that.countJokerOrdenes = that.countJokerOrdenes + 1;
+          that.refreshTableOdernes();
+        }
+
+      }
+    }
+
+    loop();
+
+    this.checkOrdenes = false;
   }
 
   downloadErrorExcel() {
@@ -1331,9 +1453,11 @@ applyFilterCliente(filterValue: string) {
     this.arrayExcelSuccess = [];
     this.arrayExcelError = [];
     this.arrayExcelErrorPost = [];
-    this.dateend = undefined; 
+    this.dateend = undefined;
+    this.countExiste = 0;
 
   }
+
 }
 
 @Component({

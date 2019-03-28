@@ -296,25 +296,30 @@
 
 </div>
 <P></P>
+<div  style="float:right">
+    <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+        <div class="btn-group mr-2" role="group" aria-label="Second group" *ngIf="!isRateLimitReached">
+            <button class="btn btn-sm btn-outline-secondary dropdown-toggle" (click)="ExportTOExcel()">
+                <span data-feather="csv"></span>
+                Excel
+              </button>
 
+        </div>
+
+        <div class="btn-group mr-2" role="group" aria-label="Second group">
+              <div class="btn-group" *ngIf="!isRateLimitReached">    
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" [matMenuTriggerFor]="menucsv"><span data-feather="CSV"></span>CSV</button>
+                    <mat-menu #menucsv="matMenu">
+                    <button mat-menu-item (click)="openDialogCsv()"><span data-feather="csv"></span>Buscar</button>    
+                    </mat-menu>
+              </div>
+    
+        </div>
+      </div>
+    </div>
 </mat-card-content>
 </mat-card>
 </div>
-<table  cellspacing="0" border="0" width="100%">
-  <tr>
-    <td width="95%">
-    </td>
-    <td>
-
-                <div class="btn-toolbar mb-2 mb-md-0" *ngIf="!isRateLimitReached">
-                  <button class="btn btn-sm btn-outline-secondary dropdown-toggle" (click)="ExportTOExcel()">
-                    <span data-feather="calendar"></span>
-                    CSV
-                  </button>
-                </div>
-</td>
-</tr>
-</table>
 <!-- Copyright 2018 Google Inc. All Rights Reserved.
     Use of this source code is governed by an MIT-style license that
     can be found in the LICENSE file at http://angular.io/license -->

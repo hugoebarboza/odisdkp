@@ -46,8 +46,9 @@ import { ToastrService } from 'ngx-toastr';
   	//console.log(query);
   	//const body = JSON.stringify({data});
 	//const headers = new Headers({'Content-Type':'application/json'});
-	const url = this.url+query;
-	const headers = new HttpHeaders({
+		const url = this.url+query;
+		//console.log(url);
+		const headers = new HttpHeaders({
 		'Content-Type': 'application/json',
 		'Authorization': token
 	});
@@ -91,7 +92,7 @@ import { ToastrService } from 'ngx-toastr';
 
 
 
-  getProjectShareOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, fieldValueEstatus:string, columnValueEstatus:string, columnTimeFromValue:any, columnTimeUntilValue:any, columnValueZona:number, sort: string, order: string, pageSize: number, page: number, id:number, idservice:number, token: any) {
+  getProjectShareOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, fieldValueEstatus:string, columnValueEstatus:string, columnTimeFromValue:any, columnTimeUntilValue:any, columnValueZona:number, idservicetype:number, sort: string, order: string, pageSize: number, page: number, id:number, idservice:number, token: any) {
     //console.log(sort);
     if(!fieldValue){
       fieldValue = '';
@@ -104,7 +105,7 @@ import { ToastrService } from 'ngx-toastr';
       sort = 'create_at';
     }
     
-    const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&fieldValueEstatus=${fieldValueEstatus}&columnValueEstatus=${columnValueEstatus}&columnTimeFromValue=${columnTimeFromValue}&columnTimeUntilValue=${columnTimeUntilValue}&columnValueZona=${columnValueZona}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
+    const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&fieldValueEstatus=${fieldValueEstatus}&columnValueEstatus=${columnValueEstatus}&columnTimeFromValue=${columnTimeFromValue}&columnTimeUntilValue=${columnTimeUntilValue}&columnValueZona=${columnValueZona}&idservicetype=${idservicetype}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
     //console.log('-----------------------------');
     //console.log(paginate);
     //const paginate = `?page=${page + 1}`;
@@ -140,6 +141,11 @@ import { ToastrService } from 'ngx-toastr';
 		return this.getQuery('service/'+id+'/order/'+orderid, token);
 	}
 
+	getFirmaImageOrder(token: any, id: string): Observable<any> {								  
+		return this.getQuery('order/'+id+'/firmaimage', token);
+	}
+
+	
 	getListImageOrder(token: any, id: string): Observable<any> {								  
 		return this.getQuery('order/'+id+'/listimage', token);
 	}
@@ -210,23 +216,6 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
 
-    important(token: any, id:number, orderid:number, label:number): void {	
-		let json = JSON.stringify(label);
-		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  
-		this._http.post(this.url+'project'+'/'+id+'/'+'order/'+orderid+'/importantorder/'+label, params, {headers: headers}).subscribe(
-    		data => { 
-    			  //console.log(data);
-    			  //this.dialogData = order;    		      
-			      //this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});			      
-			      },
-			      (err: HttpErrorResponse) => {	
-			      this.error = err.error.message;
-			      //console.log(err.error.message);
-			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-			    });
-	}
 
 
  	delete(token: any, orderid:number, id: number): void { 	 	
@@ -240,5 +229,25 @@ import { ToastrService } from 'ngx-toastr';
       	this.error = err.error.message;
         this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
       });
-  	}
+		}
+		
+    important(token: any, id:number, orderid:number, label:number): void {	
+			let json = JSON.stringify(label);
+			let params = 'json='+json;
+			let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+											 .set('Authorization', token);							  
+			this._http.post(this.url+'project'+'/'+id+'/'+'order/'+orderid+'/importantorder/'+label, params, {headers: headers}).subscribe(
+					data => { 
+							//console.log(data);
+							//this.dialogData = order;    		      
+							//this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});			      
+							},
+							(err: HttpErrorResponse) => {	
+							this.error = err.error.message;
+							//console.log(err.error.message);
+							//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+						});
+		}
+
+		
 }

@@ -4,9 +4,9 @@
       <mat-card-title>Modulo de Carga</mat-card-title>
       <mat-card-subtitle>Siga los pasos 1, 2 y 3 que aparecen en la pantalla</mat-card-subtitle>
     </mat-card-header>
-    <mat-card-content>
+    <mat-card-content style="height: 100vh">
 
-<div class="mat-app-background basic-container">
+<div class="mat-app-background basic-container" >
   <mat-horizontal-stepper linear #stepper>
       <mat-step [stepControl]="firtsFormGroup">
           <form [formGroup]="firtsFormGroup">
@@ -14,33 +14,41 @@
             <div class="excel-selector">
                 <button mat-mini-fab color="accent" (click)="fileInput.click()">
                     <mat-icon>attachment</mat-icon>
-                    <input hidden type="file" #fileInput class="none" (change)="incomingfile($event)" accept=".xlsx" required formControlName="inputCtrl" >                  
+                    <input hidden type="file" #fileInput class="none" (change)="incomingfile($event)" (click)="$event.target.value = null" accept=".xlsx" required formControlName="inputCtrl" >                  
                 </button>
                 <mat-form-field class="marginLeft">
                     <input matInput placeholder="Seleccione archivo" value="{{nombreFile}}"  (click)="fileInput.click()">
                 </mat-form-field>
-                <button  class="btnUpload" mat-raised-button (click)="Upload()" disabled *ngIf="!bandera">Validar</button>
+                <button  class="btnUpload" mat-raised-button (click)="Upload()" [disabled]="true"  *ngIf="!bandera">Validar</button>
                 <button  class="btnUpload" mat-raised-button (click)="Upload()" *ngIf="bandera">Validar</button>
-                <mat-form-field *ngIf="dateend !== undefined" class="marginLeftX2">
-                  <input matInput [matDatepicker]="pickerEnd" placeholder="Fecha vencimiento" [formControl]="dateend" readonly="true" disabled>
+                <mat-form-field *ngIf="dateend !== undefined && (!checkboxRegistro && !checkboxUpdateVIN && !checkboxPicking)" class="marginLeftX2" >
+                  <input matInput [matDatepicker]="pickerEnd" placeholder="Fecha vencimiento" formControlName="inputDate" (readonly)="true" >
                   <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                   <mat-datepicker #pickerEnd></mat-datepicker>
                 </mat-form-field>
-                <mat-slide-toggle class="btnUpload" (change)="checkRegistro($event)">
-                  Solo registrar vehículos
+                <mat-slide-toggle class="btnUpload" (change)="checkPicking($event)" [disabled]="checkboxRegistro ||checkboxUpdateVIN || checkboxAuto">
+                  Generar picking
                 </mat-slide-toggle>
-                <mat-slide-toggle class="marginLeftX2" (change)="checkUpdateVIN($event)">
-                  Actualizar VIN
+                <mat-slide-toggle class="btnUpload" (change)="checkRegistro($event)"  [disabled]="checkboxUpdateVIN || checkboxPicking || checkboxAuto">
+                  Registrar vehículos
                 </mat-slide-toggle>
-                <mat-slide-toggle class="marginLeftX2" (change)="checkAutoGenerar($event)">
+                <mat-slide-toggle class="marginLeftX2" (change)="checkUpdateVIN($event)" [disabled]="checkboxPicking || checkboxRegistro || checkboxAuto">
+                  Actualizar vehículos
+                </mat-slide-toggle>
+                <mat-slide-toggle class="marginLeftX2" (change)="checkAutoGenerar($event)" [disabled]="checkboxUpdateVIN || checkboxPicking || checkboxRegistro">
                   Generar N°Orden
                 </mat-slide-toggle>
-                <a mat-mini-fab target="_self" class="marginLeftX2" color="primary" href="../../assets/ModuloCarga.xlsx" download="ModuloCarga.xlsx">
+                <a mat-mini-fab target="_self" class="marginLeftX2" color="primary" href="../../assets/ModuloCargaVIN.xlsx" download="ModuloCarga.xlsx">
                   <mat-icon>archive</mat-icon>
-                </a><label class=" marginLeft"></label>
+                </a><label class=" marginLeft">Modulo de Carga</label>
+                <a mat-mini-fab target="_self" class="marginLeftX2" color="primary" href="../../assets/ModuloPicking.xlsx" download="Picking.xlsx">
+                  <mat-icon>archive</mat-icon>
+                </a><label class=" marginLeft">Picking</label>
+
+
             </div>
 
-            <div class="example-container mat-elevation-z8" *ngIf="show_table">
+            <div class="example-container mat-elevation-z8" *ngIf="show_table && !checkboxPicking">
                   
                 <mat-form-field appearance="legacy" class="mat-form-field-custom">
                     <mat-label>Buscar</mat-label>
@@ -147,25 +155,91 @@
                 <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
                 
             </div>
+            <div class="example-container mat-elevation-z8" *ngIf="show_table && checkboxPicking">
+
+              <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+                <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+              </div>
+              <div class="rate-limit-reached" *ngIf="isRateLimitReached">
+              </div>
+              <div class="table-container">
+                <table mat-table #table [dataSource]="dataSourcePicking">
+
+                  <ng-container matColumnDef="ubicacion_OCA">
+                    <th mat-header-cell *matHeaderCellDef> Ubicación OCA </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ubicacion_OCA}} </td>
+                </ng-container>
+    
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="ubicacion_SAP">
+                    <th mat-header-cell *matHeaderCellDef> Ubicación SAP </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ubicacion_SAP}} </td>
+                </ng-container>
+
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="cc_number" >
+                    <th mat-header-cell *matHeaderCellDef> VIN  </th>
+                    <td mat-cell *matCellDef="let element"> {{element.cc_number}} </td>
+                  </ng-container>
+              
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="marca">
+                    <th mat-header-cell *matHeaderCellDef> Marca </th>
+                    <td mat-cell *matCellDef="let element"> {{element.marca}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="descripcion">
+                    <th mat-header-cell *matHeaderCellDef> Modelo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.descripcion}} </td>
+                  </ng-container>
+              
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="color">
+                    <th mat-header-cell *matHeaderCellDef> Color </th>
+                    <td mat-cell *matCellDef="let element"> {{element.color}} </td>
+                  </ng-container>
+      
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="estatus" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                      <td mat-cell *matCellDef="let element"> {{element.estatus}} </td>
+                  </ng-container>
+              
+                  <tr mat-header-row *matHeaderRowDef="displayedColumnsPicking"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumnsPicking;"></tr>
+                </table>
+              </div>
+            
+              <mat-paginator #paginatorPicking [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              
+            </div>
       
             <div>
-                <table>
-                    <tr>
-                      <th>
-                          <mat-card *ngIf="countError>0">
-                              <span class="colorError">Registros invalidos {{countError}}</span> 
-                              <button mat-raised-button class="checkbox-margin" (click)="downloadErrorExcel()">Descargar Excel</button>
-                          </mat-card>
-                      </th>
-                      <th>
-                          <mat-card *ngIf="countSuccess>0">
-                              Registros validados {{countSuccess}}  
-                              <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)" md-colors="{background: 'indigo'}" formControlName="confirmarCtrl"  required>  Confirmar</mat-checkbox>
-                              <button mat-raised-button matStepperNext  (click)="fulltable()">Continuar</button>
-                          </mat-card>
-                      </th>
-                    </tr>
-                </table>
+              <table>
+                <tr>
+                  <th *ngIf="countError>0">
+                      <mat-card >
+                          <span class="colorError">Registros invalidos {{countError}}</span> 
+                          <button mat-raised-button class="checkbox-margin" (click)="downloadErrorExcel()">Descargar Excel</button>
+                      </mat-card>
+                  </th>
+                  <th *ngIf="countSuccess>0">
+                      <mat-card >
+                          Registros validados {{countSuccess}}  
+                          <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)" md-colors="{background: 'indigo'}" formControlName="confirmarCtrl"  required> Confirmar</mat-checkbox>
+                          <button mat-raised-button matStepperNext (click)="fulltable()">Continuar</button>
+                      </mat-card>
+                  </th>
+                  <th *ngIf="arrayExcelPicking && arrayExcelPicking.length > 0">
+                    <mat-card >
+                        <span>Registros validados {{arrayExcelPicking.length}}</span> 
+                        <button mat-raised-button class="checkbox-margin" (click)="downloadPickingExcel()">Descargar Excel</button>
+                    </mat-card>
+                  </th>
+                </tr>
+              </table>
             </div>
           </form>
         </mat-step>
@@ -280,14 +354,16 @@
               <table width="100%">
                 <tbody>
                   <tr>
-                    <td width="15%">
+                    <td width="30%">
                       <button mat-button matStepperPrevious>Atrás</button><!--stepper.reset()-->
                     </td>
-                    <td width="55%"></td>
-                    <td width="28%">
+                    <td width="70%" style="position: relative;">
+                      <div style="position: absolute; right: 0px; top: 0px;">
                         <button mat-raised-button color="warn" (click)="resetAll();stepper.reset()">Reset</button>
-                        <button mat-raised-button color="warn" class="marginLeft" (click)="openDialog()" [disabled]="!checkPost" *ngIf="this.arrayExcelSuccess.length != this.countExiste">Rollback Vehículos</button>
-                        <button mat-raised-button color="primary"  class="marginLeft" [disabled]="checkPost" (click)="uploadExcelPost()" *ngIf="this.arrayExcelSuccess.length != this.countExiste">Registrar Vehículos</button>
+                        <button mat-raised-button color="warn" class="marginLeft" (click)="openDialog()" [disabled]="!checkPost || (checkboxUpdateVIN && this.countSuccessPost == 0) || this.countSuccessPost == 0" *ngIf="this.arrayExcelSuccess.length != this.countExiste">Rollback Vehículos</button>
+                        <button mat-raised-button color="primary"  class="marginLeft" [disabled]="checkPost" (click)="uploadExcelPost()" *ngIf="this.arrayExcelSuccess.length != this.countExiste && !checkboxUpdateVIN">Registrar Vehículos</button>
+                        <button mat-raised-button color="primary"  class="marginLeft" [disabled]="checkPost" (click)="uploadExcelPost()" *ngIf="this.arrayExcelSuccess.length != this.countExiste && checkboxUpdateVIN">Actualizar Vehículos</button>
+                      </div>
                     </td>
                   </tr>
                 </tbody>
@@ -296,22 +372,22 @@
           <div>  
           <table>
               <tr>
-                <th>
-                    <mat-card *ngIf="countErrorPost>0">
+                <th *ngIf="countErrorPost>0">
+                    <mat-card>
                         <span class="colorError">Vehículos no {{msj}} {{countErrorPost}}</span> 
                         <button mat-raised-button class="checkbox-margin" (click)="downloadPostErrorExcel()">Descargar Excel</button>
                     </mat-card>
                 </th>
-                <th>
-                    <mat-card *ngIf="countSuccessPost>0">
-                        Vehículos {{msj}} con exito! {{countSuccessPost}}  
-                        <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)"  [disabled]="!checkPost" *ngIf="!checkboxRegistro" md-colors="{background: 'indigo'}" formControlName="confirmarCli"  required>Confirmar</mat-checkbox>
-                        <button mat-raised-button matStepperNext [disabled]="!checkPost" (click)="fulltableOrdenes();" *ngIf="!checkboxRegistro" >Continuar</button>
+                <th *ngIf="(countJokerPost + countSuccessPost)>0 && !checkboxUpdateVIN">
+                    <mat-card>
+                        Vehículos {{msj}} {{countSuccessPost}}  
+                        <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)" *ngIf="!checkboxRegistro" md-colors="{background: 'indigo'}" formControlName="confirmarCli" required>Confirmar</mat-checkbox>
+                        <button mat-raised-button matStepperNext (click)="fulltableOrdenes();" *ngIf="!checkboxRegistro" >Continuar</button>
                     </mat-card>
                 </th>
-                <th>
-                  <mat-card *ngIf="countJokerPost>0">
-                      Carga procesada {{countJokerPost + countSuccessPost}} 
+                <th *ngIf="(countJokerPost + countSuccessPost + countErrorPost) > 0">
+                  <mat-card>
+                      Carga procesada {{countJokerPost + countSuccessPost + countErrorPost}} 
                   </mat-card>
               </th>
               </tr>
@@ -430,14 +506,15 @@
             <table width="100%">
               <tbody>
                 <tr>
-                  <td width="15%">
+                  <td width="30%">
                     <button mat-button matStepperPrevious>Atrás</button>
                   </td>
-                  <td width="53%"></td>
-                  <td width="28%">
-                      <button mat-raised-button color="warn" (click)="resetAll();stepper.reset()">Reset</button>
-                      <button mat-raised-button color="warn" class="marginLeft" (click)="openDialogRollbackOrdenes()" [disabled]="!checkOrdenes || arrayExcelSuccess.length == countErrorOrdenes" >Rollback Ordenes</button>
-                      <button mat-raised-button color="primary" [disabled]="checkOrdenes" class="marginLeft" (click)="uploadExcelPostOrdenes()">Registrar ordenes</button>
+                  <td width="70%" style="position: relative;">
+                        <div style="position: absolute; right: 0px; top: 0px;">
+                        <button mat-raised-button color="warn" (click)="resetAll();stepper.reset()">Reset</button>
+                        <button mat-raised-button color="warn" class="marginLeft" (click)="openDialogRollbackOrdenes()" [disabled]="!checkOrdenes || arrayExcelSuccess.length == countErrorOrdenes" >Rollback Ordenes</button>
+                        <button mat-raised-button color="primary" [disabled]="checkOrdenes" class="marginLeft" (click)="uploadExcelPostOrdenes()">Registrar ordenes</button>
+                      </div>
                   </td>
                 </tr>
               </tbody>
@@ -446,14 +523,14 @@
         <div>  
         <table>
             <tr>
-              <th>
-                  <mat-card *ngIf="countErrorOrdenes>0">
+              <th *ngIf="countErrorOrdenes>0">
+                  <mat-card>
                       <span class="colorError">Ordenes no {{msj_ordenes}} {{countErrorOrdenes}}</span> 
                       <button mat-raised-button class="checkbox-margin" (click)="downloadPostErrorExcel()">Descargar Excel</button>
                   </mat-card>
               </th>
-              <th>
-                  <mat-card *ngIf="countSuccessOrdenes>0">
+              <th *ngIf="countSuccessOrdenes>0">
+                  <mat-card>
                       Ordenes {{msj_ordenes}} con exito! {{countSuccessOrdenes}}  
                   </mat-card>
               </th>

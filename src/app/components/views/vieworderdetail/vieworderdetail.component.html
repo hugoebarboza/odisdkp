@@ -166,7 +166,7 @@
                                   <div class="p-3">
                                     <div *ngIf="!toggleContent">
                                         <li *ngFor="let item of items | async" >
-                                            {{ item.comment }}, {{item.identity}} ({{item.created}}) 
+                                          {{item.identity}}: {{ item.comment }},  ({{item.created}}).
                                             <button mat-icon-button color="warn"  (click)="deleteCommentDatabase(item.id)"                                                                                         
                                             >
                                               <div>

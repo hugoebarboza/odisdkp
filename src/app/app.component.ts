@@ -4,10 +4,12 @@ import { Router, ActivationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 
+
 //SERVICES
 import { SettingsService } from './services/service.index';
-
 import { UserService } from './services/user.service';
+
+//MODEL
 import { Proyecto } from './models/proyecto';
 
 

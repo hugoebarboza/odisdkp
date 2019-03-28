@@ -29,7 +29,7 @@ export class ForgotpasswordComponent implements OnInit {
   	) 
   { 
   	this.title = 'Olvido Clave'; 
-    this.user = new User('','','','', 1);  
+    this.user = new User('','','','',1,'','',1);  
     this.year = new Date().getFullYear();
 
   }

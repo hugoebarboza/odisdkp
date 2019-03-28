@@ -82,7 +82,7 @@ export class LoginComponent implements OnInit {
     private toasterService: ToastrService,    
   ){
     this.title = 'Acceso';
-    this.user = new User('','','','', 1);
+    this.user = new User('','','','', 1,'','',1);
     this.year = new Date().getFullYear();
     this.identity = this._userService.getIdentity();
     this.idaccount = this._userService.getIdaccount();

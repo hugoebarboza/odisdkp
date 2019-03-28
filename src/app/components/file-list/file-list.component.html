@@ -1,0 +1,114 @@
+   
+    <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+      No se encontraron archivos.
+    </div>
+    
+    <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+       <app-loading *ngIf="isLoadingResults"></app-loading>  
+    </div>
+    
+    <table mat-table  #table  [dataSource]="dataSource"  matSort  *ngIf="!isRateLimitReached">
+    
+    <ng-container matColumnDef="nombre"  >  
+      <mat-header-cell *matHeaderCellDef  mat-sort-header> Nombre </mat-header-cell>
+        <mat-cell *matCellDef="let items; let i = index" >
+  
+          {{items.nombre}}             
+    
+      </mat-cell>
+    </ng-container>
+    
+    
+    
+    
+    <ng-container matColumnDef="tipo" >
+      <mat-header-cell *matHeaderCellDef > Tipo </mat-header-cell>
+      <mat-cell *matCellDef="let items; let i = index" > 
+    
+    
+            <div *ngIf="items.type == 'image' || items.type == 'image' || items.type == 'image' || items.type == 'image'" >
+            <i class="material-icons">
+            image
+            </i>
+            </div>
+    
+    
+            <div *ngIf="items.type== 'pdf'" >
+            <i class="material-icons">
+            attach_file
+            </i>
+            </div>
+    
+    
+            <div *ngIf="items.type== 'mp4'" >
+            <i class="material-icons">
+            videocam
+            </i>
+            </div>
+    
+    
+      </mat-cell>
+    </ng-container>
+    
+    
+    
+    <ng-container matColumnDef="create_at" >
+      <mat-header-cell *matHeaderCellDef > Creado El </mat-header-cell>
+        <mat-cell *matCellDef="let items"> {{items.created }}</mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="create_by" >
+      <mat-header-cell *matHeaderCellDef > Creado Por </mat-header-cell>
+        <mat-cell *matCellDef="let items"> {{items.identity }}</mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="visualizar" >
+      <mat-header-cell *matHeaderCellDef >  </mat-header-cell>
+        <mat-cell *matCellDef="let items; let i = index">  
+    
+          <div class="row">
+            <button mat-icon-button color="primary" (click)="downloadItem(items, i)"
+            matTooltip="Decargar documento."
+            [matTooltipPosition]="positiondatasourceaction.value"
+            >          
+              <div *ngIf="i != indexitem">
+              <mat-icon aria-label="download">get_app</mat-icon>
+              </div>
+             
+              <div *ngIf="i == indexitem">
+              <app-progress-spinner *ngIf="isLoadingDownload"></app-progress-spinner>  
+              </div>
+    
+            </button>
+    
+            <button mat-icon-button color="warn"  (click)="deleteItem(items)" 
+            matTooltip="Eliminar documento."
+            [matTooltipPosition]="positiondatasourceaction.value"
+            *ngIf="_userService.isRole(7)"
+            >
+              <div>
+              <mat-icon aria-label="Delete">delete</mat-icon>
+              </div>
+            </button>
+    
+    
+    
+            <a mat-button href="{{items.url}}" target="_blank" rel="noopener">
+              <div>
+              <mat-icon aria-label="launch">launch</mat-icon>
+              </div>
+            </a> 
+    
+    
+          </div>
+    
+        </mat-cell>
+    </ng-container>
+    
+    <mat-header-row *matHeaderRowDef="columnsToDisplay" color="primary"></mat-header-row>
+    <mat-row *matRowDef="let items; columns: columnsToDisplay;" ></mat-row>
+    </table>
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  
+    
+    

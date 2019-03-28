@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ɵConsole } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormControl, Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -35,8 +35,8 @@ import { CustomerService } from '../../../services/customer.service';
 })
 export class ShowcustomerComponent implements OnInit {
   public title: string;
-  public identity;
-  public token;  
+  public identity: any;
+  public token: any;  
   public termino: string;
   public results: Object = [];
   public resultsprovincias: Object = [];
@@ -46,7 +46,6 @@ export class ShowcustomerComponent implements OnInit {
   public provincia: Provincia;
   public comuna: Comuna;
   public customer: Customer[] = [];
-
   public tarifas: Tarifa;
   public constantes: Constante;
   public giros: Giro;
@@ -94,9 +93,8 @@ export class ShowcustomerComponent implements OnInit {
     if(projectid > 0){                                
       this._customerService.getProjectCustomerDetail(this.token.token, projectid, this.cc_id).subscribe(
       response => {
-         if(response.status == 'success'){                  
+         if(response.status == 'success'){    
          	this.customer = response.datos;
-         	//console.log(this.customer);
               for (var i=0; i<this.customer.length; i++){
                  if (this.customer){
                    this.data['name_table'] = this.customer[i]['name_table'];
@@ -125,13 +123,13 @@ export class ShowcustomerComponent implements OnInit {
                    this.data['zona'] = this.customer[i]['zona'];
                    this.data['mercado'] = this.customer[i]['mercado'];
 
-
-				   this.data['id_region'] = this.customer[i]['id_region'];                   	
-				   this.data['id_provincia'] = this.customer[i]['id_provincia'];
-				   this.data['id_comuna'] = this.customer[i]['id_comuna'];
-				   this.data['region'] = this.customer[i]['region'];                   	
-				   this.data['provincia'] = this.customer[i]['province'];
-				   this.data['comuna'] = this.customer[i]['comuna'];                   
+                   this.data['id_region'] = this.customer[i]['id_region'];                   	
+                   this.data['id_provincia'] = this.customer[i]['id_provincia'];
+                   this.data['id_comuna'] = this.customer[i]['id_comuna'];
+                   this.data['region'] = this.customer[i]['region'];                   	
+                   this.data['provincia'] = this.customer[i]['province'];
+                   this.data['comuna'] = this.customer[i]['comuna'];
+                          
                    this.data['observacion'] = this.customer[i]['observacion'];
                    this.data['marca_id'] = this.customer[i]['marca_id'];
                    this.data['modelo_id'] = this.customer[i]['modelo_id'];

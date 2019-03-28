@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material';
 import { FormControl, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
@@ -8,7 +8,9 @@ import { OnDestroy } from "@angular/core";
 
 
 //SERVICES
+import { DashboardService } from '../../services/dashboard.service';
 import { OrderserviceService } from '../../services/orderservice.service';
+import { ProjectsService } from '../../services/projects.service';
 import { SettingsService } from '../../services/service.index';
 import { UserService } from '../../services/user.service';
 
@@ -26,12 +28,13 @@ import { Region } from '../../models/Region';
 
 
 
+
 @Component({
   selector: 'app-orderservice',
   templateUrl: './orderservice.component.html',
   styleUrls: ['./orderservice.component.css']
 })
-export class OrderserviceComponent implements OnInit, OnDestroy {
+export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   public title: string;
   public identity:any;
   public token:any;
@@ -46,11 +49,16 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
   private services: Service[] = [];
   public region: Region;
   private subscription: ISubscription;
+  private sub: any;
+  public url: any;
   otherTheme: boolean = true;
   theme: string;
   color: number;
   options: FormGroup;
 
+  apikey: string;
+  clientid: string;
+  calendarID: string;
   isLoading: boolean;
   loading: boolean;
   project_name: string;
@@ -78,14 +86,31 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
     tema: ''
   };
 
+  columnsTab: Array<any> = [
+    { name: 'important', label: 'Destacar' },
+    { name: 'order_number', label: 'N. Orden' },
+    { name: 'cc_number', label: 'N. Cliente' },
+    { name: 'region', label: 'Región' },
+    { name: 'provincia', label: 'Provincia' },
+    { name: 'direccion', label: 'Dirección' },
+    { name: 'servicetype', label: 'Servicio' },
+    { name: 'estatus', label: 'Estatus' },
+    { name: 'user', label: 'Usuario' },
+    { name: 'create_at', label: 'Creado El' },
+    { name: 'actions', label: 'Acciones' }
+  ];  
+
 
 
   constructor(	
   private _route: ActivatedRoute,
-	private _userService: UserService,  
-	private _proyectoService: UserService,
   private _orderService: OrderserviceService,
+	private _project: ProjectsService,
   public _ajustes: SettingsService,
+	public _userService: UserService,  
+  private _proyectoService: UserService,
+  private _proyectoServiceRefresh: DashboardService,
+
   fb: FormBuilder
 
   ) 
@@ -100,18 +125,75 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
           top: 0
   });      
 
-  //this._userService.handleAuthentication(this.identity, this.token);
-  //const newid = this._route.snapshot.paramMap.get('id');
-
-  this._route.params.subscribe(params => { 
+  this.sub = this._route.params.subscribe(params => { 
     let id = +params['id'];            
     this.id = id;
-    if (this.id > 0 && this.token.token != null){
-                    //GET SERVICE
-                    this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
+  
+  if (this.id > 0 && this.token.token != null){
+        //GET RUTA
+        this._route.url.subscribe(res =>{
+          this.url = res[0].path;        
+          //console.log(this.url);
+        });
+
+
+        //GET PROJECT FROM CALENDAR
+        if(this.url === 'projectcalendar'){
+          this._project.getProject(this.token.token, this.id).then(
+            (res:any) => {
+              {
+                res.subscribe(
+                  (some) => 
+                  {
+                    if(some.datos){                      
+                      this.project_name = some.datos.project_name;
+                      this.apikey = some.datos.apikey;
+                      this.clientid = some.datos.clientid;
+                      this.calendarID = some.datos.calendarID;
+                      
+                    }else{
+                    }
+                  },
+                  (error) => { 
+                  console.log(<any>error);
+                  }  
+                  )
+            }
+
+            });   
+        }
+
+
+        //GET PROJECT FROM PROJECTSERVICE
+        if(this.url === 'projectservice'){
+          this._project.getProject(this.token.token, this.id).then(
+            (res:any) => {
+              {
+                res.subscribe(
+                  (some) => 
+                  {
+                    if(some.datos){                      
+                      this.project_name = some.datos.project_name
+                      //console.log(this.project_name);
+                    }else{
+                    }
+                  },
+                  (error) => { 
+                  console.log(<any>error);
+                  }  
+                  )
+            }
+
+            });   
+        }//END IF GET PROJECT SERVICE
+        
+
+        //GET PROJECT FROM SERVICEORDER
+        if(this.url === 'serviceorder'){
+          this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
                     response => {
-                      if (response.status == 'success'){   
-                        this.project_name = response.datos.project['project_name'];       
+                      if (response.status == 'success'){
+                        this.project_name = response.datos.project['project_name'];
                         this.services = response.datos;                
                         this.category_id = this.services['projects_categories_customers']['id'];
                         if(this.table){
@@ -120,9 +202,10 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
                         this.table = this.services['projects_categories_customers']['name_table'];
                       }
                     });   
-                    }
-    });
+        }//END IF GET SERVICE
 
+      }
+    });     
 
   }
 
@@ -136,10 +219,16 @@ export class OrderserviceComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(){
-     this.subscription.unsubscribe();
+     if(this.subscription){
+      this.subscription.unsubscribe();
+     }
+     this.sub.unsubscribe();
      //console.log("ngOnDestroy unsuscribe order");
   }
 
+  ngAfterViewInit() {
+    
+  }
 
   public tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
   //console.log('tabChangeEvent => ', tabChangeEvent);
@@ -183,6 +272,23 @@ toggleActive(event:any){
 
 
   }
+
+	refresh(event:number){
+		if(event == 1){
+      this.subscription = this._proyectoServiceRefresh.getProyectos(this.token.token, this.identity.dpto).subscribe(
+        response => {
+            if (response.status == 'success'){
+              this.proyectos = response.datos;
+              let key = 'proyectos';
+              localStorage.setItem(key, JSON.stringify(this.proyectos));
+            }
+          },
+        error => {
+            console.log(<any>error);
+           }
+        );    
+		}
+	}
 
 
 }

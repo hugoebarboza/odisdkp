@@ -1,0 +1,31 @@
+.custom-card {
+    background-color: #f2f4f7;
+}
+.mat-card-header-text {
+    padding-top: 7px;
+    width: 100%;
+}
+.search {
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    padding: 5px;
+    width: 75px;
+    -webkit-transition: all .5s ease;
+    -moz-transition: all .5s ease;
+    transition: all .5s ease;
+    float: left;
+}
+.search:focus {
+    width: 200px;
+}
+.example-rate-limit-reached {
+    color: #980000;
+    background: #f2f4f7;
+    max-width: 100%;
+    text-align: center;
+}
+.pointer {
+    cursor: pointer;
+}
+.material-icons.md-20 { font-size: 20px; }
+.material-icons.md-20-color { font-size: 20px; color: #FB8C00;}

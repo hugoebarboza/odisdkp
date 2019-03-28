@@ -1,0 +1,199 @@
+
+<div class="portalHost" *ngIf="portal !== 1">
+    <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
+ </div>
+ 
+ <div class="portalHostSplit" *ngIf="portal === 1">
+     <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
+  </div>
+
+
+<ng-template cdkPortal #myTemplate="cdkPortal">
+<div class="p-2">
+<mat-card  [ngStyle]="{'padding':'0px'}">
+  <mat-card-header [ngClass]="{'custom-card':true, 'padding':'0px'}">     
+
+    <div class="mat-card-header-text">
+    <mat-card-title>
+      <div class="row">
+        <div class="col-8">
+            <div class="float-left">
+            {{title}}
+            <button mat-button color="primary" (click)="refresh()"> <mat-icon >sync</mat-icon></button>      
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="float-right">
+            <button mat-raised-button color="primary" (click)="addNew(id)">Crear Proyecto</button>
+            </div>
+          </div>
+      </div>
+    </mat-card-title>
+    </div>
+
+    <mat-card-subtitle>
+    </mat-card-subtitle>
+  </mat-card-header>
+
+
+  <mat-card-content>
+   <br>
+   <div class="container-fluid p-2">
+
+        
+    <!-- CONTENT -->
+    <div class="example-loading-shade" *ngIf="loading">
+      <app-loading *ngIf="loading"></app-loading>  
+    </div>    
+
+    <!--CONTENT SEARCH-->
+    <div class="container-fluid" *ngIf="!loading && datasource.length > 0">
+      <div class="row">
+          <div class="col">
+              <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Proyecto</span>
+                  </div>
+                  <input type="text" (input)="onServiceSearch($event.target.value)" id="filter-servicio" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+              </div>            
+          </div>
+
+          <div class="col">
+              <div class="input-group input-group-sm mb-3">
+                  <div class="input-group-prepend">
+                    <span class="input-group-text" id="inputGroup-sizing-sm">Tipo Proyecto</span>
+                  </div>
+                  <input type="text" (input)="onServiceTypeSearch($event.target.value)" id="filter-servicio" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+              </div>            
+          </div>
+
+          <div class="col">
+            <div class="input-group input-group-sm mb-3">
+                <div class="input-group-prepend">
+                  <span class="input-group-text" id="inputGroup-sizing-sm">Dirección</span>
+                </div>
+                <input type="text" (input)="onAddressSearch($event.target.value)" id="filter-address" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
+            </div>            
+        </div>
+
+          <div class="col">
+              <div class="form-group">
+                <select class="custom-select" (change)="onStatusChange($event.target.value)">
+                  <option>Seleccione Estatus</option>
+                  <option [value]="1">Activo</option>
+                  <option [value]="0">Desactivo</option>
+                </select>
+              </div>
+          </div>
+
+          <div class="col">
+              <div class="float-right">
+                <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style">                  
+                  <mat-button-toggle value="bold" (click)="toggleTemplate(0)" *ngIf="portal ==0"><mat-icon class="material-icons md-20-color" >view_list</mat-icon></mat-button-toggle>
+                  <mat-button-toggle value="bold" (click)="toggleTemplate(0)" *ngIf="portal !== 0 "><mat-icon class="material-icons md-20" >view_list</mat-icon></mat-button-toggle>
+                  <mat-button-toggle value="italic" (click)="toggleTemplate(1)" *ngIf="portal == 1"><mat-icon class="material-icons md-20-color" >vertical_split</mat-icon></mat-button-toggle>
+                  <mat-button-toggle value="italic" (click)="toggleTemplate(1)" *ngIf="portal !== 1"><mat-icon class="material-icons md-20" >vertical_split</mat-icon></mat-button-toggle>
+                </mat-button-toggle-group>  
+                </div>
+          </div>
+
+          <div class="col">
+              <div class="form-group">
+                <div class="float-right">
+                <button type="button" class="btn btn-light" (click)="reset()">Reset</button>
+                </div>                
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- CONTENT LIST -->
+    <ngx-table 
+    [configuration]="configuration" 
+    [data]="services" 
+    [columns]="columns" 
+    (event)="onEvent($event)"
+    *ngIf="!loading && datasource.length > 0"    
+    >
+      <ng-template let-row >
+        <td>
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/serviceorder', row.id]" > 
+          <span class="font-small">{{row.service_name}}</span>
+          </a>
+        </td>
+        <td >
+          <div *ngIf="row.servicedetail[0] && row.servicedetail[0].order_number" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].order_number}}</div>
+        </td>
+        <td>
+          <span *ngIf="row.servicedetail[0] && row.servicedetail[0].gom_number" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].gom_number}}</span>
+        </td>
+        <td >
+            <div *ngIf="row.servicecategorie_name" class="font-small" (click)="setClickedRow(row.id)">{{row.servicecategorie_name}}</div>
+        </td>   
+        <td >
+          <div *ngIf="row.servicedetail[0] && row.servicedetail[0].address" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].address}}</div>
+        </td>   
+        <td >
+          <div *ngIf="row.servicedetail[0] && row.servicedetail[0].gestor" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].gestor}}</div>
+        </td>   
+        <td >
+          <div *ngIf="row.servicedetail[0] && row.servicedetail[0].contratista" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].contratista}}</div>
+        </td>   
+        <td>
+          <div class="circle" [style.color]="row.status? 'green' : 'red'"></div>
+        </td>
+        <td >
+          <div *ngIf="row.user" class="font-small" (click)="setClickedRow(row.id)">{{row.user}}</div>
+        </td>   
+
+        <td >
+          <div *ngIf="row.create_at" class="font-small" (click)="setClickedRow(row.id)">{{row.create_at}}</div>
+        </td>   
+
+        <td>
+          <div class="button-row">
+              <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="startEdit(row.id)">
+                <mat-icon aria-label="Edit" >edit</mat-icon>          
+              </button>            
+              <button mat-icon-button color="warn" *ngIf="_userService.isRole(7)" (click)="deleteItem(row.id)">
+                <mat-icon aria-label="Delete" >delete</mat-icon>
+              </button>
+          </div>
+        </td>
+      </ng-template>
+    </ngx-table>    
+    <!-- /CONTENT -->
+      </div>
+
+  <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+    No se encontraron registros que coincidan con su búsqueda.
+    <button mat-button color="primary" (click)="refresh()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+  </div>
+  </mat-card-content>
+  <mat-card-actions>
+  </mat-card-actions>
+</mat-card>
+</div>
+</ng-template>
+
+
+<ng-template cdkPortal #myTemplate2="cdkPortal" >
+    <div style="height: 100%">
+      <as-split  direction="horizontal" unit="percent" restrictMove="false" >
+          
+          <as-split-area size="70" minsize="50" >
+          <ng-container [cdkPortalOutlet]="_home" ></ng-container>
+          </as-split-area>
+          
+          <as-split-area size="30" minsize="30" maxsize="30">
+          <div class="p-2">
+              <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>
+              <app-viewprojectdetail  *ngIf="selectedRow == 0"></app-viewprojectdetail>              
+          </div>
+      </as-split-area>
+  
+     </as-split>          
+    </div>
+</ng-template>
+
+

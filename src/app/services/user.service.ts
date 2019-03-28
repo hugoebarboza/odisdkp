@@ -120,7 +120,7 @@ export class UserService {
 
 	public isRole(role): boolean {		
 		const roleuser = JSON.parse(localStorage.getItem('identity'));
-		if (roleuser != "Undefined"){
+		if (roleuser != "Undefined" && role > 0){
 			if(role <= roleuser.role){
 				return true;	
 			}			
