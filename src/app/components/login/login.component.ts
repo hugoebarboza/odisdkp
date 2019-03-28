@@ -12,6 +12,7 @@ import { MatProgressButtonOptions } from 'mat-progress-buttons'
 import { ToastrService } from 'ngx-toastr';
 
 
+
 @Component({
   selector:'login',
   templateUrl: './login.component.html',
@@ -72,23 +73,23 @@ export class LoginComponent implements OnInit {
        '';
     }
 
+  //private _toasterService: ToasterService;
 
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
     public _userService: UserService,
-    private toasterService: ToastrService,
+    private toasterService: ToastrService,    
   ){
     this.title = 'Acceso';
-    this.user = new User('','','','', 1);
+    this.user = new User('','','','', 1,'','',1);
     this.year = new Date().getFullYear();
     this.identity = this._userService.getIdentity();
     this.idaccount = this._userService.getIdaccount();
     this.token = this._userService.getToken();      
     this._userService.handleAuthentication(this.identity, this.token);  
     this.success = 'Exitoso.';
-    this.error = 'Credenciales no validas.';
-
+    this.error = 'Credenciales no validas.'; 
   }
 
   ngOnInit(){

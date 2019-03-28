@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router';
+import {Router, ActivatedRoute} from '@angular/router';
 import { User } from '../../models/user';
 import { UserService } from '../../services/user.service';
 
@@ -20,7 +20,7 @@ export class RegisterComponent implements OnInit {
 		private _userService: UserService
 	){
 		this.title = 'Registro';
-		this.user = new User('','','','',1);
+		this.user = new User('','','','',1,'','',1);
 	}
  
 	ngOnInit(){
@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
 	 	response => {	 		
 	 		if(response.status == 'success'){
 				this.status = response.status;	
-				this.user = new User('','','','',1);
+				this.user = new User('','','','',1,'','',1);
 				form.reset();
 	 		}else{
 	 			this.status = 'error';

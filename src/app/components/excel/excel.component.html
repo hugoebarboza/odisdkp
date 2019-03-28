@@ -4,9 +4,9 @@
     <mat-card-title>Modulo de Carga</mat-card-title>
     <mat-card-subtitle>Siga los pasos 1, 2 y 3 que aparecen en la pantalla</mat-card-subtitle>
   </mat-card-header>
-  <mat-card-content>
+  <mat-card-content style="height: 100vh">
 
-<div class="mat-app-background basic-container">
+<div class="mat-app-background basic-container" >
   <mat-horizontal-stepper linear #stepper>
       <mat-step [stepControl]="firtsFormGroup">
           <form [formGroup]="firtsFormGroup">
@@ -28,12 +28,12 @@
                         (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? '' : ''}})
                       </span>
                     </mat-select-trigger>
-                    <mat-option value="Número CC" disabled>Número CC</mat-option>
+                    <mat-option value="Número CC" [disabled]="true">Número CC</mat-option>
                     <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
                   </mat-select>
                 </mat-form-field>
                 <mat-form-field *ngIf="dateend !== undefined">
-                  <input matInput [matDatepicker]="pickerEnd" placeholder="Fecha vencimiento" [formControl]="dateend" readonly="true" disabled>
+                  <input matInput [matDatepicker]="pickerEnd" placeholder="Fecha vencimiento" [formControl]="dateend" readonly="true" formControlName="inputDate" (readonly)="true" >
                   <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
                   <mat-datepicker #pickerEnd></mat-datepicker>
                 </mat-form-field>
@@ -52,7 +52,7 @@
                   
                 <mat-form-field appearance="legacy" class="mat-form-field-custom">
                     <mat-label>Buscar</mat-label>
-                    <input matInput (keyup)="applyFilterOrdenes($event.target.value)" placeholder="Buscar">
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
                     <mat-icon matSuffix>search</mat-icon>
                 </mat-form-field>
                   
@@ -145,6 +145,11 @@
                     <ng-container matColumnDef="modelo_medidor">
                       <th mat-header-cell *matHeaderCellDef> Modelo medidor </th>
                       <td mat-cell *matCellDef="let element"> {{element.modelo_medidor}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="transformador">
+                      <th mat-header-cell *matHeaderCellDef> Transformador </th>
+                      <td mat-cell *matCellDef="let element"> {{element.transformador}} </td>
                     </ng-container>
 
                     <!-- Symbol Column -->
@@ -274,7 +279,7 @@
           <div class="example-container " *ngIf="show_table">
               <mat-form-field appearance="legacy" class="mat-form-field-custom">
                   <mat-label>Buscar</mat-label>
-                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                  <input matInput (keyup)="applyFilterCliente($event.target.value)" placeholder="Buscar">
                   <mat-icon matSuffix>search</mat-icon>
               </mat-form-field>
               <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
@@ -367,6 +372,11 @@
                   <ng-container matColumnDef="modelo_medidor">
                     <th mat-header-cell *matHeaderCellDef> Modelo medidor </th>
                     <td mat-cell *matCellDef="let element"> {{element.modelo_medidor}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="transformador">
+                    <th mat-header-cell *matHeaderCellDef> Transformador </th>
+                    <td mat-cell *matCellDef="let element"> {{element.transformador}} </td>
                   </ng-container>
 
                   <!-- Symbol Column -->
@@ -483,7 +493,8 @@
                 <th>
                     <mat-card *ngIf="countSuccessPost>0">
                         Clientes {{msj}} con exito! {{countSuccessPost}}  
-                        <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)"  [disabled]="!checkPost" md-colors="{background: 'indigo'}" formControlName="confirmarCli"  required>Confirmar</mat-checkbox>
+                        <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)"   *ngIf="!checkPost" md-colors="{background: 'indigo'}" [disabled]="true">Confirmar</mat-checkbox>
+                        <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)"   *ngIf="checkPost" md-colors="{background: 'indigo'}" formControlName="confirmarCli" required>Confirmar</mat-checkbox>
                         <button mat-raised-button matStepperNext [disabled]="!checkPost" (click)="fulltableOrdenes();">Continuar</button>
                     </mat-card>
                 </th>
@@ -498,7 +509,7 @@
         <div class="example-container " *ngIf="show_table">
             <mat-form-field appearance="legacy" class="mat-form-field-custom">
                 <mat-label>Buscar</mat-label>
-                <input matInput (keyup)="applyFilterCliente($event.target.value)" placeholder="Buscar">
+                <input matInput (keyup)="applyFilterOrdenes($event.target.value)" placeholder="Buscar">
                 <mat-icon matSuffix>search</mat-icon>
             </mat-form-field>
             <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
@@ -591,6 +602,11 @@
                 <ng-container matColumnDef="modelo_medidor">
                   <th mat-header-cell *matHeaderCellDef> Modelo medidor </th>
                   <td mat-cell *matCellDef="let element"> {{element.modelo_medidor}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="transformador">
+                  <th mat-header-cell *matHeaderCellDef> Transformador </th>
+                  <td mat-cell *matCellDef="let element"> {{element.transformador}} </td>
                 </ng-container>
 
                 <!-- Symbol Column -->

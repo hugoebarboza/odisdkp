@@ -96,11 +96,25 @@ export class DataService {
     return this.getDataBD(this.url + link, token);
   }
 
-  getValidateExisteCLiente(id_service, cc_number, medidor, bandera, token) {
-    if (bandera) {
+  getStatus(id, token) {
+    return this.getDataBD(this.url + 'service/' + id + '/estatus' , token);
+  }
+
+  getValidateExisteCLiente(id_service, cc_number, medidor, zona, b_medidor, b_zona, token) {
+    if (b_medidor && b_zona) {
       // tslint:disable-next-line:max-line-length
-      return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number + '?medidor=' + medidor, token);
-    } else {
+      return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number + '?medidor=' + medidor + '&zona=' + zona, token);
+    }
+    if (b_medidor && !b_zona) {
+      // tslint:disable-next-line:max-line-length
+      return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number + '?medidor=' + medidor , token);
+    }
+    if (!b_medidor && b_zona) {
+      // tslint:disable-next-line:max-line-length
+      return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number + '?zona=' + zona , token);
+    }
+    if (!b_medidor && !b_zona) {
+      // tslint:disable-next-line:max-line-length
       return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number, token);
     }
   }

@@ -1,11 +1,22 @@
+<meta name="Description" content="Component">
+<div class="app">
+<mat-toolbar role="heading" color="primary">
+     <h3>{{title}} </h3>
+     <span class="mat-spacer"></span>
+     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+     <mat-icon class="mat-icon">close</mat-icon>       
+     </button>
+</mat-toolbar>
+
+
+ <p></p>  
+  
+  
   <div class="example-loading-shade" *ngIf="loading">
     <app-loading *ngIf="loading"></app-loading>  
   </div>
 
-<div id="content" #content *ngIf="!loading" class="relative" disableClose="true">
-
-
-
+<div id="content" #content *ngIf="!loading" class="mat-dialog-content" disableClose="true">
     <table class="table table-bordered" width="100%" cellpadding="7">
       <tr>
         <th>
@@ -15,11 +26,6 @@
             <tr >
               <td width="90%" ><h1><strong>ORDEN DE TRABAJO</strong></h1></td>
               <td><img src="../../../assets/img/logoocaorden.png" width="162"></td>
-              <td>
-              <a href="javascript:void(0)" (click)="onNoClick()" >                  
-                <i class="material-icons md-18" *ngIf="!showdrawer">close</i> 
-              </a>          
-              </td>              
             </tr>
           </table>
           <p></p>
@@ -257,13 +263,15 @@
             <td width="20%">CREADO POR:</td>
             <td width="20%">CREADA EL:</td>
             <td width="10%">ESTATUS:</td>
-            <td width="40%">OBSERVACIÓN:</td>                        
+            <td width="10%">T.EJECUCIÓN:</td>
+            <td width="30%">OBSERVACIÓN:</td>                        
             <td width="10%">GEOREFERENCIA:</td>
           </tr>
           <tr *ngFor="let orderdetail of order[0]['orderdata']">
             <td>{{orderdetail.user.name}} {{orderdetail.user.surname}}</td>
             <td>{{orderdetail.create_at}}</td>
             <td>{{orderdetail.estatus.name}}</td>
+            <td>{{orderdetail.time}}</td>
             <td>{{orderdetail.observation}}</td>            
             <td>
             <a class="nav-link" href="https://www.google.com/maps/search/?api=1&query={{orderdetail.latitud}},{{orderdetail.longitud}}" target="_blank" *ngIf="orderdetail.latitud && orderdetail.longitud && orderdetail.direccion">                  
@@ -286,7 +294,32 @@
 
         </th>
       </tr>
-  
+
+      <tr align="middle" *ngIf="atributofirma.length > 0 ">
+        <th>
+            <br>
+            <hr>
+              <div class="container">
+                  <div class="row">
+                    <div class="col" *ngFor="let detailatributofirma of atributofirma">
+                      <div *ngFor="let imagefirma of listfirmaimageorder">
+                        
+                        <div *ngIf="imagefirma.atributo_id === detailatributofirma.id">
+                        <img *ngIf="imagefirma?.archivo" src="data:image/jpg;base64,{{imagefirma.archivo}}" style="max-height: 150px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">
+                        </div>
+
+                      </div>                      
+                    </div>
+
+                    <div class="w-100"></div>
+                    <div class="col" *ngFor="let detailatributofirma of atributofirma">{{detailatributofirma.descripcion}}</div>
+                  </div>
+              </div>
+            <br>
+          </th>
+      </tr>
+        
+
       <tr align="middle">
         <th>
           <hr>
@@ -298,14 +331,17 @@
     </table>
 
 
+</div>
 
-  <div mat-dialog-actions *ngIf="!loading">  
-
-
-     <button mat-button color="primary" [type]="submit" (click)="print('content')" mat-raised-button color="primary" class="btnprint">Imprimir</button>
-    
+  <div mat-dialog-actions *ngIf="!loading"> 
+    <br> 
+     <button mat-button color="primary" [type]="submit" (click)="print('content')" mat-raised-button color="primary" class="btnprint">Imprimir</button>    
     <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cerrar</button>
+    <br>
   </div>
+
+
+
 
 </div>
 

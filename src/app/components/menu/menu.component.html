@@ -2,25 +2,50 @@
   <div id="sidebar-wrapper" >
 
   <mat-nav-list>
-    <a mat-list-item  style="font-size:15px;  color: rgb(0,122,217);  " >
-    <i class="material-icons md-14-padding-color">business</i> PROYECTOS 
-    </a>
+    <mat-list-item  style="font-size:15px;  color: rgb(0,122,217);  " >
+      PROYECTOS
+      <button mat-icon-button color="primary" (click)="refresh()">
+      <mat-icon  >sync</mat-icon>
+      </button> 
+    </mat-list-item>
+   
   </mat-nav-list>
 
   <mat-divider></mat-divider>
     <mat-accordion multi="true" [displayMode]="displayMode" *ngFor="let k of proyectos | keys;" >
         <mat-expansion-panel class="no-shadow" >
           <mat-expansion-panel-header fxLayout="row" [expandedHeight]="expandHeight" [collapsedHeight]="collapseHeight">
-            <mat-panel-title style="color:#000000; font-weight: normal;">
-              {{proyectos[k].project_name}}
+            <mat-panel-title style="color:#000000; font-weight: normal; ">      
+            {{proyectos[k].project_name}}
             </mat-panel-title>
+            <mat-panel-description >
+            <span class="spacer"></span>
+            <h6><span class="badge badge-light"> {{ proyectos[k].service.length }}</span></h6>            
+            </mat-panel-description>
           </mat-expansion-panel-header>
 
-          <mat-nav-list dense *ngFor="let service of proyectos[k].service" style="color:#585858" (click)="navigate(service.id)">
+          <mat-nav-list dense *ngFor="let service of proyectos[k].service; let i = index" style="color:#585858" (click)="navigate(service.id)">
+            <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0">
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['/projectcalendar', proyectos[k].id]" > 
+                <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && url === 'projectcalendar'">calendar_today</i> 
+                <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || url != 'projectcalendar' ">calendar_today</i> 
+                Calendario
+              </a>  
+            </div>
+
+          <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0 && _userService.isRole(7)">
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/projectservice', proyectos[k].id]" > 
+              <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && url === 'projectservice'">folder</i> 
+              <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || url != 'projectservice' ">folder_open</i> 
+              Proyectos
+            </a>
+          </div>
+
+
             <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" >
-              <a class="nav-link" [routerLink]="['/serviceorder', service.id]" > 
-              <i class="material-icons md-14-color" *ngIf="service.id === selected">launch</i> 
-              <i class="material-icons md-14" *ngIf="service.id != selected">launch</i> 
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['/serviceorder', service.id]" > 
+              <i class="material-icons md-14-color" *ngIf="service.id === selected && url === 'serviceorder'">launch</i> 
+              <i class="material-icons md-14" *ngIf="service.id != selected || url != 'serviceorder'">launch</i> 
               {{service.service_name}} 
               </a>
             </div>

@@ -5,9 +5,9 @@
   background-color: #f2f4f7;
 }
 mat-table {
-  overflow: auto;
-  max-height: 768px;
+  height: 100%;
 }
+
 mat-header-cell, mat-header-row, .mat-header-cell-def{
     background:#f2f4f7;
     min-height:15px;
@@ -39,29 +39,24 @@ mat-cell{
 
 /* Structure */
 .example-container {
+  height: 100%;
   position: relative;
 }
 
 .example-table-container {
   position: relative;
-  max-height: 400px;
-  overflow: auto;
 }
+
 .margin {
 margin: 1px;
 }
 
 .main-table{
   width: 95%;
-  overflow: auto;
-  max-height: 768px;  
-
 }
 
 table {
   width: 100%;
-  overflow: auto;
-  max-height: 768px;  
 }
 
 .example-loading-shade {

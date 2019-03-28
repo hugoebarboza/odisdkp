@@ -1,0 +1,42 @@
+.button-row button,
+.button-row a {
+  margin-right: 7px;
+}
+.custom-card {
+    background-color: #f2f4f7;
+}
+.circle:before {
+  content: ' \25CF';
+  font-size: 20px;
+}
+.example-rate-limit-reached {
+  color: #980000;
+  background: #f2f4f7;
+  max-width: 100%;
+  text-align: center;
+}
+.row__email {
+  width: 100px;
+}
+
+.row__progressbar {
+  width: 100px;
+}
+.mat-card-header-text {
+  padding-top: 7px;
+  width: 100%;
+}
+.material-icons.md-20 { font-size: 20px; }
+.material-icons.md-20-color { font-size: 20px; color: #FB8C00;}
+.portalHost {
+  border: 0px solid red;
+  height: 100%;
+}
+
+.portalHostSplit {
+border: 0px solid red;
+height: 700px;
+}
+.font-small{
+  cursor: pointer;
+}

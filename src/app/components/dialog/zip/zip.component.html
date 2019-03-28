@@ -7,23 +7,31 @@
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
+
       <mat-form-field>
         <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" placeholder="Fecha Hasta">
         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
         <mat-datepicker #pickerEnd></mat-datepicker>
       </mat-form-field>
-        <ng-select placeholder="Tipo de Servicio *" [(ngModel)]="data.selectedValueservicio" name="data.selectedValueservicio" required>
-          <ng-option *ngFor="let type of tiposervicio" [value]="type.id">
-            {{type.name}}
-          </ng-option>
-        </ng-select>
+
+      <mat-form-field>
+        <mat-select  placeholder="Tipo de Servicio" [(ngModel)]="data.selectedValueservicio" name="data.selectedValueservicio" required>
+          <mat-option>Seleccione</mat-option>
+          <mat-option *ngFor="let type of tiposervicio" [value]="type.id">
+              {{type.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
       <mat-form-field>
         <mat-select placeholder="Zona" [(ngModel)]="data.selectedValuezona" name="data.selectedValuezona" >
+          <mat-option>Seleccione</mat-option>
           <mat-option *ngFor="let z of zona" [value]="z.id">
             {{z.descripcion}}
           </mat-option>
         </mat-select>
-      </mat-form-field>
+      </mat-form-field>      
+
     </div>
   </div>
   <div mat-dialog-actions>

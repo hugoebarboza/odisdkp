@@ -1,7 +1,11 @@
-<div class="portalHost">
+<div class="portalHost" *ngIf="portal !== 1">
    <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
 </div>
 
+<div class="portalHostSplit" *ngIf="portal === 1">
+    <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
+ </div>
+ 
 <ng-template cdkPortal #myTemplate="cdkPortal">
 <div class="p-2">
 <mat-card [ngStyle]="{'padding':'0px'}">
@@ -116,7 +120,7 @@
       <div class="footer-button-row">
 
        <button type="button" class="btn btn-primary btn-sm"  
-       (click)="applyFilter()" 
+       (click)="search()"
         [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde || !selectedColumnnUsuario.fieldValue || !selectedColumnnUsuario.columnValue"
        >
        Buscar
@@ -235,7 +239,7 @@
                   <div class="btn-toolbar mb-2 mb-md-0" *ngIf="(selectedColumnnDate.fieldValue && selectedColumnnDate.columnValueDesde && selectedColumnnDate.columnValueHasta) || (regionMultiCtrl.value)">
                   <div class="btn-group mr-2" align="right">
        
-                    <button type="button" class="btn btn-sm btn-outline-secondary"   (click)="applyFilter()">Buscar</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary"   (click)="search()">Buscar</button>
                     <button type="button" class="btn btn-sm btn-outline-secondary" (click)="resetFilters()">Limpiar</button>
 
                   </div>
@@ -255,14 +259,19 @@
 
   <mat-menu #menuview="matMenu" [overlapTrigger]="false">
     <button mat-menu-item (click)="toggleTemplate(0)">
-      <mat-icon class="material-icons md-20-color" *ngIf="!showtemplate">view_list</mat-icon>
-      <mat-icon class="material-icons md-20" *ngIf="showtemplate">view_list</mat-icon>      
-      <span >Vista de Lista </span>
+      <mat-icon class="material-icons md-20-color" *ngIf="portal ==0">view_list</mat-icon>
+      <mat-icon class="material-icons md-20" *ngIf="portal !== 0">view_list</mat-icon>      
+      <span >Vista Lista </span>
     </button>
     <button mat-menu-item (click)="toggleTemplate(1)">
-      <mat-icon class="material-icons md-20-color" *ngIf="showtemplate">view_quilt</mat-icon>
-      <mat-icon class="material-icons md-20" *ngIf="!showtemplate">view_quilt</mat-icon>
-      <span >Vista de Detalle</span>
+      <mat-icon class="material-icons md-20-color" *ngIf="portal ==1">vertical_split</mat-icon>
+      <mat-icon class="material-icons md-20" *ngIf="portal !== 1">vertical_split</mat-icon>
+      <span >Vista Detalle</span>
+    </button>
+    <button mat-menu-item (click)="toggleTemplate(2)">
+      <mat-icon class="material-icons md-20-color" *ngIf="portal ==2">view_week</mat-icon>
+      <mat-icon class="material-icons md-20" *ngIf="portal !== 2">view_week</mat-icon>
+      <span >Vista Tablero</span>
     </button>
 
   </mat-menu>
@@ -331,11 +340,11 @@
 
 <ng-container matColumnDef="order_number"  >  
   <mat-header-cell *matHeaderCellDef mat-sort-header > N. Orden </mat-header-cell>
-    <mat-cell *matCellDef="let order; let i = index" >
-
-      {{order.order_number}}             
-
-  </mat-cell>
+    <mat-cell *matCellDef="let order; let i = index" >      
+        {{order.order_number}}
+        <mat-icon class="material-icons md-13-color" *ngIf="order.imagen">image</mat-icon>        
+        <mat-icon class="material-icons md-13-nocolor" *ngIf="!order.imagen">image</mat-icon>                
+      </mat-cell>
 </ng-container>
 
 
@@ -362,11 +371,17 @@
     <mat-cell *matCellDef="let order"> {{order.comuna}} </mat-cell>
 </ng-container>
 
-  
+<ng-container matColumnDef="orderdetail_direccion">
+  <mat-header-cell *matHeaderCellDef mat-sort-header  > Realizado En </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.orderdetail_direccion}} </mat-cell>
+</ng-container>
+
+
 <ng-container matColumnDef="direccion">
   <mat-header-cell *matHeaderCellDef mat-sort-header  > Ubicación </mat-header-cell>
     <mat-cell *matCellDef="let order"> {{order.direccion}} </mat-cell>
 </ng-container>
+
 
 
 <ng-container matColumnDef="servicetype" >
@@ -377,10 +392,45 @@
 </ng-container>
 
 
+
+<ng-container matColumnDef="user" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Informador </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.user}} </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="userupdate" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Editado </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.userupdate}} </mat-cell>
+</ng-container>
+
+<ng-container matColumnDef="userassigned" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Responsable</mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.userassigned}} </mat-cell>
+</ng-container>
+
+
+<ng-container matColumnDef="create_at" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
+    <mat-cell *matCellDef="let order"> {{order.create_at }}</mat-cell>
+</ng-container>
+
+
+<ng-container matColumnDef="time" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header> T. Ejecución </mat-header-cell>
+    <mat-cell *matCellDef="let order"> <div *ngIf="order.time">{{order.time }}</div></mat-cell>
+</ng-container>
+
+
+<ng-container matColumnDef="update_at" >
+  <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
+    <mat-cell *matCellDef="let order"> 
+      <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>  
+    </mat-cell>
+</ng-container>
+
 <ng-container matColumnDef="estatus" >
   <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
   <mat-cell *matCellDef="let order; let i = index" > 
-
     <mat-chip-list>
         <mat-chip *ngIf="order.label==1" selected color="warn">
           {{order.estatus}}
@@ -394,21 +444,9 @@
           {{order.estatus}}
         </mat-chip>
     </mat-chip-list>
-
   </mat-cell>
-
 </ng-container>
 
-<ng-container matColumnDef="user" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Creado Por </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.user}} </mat-cell>
-</ng-container>
-
-
-<ng-container matColumnDef="create_at" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.create_at }} {{order.assigned_to}}</mat-cell>
-</ng-container>
 
 <!-- actions -->
     <ng-container matColumnDef="actions" >
@@ -441,7 +479,7 @@
 
       </mat-header-cell>
       <mat-cell *matCellDef="let order; let i = index" >
-        <button mat-icon-button color="primary" *ngIf="_userService.isRole(4)" (click)="startEdit(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.assigned_to, order.order_date, order.required_date, order.vencimiento_date, order.observation, order.create_at)"
+        <button mat-icon-button color="primary" *ngIf="_userService.isRole(4)" (click)="startEdit(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.assigned_to, order.order_date, order.required_date, order.vencimiento_date, order.leido_por, order.observation, order.create_at)"
         matTooltip="Editar orden."
         [matTooltipPosition]="positiondatasourceaction.value"
         
@@ -519,16 +557,13 @@
 
           <div class="btn-group" *ngIf="!isRateLimitReached">
  
-                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" [matMenuTriggerFor]="menucsv">
-                <span data-feather="calendar"></span>
-                CSV
-                </button>
+                <button class="btn btn-sm btn-outline-secondary dropdown-toggle" [matMenuTriggerFor]="menucsv"><span data-feather="CSV"></span>CSV</button>
                 <mat-menu #menucsv="matMenu">
-                <button mat-menu-item (click)="openDialogCsv()"><span data-feather="calendar"></span>Buscar</button>
+                <button mat-menu-item (click)="openDialogCsv()"><span data-feather="csv"></span>Buscar</button>
 
-                <button mat-menu-item (click)="ExportTOExcelClient(0)"><span data-feather="calendar"></span>Formato Original</button>
+                <button mat-menu-item (click)="ExportTOExcelClient(0)"><span data-feather="csv"></span>Formato Original</button>
 
-                <button mat-menu-item (click)="ExportTOExcelClient(1)"><span data-feather="calendar"></span>Formato Mayúscula</button>
+                <button mat-menu-item (click)="ExportTOExcelClient(1)"><span data-feather="csv"></span>Formato Mayúscula</button>
 
 
                 </mat-menu>
@@ -557,23 +592,25 @@
 
 
 <ng-template cdkPortal #myTemplate2="cdkPortal" >
-<div style="height: 100%">
-    <as-split direction="horizontal">
+  <div style="height: 100%">
+    <as-split  direction="horizontal" unit="percent" restrictMove="false" (dragEnd)="log($event)">
         
-        <as-split-area size="70">
+        <as-split-area size="70" minsize="50" >
         <ng-container [cdkPortalOutlet]="_home" ></ng-container>
         </as-split-area>
         
-        <as-split-area size="30">
+        <as-split-area size="30" minsize="30" maxsize="30">
         <div class="p-2">
         <app-vieworderdetail [orderid]="order_id"></app-vieworderdetail>
         </div>
-        </as-split-area>
+    </as-split-area>
 
    </as-split>          
-</div>
-
-
+  </div>
 </ng-template>
 
-
+<ng-template cdkPortal #myTemplate3="cdkPortal" >
+  <div style="height: 100%">
+    <app-tablero [id]="id" (portalevent) = "toggleTemplate( $event )" [view]="portal"></app-tablero>
+  </div>
+</ng-template>

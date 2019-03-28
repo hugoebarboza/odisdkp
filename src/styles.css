@@ -6,7 +6,8 @@
 @import "~@ng-select/ng-select/themes/material.theme.css";
 @import "~ng-pick-datetime/assets/style/picker.min.css";
 @import url(./assets/css/spinners.css);
-
+@import './assets/css/toaster.css';
+@import "~angular-vertical-timeline/dist/vertical-timeline.css";
 
 
 
@@ -60,3 +61,7 @@ html{
      z-index: 99999 !important;
 }
 
+mark {
+  outline: 1px solid red;
+  font-weight: bold;
+}

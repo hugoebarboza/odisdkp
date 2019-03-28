@@ -1,0 +1,8 @@
+<div *ngIf="days > 0">
+    {{days}} d {{hours}} h {{minutes}} m  <mat-icon class="material-icons md-13-nocolor" *ngIf="hours >=0 && minutes >=0 ">access_time</mat-icon>
+</div>
+
+<div *ngIf="days == 0">
+    {{hours}} h {{minutes}} m  <mat-icon class="material-icons md-13-nocolor" *ngIf="hours >=0 && minutes >=0 ">access_time</mat-icon>
+</div>
+    

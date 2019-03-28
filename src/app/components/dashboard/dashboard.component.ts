@@ -10,8 +10,9 @@ import { UserService } from '../../services/user.service';
 import { Proyecto } from '../../models/proyecto';
 
 //SERVICES
-import { Service } from '../../models/service';
 import { DashboardService } from '../../services/dashboard.service';
+import { Service } from '../../models/service';
+
 
 
 
@@ -34,7 +35,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 	constructor(
 		private _route: ActivatedRoute,
 		private _router: Router,		
-		private _userService: UserService,		
+		public _userService: UserService,		
 		private _proyectoService: DashboardService,
 		private _servicios: DashboardService,
 		fb: FormBuilder
@@ -86,6 +87,13 @@ export class DashboardComponent implements OnInit, OnDestroy {
   	}
 
   	public loadData(){
+	}
+
+	refresh(event:number){
+		if(event == 1){
+			this.ngOnInit();
+		}
+
 	}
 
 

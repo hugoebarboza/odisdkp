@@ -6,8 +6,11 @@ import { GLOBAL } from './global';
 
 //MODELS
 import { Order } from '../models/order';
+import { Service } from '../models/Service';
 import { UserGeoreference } from '../models/usergeoreference';
 
+//TOASTER MESSAGES
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
@@ -17,12 +20,63 @@ export class ProjectsService {
   	error: boolean;  
 
   constructor(
-	public _http: HttpClient,  	
+	public _http: HttpClient,
+	private toasterService: ToastrService, 	
   	) { 
 	this.url = GLOBAL.url;
 	this.error = false;
 
   }
+
+	addService(token: any, service: Service, id:number): void {	
+		let json = JSON.stringify(service);
+		let params = 'json='+json;
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+									.set('Authorization', token);	
+
+		this._http.post(this.url+'project'+'/'+id+'/'+'service', params, {headers: headers}).subscribe(
+			data => { 
+				this.toasterService.success('Proyecto creado.', 'Exito', {timeOut: 6000,});
+				},
+				(err: HttpErrorResponse) => {	
+				this.error = err.error.message;			      
+				//console.log(err.error.message);
+				this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+				});
+	}
+
+    updateService(token: any, service: Service, id:number, service_id:number): void {	
+		let json = JSON.stringify(service);
+		let params = 'json='+json;
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+									   .set('Authorization', token);
+
+		this._http.put(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, params, {headers: headers}).subscribe(
+    		data => { 
+    			  //console.log(data);
+			      this.toasterService.success('Proyecto actualizado.', 'Exito', {timeOut: 6000,});			      
+			      },
+			      (err: HttpErrorResponse) => {	
+			      this.error = err.error.message;
+			      //console.log(err.error.message);
+			      this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+			    });
+	}
+	
+    deleteService(token: any, id:number, service_id:number): void {	
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+									   .set('Authorization', token);									   									   
+		this._http.delete(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, {headers: headers}).subscribe(
+    		data => { 
+    			  //console.log(data);
+			      this.toasterService.success('Proyecto eliminado.', 'Exito', {timeOut: 6000,});			      
+			      },
+			      (err: HttpErrorResponse) => {	
+			      this.error = err.error.message;
+			      //console.log(err.error.message);
+			      this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+			    });
+	}
 
 
   	getQuery( query:string, token ): Observable<any>{
@@ -36,11 +90,31 @@ export class ProjectsService {
 		}));		
   	}
 
+
+	getProject(token:any, id:number){
+	    return this.getProjectOrderData('project/'+id, token);
+	}
+
+
 	getProjectOrder(token, id:number, termino, date, idstatus, serviceid, servicetypeid) {
-		const paginate = `/${termino}/date/${date}/status/${idstatus}/service/${serviceid}/servicetype/${servicetypeid}`;			           
+		const paginate = `/${termino}/date/${date}/status/${idstatus}/service/${serviceid}/servicetype/${servicetypeid}?limit=All`;			           
 	    //console.log(paginate);
 	    return this.getProjectOrderData('project/'+id+'/searchorder'+paginate, token);
 	}
+
+	getProjectServiceCategorie(token:any, id:number){
+	    return this.getQuery('project/'+id+'/servicecategorie', token);
+	}
+
+	getProjectServiceDetail(token:any, id:number){
+	    return this.getQuery('project/'+id+'/servicedetail', token);
+	}
+
+
+	getProjectServiceType(token:any, id:number){
+	    return this.getQuery('project/'+id+'/servicetype', token);
+	}
+
 
 	getProjectUser(token, id:number, role:number) {
 	    return this.getProjectOrderData('project/'+id+'/role/'+role, token);
@@ -81,5 +155,24 @@ export class ProjectsService {
 	getUserProject(token, id, role): Observable<any> {								  
 		return this.getQuery('project/'+id+'/role/'+role, token);
 	}
+
+    status(token: any, id:number, serviceid:number, servicedetailid:number, label:number): void {	
+		let json = JSON.stringify(label);
+		let params = 'json='+json;
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+										 .set('Authorization', token);		
+		this._http.post(this.url+'project'+'/'+id+'/'+'service/'+serviceid+'/'+'servicedetail/'+servicedetailid+'/status/'+label, params, {headers: headers}).subscribe(
+				data => { 
+						//console.log(data);
+						//this.dialogData = order;    		      
+						//this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});			      
+						},
+						(err: HttpErrorResponse) => {	
+						this.error = err.error.message;
+						//console.log(err.error.message);
+						//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+					});
+	}
+
 
 }

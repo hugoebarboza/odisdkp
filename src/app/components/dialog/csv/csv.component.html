@@ -11,6 +11,16 @@
             <mat-option value="orders.update_at">Editado El</mat-option>
           </mat-select>
         </mat-form-field>
+
+        <mat-form-field class="middle-width" >
+          <mat-select placeholder="Limite" [(ngModel)]="pageSize" name="limit" required>
+            <mat-option *ngFor="let limit of limits" [value]="limit.value">
+              {{limit.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>          
+        </mat-form-field>
+
         <br>
 
 
@@ -47,8 +57,15 @@
           <owl-date-time [pickerType]="'timer'" #dt2></owl-date-time>      
         </mat-form-field>
 
-
-
+        <br *ngIf="servicetype && servicetype.length > 1">
+            <mat-form-field class="middle-width" *ngIf="servicetype && servicetype.length > 1">
+              <mat-select  placeholder="Tipo Servicio" [(ngModel)]="servicetypeid" name="servicetype_id">
+              <mat-option [value]="0">Seleccione</mat-option>
+              <mat-option *ngFor="let k of servicetype | keys;" [value]="servicetype[k].id">
+                {{servicetype[k].name}}
+              </mat-option>
+              </mat-select>      
+            </mat-form-field>
 
         <br>
         <mat-form-field class="middle-width" >
@@ -90,7 +107,7 @@
         </mat-form-field>
 
 
-        <mat-form-field class="middle-width">
+        <mat-form-field class="middle-width" *ngIf="selectedColumnnUsuario.fieldValue">
           <mat-select [formControl]="userCtrl"  placeholder="Inspector" #singleSelect   [(value)]="selectedColumnnUsuario.columnValue" >
           <ngx-mat-select-search [formControl]="userMultiFilterCtrl" ></ngx-mat-select-search>
           <mat-option *ngFor="let user of filteredUserMulti | async" [value]="user.id">
@@ -98,6 +115,17 @@
           </mat-option>
           </mat-select>
         </mat-form-field>
+
+        <br>
+        <mat-form-field class="middle-width" *ngIf="zonas != null">
+          <mat-select placeholder="Zona (Opcional): " [(ngModel)]="selectedColumnnZona.columnValue" name="zona_id">
+            <mat-option>Seleccione</mat-option>
+            <mat-option *ngFor="let zona of zonas" [value]="zona.id">
+              {{zona.descripcion}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
 
         <h4 style="color:#747474; font-size: 14px;">Ordenar datos (Opcional):</h4>
         <mat-radio-group [(ngModel)]="selectedValueOrdeno" name="ordenado"  class="order-radio-group" [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde || !selectedValueFormat">
@@ -121,10 +149,10 @@
     <div class="container">      
       <div class="row justify-content-center">
       <div class="footer-button-row">
-      <mat-bar-button [options]="barButtonOptionsDisabled" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="!selectedColumnnDate.columnValueDesde || !selectedColumnnDate.columnValueHasta || !selectedValueFormat || !selectedColumnnDate.fieldValue">
+      <mat-bar-button [options]="barButtonOptionsDisabled" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="!selectedColumnnDate.columnValueDesde || !selectedColumnnDate.columnValueHasta || !selectedValueFormat || !selectedColumnnDate.fieldValue || pageSize < 0">
       </mat-bar-button>
 
-      <mat-bar-button [options]="barButtonOptions" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="selectedColumnnDate.columnValueHasta  && selectedColumnnDate.columnValueDesde && selectedValueFormat && selectedColumnnDate.fieldValue">
+      <mat-bar-button [options]="barButtonOptions" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="selectedColumnnDate.columnValueHasta  && selectedColumnnDate.columnValueDesde && selectedValueFormat && selectedColumnnDate.fieldValue && pageSize >= 0">
       </mat-bar-button>
       
       <button mat-raised-button color="warn" (click)="reset()" [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde || !selectedValueFormat" >Limpiar</button>

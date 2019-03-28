@@ -7,7 +7,7 @@
     <div id="wrapper" *ngIf="proyectos">
 
         <!-- Sidebar -->
-        <app-menu [proyectos]="proyectos"></app-menu>    
+        <app-menu [proyectos]="proyectos" (RefreshMenu) = "refresh( $event )"></app-menu>    
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->

@@ -1,11 +1,10 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FormControl, Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
+import { FormControl, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 //MODELS
-import { Order } from '../../../models/order';
 import { Customer } from '../../../models/customer';
 import { Region } from '../../../models/Region';
 import { Provincia } from '../../../models/Provincia';
@@ -33,10 +32,10 @@ import { CustomerService } from '../../../services/customer.service';
   styleUrls: ['./addcustomer.component.css']
 })
 
-export class AddcustomerComponent implements OnInit {
+export class AddcustomerComponent implements OnInit, OnDestroy {
   public title: string;
-  public identity;
-  public token;  
+  public identity: any;
+  public token: any;  
   public customer: Customer;
   public termino: string;
   public results: Object = [];
@@ -73,6 +72,8 @@ export class AddcustomerComponent implements OnInit {
   step = 0;  
   //@Input() id : number;
 
+  subscription: Subscription;
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,            
@@ -88,7 +89,7 @@ export class AddcustomerComponent implements OnInit {
     this.title = "Agregar Cliente.";
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.customer = new Customer('','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');        
+    this.customer = new Customer('','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');        
     this.id = this.data['service_id'];    
   }
 
@@ -102,6 +103,12 @@ export class AddcustomerComponent implements OnInit {
     return this.formControl.hasError('required') ? 'Dato Requerido' : '';
   }
 
+  ngOnDestroy() {
+    //console.log('La página se va a cerrar');
+    this.subscription.unsubscribe();
+  }
+
+
   onGenerarCliente() {
   const client =this.identity.sub+''+this.day+''+this.month+''+this.year+''+this.hour+''+this.minutes+''+this.seconds+''+Math.round(Math.random()*100+1);
   this.customer.cc_number = client;
@@ -110,7 +117,7 @@ export class AddcustomerComponent implements OnInit {
 
 
   public loadInfo(id:number){
-                    this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
+                    this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                     response => {
                        if(response.status == 'success'){                  
                               this.region = response.datos.region;
@@ -120,7 +127,7 @@ export class AddcustomerComponent implements OnInit {
                      });
 
                     //GET SERVICE AND CATEGORY CLIENT
-                    this._orderService.getService(this.token.token, this.id).subscribe(
+                    this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
                     response => {
                       if (response.status == 'success'){         
                         this.services = response.datos;                
@@ -132,7 +139,7 @@ export class AddcustomerComponent implements OnInit {
                     
 
                     //GET TARIFA
-                    this._customerService.getTarifa(this.token.token, this.id).subscribe(
+                    this.subscription = this._customerService.getTarifa(this.token.token, this.id).subscribe(
                     response => {
                             if(response.status == 'success'){                  
                               this.tarifas = response.datos.tarifa;
@@ -144,7 +151,7 @@ export class AddcustomerComponent implements OnInit {
                             }); 
                     
                     //GET CONSTANTE
-                    this._customerService.getConstante(this.token.token, this.id).subscribe(
+                    this.subscription = this._customerService.getConstante(this.token.token, this.id).subscribe(
                     response => {
                             if(response.status == 'success'){                  
                               this.constantes = response.datos.constante;
@@ -154,7 +161,7 @@ export class AddcustomerComponent implements OnInit {
                             });
                     
                     //GET GIRO
-                    this._customerService.getGiro(this.token.token, this.id).subscribe(
+                    this.subscription = this._customerService.getGiro(this.token.token, this.id).subscribe(
                     response => {
                             if(response.status == 'success'){                  
                               this.giros = response.datos.giro;                              
@@ -164,7 +171,7 @@ export class AddcustomerComponent implements OnInit {
                             });
 
                     //GET SECTOR
-                    this._customerService.getSector(this.token.token, this.id).subscribe(
+                    this.subscription = this._customerService.getSector(this.token.token, this.id).subscribe(
                     response => {
                     if(response.status == 'success'){                  
                       this.sectores = response.datos.sector;
@@ -174,7 +181,7 @@ export class AddcustomerComponent implements OnInit {
                     });
 
                     //GET ZONA
-                    this._customerService.getZona(this.token.token, this.id).subscribe(
+                    this.subscription = this._customerService.getZona(this.token.token, this.id).subscribe(
                     response => {
                     if(response.status == 'success'){                  
                       this.zonas = response.datos.zona;
@@ -184,7 +191,7 @@ export class AddcustomerComponent implements OnInit {
                     });
 
                     //GET MERCADO
-                   this._customerService.getMercado(this.token.token, this.id).subscribe(
+                   this.subscription = this._customerService.getMercado(this.token.token, this.id).subscribe(
                     response => {
                             if(response.status == 'success'){                  
                               this.mercados = response.datos.mercado;
@@ -195,7 +202,7 @@ export class AddcustomerComponent implements OnInit {
                             });       
 
                     //GET MARCA DE VEHICULOS
-                   this._customerService.getMarca(this.token.token).subscribe(
+                   this.subscription = this._customerService.getMarca(this.token.token).subscribe(
                     response => {
                             if(response.status == 'success'){                  
                               this.marcas = response.marca;
@@ -207,7 +214,7 @@ export class AddcustomerComponent implements OnInit {
 
 
                     //GET COLORES DE VEHICULOS
-                   this._customerService.getColor(this.token.token).subscribe(
+                   this.subscription = this._customerService.getColor(this.token.token).subscribe(
                     response => {
                             if(response.status == 'success'){                  
                               this.colors = response.color;
@@ -246,7 +253,7 @@ export class AddcustomerComponent implements OnInit {
     public searchCustomer(termino: string){
      this.termino = termino;     
      if(this.termino.length > 2){       
-       this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
+       this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
         response => {
               if(!response){
                 return;
@@ -263,7 +270,7 @@ export class AddcustomerComponent implements OnInit {
    onSelectRegion(regionid:number) {      
      if(regionid > 0){
        this.resultscomunas = null;
-       this._regionService.getProvincia(this.token.token, regionid).subscribe(
+       this.subscription = this._regionService.getProvincia(this.token.token, regionid).subscribe(
         response => {
               if(!response){
                 return;
@@ -279,7 +286,7 @@ export class AddcustomerComponent implements OnInit {
 
    onSelectProvincia(provinciaid:number) {
      if(provinciaid > 0){
-       this._regionService.getComuna(this.token.token, provinciaid).subscribe(
+       this.subscription = this._regionService.getComuna(this.token.token, provinciaid).subscribe(
         response => {
               if(!response){
                 return;
@@ -299,7 +306,7 @@ export class AddcustomerComponent implements OnInit {
    }
 
   public loadSector(){
-      this._customerService.getSector(this.token.token, this.id).subscribe(
+      this.subscription = this._customerService.getSector(this.token.token, this.id).subscribe(
       response => {
               if(response.status == 'success'){                  
                 this.sectores = response.datos.sector;
@@ -311,7 +318,7 @@ export class AddcustomerComponent implements OnInit {
 
    onSelectMarca(marcaid:number) {      
      if(marcaid > 0){
-       this._customerService.getModelo(this.token.token, marcaid).subscribe(       
+       this.subscription = this._customerService.getModelo(this.token.token, marcaid).subscribe(       
         response => {              
               if(!response){
                 return;

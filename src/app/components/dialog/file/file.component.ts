@@ -28,7 +28,7 @@ export class FileComponent implements OnInit {
 
   constructor(
   	public dialogRef: MatDialogRef<FileComponent>,
-    @Inject(MAT_DIALOG_DATA) public data 
+    @Inject(MAT_DIALOG_DATA) public data : any
   	) { 
   	  this.colorToggle = 'primary';
   	  this.backgroundColorToggle = 'primary';

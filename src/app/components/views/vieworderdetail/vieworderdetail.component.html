@@ -2,12 +2,238 @@
         <mat-card >
             <mat-card-header >
             <mat-card-title>Orden de Trabajo</mat-card-title>
-            <mat-card-subtitle>Detalles de información</mat-card-subtitle>                
+            <mat-card-subtitle>Detalles de información</mat-card-subtitle>
+            <span class="spacer"></span>
+            <img src="assets/img/logoocaorden.png" width="70" height="39">
             </mat-card-header>
+            <hr>
           <mat-card-content>
-            <p>
-              ta Listo. {{orderid}}
-            </p>
+
+          <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+          Favor seleccione OT.
+          </div>
+
+         <div class="example-loading-shade" *ngIf="isLoadingResults">
+            <app-loading *ngIf="isLoadingResults"></app-loading>  
+          </div>          
+
+            <section class="container animated fadeIn" *ngIf="!isRateLimitReached && !isLoadingResults">
+              <div class="row" >
+                <div class="col-6"  *ngFor="let model of models; let i = index">
+                <button mat-icon-button (click)="enableDiv(i)" id="bt" *ngIf="!model.expand">
+                <mat-icon class="material-icons md-14-color" >keyboard_arrow_right</mat-icon>
+                {{model.name}}
+                </button>
+                <button mat-icon-button (click)="enableDiv(i)" id="bt" *ngIf="model.expand">
+                <mat-icon class="material-icons md-14-color">keyboard_arrow_down</mat-icon>
+                {{model.name}}
+                </button>                
+                <br>
+
+                <div *ngIf="model.id === 0 && model.expand && data.length > 0">
+                    <dl class="row ">
+                      <dt class="col-sm-4"><p class="text-muted">Proyecto:</p></dt>
+                      <dd class="col-sm-8"><p class="text-secondary" *ngIf="data[0].project_name">{{data[0].project_name}}</p></dd>
+
+                      <dt class="col-sm-4"><p class="text-muted">Servicio:</p></dt>
+                      <dd class="col-sm-8"><p class="text-secondary" *ngIf="data[0].service_name">{{data[0].service_name}}</p></dd>
+
+                      <dt class="col-sm-4"><p class="text-muted">Tipo:</p></dt>
+                      <dd class="col-sm-8"><p class="text-secondary" *ngIf="data[0].servicetype">{{data[0].servicetype}}</p></dd>
+
+                      <dt class="col-sm-4"><p class="text-muted">Estatus:</p></dt>
+                      <dd class="col-sm-8"><mat-chip *ngIf="data[0].estatus">{{data[0].estatus}}</mat-chip></dd>
+
+                    </dl>
+                </div>
+                
+                <div *ngIf="model.id === 1 && model.expand && data.length > 0">
+                    <dl class="row">
+                      <dt class="col-sm-4" ><p class="text-muted">Creado:</p></dt>
+                      <dd class="col-sm-8"><p class="text-secondary" *ngIf="data[0].user">{{data[0].user}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted">Editado:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].update_to">{{data[0].update_to}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted">Asignado:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].assigned_to"><i class="material-icons">person</i>{{data[0].assigned_to}}</p></dd>
+                    </dl>
+                </div>
+
+                <div *ngIf="model.id === 2 && model.expand && data.length > 0">
+
+                    <dl class="row">
+                      <dt class="col-sm-4" ><p class="text-muted">N. Orden:</p></dt>
+                      <dd class="col-sm-8"><p class="text-secondary">{{data[0].order_number}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted">N. Cliente:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" >{{data[0].cc_number}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].comuna">Comuna:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].comuna">{{data[0].comuna}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].direccion">Dirección:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].direccion">{{data[0].direccion}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].medidor">Medidor:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].medidor">{{data[0].medidor}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].modelo_medidor">Modelo Medidor:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].modelo_medidor">{{data[0].modelo_medidor}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].marca">Marca:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].marca">{{data[0].marca}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].modelo">Modelo:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].modelo">{{data[0].modelo}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].description && !data[0].modelo">Modelo:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].description && !data[0].modelo">{{data[0].description}}</p></dd>
+
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].color">Color:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].color">{{data[0].color}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted" *ngIf="data[0].secondcolor && !data[0].color">Color:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].secondcolor && !data[0].color">{{data[0].secondcolor}}</p></dd>
+
+
+                      <dt class="col-sm-4" ><p class="text-muted">Observación:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].observation">{{data[0].observation}}</p></dd>
+
+
+                    </dl>
+
+
+                </div>
+
+                <div *ngIf="model.id === 3 && model.expand && data.length > 0">
+                    <dl class="row">
+                      <dt class="col-sm-4" ><p class="text-muted">Creado:</p></dt>
+                      <dd class="col-sm-8"><p class="text-secondary">{{data[0].create_at}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted">Editado:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].update_at">{{data[0].update_at}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted">Requerido:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].required_date">{{data[0].required_date}}</p></dd>
+
+                      <dt class="col-sm-4" ><p class="text-muted">Vencimiento:</p></dt>
+                      <dd class="col-sm-8" ><p class="text-secondary" *ngIf="data[0].vencimiento_date">{{data[0].vencimiento_date}}</p></dd>
+
+                    </dl>
+
+                </div>
+
+                <div *ngIf="model.id === 4 && model.expand && data.length > 0">
+
+
+                <section id="tabs" class="project-tab">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <nav>
+                                    <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                        <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Historico</a>
+                                        <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Comentarios</a>
+                                    </div>
+                                </nav>
+                                <div class="tab-content" id="nav-tabContent">
+                                    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                    <div class="table-responsive-sm">
+                                      <table class="table table-striped" width="100%">
+                                      <tbody>
+                                        <tr *ngFor="let orderdetail of data[0]['orderdata']">
+                                          <th>{{orderdetail.user.name}} {{orderdetail.user.surname}}</th>
+                                          <td>{{orderdetail.create_at}}</td>
+                                          <td>{{orderdetail.estatus.name}}</td>
+                                          <td>
+                                          <a class="nav-link" href="https://www.google.com/maps/search/?api=1&query={{orderdetail.latitud}},{{orderdetail.longitud}}" target="_blank" *ngIf="orderdetail.latitud && orderdetail.longitud && orderdetail.direccion">                  
+                                          <i class="material-icons">place</i> 
+                                          <p style="font-size:10px;  color: #585858;" > {{orderdetail.direccion}}</p>
+                                          </a>
+                                          <a class="nav-link" href="https://www.google.com/maps/search/?api=1&query={{orderdetail.latitud}},{{orderdetail.longitud}}" target="_blank" *ngIf="orderdetail.latitud && orderdetail.longitud && orderdetail.direccion == null">                  
+                                          <i class="material-icons">place</i> 
+                                          </a>
+                                        
+                                          </td>
+                                        </tr>
+                                      </tbody>
+                                      </table>
+                                    </div>                  
+                                    </div>
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                  <div class="p-3">
+                                    <div *ngIf="!toggleContent">
+                                        <li *ngFor="let item of items | async" >
+                                          {{item.identity}}: {{ item.comment }},  ({{item.created}}).
+                                            <button mat-icon-button color="warn"  (click)="deleteCommentDatabase(item.id)"                                                                                         
+                                            >
+                                              <div>
+                                              <mat-icon aria-label="Delete">clear</mat-icon>
+                                              </div>
+                                            </button>
+                                        </li>                                       
+                                    </div>
+                                       
+                                  <button mat-flat-button style=" background:#F8F8F8;" (click)="toggle()" *ngIf="!toggleContent">
+                                    <mat-icon class="material-icons md-14-color" >comment</mat-icon>
+                                    Comentar
+                                  </button>
+                                  <angular-editor [(ngModel)]="orderContent" [config]="editorConfig" *ngIf="toggleContent"></angular-editor>
+                                  <div class="button-row p-2" *ngIf="toggleContent">
+                                      <button mat-raised-button color="primary" (click)="addComment(orderContent)">Guardar</button>                                    
+                                      <button mat-raised-button (click)="toggle()">Cancelar</button>
+                                  </div>
+                                  </div>
+                                </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+
+
+
+                </div>
+
+                <div *ngIf="model.id === 5 && model.expand && spenttimeminutes">
+                    <dl class="row">
+                      <dt class="col-sm-4" *ngIf="spenttimehours > 0"><p class="text-muted">Horas:</p></dt>
+                      <dd class="col-sm-8" *ngIf="spenttimehours > 0"><p class="text-secondary">{{spenttimehours | number:'2.1-2'}}</p></dd>
+
+                      <dt class="col-sm-4" *ngIf="spenttimeminutes > 0"><p class="text-muted">Minutos:</p></dt>
+                      <dd class="col-sm-8" *ngIf="spenttimeminutes > 0"><p class="text-secondary" >{{spenttimeminutes | number:'4.1-2'}}</p></dd>
+
+                      <dd class="col-sm-12" *ngIf="data[0].update_at && minValue && maxValue">
+                        <vertical-timeline>
+                         
+                          <!-- Add some cards to the timeline. It works with *ngFor too -->
+                         
+                          <!-- If no value is passed for the date, the current time is used. -->
+                          <vertical-timeline-card [dateValue]="minValue">
+                           <h6>Creado</h6>
+                          </vertical-timeline-card>
+                         
+                          <!-- tomorrow = new Date(2017, 9, 20, 14,34); -->
+                          <vertical-timeline-card [dateValue]="maxValue">
+                            <h6>Editado</h6>
+                          </vertical-timeline-card>
+                         
+                        </vertical-timeline>
+                      </dd>
+
+                    </dl>
+
+                </div>
+
+
+                </div>
+              </div>
+            </section>
+
           </mat-card-content>            
         </mat-card>
 

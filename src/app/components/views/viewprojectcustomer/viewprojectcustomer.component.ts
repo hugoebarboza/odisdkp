@@ -1,5 +1,6 @@
 import {HttpClient} from '@angular/common/http';
 import {Component, OnInit, OnDestroy, ViewChild, Input, ElementRef, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
+import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import { DataSource } from '@angular/cdk/collections';
 import { merge, Observable, of as observableOf,  Subject ,  ReplaySubject ,  SubscriptionLike as ISubscription } from 'rxjs';
@@ -12,8 +13,10 @@ import { MatSelect } from '@angular/material';
 import {TooltipPosition} from '@angular/material';
 
 
+
 //DIALOG
 import { AddcustomerComponent } from '../../dialog/addcustomer/addcustomer.component';
+import { CsvCustomerComponentComponent } from '../../dialog/csvcustomercomponent/csvcustomercomponent.component';
 import { EditcustomerComponent } from '../../dialog/editcustomer/editcustomer.component';
 import { DeletecustomerComponent } from '../../dialog/deletecustomer/deletecustomer.component';
 import { ShowcustomerComponent } from '../../dialog/showcustomer/showcustomer.component';
@@ -77,13 +80,14 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   index: number;
   indexitem:number;
   category_id: number;
-  filterValue = '';
+  public filterValue = '';
   public columnselect: string[] = new Array();
   public fieldcritetira: string;
   public datedesde: FormControl;
   public datehasta: FormControl;
   private subscription: ISubscription;
-
+  private searchDecouncer$: Subject<string> = new Subject();
+  public debouncedInputValue = this.filterValue;
 
   //SORT
   sort: Sort = {
@@ -194,6 +198,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
 
   ngOnInit() {
+   this.setupSearchDebouncer();
    this.loadInfo();
   }
 
@@ -228,7 +233,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
       (res: any) => 
       {
         res.subscribe(
-          (some) => 
+          (some: any) => 
           {
             if(some.datos.data){            
             this.resultsLength = some.datos.total;
@@ -267,9 +272,9 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
   ngOnDestroy() {
      //this.unsubscribe.next();
-     //this.unsubscribe.complete();
-     //console.log("ngOnDestroy CUSTOMER complete");    
-     //this.subscription.unsubscribe();    
+     //this.unsubscribe.complete();     
+     this.subscription.unsubscribe();
+     console.log("ngOnDestroy CUSTOMER complete");
   }  
 
 
@@ -284,7 +289,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
   public loadInfo(){
     //console.log(this.identity.country);
-    this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
+    this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                 response => {
                   //console.log(response);
                    if(response.status == 'success'){
@@ -315,8 +320,8 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   }
 
   applyFilter() {
+    if(this.filterValue.length > 0 && this.filterValue.trim() !== ''){
     this.isLoadingResults = true;
-
     if(this.filterValue){
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
@@ -374,8 +379,11 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
        this.filtersregion.fieldValue = 'regions.region_name';
        //console.log('paso444') 
     }
-
-
+    
+      this.searchDecouncer$.next(this.filterValue);
+    }
+    
+    /*
     this.dataCustomerService.getCustomerProject(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
@@ -401,7 +409,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
             this.ServicioSeleccionado.emit(this.servicename);
             this.dataSource = new MatTableDataSource(some.datos.data);
             this.isLoadingResults = false;
-            //console.log(this.dataSource);
+            //console.log(some.datos.data);
             //this.data = some;        
             //console.log('paso applyFilter');
           },
@@ -416,8 +424,61 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
             console.log(<any>error);
           }  
           )
-    })
+    })*/
   } 
+
+  private setupSearchDebouncer(): void {
+    this.searchDecouncer$.pipe(
+      debounceTime(3000),
+      distinctUntilChanged(),
+    ).subscribe((term: string) => {
+      // Remember value after debouncing
+      //console.log('viene');
+      this.debouncedInputValue = term;
+      this.dataCustomerService.getCustomerProject(
+        this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
+        this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+        this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+        this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token).then(
+        (res: any) => 
+        {
+          res.subscribe(
+            (some) => 
+            {
+              if(some.datos.data){            
+              this.resultsLength = some.datos.total;
+              this.servicename = some.datos.data[0]['service_name'];
+              this.nametable = some.datos.data[0]['name_table'];
+              this.isRateLimitReached = false;          
+              }else{
+              this.resultsLength = 0;
+              this.servicename = some.datos['service_name'];
+              this.nametable = some.datos['name_table'];            
+              this.isRateLimitReached = true;          
+              }
+  
+              this.ServicioSeleccionado.emit(this.servicename);
+              this.dataSource = new MatTableDataSource(some.datos.data);
+              this.isLoadingResults = false;
+              //console.log(some.datos.data);
+              //this.data = some;        
+              //console.log('paso applyFilter');
+            },
+            (error) => {                      
+              this.isLoadingResults = false;
+              this.isRateLimitReached = true;
+              localStorage.removeItem('identity');
+              localStorage.removeItem('token');
+              localStorage.removeItem('proyectos');
+              localStorage.removeItem('expires_at');
+              this._router.navigate(["/login"]);          
+              console.log(<any>error);
+            }  
+            )
+      })
+      // Do the actual search
+    });    
+  }
 
 
   onPaginateChange(event){
@@ -699,8 +760,7 @@ deleteItem(id:number, cc_id: number, cc_number: string, category_id:number) {
 
   showItem(id:number, cc_id: number, cc_number: string, category_id:number) {
     let service_id = this.id;    
-    const dialogRef = this.dialog.open(ShowcustomerComponent, {
-      height: '650px',
+    const dialogRef = this.dialog.open(ShowcustomerComponent, {      
       width: '777px',
       disableClose: true,
       data: {service_id: id, cc_id: cc_id, cc_number: cc_number, category_id: category_id}
@@ -847,6 +907,24 @@ deleteItem(id:number, cc_id: number, cc_number: string, category_id:number) {
     //console.log(this.dataSource);
     this.excelService.exportAsExcelFile(this.dataSource.data, 'Clientes');
   }
+
+  openDialogCsv(): void {
+
+    const dialogRef = this.dialog.open(CsvCustomerComponentComponent, {
+      width: '777px',
+      disableClose: true,                          
+      data: { 
+        servicio: this.id,
+        token: this.token.token,
+      }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) { 
+
+      }
+    });
+  }
+
 
 }
 

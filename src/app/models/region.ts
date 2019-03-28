@@ -2,6 +2,7 @@ export class Region  {
 	
 	constructor(	
 	public id:number,
+	public length:number,
 	public region_name:string,
 	public status:number,	
 	public create_at:any,	

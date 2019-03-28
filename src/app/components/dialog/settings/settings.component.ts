@@ -12,21 +12,23 @@ export class SettingsComponent implements OnInit {
   public columnselect: string[] = new Array();
   lastAction: string;
   checked = false;
-  displayedColumns: string[] = ['order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
+  
+  
+    displayedColumns: string[] = ['important','order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned','create_at', 'time', 'update_at', 'estatus', 'actions']; 
+  //displayedColumns: string[] = ['important','order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned','create_at', 'update_at', 'estatus', 'actions']; 
+  //displayedColumns: string[] = ['order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
   dataColumns = new Array();
 
   constructor(
   	public dialogRef: MatDialogRef<SettingsComponent>,
-	@Inject(MAT_DIALOG_DATA) public data: any
-
+	  @Inject(MAT_DIALOG_DATA) public data: any
   	) 
-
   { 
 	this.title = "Ver / Ocultar Columnas";  	
-
+  
   }
 
-  ngOnInit() {
+  ngOnInit() {    
   	const checked = false;
   	//console.log(this.data);
   	for (var i=0; i<this.displayedColumns.length; i++){

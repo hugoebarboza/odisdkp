@@ -15,7 +15,9 @@ import { MatDialog } from '@angular/material';
 
 
 //DIALOG
+import { AddSupportComponent } from '../../components/dialog/widget/addsupport/addsupport.component';
 import { LogoutComponent } from '../../components/dialog/logout/logout.component';
+
 
 
 @Component({
@@ -29,8 +31,8 @@ export class HeaderComponent {
 
 	public title: string;
 	public titlelogout: string;
-	public identity;
-	public token;
+	public identity: any;
+	public token: any;
 
   //private itemsCollection: AngularFirestoreCollection<Item>;
 
@@ -79,6 +81,25 @@ export class HeaderComponent {
     this.token = this._userService.getToken();    
   }
 
+  support(value:number) {
+    const dialogRef = this.dialog.open(AddSupportComponent, {
+    width: '777px',     
+    disableClose: true,        
+    data: { id: value }
+    });
+
+
+    dialogRef.afterClosed().subscribe(
+          result => {       
+             if (result === 1) { 
+             // After dialog is closed we're doing frontend updates 
+             // For add we're just pushing a new row inside DataService
+             //this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  
+             }
+           });
+ }  
+
+ 
   logout(id:number) {
      const dialogRef = this.dialog.open(LogoutComponent, {
      width: '280px',             

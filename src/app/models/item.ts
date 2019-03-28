@@ -1,1 +1,1 @@
-export interface Item { id: any, nombre: string; type: string; url: string; created: any; }
+export interface Item { id: any, nombre: string; type: string; url: any; created: any; }

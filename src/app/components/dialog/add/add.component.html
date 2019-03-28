@@ -95,6 +95,15 @@
   </div>
 
 
+  <div class="form">
+    <mat-form-field >
+      <input matInput  placeholder="Leido Por" [(ngModel)]="data.leido_por" name="leido_por" maxlength="177"  >
+      <button mat-button *ngIf="data.leido_por" matSuffix mat-icon-button aria-label="Clear" (click)="data.leido_por=''">
+          <mat-icon>close</mat-icon>
+      </button>
+    </mat-form-field>
+  </div>
+
 
 
     <div class="form">
@@ -179,6 +188,9 @@
       <label>{{detailatributo.descripcion}}</label>
     </div>
     
+          <div *ngIf="detailatributo.type == 'layout_line'" >
+            <hr  class="size">            
+          </div>
 
             <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.datos == '' && detailatributo.required == 0" class="full-width">
               <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" >
@@ -213,12 +225,46 @@
 
 
 
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.datos == '' && detailatributo.required == 1" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.datos !== '' && detailatributo.required == 1" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailatributo.datos" name="{{detailatributo.id}}" required>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' && detailatributo.required == 1" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'double' && detailatributo.required == 1" class="full-width">
+              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.required == 1" class="full-width">
+              <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required></textarea>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+            
+            
+
             <div  *ngIf="detailatributo.type == 'date' ">
               <div >
               <label>{{detailatributo.descripcion}}</label>
               </div>              
               <div class="form">
-              <p-calendar placeholder="dd/mm/yy"  [(ngModel)]="myDate" name="{{detailatributo.id}}" (onSelect)="onSelectMethod($event)" 
+              <p-calendar placeholder="dd/mm/yy"  [(ngModel)]="myDate" name="{{detailatributo.id}}"  
               dateFormat="dd/mm/yy"
               [showIcon]="true"
               >

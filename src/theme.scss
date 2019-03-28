@@ -1,15 +1,15 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
-$custom-primary: mat-palette($mat-indigo, 700);
-$custom-accent: mat-palette($mat-deep-purple, 400);
-$custom-warn: mat-palette($mat-red, A700);
 
-$custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
-@include angular-material-theme($custom-theme);
+	$custom-primary: mat-palette($mat-indigo, 700);
+	$custom-accent: mat-palette($mat-deep-purple, 400);
+	$custom-warn: mat-palette($mat-red, A700);
+	$custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
+	@include angular-material-theme($custom-theme);
 
 
-.alternative {
+.alternative_green {
 	$alt-primary: mat-palette($mat-teal, 700);
 	$alt-accent: mat-palette($mat-deep-purple, 400);
 	$alt-warn: mat-palette($mat-red, A700);
@@ -17,5 +17,12 @@ $custom-theme: mat-light-theme($custom-primary, $custom-accent, $custom-warn);
 	@include angular-material-theme($alt-theme);	
 }
 
+.alternative_dark{
+	$my-theme-primary: mat-palette($mat-gray, 700, 300, 900);
+	$my-theme-accent: mat-palette($mat-light-blue);
+	$my-theme-warn: mat-palette($mat-deep-orange, A200);	
+	$my-theme: mat-light-theme($my-theme-primary, $my-theme-accent, $my-theme-warn);
+	@include angular-material-theme($my-theme);	
+}
 
 

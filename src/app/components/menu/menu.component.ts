@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
 import { FormControl } from '@angular/forms';
@@ -14,36 +14,62 @@ import { UserService } from '../../services/user.service';
 })
 export class MenuComponent implements OnInit {
   public title: string;
-  public identity;
-  public token;
-  public selected = 0;
+  public identity: any;
+  public projectid:number=0;
+  public projectselected:number = 0;
+  public selected:number = 0;  
+  public token: any;
+  public url: string = '';
+
+  
 
   searchControl = new FormControl('');
 
-
   id:number = 0;
-  opened = true;
-  over = 'side';
-  expandHeight = '40px';
   collapseHeight = '40px';
   displayMode = 'flat';
+  expandHeight = '40px';  
+  opened = true;
+  over = 'side';
 
   @Input() proyectos : any = {};
+  @Output() RefreshMenu: EventEmitter<number>;
 
   constructor(
-	private _userService: UserService,
-  private _route: ActivatedRoute, 
+    private _route: ActivatedRoute, 
+    public _userService: UserService,
   ) { 
 
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+    this.RefreshMenu = new EventEmitter(); 
     this._userService.handleAuthentication(this.identity, this.token);
 
     this._route.params.subscribe(params => {
     let id = +params['id'];        
     this.id = id;
     if(this.id >0 ){
-      this.selected = this.id;
+      //GET RUTA
+        this._route.url.subscribe(res =>{
+        this.url = res[0].path;
+      });
+      
+      if(this.url === 'projectcalendar'){
+        this.selected = 0;
+        this.projectselected = this.id;
+      }
+
+      if(this.url === 'projectservice'){
+        this.selected = 0;
+        this.projectselected = this.id;
+      }
+
+      if(this.url === 'serviceorder'){
+        this.selected = this.id;
+        this.projectselected = 0;
+      }
+
+
     }    
     });
 
@@ -54,7 +80,11 @@ export class MenuComponent implements OnInit {
 
   public navigate(item) {
     this.selected = item;
-    //console.log(this.selected);
+  }
+
+  refresh(){
+    //console.log('refresh menu');
+    this.RefreshMenu.emit(1);
   }
 
 }

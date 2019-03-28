@@ -1,7 +1,8 @@
 export class Customer  {
 	
 	constructor(		
-	public cc_number:string,
+	public id: any,
+	public cc_number:any,
 	public nombrecc:string,	
 	public title:string,
 	public description:string,
