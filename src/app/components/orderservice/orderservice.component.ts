@@ -12,7 +12,7 @@ import { DashboardService } from '../../services/dashboard.service';
 import { OrderserviceService } from '../../services/orderservice.service';
 import { ProjectsService } from '../../services/projects.service';
 import { SettingsService } from '../../services/service.index';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/service.index';
 
 //MODELS
 import { Proyecto } from '../../models/proyecto';

@@ -21,7 +21,7 @@
       <mat-card-content>
 
       
-      <form #formControl="ngForm" class="form-signin"  novalidate="novalidate">   
+      <form ngNativeValidate #formControl="ngForm" class="form-signin"  novalidate="novalidate">   
           <div class="container p-2">
             <div class="row justify-content-md-center">
               <img src="../../../assets/img/logoocalogin.png" alt="Login Page" width="118" height="64">
@@ -30,7 +30,7 @@
 
           <div class="login-container" *ngIf="!_userService.isIdaccount()">
             <mat-form-field>
-              <input matInput placeholder="Usuario" name="email" [(ngModel)]="user.email"  size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+              <input matInput placeholder="Usuario" name="email" [(ngModel)]="email"  size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
               <mat-icon matSuffix ><i class="material-icons">person</i></mat-icon>
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             </mat-form-field>
@@ -39,7 +39,7 @@
 
           <div class="login-container" *ngIf="_userService.isIdaccount()">
             <mat-form-field>
-            <input matInput placeholder="Usuario." name="email"  [(ngModel)]="user.email"   size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" [value]="user.email">          
+            <input matInput placeholder="Usuario." name="email"  [(ngModel)]="email"   size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" >          
             <mat-icon matSuffix ><i class="material-icons">person</i></mat-icon>
             </mat-form-field>
           </div>      
@@ -48,7 +48,7 @@
 
         <div class="login-container">
           <mat-form-field>
-            <input matInput placeholder="Password" [type]="hide ? 'password' : 'text'" name="password" id="password" #password="ngModel" [(ngModel)]="user.password"  min="4" required>
+            <input ngModel matInput placeholder="Password" [type]="hide ? 'password' : 'text'" name="password"  min="4" required>
             <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
@@ -70,8 +70,10 @@
             </label>
           </div>
 
-          <mat-spinner-button [options]="spinnerButtonOptions" (click)="onSubmit(formControl)" *ngIf="!_userService.isAuthenticated()" ></mat-spinner-button>
+          
 
+          <mat-spinner-button [options]="spinnerButtonOptions"  *ngIf="!_userService.isAuthenticated() && !formControl.valid" ></mat-spinner-button>
+          <mat-spinner-button [options]="spinnerButtonOptions" (click)="onSubmit(formControl)" *ngIf="!_userService.isAuthenticated() && formControl.valid" ></mat-spinner-button>
 
           <button class="btn btn-lg btn-primary btn-block" type="submit"  *ngIf="_userService.isAuthenticated()" >     
           <span *ngIf="_userService.isAuthenticated()"> Espere</span>

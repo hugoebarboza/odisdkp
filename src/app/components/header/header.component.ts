@@ -1,9 +1,11 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router';
+
+//MODELS
 import { User } from '../../models/user';
-import { UserService } from '../../services/user.service';
 
-
+//SERVICES
+import { UserService } from '../../services/service.index';
 
 import {  AngularFirestore,  AngularFirestoreCollection } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';

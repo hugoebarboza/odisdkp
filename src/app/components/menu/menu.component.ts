@@ -4,8 +4,7 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 //SERVICES
-import { UserService } from '../../services/user.service';
-
+import { UserService } from '../../services/service.index';
 
 @Component({
   selector: 'app-menu',

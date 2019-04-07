@@ -22,10 +22,11 @@ import { Color } from '../../../models/color';
 import { Service } from '../../../models/Service';
 
 //SERVICES
-import { UserService } from '../../../services/user.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
 import { CountriesService } from '../../../services/countries.service';
 import { CustomerService } from '../../../services/customer.service';
+import { OrderserviceService } from '../../../services/orderservice.service';
+import { UserService } from '../../../services/service.index';
+
 
 @Component({
   selector: 'app-showcustomer',
@@ -94,9 +95,11 @@ export class ShowcustomerComponent implements OnInit {
       this._customerService.getProjectCustomerDetail(this.token.token, projectid, this.cc_id).subscribe(
       response => {
          if(response.status == 'success'){    
-         	this.customer = response.datos;
+           this.customer = response.datos;
+
               for (var i=0; i<this.customer.length; i++){
                  if (this.customer){
+
                    this.data['name_table'] = this.customer[i]['name_table'];
                    this.data['cc_number'] = this.customer[i]['cc_number'];
                    this.data['nombrecc'] = this.customer[i]['nombrecc'];
@@ -133,6 +136,7 @@ export class ShowcustomerComponent implements OnInit {
                    this.data['observacion'] = this.customer[i]['observacion'];
                    this.data['marca_id'] = this.customer[i]['marca_id'];
                    this.data['modelo_id'] = this.customer[i]['modelo_id'];
+                   this.data['description'] = this.customer[i]['description'];
                    this.data['color_id'] = this.customer[i]['color_id'];
                    this.data['marca'] = this.customer[i]['marca'];
                    this.data['modelo'] = this.customer[i]['modelo'];

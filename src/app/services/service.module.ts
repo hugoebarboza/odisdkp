@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 
 import {
   SettingsService,
+  UserService,
  } from './service.index';
 
 
@@ -12,6 +13,7 @@ import {
   ],
   providers: [
     SettingsService,
+    UserService,
   ],
   declarations: []
 })

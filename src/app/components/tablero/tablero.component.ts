@@ -6,7 +6,7 @@ import { Sort, MatPaginator, TooltipPosition, MatDialog, PageEvent } from '@angu
 
 //SERVICES
 import { OrderserviceService } from '../../services/orderservice.service';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/service.index';
 
 //MODELS
 import { ProjectsService } from '../../services/projects.service';

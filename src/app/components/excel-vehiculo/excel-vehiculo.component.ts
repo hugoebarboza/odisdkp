@@ -6,15 +6,16 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import * as FileSaver from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs';
 
 // MODEL
 import { Service } from '../../models/Service';
 
 // SERVICES
-import { UserService } from '../../services/user.service';
 import { OrderserviceService } from '../../services/orderservice.service';
-import { Subscription } from 'rxjs';
+import { UserService } from '../../services/service.index';
 
+//UTILITY
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 import * as moment from 'moment';
 
@@ -29,7 +30,7 @@ const EXCEL_EXTENSION = '.xlsx';
 })
 export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
-  forTime = 1000;
+  forTime = 500;
 
   private token;
 
@@ -652,6 +653,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
                 observacion = 'S/N';
               } else {
                 observacion = observacion.replace(/\–/g, '-');
+                observacion = observacion.replace(/\&/g, 'Y');
                 const observacion_array: string[] = observacion.split(' ');
                 observacion = '';
                 for (let i = 0; i !== observacion_array.length; ++i) {
@@ -671,7 +673,9 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
                 }
 
               } else {
+                
                 observacion_orden = observacion_orden.replace(/\–/g, '-');
+                observacion_orden = observacion_orden.replace(/\&/g, 'Y');
                 const observacion_orden_array: string[] = observacion_orden.split(' ');
                 observacion_orden = '';
                 for (let i = 0; i !== observacion_orden_array.length; ++i) {

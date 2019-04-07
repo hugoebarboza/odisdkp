@@ -10,7 +10,7 @@ import { User } from '../../../models/User';
 //SERVICES
 import { OrderserviceService } from '../../../services/orderservice.service';
 import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/service.index';
 
 
 @Component({
@@ -19,7 +19,7 @@ import { UserService } from '../../../services/user.service';
   styleUrls: ['./deleteservice.component.css']
 })
 export class DeleteServiceComponent implements OnInit {
-  public title: string;
+  public title: string = 'Eliminar';
   public loading: boolean = true;
   public project: string;
   public project_id: number = 0;
@@ -40,8 +40,7 @@ export class DeleteServiceComponent implements OnInit {
     public _userService: UserService,
     public dialogRef: MatDialogRef<DeleteServiceComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any, 
-  ) { 
-    this.title = 'Eliminar Proyecto';
+  ) {     
     this.token = this._userService.getToken();
   }
 

@@ -6,7 +6,7 @@ export class User{
 		public password: string,
 		public role_id: number,
 		public surname: string,
-		public usuario: string,
+		public version: string,
 		public platform: number,
 	){}
 }

@@ -7,6 +7,7 @@ import { Subscription, Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 
 //DIALOG
+import { EditServiceComponent } from '../../dialog/editservice/editservice.component';
 import { ShowcustomerComponent } from '../../dialog/showcustomer/showcustomer.component';
 
 //MATERIAL
@@ -31,7 +32,7 @@ const moment = _moment;
 import { CountriesService } from '../../../services/countries.service';
 import { OrderserviceService } from '../../../services/orderservice.service';
 import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/service.index';
 
 
 export interface Item { id: any, comment: string; created: any, identity: string}
@@ -72,6 +73,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public subscription: Subscription;
   private token: any;
   public toggleContent: boolean = false;
+  public toggleContentMain: boolean = false;
   public users: User[] = [];
   public users_ito: User[] = [];
   
@@ -103,12 +105,12 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
 
 
   models: any[] = [
-    {id:0, name:'General', description:'Información General del Proyecto', expand: true},
-    {id:1, name:'Usuarios', description:'Usuarios de Proyecto', expand: true},
-    {id:5, name:'Administrativo', description:'Administrativo de Proyecto', expand: true},
-    {id:3, name:'Fechas', description:'Fechas de Proyecto', expand: true},
-    {id:4, name:'Detalles', description:'Descripción de Proyecto', expand: true},
-    {id:2, name:'Dirección', description:'Ubicación de Proyecto', expand: true}  
+    {id:0, name:'General', description:'Información General del Proyecto', expand: false},
+    {id:1, name:'Usuarios', description:'Usuarios de Proyecto', expand: false},
+    {id:5, name:'Administrativo', description:'Administrativo de Proyecto', expand: false},
+    {id:3, name:'Fechas', description:'Fechas de Proyecto', expand: false},
+    {id:4, name:'Detalles', description:'Descripción de Proyecto', expand: false},
+    {id:2, name:'Dirección', description:'Ubicación de Proyecto', expand: false}  
   ];
   
 
@@ -119,7 +121,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
     private _dataService: OrderserviceService,
     private _project: ProjectsService,
     public _regionService: CountriesService,
-    private _userService: UserService,
+    public _userService: UserService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,  
   ) { 
@@ -174,6 +176,10 @@ addComment(value:any) {
   if(this.toggleContent){
     this.toggleContent=false;
   }   
+  if(this.toggleContentMain){
+    this.toggleContentMain=false;
+  }   
+
 }
 
 deleteCommentDatabase(value$: any) {    
@@ -366,11 +372,34 @@ deleteCommentDatabase(value$: any) {
       });
     }
 
+    startEdit(id: number) {
+      const dialogRef = this.dialog.open(EditServiceComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {service_id: id}
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+  
+
     toggle() {
       this.toggleContent = !this.toggleContent;
       this.projectContent = null;
     }
   
+    togglemain() {
+      this.toggleContentMain = !this.toggleContentMain;
+      this.projectContent = null;
+    }
       
 
 }

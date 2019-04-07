@@ -14,7 +14,7 @@
   <mat-card-header [ngClass]="{'custom-card':true, 'padding':'0px'}">     
 
     <div class="mat-card-header-text">
-    <mat-card-title>
+    <mat-card-title >
       <div class="row">
         <div class="col-8">
             <div class="float-left">
@@ -22,9 +22,17 @@
             <button mat-button color="primary" (click)="refresh()"> <mat-icon >sync</mat-icon></button>      
             </div>
         </div>
-        <div class="col-4">
+        <div class="col-4" >
             <div class="float-right">
-            <button mat-raised-button color="primary" (click)="addNew(id)">Crear Proyecto</button>
+              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                  <div class="btn-group mr-2" role="group" aria-label="First group">
+                      <button class="btn btn-sm btn-outline-secondary" (click)="openDialogCsv()"><span data-feather="CSV"></span>CSV</button>
+                  </div>
+                  <div class="btn-group mr-2" role="group" aria-label="Second group" >
+                      <button mat-raised-button color="primary" (click)="addNew(id)" *ngIf="_userService.isRole(7)">Crear Proyecto</button>
+                  </div>
+              </div>
+            
             </div>
           </div>
       </div>

@@ -17,8 +17,9 @@ const moment = _moment;
 
 //SERVICES
 import { OrderserviceService } from '../../../services/orderservice.service';
-import { UserService } from '../../../services/user.service';
 import { ProjectsService } from '../../../services/projects.service';
+import { ServiceEstatus } from '../../../models/ServiceEstatus';
+import { UserService } from '../../../services/service.index';
 
 //MODELS
 import { Order } from '../../../models/order';
@@ -49,7 +50,8 @@ export class AddComponent implements OnInit, OnDestroy {
   //private sub: any;  
   public arrayservicetype: ObjectServiceType[] = [];
   public termino: string;  
-  public results: Object = [];  
+  public results: Object = [];
+  public serviceestatus: ServiceEstatus[] = [];
   public show:boolean = false;
   public showdate:boolean = false;
   myDate: any;
@@ -101,6 +103,7 @@ export class AddComponent implements OnInit, OnDestroy {
      this.category_id = this.data['category_id'];
      this.loadService();     
      this.loadServiceType();
+     this.loadServiceEstatus();
       this.en = {
             firstDayOfWeek: 0,
             dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -286,6 +289,23 @@ export class AddComponent implements OnInit, OnDestroy {
     }
 
   }
+
+  public loadServiceEstatus(){  
+
+    this.subscription = this._orderService.getServiceEstatus(this.token.token, this.data['service_id']).subscribe(
+    response => {
+              if(!response){
+                return;
+              }
+              if(response.status == 'success'){                  
+                this.serviceestatus = response.datos;
+                if(this.serviceestatus.length > 0) {
+                  this.data.status_id = this.serviceestatus.slice(-1)[0].id;
+                }
+              }
+              });        
+    }
+
 
   toggle() {
     this.show = !this.show;

@@ -17,7 +17,7 @@ import { User } from '../../../models/User';
 import { CountriesService } from '../../../services/countries.service';
 import { OrderserviceService } from '../../../services/orderservice.service';
 import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/service.index';
 
 @Component({
   selector: 'app-addservice',

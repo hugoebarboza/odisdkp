@@ -27,10 +27,10 @@ import { GLOBAL } from '../../../services/global';
 
 
 //SERVICES
-import { UserService } from '../../../services/user.service';
 import { CountriesService } from '../../../services/countries.service';
 import { CustomerService } from '../../../services/customer.service';
 import {ExcelService} from '../../../services/excel.service';
+import { UserService } from '../../../services/service.index';
 
 //MODELS
 import { User } from '../../../models/user';

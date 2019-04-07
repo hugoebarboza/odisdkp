@@ -1,9 +1,14 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
-import { UserService } from '../../services/user.service';
 import { Observable } from 'rxjs/';
 import { DataSource } from '@angular/cdk/collections';
 import { MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
+
+
+//MODELS
 import { User } from '../../models/user';
+
+//SERVICES
+import { UserService } from '../../services/service.index';
 
 
 
