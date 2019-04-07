@@ -18,7 +18,7 @@ import { User } from '../../../models/User';
 import { CountriesService } from '../../../services/countries.service';
 import { OrderserviceService } from '../../../services/orderservice.service';
 import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/service.index';
 
 
 @Component({
@@ -27,7 +27,7 @@ import { UserService } from '../../../services/user.service';
   styleUrls: ['./editservice.component.css']
 })
 export class EditServiceComponent implements OnInit {
-  public title: string = 'Editar Servicio';
+  public title: string = 'Editar';
   public comunas: Comuna[] = [];
   public customers: Customer [] = [];  
   public en: any;

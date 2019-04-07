@@ -7,8 +7,8 @@ import {Message} from 'primeng/api';
 
 
 //SERVICES
-import { UserService } from '../../../services/user.service';
 import { OrderserviceService } from '../../../services/orderservice.service';
+import { UserService } from '../../../services/service.index';
 
 //MODELS
 import { Order } from '../../../models/order';

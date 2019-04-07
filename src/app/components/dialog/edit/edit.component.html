@@ -158,6 +158,25 @@
       </mat-form-field>
     </div>
 
+    <div class="form" *ngIf="data.patio">
+      <mat-form-field color="accent">
+        <input matInput placeholder="Patio" [(ngModel)]="data.patio" name="patio">
+      </mat-form-field>
+    </div>
+
+    <div class="form" *ngIf="data.espiga">
+      <mat-form-field color="accent">
+        <input matInput placeholder="Espiga" [(ngModel)]="data.espiga" name="espiga">
+      </mat-form-field>
+    </div>
+
+    <div class="form" *ngIf="data.posicion">
+      <mat-form-field color="accent">
+        <input matInput placeholder="Posición" [(ngModel)]="data.posicion" name="posicion">
+      </mat-form-field>
+    </div>
+
+
 <div class="example-loading-shade" *ngIf="isOrderLoading && show">
   <app-loading *ngIf="isOrderLoading"></app-loading>  
 </div>

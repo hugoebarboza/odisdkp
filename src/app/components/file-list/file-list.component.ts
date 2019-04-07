@@ -15,7 +15,7 @@ import * as firebase from 'firebase/app';
 
 //SERVICES
 import { ItemFirebaseService } from '../../services/itemfirebase.service';
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/service.index';
 
 //MODELS
 import { Item } from '../../models/item';

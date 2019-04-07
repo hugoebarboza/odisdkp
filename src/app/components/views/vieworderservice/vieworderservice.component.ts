@@ -27,7 +27,7 @@ import { CountriesService } from '../../../services/countries.service';
 import { ExcelService } from '../../../services/excel.service';
 import { OrderserviceService } from '../../../services/orderservice.service';
 import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/user.service';
+import { UserService } from '../../../services/service.index';
 import { ZipService } from '../../../services/zip.service';
 
 //MODELS
@@ -88,6 +88,10 @@ interface Time {
 
 export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public title = "Órdenes de trabajo";
+  
+  
+  //date = new FormControl(moment([2019, 3, 2]).format('YYYY[-]MM[-]DD'));  
+  date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
   public subtitle = "Listado de órdenes de trabajo. Agregue, edite, elimine y ordene los datos de acuerdo a su preferencia.";
   public columnselect: string[] = new Array();
   public datedesde: FormControl;
@@ -107,6 +111,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public servicename: string;
   public servicetypeid: number = 0;
   public servicetype: ServiceType[] = [];
+  selectedValueOrdeno: string;
   public token: any;
   public url:string;
 
@@ -171,10 +176,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   };
 
   selectedColumnnDate = {
-    fieldValue: '',
+    fieldValue: 'orders.create_at',
     criteria: '',
-    columnValueDesde: '',
-    columnValueHasta: ''
+    columnValueDesde: this.date.value,
+    columnValueHasta: this.date.value
   };
 
   selectedColumnnUsuario = {
@@ -394,6 +399,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
+ 
     //this._portal = this.myTemplate;
     //this.dataSource.paginator = this.paginator;
     //this.dataSource.sort = this.matSort;
@@ -1464,10 +1470,176 @@ private filterRegionMulti() {
     this.excelService.exportAsExcelFile(this.dataSource.data, 'Ordenes');
   }
 
+  ExportTOExcelDate($event):void {
+   //console.log($event);
+   var arraydata = new Array();
+   var orderatributovalue = [];
+   var arraydata = [];
+   var valuearrayexcel = "";
+   var pattern = /(\w+)\s+(\w+)/;
+   var newtimefrom = '';
+   var newtimeuntil = '';
+
+
+   this.isLoadingResults = true;
+   this.regionMultiCtrl.reset();
+   this.selectedColumnnDate.fieldValue = 'orders.create_at';
+
+
+   if(!this.selectedColumnnEstatus.columnValue){
+     this.selectedColumnnEstatus.fieldValue = '';
+     this.selectedColumnnEstatus.columnValue = '';
+   }else{
+     this.selectedColumnnEstatus.fieldValue = 'orders_details.status_id'
+   }
+
+   if(!this.selectedColumnnUsuario.fieldValue){
+     this.selectedColumnnUsuario.fieldValue = '';
+     this.selectedColumnnUsuario.columnValue = '';
+   }
+
+
+
+   if(!this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+      this.selectedColumnn.fieldValue = '';
+      this.selectedColumnn.columnValue = '';
+      this.filtersregion.fieldValue = '';
+      this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
+      this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
+      this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
+      this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
+   }
+
+
+
+
+   this.dataService.getProjectShareOrder(      
+     this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
+     this.selectedColumnnDate.fieldValue, this.date.value, this.date.value, 
+     this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+     this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
+     this.selectedColumnnEstatus.fieldValue, this.selectedColumnnEstatus.columnValue,
+     newtimefrom, newtimeuntil,
+     this.selectedColumnnZona.columnValue,
+     this.servicetypeid,
+     this.sort.active, this.sort.direction, 0, 0, this.project_id, this.id, this.token.token, $event).then(
+     (res: any) => 
+     {
+        res.subscribe(
+         (some) => 
+         { 
+           if(some.datos){
+           this.exportDataSource = new MatTableDataSource(some.datos);
+           
+           if(!this.exportDataSource.data.length){
+             this.exportDataSource = new MatTableDataSource(some.datos.data);
+           }
+           
+             if(this.exportDataSource.data.length && this.exportDataSource.data.length > 0){
+               for (var i=0; i<this.exportDataSource.data.length; i++){
+                 var bandera: boolean = false;
+                 for (var j=0; j<arraydata.length; j++){
+                   if(arraydata[j] == this.exportDataSource.data[i]['servicetype_id']){
+                     //console.log(this.exportDataSource.data[i]['servicetype_id']);
+                     bandera = true;
+                   }                    
+
+                 }
+                 if(bandera == false){
+                   arraydata.push(this.exportDataSource.data[i]['servicetype_id']);
+                 }
+               }
+             }
+           
+
+
+
+             if($event == 3){
+               for (var i=0; i<arraydata.length; i++){//FIRSTFOR
+                 var banderatitulo: boolean = true;
+                 for (var j=0; j<this.exportDataSource.data.length; j++){//SECONDFORD
+                   if(arraydata[i] == this.exportDataSource.data[j]['servicetype_id']){ //FIRST IF    
+                     if(this.exportDataSource.data[j]['atributo_share'] && Object.keys(this.exportDataSource.data[j]['atributo_share']).length > 0 && banderatitulo == true){
+                       if(this.exportDataSource.data[j]['name_table'] == 'address'){
+                          valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";
+                       }else{
+                          valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";                          
+                       }
+
+
+                       banderatitulo = false;
+                       valuearrayexcel = valuearrayexcel +'\n';
+
+                     }else{
+                       if(!this.exportDataSource.data[j]['atributo_share'] && banderatitulo == true && this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
+                         valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
+                         banderatitulo = false;
+                       }else{
+                         if(!this.exportDataSource.data[j]['atributo_share'] && banderatitulo == true && this.exportDataSource.data[j]['name_table'] == 'address'){
+                         valuearrayexcel = valuearrayexcel + "ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
+                         banderatitulo = false;
+                         }
+                       }
+                     }
+                       if(this.exportDataSource.data[j]['name_table'] == 'address'){
+                         var ubicacion = this.exportDataSource.data[j]['direccion'];
+                       }
+                       if(this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
+                         var ubicacion = this.exportDataSource.data[j]['patio']+'-'+this.exportDataSource.data[j]['espiga']+'-'+this.exportDataSource.data[j]['posicion'];
+                       }
+
+                       if(this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
+                       valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
+                                             +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']
+                                             +';'+this.exportDataSource.data[j]['orderdetail_direccion']+';'+ubicacion
+                                             +';'+this.exportDataSource.data[j]['marca']+';'+this.exportDataSource.data[j]['modelo']+';'+this.exportDataSource.data[j]['color']+';'+this.exportDataSource.data[j]['description']+';'+this.exportDataSource.data[j]['secondcolor']
+                                             +';'+this.exportDataSource.data[j]['patio']+';'+this.exportDataSource.data[j]['espiga']+';'+this.exportDataSource.data[j]['posicion']
+                                             +';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
+                       }else{
+                         valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
+                         +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']
+                         +';'+this.exportDataSource.data[j]['leido_por']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion                                              
+                         +';'+this.exportDataSource.data[j]['ruta']+';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']
+                         +';'+this.exportDataSource.data[j]['transformador']+';'+this.exportDataSource.data[j]['medidor']+';'+this.exportDataSource.data[j]['tarifa']+';'+this.exportDataSource.data[j]['constante']
+                         +';'+this.exportDataSource.data[j]['giro']+';'+this.exportDataSource.data[j]['sector']+';'+this.exportDataSource.data[j]['zona']+';'+this.exportDataSource.data[j]['mercado']                          
+                         +';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
+                       }                      
+                       
+                       valuearrayexcel = valuearrayexcel + '\n';
+
+
+
+                   }//END FIRST IF                    
+                 }//END SECOND FOR                                 
+               }//END //FIRSTFOR
+             }
+
+
+           const FILE_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;";
+           const FILE_EXTENSION = '.csv';
+           const fileName = "Ordenes";
+           var blob = new Blob([valuearrayexcel], {type: FILE_TYPE});
+           FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + FILE_EXTENSION);
+           this.isLoadingResults = false;
+           }else{
+           this.isLoadingResults = false;
+           }
+         },
+         (error) => {            
+           this.isLoadingResults = false;
+           this.error = 'No se encontraron registros que coincidan con su búsqueda';            
+           this.toasterService.error('Error: '+this.error, '', {timeOut: 6000,});
+           console.log(<any>error);
+         }  
+         )
+   })   
+
+  }
+
 
  ExportTOExcelClient($event):void {
     //console.log($event);
-    console.log('pasooo');
+
     var arraydata = new Array();
     var arrayexcel = new Array();
     var orderatributovalue = [];
@@ -1564,7 +1736,7 @@ private filterRegionMulti() {
       newtimefrom, newtimeuntil,
       this.selectedColumnnZona.columnValue,
       this.servicetypeid,
-      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.project_id, this.id, this.token.token).then(
+      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.project_id, this.id, this.token.token, $event).then(
       (res: any) => 
       {
         res.subscribe(

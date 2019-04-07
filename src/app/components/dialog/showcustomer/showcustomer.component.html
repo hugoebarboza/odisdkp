@@ -61,7 +61,9 @@
     <p></p>
     <strong>Marca:</strong> {{data.marca}} 
     <p></p>
-    <strong>Modelo:</strong> {{data.modelo}} 
+    <strong *ngIf="data.modelo">Modelo:</strong> {{data.modelo}} 
+    <p></p>
+    <strong *ngIf="data.description">Modelo:</strong> {{data.description}} 
     <p></p>
     <strong>Color:</strong> {{data.color}} 
     <p></p>

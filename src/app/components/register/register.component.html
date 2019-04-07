@@ -1,16 +1,3 @@
-
-<div class="col-lg-12 ">  
-  <div class="alert alert-success" *ngIf="status == 'success'">
-    Exito !! Registro completado exitosamente. <a class="btn btn-primary btn-sm" [routerLink]="['login']" role="button">Accede</a>
-  </div>
-       
-  <div class="alert alert-danger" *ngIf="status == 'error'">
-    Error !! Registro no completado.
-  </div>
-</div>
-
-
-
  <main role="main" class="container animated fadeIn Fast">
       <div class="my-3 p-3 bg-white rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0"><h2><i class="material-icons">person</i> {{title}}</h2></h6>
@@ -18,72 +5,121 @@
 
           <div class="col-lg-12 animated fadeIn">
                   
-          <form name="registerForm" #registerForm="ngForm" class="col-md-12" (ngSubmit)="onSubmit(registerForm)" id="registerForm">
-                <div class="text-center mb-4">
-                  <h1 class="h3 mb-3 font-weight-normal">Ingrese sus datos</h1>
-                  <p>Por favor ingrese sus datos de registro, por seguridad <code>solo se permite</code> el uso de correo OCA Global. <a href=""></a></p>
-                </div>
+          <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="col-md-12" (ngSubmit)="onSubmit()" >
+
+            <div class="text-center mb-4">
+              <h1 class="h3 mb-3 font-weight-normal">Ingrese sus datos</h1>
+              <p>Por favor ingrese sus datos de registro, por seguridad <code>solo se permite</code> el uso de correo OCA Global. <a href=""></a></p>
+            </div>
 
 
             <div class="form-row">
               <div class="form-group col-md-6">
               <label for="nombre">Primer Nombre</label>
-              <input type="text" name="name" #name="ngModel" [(ngModel)]="user.name" class="form-control" required="" >
-              <span  *ngIf="!name.valid && name.touched" >El Primer Nombre es Obligatorio.
-              </span>
-
+              <input type="text" name="name" formControlName="name"   class="form-control" required>
               </div>
               
               <div class="form-group col-md-6">
                 <label for="apellido">Primer Apellido</label>
-                <input type="text" name="surname" #surname="ngModel" [(ngModel)]="user.surname" class="form-control" required="">
-                <span  *ngIf="!surname.valid && surname.touched" >El Primer Apellido es Obligatorio.
-                </span>
+                <input type="text" name="surname" class="form-control" formControlName="surname" required>
               </div>
             </div>
 
             <div class="form-row">
               <div class="form-group col-md-6">
-                <label for="inputEmail4">Email</label>      
-                <input type="email" name="email" #email="ngModel" [(ngModel)]="user.email" class="form-control" required pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
-                <span  *ngIf="!email.valid && email.touched" >El Email es Obligatorio.
-                </span>
+                <label for="inputEmail4">Email Primario</label>      
+                <input type="email" name="email" class="form-control" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
               </div>
 
               <div class="form-group col-md-6">
-                <label for="inputPassword4">Password</label>
-                <input type="password" id="inputPassword6" aria-describedby="passwordHelpBlock" name="password" #password="ngModel" [(ngModel)]="user.password" class="form-control" required="">
-                <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>
-                <span  *ngIf="!password.valid && password.touched" >El Password es Obligatorio.</span>
+                <label for="inputEmail4">Email Secundario</label>      
+                <input type="email" name="email2" class="form-control" formControlName="email2" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
               </div>
             </div>
+
+            <div class="form-row">
+
+              <div class="form-group col-md-6">
+                <label for="inputPassword4">Contraseña</label>
+                <input type="password" id="inputPassword" aria-describedby="passwordHelpBlock" name="password"  class="form-control" formControlName="password" required>
+                <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="inputPassword4">Confirmar Contraseña</label>
+                <input type="password" id="inputPassword2" aria-describedby="passwordHelpBlock" name="password2" class="form-control" formControlName="password2" required>
+                <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>
+              </div>
+            </div>
+
+            <div class="form-group" *ngIf="forma.errors?.equal && !forma.pristine">
+              <p class="text-danger">
+                Las contraseñas deben ser iguales.
+              </p>
+            </div>
+
+
+            <div class="form-row">
+
+              <div class="form-group col-md-6">
+                <label for="inputCity">Teléfono:</label>
+                <input type="text" class="form-control" id="inputTelefono" name="telefono" formControlName="telefono">
+              </div>
+
+
+              <div class="form-group col-md-6">
+                <label for="inputZip">Otro Teléfono:</label>
+                <input type="text" class="form-control" id="inputTelefono2" name="telefono2" formControlName="telefono2">
+              </div>
+            </div>
+
+
             <div class="form-group">
               <label for="inputAddress">Direccion</label>
-              <input type="text" class="form-control" id="inputAddress" placeholder="Calle, numero">
+              <input type="text" class="form-control" id="inputAddress" name="address" placeholder="Calle, numero">
             </div>
+
             <div class="form-group">
               <label for="inputAddress2">Direccion 2</label>
-              <input type="text" class="form-control" id="inputAddress2" placeholder="Apartamento, estudio, o piso">
+              <input type="text" class="form-control" id="inputAddress2" name="address2" placeholder="Apartamento, estudio, o piso">
             </div>
+
             <div class="form-row">
-              <div class="form-group col-md-6">
-                <label for="inputCity">Ciudad</label>
-                <input type="text" class="form-control" id="inputCity">
-              </div>
               <div class="form-group col-md-4">
-                <label for="inputState">Estado</label>
+                <label for="inputState">País</label>
                 <select id="inputState" class="form-control">
                   <option selected>Seleccione...</option>
-                  <option>...</option>
+                  <option>Chile</option>
+                  <option>España</option>
+                  <option>México</option>
+                  <option>Perú</option>
+                  <option>Otro</option>
                 </select>
               </div>
-              <div class="form-group col-md-2">
+
+              <div class="form-group col-md-4">
+                <label for="inputCity">Ciudad</label>
+                <input type="text" class="form-control" id="inputCity" name="city">
+              </div>
+
+
+              <div class="form-group col-md-4">
                 <label for="inputZip">Zip</label>
                 <input type="text" class="form-control" id="inputZip">
               </div>
             </div>
+
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <div class="checkbox checkbox-primary p-t-0">
+                        <input formControlName="condiciones" name="condiciones" id="checkbox-signup" type="checkbox">
+                        <label for="checkbox-signup"> Estoy de acuerdo con los <a href="#">términos</a></label>
+                    </div>
+                </div>
+            </div>
+
             
-            <button type="submit" class="btn btn-primary btn-md" [(disabled)]="!registerForm.form.valid">Sign in</button>
+            <button type="submit" class="btn btn-primary btn-md" >Registrarme</button>
           </form>
 
           </div>

@@ -1,9 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { FormGroup, FormControl, Validators, NgForm} from '@angular/forms';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { Observable, Subscription } from 'rxjs';
+import { FormControl, Validators, NgForm} from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import {CalendarModule} from 'primeng/calendar';
 //import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 //import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
@@ -13,8 +11,8 @@ const moment = _moment;
 
 //SERVICES
 import { OrderserviceService } from '../../../services/orderservice.service';
-import { UserService } from '../../../services/user.service';
 import { ProjectsService } from '../../../services/projects.service';
+import { UserService } from '../../../services/service.index';
 
 //MODELS
 import { Order } from '../../../models/order';
@@ -80,10 +78,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   constructor(
 
-    private _route: ActivatedRoute,
-    private _router: Router,        
     private _userService: UserService,
-    private _proyectoService: UserService,
     public dataService: OrderserviceService,
 	  public dialogRef: MatDialogRef<EditComponent>,    
     private _orderService: OrderserviceService,
@@ -213,6 +208,15 @@ export class EditComponent implements OnInit, OnDestroy {
         return;
          }       
           this.order = response.datos;
+          if(this.order[0]['patio']){
+            this.data.patio = this.order[0]['patio'];
+          }
+          if(this.order[0]['espiga']){
+            this.data.espiga = this.order[0]['espiga'];
+          }
+          if(this.order[0]['posicion']){
+            this.data.posicion = this.order[0]['posicion'];
+          }
           //console.log(response.datos);
         if(this.order.length > 0){
                 this.atributo = response.atributo;

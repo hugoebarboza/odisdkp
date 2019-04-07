@@ -1,17 +1,10 @@
 <div class="p-2">
-    <mat-card [ngStyle]="{'padding':'0px'}">
-      <mat-card-header [ngClass]="{'custom-card':true}">
-        <mat-card-title>Gestión de Proyecto</mat-card-title>
-        <mat-card-subtitle>Descripción y datos del Proyecto</mat-card-subtitle>
-      </mat-card-header>      
-    </mat-card>
-
     <div class="container-fluid">
       <div class="example-loading-shade" *ngIf="isLoadingResults">
          <app-loading *ngIf="isLoadingResults"></app-loading>  
       </div>
     </div>      
-    <br>
+    
       <div class="row" *ngIf="!isLoadingResults">        
         <div class="col-8">
             <app-viewprojectdetail [id]="id" *ngIf="id > 0"></app-viewprojectdetail>  

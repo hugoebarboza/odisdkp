@@ -13,7 +13,7 @@ import { MatSnackBar } from '@angular/material';
 import { Item } from '../../models/item';
 
 //SERVICES
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/service.index';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';

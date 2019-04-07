@@ -4,9 +4,7 @@ import { Subscription } from 'rxjs';
 
 //SERVICES
 import { OrderserviceService } from '../../services/orderservice.service';
-import { UserService } from '../../services/user.service';
-
-
+import { UserService } from '../../services/service.index';
 
 
 @Component({

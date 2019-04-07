@@ -1,10 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs/';
-import { GLOBAL } from './global';
-import { User } from '../models/user';
-import { Proyecto } from '../models/proyecto';
+import 'rxjs/add/operator/map';
+
+//MODELS
+import { User } from '../../models/user';
+import { Proyecto } from '../../models/proyecto';
+
+//SETTINGS
+import { GLOBAL } from '../global';
 
 @Injectable()
 export class UserService {
@@ -16,15 +20,11 @@ export class UserService {
 
 	constructor(
 		public _http: HttpClient,
-		private _route: ActivatedRoute,
-		private _router: Router
+		//private _route: ActivatedRoute,
+		//private _router: Router
 
 	){
 		this.url = GLOBAL.url;
-	}
-
-	pruebas(){
-		return 'Paso';
 	}
 
 
@@ -37,15 +37,18 @@ export class UserService {
   	}
 
 
-	register (user): Observable<any>{
+	register (user:any): Observable<any>{
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.post(this.url+'register', params, {headers: headers});
+		return this._http.post(this.url+'register', params, {headers: headers})
+						 .map( (resp: any) => {
+							   return resp;
+						 });				
 	}
 
-	signup(user, getToken=null): Observable<any>{
+	signup(user:any, getToken=null): Observable<any>{
 		if(getToken != null){
 			user.getToken = 'true';
 		}

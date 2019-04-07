@@ -161,7 +161,7 @@ import { ItemFirebaseService } from './services/itemfirebase.service';
 import { MapaService } from './services/mapa.service';
 import { OrderserviceService } from './services/orderservice.service';
 import { ProjectsService } from './services/projects.service';
-import { UserService } from './services/user.service';
+
 import { ZipService } from './services/zip.service';
 
 
@@ -401,8 +401,7 @@ registerLocaleData(localeEs);
     MapaService, 
     NgbActiveModal, 
     OrderserviceService, 
-    ProjectsService,
-    UserService,    
+    ProjectsService,        
     ZipService,
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},

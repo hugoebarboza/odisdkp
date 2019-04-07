@@ -14,7 +14,7 @@ import {  startOfDay,  endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  i
 import { AddCalendarComponent } from '../../components/dialog/addcalendar/addcalendar.component';
 
 //SERVICES
-import { UserService } from '../../services/user.service';
+import { UserService } from '../../services/service.index';
 
 //MOMENT
 import * as moment from 'moment';

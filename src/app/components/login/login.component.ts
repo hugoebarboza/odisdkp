@@ -2,9 +2,20 @@ import { Component, OnInit, Input, OnDestroy } from '@angular/core';
 import { FormControl, Validators, NgForm } from '@angular/forms';
 import { CommonModule } from "@angular/common"
 import { Router, ActivatedRoute, Params } from '@angular/router';
+
+//MODELS
 import { User } from '../../models/user';
 import { Proyecto } from '../../models/proyecto';
-import { UserService } from '../../services/user.service';
+
+
+//SERVICES
+import { UserService } from '../../services/service.index';
+
+//SETTINGS
+import { GLOBAL } from '../../services/global';
+
+
+//UTILITY
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
 
 
@@ -20,6 +31,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class LoginComponent implements OnInit {
+  public email: string;
   public title: string;
   public user: User;
   public token;
@@ -29,6 +41,7 @@ export class LoginComponent implements OnInit {
   public proyectos: Array<Proyecto>;
   public useraccount: string;
   public show:boolean = false;
+  
   loading: boolean = false;  
   year: number;
   hide = true;
@@ -36,6 +49,7 @@ export class LoginComponent implements OnInit {
   selected: string;
   success:string;
   error:string;
+  version:string;
 
 
   spinnerButtonOptions: MatProgressButtonOptions = {
@@ -90,17 +104,20 @@ export class LoginComponent implements OnInit {
     this._userService.handleAuthentication(this.identity, this.token);  
     this.success = 'Exitoso.';
     this.error = 'Credenciales no validas.'; 
+    this.version = GLOBAL.version;
   }
 
   ngOnInit(){
+    if (this._userService.isAuthenticated()) {
+      this._router.navigate(['dashboard']);
+    }    
     this.logout();
-        if (this.idaccount) {
-          this.rememberMe = 1;
-          this.user.email = this.idaccount;
-        } else {
-          this.rememberMe = 0;
-        }
-
+    if (this.idaccount) {
+      this.rememberMe = 1;
+      this.email = this.idaccount;
+    } else {
+      this.rememberMe = 0;
+    }
 
   }
 
@@ -122,7 +139,13 @@ export class LoginComponent implements OnInit {
    this.spinnerButtonOptions.text = 'Espere...';
    //this.barButtonOptions.active = true;
    //this.barButtonOptions.text = 'Espere...';
-   this._userService.signup(this.user).subscribe(
+   if(!form.valid){
+    return;
+   }
+
+   let usuario = new User('', '', form.value.email, form.value.password, 1, '', this.version, 1);
+
+   this._userService.signup(usuario).subscribe(
      response => {       
        if(response.status != 'error' ){
          this.status = 'success';         
@@ -130,7 +153,7 @@ export class LoginComponent implements OnInit {
          this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
          let key = 'token';
          localStorage.setItem(key, JSON.stringify(this.token));
-         this._userService.signup(this.user, true).subscribe(
+         this._userService.signup(usuario, true).subscribe(
            response => {       
             this.identity = response;                      
             let key = 'identity';
@@ -138,7 +161,7 @@ export class LoginComponent implements OnInit {
             this._userService.handleAuthentication(this.identity, this.token);
             if (this.rememberMe == 1){
               let idaccount = 'idaccount';
-              this.useraccount = this.user.email;
+              this.useraccount = usuario.email;
               localStorage.setItem(idaccount, JSON.stringify(this.useraccount));  
             }else{
               if (localStorage['idaccount'] !== undefined) {
@@ -170,7 +193,6 @@ export class LoginComponent implements OnInit {
       this.status = 'error';      
       this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
      }
-
      );
 
   }

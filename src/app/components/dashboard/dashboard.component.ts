@@ -6,14 +6,13 @@ import { FormBuilder, FormGroup } from '@angular/forms';
 
 //MODELS
 import { User } from '../../models/user';
-import { UserService } from '../../services/user.service';
 import { Proyecto } from '../../models/proyecto';
+
 
 //SERVICES
 import { DashboardService } from '../../services/dashboard.service';
 import { Service } from '../../models/service';
-
-
+import { UserService } from '../../services/service.index';
 
 
 @Component({

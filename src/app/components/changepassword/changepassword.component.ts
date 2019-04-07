@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from "@angular/common"
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
-import { UserService } from '../../services/user.service';
+
+//SERVICES
+import { UserService } from '../../services/service.index';
 
 
 @Component({

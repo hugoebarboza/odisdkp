@@ -7,7 +7,7 @@ import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 
 //SERVICES
 import { SettingsService } from './services/service.index';
-import { UserService } from './services/user.service';
+import { UserService } from './services/service.index';
 
 //MODEL
 import { Proyecto } from './models/proyecto';

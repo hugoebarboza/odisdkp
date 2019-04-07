@@ -83,6 +83,17 @@
   </mat-form-field>
   </div>
 
+  <div class="form">
+    <mat-form-field>
+    <mat-select class="form-control" placeholder="Estatus del Servicio" [(ngModel)]="data.status_id" name="status_id" required>  
+    <mat-option *ngFor="let status of serviceestatus" [value]="status.id">
+      {{status.name}}
+    </mat-option>
+    </mat-select>
+    <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+    </mat-form-field>
+    </div>
+
 
 
   <div >

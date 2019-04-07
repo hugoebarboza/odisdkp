@@ -13,8 +13,8 @@ import { Observable, Subscription } from 'rxjs';
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 
 // SERVICES
-import { UserService } from '../../services/user.service';
 import { OrderserviceService } from '../../services/orderservice.service';
+import { UserService } from '../../services/service.index';
 
 // MODEL
 import { Service } from '../../models/Service';
@@ -519,6 +519,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             if (observacion === 'undefined' || observacion.trim().length === 0) {
               observacion = 'S/N';
             } else {
+              observacion = observacion.replace(/\&/g, 'Y');
               const observacion_array: string[] = observacion.split(' ');
               observacion = '';
               for (let i = 0; i !== observacion_array.length; ++i) {
@@ -683,6 +684,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             if (observation === 'undefined' || observation.trim().length === 0) {
               observation = 'S/N';
             } else {
+              observation = observation.replace(/\&/g, 'Y');
               const observation_array: string[] = observation.split(' ');
               observation = '';
               for (let i = 0; i !== observation_array.length; ++i) {

@@ -21,10 +21,10 @@ import { Color } from '../../../models/color';
 import { Service } from '../../../models/Service';
 
 //SERVICES
-import { UserService } from '../../../services/user.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
 import { CountriesService } from '../../../services/countries.service';
 import { CustomerService } from '../../../services/customer.service';
+import { OrderserviceService } from '../../../services/orderservice.service';
+import { UserService } from '../../../services/service.index';
 
 @Component({
   selector: 'app-addcustomer',

@@ -24,9 +24,9 @@ import { Service } from '../../models/Service';
 
 
 //SERVICES
-import { SettingsNgxEasyTableService } from '../../services/settings/settings-ngx-easy-table.service';
-import { UserService } from '../../services/user.service';
 import { ProjectsService } from '../../services/projects.service';
+import { SettingsNgxEasyTableService } from '../../services/settings/settings-ngx-easy-table.service';
+import { UserService } from '../../services/service.index';
 
 
 
@@ -204,7 +204,7 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
 
 
   onEvent(event:any) { 
-    console.log(event);
+    //console.log(event);
     if (event.event === Event.onOrder) {
       if (event.value.key === 'level') {
         this.sortByLevel(event.value.order === 'asc');
@@ -217,7 +217,7 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
   }
 
   onAddressSearch(value): void {
-    console.log(value);
+    //console.log(value);
     var results = [];
     for(var i = 0; i < this.datasource.length; i++){
       if(this.datasource[i].servicedetail[0] && this.datasource[i].servicedetail[0].address){
@@ -277,6 +277,9 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
     //this.services = this.datasource.filter((_) => _.status === (value === 1));
   }
 
+  openDialogCsv(): void {
+    console.log('paso');
+  }
 
   refresh(){
     if(this.id){

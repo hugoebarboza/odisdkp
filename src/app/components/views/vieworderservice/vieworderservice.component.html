@@ -250,6 +250,17 @@
 </td>
 
 <td width="1%" >
+  <button mat-icon-button  *ngIf="!show"
+  matTooltip="Exportar las actividades del día."
+  [matTooltipPosition]="positionleftaction.value"
+  (click)="ExportTOExcelDate(3)"
+  >
+    <mat-icon>save_alt</mat-icon>
+  </button>  
+</td>
+
+
+<td width="1%" >
   <button mat-icon-button [matMenuTriggerFor]="menuview" *ngIf="!show"
   matTooltip="Cambiar vista."
   [matTooltipPosition]="positionleftaction.value"
