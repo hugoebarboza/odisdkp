@@ -274,7 +274,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
      //this.unsubscribe.next();
      //this.unsubscribe.complete();     
      this.subscription.unsubscribe();
-     console.log("ngOnDestroy CUSTOMER complete");
+     //console.log("ngOnDestroy CUSTOMER complete");
   }  
 
 
@@ -700,6 +700,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
   addNew(id:number, customer: Customer[]) {      
      const dialogRef = this.dialog.open(AddcustomerComponent, {
+      width: '777px',
        disableClose: true,
      data: { service_id: id, customer: Customer }
      });
@@ -719,6 +720,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     let service_id = this.id;    
     //console.log(order_date); 
     const dialogRef = this.dialog.open(EditcustomerComponent, {
+      width: '777px',
       disableClose: true,
       data: {service_id: id, cc_id: cc_id, cc_number: cc_number, category_id: category_id}
     });
@@ -739,7 +741,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 deleteItem(id:number, cc_id: number, cc_number: string, category_id:number) {
     let service_id = this.id;    
     const dialogRef = this.dialog.open(DeletecustomerComponent, {
-      height: '650px',
       width: '777px',
       disableClose: true,  
       data: {service_id: id, cc_id: cc_id, cc_number: cc_number, category_id: category_id}

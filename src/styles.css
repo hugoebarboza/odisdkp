@@ -65,3 +65,6 @@ mark {
   outline: 1px solid red;
   font-weight: bold;
 }
+.w100 {
+  width: 100%;
+}

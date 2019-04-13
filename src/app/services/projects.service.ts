@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Observable } from 'rxjs/';
-import { catchError, tap, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { GLOBAL } from './global';
 
 //MODELS
 import { Order } from '../models/order';
 import { Service } from '../models/Service';
-import { UserGeoreference } from '../models/usergeoreference';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
+
+import swal from 'sweetalert';
+
 
 @Injectable({
   providedIn: 'root'
@@ -35,13 +37,21 @@ export class ProjectsService {
 									.set('Authorization', token);	
 
 		this._http.post(this.url+'project'+'/'+id+'/'+'service', params, {headers: headers}).subscribe(
-			data => { 
-				this.toasterService.success('Proyecto creado.', 'Exito', {timeOut: 6000,});
+			(data:any) => { 
+
+				if(data.status === 'success'){
+					swal('Proyecto creado exitosamente con ID: ', data.lastInsertedId +'.', 'success' );
+				}else{
+					swal('No fue posible procesar su solicitud', '', 'error');
+				}
+
+				//this.toasterService.success('Proyecto creado.', 'Exito', {timeOut: 6000,});
 				},
 				(err: HttpErrorResponse) => {	
 				this.error = err.error.message;			      
 				//console.log(err.error.message);
-				this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+				//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+				swal('No fue posible procesar su solicitud', '', 'error');
 				});
 	}
 
@@ -52,14 +62,19 @@ export class ProjectsService {
 									   .set('Authorization', token);
 
 		this._http.put(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, params, {headers: headers}).subscribe(
-    		data => { 
-    			  //console.log(data);
-			      this.toasterService.success('Proyecto actualizado.', 'Exito', {timeOut: 6000,});			      
+    		(data:any) => { 
+				  //this.toasterService.success('Proyecto actualizado.', 'Exito', {timeOut: 6000,});
+					if(data.status === 'success'){
+						swal('Proyecto actualizado exitosamente con ID: ', id +'.', 'success' );
+					}else{
+						swal('No fue posible procesar su solicitud', '', 'error');
+					}				  
 			      },
 			      (err: HttpErrorResponse) => {	
 			      this.error = err.error.message;
 			      //console.log(err.error.message);
-			      this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+				  //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+				  swal('No fue posible procesar su solicitud', '', 'error');
 			    });
 	}
 	
@@ -67,14 +82,19 @@ export class ProjectsService {
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 									   .set('Authorization', token);									   									   
 		this._http.delete(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, {headers: headers}).subscribe(
-    		data => { 
-    			  //console.log(data);
-			      this.toasterService.success('Proyecto eliminado.', 'Exito', {timeOut: 6000,});			      
+    		(data: any) => { 
+				  //this.toasterService.success('Proyecto eliminado.', 'Exito', {timeOut: 6000,});
+					if(data.status === 'success'){
+						swal('Proyecto eliminado exitosamente con ID: ', id +'.', 'success' );
+					}else{
+						swal('No fue posible procesar su solicitud', '', 'error');
+					}				  
 			      },
 			      (err: HttpErrorResponse) => {	
 			      this.error = err.error.message;
 			      //console.log(err.error.message);
-			      this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+				  //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+				  swal('No fue posible procesar su solicitud', '', 'error');
 			    });
 	}
 
@@ -101,6 +121,11 @@ export class ProjectsService {
 	    //console.log(paginate);
 	    return this.getProjectOrderData('project/'+id+'/searchorder'+paginate, token);
 	}
+
+	getProjectService(token:any, id:number){
+	    return this.getQuery('project/'+id+'/service', token);
+	}
+
 
 	getProjectServiceCategorie(token:any, id:number){
 	    return this.getQuery('project/'+id+'/servicecategorie', token);

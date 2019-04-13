@@ -32,11 +32,11 @@
                     <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
                   </mat-select>
                 </mat-form-field>
-                <mat-form-field *ngIf="dateend !== undefined">
-                  <input matInput [matDatepicker]="pickerEnd" placeholder="Fecha vencimiento" [formControl]="dateend" readonly="true" formControlName="inputDate" (readonly)="true" >
-                  <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerEnd></mat-datepicker>
+
+                <mat-form-field class="example-full-width" *ngIf="dateend !== undefined">
+                    <input matInput placeholder="Fecha vencimiento" formControlName="inputDate" (readonly)="true">
                 </mat-form-field>
+
                 <mat-slide-toggle class="marginLeftX2" (change)="checkAutoGenerar($event)">
                     Generar N°Orden
                 </mat-slide-toggle>

@@ -7,13 +7,13 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-
 //ROUTER
 import { RouterModule } from '@angular/router';
 import { routing, appRoutingProviders } from './app.routing';
 
-//CDK MATERIAL
-import { PortalModule } from '@angular/cdk/portal';
+//MATERIAL
+import {MaterialModule} from './material-module';
+
 
 //FIREBASE
 import { AngularFireModule } from 'angularfire2';
@@ -21,7 +21,6 @@ import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
-
 
 //MAIN NG-BOOTSTRAP MODULE
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -36,6 +35,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
 import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { MarkdownModule } from 'ngx-markdown';
 import { Ng5SliderModule } from 'ng5-slider';
+import { RECAPTCHA_SETTINGS, RecaptchaModule,  RecaptchaSettings } from 'ng-recaptcha';
+import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { TableModule } from 'ngx-easy-table';
 import { VerticalTimelineModule } from 'angular-vertical-timeline';
@@ -46,35 +47,14 @@ import { VerticalTimelineModule } from 'angular-vertical-timeline';
 import { AngularSplitModule } from 'angular-split';
 
 
-//ANGULAR MATERIAL
+//ANGULAR UTILITY
 import { CalendarModule } from 'primeng/calendar';
 import { CalendarModule as AngularCalendar, DateAdapter as AngularDateAdapter } from 'angular-calendar';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import 'hammerjs';
-import { MatBadgeModule, MatTableModule, MatPaginatorModule } from '@angular/material';
-import { MatNativeDateModule, MatFormField, MatFormFieldModule, MatInputModule } from '@angular/material';
-import { MatButtonModule, MatDialogModule, MatButtonToggleModule } from '@angular/material';
 import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatProgressSpinnerModule, MatSortModule, MatSidenavModule, MatListModule, MatIconModule } from "@angular/material";
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatTooltipModule } from '@angular/material/tooltip';
-import { MatCardModule } from '@angular/material/card';
-import { MatStepperModule } from '@angular/material/stepper';
-import { MatProgressBarModule} from '@angular/material/progress-bar';
-import { MatChipsModule, MatTabsModule } from '@angular/material';
-import { MatSelectModule, MatMenuModule } from '@angular/material';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatExpansionModule} from '@angular/material/expansion';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
-import { MatCheckboxModule} from '@angular/material/checkbox';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { MatDatepickerModule} from '@angular/material/datepicker';
-import { MatSnackBarModule} from '@angular/material/snack-bar';
-import { MatRadioModule} from '@angular/material/radio';
-import { MatGridListModule} from '@angular/material/grid-list';
-import { MatBottomSheetModule} from '@angular/material/bottom-sheet';
-import { MatRippleModule, MatSliderModule } from '@angular/material';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 
 
@@ -100,14 +80,15 @@ import { FooterComponent } from './components/footer/footer.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
 import { GestionComponent } from './components/gestion/gestion.component';
 import { HeaderComponent } from './components/header/header.component';
-import { LoadingComponent } from './components/shared/loading/loading.component';
 import { LoginComponent } from './components/login/login.component';
+import { LoadingComponent } from './components/shared/loading/loading.component';
+import { MenuComponent } from './components/shared/menu/menu.component';
 import { MapaComponent } from './components/mapa/mapa/mapa.component';
 import { MapaFullWidthComponent } from './components/mapa/mapafullwidth/mapafullwidth.component'; 
-import { MenuComponent } from './components/menu/menu.component';
 import { MynavComponent } from './components/shared/mynav/mynav.component';
 import { NotfoundComponent } from './components/shared/notfound/notfound.component';
 import { OrderserviceComponent } from './components/orderservice/orderservice.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 import { ProgressSpinnerComponent } from './components/shared/progress-spinner/progress-spinner.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ServiceComponent } from './components/service/service.component';
@@ -130,6 +111,7 @@ import { AddSupportComponent } from './components/dialog/widget/addsupport/addsu
 import { CargaComponent } from './components/dialog/carga/carga.component';
 import { CsvComponent } from './components/dialog/csv/csv.component';
 import { CsvCustomerComponentComponent } from './components/dialog/csvcustomercomponent/csvcustomercomponent.component';
+import { CsvServiceComponent } from './components/dialog/csvservice/csvservice.component';
 import { DeleteComponent } from './components/dialog/delete/delete.component';
 import { DeletecustomerComponent } from './components/dialog/deletecustomer/deletecustomer.component';
 import { DeleteServiceComponent } from './components/dialog/deleteservice/deleteservice.component';
@@ -149,6 +131,11 @@ import { ZipComponent } from './components/dialog/zip/zip.component';
 //MODULES
 import { ServiceModule } from './services/service.module';
 
+//PIPE MODULE
+import { PipesModule } from './pipes/pipes.module';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+
+
 //SERVICES
 import { AuthguardService } from './services/authguard.service';
 import { CargaImagenesService } from './services/carga-imagenes.service';
@@ -161,7 +148,6 @@ import { ItemFirebaseService } from './services/itemfirebase.service';
 import { MapaService } from './services/mapa.service';
 import { OrderserviceService } from './services/orderservice.service';
 import { ProjectsService } from './services/projects.service';
-
 import { ZipService } from './services/zip.service';
 
 
@@ -174,13 +160,6 @@ import { ToastrModule } from 'ngx-toastr';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
-//PIPE
-import { FileSizePipe } from './pipes/file-size.pipe';
-import { HighlightSearch } from './pipes/highlight.pipe';
-import { KeysPipe } from './pipes/keys.pipe';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
-import { SearchPipe } from './pipes/search.pipe';
-import { SplitPipe } from './pipes/split.pipe';
 
 
 //ROUTE FOR LOADING
@@ -204,9 +183,7 @@ import { DropZoneDirective } from './directives/drop-zone.directive';
 import { NgDropFilesDirective } from './directives/ng-drop-files.directive';
 
 
-
 registerLocaleData(localeEs);
-
 
 @NgModule({
   declarations: [
@@ -221,6 +198,7 @@ registerLocaleData(localeEs);
     ChangepasswordComponent,    
     CsvComponent,
     CsvCustomerComponentComponent,
+    CsvServiceComponent,
     DashboardComponent,
     DateDialogComponent,
     DefaultComponent,
@@ -239,26 +217,24 @@ registerLocaleData(localeEs);
     FilelistComponent,
     FileListComponent,
     FileUploadComponent,
-    FileSizePipe,
     FooterComponent,
     ForgotpasswordComponent,
     FootermainComponent,
     GestionComponent,
     HeaderComponent,
-    HighlightSearch,
-    KeysPipe, 
-    LoadingComponent,
     LoginComponent,
     LogoutComponent,
+    LoadingComponent,
+    MenuComponent,
     MapaComponent, 
     MapaFullWidthComponent,
-    MenuComponent,
     ModalMapaComponent,
     ModalImageComponent,
     MynavComponent,
     NgDropFilesDirective,
     NotfoundComponent,
     OrderserviceComponent,
+    ProfileComponent,
     ProgressSpinnerComponent,
     RegisterComponent,
     SettingsComponent, 
@@ -266,8 +242,6 @@ registerLocaleData(localeEs);
     ShowComponent,
     ShowcustomerComponent,
     ServiceComponent,
-    SearchPipe,
-    SplitPipe, 
     UsertableComponent,
     ViewOrderDetailComponent,
     VieworderserviceComponent,
@@ -277,7 +251,9 @@ registerLocaleData(localeEs);
     ZipComponent,
     TableroComponent,
     ViewOrderTimeSpentComponent,
-    ViewProjectDetailComponent,            
+    ViewProjectDetailComponent,
+  ],
+  exports: [
   ],
   imports: [
     AngularEditorModule,
@@ -303,55 +279,23 @@ registerLocaleData(localeEs);
     FormsModule,    
     HttpModule,
     HttpClientModule,    
-    LoadingBarModule,  
-    MatBadgeModule,     
-    MatTableModule,
-    MatToolbarModule,
-    MatTooltipModule,
-    MatPaginatorModule,
-    MatFormFieldModule,
-    NgxMatSelectSearchModule,
+    LoadingBarModule,
+    MaterialModule,
+    NgxMatSelectSearchModule,        
     MarkdownModule.forRoot(),
-    MatInputModule,
-    MatIconModule,     
-    MatCardModule,    
-    MatProgressSpinnerModule, 
-    MatSortModule,    
-    MatSelectModule,
-    MatStepperModule,
-    MatCheckboxModule,
-    MatDatepickerModule,    
-    MatSidenavModule,
-    MatListModule,
-    MatIconModule,
-    MatBottomSheetModule,    
-    MatButtonToggleModule,
-    MatProgressBarModule,
     MatProgressButtonsModule,
-    MatChipsModule,
-    MatAutocompleteModule,
-    MatSlideToggleModule,
-    MatExpansionModule,
-    MatSnackBarModule,
-    MatRadioModule,
-    MatGridListModule,
-    MatRippleModule,
-    MatSliderModule,
-    MatNativeDateModule,
-    MatDialogModule,
-    MatTabsModule,
-    MatButtonModule,
-    MatMenuModule,
-    Ng2SearchPipeModule,
     Ng5SliderModule,    
     NgbModule,
-    NgSelectModule,    
+    NgSelectModule,
+    Ng2SearchPipeModule, 
     OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    PortalModule,
-    ReactiveFormsModule,      
+    OwlNativeDateTimeModule,    
+    PipesModule,
+    ReactiveFormsModule,    
+    RecaptchaFormsModule,  
+    RecaptchaModule,
     routing,
-    RouterModule,
+    RouterModule,    
     ScrollingModule,
     ServiceModule,
     TableModule,
@@ -368,6 +312,7 @@ registerLocaleData(localeEs);
     AddSupportComponent,
     CsvComponent,
     CsvCustomerComponentComponent,
+    CsvServiceComponent,
     DateDialogComponent,
     DeleteComponent, 
     DeletecustomerComponent, 
@@ -403,10 +348,15 @@ registerLocaleData(localeEs);
     OrderserviceService, 
     ProjectsService,        
     ZipService,
+    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS}
+    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    {provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: '6LdY_pwUAAAAANNCwxFDBNTGRDg2hrDvZSLTfxLl',
+      } as RecaptchaSettings,
+    }
   ],
   bootstrap: [
   	AppComponent

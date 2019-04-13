@@ -31,6 +31,9 @@ export class Order  {
 	public userupdate: string,
 	public vencimiento_date:any,
 	public orderatributofirma: any,
-	public atributo_firma:any
+	public atributo_firma:any,
+	public sign:number,
+	public usercreate_id: any,
+	public userupdate_id: any,
 	){}
 }

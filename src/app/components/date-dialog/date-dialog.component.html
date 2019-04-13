@@ -1,16 +1,22 @@
 <form>
-  <h1 mat-dialog-title>{{data.title}}</h1>
-  <div mat-dialog-content>
-    <div class="mat-app-background basic-container">
-      <mat-form-field>
-        <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" cdkFocusInitial placeholder="Fecha vencimiento">
-        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-        <mat-datepicker #pickerEnd></mat-datepicker>
-      </mat-form-field>
+    <h1 mat-dialog-title>{{data.title}}</h1>
+    <div mat-dialog-content>
+      <div class="mat-app-background basic-container">
+        <mat-form-field>
+          <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" cdkFocusInitial placeholder="Fecha vencimiento"
+          (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
+          <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+          <mat-datepicker #pickerEnd></mat-datepicker>
+        </mat-form-field>
+        <label *ngIf="showTime">Seleccione hora</label>
+        <div class="row justify-content-center">
+          <ngb-timepicker [(ngModel)]="data.time" name="data.time" [hourStep]="hourStep" [minuteStep]="minuteStep" [spinners]="spinners" *ngIf="showTime"></ngb-timepicker>
+        </div>
+      </div>
     </div>
-  </div>
-  <div mat-dialog-actions>
-    <button mat-raised-button (click)="onNoClick()">Sin vencimiento</button>
-    <button mat-raised-button color="primary"  [mat-dialog-close]="data" [disabled]="data.dateend === null" >Guardar</button>
-  </div>
-</form>
+    <br>
+    <div mat-dialog-actions class="row justify-content-center">
+      <button mat-raised-button (click)="onNoClick()">Sin vencimiento</button>
+      <button mat-raised-button color="primary"  [mat-dialog-close]="data" [disabled]="data.dateend === null || data.time === null " >Guardar</button>
+    </div>
+  </form>

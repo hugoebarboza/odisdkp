@@ -14,6 +14,7 @@ import { Portal, TemplatePortal } from '@angular/cdk/portal';
 
 //DIALOG
 import { AddServiceComponent } from '../dialog/addservice/addservice.component';
+import { CsvServiceComponent } from '../dialog/csvservice/csvservice.component';
 import { EditServiceComponent } from '../dialog/editservice/editservice.component';
 import { DeleteServiceComponent } from '../dialog/deleteservice/deleteservice.component';
 
@@ -278,7 +279,19 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
   }
 
   openDialogCsv(): void {
-    console.log('paso');
+    const dialogRef = this.dialog.open(CsvServiceComponent, {
+      width: '777px',
+      disableClose: true,                          
+      data: { project_id: this.id,
+              token: this.token.token,
+            }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) { 
+
+      }
+    });
+
   }
 
   refresh(){

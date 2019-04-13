@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, Validators, NgForm } from '@angular/forms';
-import { CommonModule } from "@angular/common"
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 //MODELS
 import { User } from '../../models/user';
@@ -30,9 +30,10 @@ import { ToastrService } from 'ngx-toastr';
   styleUrls: ['./login.component.css']
 })
 
-export class LoginComponent implements OnInit {
+export class LoginComponent implements OnInit, OnDestroy {
   public email: string;
   public title: string;
+  public fotoperfil: string = '';
   public user: User;
   public token;
   public identity;
@@ -89,6 +90,8 @@ export class LoginComponent implements OnInit {
 
   //private _toasterService: ToasterService;
 
+  subscription: Subscription;
+
   constructor(
     private _route: ActivatedRoute,
     private _router: Router,
@@ -96,7 +99,7 @@ export class LoginComponent implements OnInit {
     private toasterService: ToastrService,    
   ){
     this.title = 'Acceso';
-    this.user = new User('','','','', 1,'','',1);
+    this.user = new User('','','','','','','', 1,'','',1,'','');
     this.year = new Date().getFullYear();
     this.identity = this._userService.getIdentity();
     this.idaccount = this._userService.getIdaccount();
@@ -122,6 +125,12 @@ export class LoginComponent implements OnInit {
   }
 
 
+	ngOnDestroy(){
+		if(this.subscription){
+			this.subscription.unsubscribe();
+		}
+		//console.log("ngOnDestroy unsuscribe");
+	}
 
     onChange(value) {
         if (value.checked == true) {
@@ -143,7 +152,7 @@ export class LoginComponent implements OnInit {
     return;
    }
 
-   let usuario = new User('', '', form.value.email, form.value.password, 1, '', this.version, 1);
+   let usuario = new User('', '', '', '', '', form.value.email, form.value.password, 1, '', this.version, 1, '','');
 
    this._userService.signup(usuario).subscribe(
      response => {       
@@ -152,17 +161,24 @@ export class LoginComponent implements OnInit {
          this.token = response;
          this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
          let key = 'token';
-         localStorage.setItem(key, JSON.stringify(this.token));
+         //localStorage.setItem(key, JSON.stringify(this.token));
+         this._userService.saveStorage(key, this.token);
          this._userService.signup(usuario, true).subscribe(
-           response => {       
+           response => { 
+             //console.log(response);
             this.identity = response;                      
             let key = 'identity';
-            localStorage.setItem(key, JSON.stringify(this.identity));  
+            //localStorage.setItem(key, JSON.stringify(this.identity));  
+            this._userService.saveStorage(key, this.identity);
+            if(this.identity){
+              this.getPerfilUser(this.identity.sub);
+            }        
             this._userService.handleAuthentication(this.identity, this.token);
             if (this.rememberMe == 1){
-              let idaccount = 'idaccount';
+              let key = 'idaccount';
               this.useraccount = usuario.email;
-              localStorage.setItem(idaccount, JSON.stringify(this.useraccount));  
+              //localStorage.setItem(idaccount, JSON.stringify(this.useraccount));
+              this._userService.saveStorage(key, this.useraccount);
             }else{
               if (localStorage['idaccount'] !== undefined) {
                   localStorage.removeItem('idaccount');
@@ -197,6 +213,30 @@ export class LoginComponent implements OnInit {
 
   }
 
+  getPerfilUser(id: any){
+    if(id && this.token.token){
+      this._userService.getPerfilUser(this.token.token, id).subscribe(
+        response => {        
+          if(!response){
+            return false;        
+          }
+            if(response.status == 'success'){ 
+              this.fotoperfil = response.datos[0]['archivo'];
+              if(this.fotoperfil.length > 0){
+                let key = 'fotoprofile';
+                this._userService.saveStorage(key, this.fotoperfil);  
+              }
+            }
+        },
+            error => {
+            console.log(<any>error);
+            }   
+        );      
+    }
+
+  }
+
+
   logout(){        
     this._route.params.subscribe(params => {
       let logout = +params['sure'];
@@ -205,6 +245,7 @@ export class LoginComponent implements OnInit {
         localStorage.removeItem('token');
         localStorage.removeItem('proyectos');
         localStorage.removeItem('expires_at');
+        localStorage.removeItem('fotoprofile');
         this.identity = null;
         this.token = null;
         this.proyectos = null;        

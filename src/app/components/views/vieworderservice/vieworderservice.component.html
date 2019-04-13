@@ -57,29 +57,32 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-        <mat-form-field  *ngIf="!selectedColumnn.fieldValue" class="full-width">
+        <mat-form-field  class="full-width">
           <mat-select placeholder="Seleccione" [(ngModel)]="selectedColumnnDate.fieldValue" name="Fecha">
-            <mat-option>Seleccione</mat-option>
             <mat-option value="orders.create_at">Creado El</mat-option>
             <mat-option value="orders.update_at">Editado El</mat-option>            
           </mat-select>
         </mat-form-field>
 
 
+  
 
-        <mat-form-field *ngIf="selectedColumnnDate.fieldValue && !selectedColumnn.fieldValue"  class="full-width">
-          <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde"disabled name="columnValueDesde" >
+        <mat-form-field *ngIf="selectedColumnnDate.fieldValue"  class="full-width">
+          <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde" disabled name="columnValueDesde" >
           <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
           <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
         </mat-form-field>
 
+ 
 
 
-        <mat-form-field *ngIf="selectedColumnnDate.fieldValue && !selectedColumnn.fieldValue"class="full-width" >
+        <mat-form-field *ngIf="selectedColumnnDate.fieldValue"class="full-width" >
           <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" disabled  name="columnValueHasta">
           <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
           <mat-datepicker #fecha2 disabled="false"></mat-datepicker>
         </mat-form-field>
+
+  
     </mat-expansion-panel>
 
 
@@ -461,8 +464,8 @@
 
 <!-- actions -->
     <ng-container matColumnDef="actions" >
-      <mat-header-cell *matHeaderCellDef>        
-        <button mat-icon-button color="primary" (click)="addNew(id, category_id)" *ngIf="_userService.isRole(3)"
+      <mat-header-cell *matHeaderCellDef >        
+        <button mat-icon-button color="primary" (click)="addNew(id, category_id)" *ngIf="_userService.isRole(4) && id && category_id"
         matTooltip="Agregar orden."
         [matTooltipPosition]="positionheaderaction.value"
         >
@@ -471,12 +474,14 @@
         <button mat-icon-button color="primary" (click)="refreshTable()"
         matTooltip="Refrescar datos."
         [matTooltipPosition]="positionheaderaction.value"
+        *ngIf="_userService.isRole(4) && id && category_id"
         >
           <mat-icon  >refresh</mat-icon>
         </button>
         <button mat-icon-button color="primary" (click)="settings(columnsOrderToDisplay)"
         matTooltip="Ver/Ocultar columnas."
         [matTooltipPosition]="positionheaderaction.value"
+        *ngIf="_userService.isRole(4) && id && category_id"
         >
         <mat-icon >settings</mat-icon>
         </button>
@@ -484,6 +489,7 @@
         <button mat-icon-button color="primary" (click)="publish()"
         matTooltip="Almacenar información."
         [matTooltipPosition]="positionheaderaction.value"
+        *ngIf="_userService.isRole(4) && id && category_id"
         >
         <mat-icon class="material-icons">publish</mat-icon>
         </button>

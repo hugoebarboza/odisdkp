@@ -54,6 +54,7 @@ export class AddComponent implements OnInit, OnDestroy {
   public serviceestatus: ServiceEstatus[] = [];
   public show:boolean = false;
   public showdate:boolean = false;
+
   myDate: any;
   service_name:string;
   isLoading = false;
@@ -74,6 +75,7 @@ export class AddComponent implements OnInit, OnDestroy {
 
   serializedDate = new FormControl((new Date()).toISOString());
   en: any;
+
 
 
   subscription: Subscription;
@@ -157,6 +159,8 @@ export class AddComponent implements OnInit, OnDestroy {
 
     }
 
+
+
     for (var i=0; i<this.atributo.length; i++){
        if (myArray.hasOwnProperty(this.atributo[i]['id'])) { 
              if(this.atributo[i]['type'] !== 'label'){
@@ -227,7 +231,7 @@ export class AddComponent implements OnInit, OnDestroy {
     }
 
    public loadUserProject(id: number){
-    this.subscription = this._projectService.getUserProject(this.token.token, id, 5).subscribe(
+    this.subscription = this._projectService.getUserProject(this.token.token, id, 6).subscribe(
     response => {
               if(!response){
                 return;
@@ -246,7 +250,7 @@ export class AddComponent implements OnInit, OnDestroy {
      }else{
        this.isLoading = false;
      }
-     if(this.termino.length > 0){       
+     if(this.termino.length > 1){       
 
        this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
         response => {
@@ -318,5 +322,13 @@ export class AddComponent implements OnInit, OnDestroy {
     this.showdate = !this.showdate;
   } 
 
-
+  displayFn(value: any) {
+    if (value) { 
+      //this.valid = true;
+      //this.selected = value;
+      //console.log(this.selected);
+      //console.log(this.selected.length);
+      //return this.selected; 
+    }
+  }
 }

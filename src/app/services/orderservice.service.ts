@@ -179,7 +179,7 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
 
-    add(token: any, order: Order, id:number): void {	
+  add(token: any, order: Order, id:number): void {	
 		let json = JSON.stringify(order);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -204,7 +204,7 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
 
-    update(token: any, orderid:number, order: Order, id:number): void {	
+  update(token: any, orderid:number, order: Order, id:number): void {	
 		let json = JSON.stringify(order);
 		let params = 'json='+json;
 

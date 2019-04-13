@@ -8,11 +8,13 @@ import { DefaultComponent } from './components/default/default.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
 import { LoginComponent } from './components/login/login.component';
+import { NotfoundComponent } from './components/shared/notfound/notfound.component';
+import { OrderserviceComponent } from './components/orderservice/orderservice.component';
+import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ServiceComponent } from './components/service/service.component';
 
-import { NotfoundComponent } from './components/shared/notfound/notfound.component';
-import { OrderserviceComponent } from './components/orderservice/orderservice.component';
+
 
 //SERVICES
 import { AuthguardService } from './services/authguard.service';
@@ -54,6 +56,7 @@ const appRoute: Routes = [
 	data: { titulo: 'OCA Global - ODIS Proyectos', descripcion: 'OCA Global - ODIS Project Services Managment' }
 	},
 
+	{ path: 'profile', component: ProfileComponent, data: { titulo: 'OCA Global - ODIS Perfil de usuario' } },	
 
 	{ path:'serviceorder/:id', 
 	component: OrderserviceComponent,

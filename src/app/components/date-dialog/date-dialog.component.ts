@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
+import {MatDialog, MatDialogRef, MAT_DIALOG_DATA, MatDatepickerInputEvent} from '@angular/material';
 
 @Component({
   selector: 'app-date-dialog',
@@ -7,6 +7,7 @@ import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
   styles: ['.mat-form-field {width: 100%;}']
 })
 export class DateDialogComponent implements OnInit {
+  showTime = false;
 
   constructor(
     public dialogRef: MatDialogRef<DateDialogComponent>,
@@ -19,6 +20,11 @@ export class DateDialogComponent implements OnInit {
 
 
   ngOnInit() {
+  }
+
+  addEvent(type: string, event: MatDatepickerInputEvent<Date>) {
+    //console.log(event);
+    this.showTime = true;
   }
 
 }
