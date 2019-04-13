@@ -247,18 +247,19 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       disableClose: true,
       data: {
               dateend: null,
-              title: 'Fecha de vencimiento'
+              title: 'Fecha de vencimiento',
+              time: {hour: 23, minute: 59}
             }
     });
     dialogRef.afterClosed().subscribe(result => {
-      // console.log(result);
-
       if (result !== undefined) {
-        this.firtsFormGroup.controls['inputDate'].setValue(result['dateend']);
-        this.dateend = new FormControl(result['dateend']);
+        const newdateend = moment(result.dateend).format('YYYY-MM-DD');
+        const time: any = result.time;
+        this.dateend = newdateend + ' ' + time.hour + ':' + time.minute + ':59';
+        this.firtsFormGroup.controls['inputDate'].setValue(this.dateend);
       }
-
     });
+
   }
 
   public Upload() {
@@ -504,13 +505,13 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               modelo_medidor = modelo_medidor.trim();
             }
 
-            if (transformador === 'undefined' || transformador.trim().length > 0) {
+            if (transformador === 'undefined' || transformador.trim().length === 0) {
               transformador = '';
             } else {
               transformador =  transformador.trim();
             }
 
-            if (leido_por === 'undefined' || leido_por.trim().length > 0) {
+            if (leido_por === 'undefined' || leido_por.trim().length === 0) {
               leido_por = '';
             } else {
               leido_por = leido_por.trim();
@@ -746,8 +747,9 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             };
 
             if (that.dateend !== undefined) {
-              const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
-              objectJson['vencimiento_date'] = newdateend + ' 23:59:59';
+              //const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
+              //objectJson['vencimiento_date'] = newdateend + ' 23:59:59';
+              objectJson['vencimiento_date'] = that.dateend;
             }
 
             if (banderaJson) {
@@ -773,7 +775,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                 (res: any) => {
                   res.subscribe(
                     (some) => {
-                      console.log(some['datos']);
+                      //console.log(some['datos']);
                       if (some['datos'].length > 1) {
                         const obj: Object = {
                           'estatus' : 'Error: Cliente duplicado',
@@ -1083,7 +1085,7 @@ applyFilterCliente(filterValue: string) {
     if (this.arrayExcel.length === this.arrayCarga.length) {
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
-        console.log(this.arrayExcel);
+        //console.log(this.arrayExcel);
 
         if (this.countExiste === this.arrayExcelSuccess.length) {
           this.checkPost = true;

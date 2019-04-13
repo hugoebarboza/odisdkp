@@ -2,14 +2,24 @@
   <h1 mat-dialog-title>{{title}}</h1>
   <div mat-dialog-content disableClose="true">
     <div class="mat-app-background basic-container" >
+
+
+
+        <mat-form-field>
+            <mat-select  placeholder="Fecha de OT" [(ngModel)]="data.createEdit" name="data.createEdit">
+                <mat-option value="create_at">Creado el</mat-option>
+                <mat-option value="update_at">Editado el</mat-option>
+            </mat-select>
+          </mat-form-field>
+                
       <mat-form-field>
-        <input matInput [matDatepicker]="picker" [(ngModel)]="data.date" name="data.date" placeholder="Fecha Desde" required>
+        <input matInput [max]="data.dateend" [matDatepicker]="picker" [(ngModel)]="data.date" name="data.date" placeholder="Fecha Desde" required>
         <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
         <mat-datepicker #picker></mat-datepicker>
       </mat-form-field>
 
       <mat-form-field>
-        <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" placeholder="Fecha Hasta">
+        <input matInput [min]="data.date" [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" placeholder="Fecha Hasta">
         <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
         <mat-datepicker #pickerEnd></mat-datepicker>
       </mat-form-field>

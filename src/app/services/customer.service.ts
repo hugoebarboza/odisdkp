@@ -11,7 +11,7 @@ import { Customer } from '../models/customer';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
-
+import swal from 'sweetalert';
 
 
 @Injectable()
@@ -172,15 +172,27 @@ export class CustomerService {
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 									   .set('Authorization', token);							  
 		this._http.post(this.url+'project/'+id+'/customer', params, {headers: headers}).subscribe(
-    		data => { 
+    		(data: any) => { 
     			  //console.log(data);
     			  this.dialogData = customer;    		      
-			      this.toasterService.success('Cliente almacenado.', 'Exito', {timeOut: 6000,});
+						//this.toasterService.success('Cliente almacenado.', 'Exito', {timeOut: 6000,});
+						if(data.status === 'success'){
+							if(data.lastInsertedId){
+								swal('Cliente almacenado con ID: ', data.lastInsertedId +' exitosamente.', 'success' );
+							}else{
+								swal('Cliente almacenado exitosamente.', 'success' );
+							}
+							
+						}else{
+							swal('No fue posible procesar su solicitud', '', 'error');
+						}
+						
 			      },
 			      (err: HttpErrorResponse) => {	
-			      this.error = err.error.message;
+						this.error = err.error.message;
+						swal('No fue posible procesar su solicitud', '', 'error');
 			      //console.log(err.error.message);
-			      this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 			    });			   
 	}
 
@@ -193,13 +205,15 @@ export class CustomerService {
 		this._http.patch(this.url+'project/'+id+'/customer/'+customerid, params, {headers: headers}).subscribe(
     		data => { 
     			  //console.log(data);
-    			  this.dialogData = customer;    		      
-			      this.toasterService.success('Cliente actualizado.', 'Exito', {timeOut: 6000,});
+						this.dialogData = customer;   
+						swal('Cliente con ID: ', customerid +' actualizado exitosamente.', 'success' ); 		      
+			      //this.toasterService.success('Cliente actualizado.', 'Exito', {timeOut: 6000,});
 			      },
 			      (err: HttpErrorResponse) => {	
-			      this.error = err.error.message;
+						this.error = err.error.message;
+						swal('No fue posible procesar su solicitud', '', 'error');
 			      //console.log(err.error.message);
-			      this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 			    });			   
 	}
 
@@ -210,11 +224,13 @@ export class CustomerService {
 								   .set('Authorization', token);							      
     
     this._http.delete(this.url+'project'+'/'+id+'/'+'customer/'+customerid, {headers: headers}).subscribe(data => {         
-      this.toasterService.success('Cliente Eliminado.', 'Exito', {timeOut: 6000,});
+			//this.toasterService.success('Cliente Eliminado.', 'Exito', {timeOut: 6000,});
+				swal('Cliente con ID: ', customerid +' eliminado exitosamente.', 'success' ); 		      
       },
       (err: HttpErrorResponse) => {
-      	this.error = err.error.message;
-        this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+				this.error = err.error.message;
+				swal('No fue posible procesar su solicitud', '', 'error');
+        //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
       });
   	}
 

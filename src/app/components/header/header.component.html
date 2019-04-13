@@ -66,11 +66,31 @@
                   <mat-icon class="material-icons md-14">account_circle</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
-                  <button mat-menu-item disabled>
-                    <mat-icon>person</mat-icon>
+                  
+                  <button mat-menu-item >
+                      <div class="u-img u-img-margin" *ngIf="isLoading">
+                          <mat-spinner style="margin:0 auto;" mode="indeterminate" [strokeWidth]="2" diameter="25"></mat-spinner>
+                      </div>
+  
+                    <div class="u-img u-img-margin" *ngIf="fotoperfil && fotoperfil.length > 0 && !isLoading">
+                        <img *ngIf="fotoperfil" src="data:image/jpg;base64,{{fotoperfil}}" class="u-img">                        
+                    </div>
+                    <div class="u-img u-img-margin" *ngIf="!fotoperfil && !isLoading">
+                        <img *ngIf="!fotoperfil" src="../../../assets/img/noprofile.png" class="u-img">                        
+                    </div>
                     <span>{{identity.name + ' ' + identity.surname}}</span>
                   </button>
                   <button mat-menu-item disabled>
+                      <mat-icon>mail_outline</mat-icon>
+                      <span>{{identity.email}}</span>
+                  </button>
+
+                  <button mat-menu-item >
+                      <mat-icon>person_outline</mat-icon>
+                      <span><a routerLink="/profile"><i class="ti-user"></i>Mi Perfil</a> ({{identity.role_name}})</span>
+                  </button>
+                                  
+                  <button mat-menu-item >
                     <mat-icon>language</mat-icon>
                     <span>{{identity.country_name}}</span>
                   </button>

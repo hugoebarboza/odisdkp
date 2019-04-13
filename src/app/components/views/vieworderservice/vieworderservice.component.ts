@@ -170,7 +170,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   selectedColumnn = {
-    fieldValue: '',
+    fieldValue: 'orders.create_at',
     criteria: '',
     columnValue: ''
   };
@@ -340,7 +340,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.error = '';
     this.role = 5; //USUARIOS INSPECTORES
     this.open = false;
-
   }
 
   hoverIn(index:number){
@@ -399,7 +398,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
- 
+    //VALORES POR DEFECTO DE FILTRO AVANZADO
+    this.selectedColumnnDate.fieldValue = 'orders.create_at';
+    this.selectedColumnn.fieldValue = 'orders.create_at';
+    this.selectedColumnnDate.columnValueDesde = this.date.value;
+    this.selectedColumnnDate.columnValueHasta = this.date.value;
     //this._portal = this.myTemplate;
     //this.dataSource.paginator = this.paginator;
     //this.dataSource.sort = this.matSort;
@@ -599,6 +602,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
             localStorage.removeItem('token');
             localStorage.removeItem('proyectos');
             localStorage.removeItem('expires_at');
+            localStorage.removeItem('fotoperfil');
             this._router.navigate(["/login"]);          
             console.log(<any>error);
           });
@@ -616,8 +620,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.inspectorMultiFilterCtrl.reset();
     this.inspectorCtrl = new FormControl('');
     this.filterValue = '';
-    this.selectedColumnn.fieldValue = '';
     this.selectedColumnn.columnValue = '';
+    this.selectedColumnn.fieldValue = '';
     this.selectedColumnnDate.fieldValue = '';
     this.selectedColumnnDate.columnValueDesde = '';
     this.selectedColumnnDate.columnValueHasta = '';
@@ -1384,14 +1388,15 @@ private filterRegionMulti() {
   openDialog(): void {
 
     const dialogRef = this.dialog.open(ZipComponent, {
-      width: '350px', 
-      disableClose: true,                 
+      width: '350px',
+      disableClose: true,
       data: { zona: this.zona,
               tiposervicio: this.tipoServicio,
               date: null,
               dateend: null,
               selectedValueservicio: null,
               selectedValuezona: null,
+              createEdit: 'create_at'
             }
 
     });
@@ -1401,7 +1406,7 @@ private filterRegionMulti() {
         //console.log(result);
 
         let link = 'http://gasco.ocachile.cl/gasco/ocaglobalzip/zip.php?tiposervicio=' +
-                    result['selectedValueservicio'] + '&startdate=' +
+                    result['selectedValueservicio'] + '&createUpdate=' + result['createEdit']  + '&startdate=' +
                     this.getDateFormar(result['date']) + '&enddate=';
 
         if (result['dateend'] !== null) {
@@ -1419,7 +1424,7 @@ private filterRegionMulti() {
     });
   }
 
-
+  
   openDialogCsv(): void {
 
     const dialogRef = this.dialog.open(CsvComponent, {
@@ -1618,6 +1623,7 @@ private filterRegionMulti() {
            const FILE_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;";
            const FILE_EXTENSION = '.csv';
            const fileName = "Ordenes";
+           
            var blob = new Blob([valuearrayexcel], {type: FILE_TYPE});
            FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + FILE_EXTENSION);
            this.isLoadingResults = false;
@@ -1627,7 +1633,7 @@ private filterRegionMulti() {
          },
          (error) => {            
            this.isLoadingResults = false;
-           this.error = 'No se encontraron registros que coincidan con su búsqueda';            
+           this.error = 'No se encontraron actividades en el día.';            
            this.toasterService.error('Error: '+this.error, '', {timeOut: 6000,});
            console.log(<any>error);
          }  

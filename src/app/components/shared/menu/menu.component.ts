@@ -4,9 +4,9 @@ import { Router, ActivatedRoute, Params } from '@angular/router';
 import { FormControl } from '@angular/forms';
 
 //SERVICES
-import { UserService } from '../../services/service.index';
+import { UserService } from '../../../services/service.index';
 
-@Component({
+@Component({  
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']

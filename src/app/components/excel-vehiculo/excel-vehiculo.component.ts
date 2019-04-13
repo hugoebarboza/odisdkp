@@ -232,17 +232,17 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
       disableClose: true,
       data: {
               dateend: null,
-              title: 'Fecha de vencimiento'
+              title: 'Fecha de vencimiento',
+              time: {hour: 23, minute: 59}
             }
     });
-
     dialogRef.afterClosed().subscribe(result => {
-
       if (result !== undefined) {
-        this.firtsFormGroup.controls['inputDate'].setValue(result['dateend']);
-        this.dateend = moment(result).format();
+        const newdateend = moment(result.dateend).format('YYYY-MM-DD');
+        const time: any = result.time;
+        this.dateend = newdateend + ' ' + time.hour + ':' + time.minute + ':59';
+        this.firtsFormGroup.controls['inputDate'].setValue(this.dateend);
       }
-
     });
   }
 
@@ -810,8 +810,9 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
               };
 
               if (that.dateend !== undefined) {
-                const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
-                objectJson['vencimiento_date'] = newdateend + ' 23:59:59';
+                //const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
+                //objectJson['vencimiento_date'] = newdateend + ' 23:59:59';
+                objectJson['vencimiento_date'] = that.dateend;
               }
 
               if (banderaJson) {

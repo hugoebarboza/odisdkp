@@ -17,10 +17,11 @@ import { UserService } from '../../services/service.index';
 })
 export class RegisterComponent implements OnInit {
 	
-	forma: FormGroup;
+	public forma: FormGroup;
 	public status: string
 	public title: string;
 	public user: User;
+	public captchaResponse: boolean = true;
 	
 
 	constructor(
@@ -41,6 +42,7 @@ export class RegisterComponent implements OnInit {
 			telefono: new FormControl(null),
 			telefono2: new FormControl(null),
 			condiciones: new FormControl(false),
+			recaptchaReactive: new FormControl(null, Validators.required)
 		}, {validators: this.verifyEqual('password','password2') });
 		//console.log('register.component cargado correctamente');
 	}
@@ -65,6 +67,14 @@ export class RegisterComponent implements OnInit {
 
 	}
 
+	public resolved(captchaResponse: string) {
+		if(captchaResponse){
+			//console.log(`Resolved captcha with response ${captchaResponse}:`);
+			this.captchaResponse = true;
+		}
+		
+	}
+
 	onSubmit(){
 	
 		if(this.forma.invalid){
@@ -77,7 +87,7 @@ export class RegisterComponent implements OnInit {
 			return;
 		}
 		
-		this.user = new User('', this.forma.value.name, this.forma.value.email, this.forma.value.password, 1, this.forma.value.surname, '', 1);
+		this.user = new User('','','','',this.forma.value.name, this.forma.value.email, this.forma.value.password, 1, this.forma.value.surname, '', 1, this.forma.value.telefono, this.forma.value.telefono2);
 
 	 	this._userService.register(this.user).subscribe(
 	 		response => {
@@ -87,7 +97,7 @@ export class RegisterComponent implements OnInit {
 					//this.user = new User('','','','',1,'','',1);
 					this.forma.reset();
 				}else{
-					swal('Error', response.message, 'error');
+					swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 					//this.status = 'error';
 				}
 	 		},

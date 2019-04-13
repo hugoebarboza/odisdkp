@@ -10,7 +10,7 @@
 
 
  <p></p>
-  
+
   <form class="mat-dialog-content" #formControl="ngForm" novalidate="novalidate">
 
     <div class="form">
@@ -34,9 +34,10 @@
     </div>
 
     <!--Textarea for demo purposes-->
-    <div class="form">
+    <div class="form" *ngIf="data && category_id && token.token">
+
       <mat-form-field class="example-full-width">
-        <input matInput [(ngModel)]="data.cc_number"  placeholder="Num. Cliente" [matAutocomplete]="auto" (keyup)="searchCustomer(cc_number.value)" name="cc_number" #cc_number required>
+        <input matInput [(ngModel)]="data.cc_number"  placeholder="Num. Cliente" [matAutocomplete]="auto" (keyup)="searchCustomer(cc_number.value)" name="cc_number" #cc_number required>        
 
         <button mat-button *ngIf="data.cc_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.cc_number=''">
             <mat-icon>close</mat-icon>
@@ -47,14 +48,13 @@
           <mat-option *ngIf="isLoading" class="is-loading">
             <mat-spinner style="margin:0 auto;" mode="indeterminate" [strokeWidth]="4" diameter="50"></mat-spinner>
           </mat-option>          
-          <mat-option *ngFor="let result of results" [value]="result.cc_number" >        
+          <mat-option *ngFor="let result of results" [(value)]="result.cc_number" >        
             <span>{{result.cc_number}}</span>       
           </mat-option>
         </mat-autocomplete>
       <mat-icon matSuffix>mode_edit</mat-icon>
       </mat-form-field>
     </div>
-
 
 
     <div class="form" hidden="true">
@@ -92,7 +92,7 @@
     </mat-select>
     <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
     </mat-form-field>
-    </div>
+  </div>
 
 
 
@@ -215,12 +215,29 @@
             </mat-form-field>
 
 
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.datos == '' && detailatributo.required == 1" class="full-width">
+                <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+                <mat-icon matSuffix>mode_edit</mat-icon>
+              </mat-form-field>
+  
+  
+              <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.datos !== '' && detailatributo.required == 1" class="full-width">
+                <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailatributo.datos" name="{{detailatributo.id}}" required>
+                <mat-icon matSuffix>mode_edit</mat-icon>
+              </mat-form-field>
+  
+
             <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' && detailatributo.required == 0" class="full-width">
               <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" >
               <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>
 
-
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' && detailatributo.required == 1" class="full-width">
+                <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+                <mat-icon matSuffix>mode_edit</mat-icon>
+              </mat-form-field>
+  
+  
 
             <mat-form-field color="accent" *ngIf="detailatributo.type == 'double' && detailatributo.required == 0" class="full-width">
               <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" >
@@ -228,46 +245,40 @@
             </mat-form-field>            
 
 
-
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.required == 0" class="full-width">
-              <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}"></textarea>
-              <mat-icon matSuffix>mode_edit</mat-icon>
-            </mat-form-field>            
-
-
-
-
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.datos == '' && detailatributo.required == 1" class="full-width">
-              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
-              <mat-icon matSuffix>mode_edit</mat-icon>
-            </mat-form-field>
-
-
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.datos !== '' && detailatributo.required == 1" class="full-width">
-              <input matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailatributo.datos" name="{{detailatributo.id}}" required>
-              <mat-icon matSuffix>mode_edit</mat-icon>
-            </mat-form-field>
-
-
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'int' && detailatributo.required == 1" class="full-width">
-              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
-              <mat-icon matSuffix>mode_edit</mat-icon>
-            </mat-form-field>
-
-
-
             <mat-form-field color="accent" *ngIf="detailatributo.type == 'double' && detailatributo.required == 1" class="full-width">
-              <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
-              <mat-icon matSuffix>mode_edit</mat-icon>
+                <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required>
+                <mat-icon matSuffix>mode_edit</mat-icon>
+             </mat-form-field>            
+  
+
+
+
+
+
+
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos == '' && detailatributo.required == 0" class="full-width">
+                <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}"></textarea>
+                <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>            
+  
 
-
-
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.required == 1" class="full-width">
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos == '' && detailatributo.required == 1" class="full-width">
               <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required></textarea>
               <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>            
             
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos != '' && detailatributo.required == 0" class="full-width">
+
+                <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailatributo.datos" name="{{detailatributo.id}}"></textarea>
+                <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+  
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos != '' && detailatributo.required == 1" class="full-width">
+              <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailatributo.datos" name="{{detailatributo.id}}" required></textarea>
+              <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
             
 
             <div  *ngIf="detailatributo.type == 'date' ">
@@ -308,7 +319,7 @@
 
           <div *ngIf="detailatributo.type == 'spinner' && detailatributo.descripcion != 'Inspector'" >
             <div>
-              <mat-form-field >
+              <mat-form-field class="full-width">
                 <mat-select placeholder="{{detailatributo.descripcion}}"  ngModel name="{{detailatributo.id}}" >
                   <div *ngFor="let items of detailatributo.datos | split" >
                     <mat-option *ngFor="let item of items" [value]="item.value" >
@@ -323,7 +334,7 @@
 
           <div *ngIf="detailatributo.type == 'spinner' && detailatributo.descripcion == 'Inspector' && selectedUsers" >
             <div>
-              <mat-form-field >
+              <mat-form-field class="full-width">
                 <mat-select placeholder="{{detailatributo.descripcion}}"  [(ngModel)]="selectedUsers.usuario" name="{{detailatributo.id}}" >
                   <div *ngFor="let items of detailatributo.datos | split: selectedUsers.usuario">
                     <mat-option *ngFor="let item of items" [value]="item.value" >

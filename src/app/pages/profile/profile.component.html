@@ -1,0 +1,151 @@
+<meta name="Description" content="Profile">
+
+
+
+    <div id="wrapper" *ngIf="proyectos">
+
+        <!-- Sidebar -->
+        <app-menu [proyectos]="proyectos"></app-menu>   
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+<div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()">
+<div class="container m-2">
+<!-- SPACE -->  
+</div>
+
+
+            <div class="container-fluid" *ngIf="identity">               
+
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                    <h1 class="h4">Perfil del usuario</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row animated fadeIn">
+                      <div class="col-lg-7">
+                          <div class="card">
+                              <div class="card-body">
+                                  <div class="loading" *ngIf="isLoading">
+                                       <app-loading></app-loading> 
+                                  </div>
+                                  <h6 class="card-subtitle mb-2 text-muted" *ngIf="identity && !isLoading"><mat-icon>account_circle</mat-icon> {{identity.name + ' ' + identity.surname}} </h6>
+                  
+                                  
+                                  <form ngNativeValidate #registerForm="ngForm" (ngSubmit)="guardar( registerForm.value )" class="form p-t-20" *ngIf="identity && !isLoading">
+                                      <div class="form-group">
+                                          <label for="exampleInputuname">Primer Nombre</label>
+                                          <div class="input-group">
+                                              <div class="input-group-addon"><mat-icon>person_outline</mat-icon></div>
+                                              <input [ngModel]="identity.name" name="name" type="text" class="form-control" placeholder="Nombre de usuario" required  [disabled]="!_userService.isRole(7)">
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="exampleInputuname">Primer Apellido</label>
+                                          <div class="input-group">
+                                              <div class="input-group-addon"><mat-icon>person_outline</mat-icon></div>
+                                              <input [ngModel]="identity.surname" name="surname" type="text" class="form-control" placeholder="Nombre de usuario" required [disabled]="!_userService.isRole(7)">
+                                          </div>
+                                      </div>
+              
+                                      <div class="form-group">
+                                          <label for="exampleInputEmail1">Email Primario</label>
+                                          <div class="input-group">
+                                              <div class="input-group-addon"><mat-icon>mail_outline</mat-icon></div>
+                                              <input [ngModel]="identity.email" name="email" type="email" class="form-control" placeholder="Correo del usuario" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required [disabled]="!_userService.isRole(7)">
+                                          </div>
+                                      </div>
+              
+                                      <div class="form-group row">
+                                              <div class="col-9">
+                                              <label for="exampleInput">DNI</label>
+                                              <div class="input-group">
+                                                  <div class="input-group-addon"><mat-icon>fingerprint</mat-icon></div>
+                                                  <input [ngModel]="identity.dni" name="dni" type="text" class="form-control" placeholder="DNI del usuario" [disabled]="!_userService.isRole(7)">
+                                              </div>
+                                              </div>
+                                              <div class="col-3">
+                                              <label for="exampleInput">Dv</label>
+                                              <div class="input-group">
+                                                 <input [ngModel]="identity.dv" name="dv" type="text" class="form-control" placeholder="DV del usuario" [disabled]="!_userService.isRole(7)">
+                                              </div>
+                                              </div>
+                                      </div>
+                                      
+              
+              
+                                      <div class="form-group">
+                                              <label for="exampleInput">Teléfono</label>
+                                              <div class="input-group">
+                                                  <div class="input-group-addon"><mat-icon>smartphone</mat-icon></div>
+                                                  <input [ngModel]="identity.telefono1" name="telefono1" type="text" class="form-control" placeholder="Teléfono del usuario">
+                                              </div>
+                                      </div>
+              
+                                      <div class="form-group">
+                                              <label for="exampleInput">Otro Teléfono</label>
+                                              <div class="input-group">
+                                                  <div class="input-group-addon"><mat-icon>smartphone</mat-icon></div>
+                                                  <input type="text" class="form-control" id="inputTelefono" name="telefono2" [ngModel]="identity.telefono2" placeholder="Otro Teléfono del usuario">
+                                              </div>
+                                       </div>
+                  
+                                          
+                                      <button type="submit" class="btn btn-primary waves-effect waves-light m-r-10" [disabled]="!registerForm.form.valid">
+                                        <i class="fa fa-save"></i>
+                                        Guardar
+                                      </button>
+                                  </form>
+                              </div>
+                          </div>
+                      </div>
+              
+                  
+                  
+                      <div class="col-lg-5">
+                          <div class="card">
+                              <div class="loading" *ngIf="isLoadingPerfil">
+                                  <app-loading></app-loading> 
+                              </div>                        
+                              <div class="card-body" align="center" *ngIf="!isLoadingPerfil">
+                                  <h4 class="card-title"><mat-icon>account_circle</mat-icon> Fotografía del usuario</h4>
+                                  <h6 class="card-subtitle  mb-2 text-muted">{{identity.name + ' ' + identity.surname}} </h6>
+                                  <img *ngIf="!imagenTemp && fotoperfil && fotoperfil.length > 0" src="data:image/jpg;base64,{{fotoperfil}}" class="img-fluid">
+                                  <img *ngIf="!imagenTemp && !fotoperfil" src="../../../assets/img/noprofile.png" class="img-fluid">
+                                  <img *ngIf="imagenTemp" [src]="imagenTemp" class="img-fluid">
+                  
+                                  <input (change)="seleccionImage($event.target.files)" type="file">
+              
+                                  <br><br>
+                  
+                                  <button (click)="cambiarImagen()" [disabled]="!imagenSubir" type="button" class="btn btn-block btn-primary waves-effect waves-light m-r-10">
+                                      <i class="fa fa-save"></i>
+                                      Actualizar Foto
+                                    </button>
+                              </div>
+                          </div>
+                      </div>
+                  
+                  </div>
+              
+
+
+            <script>
+            $('#myTab a').on('click', function (e) {
+              e.preventDefault()
+              $(this).tab('show')
+            })
+            </script>
+                
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>
+
+
+<div class="container-fluid" *ngIf="identity">               
+
+
+
+</div>

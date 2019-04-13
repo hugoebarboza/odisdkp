@@ -52,30 +52,43 @@ export class DashboardComponent implements OnInit, OnDestroy {
  
 	ngOnInit(){	  	
 		//this.loadData();
-		this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
-		response => {
-				if (response.status == 'success'){
-					this.proyectos = response.datos;
-					let key = 'proyectos';
-					localStorage.setItem(key, JSON.stringify(this.proyectos));
-					//console.log(this.proyectos.length);
-				}
-					//console.log(this._servicios);
-			},
-		error => {
-				localStorage.removeItem('identity');
-				localStorage.removeItem('token');
-				localStorage.removeItem('proyectos');
-				localStorage.removeItem('expires_at');
-				this._router.navigate(["/login"]);
-		   },
-		  () => console.log('complete dashboard')
-		);
+		if(this.identity && this.token){
+			this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+				response => {
+						if (response.status == 'success'){
+							this.proyectos = response.datos;
+							let key = 'proyectos';
+							this._userService.saveStorage(key, this.proyectos);
+							//localStorage.setItem(key, JSON.stringify(this.proyectos));
+							//console.log(this.proyectos.length);
+						}
+							//console.log(this._servicios);
+					},
+				error => {
+						localStorage.removeItem('identity');
+						localStorage.removeItem('token');
+						localStorage.removeItem('proyectos');
+						localStorage.removeItem('expires_at');
+						localStorage.removeItem('fotoprofile');
+						this._router.navigate(["/login"]);
+				   },
+				  () => console.log('complete dashboard')
+				);		
+		}else{
+			localStorage.removeItem('identity');
+			localStorage.removeItem('token');
+			localStorage.removeItem('proyectos');
+			localStorage.removeItem('expires_at');
+			localStorage.removeItem('fotoprofile');
+			this._router.navigate(["/login"]);
+		}
 		
 	}
 
 	ngOnDestroy(){
- 		this.subscription.unsubscribe();
+		if(this.subscription){
+			this.subscription.unsubscribe();
+		}
 		//console.log("ngOnDestroy unsuscribe");
 	}
 

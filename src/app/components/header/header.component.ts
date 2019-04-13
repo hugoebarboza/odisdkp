@@ -1,14 +1,12 @@
 import { Component, OnInit, DoCheck } from '@angular/core';
 import {Router, ActivatedRoute, Params} from '@angular/router';
 
-//MODELS
-import { User } from '../../models/user';
 
 //SERVICES
 import { UserService } from '../../services/service.index';
 
 import {  AngularFirestore,  AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 export interface Item { id: number; }
 
 
@@ -33,18 +31,20 @@ export class HeaderComponent {
 
 	public title: string;
 	public titlelogout: string;
-	public identity: any;
+  public fotoperfil: string = '';
+  public identity: any;
+  public isLoading: boolean = true;
 	public token: any;
+  
 
   //private itemsCollection: AngularFirestoreCollection<Item>;
 
   private itemsCollection: AngularFirestoreCollection<Item>;
   items: Observable<Item[]>;
   
-	
+	subscription: Subscription;
 
 	constructor(
-		private _route: ActivatedRoute,
 		private _router: Router,		
 		private _userService: UserService,
 		public dialog: MatDialog,
@@ -54,14 +54,17 @@ export class HeaderComponent {
 		this.title = 'Header';	  	
 		this.titlelogout = '¿ Está seguro de salir ?';	  	
   	this.identity = this._userService.getIdentity();
-  	this.token = this._userService.getToken();
-
+    this.token = this._userService.getToken();
+    this.fotoperfil = this._userService.getFotoProfile();
     this.itemsCollection = afs.collection<Item>('items');
     this.items = this.itemsCollection.valueChanges();
+    this.isLoading = true;
 	}
  
 	ngOnInit(){
-
+    if(this.identity){
+      this.isLoading = false;
+    }
     //this.addTodo(4);
     //console.log(this.itemsCollection);
 	  	if (this.identity == null ){
@@ -72,6 +75,13 @@ export class HeaderComponent {
 
 	}
 
+  ngOnDestroy() {
+    //console.log('La página se va a cerrar');
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
+
+  }
 
   addTodo(iddb: number) {
       this.itemsCollection.add({ id: iddb });
@@ -79,9 +89,16 @@ export class HeaderComponent {
   }
 
   ngDoCheck(){
-    this.identity = this._userService.getIdentity();
-    this.token = this._userService.getToken();    
+    this.identity = this._userService.getIdentity();  
+    this.token = this._userService.getToken();
+    this.fotoperfil = this._userService.getFotoProfile();
+    if(this.identity){
+      this.isLoading = false;
+    }
+    
   }
+
+
 
   support(value:number) {
     const dialogRef = this.dialog.open(AddSupportComponent, {

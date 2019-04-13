@@ -21,11 +21,12 @@
                 </mat-form-field>
                 <button  class="btnUpload" mat-raised-button (click)="Upload()" [disabled]="true"  *ngIf="!bandera">Validar</button>
                 <button  class="btnUpload" mat-raised-button (click)="Upload()" *ngIf="bandera">Validar</button>
+
+
                 <mat-form-field *ngIf="dateend !== undefined && (!checkboxRegistro && !checkboxUpdateVIN && !checkboxPicking)" class="marginLeftX2" >
-                  <input matInput [matDatepicker]="pickerEnd" placeholder="Fecha vencimiento" formControlName="inputDate" (readonly)="true" >
-                  <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
-                  <mat-datepicker #pickerEnd></mat-datepicker>
+                    <input matInput placeholder="Fecha vencimiento" formControlName="inputDate" (readonly)="true">
                 </mat-form-field>
+                
                 <mat-slide-toggle class="btnUpload" (change)="checkPicking($event)" [disabled]="checkboxRegistro ||checkboxUpdateVIN || checkboxAuto">
                   Generar picking
                 </mat-slide-toggle>

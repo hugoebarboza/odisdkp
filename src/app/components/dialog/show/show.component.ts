@@ -1,13 +1,7 @@
-import { Component, Inject, ViewChild, ElementRef, OnInit, OnDestroy  } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy  } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { MatTableDataSource} from '@angular/material';
-import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
-import { trigger, state, style, animate, transition } from '@angular/animations';
-import { Observable, Subscription } from 'rxjs';
-
-
-// material
-import {MatGridListModule} from '@angular/material/grid-list';
+import { DomSanitizer } from '@angular/platform-browser';
+import { Subscription } from 'rxjs';
 
 
 //SERVICES
@@ -19,7 +13,7 @@ import { UserService } from '../../../services/service.index';
 import { AtributoFirma } from '../../../models/atributofirma';
 import { Order } from '../../../models/order';
 import { OrderAtributoFirma } from '../../../models/orderatributofirma';
-
+import { User } from '../../../models/user';
 
 //PDF
 import * as jsPDF from 'jspdf';
@@ -35,32 +29,43 @@ import html2canvas from 'html2canvas';
 
 
 export class ShowComponent implements OnInit, OnDestroy {
+
 	public title: string;
   public identity: any;
-  public token: any;
   public order: Order[] = [];
   public show:boolean = false;
-  isImageLoading: boolean = false;
-  loading: boolean;
+  public sign:boolean = false;
+  public token: any;
+
   atributo= new Array();  
   atributofirma: AtributoFirma[] = [];
-  orderatributo= new Array();
-  orderatributofirma: OrderAtributoFirma[] = [];
-  listimageorder = new Array();
-  listfirmaimageorder = new Array();
-  displayedColumns: string[] = ['id', 'valor'];  
   counter;
   count = 0;
   dataColumns = new Array();
+  displayedColumns: string[] = ['id', 'valor'];
   imageToShow = new Array();
   imageRows = new Array();
+  isImageLoading: boolean = false;
+  loading: boolean;
+  listimageorder = new Array();
+  listfirmaimageorder = new Array();
+  listfirmauser = new Array();
+  orderatributo= new Array();
+  orderatributofirma: OrderAtributoFirma[] = [];
+  usercreate:User[];
+  userupdate:User[];
   
-margins = {
-  top: 70,
-  bottom: 40,
-  left: 30,
-  width: 550
-};
+  atributofirmauser = [
+    {index: '0', descripcion: 'Firma Informador'},
+    {index: '1', descripcion: 'Firma Editor'}
+  ];
+
+  margins = {
+   top: 70,
+   bottom: 40,
+   left: 30,
+   width: 550
+  };
 
   subscription: Subscription;
 
@@ -68,7 +73,6 @@ margins = {
     private _userService: UserService,        
     private _orderService: OrderserviceService,
   	public dialogRef: MatDialogRef<ShowComponent>,
-    private sanitizer: DomSanitizer,
 	  @Inject(MAT_DIALOG_DATA) public data: any
   	) 
   { 
@@ -111,25 +115,30 @@ margins = {
          }       
           this.order = response.datos;
         if(this.order.length > 0){
-              //console.log(this.order);
               this.atributo = response.atributo;
               this.orderatributo = response.orderatributo;
-
+              if(this.order[0].sign && this.order[0].sign > 0){
+                this.sign = true;            
+                if(this.order[0].usercreate_id && this.order[0].usercreate_id >0 ){
+                  this.usercreate = this.order[0].usercreate_id; 
+                  this.getFirmaUser(this.usercreate);
+                }
+                if(this.order[0].userupdate_id && this.order[0].userupdate_id >0 ){
+                  this.userupdate = this.order[0].userupdate_id; 
+                  this.getFirmaUser(this.userupdate);
+                }
+              }
               if(this.order[0].orderatributofirma.length > 0){
                 this.orderatributofirma = this.order[0].orderatributofirma;
                 this.getFirmaImage(this.orderatributofirma);
-                //console.log(this.orderatributofirma);
               }
               if(this.order[0].atributo_firma.length > 0){
                 this.atributofirma = this.order[0].atributo_firma;
-                //console.log(this.atributofirma);
               }
-                //console.log(this.orderatributo);
                 this.loading = false;
           } else{        
                 this.loading = false;
           }
-          //console.log(this.servicename);        
       }
       );      
    }
@@ -144,7 +153,30 @@ margins = {
   }
 
 
-  public getFirmaImage(datafirma: any){   
+  public getFirmaUser(id: any){
+    this.subscription = this._userService.getFirmaUser(this.token.token, id).subscribe(
+      response => {        
+        if(!response){
+          return;        
+        }
+          if(response.status == 'success'){ 
+            this.listfirmauser.push(response.datos);
+            if(this.listfirmauser){
+              //console.log(this.listfirmauser);
+              //console.log(this.listfirmauser.length);
+            }
+
+          }
+      },
+          error => {
+          console.log(<any>error);
+          }   
+      );
+      
+}
+
+
+  public getFirmaImage(datafirma: any){
     this.subscription = this._orderService.getFirmaImageOrder(this.token.token, this.data['order_id']).subscribe(
       response => {        
         if(!response){

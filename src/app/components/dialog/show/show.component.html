@@ -326,6 +326,38 @@
       </tr>
         
 
+      <tr align="middle" *ngIf="sign && listfirmauser.length > 0">
+        <th>
+            <br>
+            <hr>
+              <div class="container">
+                  <div class="row">
+                    <div class="col" *ngFor="let detailatributofirmauser of atributofirmauser">
+                      <div *ngFor="let firmauser of listfirmauser;let i = index">
+
+
+                          <div class="container-fluid" *ngIf="i == detailatributofirmauser.index">
+                              <div class="row">
+                                <div class="col" >
+                                    <img *ngIf="firmauser[0]['archivo']" src="data:image/jpg;base64,{{firmauser[0]['archivo']}}" style="max-height: 150px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">
+                                </div>                        
+                                <div class="w-100"></div>
+                                <div class="col">Firma {{firmauser[0]['user']}}</div>
+                              </div>
+                          </div>
+
+                        <div >
+                        </div>
+
+                      </div>                      
+                    </div>
+                  </div>
+              </div>
+            <br>
+          </th>
+      </tr>
+
+
       <tr align="middle">
         <th>
           <hr>

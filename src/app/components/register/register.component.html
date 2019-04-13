@@ -1,4 +1,4 @@
- <main role="main" class="container animated fadeIn Fast">
+ <main role="main" class="container-fluid animated fadeIn Fast">
       <div class="my-3 p-3 bg-white rounded box-shadow">
         <h6 class="border-bottom border-gray pb-2 mb-0"><h2><i class="material-icons">person</i> {{title}}</h2></h6>
         <div class="media text-muted pt-3">
@@ -7,6 +7,12 @@
                   
           <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="col-md-12" (ngSubmit)="onSubmit()" >
 
+            <div class="container p-2">
+              <div class="row justify-content-md-center">
+                <img src="../../../assets/img/logoocapng.png" alt="Login Page" width="118" height="64">
+              </div>
+            </div>
+  
             <div class="text-center mb-4">
               <h1 class="h3 mb-3 font-weight-normal">Ingrese sus datos</h1>
               <p>Por favor ingrese sus datos de registro, por seguridad <code>solo se permite</code> el uso de correo OCA Global. <a href=""></a></p>
@@ -118,8 +124,13 @@
                 </div>
             </div>
 
+            <div class="form-group row">
+              <div class="col-md-12">
+                  <re-captcha formControlName="recaptchaReactive"></re-captcha>
+              </div>
+            </div>
             
-            <button type="submit" class="btn btn-primary btn-md" >Registrarme</button>
+            <button type="submit" class="btn btn-primary btn-md" [disabled]="forma.invalid || !captchaResponse">Registrarme</button>
           </form>
 
           </div>
