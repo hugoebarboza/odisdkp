@@ -1,23 +1,19 @@
-import { Component, OnInit , Inject, ViewChild, Input, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
+import { Component, OnInit , ViewChild, Input, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
 import * as XLSX from 'xlsx';
-import { DataService } from '../../services/data.service';
 import { FormBuilder, FormGroup, Validators, FormControl } from '@angular/forms';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import * as FileSaver from 'file-saver';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
-
-import { Observable, Subscription } from 'rxjs';
+import {MatDialog, MatDialogRef} from '@angular/material';
+import { Subscription } from 'rxjs';
 
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 
 // SERVICES
-import { OrderserviceService } from '../../services/orderservice.service';
-import { UserService } from '../../services/service.index';
+import { DataService, OrderserviceService, UserService } from '../../services/service.index';
 
 // MODEL
-import { Service } from '../../models/Service';
+import { Service } from '../../models/types';
 
 // MOMENT
 import * as _moment from 'moment';

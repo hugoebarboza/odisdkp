@@ -3,11 +3,15 @@ import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs/';
 import 'rxjs/add/operator/map';
 
-import swal from 'sweetalert';
 
 //MODELS
-import { User } from '../../models/user';
-import { Proyecto } from '../../models/proyecto';
+import { 
+	Departamento,
+	Proyecto,
+	User
+
+} from '../../models/types';
+	
 
 //SETTINGS
 import { GLOBAL } from '../global';
@@ -15,11 +19,13 @@ import { GLOBAL } from '../global';
 @Injectable()
 export class UserService {
 	public url:string;
+	public departamentos: Array<Departamento>;
 	public idaccount;
 	public identity;
 	public token;	
 	public proyectos: Array<Proyecto>;
-	public usuario: User;
+	public usuario: any;
+	
 
 	constructor(
 		public _http: HttpClient,
@@ -28,8 +34,19 @@ export class UserService {
 
 	){
 		this.url = GLOBAL.url;
+		this.cargarStorage();
 	}
 
+	cargarStorage() {
+
+    if ( localStorage.getItem('token')) {
+			this.identity = JSON.parse( localStorage.getItem('identity') );
+    } else {
+      this.token = '';
+      this.identity = null;
+    }
+
+  }
 
   	getQuery( query:string, token ){  		
 		const url = this.url+query;
@@ -51,9 +68,56 @@ export class UserService {
 						 });				
 	}
 
+	registeruseremployee (token: any, user:User): Observable<any>{
+		let json = JSON.stringify(user);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+		return this._http.post(this.url+'registeruseremployee', params, {headers: headers})
+						 .map( (resp: any) => {
+							   return resp;
+						 });				
+	}
+
+
+	delete(token: any, id:number): Observable<any>{
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+
+
+		return this._http.delete(this.url+'user/'+id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 
 
 	update(token: any, user:User, id:number): Observable<any>{
+		let json = JSON.stringify(user);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+
+
+		return this._http.post(this.url+'updateuser/'+id, params, {headers: headers})
+						 .map( (resp: any) => {
+							if(resp.status == 'success'){
+								if (user.id === this.identity.sub) {
+									let usuarioDB: User = resp.usuario;
+									let key = 'identity';
+									this.saveStorageUser(key, usuarioDB);
+								}	
+							}
+
+							 return resp;
+						 });				
+	}
+
+	updateProfile(token: any, user:User, id:number): Observable<any>{
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
 
@@ -72,6 +136,7 @@ export class UserService {
 						 });				
 	}
 
+
 	updateFotoProfile(token: any, archivo: any ): Observable<any> {
 		let params = new FormData(); 
 		params.append('image', archivo); 
@@ -83,6 +148,17 @@ export class UserService {
 						});				
     }
 
+		updateFotoProfileUser(token: any, archivo: any, id:number ): Observable<any> {
+			let params = new FormData(); 
+			params.append('image', archivo); 
+			let headers = new HttpHeaders().set('Authorization', token);
+	
+			return this._http.post(this.url+'uploadfileperfiluser/'+id, params, {headers: headers})
+							 .map( (resp: any) => {
+									return resp;
+							});				
+			}
+	
 
 	signup(user:any, getToken=null): Observable<any>{
 		if(getToken != null){
@@ -152,9 +228,30 @@ export class UserService {
 		return this.getQuery('user/'+id+'/perfil', token);
 	}
 
+	getRoleUser(token: any): Observable<any> {								  
+		return this.getQuery('usersroles', token);
+	}
+
 	getFirmaUser(token: any, id: string): Observable<any> {								  
 		return this.getQuery('user/'+id+'/firma', token);
 	}
+
+	
+	getUserPaginate(token: string, id: number, page: number = 0): Observable<User[]>{		
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+										 .set('Authorization', token);
+		
+		let paginate = `?page=${page}`;
+
+		let Url = this.url+'userspaginate/'+id+'/page'+paginate;
+
+		
+		return this._http.get<User[]>(Url, {headers: headers});		
+	}
+
+
+
 
 	saveStorage( key:any, data: any ) {
 		if (key && data){
@@ -178,11 +275,25 @@ export class UserService {
 			this.usuario.dv = data.dv;
 			this.usuario.telefono1 = data.telefono1;
 			this.usuario.telefono2 = data.telefono2;
+			this.usuario.role = data.role_id;
 			localStorage.setItem(key, JSON.stringify(this.usuario));
 			localStorage.setItem(account, JSON.stringify(this.usuario.email));	
 		}else{
 			return;
 		}
+
+	}
+
+	searchUser(token:string, id: number, page: number = 0, termino: string){
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+										 .set('Authorization', token);
+		
+		let paginate = `?page=${page}`;
+
+		let Url = this.url+'searchuser/'+id+'/termino/'+termino+paginate;
+		
+		return this._http.get<User[]>(Url, {headers: headers});		
 
 	}
 
@@ -217,6 +328,17 @@ export class UserService {
 		}else{
 			return false;
 		}
+	}
+
+	getDepartamentos(){
+		let departamentos = JSON.parse(localStorage.getItem('departamentos'));
+		if (departamentos != "Undefined"){
+			this.departamentos = departamentos;
+		}else{
+			this.departamentos= null;
+		}
+		return this.departamentos;
+
 	}
 
 
@@ -257,6 +379,15 @@ export class UserService {
 		return this._http.post(this.url+'changepassword', params, {headers: headers});
 	}
 
+	changepasswordprofile(token:any, id:number, user:any): Observable<any> {
+
+		let json = JSON.stringify(user);
+		let params = 'json='+json;
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+									   .set('Authorization', token);							  
+							  
+		return this._http.post(this.url+'changepasswordprofile/'+id, params, {headers: headers});
+	}
 
 
 }

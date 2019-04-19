@@ -19,7 +19,9 @@ export class AuthguardService implements CanActivate {
   		//console.log('paso authguard');
   		return true;	
   	}else{
-  		//console.error('nooooo paso authguard');
+			//console.error('nooooo paso authguard');
+			localStorage.removeItem('departamentos');
+			localStorage.removeItem('fotoprofile');
 		  localStorage.removeItem('identity');
 		  localStorage.removeItem('token');
 		  localStorage.removeItem('proyectos');

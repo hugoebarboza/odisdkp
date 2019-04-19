@@ -7,20 +7,34 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgSelectModule } from '@ng-select/ng-select';
 
-//ROUTER
-import { RouterModule } from '@angular/router';
-import { routing, appRoutingProviders } from './app.routing';
-
-//MATERIAL
-import {MaterialModule} from './material-module';
-
-
 //FIREBASE
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
+
+//MATERIAL
+import {MaterialModule} from './material-module';
+
+//MAPS
+import { AgmCoreModule } from '@agm/core';
+import { AgmDirectionModule} from 'agm-direction'; 
+
+//MODAL
+import { ModalMapaComponent } from './components/modal/modalmapa/modalmapa.component';
+import { ModalImageComponent } from './components/modal/modalimage/modalimage.component';
+import { ModalUploadImageComponent } from './components/modal/modaluploadimage/modaluploadimage.component';
+
+
+//ROUTER
+import { RouterModule } from '@angular/router';
+import { routing, appRoutingProviders } from './app.routing';
+
+//SERVICE MODULES
+import { ServiceModule } from './services/service.module';
+
+
 
 //MAIN NG-BOOTSTRAP MODULE
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
@@ -76,10 +90,10 @@ import { FilelistComponent } from './components/dialog/filelist/filelist.compone
 import { FileListComponent } from './components/file-list/file-list.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
 import { FootermainComponent } from './components/shared/footermain/footermain.component';
-import { FooterComponent } from './components/footer/footer.component';
+import { FooterComponent } from './components/shared/footer/footer.component';
 import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
 import { GestionComponent } from './components/gestion/gestion.component';
-import { HeaderComponent } from './components/header/header.component';
+import { HeaderComponent } from './components/shared/header/header.component';
 import { LoginComponent } from './components/login/login.component';
 import { LoadingComponent } from './components/shared/loading/loading.component';
 import { MenuComponent } from './components/shared/menu/menu.component';
@@ -94,6 +108,7 @@ import { RegisterComponent } from './components/register/register.component';
 import { ServiceComponent } from './components/service/service.component';
 import { TableroComponent } from './components/tablero/tablero.component';
 import { UsertableComponent } from './components/usertable/usertable.component';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { ViewOrderDetailComponent } from './components/views/vieworderdetail/vieworderdetail.component';
 import { VieworderserviceComponent } from './components/views/vieworderservice/vieworderservice.component';
 import { ViewOrderTimeSpentComponent } from './components/views/viewordertimespent/viewordertimespent.component';
@@ -106,6 +121,7 @@ import { ViewProjectDetailComponent } from './components/views/viewprojectdetail
 import { AddComponent } from './components/dialog/add/add.component';
 import { AddCalendarComponent } from './components/dialog/addcalendar/addcalendar.component';
 import { AddcustomerComponent } from './components/dialog/addcustomer/addcustomer.component';
+import { AddUserComponent } from './components/dialog/adduser/adduser.component';
 import { AddServiceComponent } from './components/dialog/addservice/addservice.component';
 import { AddSupportComponent } from './components/dialog/widget/addsupport/addsupport.component';
 import { CargaComponent } from './components/dialog/carga/carga.component';
@@ -119,17 +135,17 @@ import { DownloadComponent } from './components/dialog/download/download.compone
 import { EditComponent } from './components/dialog/edit/edit.component';
 import { EditcustomerComponent } from './components/dialog/editcustomer/editcustomer.component';
 import { EditServiceComponent } from './components/dialog/editservice/editservice.component';
+import { EditUserComponent } from './components/dialog/edituser/edituser.component';
 import { LogoutComponent } from './components/dialog/logout/logout.component';
 import { ShowComponent } from './components/dialog/show/show.component';
 import { ShowcustomerComponent } from './components/dialog/showcustomer/showcustomer.component';
+import { ShowProfileSecurityComponent } from './components/dialog/showprofilesecurity/showprofilesecurity.component';
+import { ShowProfileComponent } from './components/dialog/showprofile/showprofile.component';
 import { SettingsComponent } from './components/dialog/settings/settings.component';
 import { SettingscustomerComponent } from './components/dialog/settingscustomer/settingscustomer.component';
 import { VehiculoOverviewDialog } from './components/excel-vehiculo/excel-vehiculo.component';
 import { ZipComponent } from './components/dialog/zip/zip.component';
 
-
-//MODULES
-import { ServiceModule } from './services/service.module';
 
 //PIPE MODULE
 import { PipesModule } from './pipes/pipes.module';
@@ -138,17 +154,6 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
 
 //SERVICES
 import { AuthguardService } from './services/authguard.service';
-import { CargaImagenesService } from './services/carga-imagenes.service';
-import { CountriesService } from './services/countries.service';
-import { CustomerService } from './services/customer.service';
-import { DataService } from './services/data.service';
-import { DashboardService } from './services/dashboard.service';
-import { ExcelService } from './services/excel.service';
-import { ItemFirebaseService } from './services/itemfirebase.service';
-import { MapaService } from './services/mapa.service';
-import { OrderserviceService } from './services/orderservice.service';
-import { ProjectsService } from './services/projects.service';
-import { ZipService } from './services/zip.service';
 
 
 //Import toast module
@@ -166,13 +171,6 @@ import { registerLocaleData } from '@angular/common';
 //import { RouterResolver } from './router.resolver';
 
 
-//MAPS
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule} from 'agm-direction'; 
-
-//MODAL
-import { ModalMapaComponent } from './components/modal/modalmapa/modalmapa.component';
-import { ModalImageComponent } from './components/modal/modalimage/modalimage.component';
 
 //PWA
 import { ServiceWorkerModule } from '@angular/service-worker';
@@ -182,6 +180,9 @@ import { environment } from '../environments/environment';
 import { DropZoneDirective } from './directives/drop-zone.directive';
 import { NgDropFilesDirective } from './directives/ng-drop-files.directive';
 
+
+// Global vars
+import { GLOBAL } from './services/global';
 
 registerLocaleData(localeEs);
 
@@ -193,6 +194,7 @@ registerLocaleData(localeEs);
     AddcustomerComponent,
     AddServiceComponent,
     AddSupportComponent,
+    AddUserComponent,
     CalendarComponent,
     CargaComponent,
     ChangepasswordComponent,    
@@ -210,7 +212,8 @@ registerLocaleData(localeEs);
     DropZoneDirective,
     EditcustomerComponent,
     EditComponent,
-    EditServiceComponent,    
+    EditServiceComponent,
+    EditUserComponent,  
     ExcelComponent,
     ExcelVehiculoComponent,
     FileComponent,
@@ -230,6 +233,7 @@ registerLocaleData(localeEs);
     MapaFullWidthComponent,
     ModalMapaComponent,
     ModalImageComponent,
+    ModalUploadImageComponent,
     MynavComponent,
     NgDropFilesDirective,
     NotfoundComponent,
@@ -241,8 +245,11 @@ registerLocaleData(localeEs);
     SettingscustomerComponent, 
     ShowComponent,
     ShowcustomerComponent,
+    ShowProfileSecurityComponent,
+    ShowProfileComponent,
     ServiceComponent,
     UsertableComponent,
+    UsuariosComponent,
     ViewOrderDetailComponent,
     VieworderserviceComponent,
     ViewprojectorderComponent,
@@ -264,8 +271,8 @@ registerLocaleData(localeEs);
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     AgmCoreModule.forRoot({
-      apiKey: 'AIzaSyAg5Y0POCb-IZd3KgqFHW51BT_7lJGFNwg'
-    }),   
+      apiKey: GLOBAL.agmapikey
+    }),
     AngularSplitModule.forRoot(),
     AngularCalendar.forRoot({
       provide: AngularDateAdapter,
@@ -310,6 +317,7 @@ registerLocaleData(localeEs);
     AddcustomerComponent, 
     AddServiceComponent,
     AddSupportComponent,
+    AddUserComponent,
     CsvComponent,
     CsvCustomerComponentComponent,
     CsvServiceComponent,
@@ -322,12 +330,16 @@ registerLocaleData(localeEs);
     EditComponent,
     EditcustomerComponent, 
     EditServiceComponent,
+    EditUserComponent,
     FileComponent, 
     LogoutComponent,
     ModalMapaComponent, 
-    ModalImageComponent, 
+    ModalImageComponent,
+    ModalUploadImageComponent,
     ShowComponent, 
-    ShowcustomerComponent, 
+    ShowcustomerComponent,
+    ShowProfileSecurityComponent,
+    ShowProfileComponent,
     SettingsComponent, 
     SettingscustomerComponent, 
     VehiculoOverviewDialog,
@@ -336,18 +348,7 @@ registerLocaleData(localeEs);
   providers: [
     appRoutingProviders, 
     AuthguardService, 
-    CargaImagenesService, 
-    CountriesService, 
-    CustomerService, 
-    DashboardService, 
-    DataService, 
-    ExcelService, 
-    ItemFirebaseService, 
-    MapaService, 
     NgbActiveModal, 
-    OrderserviceService, 
-    ProjectsService,        
-    ZipService,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},

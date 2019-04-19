@@ -19,15 +19,12 @@ import { EditServiceComponent } from '../dialog/editservice/editservice.componen
 import { DeleteServiceComponent } from '../dialog/deleteservice/deleteservice.component';
 
 //MODELS
-import { Proyecto } from '../../models/proyecto';
-import { Order } from '../../models/order';
-import { Service } from '../../models/Service';
+import { Order, Proyecto } from '../../models/types';
 
 
 //SERVICES
-import { ProjectsService } from '../../services/projects.service';
 import { SettingsNgxEasyTableService } from '../../services/settings/settings-ngx-easy-table.service';
-import { UserService } from '../../services/service.index';
+import { ProjectsService, UserService } from '../../services/service.index';
 
 
 
@@ -91,7 +88,7 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
   @Input() id : number;
 
   constructor(	
-    private _router: Router,        
+    private _router: Router,       
     public _userService: UserService,  
     public _proyectoService: ProjectsService,
     public dialog: MatDialog,
@@ -131,10 +128,12 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
         (error: any) => {
             this.loading = false;
             this.isRateLimitReached = true;
+            localStorage.removeItem('departamentos');
             localStorage.removeItem('identity');
             localStorage.removeItem('token');
             localStorage.removeItem('proyectos');
             localStorage.removeItem('expires_at');
+            localStorage.removeItem('fotoprofile');              
             this._router.navigate(["/login"]);          
             console.log(<any>error);
           }

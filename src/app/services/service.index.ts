@@ -1,3 +1,13 @@
-
+export { CargaImagenesService } from './firebase/carga-imagenes.service';
+export { CountriesService } from './country/countries.service';
+export { CustomerService } from './customer/customer.service';
+export { DataService } from './data/data.service';
+export { DashboardService } from './data/dashboard.service';
+export { ExcelService } from './utility/excel.service';
+export { ItemFirebaseService } from './firebase/itemfirebase.service';
+export { MapaService } from './mapa/mapa.service';
+export { OrderserviceService } from './data/orderservice.service';
+export { ProjectsService } from './data/projects.service';
 export { SettingsService } from './settings/settings.service';
 export { UserService } from './usuario/user.service';
+export { ZipService } from './utility/zip.service';

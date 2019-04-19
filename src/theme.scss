@@ -25,4 +25,16 @@
 	@include angular-material-theme($my-theme);	
 }
 
+.dark-theme {
+	// theme colors
+	$primary-dark: mat-palette($mat-pink, 700);
+	$accent-dark: mat-palette($mat-green);
+	$warn-dark: mat-palette($mat-red);
+  
+	$theme-dark: mat-dark-theme($primary-dark, $accent-dark, $warn-dark);
+  
+	// create theme from palettes
+	@include angular-material-theme($theme-dark);
+  }
+
 

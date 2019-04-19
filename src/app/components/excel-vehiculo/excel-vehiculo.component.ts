@@ -1,6 +1,5 @@
 import { Component, OnInit , ViewChild, Inject, Input, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
 import * as XLSX from 'xlsx';
-import { DataService } from '../../services/data.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
@@ -9,11 +8,10 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 // MODEL
-import { Service } from '../../models/Service';
+import { Service } from '../../models/types';
 
 // SERVICES
-import { OrderserviceService } from '../../services/orderservice.service';
-import { UserService } from '../../services/service.index';
+import { DataService, OrderserviceService, UserService } from '../../services/service.index';
 
 //UTILITY
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';

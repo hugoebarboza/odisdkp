@@ -13,6 +13,7 @@ import { OrderserviceComponent } from './components/orderservice/orderservice.co
 import { ProfileComponent } from './pages/profile/profile.component';
 import { RegisterComponent } from './components/register/register.component';
 import { ServiceComponent } from './components/service/service.component';
+import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 
 
 
@@ -43,21 +44,17 @@ const appRoute: Routes = [
 	canActivate: [AuthguardService],
 	data: { titulo: 'OCA Global - ODIS Calendario', descripcion: 'OCA Global - ODIS Calendar Managment' }
 	},
-
 	{ path:'project/:id', 
 	component: ServiceComponent,
 	canActivate: [AuthguardService],
 	data: { titulo: 'OCA Global - ODIS Proyectos', descripcion: 'OCA Global - ODIS Project Managment' }
 	},
-
 	{ path:'projectservice/:id', 
 	component: OrderserviceComponent,
 	canActivate: [AuthguardService],
 	data: { titulo: 'OCA Global - ODIS Proyectos', descripcion: 'OCA Global - ODIS Project Services Managment' }
 	},
-
 	{ path: 'profile', component: ProfileComponent, data: { titulo: 'OCA Global - ODIS Perfil de usuario' } },	
-
 	{ path:'serviceorder/:id', 
 	component: OrderserviceComponent,
 	canActivate: [AuthguardService],
@@ -65,7 +62,13 @@ const appRoute: Routes = [
 	},
 	{ path:'forgot', component: ForgotpasswordComponent, data: { titulo: 'OCA Global - ODIS Acceso', descripcion: 'OCA Global - ODIS User Forgot Password' }},	
 	{ path:'change', component: ChangepasswordComponent, data: { titulo: 'OCA Global - ODIS Acceso', descripcion: 'OCA Global - ODIS User Change Password'  }},	
-	{ path:'notfound', component: NotfoundComponent, data: { titulo: 'OCA Global - ODIS 404', descripcion: 'OCA Global - ODIS User 404'  }},	
+	{ path:'notfound', component: NotfoundComponent, data: { titulo: 'OCA Global - ODIS 404', descripcion: 'OCA Global - ODIS User 404'  }},
+    // Mantenimientos
+	{ path: 'usuarios/:id', 
+	component: OrderserviceComponent,
+	canActivate: [AuthguardService],
+	data: { titulo: 'OCA Global - ODIS Mantenimiento de Usuarios' } 
+	},
 	{ path:'**', pathMatch: 'full', redirectTo: 'notfound', data: { titulo: 'OCA Global - ODIS 404', descripcion: 'OCA Global - ODIS User 404'  } }
 
 ];

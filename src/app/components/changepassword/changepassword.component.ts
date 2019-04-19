@@ -3,6 +3,10 @@ import { CommonModule } from "@angular/common"
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, ActivatedRoute, Params } from '@angular/router';
 
+//HELPERS
+import { MustMatch } from '../../helpers/must-match.validator';
+
+
 //SERVICES
 import { UserService } from '../../services/service.index';
 
@@ -16,7 +20,7 @@ export class ChangepasswordComponent implements OnInit {
   public title: string;
   private identity;
   private token;
-  public status: String;
+  public status: string;
   public changeForm: FormGroup;
 
   currentpassword : string;
@@ -39,28 +43,12 @@ export class ChangepasswordComponent implements OnInit {
     this.token = this._userService.getToken();
     
    this.changeForm = new FormGroup({
-
-      'currentpassword' : new FormControl(
-        '',
-        [
-        Validators.required, 
-        Validators.minLength(4)]
-       ),
-      
-      'newpassword' : new FormControl(
-        '',
-        [Validators.required, Validators.minLength(6)]
-       ),
-      
-      'password_confirmation' : new FormControl(
-        '',
-        [Validators.required, Validators.minLength(6)]
-       ),    
-    });
-
-    this.changeForm.controls['password_confirmation'].setValidators(
-      [Validators.required, this.noIgual.bind(this.changeForm)]
-      )
+      'currentpassword' : new FormControl('',[Validators.required,Validators.minLength(4)]),      
+      'newpassword' : new FormControl('',[Validators.required, Validators.minLength(6)]),      
+      'password_confirmation' : new FormControl('',[Validators.required, Validators.minLength(6)]),    
+    },
+    { validators: MustMatch('newpassword','password_confirmation') } 
+    );
   }
 
 

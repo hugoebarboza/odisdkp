@@ -1,0 +1,72 @@
+<meta name="Description" content="User Profile Security.">
+  <h1 mat-dialog-title>{{title}}</h1>
+
+  <div class="mat-app-background" >
+    <div class="card-body">
+
+        <h5 class="card-title">{{ usuario.name }} {{ usuario.surname }}</h5>
+        <p class="card-text">{{ usuario.email }}</p>        
+        <h6 class="card-text"><mat-icon mat-list-icon>lock</mat-icon> Opciones de recuperación de contraseña.</h6>
+        <mat-list>
+          <mat-divider></mat-divider>
+        </mat-list>
+        <br>
+        <section class="mat-dialog-content" >
+         <mat-checkbox class="margin" [(ngModel)]="showEmail" name="showEmail"  (change)="onChangeEmail($event)">Enviar una contraseña temporal por correo electrónico ?</mat-checkbox>
+          <div class="animated fadeIn"  *ngIf="showEmail && !showReset">
+            <label>Enviar contraseña temporal por correo electrónico al siguiente destinatario:</label>
+            <br>
+            <div class="row">
+                <div class="col-12 col-sm-6 col-md-8"><input [(ngModel)]="usuario.email" name="email" type="email" placeholder="Email del usuario" [disabled]="showEmail"></div>
+                <div class="col-6 col-md-4"><button type="button" class="btn btn-primary btn-sm" (click)="forgotpassword(usuario)" *ngIf="usuario.email">Enviar correo y cerrar</button></div>
+            </div>                        
+          </div>
+        </section>      
+        
+        <br>
+        <section class="mat-dialog-content">
+            <mat-checkbox class="margin" [(ngModel)]="showReset" name="showReset" (change)="onChangeReset($event)">Dejarme crear la contraseña ?</mat-checkbox>
+             <div class="animated fadeIn"  *ngIf="showReset && !showEmail">
+               <label>Restablecer contraseña (Se notificará cambio de contraseña por correo electrónico al siguiente destinatario):</label>
+               <br>
+               <div class="row">
+                   <div class="col"><input [(ngModel)]="username" name="name" type="text" placeholder="Nombre del usuario" [disabled]="showReset"></div>
+                   <div class="col"><input [(ngModel)]="usuario.email" name="email" type="email" placeholder="Email del usuario" [disabled]="showReset"></div>
+               </div>
+               <br>
+               <form [formGroup] = "changeForm" (ngSubmit)="changepassword(changeForm.value)">
+               <div class="row">
+                   <div class="col">
+                     <input class="form-control" type="password" name="newpassword" formControlName="newpassword" placeholder="Nueva contraseña" >
+                    </div>
+                   <div class="col">
+                     <input class="form-control" type="password" name="password_confirmation" formControlName="password_confirmation"  placeholder="Confirme contraseña">
+                   </div>
+               </div>
+               <br>
+               <div class="row">
+                   <div class="col"><button class="btn btn-primary btn-sm" type="submit" [disabled]="!changeForm.valid">Restablecer y cerrar</button></div>
+                   <div class="col"></div>
+               </div>
+              </form>
+
+             </div>
+        </section>      
+   
+      </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <div class="container">      
+      <div class="row justify-content-center">
+      <div class="footer-button-row">      
+      <button mat-raised-button color="warn" (click)="usuario.password=''" *ngIf="usuario.password && usuario.password.length > 0">Limpiar</button>
+
+      <button mat-button (click)="onNoClick()" >Cancelar</button>
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+

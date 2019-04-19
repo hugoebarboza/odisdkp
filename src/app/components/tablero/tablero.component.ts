@@ -5,13 +5,10 @@ import { Sort, MatPaginator, TooltipPosition, MatDialog, PageEvent } from '@angu
 
 
 //SERVICES
-import { OrderserviceService } from '../../services/orderservice.service';
-import { UserService } from '../../services/service.index';
+import { OrderserviceService, ProjectsService, UserService } from '../../services/service.index';
 
 //MODELS
-import { ProjectsService } from '../../services/projects.service';
-import { ServiceEstatus } from '../../models/ServiceEstatus';
-import { Order } from '../../models/order';
+import { Order, ServiceEstatus } from '../../models/types';
 
 //DIALOG
 import { ShowComponent } from '../dialog/show/show.component';

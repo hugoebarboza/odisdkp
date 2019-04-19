@@ -38,13 +38,18 @@
               </div>
 
               <div class="form-group col-md-6">
-                <label for="inputEmail4">Email Secundario</label>      
+                <label for="inputEmail4">Confirmar Email</label>      
                 <input type="email" name="email2" class="form-control" formControlName="email2" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
               </div>
             </div>
+            <div class="form-group" *ngIf="forma && forma.errors?.equal && !forma.pristine">
+                <p class="text-danger">
+                  Los email deben ser iguales.
+                </p>
+              </div>
+  
 
             <div class="form-row">
-
               <div class="form-group col-md-6">
                 <label for="inputPassword4">Contraseña</label>
                 <input type="password" id="inputPassword" aria-describedby="passwordHelpBlock" name="password"  class="form-control" formControlName="password" required>
@@ -57,10 +62,9 @@
                 <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>
               </div>
             </div>
-
-            <div class="form-group" *ngIf="forma.errors?.equal && !forma.pristine">
+            <div class="form-group" *ngIf="forma && forma.errors?.mismatch && !forma.pristine">
               <p class="text-danger">
-                Las contraseñas deben ser iguales.
+               Las contraseñas deben ser iguales.
               </p>
             </div>
 

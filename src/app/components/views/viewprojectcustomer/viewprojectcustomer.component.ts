@@ -2,17 +2,20 @@ import {HttpClient} from '@angular/common/http';
 import {Component, OnInit, OnDestroy, ViewChild, Input, ElementRef, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import { DataSource } from '@angular/cdk/collections';
-import { merge, Observable, of as observableOf,  Subject ,  ReplaySubject ,  SubscriptionLike as ISubscription } from 'rxjs';
-import {catchError, map, startWith, switchMap,  take, takeUntil } from 'rxjs/operators';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { HttpHeaders, HttpErrorResponse, HttpParams} from '@angular/common/http';
-import {PageEvent} from '@angular/material';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
+import {  Subject ,  ReplaySubject ,  SubscriptionLike as ISubscription } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { Router, ActivatedRoute } from '@angular/router';
+import { PageEvent } from '@angular/material';
+import { FormControl, Validators} from '@angular/forms';
 import { MatSelect } from '@angular/material';
 import {TooltipPosition} from '@angular/material';
 
 
+import { 
+  Customer,
+  Proyecto,
+  Tarifa
+  } from '../../../models/types';
 
 //DIALOG
 import { AddcustomerComponent } from '../../dialog/addcustomer/addcustomer.component';
@@ -22,21 +25,10 @@ import { DeletecustomerComponent } from '../../dialog/deletecustomer/deletecusto
 import { ShowcustomerComponent } from '../../dialog/showcustomer/showcustomer.component';
 import { SettingscustomerComponent } from '../../dialog/settingscustomer/settingscustomer.component';
 
-//GLOBAL
-import { GLOBAL } from '../../../services/global';
-
 
 //SERVICES
-import { CountriesService } from '../../../services/countries.service';
-import { CustomerService } from '../../../services/customer.service';
-import {ExcelService} from '../../../services/excel.service';
-import { UserService } from '../../../services/service.index';
+import { CountriesService, CustomerService, ExcelService, UserService } from '../../../services/service.index';
 
-//MODELS
-import { User } from '../../../models/user';
-import { Proyecto } from '../../../models/proyecto';
-import { Customer } from '../../../models/customer';
-import { Tarifa } from '../../../models/tarifa';
 
 
 //MOMENT
@@ -67,27 +59,31 @@ export interface Column {
 
 
 export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChanges {
-  public title: string;
-  public identity;
-  public token;
-  public servicename;
-  public projectname;
-  public proyectos: Array<Proyecto>;
-  public customer: Customer[] = [];
-  public tarifas: Tarifa;
-  private sub: any;   
+  
+  title: string;
+  
+  category_id: number;
+  columnselect: string[] = new Array();
+  customer: Customer[] = [];  
+  datedesde: FormControl;
+  datehasta: FormControl;  
+  filterValue = '';
+  debouncedInputValue = this.filterValue;
+  fieldcritetira: string;
   loading: boolean;
+  identity;
   index: number;
   indexitem:number;
-  category_id: number;
-  public filterValue = '';
-  public columnselect: string[] = new Array();
-  public fieldcritetira: string;
-  public datedesde: FormControl;
-  public datehasta: FormControl;
-  private subscription: ISubscription;
-  private searchDecouncer$: Subject<string> = new Subject();
-  public debouncedInputValue = this.filterValue;
+  projectname;
+  proyectos: Array<Proyecto>;
+  subscription: ISubscription;
+  searchDecouncer$: Subject<string> = new Subject();
+  servicename;
+  tarifas: Tarifa;
+  token;   
+  
+  
+  termino: string = '';
 
   //SORT
   sort: Sort = {
@@ -210,6 +206,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
 
   private refreshTableCustomer() {
+  this.termino = '';
   this.regionMultiCtrl.reset();    
   this.filterValue = '';
   this.selectedColumnn.fieldValue = '';
@@ -257,6 +254,8 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
+            localStorage.removeItem('departamentos');
+            localStorage.removeItem('fotoprofile');
             localStorage.removeItem('identity');
             localStorage.removeItem('token');
             localStorage.removeItem('proyectos');
@@ -320,8 +319,11 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   }
 
   applyFilter() {
-    if(this.filterValue.length > 0 && this.filterValue.trim() !== ''){
+
+
+    if(this.filterValue.length > 0 && this.filterValue.trim() !== '' && this.termino !== this.filterValue){
     this.isLoadingResults = true;
+    this.termino = this.filterValue;
     if(this.filterValue){
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
@@ -467,6 +469,8 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
             (error) => {                      
               this.isLoadingResults = false;
               this.isRateLimitReached = true;
+              localStorage.removeItem('departamentos');
+              localStorage.removeItem('fotoprofile');
               localStorage.removeItem('identity');
               localStorage.removeItem('token');
               localStorage.removeItem('proyectos');
@@ -576,6 +580,8 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
+            localStorage.removeItem('departamentos');
+            localStorage.removeItem('fotoprofile');
             localStorage.removeItem('identity');
             localStorage.removeItem('token');
             localStorage.removeItem('proyectos');
@@ -685,7 +691,9 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
+            localStorage.removeItem('departamentos');
             localStorage.removeItem('identity');
+            localStorage.removeItem('fotoprofile');
             localStorage.removeItem('token');
             localStorage.removeItem('proyectos');
             localStorage.removeItem('expires_at');

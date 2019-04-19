@@ -1,19 +1,20 @@
 import { Component, Inject, OnInit, OnDestroy  } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { DomSanitizer } from '@angular/platform-browser';
 import { Subscription } from 'rxjs';
 
 
 //SERVICES
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { UserService } from '../../../services/service.index';
+import { OrderserviceService, UserService } from '../../../services/service.index';
 
 
 //MODELS
-import { AtributoFirma } from '../../../models/atributofirma';
-import { Order } from '../../../models/order';
-import { OrderAtributoFirma } from '../../../models/orderatributofirma';
-import { User } from '../../../models/user';
+import {
+  AtributoFirma,
+  Order,
+  OrderAtributoFirma,
+  User
+ } from '../../../models/types';
+
 
 //PDF
 import * as jsPDF from 'jspdf';

@@ -6,20 +6,19 @@ import { Subscription } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef, Sort, MatTableDataSource } from '@angular/material';
 
 //MODELS
-import { Customer } from '../../../models/customer';
+import { Customer } from '../../../models/types';
 
 
 //UTILITY
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
 
 //SERVICES
-import { CustomerService } from '../../../services/customer.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
+import { CustomerService, OrderserviceService } from '../../../services/service.index';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
 
-import {ExcelService} from '../../../services/excel.service';
+import { ExcelService } from '../../../services/service.index';
 
 
 

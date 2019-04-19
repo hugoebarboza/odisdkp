@@ -1,8 +1,4 @@
 import {Component, OnInit} from '@angular/core';
-import {Router, ActivatedRoute, Params} from '@angular/router';
-
-//MODELS
-import { User } from '../../models/user';
 
 //SERVICES
 import { UserService } from '../../services/service.index';
@@ -29,8 +25,6 @@ export class DefaultComponent implements OnInit {
 	};
 
 	constructor(
-		private _route: ActivatedRoute,
-		private _router: Router,		
 		private _userService: UserService,
 
 	){

@@ -10,16 +10,10 @@ import * as _moment from 'moment';
 const moment = _moment;
 
 //SERVICES
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/service.index';
+import { OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
 
 //MODELS
-import { Order } from '../../../models/order';
-import { Service } from '../../../models/Service';
-import { ServiceType } from '../../../models/ServiceType';
-import { ServiceEstatus } from '../../../models/ServiceEstatus';
-import { User } from '../../../models/User';
+import { Order, Service, ServiceType, ServiceEstatus, User } from '../../../models/types';
 
 @Component({
   selector: 'app-edit',

@@ -16,25 +16,17 @@ import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 //CDK
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
 
-import * as XLSX from 'xlsx';
 import * as FileSaver from 'file-saver';
 
 //GLOBAL
 import { GLOBAL } from '../../../services/global';
 
 //SERVICES
-import { CountriesService } from '../../../services/countries.service';
-import { ExcelService } from '../../../services/excel.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/service.index';
-import { ZipService } from '../../../services/zip.service';
+import { CountriesService, ExcelService, OrderserviceService, ProjectsService, UserService, ZipService } from '../../../services/service.index';
+
 
 //MODELS
-import { Proyecto } from '../../../models/proyecto';
-import { ServiceType } from '../../../models/ServiceType';
-import { ServiceEstatus } from '../../../models/ServiceEstatus';
-import { Order } from '../../../models/order';
+import { Order, Proyecto, ServiceType, ServiceEstatus } from '../../../models/types';
 
 
 //COMPONENTS
@@ -112,6 +104,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public servicetypeid: number = 0;
   public servicetype: ServiceType[] = [];
   selectedValueOrdeno: string;
+  termino: string = '';
   public token: any;
   public url:string;
 
@@ -407,7 +400,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     //this.dataSource.paginator = this.paginator;
     //this.dataSource.sort = this.matSort;
     this.setupSearchDebouncer();
-
     this.inspectorMultiFilterCtrl.valueChanges
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
@@ -417,7 +409,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
-    //console.log('onchange order');
     this.portal = 0;
     this.selectedRow = -1;
     this.order_id = 0;
@@ -431,10 +422,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.getProject(this.id);
     this.getTipoServicio(this.id);    
     this.getEstatus(this.id);
-    this.refreshTable();
-
-
-    
+    this.refreshTable();    
   }
 
 
@@ -598,6 +586,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
+            localStorage.removeItem('departamentos');           
             localStorage.removeItem('identity');
             localStorage.removeItem('token');
             localStorage.removeItem('proyectos');
@@ -609,11 +598,13 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }else{
       return;
     }
+    
   }
 
   public refreshTable() { 
     //console.log('paso refresch');   
     //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
+    this.termino = '';
     this.selectedRow = -1;
     this.order_id = 0;
     this.regionMultiCtrl.reset();
@@ -872,10 +863,12 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }  
 
   applyFilter() {
-    if(this.filterValue.length > 0 && this.filterValue.trim() !== ''){
+    if(this.filterValue.length > 0 && this.filterValue.trim() !== '' && this.termino !== this.filterValue){
       this.isLoadingResults = true;
       this.getParams();
+      this.termino = this.filterValue;
       this.searchDecouncer$.next(this.filterValue);
+      //this.searchDecouncer$.unsubscribe();
     }
     //console.log('paso');
     /*
@@ -981,7 +974,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       distinctUntilChanged(),
     ).subscribe((term: string) => {
       // Remember value after debouncing
-      //console.log('viene');
       this.debouncedInputValue = term;
       this.dataService.getServiceOrder(
         this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
@@ -1386,24 +1378,27 @@ private filterRegionMulti() {
 
 
   openDialog(): void {
-
     const dialogRef = this.dialog.open(ZipComponent, {
       width: '350px',
       disableClose: true,
-      data: { zona: this.zona,
-              tiposervicio: this.tipoServicio,
+      data: {
+              createEdit: 'create_at',
               date: null,
               dateend: null,
+              id_region: 0,
+              id_provincia: 0,
+              id_comuna: 0,
               selectedValueservicio: null,
               selectedValuezona: null,
-              createEdit: 'create_at'
+              tiposervicio: this.tipoServicio,
+              zona: this.zona
             }
 
     });
     dialogRef.afterClosed().subscribe(result => {
 
       if (result !== undefined) {
-        //console.log(result);
+        // console.log(result);
 
         let link = 'http://gasco.ocachile.cl/gasco/ocaglobalzip/zip.php?tiposervicio=' +
                     result['selectedValueservicio'] + '&createUpdate=' + result['createEdit']  + '&startdate=' +
@@ -1418,6 +1413,9 @@ private filterRegionMulti() {
         if (result['selectedValuezona'] !== null) {
         link = link + '&zona=' + result['selectedValuezona'];
         }
+
+        // tslint:disable-next-line:max-line-length
+        link =  link + '&idr=' + result['id_region'] + '&idp=' + result['id_provincia'] + '&idc=' + result['id_comuna'];
         window.open(link, '_blank');
       }
 

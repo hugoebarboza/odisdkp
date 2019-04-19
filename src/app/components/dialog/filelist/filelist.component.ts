@@ -1,23 +1,21 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
-import { FormGroup, FormControl, Validators} from '@angular/forms';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import { FormControl} from '@angular/forms';
+import { HttpClient} from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 //MATERIAL
-import { Sort, MatDialog, MatPaginator, MatSnackBar, MatSort, MatSortable, MatTableDataSource, MAT_DIALOG_DATA, TooltipPosition } from '@angular/material';
+import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource, TooltipPosition } from '@angular/material';
 
-
-import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';
 
 
 import * as firebase from 'firebase/app';
 
 //SERVICES
-import { ItemFirebaseService } from '../../../services/itemfirebase.service';
+import { ItemFirebaseService } from '../../../services/service.index';
 
 //MODELS
-import { Item } from '../../../models/item';
+import { Item } from '../../../models/types';
 
 
 @Component({

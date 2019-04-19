@@ -11,16 +11,17 @@ const moment = _moment;
 
 
 //MODELS
-import { Order } from '../../../models/order';
-import { ServiceEstatus } from '../../../models/ServiceEstatus';
-import { ServiceType } from '../../../models/ServiceType';
-import { Zona } from '../../../models/Zona';
+import {
+  Order, 
+  ServiceEstatus,
+  ServiceType,
+  Zona } from '../../../models/types';
+
+
 
 
 //SERVICES
-import { CustomerService } from '../../../services/customer.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
+import { CustomerService, OrderserviceService, ProjectsService } from '../../../services/service.index';
 
 
 import * as FileSaver from 'file-saver';

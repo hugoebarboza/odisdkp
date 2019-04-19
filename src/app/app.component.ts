@@ -6,11 +6,10 @@ import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 
 
 //SERVICES
-import { SettingsService } from './services/service.index';
-import { UserService } from './services/service.index';
+import { SettingsService, UserService } from './services/service.index';
 
 //MODEL
-import { Proyecto } from './models/proyecto';
+import { Proyecto } from './models/types';
 
 
 @Component({

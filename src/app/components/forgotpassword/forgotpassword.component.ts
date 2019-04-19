@@ -3,7 +3,7 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 //MODELS
-import { User } from '../../models/user';
+import { User } from '../../models/types';
 
 //SERVICES
 import { UserService } from '../../services/service.index';
@@ -39,7 +39,7 @@ export class ForgotpasswordComponent implements OnInit {
   	) 
   { 
   	this.title = 'Olvido Clave'; 
-    this.user = new User('','','','','','','',1,'','',1,'','');  
+    this.user = new User('','','','','','','',1,'','',1,'','',1,1,1);  
     this.year = new Date().getFullYear();
 
   }
@@ -61,7 +61,7 @@ export class ForgotpasswordComponent implements OnInit {
 			return;
 		}
 
-	this.user = new User('', '', '', '','', this.forma.value.email, '', 1, '', '', 1,'','');
+	this.user = new User('', '', '', '','', this.forma.value.email, '', 1, '', '', 1,'','',1,1,1);
 
 
    this._userService.forgotpassword(this.user).subscribe(
