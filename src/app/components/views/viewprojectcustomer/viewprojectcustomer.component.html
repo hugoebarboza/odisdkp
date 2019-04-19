@@ -223,16 +223,18 @@
 
 <!-- actions -->
     <ng-container matColumnDef="actions">
-      <mat-header-cell *matHeaderCellDef>        
-        <button mat-icon-button color="primary" (click)="addNew(id)" *ngIf="_userService.isRole(3)" 
+      <mat-header-cell *matHeaderCellDef >        
+        <button mat-icon-button color="primary" (click)="addNew(id)" *ngIf="_userService.isRole(3) && id" 
         matTooltip="Agregar cliente."
         [matTooltipPosition]="positionheaderaction.value"
         >
           <mat-icon >add</mat-icon>
         </button>
+
         <button mat-icon-button color="primary" (click)="refreshTableCustomer()"
         matTooltip="Refrescar datos."
         [matTooltipPosition]="positionheaderaction.value"
+        *ngIf="id" 
         >
           <mat-icon aria-label="Example icon-button with a heart icon" >refresh</mat-icon>
         </button>
@@ -240,6 +242,7 @@
         <button mat-icon-button color="primary" (click)="settings(columnsToDisplay)" 
         matTooltip="Ver/Ocultar columnas."
         [matTooltipPosition]="positionheaderaction.value"
+        *ngIf="id && columnsToDisplay" 
         >
         <i class="material-icons">settings</i>
         </button>

@@ -18,7 +18,6 @@ import { UserService } from '../../services/service.index';
 
 //MOMENT
 import * as moment from 'moment';
-import * as momenttz from 'moment-timezone';
 
 
 export interface Month {

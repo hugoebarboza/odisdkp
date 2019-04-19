@@ -3,14 +3,10 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 //MODELS
-import { Service } from '../../../models/Service';
-import { User } from '../../../models/User';
-
+import { Service, User } from '../../../models/types';
 
 //SERVICES
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/service.index';
+import { OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
 
 
 @Component({

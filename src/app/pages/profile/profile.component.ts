@@ -4,8 +4,7 @@ import { Subscription } from 'rxjs';
 import swal from 'sweetalert';
 
 //MODEL
-import { Proyecto } from '../../models/proyecto';
-import { User } from '../../models/user';
+import { Proyecto, User } from '../../models/types';
 
 //SERVICES
 import { UserService } from '../../services/service.index';
@@ -61,6 +60,11 @@ export class ProfileComponent implements OnInit {
   }
 
 
+  ngDoCheck(){
+    this.identity = this._userService.getIdentity();  
+  }
+
+
   
   guardar( usuario: User ) {
 
@@ -72,9 +76,9 @@ export class ProfileComponent implements OnInit {
 		}
 
 
-    this.user = new User('',usuario.dni, usuario.dv, '',usuario.name, usuario.email, '', 1, usuario.surname, '', 1, usuario.telefono1, usuario.telefono2);   
+    this.user = new User('',usuario.dni, usuario.dv, '',usuario.name, usuario.email, '', this.identity.role, usuario.surname, '', 1, usuario.telefono1, usuario.telefono2, 1, 1, 1);
 
-    this.subscription = this._userService.update(this.token.token, this.user, this.identity.sub).subscribe(
+    this.subscription = this._userService.updateProfile(this.token.token, this.user, this.identity.sub).subscribe(
       response => {
 				if(response.status == 'success'){
           swal('Usuario actualizado', this.user.email, 'success' );

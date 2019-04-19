@@ -11,13 +11,10 @@ const moment = _moment;
 
 
 //MODELS
-import { Order } from '../../../models/order';
-import { Service } from '../../../models/Service';
+import { Order, Service } from '../../../models/types';
 
 //SERVICES
-import { CustomerService } from '../../../services/customer.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
+import { OrderserviceService, ProjectsService } from '../../../services/service.index';
 
 
 import * as FileSaver from 'file-saver';

@@ -1,9 +1,11 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
 import { MatSnackBar } from '@angular/material';
-import { FormControl, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import { FileItem } from '../../../models/file-item';
-import { CargaImagenesService } from '../../../services/carga-imagenes.service';
+import { FormControl} from '@angular/forms';
+
+import { FileItem } from '../../../models/types';
+
+import { CargaImagenesService } from '../../../services/service.index';
 
 
 //MOMENT

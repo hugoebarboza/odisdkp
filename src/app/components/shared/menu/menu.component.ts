@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 import { FormControl } from '@angular/forms';
 
@@ -62,6 +62,12 @@ export class MenuComponent implements OnInit {
         this.selected = 0;
         this.projectselected = this.id;
       }
+
+      if(this.url === 'usuarios'){
+        this.selected = 0;
+        this.projectselected = this.id;
+      }
+
 
       if(this.url === 'serviceorder'){
         this.selected = this.id;

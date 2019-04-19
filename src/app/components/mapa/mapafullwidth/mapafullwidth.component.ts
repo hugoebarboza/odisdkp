@@ -9,21 +9,16 @@ import {NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 //AGM
 import { InfoWindow } from '@agm/core/services/google-maps-types'
 
-//MODAL
-import { ModalMapaComponent } from '../../modal/modalmapa/modalmapa.component'; 
-
-
 //MODELS
-import { Order } from '../../../models/order';
-import { UserGeoreference } from '../../../models/usergeoreference';
-import { ServiceEstatus } from '../../../models/ServiceEstatus';
+import { 
+  Order,
+  ServiceEstatus,
+  UserGeoreference
+ } from '../../../models/types';
+
 
 //SERVICES
-import { CountriesService } from '../../../services/countries.service';
-import { MapaService } from '../../../services/mapa.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/service.index';
+import { CountriesService, MapaService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
 
 //CLASSES
 import { Marcador } from '../../../classes/marcador.class';
@@ -395,7 +390,9 @@ export class MapaFullWidthComponent implements OnInit {
                       this.lng = 0;
                          }
                     },
-                      error => {                      
+                      error => {
+                      localStorage.removeItem('departamentos');
+                      localStorage.removeItem('fotoprofile');             
                       localStorage.removeItem('identity');
                       localStorage.removeItem('token');
                       localStorage.removeItem('proyectos');

@@ -5,14 +5,10 @@ import { OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup } from '@angular/forms';
 
 //MODELS
-import { User } from '../../models/user';
-import { Proyecto } from '../../models/proyecto';
-
+import { Proyecto, Service } from '../../models/types';
 
 //SERVICES
-import { DashboardService } from '../../services/dashboard.service';
-import { Service } from '../../models/service';
-import { UserService } from '../../services/service.index';
+import { DashboardService, UserService } from '../../services/service.index';
 
 
 @Component({
@@ -26,6 +22,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 	public title: string;
 	public identity;
 	public token;
+	departamentos: Array<any> = [];
 	public proyectos: Array<Proyecto>;
 	public servicios: Array<Service>;
 	private subscription: ISubscription;
@@ -59,29 +56,33 @@ export class DashboardComponent implements OnInit, OnDestroy {
 							this.proyectos = response.datos;
 							let key = 'proyectos';
 							this._userService.saveStorage(key, this.proyectos);
+							this.loadData(this.proyectos);
 							//localStorage.setItem(key, JSON.stringify(this.proyectos));
 							//console.log(this.proyectos.length);
 						}
 							//console.log(this._servicios);
 					},
 				error => {
-						localStorage.removeItem('identity');
-						localStorage.removeItem('token');
-						localStorage.removeItem('proyectos');
-						localStorage.removeItem('expires_at');
-						localStorage.removeItem('fotoprofile');
-						this._router.navigate(["/login"]);
+					localStorage.removeItem('departamentos');
+					localStorage.removeItem('expires_at');
+					localStorage.removeItem('fotoprofile');
+					localStorage.removeItem('identity');
+					localStorage.removeItem('proyectos');
+					localStorage.removeItem('token');		
+					this._router.navigate(["/login"]);
 				   },
-				  () => console.log('complete dashboard')
+				  () => console.log('Complete')
 				);		
 		}else{
-			localStorage.removeItem('identity');
-			localStorage.removeItem('token');
-			localStorage.removeItem('proyectos');
+			localStorage.removeItem('departamentos');
 			localStorage.removeItem('expires_at');
 			localStorage.removeItem('fotoprofile');
+			localStorage.removeItem('identity');
+			localStorage.removeItem('proyectos');
+			localStorage.removeItem('token');
 			this._router.navigate(["/login"]);
 		}
+
 		
 	}
 
@@ -98,7 +99,18 @@ export class DashboardComponent implements OnInit, OnDestroy {
     	this.token = this._userService.getToken();    
   	}
 
-  	public loadData(){
+  	public loadData(proyectos: any){
+		if(proyectos){
+			this.subscription = this._proyectoService.getDepartamentos(this.token.token).subscribe( 
+				(response:any) => {
+						if (response.status == 'success'){
+							this.departamentos = response.datos;
+							let key = 'departamentos';
+							this._userService.saveStorage(key, this.departamentos);
+						}
+					});			
+		}
+
 	}
 
 	refresh(event:number){

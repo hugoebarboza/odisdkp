@@ -5,26 +5,25 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 //MODELS
-import { Customer } from '../../../models/customer';
-import { Region } from '../../../models/Region';
-import { Provincia } from '../../../models/Provincia';
-import { Comuna } from '../../../models/Comuna';
-import { Tarifa } from '../../../models/Tarifa';
-import { Constante } from '../../../models/Constante';
-import { Giro } from '../../../models/Giro';
-import { Sector } from '../../../models/Sector';
-import { Zona } from '../../../models/Zona';
-import { Mercado } from '../../../models/Mercado';
-import { Marca } from '../../../models/marca';
-import { Modelo } from '../../../models/modelo';
-import { Color } from '../../../models/color';
-import { Service } from '../../../models/Service';
+import { 
+  Color,
+  Comuna,
+  Constante, 
+  Customer,
+  Giro, 
+  Marca,
+  Mercado, 
+  Modelo,
+  Provincia,
+  Region, 
+  Sector, 
+  Service, 
+  Tarifa, 
+  Zona } from '../../../models/types';
+
 
 //SERVICES
-import { CountriesService } from '../../../services/countries.service';
-import { CustomerService } from '../../../services/customer.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { UserService } from '../../../services/service.index';
+import { CountriesService, CustomerService, OrderserviceService, UserService } from '../../../services/service.index';
 
 @Component({
   selector: 'app-addcustomer',
@@ -277,6 +276,8 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
               }
               if(response.status == 'success'){  
                 this.resultsprovincias = response.datos.provincia;
+                this.customer.id_provincia = null;
+                this.customer.id_comuna = null;
               }
               }); 
       }else{
@@ -293,6 +294,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
               }
               if(response.status == 'success'){  
                 this.resultscomunas = response.datos.comuna;
+                this.customer.id_comuna = null;
               }
               }); 
       }else{

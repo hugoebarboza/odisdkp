@@ -1,0 +1,47 @@
+.order-radio-group {
+    display: inline-flex;
+    flex-direction: column;
+     width: 100%;
+  }
+  
+  .order-radio-button {
+    margin: 5px;
+    color:#747474; 
+    font-size: 14px;
+  }
+  
+  .full-width {
+    width: 60%;
+    padding: 4px;
+  }
+  .middle-width {
+    width: 50%;
+    padding: 4px;
+  }
+  
+  .footer-button-row button,
+  .footer-button-row a {
+    margin-right: 8px;
+  }
+  
+.section {
+    display: flex;
+    flex-direction: column;
+    align-content: left;
+    align-items: left;
+    height: 60px;
+  }
+
+  .margin {
+    margin: 10px;
+  }
+
+input[type=email] {
+    width: 100%;
+}
+input[type=text] {
+  width: 100%;
+}
+input[type=password] {
+  width: 100%;
+}

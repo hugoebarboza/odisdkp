@@ -7,13 +7,10 @@ import {Message} from 'primeng/api';
 
 
 //SERVICES
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { UserService } from '../../../services/service.index';
+import { OrderserviceService, UserService } from '../../../services/service.index';
 
 //MODELS
-import { Order } from '../../../models/order';
-import { Service } from '../../../models/Service';
-import { ServiceType } from '../../../models/ServiceType';
+import { Service, ServiceType } from '../../../models/types';
 
 
 @Component({

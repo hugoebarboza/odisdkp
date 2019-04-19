@@ -1,10 +1,8 @@
-import { Component, OnInit, Output, EventEmitter, OnChanges, OnDestroy, Input, SimpleChanges, ViewChild } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Component, OnInit, Output, EventEmitter, OnChanges, OnDestroy, Input, SimpleChanges } from '@angular/core';
 
 
 //SERVICES
-import { OrderserviceService } from '../../services/orderservice.service';
-import { UserService } from '../../services/service.index';
+import { OrderserviceService, UserService } from '../../services/service.index';
 
 
 @Component({

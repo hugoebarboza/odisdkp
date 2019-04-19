@@ -1,19 +1,18 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { FormControl, FormsModule  } from '@angular/forms';
+import { FormControl  } from '@angular/forms';
 
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 
 //SERVICES
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { UserService } from '../../../services/service.index';
+import { OrderserviceService, UserService } from '../../../services/service.index';
 
 //MODELS
-import { Order } from '../../../models/order';
+import { Order } from '../../../models/types';
 
 //SLIDE COMPONENT
-import { Options, LabelType } from 'ng5-slider';
+import { Options } from 'ng5-slider';
 
 //MOMENT
 //MOMENT

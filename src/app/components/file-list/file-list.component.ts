@@ -7,18 +7,16 @@ import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource, TooltipPosition
 
 
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 import * as FileSaver from 'file-saver';
 
 
 import * as firebase from 'firebase/app';
 
 //SERVICES
-import { ItemFirebaseService } from '../../services/itemfirebase.service';
-import { UserService } from '../../services/service.index';
+import { ItemFirebaseService, UserService } from '../../services/service.index';
 
 //MODELS
-import { Item } from '../../models/item';
+import { Item } from '../../models/types';
 
 @Component({
   selector: 'app-file-list',
@@ -59,7 +57,7 @@ export class FileListComponent implements OnInit {
 
   constructor(
     public _http: HttpClient,
-    private _userService: UserService,
+    public _userService: UserService,
     private itemService: ItemFirebaseService,
     public snackBar: MatSnackBar,
     ) {

@@ -1,29 +1,28 @@
 import { Component, OnInit, OnDestroy, Output, EventEmitter, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormControl } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 
 
 //AGM
 import { InfoWindow } from '@agm/core/services/google-maps-types'
 
 //MODAL
-import {NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import {NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalMapaComponent } from '../../modal/modalmapa/modalmapa.component'; 
 
 
 //MODELS
-import { Order } from '../../../models/order';
-import { UserGeoreference } from '../../../models/usergeoreference';
-import { ServiceEstatus } from '../../../models/ServiceEstatus';
+import { 
+  Order,
+  ServiceEstatus,
+  UserGeoreference
+ } from '../../../models/types';
+
 
 //SERVICES
-import { CountriesService } from '../../../services/countries.service';
-import { MapaService } from '../../../services/mapa.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/service.index';
+import { CountriesService, MapaService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
 
 //CLASSES
 import { Marcador } from '../../../classes/marcador.class';
@@ -364,6 +363,8 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                     },
                     (error) => {                      
                       this.isLoadingResults = false;
+                      localStorage.removeItem('departamentos');
+                      localStorage.removeItem('fotoprofile');
                       localStorage.removeItem('identity');
                       localStorage.removeItem('token');
                       localStorage.removeItem('proyectos');
@@ -407,6 +408,8 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                          }
                     },
                       error => {                      
+                      localStorage.removeItem('departamentos');
+                      localStorage.removeItem('fotoprofile');
                       localStorage.removeItem('identity');
                       localStorage.removeItem('token');
                       localStorage.removeItem('proyectos');

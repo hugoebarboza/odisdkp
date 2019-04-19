@@ -2,8 +2,19 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
+  DataService,
+  DashboardService,
+  CargaImagenesService,
+  CountriesService,
+  CustomerService,
+  ExcelService,
+  ItemFirebaseService,
+  MapaService,
+  OrderserviceService,
+  ProjectsService,
   SettingsService,
   UserService,
+  ZipService
  } from './service.index';
 
 
@@ -12,8 +23,19 @@ import {
     CommonModule
   ],
   providers: [
+    DataService,
+    DashboardService,  
+    CargaImagenesService,
+    CountriesService,
+    CustomerService,
+    ExcelService,
+    ItemFirebaseService,
+    MapaService,
+    OrderserviceService,
+    ProjectsService,
     SettingsService,
     UserService,
+    ZipService
   ],
   declarations: []
 })

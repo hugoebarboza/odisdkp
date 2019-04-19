@@ -10,7 +10,7 @@ import { finalize } from 'rxjs/operators';
 import { MatSnackBar } from '@angular/material';
 
 //MODELS
-import { Item } from '../../models/item';
+import { Item } from '../../models/types';
 
 //SERVICES
 import { UserService } from '../../services/service.index';

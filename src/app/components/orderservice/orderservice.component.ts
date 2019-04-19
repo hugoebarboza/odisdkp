@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute, Params } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material';
 import { FormControl, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import { SubscriptionLike as ISubscription } from 'rxjs'
@@ -8,23 +8,20 @@ import { OnDestroy } from "@angular/core";
 
 
 //SERVICES
-import { DashboardService } from '../../services/dashboard.service';
-import { OrderserviceService } from '../../services/orderservice.service';
-import { ProjectsService } from '../../services/projects.service';
-import { SettingsService } from '../../services/service.index';
-import { UserService } from '../../services/service.index';
+import { DashboardService, OrderserviceService, ProjectsService, SettingsService, UserService } from '../../services/service.index';
 
 //MODELS
-import { Proyecto } from '../../models/proyecto';
-import { Order } from '../../models/order';
-import { Tarifa } from '../../models/Tarifa';
-import { Constante } from '../../models/Constante';
-import { Giro } from '../../models/Giro';
-import { Sector } from '../../models/Sector';
-import { Zona } from '../../models/Zona';
-import { Mercado } from '../../models/Mercado';
-import { Service } from '../../models/Service';
-import { Region } from '../../models/Region';
+import { 
+  Constante, 
+  Giro, 
+  Mercado, 
+  Order, 
+  Proyecto, 
+  Region, 
+  Sector, 
+  Service, 
+  Tarifa, 
+  Zona } from '../../models/types';
 
 
 
@@ -104,6 +101,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(	
   private _route: ActivatedRoute,
+  private _router: Router,
   private _orderService: OrderserviceService,
 	private _project: ProjectsService,
   public _ajustes: SettingsService,
@@ -154,7 +152,13 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
                     }else{
                     }
                   },
-                  (error) => { 
+                  (error) => {
+                  //localStorage.removeItem('identity');
+                  //localStorage.removeItem('token');
+                  //localStorage.removeItem('proyectos');
+                  //localStorage.removeItem('expires_at');
+                  //localStorage.removeItem('fotoprofile');              
+                  //this._router.navigate(["/login"]);  
                   console.log(<any>error);
                   }  
                   )
@@ -164,8 +168,8 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
         }
 
 
-        //GET PROJECT FROM PROJECTSERVICE
-        if(this.url === 'projectservice'){
+        //GET PROJECT FROM PROJECTSERVICE OR USER
+        if(this.url === 'projectservice' || this.url === 'usuarios'){
           this._project.getProject(this.token.token, this.id).then(
             (res:any) => {
               {
@@ -178,7 +182,14 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
                     }else{
                     }
                   },
-                  (error) => { 
+                  (error) => {
+                  localStorage.removeItem('departamentos');
+                  localStorage.removeItem('identity');
+                  localStorage.removeItem('token');
+                  localStorage.removeItem('proyectos');
+                  localStorage.removeItem('expires_at');
+                  localStorage.removeItem('fotoprofile');              
+                  this._router.navigate(["/login"]);        
                   console.log(<any>error);
                   }  
                   )
@@ -187,6 +198,8 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
             });   
         }//END IF GET PROJECT SERVICE
         
+
+
 
         //GET PROJECT FROM SERVICEORDER
         if(this.url === 'serviceorder'){
@@ -267,6 +280,11 @@ toggleActive(event:any){
     if(tcolor == 2){
       this.theme = 'alternative_dark';  
     }
+
+    if(tcolor == 3){
+      this.theme = 'dark-theme';  
+    }
+
 
     this._ajustes.aplicarTema( this.theme, tcolor );
 

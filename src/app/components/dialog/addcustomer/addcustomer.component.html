@@ -84,8 +84,7 @@
 
   <div class="form" appearance="legacy">
     <mat-form-field class="margin">
-     <mat-select class="form-control" placeholder="Region" [(ngModel)]="customer.id_region" name="id_region"  (selectionChange)="onSelectRegion(customer.id_region)">
-      <mat-option [value]=0>None</mat-option>
+     <mat-select class="form-control" placeholder="Region" [(ngModel)]="customer.id_region" name="id_region"  (selectionChange)="onSelectRegion(customer.id_region)" required>
      <mat-option *ngFor="let regiones of region" [value]="regiones.id">
       {{regiones.region_name}}
     </mat-option>
@@ -94,8 +93,7 @@
 
 
     <mat-form-field appearance="legacy" class="margin">
-     <mat-select class="form-control" placeholder="Provincia" [(ngModel)]="customer.id_provincia" name="id_provincia"  (selectionChange)="onSelectProvincia(customer.id_provincia)">
-      <mat-option *ngIf='customer.id_region == 0'  [value]=0>None</mat-option>
+     <mat-select class="form-control" placeholder="Provincia" [(ngModel)]="customer.id_provincia" name="id_provincia"  (selectionChange)="onSelectProvincia(customer.id_provincia)" required>
      <mat-option *ngFor="let provincia of resultsprovincias" [value]="provincia.id">
       {{provincia.province_name}}
     </mat-option>
@@ -106,8 +104,7 @@
 
 
     <mat-form-field appearance="legacy" class="margin">
-     <mat-select class="form-control" placeholder="Comuna" [(ngModel)]="customer.id_comuna" name="id_comuna"  (selectionChange)="onSelectComuna($event)">
-      <mat-option *ngIf='customer.id_provincia == 0' [value]=0>None</mat-option>
+     <mat-select class="form-control" placeholder="Comuna" [(ngModel)]="customer.id_comuna" name="id_comuna"  (selectionChange)="onSelectComuna($event)" required>
      <mat-option *ngFor="let comuna of resultscomunas" [value]="comuna.id">
       {{comuna.commune_name}}
     </mat-option>

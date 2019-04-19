@@ -4,7 +4,7 @@ import { FormControl  } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 
 //FIREBASE
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 //DIALOG
 import { EditServiceComponent } from '../../dialog/editservice/editservice.component';
@@ -14,14 +14,15 @@ import { ShowcustomerComponent } from '../../dialog/showcustomer/showcustomer.co
 import { MatDialog, MatSnackBar } from '@angular/material';
 
 //MODELS
-import { Comuna } from '../../../models/Comuna';
-import { Customer } from '../../../models/customer';
-import { ProjectServiceCategorie } from '../../../models/ProjectServiceCategorie';
-import { ProjectServiceType } from '../../../models/ProjectServiceType';
-import { Provincia } from '../../../models/Provincia';
-import { Region } from '../../../models/Region';
-import { Service } from '../../../models/Service';
-import { User } from '../../../models/User';
+import { 
+  Comuna,
+  Customer,
+  Provincia,
+  ProjectServiceCategorie,
+  ProjectServiceType,
+  Region, 
+  Service, 
+  User } from '../../../models/types';
 
 //MOMENT
 import * as _moment from 'moment';
@@ -29,10 +30,7 @@ const moment = _moment;
 
 
 //SERVICES
-import { CountriesService } from '../../../services/countries.service';
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
-import { UserService } from '../../../services/service.index';
+import { CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
 
 
 export interface Item { id: any, comment: string; created: any, identity: string}

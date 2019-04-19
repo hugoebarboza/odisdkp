@@ -4,8 +4,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 //MODELS
-import { User } from '../../models/user';
-import { Proyecto } from '../../models/proyecto';
+import { Proyecto, User } from '../../models/types';
 
 
 //SERVICES
@@ -38,7 +37,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   public token;
   public identity;
   public idaccount;
-  public status: String;
+  public status: string;
   public proyectos: Array<Proyecto>;
   public useraccount: string;
   public show:boolean = false;
@@ -99,7 +98,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     private toasterService: ToastrService,    
   ){
     this.title = 'Acceso';
-    this.user = new User('','','','','','','', 1,'','',1,'','');
+    this.user = new User('','','','','','','', 1,'','',1,'','',1,1,1);
     this.year = new Date().getFullYear();
     this.identity = this._userService.getIdentity();
     this.idaccount = this._userService.getIdaccount();
@@ -152,7 +151,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     return;
    }
 
-   let usuario = new User('', '', '', '', '', form.value.email, form.value.password, 1, '', this.version, 1, '','');
+   let usuario = new User('', '', '', '', '', form.value.email, form.value.password, 1, '', this.version, 1, '','',1, 1, 1);
 
    this._userService.signup(usuario).subscribe(
      response => {       
@@ -206,7 +205,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.spinnerButtonOptions.text = 'Iniciar sesión'         
       //this.barButtonOptions.active = false;      
       //this.barButtonOptions.text = 'Iniciar sesión'         
-      this.status = 'error';      
+      this.status = 'error';   
       this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
      }
      );
@@ -240,12 +239,14 @@ export class LoginComponent implements OnInit, OnDestroy {
   logout(){        
     this._route.params.subscribe(params => {
       let logout = +params['sure'];
-      if(logout == 1){        
-        localStorage.removeItem('identity');
-        localStorage.removeItem('token');
-        localStorage.removeItem('proyectos');
+      if(logout == 1){ 
+        
+        localStorage.removeItem('departamentos');
         localStorage.removeItem('expires_at');
         localStorage.removeItem('fotoprofile');
+        localStorage.removeItem('identity');
+        localStorage.removeItem('proyectos');
+        localStorage.removeItem('token');      
         this.identity = null;
         this.token = null;
         this.proyectos = null;        

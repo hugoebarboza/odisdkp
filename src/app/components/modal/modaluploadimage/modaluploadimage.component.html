@@ -1,0 +1,54 @@
+<meta name="Description" content="User Profile Image.">
+  <h1 mat-dialog-title>{{title}}</h1>
+
+  <div class="mat-app-background" *ngIf="usuario">
+    <div class="card-body">
+
+        <h5 class="card-title">{{ usuario.name }} {{ usuario.surname }}</h5>
+        <p class="card-text">{{ usuario.email }}</p>        
+        <h6 class="card-text"><mat-icon mat-list-icon>image</mat-icon> Cambiar imagen del perfil del usuario.</h6>
+        <mat-list>
+          <mat-divider></mat-divider>
+        </mat-list>
+        <br>
+        <section class="mat-dialog-content" >
+        <app-progress-spinner *ngIf="isLoadingPerfil"></app-progress-spinner>
+        <div class="card-body" align="center" *ngIf="!isLoadingPerfil">
+            <h4 class="card-title"><mat-icon>account_circle</mat-icon> Fotografía del usuario</h4>
+            <img *ngIf="!imagenTemp && fotoperfil && fotoperfil.length > 0" src="data:image/jpg;base64,{{fotoperfil}}" class="w150 img-circle pointer">
+            <img *ngIf="!imagenTemp && !fotoperfil" src="../../../assets/img/noprofile.png" class="w150 img-circle pointer">
+            <img *ngIf="imagenTemp" [src]="imagenTemp" class="w150 img-circle pointer">
+            <input (change)="seleccionImage($event.target.files)" type="file">
+            <br><br>
+        </div>
+
+
+        </section>    
+            
+   
+      </div>
+  </div>
+
+  <div mat-dialog-actions>
+    <div class="container">      
+      <div class="row justify-content-center">
+      <div class="footer-button-row">      
+      
+      <button mat-raised-button (click)="cambiarImagen()" color="primary" *ngIf="imagenSubir">
+       <i class="fa fa-save"></i>
+       Actualizar Foto
+       </button>
+
+       <button mat-raised-button color="primary" *ngIf="!imagenSubir" disabled>
+       <i class="fa fa-save"></i>
+       Actualizar Foto
+       </button>
+   
+       <button mat-raised-button (click)="onNoClick()" >Cancelar</button>
+      </div>
+
+      </div>
+    </div>
+  </div>
+
+

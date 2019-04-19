@@ -1,13 +1,8 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { FormControl, Validators, FormBuilder, FormGroup, NgForm, ReactiveFormsModule, FormsModule } from '@angular/forms';
-import { MatAutocompleteModule} from '@angular/material/autocomplete';
-import { merge, Observable, of as observableOf, Subscription } from 'rxjs';
-import { catchError, map, startWith, switchMap, debounceTime, tap, finalize } from 'rxjs/operators';
-import { CalendarModule } from 'primeng/calendar';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { NgSelectModule, NgOption } from '@ng-select/ng-select';
+import { FormControl, Validators, NgForm, } from '@angular/forms';
+import { Subscription } from 'rxjs';
 
 
 //MOMENT
@@ -16,16 +11,10 @@ const moment = _moment;
 
 
 //SERVICES
-import { OrderserviceService } from '../../../services/orderservice.service';
-import { ProjectsService } from '../../../services/projects.service';
-import { ServiceEstatus } from '../../../models/ServiceEstatus';
-import { UserService } from '../../../services/service.index';
+import { OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
 
 //MODELS
-import { Order } from '../../../models/order';
-import { Service } from '../../../models/Service';
-import { ServiceType } from '../../../models/ServiceType';
-import { User } from '../../../models/User';
+import { Order, Service, ServiceType, ServiceEstatus, User } from '../../../models/types';
 
 interface ObjectServiceType {
       id: number;

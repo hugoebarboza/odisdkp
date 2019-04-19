@@ -65,6 +65,16 @@ mark {
   outline: 1px solid red;
   font-weight: bold;
 }
+.pointer {
+  cursor: pointer;
+}
+.w10{
+  width: 10px;
+}
 .w100 {
   width: 100%;
+}
+
+.w150{
+  width: 150px;
 }
