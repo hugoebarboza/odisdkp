@@ -7,6 +7,11 @@ import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+//ROUTER
+import { RouterModule } from '@angular/router';
+import { routing } from './app.routing';
+
+
 //FIREBASE
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireDatabaseModule } from 'angularfire2/database';
@@ -16,6 +21,10 @@ import { AngularFireStorageModule } from 'angularfire2/storage';
 
 //MATERIAL
 import {MaterialModule} from './material-module';
+
+//MODULES
+import { PagesModule } from './pages/pages.module';
+import { SharedModule } from './components/shared/shared.module';
 
 //MAPS
 import { AgmCoreModule } from '@agm/core';
@@ -27,9 +36,6 @@ import { ModalImageComponent } from './components/modal/modalimage/modalimage.co
 import { ModalUploadImageComponent } from './components/modal/modaluploadimage/modaluploadimage.component';
 
 
-//ROUTER
-import { RouterModule } from '@angular/router';
-import { routing, appRoutingProviders } from './app.routing';
 
 //SERVICE MODULES
 import { ServiceModule } from './services/service.module';
@@ -76,12 +82,23 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
+
+//DEFAULT AND LOGIN
+import { DefaultComponent } from './default/default.component';
+import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
+import { LoginComponent } from './login/login.component';
+import { RegisterComponent } from './register/register.component';
+
+//PAGES
+import { CalendarComponent } from './pages/calendar/calendar.component';
+//import { ChangepasswordComponent } from './pages/changepassword/changepassword.component';
+//import { DashboardComponent } from './pages/dashboard/dashboard.component';
+//import { ProfileComponent } from './pages/profile/profile.component';
+import { ServiceComponent } from './pages/service/service.component';
+//import { UsuariosComponent } from './pages/usuarios/usuarios.component';
+
 //COMPONENT
 import { AppComponent } from './app.component';
-import { CalendarComponent } from './components/calendar/calendar.component';
-import { ChangepasswordComponent } from './components/changepassword/changepassword.component';
-import { DefaultComponent } from './components/default/default.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { DateDialogComponent } from './components/date-dialog/date-dialog.component';
 import { ExcelComponent, DialogOverviewDialog } from './components/excel/excel.component';
 import { ExcelVehiculoComponent } from './components/excel-vehiculo/excel-vehiculo.component';
@@ -89,26 +106,12 @@ import { FileComponent } from './components/dialog/file/file.component';
 import { FilelistComponent } from './components/dialog/filelist/filelist.component';
 import { FileListComponent } from './components/file-list/file-list.component';
 import { FileUploadComponent } from './components/file-upload/file-upload.component';
-import { FootermainComponent } from './components/shared/footermain/footermain.component';
-import { FooterComponent } from './components/shared/footer/footer.component';
-import { ForgotpasswordComponent } from './components/forgotpassword/forgotpassword.component';
 import { GestionComponent } from './components/gestion/gestion.component';
-import { HeaderComponent } from './components/shared/header/header.component';
-import { LoginComponent } from './components/login/login.component';
-import { LoadingComponent } from './components/shared/loading/loading.component';
-import { MenuComponent } from './components/shared/menu/menu.component';
 import { MapaComponent } from './components/mapa/mapa/mapa.component';
 import { MapaFullWidthComponent } from './components/mapa/mapafullwidth/mapafullwidth.component'; 
-import { MynavComponent } from './components/shared/mynav/mynav.component';
-import { NotfoundComponent } from './components/shared/notfound/notfound.component';
 import { OrderserviceComponent } from './components/orderservice/orderservice.component';
-import { ProfileComponent } from './pages/profile/profile.component';
-import { ProgressSpinnerComponent } from './components/shared/progress-spinner/progress-spinner.component';
-import { RegisterComponent } from './components/register/register.component';
-import { ServiceComponent } from './components/service/service.component';
 import { TableroComponent } from './components/tablero/tablero.component';
 import { UsertableComponent } from './components/usertable/usertable.component';
-import { UsuariosComponent } from './pages/usuarios/usuarios.component';
 import { ViewOrderDetailComponent } from './components/views/vieworderdetail/vieworderdetail.component';
 import { VieworderserviceComponent } from './components/views/vieworderservice/vieworderservice.component';
 import { ViewOrderTimeSpentComponent } from './components/views/viewordertimespent/viewordertimespent.component';
@@ -183,6 +186,7 @@ import { NgDropFilesDirective } from './directives/ng-drop-files.directive';
 
 // Global vars
 import { GLOBAL } from './services/global';
+import { PagesComponent } from './pages/pages.component';
 
 registerLocaleData(localeEs);
 
@@ -197,11 +201,9 @@ registerLocaleData(localeEs);
     AddUserComponent,
     CalendarComponent,
     CargaComponent,
-    ChangepasswordComponent,    
     CsvComponent,
     CsvCustomerComponentComponent,
     CsvServiceComponent,
-    DashboardComponent,
     DateDialogComponent,
     DefaultComponent,
     DeletecustomerComponent,
@@ -220,36 +222,26 @@ registerLocaleData(localeEs);
     FilelistComponent,
     FileListComponent,
     FileUploadComponent,
-    FooterComponent,
     ForgotpasswordComponent,
-    FootermainComponent,
     GestionComponent,
-    HeaderComponent,
     LoginComponent,
     LogoutComponent,
-    LoadingComponent,
-    MenuComponent,
     MapaComponent, 
     MapaFullWidthComponent,
     ModalMapaComponent,
     ModalImageComponent,
     ModalUploadImageComponent,
-    MynavComponent,
     NgDropFilesDirective,
-    NotfoundComponent,
     OrderserviceComponent,
-    ProfileComponent,
-    ProgressSpinnerComponent,
     RegisterComponent,
+    ServiceComponent,
     SettingsComponent, 
     SettingscustomerComponent, 
     ShowComponent,
     ShowcustomerComponent,
     ShowProfileSecurityComponent,
     ShowProfileComponent,
-    ServiceComponent,
     UsertableComponent,
-    UsuariosComponent,
     ViewOrderDetailComponent,
     VieworderserviceComponent,
     ViewprojectorderComponent,
@@ -259,10 +251,11 @@ registerLocaleData(localeEs);
     TableroComponent,
     ViewOrderTimeSpentComponent,
     ViewProjectDetailComponent,
+    PagesComponent,
   ],
   exports: [
   ],
-  imports: [
+  imports: [    
     AngularEditorModule,
     AgmDirectionModule,
     AngularFireModule.initializeApp(environment.firebase),
@@ -302,7 +295,9 @@ registerLocaleData(localeEs);
     RecaptchaFormsModule,  
     RecaptchaModule,
     routing,
-    RouterModule,    
+    RouterModule,
+    PagesModule,
+    SharedModule, 
     ScrollingModule,
     ServiceModule,
     TableModule,
@@ -346,7 +341,6 @@ registerLocaleData(localeEs);
     ZipComponent    
   ],
   providers: [
-    appRoutingProviders, 
     AuthguardService, 
     NgbActiveModal, 
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

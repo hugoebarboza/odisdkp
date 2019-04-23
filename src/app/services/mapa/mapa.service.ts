@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { HttpHeaders } from '@angular/common/http';
 import { Http, URLSearchParams } from '@angular/http';
-import { map } from 'rxjs/operators';
+import 'rxjs/add/operator/map';
 
 import { GLOBAL } from '../global';
 
@@ -54,10 +54,10 @@ export class MapaService {
     'Content-Type': 'application/json',
     'Authorization': token
   });
-    return this._http.get(requestUrl, { search: params }).pipe(map((res: any) => {
+    return this._http.get(requestUrl, { search: params }).map((res: any) => {
             //console.log(res.json());
             return res;
-    }));    
+    });    
     }
 
 

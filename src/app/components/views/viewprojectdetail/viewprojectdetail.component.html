@@ -34,13 +34,15 @@
 
         <div class="row" *ngIf="!isRateLimitReached && !isLoadingResults">
           <div class="col-6"  *ngFor="let model of models; let i = index">
-                  <div class="container-fluid" class="mb-2 bg-light text-dark" (click)="enableDiv(i)">
+            
+                  <div class="container-fluid mb-2 bg-light text-dark" (click)="enableDiv(i)">
                   <button mat-icon-button  id="bt" *ngIf="!model.expand">
                   <mat-icon class="material-icons md-14-color" >keyboard_arrow_right</mat-icon>
                   {{model.name}}
                   </button>
                   </div>
 
+                  
                   <div class="container-fluid" class="mb-2 bg-light text-dark" (click)="enableDiv(i)">
                   <button mat-icon-button  id="bt" *ngIf="model.expand">
                   <mat-icon class="material-icons md-14-color">keyboard_arrow_down</mat-icon>
@@ -73,360 +75,282 @@
                   </div>
 
 
-                  <br>
 
-                  <div *ngIf="model.id === 0 && model.expand && service_detail && service_detail.length > 0">
-                      <dl class="row ">
-                        <dt class="col-sm-4"><p class="text-muted">N° OT:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.order_number">{{service_data.order_number}}</p></dd>
+                      <div class="card bg-light mb-3" *ngIf="model.id === 0 && model.expand && service_detail && service_detail.length > 0">
+                          <div class="card-body">
+                            <h5 class="card-title">N° OT</h5>
+                            <p class="card-text" *ngIf="service_data.order_number">{{service_data.order_number}}</p>
+                          </div>
+
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngIf="service_data.order_number"><h6 class="text-muted">N° OT: <small>{{service_data.order_number}}</small></h6> </li>
+                            <li class="list-group-item" *ngIf="service_data.gom_number"><h6 class="text-muted">N° GOM: <small>{{service_data.gom_number}}</small></h6> </li>
+                            <li class="list-group-item" *ngIf="service_data.gestor"><h6 class="text-muted">Gestor: <small>{{service_data.gestor}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.unidad_responsable"><h6 class="text-muted">Unidad Responsable: <small>{{service_data.unidad_responsable}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.area_solicitante"><h6 class="text-muted">Area Solicitante: <small>{{service_data.area_solicitante}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.contratista"><h6 class="text-muted">Contratista: <small>{{service_data.contratista}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.contract_number"><h6 class="text-muted">N° Contrato: <small>{{service_data.contract_number}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.address"><h6 class="text-muted">Dirección: <small>{{service_data.address}}</small></h6></li>
+                          </ul>
+                          <div class="card-body">
+                            <mat-chip-list><mat-chip color="primary" selected *ngIf="service_data.status == 1">ACTIVO</mat-chip></mat-chip-list>
+                            <mat-chip-list><mat-chip color="accent" selected *ngIf="service_data.status == 0">INACTIVO</mat-chip></mat-chip-list>
+                          </div>
+                        </div>
+
+
+                      <div class="card bg-light mb-3" *ngIf="model.id === 1 && model.expand && service_detail && service_detail.length > 0">
+                          <div class="card-body">
+                            <h5 class="card-title">Creado por</h5>
+                            <p>
+                                <mat-form-field class="card-text" *ngIf="users && users.length > 0">
+                                    <mat-select [(ngModel)]="service_data.create_by" name="create_by" disabled>
+                                        <mat-option *ngFor="let user of users" [value]="user.id">
+                                          {{user.usuario}}
+                                        </mat-option>
+                                    </mat-select>                                      
+                                </mat-form-field>                                                                                      
+                            </p>
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngIf="users && users.length > 0">
+                              <h6 class="text-muted">Editado por
+                              <small>
+                                  <mat-form-field *ngIf="users && users.length > 0">
+                                      <mat-select [(ngModel)]="service_data.update_by" name="update_by" disabled>
+                                          <mat-option *ngFor="let user of users" [value]="user.id">
+                                            {{user.usuario}}
+                                          </mat-option>
+                                      </mat-select>                                      
+                                  </mat-form-field>                                    
+                              </small>
+                              </h6> 
+                            </li>
+                            <li class="list-group-item" *ngIf="users && users.length > 0">
+                              <h6 class="text-muted">Informado por 
+                                <small>
+                                    <mat-form-field *ngIf="users && users.length > 0">
+                                        <mat-select [(ngModel)]="service_data.user_informador" name="user_informador" disabled>
+                                            <mat-option *ngFor="let user of users" [value]="user.id">
+                                              {{user.usuario}}
+                                            </mat-option>
+                                        </mat-select>                                      
+                                    </mat-form-field>            
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="users && users.length > 0">
+                              <h6 class="text-muted">Responsable
+                                <small>
+                                    <mat-form-field *ngIf="users && users.length > 0">
+                                        <mat-select [(ngModel)]="service_data.user_responsable" name="user_responsable" disabled>
+                                            <mat-option *ngFor="let user of users" [value]="user.id">
+                                              {{user.usuario}}
+                                            </mat-option>
+                                        </mat-select>                                      
+                                    </mat-form-field>            
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="users_ito && users_ito.length > 0">
+                              <h6 class="text-muted">ITO Civil
+                                <small>
+                                    <mat-form-field *ngIf="users_ito && users_ito.length > 0">
+                                        <mat-select [(ngModel)]="service_data.user_itocivil_assigned_to" name="user_itocivil_assigned_to" disabled>
+                                            <mat-option *ngFor="let user of users_ito" [value]="user.id">
+                                              {{user.usuario}}
+                                            </mat-option>
+                                          </mat-select>                                      
+                                    </mat-form-field>                                                                                          
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="users_ito && users_ito.length > 0">
+                              <h6 class="text-muted">ITO Eléctrico
+                                <small>
+                                    <mat-form-field *ngIf="users_ito && users_ito.length > 0">
+                                        <mat-select [(ngModel)]="service_data.user_itoelec_assigned_to" name="user_itoelec_assigned_to" disabled>
+                                            <mat-option *ngFor="let user of users_ito" [value]="user.id">
+                                              {{user.usuario}}
+                                            </mat-option>
+                                          </mat-select>                                      
+                                    </mat-form-field>                                                                              
+            
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="service_data.other_ito_civil">
+                              <h6 class="text-muted">ITO Civil Externo
+                                <small *ngIf="service_data.other_ito_civil">
+                                    {{service_data.other_ito_civil}}
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="service_data.other_ito_electrico">
+                              <h6 class="text-muted">ITO Eléctrico Externo
+                                <small *ngIf="service_data.other_ito_electrico">
+                                    {{service_data.other_ito_electrico}}
+                                </small>
+                              </h6>
+                            </li>
+                          </ul>
+                          <div class="card-body">
+                          </div>
+                        </div>
+
+
+                      <div class="card bg-light mb-3" *ngIf="model.id === 2 && model.expand && service_detail && service_detail.length > 0">
+                          <div class="card-body">
+                            <h5 class="card-title">Región</h5>
+                            <p class="card-text" *ngIf="service_data.region_id">
+                                <mat-form-field >
+                                    <mat-select [(ngModel)]="service_data.region_id" name="region_id" required (selectionChange)="onSelectRegion(service_data.region_id)" disabled>
+                                      <mat-option *ngFor="let region of regiones" [value]="region.id">
+                                        {{region.region_name}}
+                                      </mat-option>
+                                    </mat-select>
+                                </mat-form-field>        
+                            </p>
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngIf="service_data.provincia_id"><h6 class="text-muted">Provincia
+                              <small>
+                                  <mat-form-field *ngIf="service_data.provincia_id">
+                                      <mat-select [(ngModel)]="service_data.provincia_id" name="provincia_id" required (selectionChange)="onSelectProvincia(service_data.provincia_id)" disabled>
+                                        <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">
+                                          {{provincia.province_name}}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>                                              
+                              </small>
+                            </h6> 
+                            </li>
+                            <li class="list-group-item" *ngIf="service_data.comuna_id"><h6 class="text-muted">Comuna 
+                              <small>
+                                  <mat-form-field *ngIf="service_data.comuna_id">
+                                      <mat-select [(ngModel)]="service_data.comuna_id" name="comuna_id" disabled>
+                                        <mat-option *ngFor="let comuna of comunas" [value]="comuna.id">
+                                          {{comuna.commune_name}}
+                                        </mat-option>
+                                      </mat-select>                                    
+                                    </mat-form-field>                                              
+                              </small>
+                            </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="service_data.address"><h6 class="text-muted">Dirección 
+                              <small *ngIf="service_data.address">
+                                  {{service_data.address}}
+                              </small>
+                            </h6>
+                          </li>
+                          </ul>
+                          <div class="card-body">
+                          </div>
+                        </div>
+
+
+
+                        <div class="card bg-light mb-3" *ngIf="model.id === 3 && model.expand && service_detail && service_detail.length > 0">
+                            <div class="card-body">
+                              <h5 class="card-title">Creado el</h5>
+                              <p class="card-text" *ngIf="service_data.create_at">{{service_data.create_at}}</p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                              <li class="list-group-item" *ngIf="service_data.update_at"><h6 class="text-muted">Editado el: <small>{{service_data.update_at}}</small></h6> </li>
+                              <li class="list-group-item" *ngIf="service_data.reception_date"><h6 class="text-muted">Recepcionado: <small>{{service_data.reception_date}}</small></h6> </li>
+                              <li class="list-group-item" *ngIf="service_data.required_date"><h6 class="text-muted">Ter. Estimada: <small>{{service_data.required_date}}</small></h6></li>
+                              <li class="list-group-item" *ngIf="service_data.due_date"><h6 class="text-muted">Vencimiento: <small>{{service_data.due_date}}</small></h6></li>
+                              <li class="list-group-item" *ngIf="service_data.assigned_date_touser1"><h6 class="text-muted">Asignación ITO Civil: <small>{{service_data.assigned_date_touser1}}</small></h6></li>
+                              <li class="list-group-item" *ngIf="service_data.assigned_date_touser2"><h6 class="text-muted">Asignación ITO Eléctrico: <small>{{service_data.assigned_date_touser2}}</small></h6></li>
+                              <li class="list-group-item" *ngIf="service_data.other_assigned_date_toitocivil"><h6 class="text-muted">Asignación ITO Civil Externo: <small>{{service_data.other_assigned_date_toitocivil}}</small></h6></li>
+                              <li class="list-group-item" ><h6 class="text-muted">Asignación ITO Eléctrico Externo: <small>{{service_data.other_assigned_date_toitoelec}}</small></h6></li>
+                            </ul>
+                            <div class="card-body">
+                            </div>
+                          </div>
   
-                        <dt class="col-sm-4"><p class="text-muted">GOM:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.gom_number">{{service_data.gom_number}}</p></dd>                                           
-
-                        <dt class="col-sm-4"><p class="text-muted">Gestor:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.gestor">{{service_data.gestor}}</p></dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">Unidad Responsable:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.unidad_responsable">{{service_data.unidad_responsable}}</p></dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">Area Solicitante:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.area_solicitante">{{service_data.area_solicitante}}</p></dd>
-
-                        
-                        <dt class="col-sm-4"><p class="text-muted">Contratista:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.contratista">{{service_data.contratista}}</p></dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">N° Contrato:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.contract_number">{{service_data.contract_number}}</p></dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">Dirección:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.address">{{service_data.address}}</p></dd>
-                        
-                        <dt class="col-sm-4"><p class="text-muted">Estatus:</p></dt>
-                        <dd class="col-sm-8"><mat-chip *ngIf="service_data.status == 1">ACTIVO</mat-chip></dd>
-                        <dd class="col-sm-8"><mat-chip *ngIf="service_data.status == 0">INACTIVO</mat-chip></dd>
 
 
-                      </dl>
-                  </div>
+                          <div class="card bg-light mb-3" *ngIf="model.id === 4 && model.expand && service_detail && service_detail.length > 0">
+                              <div class="card-body">
+                                <h5 class="card-title">Tipo</h5>
+                                <p class="card-text" *ngIf="service_data.type_id">
+                                    <mat-form-field>
+                                        <mat-select [(ngModel)]="service_data.type_id" name="type_id" disabled>
+                                          <mat-option *ngFor="let value of projectservicetype" [value]="value.id">
+                                            {{value.descripcion}}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>                                              
+                                </p>
+                              </div>
+                              <ul class="list-group list-group-flush">
+                                <li class="list-group-item" *ngIf="service_data.type_id">
+                                  <h6 class="text-muted">Categoría: 
+                                    <small>
+                                        <mat-form-field >
+                                            <mat-select [(ngModel)]="service_data.category_id" name="category_id" disabled>
+                                              <mat-option *ngFor="let value of projectservicecategorie" [value]="value.id">
+                                                {{value.descripcion}}
+                                              </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>                                                    
+                                    </small>
+                                  </h6>
+                                </li>
+                                <li class="list-group-item" *ngIf="service_data.description"><h6 class="text-muted">Descripción: <small>{{service_data.description}}</small></h6> </li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_obra"><h6 class="text-muted">Responsable Obra: <small>{{service_data.responsable_obra}}</small></h6></li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_phone"><h6 class="text-muted">Tlf. Responsable Obra: <small>{{service_data.responsable_phone}}</small></h6></li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_email"><h6 class="text-muted">Email Responsable Obra: <small>{{service_data.responsable_email}}</small></h6></li>
 
-  
+                                <li class="list-group-item" *ngIf="service_data.responsable_unidad"><h6 class="text-muted">Responsable Unidad: <small>{{service_data.responsable_unidad}}</small></h6></li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_unidad_phone"><h6 class="text-muted">Tlf. Responsable Unidad: <small>{{service_data.responsable_unidad_phone}}</small></h6></li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_unidad_email"><h6 class="text-muted">Email Responsable Unidad: <small>{{service_data.responsable_unidad_email}}</small></h6></li>
+                              </ul>
+                              <div class="card-body">
+                              </div>
+                            </div>
 
-                  <div *ngIf="model.id === 1 && model.expand && service_detail && service_detail.length > 0">
-                    <dl class="row ">
+                            
 
-                      <dt class="col-sm-4"><p class="text-muted">Creado Por:</p></dt>
-                      <dd class="col-sm-8">
-                        <mat-form-field *ngIf="users && users.length > 0">
-                            <mat-select [(ngModel)]="service_data.create_by" name="create_by" disabled>
-                                <mat-option *ngFor="let user of users" [value]="user.id">
-                                  {{user.usuario}}
-                                </mat-option>
-                            </mat-select>                                      
-                        </mat-form-field>                                                                              
-                      </dd>
+                            <div class="card bg-light mb-3" *ngIf="model.id === 5 && model.expand && service_detail && service_detail.length > 0">
+                                <div class="card-body">
+                                  <h5 class="card-title">N° Cliente</h5>
+                                  <p class="card-text" *ngIf="service_data.cc_number">
+                                      <a mat-button color="primary" (click)="showItem(id, cc_id, service_data.cc_number, category_id)" >
+                                          {{service_data.cc_number}}
+                                          <i class="material-icons md-14-color" >launch</i> 
+                                      </a>            
+                                  </p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                  <li class="list-group-item" *ngIf="service_data.ejecutivo">
+                                    <h6 class="text-muted">Ejecutivo Market:
+                                      <small>
+                                          {{service_data.ejecutivo}}
+                                      </small>
+                                    </h6>
+                                  </li>
+                                  <li class="list-group-item" *ngIf="service_data.cro_number"><h6 class="text-muted">N° CRO: <small>{{service_data.cro_number}}</small></h6> </li>
+                                  <li class="list-group-item" *ngIf="service_data.cro_status"><h6 class="text-muted">CRO Estatus: <small>{{service_data.cro_status}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.reception_crodate"><h6 class="text-muted">Fecha Recepción CRO: <small>{{service_data.reception_crodate}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.checked_crodate"><h6 class="text-muted">Fecha Revisión CRO: <small>{{service_data.checked_crodate}}</small></h6></li>  
+                                  <li class="list-group-item" *ngIf="service_data.mo_number"><h6 class="text-muted">MO (Mayor Obra): <small>{{service_data.mo_number}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.edp_number"><h6 class="text-muted">N° EDP: <small>{{service_data.edp_number}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.edp_status"><h6 class="text-muted">EDP. Estatus: <small>{{service_data.edp_status}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.edp_amount"><h6 class="text-muted">EDP. Monto: <small>{{service_data.edp_amount}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.send_edpdate"><h6 class="text-muted">Fecha Envío EDP: <small>{{service_data.send_edpdate}}</small></h6></li>
 
-                      <dt class="col-sm-4"><p class="text-muted">Editado Por:</p></dt>
-                      <dd class="col-sm-8">
-                        <mat-form-field *ngIf="users && users.length > 0">
-                            <mat-select [(ngModel)]="service_data.update_by" name="update_by" disabled>
-                                <mat-option *ngFor="let user of users" [value]="user.id">
-                                  {{user.usuario}}
-                                </mat-option>
-                            </mat-select>                                      
-                        </mat-form-field>                                                                              
-                      </dd>
+                                  <li class="list-group-item" *ngIf="service_data.accept_edpdate"><h6 class="text-muted">Fecha Aprobación EDP: <small>{{service_data.accept_edpdate}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.reject_edpdate"><h6 class="text-muted">Fecha Rechazo EDP: <small>{{service_data.reject_edpdate}}</small></h6></li>                                  
+                                </ul>
+                                <div class="card-body">
+                                </div>
+                              </div>
 
-                      <dt class="col-sm-4"><p class="text-muted">Informado Por:</p></dt>
-                      <dd class="col-sm-8">
-                        <mat-form-field *ngIf="users && users.length > 0">
-                            <mat-select [(ngModel)]="service_data.user_informador" name="user_informador" disabled>
-                                <mat-option *ngFor="let user of users" [value]="user.id">
-                                  {{user.usuario}}
-                                </mat-option>
-                            </mat-select>                                      
-                        </mat-form-field>                                                                              
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">Responsable:</p></dt>
-                      <dd class="col-sm-8">
-                        <mat-form-field *ngIf="users && users.length > 0">
-                            <mat-select [(ngModel)]="service_data.user_responsable" name="user_responsable" disabled>
-                                <mat-option *ngFor="let user of users" [value]="user.id">
-                                  {{user.usuario}}
-                                </mat-option>
-                            </mat-select>                                      
-                        </mat-form-field>                                                                              
-                      </dd>
-
-
-                      <dt class="col-sm-4"><p class="text-muted">ITO Civil:</p></dt>
-                      <dd class="col-sm-8">
-                        <mat-form-field *ngIf="users_ito && users_ito.length > 0">
-                            <mat-select [(ngModel)]="service_data.user_itocivil_assigned_to" name="user_itocivil_assigned_to" disabled>
-                                <mat-option *ngFor="let user of users_ito" [value]="user.id">
-                                  {{user.usuario}}
-                                </mat-option>
-                              </mat-select>                                      
-                        </mat-form-field>                                                                              
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">ITO Eléctrico:</p></dt>
-                      <dd class="col-sm-8">
-                        <mat-form-field *ngIf="users_ito && users_ito.length > 0">
-                            <mat-select [(ngModel)]="service_data.user_itoelec_assigned_to" name="user_itoelec_assigned_to" disabled>
-                                <mat-option *ngFor="let user of users_ito" [value]="user.id">
-                                  {{user.usuario}}
-                                </mat-option>
-                              </mat-select>                                      
-                        </mat-form-field>                                                                              
-                      </dd>
-                      
-                      <dt class="col-sm-4"><p class="text-muted">ITO Civil Externo:</p></dt>
-                      <dd class="col-sm-8">
-                      <p class="text-secondary" *ngIf="service_data.other_ito_civil">{{service_data.other_ito_civil}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">ITO Eléctrico Externo:</p></dt>
-                      <dd class="col-sm-8">
-                      <p class="text-secondary" *ngIf="service_data.other_ito_electrico">{{service_data.other_ito_electrico}}</p>
-                      </dd>
-
-                    </dl>
-                </div>
-
-
-                  <div *ngIf="model.id === 2 && model.expand && service_detail && service_detail.length > 0">
-                      <dl class="row ">
-
-                        <dt class="col-sm-4"><p class="text-muted">Región:</p></dt>
-                        <dd class="col-sm-8">
-                          <mat-form-field *ngIf="service_data.region_id">
-                            <mat-select [(ngModel)]="service_data.region_id" name="region_id" required (selectionChange)="onSelectRegion(service_data.region_id)" disabled>
-                              <mat-option *ngFor="let region of regiones" [value]="region.id">
-                                {{region.region_name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>                                                                              
-                        </dd>
-
-
-                        <dt class="col-sm-4"><p class="text-muted">Provincia:</p></dt>
-                        <dd class="col-sm-8">
-                          <mat-form-field *ngIf="service_data.provincia_id">
-                            <mat-select [(ngModel)]="service_data.provincia_id" name="provincia_id" required (selectionChange)="onSelectProvincia(service_data.provincia_id)" disabled>
-                              <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">
-                                {{provincia.province_name}}
-                              </mat-option>
-                            </mat-select>
-                          </mat-form-field>                                    
-                        </dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">Comuna:</p></dt>
-                        <dd class="col-sm-8">
-                          <mat-form-field *ngIf="service_data.comuna_id">
-                            <mat-select [(ngModel)]="service_data.comuna_id" name="comuna_id" disabled>
-                              <mat-option *ngFor="let comuna of comunas" [value]="comuna.id">
-                                {{comuna.commune_name}}
-                              </mat-option>
-                            </mat-select>                                    
-                          </mat-form-field>                                    
-                        </dd>
-
-
-                        <dt class="col-sm-4"><p class="text-muted">Dirección:</p></dt>
-                        <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.address">{{service_data.address}}</p></dd>
-    
-                      </dl>
-                  </div>
-
-
-                  <div *ngIf="model.id === 3 && model.expand && service_detail && service_detail.length > 0">
-                      <dl class="row ">
-
-                        <dt class="col-sm-4"><p class="text-muted">Creado El:</p></dt>
-                        <dd class="col-sm-8">
-                          <p class="text-secondary" *ngIf="service_data.create_at">{{service_data.create_at}}</p>
-                        </dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">Editado El:</p></dt>
-                        <dd class="col-sm-8">
-                          <p class="text-secondary" *ngIf="service_data.update_at">{{service_data.update_at}}</p>
-                        </dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">Recepcionado:</p></dt>
-                        <dd class="col-sm-8">
-                          <p class="text-secondary" *ngIf="service_data.reception_date">{{service_data.reception_date}}</p>
-                        </dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">Ter. Estimada:</p></dt>
-                        <dd class="col-sm-8">
-                          <p class="text-secondary" *ngIf="service_data.required_date">{{service_data.required_date}}</p>
-                        </dd>
-
-                        <dt class="col-sm-4"><p class="text-muted">Vencimiento:</p></dt>
-                        <dd class="col-sm-8">
-                          <p class="text-secondary" *ngIf="service_data.due_date">{{service_data.due_date}}</p>
-                        </dd>
-
-                        <dt class="col-sm-4" *ngIf="service_data.assigned_date_touser1"><p class="text-muted">Asignación ITO Civil:</p></dt>
-                        <dd class="col-sm-8" *ngIf="service_data.assigned_date_touser1">
-                          <p class="text-secondary" *ngIf="service_data.assigned_date_touser1">{{service_data.assigned_date_touser1}}</p>
-                        </dd>
-
-                        <dt class="col-sm-4" *ngIf="service_data.assigned_date_touser2"><p class="text-muted">Asignación ITO Eléctrico:</p></dt>
-                        <dd class="col-sm-8" *ngIf="service_data.assigned_date_touser2">
-                          <p class="text-secondary" *ngIf="service_data.assigned_date_touser2">{{service_data.assigned_date_touser2}}</p>
-                        </dd>
-
-                        <dt class="col-sm-4" *ngIf="service_data.other_assigned_date_toitocivil"><p class="text-muted">Asignación ITO Civil Externo:</p></dt>
-                        <dd class="col-sm-8" *ngIf="service_data.other_assigned_date_toitocivil">
-                          <p class="text-secondary" *ngIf="service_data.other_assigned_date_toitocivil">{{service_data.other_assigned_date_toitocivil}}</p>
-                        </dd>
-
-                        <dt class="col-sm-4" *ngIf="service_data.other_assigned_date_toitoelec"><p class="text-muted">Asignación ITO Eléctrico Externo:</p></dt>
-                        <dd class="col-sm-8" *ngIf="service_data.other_assigned_date_toitoelec">
-                          <p class="text-secondary" *ngIf="service_data.other_assigned_date_toitoelec">{{service_data.other_assigned_date_toitoelec}}</p>
-                        </dd>
-                        
-                      </dl>
-                  </div>                                      
-
-
-                  <div *ngIf="model.id === 4 && model.expand && service_detail && service_detail.length > 0">
-                    <dl class="row ">
-
-                      <dt class="col-sm-4"><p class="text-muted">Tipo:</p></dt>
-                      <dd class="col-sm-8">
-                        <mat-form-field>
-                          <mat-select [(ngModel)]="service_data.type_id" name="type_id" disabled>
-                            <mat-option *ngFor="let value of projectservicetype" [value]="value.id">
-                              {{value.descripcion}}
-                            </mat-option>
-                          </mat-select>
-                        </mat-form-field>                                
-                      </dd>
-  
-                      <dt class="col-sm-4"><p class="text-muted">Categoría:</p></dt>
-                      <dd class="col-sm-8">
-                          <mat-form-field *ngIf="service_data.type_id">
-                              <mat-select [(ngModel)]="service_data.category_id" name="category_id" disabled>
-                                <mat-option *ngFor="let value of projectservicecategorie" [value]="value.id">
-                                  {{value.descripcion}}
-                                </mat-option>
-                              </mat-select>
-                          </mat-form-field>                                      
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">Descripción:</p></dt>
-                      <dd class="col-sm-8"><p class="text-secondary" *ngIf="service_data.description">{{service_data.description}}</p></dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.responsable_obra"><p class="text-muted">Responsable Obra:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.responsable_obra">                                          
-                          <p class="text-secondary" *ngIf="service_data.responsable_obra">{{service_data.responsable_obra}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.responsable_phone"><p class="text-muted">Tlf. Responsable Obra:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.responsable_phone">                                          
-                          <p class="text-secondary" *ngIf="service_data.responsable_phone">{{service_data.responsable_phone}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.responsable_email"><p class="text-muted">Email Responsable Obra:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.responsable_email">                                          
-                          <p class="text-secondary" *ngIf="service_data.responsable_email">{{service_data.responsable_email}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.responsable_unidad"><p class="text-muted">Responsable Unidad:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.responsable_unidad">                                          
-                          <p class="text-secondary" *ngIf="service_data.responsable_unidad">{{service_data.responsable_unidad}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.responsable_unidad_phone"><p class="text-muted">Tlf. Responsable Unidad:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.responsable_unidad_phone">                                          
-                          <p class="text-secondary" *ngIf="service_data.responsable_unidad_phone">{{service_data.responsable_unidad_phone}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.responsable_unidad_email"><p class="text-muted">Email Responsable Unidad:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.responsable_unidad_email">                                          
-                          <p class="text-secondary" *ngIf="service_data.responsable_unidad_email">{{service_data.responsable_unidad_email}}</p>
-                      </dd>
-
-                    </dl>
-                </div>
-
-                <div *ngIf="model.id === 5 && model.expand && service_detail && service_detail.length > 0">
-                    <dl class="row ">
-
-                      <dt class="col-sm-4" ><p class="text-muted">N° Cliente:</p></dt>                      
-                      <dd class="col-sm-8" >
-                            <a mat-button color="primary" (click)="showItem(id, cc_id, service_data.cc_number, category_id)" *ngIf="service_data.cc_number">
-                              {{service_data.cc_number}}
-                              <i class="material-icons md-14-color" >launch</i> 
-                            </a>
-                      </dd>
-  
-                      <dt class="col-sm-4"><p class="text-muted">Ejecutivo Market:</p></dt>
-                      <dd class="col-sm-8">
-                          <p class="text-secondary" *ngIf="service_data.ejecutivo">{{service_data.ejecutivo}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">N° CRO:</p></dt>
-                      <dd class="col-sm-8">
-                          <p class="text-secondary" *ngIf="service_data.cro_number">{{service_data.cro_number}}</p>                                          
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">CRO Estatus:</p></dt>
-                      <dd class="col-sm-8">
-                          <p class="text-secondary" *ngIf="service_data.cro_status">{{service_data.cro_status}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.reception_crodate"><p class="text-muted">Fecha Recepción CRO:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.reception_crodate">
-                          <p class="text-secondary" *ngIf="service_data.reception_crodate">{{service_data.reception_crodate}}</p>
-                      </dd>
-                      <dt class="col-sm-4" *ngIf="service_data.checked_crodate"><p class="text-muted">Fecha Revisión CRO:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.checked_crodate">
-                          <p class="text-secondary" *ngIf="service_data.checked_crodate">{{service_data.checked_crodate}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">MO (Mayor Obra):</p></dt>
-                      <dd class="col-sm-8">                                          
-                          <p class="text-secondary" *ngIf="service_data.mo_number">{{service_data.mo_number}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">N° EDP:</p></dt>
-                      <dd class="col-sm-8">                                          
-                          <p class="text-secondary" *ngIf="service_data.edp_number">{{service_data.edp_number}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">EDP. Estatus:</p></dt>
-                      <dd class="col-sm-8">                                          
-                          <p class="text-secondary" *ngIf="service_data.edp_status">{{service_data.edp_status}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4"><p class="text-muted">EDP. Monto:</p></dt>
-                      <dd class="col-sm-8">                                          
-                          <p class="text-secondary" *ngIf="service_data.edp_amount">{{service_data.edp_amount}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.send_edpdate"><p class="text-muted">Fecha Envío EDP:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.send_edpdate">                                          
-                          <p class="text-secondary" *ngIf="service_data.send_edpdate">{{service_data.send_edpdate}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.accept_edpdate"><p class="text-muted">Fecha Aprobación EDP:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.accept_edpdate">                                          
-                          <p class="text-secondary" *ngIf="service_data.accept_edpdate">{{service_data.accept_edpdate}}</p>
-                      </dd>
-
-                      <dt class="col-sm-4" *ngIf="service_data.reject_edpdate"><p class="text-muted">Fecha Rechazo EDP:</p></dt>
-                      <dd class="col-sm-8" *ngIf="service_data.reject_edpdate">                                          
-                          <p class="text-secondary" *ngIf="service_data.reject_edpdate">{{service_data.reject_edpdate}}</p>
-                      </dd>
-
-                    </dl>
-                </div>
           </div>
+
+
           <div class="w-100"></div>
           <div class="col-12"  *ngIf="!isRateLimitReached && !isLoadingResults && toggleContentMain">
               <section id="tabs" class="project-tab">

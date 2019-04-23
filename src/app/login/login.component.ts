@@ -4,14 +4,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
 //MODELS
-import { Proyecto, User } from '../../models/types';
+import { Proyecto, User } from '../models/types';
 
 
 //SERVICES
-import { UserService } from '../../services/service.index';
+import { AuthService, DashboardService, UserService } from '../services/service.index';
 
 //SETTINGS
-import { GLOBAL } from '../../services/global';
+import { GLOBAL } from '../services/global';
 
 
 //UTILITY
@@ -30,27 +30,42 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class LoginComponent implements OnInit, OnDestroy {
-  public email: string;
-  public title: string;
-  public fotoperfil: string = '';
-  public user: User;
-  public token;
-  public identity;
-  public idaccount;
-  public status: string;
-  public proyectos: Array<Proyecto>;
-  public useraccount: string;
-  public show:boolean = false;
-  
-  loading: boolean = false;  
-  year: number;
+  title: string;
+
+  departamentos: Array<any> = [];
+  email: string;
+  error:string;
+  fotoperfil: string = '';
   hide = true;
+  loading: boolean = false;  
+  identity;
+  idaccount;
+  proyectos: Array<Proyecto>;
   rememberMe:number = 0;  
   selected: string;
   success:string;
-  error:string;
+  show:boolean = false;
+  status: string;  
+  token;
+  user: User;
+  userFirebase;
+  useraccount: string;
+  year: number;
   version:string;
 
+
+  spinnerButtonOptionsDisabled: MatProgressButtonOptions = {
+    active: false,
+    text: 'Iniciar sesión',
+    spinnerSize: 18,
+    raised: true,
+    stroked: false,
+    buttonColor: 'primary',
+    spinnerColor: 'warn',
+    fullWidth: true,
+    disabled: true,
+    mode: 'indeterminate',    
+  }
 
   spinnerButtonOptions: MatProgressButtonOptions = {
     active: false,
@@ -62,7 +77,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     spinnerColor: 'warn',
     fullWidth: true,
     disabled: false,
-    mode: 'indeterminate'
+    mode: 'indeterminate',    
   }
 
  barButtonOptions: MatProgressButtonOptions = {
@@ -92,10 +107,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,
+    public _proyectoService: DashboardService,		
+    public _route: ActivatedRoute,
+    public _router: Router,
     public _userService: UserService,
-    private toasterService: ToastrService,    
+    public authService: AuthService,
+    public toasterService: ToastrService,    
   ){
     this.title = 'Acceso';
     this.user = new User('','','','','','','', 1,'','',1,'','',1,1,1);
@@ -158,25 +175,17 @@ export class LoginComponent implements OnInit, OnDestroy {
        if(response.status != 'error' ){
          this.status = 'success';         
          this.token = response;
-         this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
-         let key = 'token';
-         //localStorage.setItem(key, JSON.stringify(this.token));
-         this._userService.saveStorage(key, this.token);
-         this._userService.signup(usuario, true).subscribe(
+         this._userService.signuptrue(usuario, true).subscribe(
            response => { 
-             //console.log(response);
-            this.identity = response;                      
-            let key = 'identity';
-            //localStorage.setItem(key, JSON.stringify(this.identity));  
-            this._userService.saveStorage(key, this.identity);
+            this.identity = response;
             if(this.identity){
               this.getPerfilUser(this.identity.sub);
             }        
             this._userService.handleAuthentication(this.identity, this.token);
+            this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});            
             if (this.rememberMe == 1){
               let key = 'idaccount';
               this.useraccount = usuario.email;
-              //localStorage.setItem(idaccount, JSON.stringify(this.useraccount));
               this._userService.saveStorage(key, this.useraccount);
             }else{
               if (localStorage['idaccount'] !== undefined) {
@@ -184,32 +193,40 @@ export class LoginComponent implements OnInit, OnDestroy {
               }
               
             }          
-            //Redirect
-            this._router.navigate(['dashboard']);
-             
-           },
-           error => {
-             this.spinnerButtonOptions.active = false;      
-             //this.barButtonOptions.active = false;      
-             this.status = 'error';
-           }
-           );
-       }else{
-         this.spinnerButtonOptions.active = false;               
-         //this.barButtonOptions.active = false;      
-         this.status = 'error';
+
+            this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+              response => {
+                  if (response.status == 'success'){
+                    this.proyectos = response.datos;
+                    let key = 'proyectos';
+                    this._userService.saveStorage(key, this.proyectos);
+                    this._router.navigate(['dashboard']);
+                  }
+                }
+              );   
+
+           });
+
        }
      },
-     error => {     
+     error => {
       this.spinnerButtonOptions.active = false;                      
       this.spinnerButtonOptions.text = 'Iniciar sesión'         
       //this.barButtonOptions.active = false;      
       //this.barButtonOptions.text = 'Iniciar sesión'         
-      this.status = 'error';   
+      this.status = 'error';
       this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
      }
      );
 
+  }
+
+
+  getPerfilFirebase(response: any){
+    if(response){
+    }else{
+
+    }
   }
 
   getPerfilUser(id: any){
@@ -236,6 +253,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 
+
+
   logout(){        
     this._route.params.subscribe(params => {
       let logout = +params['sure'];
@@ -251,6 +270,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.token = null;
         this.proyectos = null;        
         //this._router.navigate(['']);
+        this.authService.logout();
         this._router.navigate(['/login']);
       }
 

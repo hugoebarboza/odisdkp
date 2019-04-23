@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { Observable } from 'rxjs/';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-
 
 //MODELS
 import { 
@@ -38,12 +38,15 @@ export class UserService {
 	}
 
 	cargarStorage() {
-
     if ( localStorage.getItem('token')) {
+			this.token = JSON.parse( localStorage.getItem('token') );
 			this.identity = JSON.parse( localStorage.getItem('identity') );
+			this.proyectos = JSON.parse( localStorage.getItem('proyectos'));
     } else {
       this.token = '';
-      this.identity = null;
+			this.identity = null;
+			this.proyectos = [];
+			
     }
 
   }
@@ -168,7 +171,35 @@ export class UserService {
 		let params = 'json='+json;
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.post(this.url+'logindkp', params, {headers: headers});
+		
+		return this._http.post(this.url+'logindkp', params, {headers: headers})
+			.map( (resp: any) => {
+				this.token = resp;
+				let key = 'token';
+				this.saveStorage(key, resp);			
+				return resp;
+			}).catch( err => {
+				return Observable.throw( err );
+			});		
+	}
+
+	signuptrue(user:any, getToken=null): Observable<any>{
+		if(getToken != null){
+			user.getToken = 'true';
+		}
+		let json = JSON.stringify(user);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.post(this.url+'logindkp', params, {headers: headers})
+			.map( (resp: any) => {
+				this.identity = resp;
+				let key = 'identity';
+				this.saveStorage(key, resp);
+				return resp;
+		}).catch( err => {
+			return Observable.throw( err );
+		});
 	}
 
 	
@@ -254,6 +285,7 @@ export class UserService {
 
 
 	saveStorage( key:any, data: any ) {
+
 		if (key && data){
 			let value = JSON.stringify(data);
 			localStorage.setItem(key, value);
@@ -320,8 +352,11 @@ export class UserService {
 
 
 	public isRole(role): boolean {		
+		if(!role){
+			return;
+		}
 		const roleuser = JSON.parse(localStorage.getItem('identity'));
-		if (roleuser != "Undefined" && role > 0){
+		if (roleuser != "Undefined" && roleuser != null && role > 0){
 			if(role <= roleuser.role){
 				return true;	
 			}			

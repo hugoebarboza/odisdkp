@@ -2,14 +2,15 @@ import { Component, OnInit, DoCheck } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { Router, ActivationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
+import { Subscription } from 'rxjs/Subscription';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 
 
+//MODELS
+import { Proyecto } from './models/types';
+
 //SERVICES
 import { SettingsService, UserService } from './services/service.index';
-
-//MODEL
-import { Proyecto } from './models/types';
 
 
 @Component({
@@ -19,27 +20,28 @@ import { Proyecto } from './models/types';
   providers: [UserService]
 })
 export class AppComponent implements OnInit, DoCheck {
-  public identity: any;
-  public token: any;
-  public proyectos: Array<Proyecto>;
   titulo: string;
+
   description: string;
-  
+  departamentos: Array<any> = [];
+  identity: any;
+  public proyectos: Array<Proyecto>;
+  subscription: Subscription;
+  token: any;
   update: boolean = false;
 
 
   constructor(
   	private _userService: UserService,
-    private _proyectos: UserService,
     public _ajustes: SettingsService,
     private _router: Router,
     private _title: Title,
     private _meta: Meta,
     updates: SwUpdate
   	){
-  	this.identity = this._userService.getIdentity();
+    this.identity = this._userService.getIdentity();
+    this.proyectos = this._userService.getProyectos();
   	this.token = this._userService.getToken();
-    this.proyectos = this._proyectos.getProyectos();
     updates.available.subscribe( event => {
       //this.update = true;
       updates.activateUpdate().then( () => document.location.reload());
@@ -66,14 +68,14 @@ export class AppComponent implements OnInit, DoCheck {
   }
 
   ngOnInit(){
-	//console.log('app.component cargado');
+
 
   }
     
   ngDoCheck(){
-    this.identity = this._userService.getIdentity();
-    this.token = this._userService.getToken();
-    this.proyectos = this._proyectos.getProyectos(); 
+    //this.identity = this._userService.getIdentity();
+    //this.token = this._userService.getToken();
+    //this.proyectos = this._proyectos.getProyectos(); 
   }
 
 
@@ -86,5 +88,8 @@ export class AppComponent implements OnInit, DoCheck {
 
     );
   }
+
+
+
 
 }

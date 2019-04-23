@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 import swal from 'sweetalert';
 
@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 import { Proyecto, User } from '../../models/types';
 
 //SERVICES
-import { UserService } from '../../services/service.index';
+import { ProjectsService, UserService } from '../../services/service.index';
 
 
 @Component({
@@ -16,7 +16,6 @@ import { UserService } from '../../services/service.index';
   styles: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit {
-
   fotoperfil: string = '';
   file:any;
   imagenSubir: File;
@@ -26,12 +25,14 @@ export class ProfileComponent implements OnInit {
   isLoadingPerfil: boolean = true;
   proyectos: Array<Proyecto>;
   subscription: Subscription;
+  title: string = 'Perfil del usuario';
   token: any;
   usuario: User;
   user: User;
   urlImagenTemp: any;
 
   constructor(
+    private _proyectoService: ProjectsService,
     public _userService: UserService
   ) {
     this.identity = this._userService.getIdentity();
@@ -52,9 +53,9 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnDestroy() {
-    //console.log('La página se va a cerrar');
     if(this.subscription){
       this.subscription.unsubscribe();
+      console.log("ngOnDestroy unsuscribe");
     }
 
   }
@@ -171,6 +172,20 @@ export class ProfileComponent implements OnInit {
     }
 
   }
+
+  refreshMenu(event:number){
+		if(event == 1){
+			this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+				response => {
+						if (response.status == 'success'){
+							this.proyectos = response.datos;
+							let key = 'proyectos';
+							this._userService.saveStorage(key, this.proyectos);
+						}
+					}
+				);		
+		}
+	}
 
 
 }

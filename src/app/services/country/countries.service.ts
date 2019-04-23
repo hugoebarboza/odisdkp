@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { Observable } from 'rxjs/';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
+
 
 
 @Injectable({
@@ -23,10 +24,10 @@ export class CountriesService {
 		let headers = new HttpHeaders().set('Content-Type', 'application/json')
 									   .set('Authorization', token);							  							 
 
-		return this._http.get(url, {headers: headers}).pipe(map((res: any) => {
+		return this._http.get(url, {headers: headers}).map((res: any) => {			
       			//console.log('res', res);
       			return res;
-		}));
+		});
  	}
 
 	getRegion(token, id): Observable<any>{		

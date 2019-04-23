@@ -1,9 +1,13 @@
 //ANGULAR
-import { Component, OnInit, Input, NgZone, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit, NgZone } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { Subject } from 'rxjs';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from "rxjs/Subscription";
 import { MatDialog } from '@angular/material';
+import { ActivatedRoute } from '@angular/router';
 
+//MODEL
+import { Proyecto } from '../../models/types';
 
 //CALENDAR
 import {  CalendarEvent,  CalendarEventAction,  CalendarEventTimesChangedEvent,  CalendarEventTitleFormatter,  CalendarView} from 'angular-calendar';
@@ -14,10 +18,11 @@ import {  startOfDay,  endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  i
 import { AddCalendarComponent } from '../../components/dialog/addcalendar/addcalendar.component';
 
 //SERVICES
-import { UserService } from '../../services/service.index';
+import { ProjectsService, UserService } from '../../services/service.index';
 
 //MOMENT
 import * as moment from 'moment';
+
 
 
 export interface Month {
@@ -36,22 +41,27 @@ declare const gapi: any;
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
-export class CalendarComponent implements OnInit, OnChanges {
+export class CalendarComponent implements OnInit {
   
-  public subtitle: string = 'Seleccione de acuerdo a las siguientes opciones'
-  public title: string = 'Calendario';
-
-  public activeDayIsOpen = false;
-  public date: Date;
-  public events = [];
-  public events_calendar: CalendarEvent[] = [];
-  public identity: any;  
-  public loadingResults: boolean = false;
-  public refresh: Subject<any> = new Subject();
-  public updatesuccess:string = 'Evento actualizado';
-  public updateerror:string = 'Evento no actualizado';
-  public token: any;
-  public viewDate: Date = new Date();
+  activeDayIsOpen = false;
+  date: Date;
+  events = [];
+  events_calendar: CalendarEvent[] = [];
+  identity: any;  
+  id:number;
+  loadingResults: boolean = false;
+  project: any;
+  proyectos: Array<Proyecto> = [];
+  project_name: string = '';  
+  refresh: Subject<any> = new Subject();
+  sub: any;
+  subtitle: string = 'Seleccione de acuerdo a las siguientes opciones'
+  subscription: Subscription;
+  title: string = 'Calendario'
+  token: any;
+  updatesuccess:string = 'Evento actualizado';
+  updateerror:string = 'Evento no actualizado';  
+  viewDate: Date = new Date();
 
   
 
@@ -109,21 +119,43 @@ export class CalendarComponent implements OnInit, OnChanges {
   selectedYear: any;
 
 
-  @Input() id : number;  
-  @Input() apikey: string;
-  @Input() clientid: string;
-  @Input() calendarID: string;
+  apikey: string;
+  clientid: string;
+  calendarID: string;
 
   constructor(
-    public dialog: MatDialog,
-    private _userService: UserService,
-    private toaster: ToastrService,
     public _ngZone: NgZone,
+    private _proyectoService: ProjectsService,		
+    private _route: ActivatedRoute,
+    private _userService: UserService,
+    public dialog: MatDialog,
+    private toaster: ToastrService,    
   ) { 
     this._userService.handleAuthentication(this.identity, this.token);    
     this.date = new Date();
     this.identity = this._userService.getIdentity();
+    this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
+
+    this.sub = this._route.params.subscribe(params => { 
+      let id = +params['id'];            
+      this.id = id;
+      if(this.id){
+        this.project = this.filter();
+        this.project_name = this.project.project_name;
+        this.calendarID = this.project.calendarID;
+        this.apikey = this.project.apikey;
+        this.clientid = this.project.clientid;
+        this.calendarID = this.project.calendarID;
+        if(this.calendarID){
+          this.viewDate = new Date();
+          this.getCalendar(this.calendarID);      
+        }
+    
+      
+      }
+    });
+
 
   }
 
@@ -132,14 +164,12 @@ export class CalendarComponent implements OnInit, OnChanges {
     //console.log(this.date);
   }
 
-  ngOnChanges(changes: SimpleChanges) {
-    if(this.calendarID){
-      //console.log(this.calendarID);
-      this.viewDate = new Date();
-      this.getCalendar(this.calendarID);
-  
-    }
-  }
+  ngOnDestroy(){
+		if(this.subscription){
+      this.subscription.unsubscribe();
+      //console.log("ngOnDestroy unsuscribe");
+		}		
+	}
 
 
   addNew() {    
@@ -453,6 +483,32 @@ export class CalendarComponent implements OnInit, OnChanges {
     const parse: string = month;
     this.viewDate = new Date(year, parseInt(parse));
   }
+
+
+  filter(){
+    if(this.proyectos && this.id){
+      for(var i = 0; i < this.proyectos.length; i += 1){
+        var result = this.proyectos[i];
+        if(result.id === this.id){
+            return result;
+        }
+      }
+    }    
+  }
+
+  refreshMenu(event:number){
+		if(event == 1){
+			this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+				response => {
+						if (response.status == 'success'){
+							this.proyectos = response.datos;
+							let key = 'proyectos';
+							this._userService.saveStorage(key, this.proyectos);
+						}
+					}
+				);
+    }
+	}
 
 
 }

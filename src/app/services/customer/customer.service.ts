@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http, Headers, Response } from '@angular/http';
-import { HttpClient, HttpHeaders, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { GLOBAL } from '../global';
-import { catchError, tap, map } from 'rxjs/operators';
-import { Observable } from 'rxjs';
-//import { map } from 'rxjs/add/operator/map';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 
 //MODELS
 import { Customer } from '../../models/types';
@@ -51,9 +49,9 @@ export class CustomerService {
 			'Content-Type': 'application/json',
 			'Authorization': token
 			});
-		return this._http.get(url, {headers: headers}).pipe(map((res: any) => {
+		return this._http.get(url, {headers: headers}).map((res: any) => {
 	      			return res;
-		}));		
+		});		
 
  	}
 

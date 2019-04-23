@@ -1,3 +1,36 @@
+<meta name="Description" content="Services">
+
+<div id="wrapper" *ngIf="proyectos && identity">
+<!-- Sidebar -->
+<app-menu  (RefreshMenu) = "refresh( $event )"></app-menu>    
+<!-- /#sidebar-wrapper -->
+<!-- Page Content -->
+<div id="page-content-wrapper" >
+<div class="container m-2">
+<!-- SPACE -->  
+</div>
+
+
+<div class="container-fluid p-2">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+    <h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}<button mat-button color="primary" (click)="refresh()"> <mat-icon >sync</mat-icon></button></h1>
+    <div class="btn-toolbar mb-2 mb-md-0">
+      <div class="btn-group mr-2">
+      </div>
+    </div>
+</div>
+
+
+<div class="row animated fadeIn">
+  <div class="col-12">
+
+<div class="container" *ngIf="loading">
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-2">
+          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
+      </div>
+    </div>
+</div>             
 
 <div class="portalHost" *ngIf="portal !== 1">
     <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
@@ -17,10 +50,6 @@
     <mat-card-title >
       <div class="row">
         <div class="col-8">
-            <div class="float-left">
-            {{title}}
-            <button mat-button color="primary" (click)="refresh()"> <mat-icon >sync</mat-icon></button>      
-            </div>
         </div>
         <div class="col-4" >
             <div class="float-right">
@@ -54,8 +83,8 @@
 
         
     <!-- CONTENT -->
-    <div class="example-loading-shade" *ngIf="loading">
-      <app-loading *ngIf="loading"></app-loading>  
+    <div class="example-loading-shade" *ngIf="isLoadingRefresh">
+      <app-loading *ngIf="isLoadingRefresh"></app-loading>  
     </div>    
 
     <!--CONTENT SEARCH-->
@@ -189,23 +218,29 @@
 </ng-template>
 
 
-<ng-template cdkPortal #myTemplate2="cdkPortal" >
-    <div style="height: 100%">
-      <as-split  direction="horizontal" unit="percent" restrictMove="false" >
-          
-          <as-split-area size="70" minsize="50" >
-          <ng-container [cdkPortalOutlet]="_home" ></ng-container>
-          </as-split-area>
-          
-          <as-split-area size="30" minsize="30" maxsize="30">
-          <div class="p-2">
-              <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>
-              <app-viewprojectdetail  *ngIf="selectedRow == 0"></app-viewprojectdetail>              
-          </div>
-      </as-split-area>
-  
-     </as-split>          
-    </div>
-</ng-template>
+  <ng-template cdkPortal #myTemplate2="cdkPortal" >
+      <div style="height: 100%">
+        <as-split  direction="horizontal" unit="percent" restrictMove="false" >
+            
+            <as-split-area size="70" minsize="50" >
+            <ng-container [cdkPortalOutlet]="_home" ></ng-container>
+            </as-split-area>
+            
+            <as-split-area size="30" minsize="30" maxsize="30">
+            <div class="p-2">
+                <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>
+                <app-viewprojectdetail  *ngIf="selectedRow == 0"></app-viewprojectdetail>              
+            </div>
+        </as-split-area>
+    
+      </as-split>          
+      </div>
+  </ng-template>
 
+  </div>
+</div>
+</div>
 
+</div>
+<!-- /#page-content-wrapper -->
+</div>

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
-import { map} from 'rxjs/operators';
-import { Observable } from 'rxjs/';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 import {BehaviorSubject} from 'rxjs';
 
@@ -57,10 +57,10 @@ import { ToastrService } from 'ngx-toastr';
 		//console.log(url);
 		//console.log(headers);
 		//return this._http.get(url, {headers:headers});  			
-		return this._http.get(url, {headers: headers}).pipe(map((res: any) => {
+		return this._http.get(url, {headers: headers}).map((res: any) => {
       			//console.log('res', res);
       			return res;
-		}));		
+		});		
   }
 
   getOrderDetail(orderid: number, token: any){

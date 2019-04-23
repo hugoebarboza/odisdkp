@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { Observable } from 'rxjs/';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
+import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 
 //MODELS
@@ -104,10 +104,19 @@ export class ProjectsService {
 		'Content-Type': 'application/json',
 		'Authorization': token
 	});
-		return this._http.get(url, {headers: headers}).pipe(map((res: any) => {
+		return this._http.get(url, {headers: headers}).map((res: any) => {
       			return res;
-		}));		
+		});		
   	}
+
+    getDepartamentos(token): Observable<any> {
+		return this.getQuery('departamento', token);
+	}
+
+
+	getProyectos(token, id): Observable<any> {
+		return this.getQuery('departamento/'+id+'/proyecto', token);
+	}
 
 
 	getProject(token:any, id:number){

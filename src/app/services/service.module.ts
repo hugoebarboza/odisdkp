@@ -2,11 +2,12 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 import {
-  DataService,
-  DashboardService,
+  AuthService,
   CargaImagenesService,
   CountriesService,
   CustomerService,
+  DataService,
+  DashboardService,
   ExcelService,
   ItemFirebaseService,
   MapaService,
@@ -23,11 +24,12 @@ import {
     CommonModule
   ],
   providers: [
-    DataService,
-    DashboardService,  
+    AuthService,
     CargaImagenesService,
     CountriesService,
     CustomerService,
+    DataService,
+    DashboardService,  
     ExcelService,
     ItemFirebaseService,
     MapaService,

@@ -1,20 +1,20 @@
 <meta name="Description" content="Dashboard">
 <!--CONTENT-->
-<div class="loading" *ngIf="!proyectos">
+<div class="loading" *ngIf="!proyectos && identity">
 <app-loading></app-loading>  
 </div>
 
-    <div id="wrapper" *ngIf="proyectos">
+    <div id="wrapper" *ngIf="proyectos && identity">
 
         <!-- Sidebar -->
-        <app-menu [proyectos]="proyectos" (RefreshMenu) = "refresh( $event )"></app-menu>    
+        <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>    
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
-        <div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()">
-<div class="container m-2">
-<!-- SPACE -->  
-</div>
+        <div id="page-content-wrapper" >
+        <div class="container m-2">
+        <!-- SPACE -->  
+        </div>
 
 
             <div class="container-fluid">               
@@ -27,14 +27,6 @@
                 </div>
               </div>
 
-
-
-            <script>
-            $('#myTab a').on('click', function (e) {
-              e.preventDefault()
-              $(this).tab('show')
-            })
-            </script>
                 
             </div>
         </div>

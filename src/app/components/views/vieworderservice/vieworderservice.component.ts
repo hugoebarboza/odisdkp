@@ -2,8 +2,10 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
-import { ReplaySubject ,  Subject ,  Subscription } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { takeUntil } from 'rxjs/operators/takeUntil';
 import { HttpClient} from '@angular/common/http';
 import { FormControl, Validators} from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
@@ -11,7 +13,8 @@ import { PageEvent } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MatSelect } from '@angular/material';
 import { MatBottomSheet } from '@angular/material';
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
+import { debounceTime } from 'rxjs/operators/debounceTime';
+import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 
 //CDK
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
@@ -112,6 +115,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   portal:number=0;
   open: boolean = false;
   loading: boolean;
+  isactiveSearch: boolean = false;
+  datasourceLength: number = 0;
   label: boolean;
   row : Number;
   index: number;    
@@ -417,6 +422,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this._portal = this.myTemplate;
     this._home = this.myTemplate;
     this.showcell = true;
+    this.isactiveSearch = false;
+    this.datasourceLength = 0;
     this.loadInfo();
     this.getZona(this.id);
     this.getProject(this.id);
@@ -577,8 +584,13 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
             this.isRateLimitReached = true;          
             }
             this.ServicioSeleccionado.emit(this.servicename);
-            this.dataSource = new MatTableDataSource(some.datos.data);
-            //console.log(this.dataSource);
+            this.dataSource = new MatTableDataSource(some.datos.data);            
+            if(this.dataSource && this.dataSource.data.length > this.datasourceLength){
+              this.datasourceLength = this.dataSource.data.length;
+              this.isactiveSearch = true;
+              
+            }
+            //console.log(this.dataSource.data.length);
             //this.dataSource.paginator = this.paginator;
             //this.dataSource.sort = this.matSort;            
             this.isLoadingResults = false;

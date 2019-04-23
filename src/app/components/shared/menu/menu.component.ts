@@ -14,6 +14,7 @@ import { UserService } from '../../../services/service.index';
 export class MenuComponent implements OnInit {
   public title: string;
   public identity: any;
+  proyectos : any = [];
   public projectid:number=0;
   public projectselected:number = 0;
   public selected:number = 0;  
@@ -31,7 +32,7 @@ export class MenuComponent implements OnInit {
   opened = true;
   over = 'side';
 
-  @Input() proyectos : any = {};
+  //@Input() proyectos : any = {};
   @Output() RefreshMenu: EventEmitter<number>;
 
   constructor(
@@ -42,8 +43,7 @@ export class MenuComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.RefreshMenu = new EventEmitter(); 
-    this._userService.handleAuthentication(this.identity, this.token);
-
+   
     this._route.params.subscribe(params => {
     let id = +params['id'];        
     this.id = id;
@@ -81,7 +81,11 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.proyectos = this._userService.proyectos;
+    //console.log(this.proyectos);
+    //console.log(this.identity);
   }
+  
 
   public navigate(item) {
     this.selected = item;
