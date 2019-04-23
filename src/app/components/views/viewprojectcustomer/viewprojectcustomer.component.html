@@ -8,10 +8,16 @@
     <td>
     <mat-form-field>
       <input matInput (keyup)="applyFilter()" placeholder="Buscar Cliente" [(ngModel)]="filterValue">
-      <button mat-button *ngIf="filterValue" matSuffix mat-icon-button aria-label="Clear" (click)="filterValue=''">
+      <button mat-button *ngIf="filterValue && isLoadingResults" matSuffix mat-icon-button aria-label="Clear" >
+          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17"></mat-spinner>
+      </button>
+
+      <button mat-button *ngIf="filterValue && !isLoadingResults" matSuffix mat-icon-button aria-label="Clear" (click)="filterValue=''">
         <mat-icon>close</mat-icon>
-      </button>  
-      <mat-icon matSuffix>search</mat-icon>
+      </button>
+      
+      <mat-icon matSuffix *ngIf="!filterValue">search</mat-icon>
+
     </mat-form-field>
     </td>
 
@@ -140,7 +146,7 @@
 <mat-card-content>
 
 
-    <div class="example-full-width" *ngIf="isRateLimitReached">
+    <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
       No se encontraron registros que coincidan con su búsqueda.
       <button mat-button color="primary" (click)="refreshTableCustomer()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
     </div>
@@ -295,6 +301,7 @@
                   [pageSizeOptions]="pageSizeOptions"
                   (page)="onPaginateChange($event)"
                   [showFirstLastButtons]="true" 
+                  [ngClass]="{'custom-card':true}"
                   ></mat-paginator>    
 
 </div>

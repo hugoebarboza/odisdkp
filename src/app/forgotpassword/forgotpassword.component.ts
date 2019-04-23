@@ -3,10 +3,10 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 //MODELS
-import { User } from '../../models/types';
+import { User } from '../models/types';
 
 //SERVICES
-import { UserService } from '../../services/service.index';
+import { UserService } from '../services/service.index';
 
 //UTYLITY
 import swal from 'sweetalert';
@@ -18,12 +18,12 @@ import swal from 'sweetalert';
   styleUrls: ['./forgotpassword.component.css']
 })
 export class ForgotpasswordComponent implements OnInit {
-	public title: string;
+	title: string = 'Olvido Clave';
   
-  public forma: FormGroup;  
-  public resetForm:FormGroup;
-  public status: String;
-  public user : User;
+  forma: FormGroup;  
+  resetForm:FormGroup;
+  status: String;
+  user : User;
   
   
   nuevopassword : string;
@@ -38,7 +38,6 @@ export class ForgotpasswordComponent implements OnInit {
 
   	) 
   { 
-  	this.title = 'Olvido Clave'; 
     this.user = new User('','','','','','','',1,'','',1,'','',1,1,1);  
     this.year = new Date().getFullYear();
 

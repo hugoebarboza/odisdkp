@@ -69,7 +69,7 @@
 
           
 
-          <mat-spinner-button [options]="spinnerButtonOptions"  *ngIf="!_userService.isAuthenticated() && !formControl.valid" ></mat-spinner-button>
+          <mat-spinner-button [options]="spinnerButtonOptionsDisabled"  *ngIf="!_userService.isAuthenticated() && !formControl.valid" ></mat-spinner-button>
           <mat-spinner-button [options]="spinnerButtonOptions" (click)="onSubmit(formControl)" *ngIf="!_userService.isAuthenticated() && formControl.valid" ></mat-spinner-button>
 
           <button class="btn btn-lg btn-primary btn-block" type="submit"  *ngIf="_userService.isAuthenticated()" >     
@@ -84,6 +84,12 @@
           </div>
           </div>
 
+          <div class="form-group m-b-0">
+            <div class="col-sm-12 text-center">
+                <a class="nav-link" [routerLink]="['/register']"> <b>Crear cuenta</b></a>
+            </div>
+            </div>
+  
           
             <small class="d-block text-center mt-3">
               <p>Por seguridad <code>no comparta sus credenciales</code> con ningún usuario.</p>          

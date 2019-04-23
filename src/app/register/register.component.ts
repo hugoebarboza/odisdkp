@@ -4,13 +4,13 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import swal from 'sweetalert';
 
 //HELPERS
-import { MustMatch } from '../../helpers/must-match.validator';
+import { MustMatch } from '../helpers/must-match.validator';
 
 //MODELS
-import { User } from '../../models/types';
+import { User } from '../models/types';
 
 //SERVICES
-import { UserService } from '../../services/service.index';
+import { UserService } from '../services/service.index';
 
 
 @Component({

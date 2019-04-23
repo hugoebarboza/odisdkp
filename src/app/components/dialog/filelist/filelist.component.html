@@ -1,35 +1,29 @@
 <div class="p-3">
+  <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+    No se encontraron archivos.
+  </div>
+  
 
-
-<mat-card [ngStyle]="{'padding':'0px'}">
+<mat-card [ngStyle]="{'padding':'0px'}" *ngIf="!isRateLimitReached">
 <mat-card-header [ngClass]="{'custom-card':true}">
-  <mat-card-title>{{title}}</mat-card-title>
-  <mat-card-subtitle>{{subtitle}}</mat-card-subtitle>
-
 <span class="spacer"></span>
   <div class="top-bar" >
   <div class="search-container" *ngIf="!isRateLimitReached" >
         <input class="search" type="search" placeholder="Buscar..." (keyup)="applyFilter($event.target.value)" #input>
   </div>  
   </div>
-
 </mat-card-header>
 
 
 
 <mat-card-content >
 
-<div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-  No se encontraron archivos.
-</div>
-
 <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
    <app-loading *ngIf="isLoadingResults"></app-loading>  
 </div>
 
-<table mat-table  #table  [dataSource]="dataSource" 
-  matSort    
->
+
+<table mat-table  #table  [dataSource]="dataSource" matSort >
 
 <ng-container matColumnDef="nombre"  >  
   <mat-header-cell *matHeaderCellDef  mat-sort-header> Nombre </mat-header-cell>
@@ -124,7 +118,10 @@
 <mat-header-row *matHeaderRowDef="columnsToDisplay" color="primary"></mat-header-row>
 <mat-row *matRowDef="let items; columns: columnsToDisplay;" ></mat-row>
 </table>
-<mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+<div class="example-rate-limit-reached" *ngIf="dataSource && dataSource.filteredData.length == 0">
+  No se encontraron archivos.
+</div>
+<mat-paginator [pageSizeOptions]="[10, 25, 100]" ></mat-paginator>
 
 </mat-card-content>
 </mat-card>

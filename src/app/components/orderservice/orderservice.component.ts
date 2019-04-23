@@ -1,8 +1,8 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material';
-import { FormControl, FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import { SubscriptionLike as ISubscription } from 'rxjs'
+import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription'
 import { OnDestroy } from "@angular/core";
 
 
@@ -45,7 +45,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   public mercados: Mercado;
   private services: Service[] = [];
   public region: Region;
-  private subscription: ISubscription;
+  private subscription: Subscription;
   private sub: any;
   public url: any;
   otherTheme: boolean = true;
@@ -101,13 +101,10 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(	
   private _route: ActivatedRoute,
-  private _router: Router,
   private _orderService: OrderserviceService,
-	private _project: ProjectsService,
   public _ajustes: SettingsService,
 	public _userService: UserService,  
-  private _proyectoService: UserService,
-  private _proyectoServiceRefresh: DashboardService,
+  private _proyectoService: DashboardService,
 
   fb: FormBuilder
 
@@ -116,7 +113,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
 
 	this.identity = this._userService.getIdentity();
 	this.token = this._userService.getToken();
-	this.proyectos = this._proyectoService.getProyectos();
+	this.proyectos = this._userService.getProyectos();
   this.options = fb.group({
           bottom: 0,
           fixed: false,
@@ -133,72 +130,6 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
           this.url = res[0].path;        
           //console.log(this.url);
         });
-
-
-        //GET PROJECT FROM CALENDAR
-        if(this.url === 'projectcalendar'){
-          this._project.getProject(this.token.token, this.id).then(
-            (res:any) => {
-              {
-                res.subscribe(
-                  (some) => 
-                  {
-                    if(some.datos){                      
-                      this.project_name = some.datos.project_name;
-                      this.apikey = some.datos.apikey;
-                      this.clientid = some.datos.clientid;
-                      this.calendarID = some.datos.calendarID;
-                      
-                    }else{
-                    }
-                  },
-                  (error) => {
-                  //localStorage.removeItem('identity');
-                  //localStorage.removeItem('token');
-                  //localStorage.removeItem('proyectos');
-                  //localStorage.removeItem('expires_at');
-                  //localStorage.removeItem('fotoprofile');              
-                  //this._router.navigate(["/login"]);  
-                  console.log(<any>error);
-                  }  
-                  )
-            }
-
-            });   
-        }
-
-
-        //GET PROJECT FROM PROJECTSERVICE OR USER
-        if(this.url === 'projectservice' || this.url === 'usuarios'){
-          this._project.getProject(this.token.token, this.id).then(
-            (res:any) => {
-              {
-                res.subscribe(
-                  (some) => 
-                  {
-                    if(some.datos){                      
-                      this.project_name = some.datos.project_name
-                      //console.log(this.project_name);
-                    }else{
-                    }
-                  },
-                  (error) => {
-                  localStorage.removeItem('departamentos');
-                  localStorage.removeItem('identity');
-                  localStorage.removeItem('token');
-                  localStorage.removeItem('proyectos');
-                  localStorage.removeItem('expires_at');
-                  localStorage.removeItem('fotoprofile');              
-                  this._router.navigate(["/login"]);        
-                  console.log(<any>error);
-                  }  
-                  )
-            }
-
-            });   
-        }//END IF GET PROJECT SERVICE
-        
-
 
 
         //GET PROJECT FROM SERVICEORDER
@@ -291,9 +222,9 @@ toggleActive(event:any){
 
   }
 
-	refresh(event:number){
+	refreshMenu(event:number){
 		if(event == 1){
-      this.subscription = this._proyectoServiceRefresh.getProyectos(this.token.token, this.identity.dpto).subscribe(
+      this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
         response => {
             if (response.status == 'success'){
               this.proyectos = response.datos;

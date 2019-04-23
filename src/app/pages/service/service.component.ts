@@ -1,8 +1,8 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { OnDestroy } from "@angular/core";
 import { MatDialog } from '@angular/material';
-import { SubscriptionLike as ISubscription } from 'rxjs'
+import { Subscription } from 'rxjs/Subscription'
 
 //NGX TABLE
 import { Event } from 'ngx-easy-table';
@@ -13,10 +13,10 @@ import { Columns } from 'ngx-easy-table';
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
 
 //DIALOG
-import { AddServiceComponent } from '../dialog/addservice/addservice.component';
-import { CsvServiceComponent } from '../dialog/csvservice/csvservice.component';
-import { EditServiceComponent } from '../dialog/editservice/editservice.component';
-import { DeleteServiceComponent } from '../dialog/deleteservice/deleteservice.component';
+import { AddServiceComponent } from '../../components/dialog/addservice/addservice.component';
+import { CsvServiceComponent } from '../../components/dialog/csvservice/csvservice.component';
+import { EditServiceComponent } from '../../components/dialog/editservice/editservice.component';
+import { DeleteServiceComponent } from '../../components/dialog/deleteservice/deleteservice.component';
 
 //MODELS
 import { Order, Proyecto } from '../../models/types';
@@ -44,31 +44,34 @@ export const columns: Columns[] = [
 ];
 
 
-@Component({
+@Component({  
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.css'],
   providers: [SettingsNgxEasyTableService],
 })
-export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
-  public title: string = 'Proyectos';
-  public columns: Columns[] = [];
-  public configuration: any;
-  public datasource:any = [];
-  public identity:any;
-  public loading: boolean;
-  public order: Order[] = [];
-  public portal:number=0;
-  public proyectos: Array<Proyecto>;  
-  public project_name: string;
-  public project: string;
-  public isRateLimitReached: boolean = false;
-  public selected: any;
-  public selectedRow: number = 0;
-  public services: any = [];
-  //private services: Services[]=[];
-  private subscription: ISubscription;
-  public token:any;
+export class ServiceComponent  implements OnInit, OnDestroy {
+    
+  columns: Columns[] = [];
+  configuration: any;
+  datasource:any = [];
+  id:number;
+  identity:any;
+  isRateLimitReached: boolean = false;
+  isLoadingRefresh: boolean = false;
+  loading: boolean = true;
+  order: Order[] = [];
+  portal:number=0;
+  project: any;
+  proyectos: Array<Proyecto> = [];  
+  project_name: string;
+  selected: any;
+  selectedRow: number = 0;
+  services: any = [];
+  subscription: Subscription;
+  sub: any;
+  title: string = 'Proyectos';
+  token:any;
 
 
   levels = {
@@ -85,9 +88,9 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
   public _home:Portal<any>;
 
 
-  @Input() id : number;
 
   constructor(	
+    private _route: ActivatedRoute,
     private _router: Router,       
     public _userService: UserService,  
     public _proyectoService: ProjectsService,
@@ -98,51 +101,61 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
     this.columns = columns;
     this.configuration = SettingsNgxEasyTableService.config;
     this.identity = this._userService.getIdentity();
+    this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
+
+    this.sub = this._route.params.subscribe(params => { 
+      let id = +params['id'];            
+      this.id = id;
+      if(this.id){
+        this.loading = true;         
+        this.services = [];
+        this.datasource = [];  
+        this.project = this.filter();
+        this.project_name = this.project.project_name;
+        this.subscription = this._proyectoService.getProjectServiceDetail(this.token.token, this.id).subscribe(
+          response => {
+              if (response.status == 'success'){
+                this.services = response.datos;
+                this.datasource = response.datos;
+                //console.log(this.services.length)
+                this.loading = false;
+                this.isRateLimitReached = false;
+                this.ngOnInit();
+              }
+            },
+          (error: any) => {
+              this.loading = false;
+              this.isRateLimitReached = true;
+              localStorage.removeItem('departamentos');
+              localStorage.removeItem('identity');
+              localStorage.removeItem('token');
+              localStorage.removeItem('proyectos');
+              localStorage.removeItem('expires_at');
+              localStorage.removeItem('fotoprofile');              
+              this._router.navigate(["/login"]);          
+              console.log(<any>error);
+            }
+          );
+        
+      }
+    });    
   }
 
-  ngOnInit() {    
-  }
-
-
-  ngOnChanges(changes: SimpleChanges) {
+  ngOnInit() {
     this.portal = 0;
+    this.selectedRow = 0;  
     this._portal = this.myTemplate;
     this._home = this.myTemplate;
-    this.selectedRow = 0;
-    if(this.id){
-      this.services = [];
-      this.datasource = [];  
-      this.loading = true;
-      this.subscription = this._proyectoService.getProjectServiceDetail(this.token.token, this.id).subscribe(
-        response => {
-            if (response.status == 'success'){
-              this.services = response.datos;
-              this.datasource = response.datos;
-              //console.log(this.datasource);
-              //console.log(this.services.length)
-              this.loading = false;
-              this.isRateLimitReached = false;              
-            }
-          },
-        (error: any) => {
-            this.loading = false;
-            this.isRateLimitReached = true;
-            localStorage.removeItem('departamentos');
-            localStorage.removeItem('identity');
-            localStorage.removeItem('token');
-            localStorage.removeItem('proyectos');
-            localStorage.removeItem('expires_at');
-            localStorage.removeItem('fotoprofile');              
-            this._router.navigate(["/login"]);          
-            console.log(<any>error);
-          }
-        );
-    }
   }
 
+
+
   ngOnDestroy(){
-     this.subscription.unsubscribe();
+		if(this.subscription){
+			this.subscription.unsubscribe();
+			//console.log("ngOnDestroy unsuscribe");
+		}
   }
 
   addNew(id:number) {
@@ -294,10 +307,11 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
   }
 
   refresh(){
+
     if(this.id){
       this.services = [];
       this.datasource = [];  
-      this.loading = true;
+      this.isLoadingRefresh = true;
       this.subscription = this._proyectoService.getProjectServiceDetail(this.token.token, this.id).subscribe(
         response => {
             if (response.status == 'success'){
@@ -307,11 +321,13 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
               //console.log(this.services.length)
               this.loading = false;
               this.isRateLimitReached = false;
+              this.isLoadingRefresh = false;
             }
           },
         (error: any) => {
             this.loading = false;
             this.isRateLimitReached = true;
+            this.isLoadingRefresh = false;
             console.log(<any>error);
           }
         );
@@ -364,9 +380,33 @@ export class ServiceComponent  implements OnInit, OnChanges, OnDestroy {
       this._portal = this.myTemplate2;
       this.portal = 1;
     }
-    
-
   }
+
+  filter(){
+    if(this.proyectos && this.id){
+      for(var i = 0; i < this.proyectos.length; i += 1){
+        var result = this.proyectos[i];
+        if(result.id === this.id){
+            return result;
+        }
+      }
+    }    
+  }
+
+
+  refreshMenu(event:number){
+		if(event == 1){
+			this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+				response => {
+						if (response.status == 'success'){
+							this.proyectos = response.datos;
+							let key = 'proyectos';
+							this._userService.saveStorage(key, this.proyectos);
+						}
+					}
+				);		
+		}
+	}
 
 
 

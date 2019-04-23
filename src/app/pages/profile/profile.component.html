@@ -1,28 +1,33 @@
 <meta name="Description" content="Profile">
 
+<div class="loading" *ngIf="!proyectos && identity">
+        <app-loading></app-loading>  
+</div>
+    
 
 
-    <div id="wrapper" *ngIf="proyectos">
+    <div id="wrapper" *ngIf="proyectos && identity">
 
         <!-- Sidebar -->
-        <app-menu [proyectos]="proyectos"></app-menu>   
+        <app-menu (RefreshMenu) = "refreshMenu( $event )"></app-menu>   
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->
-<div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()">
-<div class="container m-2">
-<!-- SPACE -->  
-</div>
+        <div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()">
+        <div class="container m-2">
+        <!-- SPACE -->  
+        </div>
 
 
-            <div class="container-fluid" *ngIf="identity">               
+            <div class="container-fluid" >               
 
                 <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
-                    <h1 class="h4">Perfil del usuario</h1>
+                    <h1 class="h4">{{title}}</h1>
                     <div class="btn-toolbar mb-2 mb-md-0">
                     </div>
                   </div>
                   <br>
+
                   <div class="row animated fadeIn">
                       <div class="col-lg-7">
                           <div class="card">
@@ -131,21 +136,8 @@
               
 
 
-            <script>
-            $('#myTab a').on('click', function (e) {
-              e.preventDefault()
-              $(this).tab('show')
-            })
-            </script>
                 
             </div>
         </div>
         <!-- /#page-content-wrapper -->
-</div>
-
-
-<div class="container-fluid" *ngIf="identity">               
-
-
-
 </div>

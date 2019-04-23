@@ -1,3 +1,4 @@
+export { AuthService } from './firebase/auth.service';
 export { CargaImagenesService } from './firebase/carga-imagenes.service';
 export { CountriesService } from './country/countries.service';
 export { CustomerService } from './customer/customer.service';

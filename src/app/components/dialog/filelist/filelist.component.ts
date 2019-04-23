@@ -16,6 +16,7 @@ import { ItemFirebaseService } from '../../../services/service.index';
 
 //MODELS
 import { Item } from '../../../models/types';
+import { filter } from 'rxjs/operators';
 
 
 @Component({
@@ -63,6 +64,7 @@ export class FilelistComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.isLoadingResults = true;
     if (this.orderid == 0){
         this.CARPETA_ARCHIVOS = 'filesprojects/'+this.projectid+'/'+this.serviceid;
     }
@@ -90,7 +92,10 @@ export class FilelistComponent implements OnInit {
 
 
   applyFilter(filterValue: string) {
+    if(filterValue.length > 0){
     this.dataSource.filter = filterValue.trim().toLowerCase();
+    //console.log(this.dataSource.filteredData.length);
+    }
 
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();

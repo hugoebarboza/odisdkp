@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
-import { Observable } from 'rxjs/';
-import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs/Observable';
 import { GLOBAL } from '../global';
+
+import 'rxjs/add/operator/map';
 
 @Injectable()
 export class DashboardService {
@@ -26,10 +27,10 @@ export class DashboardService {
 	});
 		//console.log(headers);
 		//return this._http.get(url, {headers:headers});  			
-		return this._http.get(url, {headers: headers}).pipe(map((res: any) => {
+		return this._http.get(url, {headers: headers}).map((res: any) => {
       			//console.log('res', res);
       			return res;
-		}));		
+		});		
   	}
 
 /*

@@ -5,7 +5,7 @@
 <div class="portalHostSplit" *ngIf="portal === 1">
     <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
  </div>
- 
+
 <ng-template cdkPortal #myTemplate="cdkPortal">
 <div class="p-2">
 <mat-card [ngStyle]="{'padding':'0px'}">
@@ -14,11 +14,15 @@
   <tr>
     <td>
     <mat-form-field>      
-      <input  matInput (keyup)="applyFilter()" placeholder="Buscar Orden" [(ngModel)]="filterValue">
-      <button mat-button *ngIf="filterValue" matSuffix mat-icon-button aria-label="Clear" (click)="filterValue=''">
+      <input  matInput placeholder="Buscar Orden" *ngIf="!isactiveSearch && datasourceLength == 0" disabled>
+      <input  matInput (keyup)="applyFilter()" placeholder="Buscar Orden" [(ngModel)]="filterValue" *ngIf="isactiveSearch && datasourceLength > 0">
+      <button mat-button *ngIf="filterValue && isLoadingResults" matSuffix mat-icon-button aria-label="Clear" >
+          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17"></mat-spinner>
+      </button>
+      <button mat-button *ngIf="filterValue && !isLoadingResults" matSuffix mat-icon-button aria-label="Clear" (click)="filterValue=''">
         <mat-icon>close</mat-icon>
-      </button>  
-      <mat-icon matSuffix>search</mat-icon>
+      </button>      
+      <mat-icon matSuffix *ngIf="!filterValue">search</mat-icon>
     </mat-form-field>
     </td>
 
@@ -309,6 +313,7 @@
 
 
 <div class="example-container " >
+
   <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
     <app-loading *ngIf="isLoadingResults"></app-loading>  
   </div>
@@ -547,6 +552,7 @@
                   [pageSizeOptions]="pageSizeOptions"
                   (page)="onPaginateChange($event)"
                   [showFirstLastButtons]="true" 
+                  [ngClass]="{'custom-card':true}"
                   ></mat-paginator>    
 
 </div>

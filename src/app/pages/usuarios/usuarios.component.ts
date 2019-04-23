@@ -1,7 +1,8 @@
-import { Component, OnInit, Input, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { Subscription } from "rxjs/Subscription";
 import { MatDialog } from '@angular/material';
 
-//import swal from 'sweetalert';
 declare var swal: any;
 
 //DIALOG
@@ -16,7 +17,7 @@ import { Proyecto, User } from '../../models/types';
 
 
 //SERVICES
-import { UserService } from '../../services/service.index';
+import { ProjectsService, UserService } from '../../services/service.index';
 
 
 
@@ -28,6 +29,7 @@ import { UserService } from '../../services/service.index';
 export class UsuariosComponent implements OnInit {
 
   identity: any;
+  id:number;
   indexitem:number;
   indexitemdelete:number;
   isLoading: boolean = true;
@@ -37,16 +39,22 @@ export class UsuariosComponent implements OnInit {
   page: number = 1;
   pageSize: number = 0;
   proyectos: Array<Proyecto> = [];
+  project: any;
+  project_name: string = '';
   roles:  any[] = [];
   status: string;
+  sub: any;
+  subscription: Subscription;
+  title: string = 'Usuarios'
   termino: string = '';
   token: any;
   totalRegistros: number = 0;
   usuarios: any[] = [];
 
-  @Input() id : number;
   
   constructor(
+    private _proyectoService: ProjectsService,
+    private _route: ActivatedRoute,
     public _userService: UserService,
     public dialog: MatDialog,
   ) { 
@@ -54,10 +62,35 @@ export class UsuariosComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
+
+    this.sub = this._route.params.subscribe(params => { 
+      let id = +params['id'];            
+      this.id = id;
+      this.termino = '';
+      this.page = 1;
+      this.pageSize = 0;
+      if(this.id){
+        this.project = this.filter();
+        this.departamento_id = this.project.department_id;
+        this.project_name = this.project.project_name;
+        this.cargarUsuarios();
+        this.getRoleUser();
+      }
+    });
+    
   }
 
   ngOnInit() {
+
   }
+
+	ngOnDestroy(){
+		if(this.subscription){
+			this.subscription.unsubscribe();      
+      //console.log("ngOnDestroy unsuscribe");
+		}
+	}
+
 
   /*
   ngDoCheck(){
@@ -69,17 +102,6 @@ export class UsuariosComponent implements OnInit {
     }
   }*/
 
-  ngOnChanges(changes: SimpleChanges) {
-    this.termino = '';
-    this.page = 1;
-    this.pageSize = 0;
-  
-    if(this.id){
-      this.departamento_id = this.filter();
-      this.cargarUsuarios();
-      this.getRoleUser();
-    }
-  }
 
   addNew(id:number, departamento:number) {
     if(id > 0 && departamento > 0){
@@ -252,7 +274,7 @@ export class UsuariosComponent implements OnInit {
       for(var i = 0; i < this.proyectos.length; i += 1){
         var result = this.proyectos[i];
         if(result.id === this.id){
-            return result.department_id;
+            return result;
         }
       }
     }    
@@ -341,6 +363,20 @@ export class UsuariosComponent implements OnInit {
       }
     });
   }
+
+  refreshMenu(event:number){
+		if(event == 1){
+			this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+				response => {
+						if (response.status == 'success'){
+							this.proyectos = response.datos;
+							let key = 'proyectos';
+							this._userService.saveStorage(key, this.proyectos);
+						}
+					}
+				);		
+		}
+	}
 
 
 }

@@ -1,6 +1,8 @@
-<div class="container">
+<div class="container" *ngIf="proyectos && identity">
   <div id="sidebar-wrapper" >
-
+      <div class="container m-2">
+        </div>
+        
   <mat-nav-list>
     <mat-list-item  style="font-size:15px;  color: rgb(0,122,217);  " >
       PROYECTOS
@@ -27,9 +29,9 @@
           <mat-nav-list dense *ngFor="let service of proyectos[k].service; let i = index" style="color:#585858" (click)="navigate(service.id)">
 
             <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0">
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/projectcalendar', proyectos[k].id]" > 
-                <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && url === 'projectcalendar'">calendar_today</i> 
-                <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || url != 'projectcalendar' ">calendar_today</i> 
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['/calendar', proyectos[k].id]" > 
+                <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && url === 'calendar'">calendar_today</i> 
+                <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || url != 'calendar' ">calendar_today</i> 
                 Calendario
               </a>  
             </div>
@@ -43,9 +45,9 @@
           </div>
 
           <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0 && _userService.isRole(7)">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/usuarios', proyectos[k].id]" > 
-              <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && url === 'usuarios'">people</i> 
-              <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || url != 'usuarios' ">people_outline</i> 
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/users', proyectos[k].id]" > 
+              <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && url === 'users'">people</i> 
+              <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || url != 'users' ">people_outline</i> 
               Usuarios
             </a>
           </div>

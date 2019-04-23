@@ -3,7 +3,7 @@
 
     <div id="wrapper" *ngIf="proyectos">
         <!-- Sidebar -->
-        <app-menu [proyectos]="proyectos" (RefreshMenu) = "refresh( $event )"></app-menu>    
+        <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>   
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->        
@@ -18,10 +18,7 @@
   <div class="page-wrap">
     <header role="banner">
             <mat-toolbar color="primary">
-              <h1 class="text-uppercase" *ngIf="url === 'projectcalendar'">{{project_name}} / Calendario</h1>
-              <h1 class="text-uppercase" *ngIf="url === 'projectservice'">{{project_name}} / Proyectos</h1>
-              <h1 class="text-uppercase" *ngIf="url === 'usuarios'">{{project_name}} / Usuarios</h1>              
-              <h1 class="text-uppercase" *ngIf="url === 'serviceorder'">{{project_name}} / {{service}}</h1>
+              <h1 class="text-uppercase" >{{project_name}} / {{service}}</h1>
               <button mat-icon-button [matMenuTriggerFor]="menu">
                 <mat-icon class="material-icons md-15">format_color_fill</mat-icon>
               </button>
@@ -50,22 +47,8 @@
 
 
 
-      <main class="content">
-
-        <div *ngIf="url === 'projectcalendar'" class="p-2" style="width: 100%;">
-          <app-calendar [id]="id" [calendarID]="calendarID" [apikey]="apikey" [clientid]="clientid" *ngIf="calendarID"></app-calendar>
-        </div>
-        
-        <div *ngIf="url === 'projectservice'" class="p-2" style="width: 100%;">
-          <app-service [id]="id" *ngIf="id"></app-service>
-        </div>
-        
-        <div *ngIf="url === 'usuarios'" class="p-2" style="width: 100%;">
-          <app-usuarios [id]="id" *ngIf="id"></app-usuarios>
-        </div>
-
-
-        <div *ngIf="url === 'serviceorder'">
+      <main class="content">        
+        <div >
 
           <mat-tab-group backgroundColor="primary" 
           [selectedIndex]="selected.value"
