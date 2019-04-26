@@ -7,8 +7,8 @@ import { Subscription, Observable } from 'rxjs';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 //DIALOG
-import { EditServiceComponent } from '../../dialog/editservice/editservice.component';
-import { ShowcustomerComponent } from '../../dialog/showcustomer/showcustomer.component';
+import { EditServiceComponent } from '../../../pages/service/dialog/editservice/editservice.component';
+import { ShowcustomerComponent } from '../../../components/dialog/showcustomer/showcustomer.component';
 
 //MATERIAL
 import { MatDialog, MatSnackBar } from '@angular/material';

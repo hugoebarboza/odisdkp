@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-@Component({
+@Component({  
   selector: 'app-pages',
   templateUrl: './pages.component.html',
   styles: []

@@ -1,5 +1,5 @@
 //ANGULAR
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from "rxjs/Subscription";
@@ -18,7 +18,7 @@ import {  startOfDay,  endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  i
 import { AddCalendarComponent } from '../../components/dialog/addcalendar/addcalendar.component';
 
 //SERVICES
-import { ProjectsService, UserService } from '../../services/service.index';
+import { ProjectsService, SettingsService, UserService } from '../../services/service.index';
 
 //MOMENT
 import * as moment from 'moment';
@@ -41,7 +41,8 @@ declare const gapi: any;
   templateUrl: './calendar.component.html',
   styleUrls: ['./calendar.component.css']
 })
-export class CalendarComponent implements OnInit {
+export class CalendarComponent implements OnInit, OnDestroy 
+{
   
   activeDayIsOpen = false;
   date: Date;
@@ -57,7 +58,7 @@ export class CalendarComponent implements OnInit {
   sub: any;
   subtitle: string = 'Seleccione de acuerdo a las siguientes opciones'
   subscription: Subscription;
-  title: string = 'Calendario'
+  title: string;
   token: any;
   updatesuccess:string = 'Evento actualizado';
   updateerror:string = 'Evento no actualizado';  
@@ -129,6 +130,7 @@ export class CalendarComponent implements OnInit {
     private _route: ActivatedRoute,
     private _userService: UserService,
     public dialog: MatDialog,
+    public label: SettingsService,
     private toaster: ToastrService,    
   ) { 
     this._userService.handleAuthentication(this.identity, this.token);    
@@ -136,6 +138,11 @@ export class CalendarComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
+
+    this.label.getDataRoute().subscribe(data => {
+      this.title = data.subtitle;
+    });
+
 
     this.sub = this._route.params.subscribe(params => { 
       let id = +params['id'];            
@@ -498,15 +505,6 @@ export class CalendarComponent implements OnInit {
 
   refreshMenu(event:number){
 		if(event == 1){
-			this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
-				response => {
-						if (response.status == 'success'){
-							this.proyectos = response.datos;
-							let key = 'proyectos';
-							this._userService.saveStorage(key, this.proyectos);
-						}
-					}
-				);
     }
 	}
 

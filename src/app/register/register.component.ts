@@ -10,7 +10,7 @@ import { MustMatch } from '../helpers/must-match.validator';
 import { User } from '../models/types';
 
 //SERVICES
-import { UserService } from '../services/service.index';
+import { SettingsService, UserService } from '../services/service.index';
 
 
 @Component({
@@ -28,10 +28,13 @@ export class RegisterComponent implements OnInit {
 	
 
 	constructor(
-		private _userService: UserService
+		private _userService: UserService,
+		public label: SettingsService,
+
 	){
-		this.title = 'Registro';
-		//this.user = new User('','','','',1,'','',1);
+		this.label.getDataRoute().subscribe(data => {
+			this.title = data.subtitle;
+		  });	  
 	}
  
 	ngOnInit(){

@@ -8,7 +8,7 @@ import { Proyecto, User } from '../models/types';
 
 
 //SERVICES
-import { AuthService, DashboardService, UserService } from '../services/service.index';
+import { AuthService, DashboardService, SettingsService, UserService } from '../services/service.index';
 
 //SETTINGS
 import { GLOBAL } from '../services/global';
@@ -30,7 +30,6 @@ import { ToastrService } from 'ngx-toastr';
 })
 
 export class LoginComponent implements OnInit, OnDestroy {
-  title: string;
 
   departamentos: Array<any> = [];
   email: string;
@@ -46,6 +45,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   success:string;
   show:boolean = false;
   status: string;  
+  title: string;
   token;
   user: User;
   userFirebase;
@@ -112,9 +112,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     public _router: Router,
     public _userService: UserService,
     public authService: AuthService,
+    public label: SettingsService,
     public toasterService: ToastrService,    
   ){
-    this.title = 'Acceso';
+
     this.user = new User('','','','','','','', 1,'','',1,'','',1,1,1);
     this.year = new Date().getFullYear();
     this.identity = this._userService.getIdentity();
@@ -124,6 +125,10 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.success = 'Exitoso.';
     this.error = 'Credenciales no validas.'; 
     this.version = GLOBAL.version;
+    this.label.getDataRoute().subscribe(data => {
+      this.title = data.subtitle;
+    });
+          
   }
 
   ngOnInit(){
@@ -159,64 +164,91 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   onSubmit(form:NgForm){
-    //console.log('paso');
    this.spinnerButtonOptions.active = true;
    this.spinnerButtonOptions.text = 'Espere...';
-   //this.barButtonOptions.active = true;
-   //this.barButtonOptions.text = 'Espere...';
    if(!form.valid){
     return;
    }
 
    let usuario = new User('', '', '', '', '', form.value.email, form.value.password, 1, '', this.version, 1, '','',1, 1, 1);
 
+   if (this.rememberMe == 1){
+    let key = 'idaccount';
+    this.useraccount = usuario.email;
+    this._userService.saveStorage(key, this.useraccount);
+   }else{
+    if (localStorage['idaccount'] && localStorage['idaccount'] !== undefined && localStorage['idaccount'] !== null) {
+        localStorage.removeItem('idaccount');
+    }           
+   }
+
+
+
    this._userService.signup(usuario).subscribe(
-     response => {       
+     (response:any) => {       
        if(response.status != 'error' ){
          this.status = 'success';         
          this.token = response;
-         this._userService.signuptrue(usuario, true).subscribe(
-           response => { 
-            this.identity = response;
-            if(this.identity){
-              this.getPerfilUser(this.identity.sub);
-            }        
-            this._userService.handleAuthentication(this.identity, this.token);
-            this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});            
-            if (this.rememberMe == 1){
-              let key = 'idaccount';
-              this.useraccount = usuario.email;
-              this._userService.saveStorage(key, this.useraccount);
-            }else{
-              if (localStorage['idaccount'] !== undefined) {
-                  localStorage.removeItem('idaccount');
-              }
-              
-            }          
-
-            this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
-              response => {
-                  if (response.status == 'success'){
-                    this.proyectos = response.datos;
-                    let key = 'proyectos';
-                    this._userService.saveStorage(key, this.proyectos);
-                    this._router.navigate(['dashboard']);
-                  }
-                }
-              );   
-
-           });
-
        }
      },
-     error => {
+     (error:any) => {
       this.spinnerButtonOptions.active = false;                      
       this.spinnerButtonOptions.text = 'Iniciar sesión'         
-      //this.barButtonOptions.active = false;      
-      //this.barButtonOptions.text = 'Iniciar sesión'         
       this.status = 'error';
       this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
-     }
+     },
+     () => { 
+
+      //console.log('Primer Login success')
+      this._userService.signuptrue(usuario, true).subscribe(
+        (response:any) => { 
+          this.identity = response;
+          if(this.identity){
+            this.getPerfilUser(this.identity.sub);
+          }        
+          this._userService.handleAuthentication(this.identity, this.token);          
+        },
+        (error:any) => {
+          this.spinnerButtonOptions.active = false;                      
+          this.spinnerButtonOptions.text = 'Iniciar sesión'         
+          this.status = 'error';
+          this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });    
+        },
+        () => { 
+          //console.log('Segundo Login success');
+          this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+            (response:any) => {
+                if (response.status == 'success'){
+                  this.proyectos = response.datos;
+                  let key = 'proyectos';
+                  this._userService.saveStorage(key, this.proyectos);
+                }
+              },
+              (error:any) => {
+                this.spinnerButtonOptions.active = false;                      
+                this.spinnerButtonOptions.text = 'Iniciar sesión'
+                localStorage.removeItem('departamentos');
+                localStorage.removeItem('expires_at');
+                localStorage.removeItem('fotoprofile');
+                localStorage.removeItem('identity');
+                localStorage.removeItem('proyectos');
+                localStorage.removeItem('token');		    
+                this._router.navigate(['/login']);
+              },
+              () => { 
+                //console.log('Login Success and Redirect');
+                this.spinnerButtonOptions.active = false;                      
+                this.spinnerButtonOptions.text = 'Iniciar sesión'          
+                this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
+                this._router.navigate(['dashboard']);
+              }
+            );   
+        }
+        
+        );
+
+
+      }
      );
 
   }
