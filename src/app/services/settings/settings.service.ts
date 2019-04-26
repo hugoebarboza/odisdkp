@@ -1,4 +1,8 @@
 import { Injectable, Inject } from '@angular/core';
+import { Router, ActivationEnd } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+
+import 'rxjs/add/operator/filter';
 
 
 @Injectable()
@@ -9,7 +13,9 @@ export class SettingsService {
     tema: ''
   };
 
-  constructor(  ) {
+  constructor(  
+    private _router: Router,
+  ) {
     this.cargarAjustes();
   }
 
@@ -34,17 +40,21 @@ export class SettingsService {
   }
 
   aplicarTema( tema, tcolor ) {
-
-
     //let url = `assets/css/colors/${ tema }.css`;
     //this._document.getElementById('tema').setAttribute('href', url );
 
     this.ajustes.tema = tema;
     this.ajustes.idtema = tcolor;
-
     this.guardarAjustes();
-
   }
+
+  getDataRoute(): Observable<any> {
+    return this._router.events
+        .filter( evento => evento instanceof ActivationEnd  )
+        .filter( (evento: ActivationEnd) => evento.snapshot.firstChild === null )
+        .map( (evento: ActivationEnd) => evento.snapshot.data );
+  }
+
 
 }
 

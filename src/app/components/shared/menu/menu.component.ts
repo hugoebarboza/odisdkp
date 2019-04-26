@@ -1,25 +1,30 @@
-import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-
+import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
+import { Subscription } from 'rxjs/Subscription';
 
 //SERVICES
-import { UserService } from '../../../services/service.index';
+import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+
 
 @Component({  
   selector: 'app-menu',
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-export class MenuComponent implements OnInit {
-  public title: string;
-  public identity: any;
+export class MenuComponent implements OnInit, OnDestroy {
+  
+  identity: any;
+  path:string;
   proyectos : any = [];
-  public projectid:number=0;
-  public projectselected:number = 0;
-  public selected:number = 0;  
-  public token: any;
-  public url: string = '';
+  projectid:number=0;
+  projectselected:number = 0;
+  selected:number = 0;
+  subscription: Subscription;
+  title: string;
+  token: any;
+  url: string = '';
+  uri:string;
 
   
 
@@ -37,23 +42,41 @@ export class MenuComponent implements OnInit {
 
   constructor(
     private _route: ActivatedRoute, 
+    public _proyectoService: ProjectsService,
     public _userService: UserService,
+    public label: SettingsService,
   ) { 
 
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.RefreshMenu = new EventEmitter(); 
-   
+    this.proyectos = this._userService.getProyectos();
+    this.RefreshMenu = new EventEmitter();
+		this.label.getDataRoute().subscribe(data => {
+      this.path = data.path;
+      //console.log(this.path);
+      if(this.path === 'users'){
+        this.selected = 0;
+        this.projectselected = this.id;
+      }
+      if(this.path === 'projectservice'){
+        this.selected = 0;
+        this.projectselected = this.id;
+      }
+
+    });
+
+
+
     this._route.params.subscribe(params => {
     let id = +params['id'];        
     this.id = id;
-    if(this.id >0 ){
+    if(this.id >0){
       //GET RUTA
         this._route.url.subscribe(res =>{
         this.url = res[0].path;
       });
       
-      if(this.url === 'projectcalendar'){
+      if(this.url === 'calendar'){
         this.selected = 0;
         this.projectselected = this.id;
       }
@@ -63,7 +86,7 @@ export class MenuComponent implements OnInit {
         this.projectselected = this.id;
       }
 
-      if(this.url === 'usuarios'){
+      if(this.url === 'users'){
         this.selected = 0;
         this.projectselected = this.id;
       }
@@ -81,19 +104,36 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.proyectos = this._userService.proyectos;
+    //this.proyectos = this._userService.proyectos;
     //console.log(this.proyectos);
     //console.log(this.identity);
   }
   
+
+  ngOnDestroy(){
+		if(this.subscription){
+			this.subscription.unsubscribe();
+			//console.log("ngOnDestroy unsuscribe");
+    }   
+  }
+
 
   public navigate(item) {
     this.selected = item;
   }
 
   refresh(){
-    //console.log('refresh menu');
     this.RefreshMenu.emit(1);
+    this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+      response => {
+          if (response.status == 'success'){
+            this.proyectos = response.datos;
+            let key = 'proyectos';
+            this._userService.saveStorage(key, this.proyectos);
+          }
+        }
+      );		
+
   }
 
 }

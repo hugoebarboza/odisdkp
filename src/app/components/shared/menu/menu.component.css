@@ -1,7 +1,8 @@
 .active-link{
     background-color: #F3F3F3;
-    color: rgb(0,122,217);    
+    color: rgb(0,122,217);
     font-weight: bold;
+    border-left: 2px solid rgb(0,122,217);
 }
 .example-headers-align .mat-expansion-panel-header-title, 
 .example-headers-align .mat-expansion-panel-header-description {
@@ -63,3 +64,5 @@ h6 {
 .spacer {
   flex: 1 1 auto;
 }
+
+

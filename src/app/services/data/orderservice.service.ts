@@ -1,11 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 import {BehaviorSubject} from 'rxjs';
-
-//import { BehaviorSubject } from 'rxjs/';
+import 'rxjs/add/operator/map';
 
 import swal from 'sweetalert';
 

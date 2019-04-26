@@ -4,6 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+
 //MODELS
 import { 
 	Departamento,
@@ -48,16 +49,21 @@ export class UserService {
 			this.proyectos = [];
 			
     }
-
   }
 
-  	getQuery( query:string, token ){  		
+  isLogin() {
+		if(this.token){
+			return ( this.token.token.length > 5 ) ? true : false;
+		}
+  }
+
+  getQuery( query:string, token ){  		
 		const url = this.url+query;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 									   .set('Authorization', token);							  							 
 
 		return this._http.get(url, {headers: headers});  			
-  	}
+  }
 
 
 	register (user:User): Observable<any>{
@@ -179,7 +185,7 @@ export class UserService {
 				this.saveStorage(key, resp);			
 				return resp;
 			}).catch( err => {
-				return Observable.throw( err );
+				return err.error.message;
 			});		
 	}
 

@@ -71,10 +71,7 @@
 
           <mat-spinner-button [options]="spinnerButtonOptionsDisabled"  *ngIf="!_userService.isAuthenticated() && !formControl.valid" ></mat-spinner-button>
           <mat-spinner-button [options]="spinnerButtonOptions" (click)="onSubmit(formControl)" *ngIf="!_userService.isAuthenticated() && formControl.valid" ></mat-spinner-button>
-
-          <button class="btn btn-lg btn-primary btn-block" type="submit"  *ngIf="_userService.isAuthenticated()" >     
-          <span *ngIf="_userService.isAuthenticated()"> Espere</span>
-          </button>
+          <mat-spinner-button [options]="spinnerButtonOptions" *ngIf="_userService.isAuthenticated() && formControl.valid" ></mat-spinner-button>
 
           <div class="container">
           <div class="d-block text-center mt-3">

@@ -1,0 +1,145 @@
+<form  novalidate="novalidate">
+  <h1 mat-dialog-title>{{title}}</h1>
+
+
+    <div class="mat-app-background " >
+
+        <mat-form-field class="middle-width" >
+          <mat-select placeholder="Fecha de OT: " [(ngModel)]="selectedColumnnDate.fieldValue" name="filtrofecha" required  >
+            <mat-option value="orders.create_at">Creado El</mat-option>            
+            <mat-option value="orders.update_at">Editado El</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <mat-form-field class="middle-width" >
+          <mat-select placeholder="Limite" [(ngModel)]="pageSize" name="limit" required>
+            <mat-option *ngFor="let limit of limits" [value]="limit.value">
+              {{limit.name}}
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>          
+        </mat-form-field>
+
+        <br>
+        
+
+
+
+        <mat-form-field class="middle-width">
+          <input matInput [max]="selectedColumnnDate.columnValueHasta" [matDatepicker]="fecha1" placeholder="Fecha Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde" name="columnValueDesde" disabled required>
+          <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
+          <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
+        </mat-form-field>
+        
+        <mat-form-field class="middle-width" *ngIf="selectedColumnnDate.columnValueDesde">
+          <mat-label>Hora Desde (Opcional)</mat-label>
+          <input matInput placeholder="Seleccione"
+               [(ngModel)]="timefrom"
+               name="timefrom"
+               [owlDateTimeTrigger]="dt1" [owlDateTime]="dt1">
+          <owl-date-time [pickerType]="'timer'" #dt1></owl-date-time>      
+        </mat-form-field>
+
+        
+        <br>
+        <mat-form-field  class="middle-width">
+          <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Fecha Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" name="columnValueHasta" disabled required>
+          <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
+          <mat-datepicker #fecha2 disabled="false"></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field class="middle-width" *ngIf="selectedColumnnDate.columnValueHasta">
+          <mat-label>Hora Hasta (Opcional)</mat-label>
+          <input matInput placeholder="Seleccione"
+               [(ngModel)]="timeuntil"
+               name="timeuntil"
+               [owlDateTimeTrigger]="dt2" [owlDateTime]="dt2">
+          <owl-date-time [pickerType]="'timer'" #dt2></owl-date-time>      
+        </mat-form-field>
+
+        <br *ngIf="service && service.length > 1">
+            <mat-form-field class="middle-width" *ngIf="service && service.length > 1">
+              <mat-select  placeholder="Servicio" [(ngModel)]="serviceid" name="service_id">
+              <mat-option [value]="0">Seleccione</mat-option>
+              <mat-option *ngFor="let k of service | keys;" [value]="service[k].id">
+                {{service[k].service_name}}
+              </mat-option>
+              </mat-select>      
+            </mat-form-field>
+
+        <br *ngIf="serviceid">
+        <mat-form-field class="middle-width" *ngIf="serviceid">
+          <mat-select placeholder="Seleccione Formato" [(ngModel)]="selectedValueFormat.fieldValue" name="format" required>
+            <mat-option value="3">Sólo datos de la orden</mat-option>            
+          </mat-select>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>          
+        </mat-form-field>
+
+        <br>
+
+        <mat-form-field class="middle-width" >
+          <mat-select placeholder="Reponsable (Opcional): " [(ngModel)]="selectedColumnnUsuario.fieldValue" name="usuario">
+            <mat-option>Seleccione</mat-option>
+            <mat-option value="orders_details.assigned_to">Asignado A</mat-option>            
+            <mat-option value="orders_details.create_by">Creado Por</mat-option>
+            <mat-option value="orders_details.update_by">Editado Por</mat-option>            
+            <p></p>
+            <div class="container">
+            <div class="button-row">
+            <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnnUsuario.fieldValue=''">Limpiar</button>            
+            </div>
+            </div>
+            <p></p>
+          </mat-select>
+        </mat-form-field>
+
+
+        <mat-form-field class="middle-width" *ngIf="selectedColumnnUsuario.fieldValue">
+          <mat-select [formControl]="userCtrl"  placeholder="Inspector" #singleSelect   [(value)]="selectedColumnnUsuario.columnValue" >
+          <ngx-mat-select-search [formControl]="userMultiFilterCtrl"></ngx-mat-select-search>
+          <mat-option *ngFor="let user of filteredUserMulti | async" [value]="user.id">
+            {{user.name}}
+          </mat-option>
+          </mat-select>
+        </mat-form-field>
+
+
+
+        <h4 style="color:#747474; font-size: 14px;">Ordenar datos (Opcional):</h4>
+        <mat-radio-group [(ngModel)]="selectedValueOrdeno" name="ordenado"  class="order-radio-group" [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde || !selectedValueFormat">
+          <mat-radio-button class="order-radio-button" *ngFor="let sortdateby of sortdate" [value]="sortdateby" >
+          {{sortdateby.name}}
+          </mat-radio-button>
+          <mat-radio-button class="order-radio-button" *ngFor="let sortdateupdateby of sortdateupdate" [value]="sortdateupdateby">
+          {{sortdateupdateby.name}}
+          </mat-radio-button>
+        </mat-radio-group>
+
+
+
+
+
+
+    </div>
+
+  <div mat-dialog-actions>
+
+    <div class="container">      
+      <div class="row justify-content-center">
+      <div class="footer-button-row">
+      <mat-bar-button [options]="barButtonOptionsDisabled" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="!selectedColumnnDate.columnValueDesde || !selectedColumnnDate.columnValueHasta || !selectedValueFormat || !selectedColumnnDate.fieldValue || pageSize < 0">      
+      </mat-bar-button>
+
+      <mat-bar-button [options]="barButtonOptions" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="selectedColumnnDate.columnValueHasta  && selectedColumnnDate.columnValueDesde && selectedValueFormat && selectedColumnnDate.fieldValue && pageSize >= 0">
+      </mat-bar-button>
+      
+      <button mat-raised-button color="warn" (click)="reset()" [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde || !selectedValueFormat" >Limpiar</button>
+
+      <button mat-button (click)="onNoClick()" >Cerrar</button>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</form>
+
