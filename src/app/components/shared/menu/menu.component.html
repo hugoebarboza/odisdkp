@@ -30,16 +30,16 @@
 
             <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0">
               <a class="nav-link" routerLinkActive="active" [routerLink]="['/calendar', proyectos[k].id]" > 
-                <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && url === 'calendar'">date_range</i> 
-                <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || url != 'calendar' ">calendar_today</i> 
+                <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'calendar'">date_range</i> 
+                <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'calendar' ">calendar_today</i> 
                 Calendario
               </a>  
             </div>
 
           <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0 && _userService.isRole(7)">
-            <a class="nav-link" routerLinkActive="active" [routerLink]="['/projectservice', proyectos[k].id]" > 
-              <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'projectservice'">folder</i> 
-              <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'projectservice' ">folder_open</i> 
+            <a class="nav-link" routerLinkActive="active" [routerLink]="['/project', proyectos[k].id]" > 
+              <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'project'">folder</i> 
+              <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'project' ">folder_open</i> 
               Proyectos
             </a>
           </div>
@@ -54,9 +54,9 @@
 
 
             <div routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" >
-              <a class="nav-link" routerLinkActive="active" [routerLink]="['/serviceorder', service.id]" > 
-              <i class="material-icons md-14-color" *ngIf="service.id === selected && url === 'serviceorder'">launch</i> 
-              <i class="material-icons md-14" *ngIf="service.id != selected || url != 'serviceorder'">launch</i> 
+              <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', service.id]" > 
+              <i class="material-icons md-14-color" *ngIf="service.id === selected && path === 'service'">launch</i> 
+              <i class="material-icons md-14" *ngIf="service.id != selected || path != 'service'">launch</i> 
               {{service.service_name}} 
               </a>
             </div>

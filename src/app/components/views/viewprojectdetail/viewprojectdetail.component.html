@@ -1,6 +1,6 @@
 
-        <mat-card >
-          <mat-card-header >
+        <mat-card >          
+          <mat-card-header >             
           <mat-card-title *ngIf="project">Proyecto: {{project}}</mat-card-title>
           <mat-card-title *ngIf="!project">Proyecto: S/N</mat-card-title>
           <mat-card-subtitle *ngIf="servicename">Detalles de: <b>{{servicename}} </b></mat-card-subtitle>
@@ -357,7 +357,7 @@
                       <div class="row">
                           <div class="col-12">
                                 <div class="p-3 animated fadeIn Fast">
-                                <angular-editor [(ngModel)]="projectContent" [config]="editorConfig" *ngIf="toggleContentMain"></angular-editor>
+                                <angular-editor [(ngModel)]="projectContent" [config]="editorConfig" *ngIf="toggleContentMain"></angular-editor>                                
                                 <div class="button-row p-2" *ngIf="toggleContentMain">
                                     <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="!projectContent" disabled>Guardar</button>                                    
                                     <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="projectContent && projectContent.length <= 3" disabled>Guardar</button>

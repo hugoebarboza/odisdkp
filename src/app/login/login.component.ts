@@ -222,6 +222,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                   this.proyectos = response.datos;
                   let key = 'proyectos';
                   this._userService.saveStorage(key, this.proyectos);
+                  this.spinnerButtonOptions.active = false;                      
+                  this.spinnerButtonOptions.text = 'Iniciar sesión'          
+                  this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
+                  this._router.navigate(['dashboard']);  
                 }
               },
               (error:any) => {
@@ -236,11 +240,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                 this._router.navigate(['/login']);
               },
               () => { 
-                //console.log('Login Success and Redirect');
-                this.spinnerButtonOptions.active = false;                      
-                this.spinnerButtonOptions.text = 'Iniciar sesión'          
-                this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
-                this._router.navigate(['dashboard']);
+                //console.log('Complete');
               }
             );   
         }

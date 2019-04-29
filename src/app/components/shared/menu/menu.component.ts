@@ -54,14 +54,25 @@ export class MenuComponent implements OnInit, OnDestroy {
 		this.label.getDataRoute().subscribe(data => {
       this.path = data.path;
       //console.log(this.path);
+      if(this.path === 'calendar'){        
+        this.selected = 0;
+        this.projectselected = this.id;
+      }
+
       if(this.path === 'users'){
         this.selected = 0;
         this.projectselected = this.id;
       }
-      if(this.path === 'projectservice'){
+      if(this.path === 'project'){
         this.selected = 0;
         this.projectselected = this.id;
       }
+
+      if(this.path === 'order'){
+        this.selected = this.id;
+        this.projectselected = 0;
+      }
+      
 
     });
 
@@ -81,7 +92,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.projectselected = this.id;
       }
 
-      if(this.url === 'projectservice'){
+      if(this.url === 'project'){
         this.selected = 0;
         this.projectselected = this.id;
       }
@@ -92,7 +103,7 @@ export class MenuComponent implements OnInit, OnDestroy {
       }
 
 
-      if(this.url === 'serviceorder'){
+      if(this.url === 'service'){
         this.selected = this.id;
         this.projectselected = 0;
       }

@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material';
 import { ActivatedRoute } from '@angular/router';
 
 //MODEL
-import { Proyecto } from '../../models/types';
+import { Proyecto } from '../../../models/types';
 
 //CALENDAR
 import {  CalendarEvent,  CalendarEventAction,  CalendarEventTimesChangedEvent,  CalendarEventTitleFormatter,  CalendarView} from 'angular-calendar';
@@ -15,10 +15,10 @@ import {  CalendarEvent,  CalendarEventAction,  CalendarEventTimesChangedEvent, 
 import {  startOfDay,  endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  isSameMonth,  addHours } from 'date-fns';
 
 //DIALOG
-import { AddCalendarComponent } from '../../components/dialog/addcalendar/addcalendar.component';
+import { AddCalendarComponent } from '../dialog/addcalendar/addcalendar.component';
 
 //SERVICES
-import { ProjectsService, SettingsService, UserService } from '../../services/service.index';
+import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
 
 //MOMENT
 import * as moment from 'moment';
