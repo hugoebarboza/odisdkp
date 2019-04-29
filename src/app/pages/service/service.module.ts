@@ -1,4 +1,3 @@
-
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
@@ -7,7 +6,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //COMPONENTS
 import { ServiceComponent } from './service-list/service.component';
 
-import { PagesModule } from '../pages.module'
 
 //DIALOG
 import { AddServiceComponent } from './dialog/addservice/addservice.component';
@@ -29,6 +27,7 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { TableModule } from 'ngx-easy-table';
+import { ViewModule } from '../../components/views/view.module';
 
 
 //MOMENT
@@ -51,13 +50,13 @@ import { ServiceRoutingModule } from './service.routing';
     NgxMatSelectSearchModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    PagesModule,
     PipesModule,
     ReactiveFormsModule,
     ServiceRoutingModule,
     SharedModule,
     ScrollingModule,
     TableModule,
+    ViewModule
   ],
   declarations: 
   [
@@ -78,8 +77,7 @@ import { ServiceRoutingModule } from './service.routing';
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
-  ],  
-
+  ],
 })
 export class ServiceModule { }
 

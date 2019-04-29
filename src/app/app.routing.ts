@@ -24,7 +24,13 @@ const appRoute: Routes = [
 	{ path:'logout/:sure', component: LoginComponent, data: { titulo: 'OCA Global - ODIS Acceso', subtitle: '', descripcion: 'OCA Global - ODIS User Login' }},
 	{ path:'notfound', component: NotfoundComponent, data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  }},
 	{ path:'register', component: RegisterComponent, data: { titulo: 'OCA Global - ODIS Registro', subtitle: 'Registro', descripcion: 'OCA Global - ODIS User Register' }},
-    { 
+	{ 
+		path:'calendar', 
+		canActivate: [ LoginGuardGuard ],
+		loadChildren: './pages/calendar/calendar.module#CalendarioModule',
+		data: { preload: true, delay: false }
+	},
+	{ 
 		path:'change', 
 		canActivate: [ LoginGuardGuard ],
 		loadChildren: './pages/changepassword/changepassword.module#ChangePasswordModule',
@@ -43,23 +49,24 @@ const appRoute: Routes = [
 		data: { preload: true, delay: true }
 	},
 	{
-		path: 'projectservice',
+		path: 'project',
 		canActivate: [ LoginGuardGuard ],
 		loadChildren: './pages/service/service.module#ServiceModule',
-		data: { preload: true, delay: true }
+		data: { preload: true, delay: false }
 	},
-  { 	
+    { 	
 		path: 'users', 
     canActivate: [LoginGuardGuard],
 		loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
 		data: { preload: true, delay: false }
-  },
+    },
 	{
-		path: '',
+		path: 'service',
 		canActivate: [ LoginGuardGuard ],
 		loadChildren: './pages/pages.module#PagesModule',
 		data: { preload: true, delay: false }
 	},
+	{ path:'', component: DefaultComponent, pathMatch: 'full', data: { titulo: 'OCA Global - ODIS Home', subtitle: '', descripcion: 'OCA Global - ODIS Home' } },		
 	{ path:'**', pathMatch: 'full', redirectTo: 'notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
 
 ];

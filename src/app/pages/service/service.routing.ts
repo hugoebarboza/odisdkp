@@ -13,7 +13,7 @@ const routes: Routes = [
     { path:':id', 
     component: ServiceComponent,
     canActivate: [AuthguardService],
-    data: { path: 'projectservice', titulo: 'OCA Global - ODIS Proyectos', subtitle: 'Proyectos', descripcion: 'OCA Global - ODIS Project Services Managment' }
+    data: { path: 'project', titulo: 'OCA Global - ODIS Proyectos', subtitle: 'Proyectos', descripcion: 'OCA Global - ODIS Project Services Managment' }
     },
 ];
 

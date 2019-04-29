@@ -157,7 +157,7 @@
     >
       <ng-template let-row >
         <td>
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/serviceorder', row.id]" > 
+          <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', row.id]" > 
           <span class="font-small">{{row.service_name}}</span>
           </a>
         </td>
@@ -227,7 +227,7 @@
             
             <as-split-area size="30" minsize="30" maxsize="30">
             <div class="p-2">
-                <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>
+                <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>                                       
                 <app-viewprojectdetail *ngIf="selectedRow == 0"></app-viewprojectdetail>              
             </div>
         </as-split-area>

@@ -16,6 +16,7 @@ import { PagesComponent } from './pages/pages.component';
 import { RegisterComponent } from './register/register.component';
 
 
+
 //MATERIAL
 import {MaterialModule} from './material-module';
 
@@ -90,8 +91,6 @@ registerLocaleData(localeEs);
     PagesComponent,
     RegisterComponent,
   ],
-  exports: [
-  ],
   imports: [    
     AppRoutingModule,
     AngularEditorModule,
@@ -118,11 +117,13 @@ registerLocaleData(localeEs);
     RouterModule,
     SharedModule, 
     ServiceModule,
-    ToastrModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    ToastrModule.forRoot(),
   ],
   entryComponents: [
     LogoutComponent,
+  ],
+  exports: [
   ],
   providers: [
     AuthguardService,

@@ -125,16 +125,9 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
     this.id = id;
   
   if (this.id > 0 && this.token.token != null){
-        //GET RUTA
-        this._route.url.subscribe(res =>{
-          this.url = res[0].path;        
-          //console.log(this.url);
-        });
 
-
-        //GET PROJECT FROM SERVICEORDER
-        if(this.url === 'serviceorder'){
-          this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
+      //GET PROJECT FROM SERVICEORDER
+      this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
                     response => {
                       if (response.status == 'success'){
                         this.project_name = response.datos.project['project_name'];
@@ -146,8 +139,6 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
                         this.table = this.services['projects_categories_customers']['name_table'];
                       }
                     });   
-        }//END IF GET SERVICE
-
       }
     });     
 

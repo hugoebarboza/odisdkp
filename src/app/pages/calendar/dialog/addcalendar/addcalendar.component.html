@@ -13,7 +13,7 @@
   <form  #formControl="ngForm" novalidate="novalidate">
       <div class="form-group">          
         <label class="form-control-label" style="margin-bottom: 0;">Fecha Inicio</label>
-        <br>
+        <br>        
         <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.date" [maxDate]="data.due_date"  name="date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true" *ngIf="data.formcalendar == null">        </p-calendar>
         <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.date"  name="date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true"  *ngIf="data.formcalendar">
           </p-calendar>
