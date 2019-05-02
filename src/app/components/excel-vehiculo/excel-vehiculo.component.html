@@ -27,18 +27,24 @@
                     <input matInput placeholder="Fecha vencimiento" formControlName="inputDate" (readonly)="true">
                 </mat-form-field>
                 
-                <mat-slide-toggle class="btnUpload" (change)="checkPicking($event)" [disabled]="checkboxRegistro ||checkboxUpdateVIN || checkboxAuto">
+                <mat-slide-toggle class="btnUpload" (change)="checkPicking($event)" [disabled]="liberar || checkboxRegistro ||checkboxUpdateVIN || checkboxAuto">
                   Generar picking
                 </mat-slide-toggle>
-                <mat-slide-toggle class="btnUpload" (change)="checkRegistro($event)"  [disabled]="checkboxUpdateVIN || checkboxPicking || checkboxAuto">
+                <mat-slide-toggle class="btnUpload" (change)="checkRegistro($event)"  [disabled]="liberar || checkboxUpdateVIN || checkboxPicking || checkboxAuto">
                   Registrar vehículos
                 </mat-slide-toggle>
-                <mat-slide-toggle class="marginLeftX2" (change)="checkUpdateVIN($event)" [disabled]="checkboxPicking || checkboxRegistro || checkboxAuto">
+                <mat-slide-toggle class="marginLeftX2" (change)="checkUpdateVIN($event)" [disabled]="liberar || checkboxPicking || checkboxRegistro || checkboxAuto">
                   Actualizar vehículos
                 </mat-slide-toggle>
                 <mat-slide-toggle class="marginLeftX2" (change)="checkAutoGenerar($event)" [disabled]="checkboxUpdateVIN || checkboxPicking || checkboxRegistro">
                   Generar N°Orden
                 </mat-slide-toggle>
+                <mat-slide-toggle class="marginLeftX2" (change)="checkLiberar($event)" [disabled]="checkboxUpdateVIN || checkboxPicking || checkboxRegistro">
+                  Liberar ubicaciones
+                </mat-slide-toggle>
+
+
+
                 <a mat-mini-fab target="_self" class="marginLeftX2" color="primary" href="../../assets/ModuloCargaVIN.xlsx" download="ModuloCarga.xlsx">
                   <mat-icon>archive</mat-icon>
                 </a><label class=" marginLeft">Modulo de Carga</label>

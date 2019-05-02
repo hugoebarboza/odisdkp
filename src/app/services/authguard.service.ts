@@ -19,7 +19,7 @@ export class AuthguardService implements CanActivate {
 
 			let token = this.auth.token.token;
 			if(token){
-				//console.log('paso authguard true token');
+				console.log('paso authguard true token');
 				let payload = JSON.parse( atob( token.split('.')[1] ));
 				let expirado = this.expirado( payload.exp );
 		
@@ -31,11 +31,11 @@ export class AuthguardService implements CanActivate {
 					localStorage.removeItem('proyectos');
 					localStorage.removeItem('expires_at');
 					this._router.navigate(["/login"]);
-					//console.log('paso authguard false');
+					console.log('paso authguard false');
 					return false;		
 				}	
 			}
-  		//console.log('paso authguard true');
+  		console.log('paso authguard true');
   		return true;	
   	}  	
 	}

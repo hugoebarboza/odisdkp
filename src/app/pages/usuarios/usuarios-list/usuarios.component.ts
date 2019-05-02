@@ -51,7 +51,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   
   constructor(
-    private _proyectoService: ProjectsService,
     private _route: ActivatedRoute,
     public _userService: UserService,
     public dialog: MatDialog,
@@ -133,7 +132,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
-    this._userService.getUserPaginate( this.token.token, this.id, this.page )
+    this.subscription = this._userService.getUserPaginate( this.token.token, this.id, this.page )
               .subscribe( (resp: any) => {
                 this.totalRegistros = resp.datos.total;
                 this.usuarios = resp.datos.data;

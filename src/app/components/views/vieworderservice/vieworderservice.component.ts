@@ -354,6 +354,25 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
    //console.log(x);
   }
 
+  onChangeIcon(checked:boolean, category_id:number, orden:number) {
+
+    this.label = checked;
+
+    if(this.label == true){
+      const tag = 1;
+      this.dataService.important(this.token.token, category_id, orden, tag);
+      this.snackBar.open('Se ha marcado la orden como importante.', 'Destacada', {duration: 2000,});
+    }
+
+    if(this.label == false){
+      const tag = 0;
+      this.dataService.important(this.token.token, category_id, orden, tag);
+      this.snackBar.open('Se ha marcado la orden como no importante.', '', {duration: 2000,});
+    }
+
+  }  
+
+  /*
   onChange(event:any, category_id:number, orden:number) {
     this.label = event.checked;
    
@@ -368,7 +387,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.dataService.important(this.token.token, category_id, orden, tag);
       this.snackBar.open('Se ha marcado la orden como no importante.', '', {duration: 2000,});             
     }           
-  }
+  }*/
 
 
 

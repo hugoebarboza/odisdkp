@@ -119,7 +119,7 @@ import { ToastrService } from 'ngx-toastr';
     const requestUrl = href;
     //console.log(requestUrl);
     const headers = new HttpHeaders({'Content-Type': 'application/json','Authorization': token});
-
+    //console.log(headers);
     return new Promise((resolve, reject) => {
       if (token == '')
           reject('Sin Token');

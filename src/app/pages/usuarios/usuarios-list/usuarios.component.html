@@ -73,10 +73,10 @@
                           <thead>
                               <tr>
                                   <th></th>                        
-                                  <th>Correo</th>
                                   <th>Nombre</th>
+                                  <th>Correo</th>                                  
+                                  <th>Rut</th>                                  
                                   <th>Rol</th>
-                                  <th>Rut</th>
                                   <th>Estatus</th>
                                   <th>Verificado</th>                          
                                   <th>Acceso</th>
@@ -91,18 +91,22 @@
                                 <td class="w10">
                                     <div class="circle" [style.color]="usuario.status? 'green' : 'red'"></div>
                                 </td>
-                                  <td>                          
-                                  {{ usuario.email }}
-                                  <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="usuario.status_foto">
-                                  <mat-icon class="material-icons md-13-color" >image</mat-icon>        
-                                  </button>
-                                  
-                                  <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="!usuario.status_foto">
-                                  <mat-icon class="material-icons md-13-nocolor" >image</mat-icon>
-                                  </button>
-                          
+                                  <td>{{ usuario.name | titlecase}} {{ usuario.surname | titlecase}}
+                                      <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="usuario.status_foto">
+                                          <mat-icon class="material-icons md-13-color" >image</mat-icon>        
+                                          </button>
+                                          
+                                          <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="!usuario.status_foto">
+                                          <mat-icon class="material-icons md-13-nocolor" >image</mat-icon>
+                                          </button>        
                                   </td>
-                                  <td>{{ usuario.name }} {{ usuario.surname }}</td>
+                                  <td>{{ usuario.email | lowercase}}</td>
+                                  <td>
+                                      <div class="form-group row" >
+                                          <div *ngIf="usuario.dni >=0">{{usuario.dni}}-{{usuario.dv}}</div>
+                                      </div>
+                                  </td>
+
                                   <td >
                                     <select [(ngModel)]="usuario.role_id" name="role" class="form-control" *ngIf="roles">
                                             <option *ngFor="let rol of roles" [value]="rol.id">
@@ -110,11 +114,6 @@
                                             <option>
                                     </select>                            
 
-                                  </td>
-                                  <td>
-                                      <div class="form-group row" >
-                                          <div *ngIf="usuario.dni >=0">{{usuario.dni}}-{{usuario.dv}}</div>
-                                      </div>
                                   </td>
 
                                   <td>
@@ -160,7 +159,7 @@
                                     </button>            
                         
 
-                                    <button mat-icon-button color="warn" *ngIf="_userService.isRole(7)" (click)="borrarUsuario(usuario, i)">
+                                    <button mat-icon-button color="warn" *ngIf="_userService.isRole(7) && usuario.id !== identity.sub" (click)="borrarUsuario(usuario, i)">
                                     <mat-icon aria-label="Edit" *ngIf="i != indexitemdelete" >delete</mat-icon>                             
                                     <app-progress-spinner *ngIf="isLoadingDelete && i == indexitemdelete"></app-progress-spinner>
                                     </button>

@@ -1,0 +1,72 @@
+<div class="container-fluid p-2">
+
+    <div class="row animated fadeIn">
+        <div class="col-12">
+            <div >
+                <div >
+                    <table class="table table-hover">
+                        <tbody>
+                            <input #input [(ngModel)]="termino" (keyup)="buscarUsuario(termino)" type="text" class="form-control" placeholder="Buscar usuario por Nombre...">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+  <div class="row animated fadeIn" *ngIf="isLoading">
+      <div class="col-sm-12">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+    </div>
+
+    <div class="row animated fadeIn" *ngIf="!isLoading && status == 'error'">
+        <div class="col-sm-12">
+            <div class="alert alert-danger" *ngIf="status == 'error'">
+                No se encontraron registros que coincidan con su búsqueda. 
+                <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+            </div>
+        </div>
+    </div>
+      
+
+
+    <div class="row animated fadeIn" *ngIf="!isLoading && status == 'success'">
+      <div class="col-12">
+          <div >
+              <div >
+                  <table class="table table-hover">
+                      <tbody>
+                          <tr *ngFor="let usuario of usuarios; let i = index">
+                            <td class="w10">
+                                <div class="circle" [style.color]="usuario.status? 'green' : 'red'"></div>
+                            </td>
+                            <td>{{ usuario.name | titlecase }} {{ usuario.surname | titlecase }}</td>
+                            <td>{{ usuario.email | lowercase }}</td>
+                            <td>{{ usuario.project_name }}</td>
+
+                              <td *ngIf="_userService.isRole(7)">
+                                <button type="button" (click)="adduser(usuario.id)" class="btn btn-success">Agregar</button>
+                              </td>
+                          </tr>
+
+                      </tbody>
+                  </table>
+                  <div class="button-row">
+
+                  <button (click)="paginate(-10, -1)" class="btn btn-secondary">
+                    Anterior
+                  </button>
+
+                  <button (click)="paginate(10, 1)" class="btn btn-secondary">
+                      Siguiente
+                  </button>
+                  </div>
+
+
+
+              </div>
+          </div>
+      </div>
+    </div>
+</div>

@@ -38,10 +38,11 @@ html{
 }
  */
 
+ /*
 .mat-toolbar.mat-primary {
   background: #3949AB;
   color: #3949AB;
-}
+}*/
 
 .xlModal > .modal-dialog {
     max-width: 1490px !important;

@@ -11,7 +11,7 @@
     <app-loading *ngIf="isLoading"></app-loading>  
   </div>
   
-  <div class="animated fadeIn" *ngIf="!isLoading && usuario && forma" >
+<div class="app animated fadeIn" *ngIf="!isLoading && usuario && forma" >
 
       <form ngNativeValidate *ngIf="forma" [formGroup]="forma"  >
 
@@ -96,13 +96,9 @@
       
         </form>
 
-
+</div>
 <br>
-  <div mat-dialog-actions >      
+<div mat-dialog-actions >      
     <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="confirmEdit()">Actualizar</button>
     <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
-  </div>
 </div>
-
-
-<br>

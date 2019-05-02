@@ -158,6 +158,8 @@ table {
 .material-icons.md-dark.md-inactive { color: rgba(0, 0, 0, 0.26); }
 .material-icons.md-13-color { font-size: 13px; color: #809c13; padding: 1px;}
 .material-icons.md-13-nocolor { font-size: 13px; color: #CFCFCF; padding: 1px;}
+.material-icons.md-color-checkbox{ font-size: 24px; color: #ffe600; padding: 1px;}
+.material-icons.md-nocolor-checkbox{ font-size: 24px; color: #CFCFCF; padding: 1px;}
 
 .no-shadow {
   box-shadow: none !important;

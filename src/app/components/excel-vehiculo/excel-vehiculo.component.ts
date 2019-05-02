@@ -48,6 +48,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
   isRateLimitReached = false;
   show_table = false;
   bandera = false;
+  liberar = false;
   checkValidation = false;
   checkPost = false;
   checkValidationPost = false;
@@ -804,8 +805,13 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
                 'id': '',
                 'orden_id': '',
                 'parametro': 0,
-                'estatus': ''
+                'estatus': '',
+                'banderatracker': false                
               };
+
+              if (that.liberar) {
+                objectJson['banderatracker'] = that.liberar;
+              }
 
               if (that.dateend !== undefined) {
                 //const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
@@ -897,6 +903,16 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
       this.checkboxAuto = true;
     }
   }
+
+  checkLiberar(event) {
+    if (!event.checked) {
+      this.checkboxAuto = false;
+      this.liberar = false;
+    } else {
+      this.liberar = true;
+      this.checkboxAuto = true;
+    }
+  }  
 
   checkUpdateVIN(event) {
     if (!event.checked) {

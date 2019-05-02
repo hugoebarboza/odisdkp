@@ -185,7 +185,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
    this._userService.signup(usuario).subscribe(
-     (response:any) => {       
+     (response:any) => {   
        if(response.status != 'error' ){
          this.status = 'success';         
          this.token = response;
@@ -207,15 +207,6 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.getPerfilUser(this.identity.sub);
           }        
           this._userService.handleAuthentication(this.identity, this.token);          
-        },
-        (error:any) => {
-          this.spinnerButtonOptions.active = false;                      
-          this.spinnerButtonOptions.text = 'Iniciar sesión'         
-          this.status = 'error';
-          this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });    
-        },
-        () => { 
-          //console.log('Segundo Login success');
           this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
             (response:any) => {
                 if (response.status == 'success'){
@@ -223,9 +214,10 @@ export class LoginComponent implements OnInit, OnDestroy {
                   let key = 'proyectos';
                   this._userService.saveStorage(key, this.proyectos);
                   this.spinnerButtonOptions.active = false;                      
-                  this.spinnerButtonOptions.text = 'Iniciar sesión'          
+                  this.spinnerButtonOptions.text = 'Iniciar sesión'
                   this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
-                  this._router.navigate(['dashboard']);  
+                  console.log('paso login')
+                  this._router.navigate(['dashboard']);        
                 }
               },
               (error:any) => {
@@ -239,13 +231,15 @@ export class LoginComponent implements OnInit, OnDestroy {
                 localStorage.removeItem('token');		    
                 this._router.navigate(['/login']);
               },
-              () => { 
-                //console.log('Complete');
-              }
-            );   
-        }
-        
-        );
+            () => { /*console.log('Complete');*/   });   
+        },
+        (error:any) => {
+          this.spinnerButtonOptions.active = false;                      
+          this.spinnerButtonOptions.text = 'Iniciar sesión'         
+          this.status = 'error';
+          this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });    
+        },
+        () => { /*console.log('Segundo Login success');*/});
 
 
       }

@@ -13,10 +13,12 @@ import { Columns } from 'ngx-easy-table';
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
 
 //DIALOG
+import { AddUserServiceComponent } from '../components/adduserservice/adduserservice.component';
 import { AddServiceComponent } from '../dialog/addservice/addservice.component';
 import { CsvServiceComponent } from '../dialog/csvservice/csvservice.component';
 import { EditServiceComponent } from '../dialog/editservice/editservice.component';
 import { DeleteServiceComponent } from '../dialog/deleteservice/deleteservice.component';
+import { UserComponent } from '../dialog/user/user.component';
 
 //MODELS
 import { Order, Proyecto } from '../../../models/types';
@@ -33,11 +35,10 @@ export const columns: Columns[] = [
   { key: 'service_name', title: 'Proyecto' },
   { key: 'order_number', title: 'N° OT' },
   { key: 'gom_number', title: 'GOM' },
-  { key: 'servicecategorie_name', title: 'TIPO PROYECTO' },  
-  { key: 'address', title: 'DIRECCIÓN' },
-  { key: 'gestor', title: 'GESTOR' },
-  { key: 'contratista', title: 'CONTRATISTA' },
-  { key: 'status', title: 'Estatus' },
+  { key: 'servicecategorie_name', title: 'Tipo Proyecto' },  
+  { key: 'address', title: 'Dirección' },
+  { key: 'gestor', title: 'Gestor' },
+  { key: 'contratista', title: 'Contratista' },
   { key: 'user', title: 'Informador' },
   { key: 'create_at', title: 'Creado El' },
   { key: 'action', title: 'Opciones' },
@@ -63,7 +64,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   order: Order[] = [];
   portal:number=0;
   project: any;
-  proyectos: Array<Proyecto> = [];  
+  proyectos: Array<Proyecto> = [];
   project_name: string;
   selected: any;
   selectedRow: number = 0;
@@ -307,8 +308,27 @@ export class ServiceComponent  implements OnInit, OnDestroy {
 
       }
     });
-
   }
+
+  openDialogUser(id:number) {
+    const dialogRef = this.dialog.open(UserComponent, {
+    width: '777px',
+    disableClose: true,        
+    data: { project_id: id }
+    });
+
+
+    dialogRef.afterClosed().subscribe(
+          result => {       
+             if (result === 1) { 
+             // After dialog is closed we're doing frontend updates 
+             // For add we're just pushing a new row inside DataService
+             //this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  
+             this.refresh();
+             }
+           });
+  }
+
 
   refresh(){
 
