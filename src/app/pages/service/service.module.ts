@@ -4,6 +4,8 @@ import { LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //COMPONENTS
+import { AddUserServiceComponent } from './components/adduserservice/adduserservice.component';
+import { RemoveUserComponent } from './components/removeuser/removeuser.component';
 import { ServiceComponent } from './service-list/service.component';
 
 
@@ -12,7 +14,7 @@ import { AddServiceComponent } from './dialog/addservice/addservice.component';
 import { CsvServiceComponent } from './dialog/csvservice/csvservice.component';
 import { EditServiceComponent } from './dialog/editservice/editservice.component';
 import { DeleteServiceComponent } from './dialog/deleteservice/deleteservice.component';
-
+import { UserComponent } from './dialog/user/user.component';
 
 //MODULES
 import { AngularSplitModule } from 'angular-split';
@@ -36,6 +38,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 
 //ROUTING
 import { ServiceRoutingModule } from './service.routing';
+
 
 @NgModule({
   imports: [
@@ -61,16 +64,21 @@ import { ServiceRoutingModule } from './service.routing';
   declarations: 
   [
     AddServiceComponent,
+    AddUserServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent,
     EditServiceComponent,
+    RemoveUserComponent,    
     ServiceComponent,
+    UserComponent,
   ],
   entryComponents: [
     AddServiceComponent,
+    AddUserServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent, 
     EditServiceComponent,
+    UserComponent
   ],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

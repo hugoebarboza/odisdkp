@@ -53,7 +53,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.RefreshMenu = new EventEmitter();
 		this.label.getDataRoute().subscribe(data => {
       this.path = data.path;
-      //console.log(this.path);
       if(this.path === 'calendar'){        
         this.selected = 0;
         this.projectselected = this.id;
@@ -73,7 +72,6 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.projectselected = 0;
       }
       
-
     });
 
 
@@ -84,26 +82,28 @@ export class MenuComponent implements OnInit, OnDestroy {
     if(this.id >0){
       //GET RUTA
         this._route.url.subscribe(res =>{
-        this.url = res[0].path;
+          if(res[0]){
+            this.url = res[0].path;
+          }
       });
       
-      if(this.url === 'calendar'){
+      if(this.url && this.url === 'calendar'){
         this.selected = 0;
         this.projectselected = this.id;
       }
 
-      if(this.url === 'project'){
+      if(this.url && this.url === 'project'){
         this.selected = 0;
         this.projectselected = this.id;
       }
 
-      if(this.url === 'users'){
+      if(this.url && this.url === 'users'){
         this.selected = 0;
         this.projectselected = this.id;
       }
 
 
-      if(this.url === 'service'){
+      if(this.url && this.url === 'service'){
         this.selected = this.id;
         this.projectselected = 0;
       }

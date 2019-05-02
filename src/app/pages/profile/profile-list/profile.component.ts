@@ -47,22 +47,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-
     this.isLoading = true;
     this.isLoadingPerfil = true;
     if(this.identity){
       this.isLoadingPerfil = false;
       this.isLoading = false;
     }
-
   }
 
   ngOnDestroy() {
     if(this.subscription){
       this.subscription.unsubscribe();
-      console.log("ngOnDestroy unsuscribe");
+      //console.log("ngOnDestroy unsuscribe");
     }
-
   }
 
 

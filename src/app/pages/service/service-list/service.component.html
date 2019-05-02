@@ -57,7 +57,7 @@
                       <button type="button" class="btn btn-light btn-sm" (click)="openDialogCsv()"><mat-icon class="material-icons md-14">save_alt</mat-icon>CSV</button>
                   </div>
                   <div class="btn-group mr-2" role="group" aria-label="Second group" *ngIf="_userService.isRole(7)">
-                      <button type="button" class="btn btn-light btn-sm" (click)="openDialogCsv()"><mat-icon class="material-icons md-14">people</mat-icon>Usuarios</button>
+                      <button type="button" class="btn btn-light btn-sm" (click)="openDialogUser(id)"><mat-icon class="material-icons md-14">people</mat-icon>Usuarios</button>
                   </div>
 
                   <div class="btn-group mr-2" role="group" aria-label="Tird group" *ngIf="_userService.isRole(7)">
@@ -158,7 +158,7 @@
       <ng-template let-row >
         <td>
           <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', row.id]" > 
-          <span class="font-small">{{row.service_name}}</span>
+          <span class="font-small"><span class="circle" [style.color]="row.status? 'green' : 'red'"></span> {{row.service_name}}</span>
           </a>
         </td>
         <td >
@@ -179,9 +179,6 @@
         <td >
           <div *ngIf="row.servicedetail[0] && row.servicedetail[0].contratista" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].contratista}}</div>
         </td>   
-        <td>
-          <div class="circle" [style.color]="row.status? 'green' : 'red'"></div>
-        </td>
         <td >
           <div *ngIf="row.user" class="font-small" (click)="setClickedRow(row.id)">{{row.user}}</div>
         </td>   

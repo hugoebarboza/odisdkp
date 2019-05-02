@@ -66,7 +66,7 @@ const appRoute: Routes = [
 		loadChildren: './pages/pages.module#PagesModule',
 		data: { preload: true, delay: false }
 	},
-	{ path:'', component: DefaultComponent, pathMatch: 'full', data: { titulo: 'OCA Global - ODIS Home', subtitle: '', descripcion: 'OCA Global - ODIS Home' } },		
+	{ path:'', component: LoginComponent, pathMatch: 'full', data: { titulo: 'OCA Global - ODIS Home', subtitle: '', descripcion: 'OCA Global - ODIS Home' } },		
 	{ path:'**', pathMatch: 'full', redirectTo: 'notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
 
 ];

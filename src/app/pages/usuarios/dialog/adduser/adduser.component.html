@@ -11,10 +11,8 @@
     <app-loading *ngIf="isLoading"></app-loading>  
   </div>
   
-
-  <div class="animated fadeIn" *ngIf="!isLoading && forma" >
-
-      <form ngNativeValidate *ngIf="forma" [formGroup]="forma"  >
+<div class="app animated fadeIn" *ngIf="!isLoading && forma">
+      <form class="mat-dialog-content" ngNativeValidate *ngIf="forma" [formGroup]="forma"  >
 
           <div >
               <div class="row">
@@ -26,7 +24,7 @@
               <div class="row">
                   <div class="col-sm-6">
                       <label for="nombre">Primer Nombre</label>
-                      <input type="text" name="name" formControlName="name"   class="form-control" required>                              
+                      <input type="text" name="name" formControlName="name"   class="form-control" required>
                   </div>
                   <div class="col-sm-6">
                       <label for="apellido">Primer Apellido</label>
@@ -148,14 +146,12 @@
 
       
         </form>
-
+</div>
 
 <br>
-  <div mat-dialog-actions >      
+<div mat-dialog-actions >      
     <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="confirmAdd()">Guardar</button>
     <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
-  </div>
 </div>
 
 
-<br>

@@ -331,7 +331,17 @@
 <ng-container matColumnDef="important" >
   <mat-header-cell *matHeaderCellDef mat-sort-header><i class="material-icons">unfold_more</i></mat-header-cell>
     <mat-cell *matCellDef="let order; let i = index" style="color:blue">
+
+      <div class="collapsible-header"  (click)="order.important=!order.important; onChangeIcon(order.important, category_id, order.order_id) ">
+        <i class="material-icons md-color-checkbox" matTooltip="Destacado"
+        [matTooltipPosition]="positiondatasourceaction.value" *ngIf="order.important">label_important</i>
+        <i class="material-icons md-nocolor-checkbox" matTooltip="Sin destacar"
+        [matTooltipPosition]="positiondatasourceaction.value" *ngIf="!order.important">label_important</i>
+      </div>      
+
+      <!--
       <div *ngIf="order.important==0">   
+
       <mat-checkbox
       color="primary"
       [checked]="false"
@@ -352,6 +362,8 @@
       >        
       </mat-checkbox>
       </div>
+      -->
+
     </mat-cell>
 </ng-container>
 

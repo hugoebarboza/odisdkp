@@ -2,7 +2,6 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from "@angular/common"
 import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID, NgModule } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
@@ -77,7 +76,9 @@ import { registerLocaleData } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
-
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from './http-interceptors/my.interceptor';
+import { httpInterceptorProviders } from './http-interceptors/index';
 
 registerLocaleData(localeEs);
 
@@ -138,7 +139,9 @@ registerLocaleData(localeEs);
       useValue: {
         siteKey: '6LdY_pwUAAAAANNCwxFDBNTGRDg2hrDvZSLTfxLl',
       } as RecaptchaSettings,
-    }
+    },
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+    
   ],
   bootstrap: [
   	AppComponent

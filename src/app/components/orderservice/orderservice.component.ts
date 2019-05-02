@@ -32,50 +32,49 @@ import {
   styleUrls: ['./orderservice.component.css']
 })
 export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
-  public title: string;
-  public identity:any;
-  public token:any;
-  public proyectos: Array<Proyecto>;
-  public order: Order[] = [];
-  public tarifas: Tarifa;
-  public constantes: Constante;
-  public giros: Giro;
-  public sectores: Sector;
-  public zonas: Zona;
-  public mercados: Mercado;
-  private services: Service[] = [];
-  public region: Region;
-  private subscription: Subscription;
-  private sub: any;
-  public url: any;
-  otherTheme: boolean = true;
-  theme: string;
-  color: number;
-  options: FormGroup;
-
+  
+  
   apikey: string;
-  clientid: string;
-  calendarID: string;
-  isLoading: boolean;
-  loading: boolean;
-  project_name: string;
-  project: string;
-  service: string;
-  table: string = null;
-  id: number;
-  category_id: number; 
-  dataSource;
-  tabGroup:number;
-
   links = ['First', 'Second', 'Third'];
   activeLink = this.links[0];
-  background = '';
-  selected = new FormControl(0);
-
-  isExpanded = true;
+  background = '';  
+  clientid: string;
+  category_id: number;
+  calendarID: string;
+  color: number;
+  constantes: Constante;
+  dataSource;  
   element: HTMLElement;
-
+  giros: Giro;
+  id: number;
+  identity:any;
+  isLoading: boolean;
+  isExpanded = true;
+  loading: boolean;
+  mercados: Mercado;
   mode = new FormControl('side');
+  otherTheme: boolean = true;
+  order: Order[] = [];
+  options: FormGroup;
+  proyectos: Array<Proyecto>;  
+  project_name: string;
+  project: string;
+  region: Region;
+  sectores: Sector;
+  selected = new FormControl(0);
+  services: Service[] = [];
+  service: string;
+  subscription: Subscription;
+  sub: any;
+  table: string = null;
+  tabGroup:number;
+  tarifas: Tarifa;
+  theme: string;
+  title: string;
+  token:any;
+  url: any;
+  zonas: Zona;
+
   shouldRun = [/(^|\.)plnkr\.co$/, /(^|\.)stackblitz\.io$/].some(h => h.test(window.location.host));
 
   ajustes: Ajustes = {
@@ -105,8 +104,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   public _ajustes: SettingsService,
 	public _userService: UserService,  
   private _proyectoService: DashboardService,
-
-  fb: FormBuilder
+  public fb: FormBuilder
 
   ) 
   { 

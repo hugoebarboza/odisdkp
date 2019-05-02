@@ -1,9 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders} from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
+import {  HttpHeaders } from '@angular/common/http';
+
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+const httpOptions = {
+  headers: new HttpHeaders({
+    'Content-Type':  undefined,
+    'Authorization': undefined
+	})
+};
 
 //MODELS
 import { 
@@ -18,7 +26,7 @@ import {
 import { GLOBAL } from '../global';
 
 @Injectable()
-export class UserService {
+export class UserService  {
 	public url:string;
 	public departamentos: Array<Departamento>;
 	public idaccount;
@@ -26,6 +34,7 @@ export class UserService {
 	public token;	
 	public proyectos: Array<Proyecto>;
 	public usuario: any;
+	public headers: HttpHeaders = undefined;
 	
 
 	constructor(
@@ -35,6 +44,7 @@ export class UserService {
 
 	){
 		this.url = GLOBAL.url;
+		this.headers = undefined;
 		this.cargarStorage();
 	}
 
@@ -102,6 +112,34 @@ export class UserService {
 						 });				
 	}
 
+	adduser(token: any, userid:number, id:number): Observable<any>{
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+
+		
+		return this._http.post(this.url+'adduser/'+userid+'/project/'+id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });
+	}
+
+
+	remover(token: any, userid:number, id:number): Observable<any>{
+
+		/*
+		const expandedHeaders = this.prepareHeader(headers, token);
+		console.log(expandedHeaders);*/
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+
+		//console.log(headers);
+		return this._http.post(this.url+'removeruser/'+userid+'/project/'+id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
 
 
 	update(token: any, user:User, id:number): Observable<any>{
@@ -110,7 +148,7 @@ export class UserService {
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 		.set('Authorization', token);
-
+		console.log(headers);
 
 		return this._http.post(this.url+'updateuser/'+id, params, {headers: headers})
 						 .map( (resp: any) => {
@@ -177,6 +215,8 @@ export class UserService {
 		let params = 'json='+json;
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		//console.log(headers);
+		//console.log(params);
 		
 		return this._http.post(this.url+'logindkp', params, {headers: headers})
 			.map( (resp: any) => {
@@ -283,10 +323,22 @@ export class UserService {
 
 		let Url = this.url+'userspaginate/'+id+'/page'+paginate;
 
-		
+
 		return this._http.get<User[]>(Url, {headers: headers});		
 	}
 
+
+	getNotUserPaginate(token: string, id: number, page: number = 0, customerid:number): Observable<User[]>{
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+										 .set('Authorization', token);
+		
+		let paginate = `?page=${page}&customerid=${customerid}`;
+
+		let Url = this.url+'nouserspaginate/'+id+'/page'+paginate;
+		//console.log(Url);
+		
+		return this._http.get<User[]>(Url, {headers: headers});		
+	}
 
 
 
@@ -335,6 +387,19 @@ export class UserService {
 
 	}
 
+	searchaddUser(token:string, id: number, page: number = 0, termino: string, customerid:number){
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+										 .set('Authorization', token);
+		
+		let paginate = `?page=${page}&customerid=${customerid}`;
+
+		let Url = this.url+'searchadduser/'+id+'/termino/'+termino+paginate;
+
+		
+		return this._http.get<User[]>(Url, {headers: headers});		
+
+	}
 
 	
 	public handleAuthentication(identity, token):void {			
@@ -430,6 +495,14 @@ export class UserService {
 		return this._http.post(this.url+'changepasswordprofile/'+id, params, {headers: headers});
 	}
 
+
+	private prepareHeader(headers: HttpHeaders | null, token:any): HttpHeaders  {
+    headers = new HttpHeaders();
+    headers = headers.append('Content-Type', 'application/json');
+		headers = headers.append('Accept', 'application/json');
+		headers = headers.append('Authorization', token);		
+		return headers;
+	}	
 
 }
 

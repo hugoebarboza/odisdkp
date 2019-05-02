@@ -9,7 +9,7 @@
 </mat-toolbar>
 
 
- <p></p>
+<br>
   
 <div *ngIf="loading">
     <app-loading *ngIf="loading"></app-loading>  
@@ -19,7 +19,7 @@
   <form class="mat-dialog-content" #formControl="ngForm" novalidate="novalidate" >
     <div class="form">
       <mat-form-field color="accent">
-        <input matInput #input class="form-control" placeholder="Proyecto" [(ngModel)]="project" name="project" required [value]="project" disabled>
+        <input matInput #input class="form-control" placeholder="Proyecto" [(ngModel)]="project_name" name="project" required [value]="project_name" disabled>
         <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
       </mat-form-field>
     </div>

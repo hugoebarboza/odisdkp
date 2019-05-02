@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { 
   Comuna,
   Customer,
+  Proyecto,
   Provincia,
   ProjectServiceCategorie,
   ProjectServiceType,
@@ -24,27 +25,30 @@ import { CountriesService, OrderserviceService, ProjectsService, UserService } f
   styleUrls: ['./addservice.component.css']  
 })
 export class AddServiceComponent implements OnInit {
-  public title: string = 'Agregar Proyecto';
-  public comunas: Comuna[] = [];
-  public customers: Customer [] = [];  
-  public en: any;
-  public identity: any;
-  public isLoading:boolean = false;
-  public loading: boolean = false;
-  public project: string;
-  public projectservicecategorie: ProjectServiceCategorie[] = [];
-  public projectservicetype: ProjectServiceType[] = [];
-  public provincias: Provincia[] = [];
-  public regiones: Region[] = [];
-  public termino: any;
-  public users: User[] = [];
-  public users_ito: User[] = [];
-  public user_informador: any;
-	public user_responsable:any;
-	public user_itocivil_assigned_to: any;
-	public user_itoelec_assigned_to: any;
-  public subscription: Subscription;
-  public token: any;
+  title: string = 'Agregar Proyecto';
+  comunas: Comuna[] = [];
+  customers: Customer [] = [];  
+  en: any;
+  id:number;
+  identity: any;
+  isLoading:boolean = false;
+  loading: boolean = false;
+  proyectos: Array<Proyecto> = [];
+  project: any;
+  project_name: string;
+  projectservicecategorie: ProjectServiceCategorie[] = [];
+  projectservicetype: ProjectServiceType[] = [];
+  provincias: Provincia[] = [];
+  regiones: Region[] = [];
+  termino: any;
+  users: User[] = [];
+  users_ito: User[] = [];
+  user_informador: any;
+	user_responsable:any;
+	user_itocivil_assigned_to: any;
+	user_itoelec_assigned_to: any;
+  subscription: Subscription;
+  token: any;
 
 
 
@@ -57,9 +61,10 @@ export class AddServiceComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public data: Service
   ) 
   { 
-    this.identity = this._userService.getIdentity();
     this.loading = true;
+    this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+    this.proyectos = this._userService.getProyectos();
     this.en = {
       firstDayOfWeek: 0,
       dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -81,10 +86,17 @@ export class AddServiceComponent implements OnInit {
 
   ngOnInit() {
     if(this.data.project_id > 0){
+      this.id = this.data.project_id;
       this.loadInfo();
       this.loadProjectServiceType();
       this.loadProjectServiceCategorie();
       this.loadUserProject();
+      this.project = this.filter();
+      this.project_name = this.project.project_name;
+      this.loading = false;
+
+
+      /*
       this._project.getProject(this.token.token, this.data.project_id).then(
         (res:any) => {
           {
@@ -103,8 +115,8 @@ export class AddServiceComponent implements OnInit {
               }  
               )
         }
+        }); */
 
-        });   
     }
   }
 
@@ -142,6 +154,17 @@ export class AddServiceComponent implements OnInit {
   }
 
   
+  filter(){
+    if(this.proyectos && this.id){
+      for(var i = 0; i < this.proyectos.length; i += 1){
+        var result = this.proyectos[i];
+        if(result.id === this.id){
+            return result;
+        }
+      }
+    }    
+  }
+
   loadInfo(){
     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
     response => {

@@ -23,13 +23,12 @@ import { UserService } from '../../../../services/service.index';
 })
 export class ShowProfileSecurityComponent implements OnInit {
 
-  title = "Perfil del Usuario - Seguridad";
-
   changeForm: FormGroup;
   hide = true;
   identity: any;
   showEmail = false;
   showReset = false;
+  title = "Perfil del Usuario - Seguridad";
   token: any;
   usuario:any;
   username: string;
