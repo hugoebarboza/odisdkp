@@ -391,12 +391,7 @@ export class MapaFullWidthComponent implements OnInit {
                          }
                     },
                       error => {
-                      localStorage.removeItem('departamentos');
-                      localStorage.removeItem('fotoprofile');             
-                      localStorage.removeItem('identity');
-                      localStorage.removeItem('token');
-                      localStorage.removeItem('proyectos');
-                      localStorage.removeItem('expires_at');
+                      this._userService.logout();
                       this._router.navigate(["/login"]);
                       console.log(<any>error);
                       } 

@@ -5,14 +5,10 @@
 </div>
 
 <div id="wrapper" *ngIf="proyectos && identity">
-<!-- Sidebar -->
-<app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>    
+<!-- Sidebar <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>-->
 <!-- /#sidebar-wrapper -->
 <!-- Page Content -->
 <div id="page-content-wrapper" >
-<div class="container m-2">
-<!-- SPACE -->  
-</div>
 
         <div class="container-fluid p-2">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
@@ -78,7 +74,7 @@
                                   <th>Rut</th>                                  
                                   <th>Rol</th>
                                   <th>Estatus</th>
-                                  <th>Verificado</th>                          
+                                  <th *ngIf="_userService.isRole(8)">Verificado</th>                          
                                   <th>Acceso</th>
                                   <th>Creado El</th>
                                   <th>Creado Por</th>
@@ -94,11 +90,11 @@
                                   <td>{{ usuario.name | titlecase}} {{ usuario.surname | titlecase}}
                                       <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="usuario.status_foto">
                                           <mat-icon class="material-icons md-13-color" >image</mat-icon>        
-                                          </button>
+                                      </button>
                                           
-                                          <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="!usuario.status_foto">
+                                      <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="!usuario.status_foto">
                                           <mat-icon class="material-icons md-13-nocolor" >image</mat-icon>
-                                          </button>        
+                                      </button>        
                                   </td>
                                   <td>{{ usuario.email | lowercase}}</td>
                                   <td>
@@ -123,9 +119,12 @@
                                     </select>                            
                                   </td>
 
-                                  <td align="center">
+                                  <td align="center" *ngIf="_userService.isRole(8)">
+
+                                    <button mat-icon-button  (click)="usuario.verified=!usuario.verified; onChangeIcon(usuario.id, usuario.verified) " *ngIf="usuario.id !== identity.sub">
                                     <mat-icon class="material-icons md-20-color-green" *ngIf="usuario.verified == 1">verified_user</mat-icon>
                                     <mat-icon class="material-icons md-20-color-red" *ngIf="usuario.verified == 0">verified_user</mat-icon>
+                                    </button>
                                   </td>
 
                                   <td>

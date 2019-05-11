@@ -130,7 +130,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this._userService.handleAuthentication(this.identity, this.token);
-    this.portalevent = new EventEmitter(); 
+    this.portalevent = new EventEmitter();
     this.ServicioSeleccionado = new EventEmitter(); 
     this.error = '';
     this.role = 5; //USUARIOS INSPECTORES

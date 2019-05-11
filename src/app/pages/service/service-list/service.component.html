@@ -1,13 +1,9 @@
 <meta name="Description" content="Services">
 <div id="wrapper" *ngIf="proyectos && identity">
-<!-- Sidebar -->
-<app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>    
+<!-- Sidebar <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>-->
 <!-- /#sidebar-wrapper -->
 <!-- Page Content -->
 <div id="page-content-wrapper" >
-<div class="container m-2">
-<!-- SPACE -->  
-</div>
 
 
 <div class="container-fluid p-2">
@@ -29,7 +25,7 @@
           <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
       </div>
     </div>
-</div>             
+</div>
 
 <div class="portalHost" *ngIf="portal !== 1">
     <ng-container [cdkPortalOutlet]="_portal" ></ng-container>

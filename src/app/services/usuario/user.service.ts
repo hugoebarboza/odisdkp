@@ -148,7 +148,7 @@ export class UserService  {
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
 		.set('Authorization', token);
-		console.log(headers);
+		//console.log(headers);
 
 		return this._http.post(this.url+'updateuser/'+id, params, {headers: headers})
 						 .map( (resp: any) => {
@@ -195,16 +195,29 @@ export class UserService  {
 						});				
     }
 
-		updateFotoProfileUser(token: any, archivo: any, id:number ): Observable<any> {
-			let params = new FormData(); 
-			params.append('image', archivo); 
-			let headers = new HttpHeaders().set('Authorization', token);
-	
-			return this._http.post(this.url+'uploadfileperfiluser/'+id, params, {headers: headers})
-							 .map( (resp: any) => {
-									return resp;
-							});				
-			}
+	updateFotoProfileUser(token: any, archivo: any, id:number ): Observable<any> {
+		let params = new FormData(); 
+		params.append('image', archivo); 
+		let headers = new HttpHeaders().set('Authorization', token);
+
+		return this._http.post(this.url+'uploadfileperfiluser/'+id, params, {headers: headers})
+							.map( (resp: any) => {
+								return resp;
+						});				
+	}
+
+	verifyStatusUser(token: any, userid:number, status:number): Observable<any>{
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+		//console.log(headers);
+
+		return this._http.post(this.url+'user/'+userid+'/verify/'+status, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 	
 
 	signup(user:any, getToken=null): Observable<any>{
@@ -225,7 +238,9 @@ export class UserService  {
 				this.saveStorage(key, resp);			
 				return resp;
 			}).catch( err => {
-				return err.error.message;
+				//return err.error;
+				//return err.error.message;
+				return Observable.throw( err );
 			});		
 	}
 
@@ -421,6 +436,26 @@ export class UserService  {
 		return new Date().getTime() < expiresAt;
 	}
 
+	
+
+	public isTokenValidate(): boolean {				
+		if(!JSON.parse(localStorage.getItem('token'))){
+			return false;
+		}
+		const expiresAtToken = JSON.parse(localStorage.getItem('token'));		
+		const payload = JSON.parse( atob( expiresAtToken.token.split('.')[1] ));
+		const ahora = new Date().getTime() / 1000;
+		console.log(payload.exp);
+		console.log('----------');
+		console.log(ahora);
+		if ( ahora < payload.exp) {
+      return true;
+    }else{
+			return false;
+		}
+		//return new Date().getTime() < expiresAt;
+	}
+
 
 	public isRole(role): boolean {		
 		if(!role){
@@ -496,6 +531,17 @@ export class UserService  {
 	}
 
 
+  logout() {
+		localStorage.removeItem('departamentos');
+		localStorage.removeItem('expires_at');
+		localStorage.removeItem('fotoprofile');
+		localStorage.removeItem('identity');
+		localStorage.removeItem('proyectos');
+		localStorage.removeItem('token');
+	}
+
+
+
 	private prepareHeader(headers: HttpHeaders | null, token:any): HttpHeaders  {
     headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
@@ -503,6 +549,8 @@ export class UserService  {
 		headers = headers.append('Authorization', token);		
 		return headers;
 	}	
+
+
 
 }
 

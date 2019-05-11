@@ -233,7 +233,7 @@ export class AddComponent implements OnInit, OnDestroy {
    }
 
    public searchCustomer(termino: string){          
-     this.termino = termino;
+     this.termino = termino.trim();
      if(this.termino.length > 0){       
        this.isLoading = true;
      }else{

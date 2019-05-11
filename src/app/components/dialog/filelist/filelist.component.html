@@ -18,9 +18,14 @@
 
 <mat-card-content >
 
-<div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
-   <app-loading *ngIf="isLoadingResults"></app-loading>  
-</div>
+
+    <div class="container" *ngIf="isLoadingResults || isRateLimitReached">
+        <div class="row justify-content-md-center">
+          <div class="col col-lg-2">
+              <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
+          </div>
+        </div>
+    </div>     
 
 
 <table mat-table  #table  [dataSource]="dataSource" matSort >

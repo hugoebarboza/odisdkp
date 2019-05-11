@@ -132,12 +132,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
           (error: any) => {
               this.loading = false;
               this.isRateLimitReached = true;
-              localStorage.removeItem('departamentos');
-              localStorage.removeItem('identity');
-              localStorage.removeItem('token');
-              localStorage.removeItem('proyectos');
-              localStorage.removeItem('expires_at');
-              localStorage.removeItem('fotoprofile');              
+              this._userService.logout();
               this._router.navigate(["/login"]);          
               console.log(<any>error);
             }

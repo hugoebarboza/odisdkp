@@ -363,12 +363,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                     },
                     (error) => {                      
                       this.isLoadingResults = false;
-                      localStorage.removeItem('departamentos');
-                      localStorage.removeItem('fotoprofile');
-                      localStorage.removeItem('identity');
-                      localStorage.removeItem('token');
-                      localStorage.removeItem('proyectos');
-                      localStorage.removeItem('expires_at');
+                      this._userService.logout();
                       this._router.navigate(["/login"]);          
                       console.log(<any>error);
                     }  
@@ -407,13 +402,8 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                       this.lng = 0;
                          }
                     },
-                      error => {                      
-                      localStorage.removeItem('departamentos');
-                      localStorage.removeItem('fotoprofile');
-                      localStorage.removeItem('identity');
-                      localStorage.removeItem('token');
-                      localStorage.removeItem('proyectos');
-                      localStorage.removeItem('expires_at');
+                      error => {
+                      this._userService.logout();   
                       this._router.navigate(["/login"]);
                       console.log(<any>error);
                       } 

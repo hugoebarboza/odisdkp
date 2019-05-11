@@ -2,13 +2,14 @@ import { Component, OnInit, Input, ViewChild } from '@angular/core';
 import { FormControl} from '@angular/forms';
 import { HttpClient} from '@angular/common/http';
 
+declare var swal: any;
+
 //MATERIAL
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource, TooltipPosition } from '@angular/material';
 
 
 import { Observable } from 'rxjs';
 import * as FileSaver from 'file-saver';
-
 
 import * as firebase from 'firebase/app';
 
@@ -127,17 +128,30 @@ export class FileListComponent implements OnInit {
 
 
   deleteItem(item: Item){
-     this.isLoadingResults = true;
-     this.itemService.deleteDoc(this.CARPETA_ARCHIVOS, item).subscribe(
-     data => {      
-      this.items = data;
-      this.dataSource = new MatTableDataSource(this.items);      
-      this.isLoadingResults = false;
-      if(data.length == 0){
-        this.isRateLimitReached = true;        
+
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta seguro de borrar documento con nombre ' + item.nombre,
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    .then( borrar => {
+      if(borrar){
+        this.isLoadingResults = true;
+        this.itemService.deleteDoc(this.CARPETA_ARCHIVOS, item).subscribe(
+        data => {      
+         this.items = data;
+         this.dataSource = new MatTableDataSource(this.items);      
+         this.isLoadingResults = false;
+         if(data.length == 0){
+           this.isRateLimitReached = true;        
+         }
+         });
+         this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});   
       }
     });
-      this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});
+
   }
 
 

@@ -22,7 +22,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 
 
 //ROUTING
-import { CalendarRoutingModule } from './calendar.routing';
+import { CalendarRoutingModule } from './calendario.routing';
 
 @NgModule({
   imports: [

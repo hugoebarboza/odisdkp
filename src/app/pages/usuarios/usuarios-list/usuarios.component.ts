@@ -48,6 +48,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   token: any;
   totalRegistros: number = 0;
   usuarios: any[] = [];
+  verify:number;
 
   
   constructor(
@@ -102,6 +103,38 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       this.ngOnInit()
     }
   }*/
+
+  onChangeIcon(userid:number, status:number) {
+
+    if(status){
+      this.verify = 1;
+    }
+
+    if(!status){
+      this.verify = 0;
+    }
+
+
+    this.subscription = this._userService.verifyStatusUser( this.token.token, userid, this.verify )
+              .subscribe( (resp: any) => {
+                swal('Solicitud procesada exitosamente', resp.message, 'success' );
+              },
+              error => {
+                swal('Importante', error.error.message, 'error');                
+                console.log(<any>error);
+              }
+              );
+
+
+    /*
+    if(this.label == true){
+      const tag = 1;
+      this.dataService.important(this.token.token, category_id, orden, tag);
+      this.snackBar.open('Se ha marcado la orden como importante.', 'Destacada', {duration: 2000,});
+    }*/
+
+  }  
+
 
 
   addNew(id:number, departamento:number) {

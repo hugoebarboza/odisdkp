@@ -1,4 +1,3 @@
-import { SelectionModel } from '@angular/cdk/collections';
 import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
 import { Router } from '@angular/router';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -6,13 +5,11 @@ import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { takeUntil } from 'rxjs/operators/takeUntil';
-import { HttpClient} from '@angular/common/http';
 import { FormControl, Validators} from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
 import { PageEvent } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MatSelect } from '@angular/material';
-import { MatBottomSheet } from '@angular/material';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 
@@ -29,7 +26,7 @@ import { CountriesService, ExcelService, OrderserviceService, ProjectsService, U
 
 
 //MODELS
-import { Order, Proyecto, ServiceType, ServiceEstatus } from '../../../models/types';
+import { Order, ServiceType, ServiceEstatus } from '../../../models/types';
 
 
 //COMPONENTS
@@ -87,29 +84,29 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   
   //date = new FormControl(moment([2019, 3, 2]).format('YYYY[-]MM[-]DD'));  
   date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
-  public subtitle = "Listado de órdenes de trabajo. Agregue, edite, elimine y ordene los datos de acuerdo a su preferencia.";
-  public columnselect: string[] = new Array();
-  public datedesde: FormControl;
-  public datehasta: FormControl;
-  public filterValue = '';
-  public debouncedInputValue = this.filterValue;
-  public estatus: ServiceEstatus[] = [];  
-  public filterChanged: Subject<any> = new Subject();
-  public identity: any;
-  public order: Order[] = [];
-  public order_id: number;
-  public projectname: string;
+  subtitle = "Listado de órdenes de trabajo. Agregue, edite, elimine y ordene los datos de acuerdo a su preferencia.";
+  columnselect: string[] = new Array();
+  datedesde: FormControl;
+  datehasta: FormControl;
+  filterValue = '';
+  debouncedInputValue = this.filterValue;
+  estatus: ServiceEstatus[] = [];  
+  filterChanged: Subject<any> = new Subject();
+  identity: any;
+  order: Order[] = [];
+  order_id: number;
+  projectname: string;
   private project_id: number;
-  public proyectos: Array<Proyecto>;
   private searchDecouncer$: Subject<string> = new Subject();
-  public service_id:number;
-  public servicename: string;
-  public servicetypeid: number = 0;
-  public servicetype: ServiceType[] = [];
+  service_id:number;
+  servicename: string;
+  servicetypeid: number = 0;
+  servicetype: ServiceType[] = [];
   selectedValueOrdeno: string;
+  token:any;
   termino: string = '';
-  public token: any;
-  public url:string;
+  oken: any;
+  url:string;
 
 
   portal:number=0;
@@ -265,6 +262,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   ];  
 
 
+
+
   dataSourceEmpty: any;    
   displayedColumns: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned','create_at', 'time', 'update_at', 'estatus', 'actions']; 
   columnsOrderToDisplay: string[] = this.columns.map(column => column.name);
@@ -276,18 +275,15 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   data: Order[] = [];
   dataSource: MatTableDataSource<Order[]>;  
   exportDataSource: MatTableDataSource<Order[]>;  
-  selection = new SelectionModel<Order[]>(true, []);
 
   isLoadingResults = true;
   isRateLimitReached = false;
   nametable: string;
-  resultsLength = 0;
+  resultsLength:number = 0;
   pageIndex:number;
   public show:boolean = false;
   public showcell:boolean = true;
   public buttonName:any = 'Show';
-  private alive = true;
-
 
 
   @ViewChild(MatPaginator) paginator: MatPaginator;
@@ -301,6 +297,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('myTemplate') myTemplate: TemplatePortal<any>;
   @ViewChild('myTemplate2') myTemplate2: TemplatePortal<any>;
   @ViewChild('myTemplate3') myTemplate3: TemplatePortal<any>;
+  @ViewChild('myTemplate4') myTemplate4: TemplatePortal<any>;
   public _portal: Portal<any>;
   public _home:Portal<any>;
 
@@ -308,19 +305,15 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   subscription: Subscription;
 
   constructor(  
-    private _router: Router,        
-    public _userService: UserService,    
-    private _proyectoService: UserService,
+    private _router: Router,      
+    public _userService: UserService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
     public dialog: MatDialog,
-    public dataService: OrderserviceService,
-    private http: HttpClient,
     public snackBar: MatSnackBar,
     private _regionService: CountriesService,
     private excelService:ExcelService,
     private toasterService: ToastrService,
-    private bottomSheet: MatBottomSheet,
     public zipService: ZipService,
 
 
@@ -331,7 +324,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.loading = true;
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.proyectos = this._proyectoService.getProyectos();
     this._userService.handleAuthentication(this.identity, this.token);
     this.ServicioSeleccionado = new EventEmitter(); 
     this.dataSource = new MatTableDataSource();
@@ -354,19 +346,20 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
    //console.log(x);
   }
 
+
   onChangeIcon(checked:boolean, category_id:number, orden:number) {
 
     this.label = checked;
 
     if(this.label == true){
       const tag = 1;
-      this.dataService.important(this.token.token, category_id, orden, tag);
+      this._orderService.important(this.token.token, category_id, orden, tag);
       this.snackBar.open('Se ha marcado la orden como importante.', 'Destacada', {duration: 2000,});
     }
 
     if(this.label == false){
       const tag = 0;
-      this.dataService.important(this.token.token, category_id, orden, tag);
+      this._orderService.important(this.token.token, category_id, orden, tag);
       this.snackBar.open('Se ha marcado la orden como no importante.', '', {duration: 2000,});
     }
 
@@ -388,6 +381,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.snackBar.open('Se ha marcado la orden como no importante.', '', {duration: 2000,});             
     }           
   }*/
+
+
 
 
 
@@ -456,7 +451,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     //console.log('La página se va a cerrar');
     this._onDestroy.next();
     this._onDestroy.complete();
+    if(this.subscription){
     this.subscription.unsubscribe();
+    }
      //this.subscription.unsubscribe();     
      //this.unsubscribe.next();
      //this.unsubscribe.complete();
@@ -617,20 +614,15 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
-            localStorage.removeItem('departamentos');           
-            localStorage.removeItem('identity');
-            localStorage.removeItem('token');
-            localStorage.removeItem('proyectos');
-            localStorage.removeItem('expires_at');
-            localStorage.removeItem('fotoperfil');
+            this._userService.logout();
             this._router.navigate(["/login"]);          
             console.log(<any>error);
           });
     }else{
       return;
-    }
-    
+    }    
   }
+
 
   public refreshTable() { 
     //console.log('paso refresch');   
@@ -662,7 +654,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     
-    this.dataService.getServiceOrder(
+    this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
@@ -782,7 +774,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
    this.isLoadingResults = true;
    this.pageSize = event.pageSize;    
    this.getParams();
-    this.dataService.getServiceOrder(
+    this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
@@ -879,7 +871,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     
-    this.dataService.getServiceOrder(
+    this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
@@ -899,7 +891,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.getParams();
       this.termino = this.filterValue;
       this.searchDecouncer$.next(this.filterValue);
-      //this.searchDecouncer$.unsubscribe();
     }
     //console.log('paso');
     /*
@@ -1006,7 +997,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     ).subscribe((term: string) => {
       // Remember value after debouncing
       this.debouncedInputValue = term;
-      this.dataService.getServiceOrder(
+      this._orderService.getServiceOrder(
         this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
         this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
         this.filtersregion.fieldValue, this.regionMultiCtrl.value,
@@ -1033,99 +1024,19 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }
     this.isLoadingResults = true;
     this.getParams();
-    /*
-    if(this.filterValue){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnDate.fieldValue = '';
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.filtersregion.fieldValue = '';
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.regionMultiCtrl = new FormControl('');
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
-       //console.log('paso000')      
-    }
 
-    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue){
-       this.selectedColumnnDate.fieldValue = '';
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.filtersregion.fieldValue = '';
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.regionMultiCtrl = new FormControl('');
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
-       //console.log('paso111')
-    }
-
-    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       //console.log('paso222')
-    }
-
-    if(this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnDate.fieldValue = '';       
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.filtersregion.fieldValue= 'regions.region_name';
-       //console.log('paso333') 
-    }
-
-    if(this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
-       this.filtersregion.fieldValue = 'regions.region_name';
-       //console.log('paso444') 
-    }
-
-    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.filtersregion.fieldValue = '';
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       //console.log('paso777')
-    }*/
-
-
-      this.dataService.getServiceOrder(
-      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
-      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
-      this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
-      .then(response => {this.getData(response)})
-      .catch(error => {                      
-            this.isLoadingResults = false;
-            this.isRateLimitReached = true;
-            console.log(<any>error);          
-      });
+    this._orderService.getServiceOrder(
+    this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
+    this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+    this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+    this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
+    this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
+    .then(response => {this.getData(response)})
+    .catch(error => {                      
+          this.isLoadingResults = false;
+          this.isRateLimitReached = true;
+          console.log(<any>error);          
+    });
   }
 
 
@@ -1203,7 +1114,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.portal = 2;
     }
 
-
+    if (event == 3){
+      this._portal = this.myTemplate4;
+      this.showcell = false;
+      this.portal = 2;
+    }
   }
 
 
@@ -1547,7 +1462,7 @@ private filterRegionMulti() {
 
 
 
-   this.dataService.getProjectShareOrder(      
+   this._orderService.getProjectShareOrder(      
      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
      this.selectedColumnnDate.fieldValue, this.date.value, this.date.value, 
      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
@@ -1762,7 +1677,7 @@ private filterRegionMulti() {
     }      
 
 
-    this.dataService.getProjectShareOrder(      
+    this._orderService.getProjectShareOrder(      
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,

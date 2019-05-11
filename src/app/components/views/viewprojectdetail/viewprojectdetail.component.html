@@ -399,7 +399,7 @@
                                               <div class="col">
                                                 {{ item.comment }}
                                                 <button mat-icon-button color="warn" >
-                                                  <mat-icon aria-label="Delete" *ngIf="_userService.isRole(7)" (click)="deleteCommentDatabase(item.id)">delete</mat-icon>
+                                                  <mat-icon aria-label="Delete" *ngIf="_userService.isRole(7)" (click)="deleteCommentDatabase(item)">delete</mat-icon>
                                                 </button>    
                                               </div>
                                             </div>

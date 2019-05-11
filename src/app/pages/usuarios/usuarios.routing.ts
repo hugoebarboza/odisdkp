@@ -20,7 +20,8 @@ const routes: Routes = [
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
+  providers: [AuthguardService]
 })
 export class UsuariosRoutingModule { }
 

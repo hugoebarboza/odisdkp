@@ -4,7 +4,7 @@
     </div>
     
     <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
-       <app-loading *ngIf="isLoadingResults"></app-loading>  
+        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
     </div>
     
     <table mat-table  #table  [dataSource]="dataSource"  matSort  *ngIf="!isRateLimitReached">

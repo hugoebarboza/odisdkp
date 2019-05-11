@@ -1,0 +1,493 @@
+<div class="p-2" >
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-2 d-none d-md-block bg-light sidebar">
+      <div class="sidebar-sticky">
+          <div class="row">
+              <div class="col-8">
+                <h5 >
+                      Operación masiva
+                </h5>        
+              </div>
+              <div class="col-4">
+                  <button type="button" class="btn btn-primary btn-sm">Siguiente</button>                
+              </div>
+            </div>        
+
+        <mat-radio-group aria-labelledby="radio-group-label" class="radio-group" [(ngModel)]="select">
+          <div *ngFor="let option of columnsSelectToDisplay; let i = index">
+              <mat-radio-button class="radio-button"  [value]="option.id" (change)="onSelectionChange(option)" checked *ngIf="select == 1 && option.id == 1">
+                  {{option.label}}
+              </mat-radio-button>      
+              <mat-radio-button class="radio-button"  [value]="option.id" (change)="onSelectionChange(option)" checked *ngIf="select == 2 && option.id == 2">
+                  {{option.label}}
+              </mat-radio-button>      
+              <mat-radio-button class="radio-button"  [value]="option.id" (change)="onSelectionChange(option)" checked *ngIf="select == 3 && option.id == 3">
+                  {{option.label}}
+              </mat-radio-button>      
+              
+           </div>
+        </mat-radio-group>
+
+        <div>Your favorite season is: {{select}}</div>
+      </div>
+    </nav>
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">      
+      <div >
+          <mat-card [ngStyle]="{'padding':'0px'}">
+              <mat-card-header [ngClass]="{'custom-card':true}">
+                  <div class="mat-card-header-text">
+                      <mat-card-title>
+                        <div class="row">
+                          <div class="col-8">
+                              <div class="float-left">
+                              {{title}} <button mat-icon-button color="primary" (click)="refreshTable()" *ngIf="_userService.isRole(4) && id && category_id"><mat-icon  >refresh</mat-icon></button>                  
+                              </div>
+                          </div>
+                          <div class="col-4">
+                              <div class="float-right">
+                                  <button mat-icon-button [matMenuTriggerFor]="menuview">
+                                    <mat-icon>view_headline</mat-icon>
+                                  </button>
+                                  
+                                  <mat-menu #menuview="matMenu" [overlapTrigger]="false">
+                                    <button mat-menu-item (click)="toggleTemplate(0)">
+                                    <mat-icon class="material-icons md-20" >view_list</mat-icon>      
+                                    <span >Vista de Lista </span>
+                                    </button>
+                                    <button mat-menu-item (click)="toggleTemplate(1)">
+                                    <mat-icon class="material-icons md-20" >view_quilt</mat-icon>
+                                    <span >Vista de Detalle</span>
+                                    </button>
+                                    <button mat-menu-item (click)="toggleTemplate(2)">
+                                    <mat-icon class="material-icons md-20" >view_week</mat-icon>
+                                    <span >Vista de Tablero</span>
+                                    </button>
+                                  
+                                  </mat-menu>
+                              </div>
+                          </div>
+              
+                        </div>
+                      </mat-card-title>
+                    <mat-card-subtitle>
+                        <table cellspacing="0" class="main-table">
+                            <tr>
+                            <td>
+                                      <mat-form-field>      
+                                        <input  matInput placeholder="Buscar Orden" *ngIf="!isactiveSearch && datasourceLength == 0" disabled>
+                                        <input  matInput (keyup)="applyFilter()" placeholder="Buscar Orden" [(ngModel)]="filterValue" *ngIf="isactiveSearch && datasourceLength > 0">
+                                        <button mat-button *ngIf="filterValue && isLoadingResults" matSuffix mat-icon-button aria-label="Clear" >
+                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17"></mat-spinner>
+                                        </button>
+                                        <button mat-button *ngIf="filterValue && !isLoadingResults" matSuffix mat-icon-button aria-label="Clear" (click)="filterValue=''">
+                                          <mat-icon>close</mat-icon>
+                                        </button>      
+                                        <mat-icon matSuffix *ngIf="!filterValue">search</mat-icon>
+                                      </mat-form-field>
+                            </td>                
+                            <td width="1%"></td>
+                            <td width="1%">
+                            
+                            <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" (click)="toggle($event)"  id="bt"  *ngIf="!show">
+                              <mat-button-toggle value="bold">Filtros<i class="material-icons">arrow_drop_down</i></mat-button-toggle>
+                            </mat-button-toggle-group>
+                            
+                            <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" (click)="toggle($event)" id="bt"  *ngIf="show">
+                              <mat-button-toggle value="bold">Filtros<i class="material-icons" style="color:blue">arrow_right</i></mat-button-toggle>
+                            </mat-button-toggle-group>
+                            </td>
+                            
+                            
+                            
+                            <td width="1%">
+                            <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="!show">
+                              <mat-icon>filter_list</mat-icon>
+                            </button>
+                            
+                            <mat-menu #menu="matMenu" [overlapTrigger]="false">
+                              <form (keydown.tab)="$event.stopPropagation()">
+                              <div class="container">    
+                              <mat-accordion>
+                                <mat-expansion-panel (click)="$event.stopPropagation(); false;" [expanded]="step === 0" (opened)="setStep(0)" class="no-shadow">
+                                  <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                      Filtrar Fecha
+                                    </mat-panel-title>
+                                  </mat-expansion-panel-header>
+                            
+                                    <mat-form-field  class="full-width">
+                                      <mat-select placeholder="Seleccione" [(ngModel)]="selectedColumnnDate.fieldValue" name="Fecha">
+                                        <mat-option value="orders.create_at">Creado El</mat-option>
+                                        <mat-option value="orders.update_at">Editado El</mat-option>            
+                                      </mat-select>
+                                    </mat-form-field>
+                            
+                            
+                              
+                            
+                                    <mat-form-field *ngIf="selectedColumnnDate.fieldValue"  class="full-width">
+                                      <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde" disabled name="columnValueDesde" >
+                                      <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
+                                      <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
+                                    </mat-form-field>
+                            
+                             
+                            
+                            
+                                    <mat-form-field *ngIf="selectedColumnnDate.fieldValue"class="full-width" >
+                                      <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" disabled  name="columnValueHasta">
+                                      <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
+                                      <mat-datepicker #fecha2 disabled="false"></mat-datepicker>
+                                    </mat-form-field>
+                            
+                              
+                                </mat-expansion-panel>
+                            
+                            
+                              <mat-expansion-panel (click)="$event.stopPropagation(); false;" [expanded]="step === 1" (opened)="setStep(1)" class="no-shadow">
+                                <mat-expansion-panel-header>
+                                  <mat-panel-title>
+                                    Filtrar Inspector
+                                  </mat-panel-title>
+                                </mat-expansion-panel-header>
+                            
+                                    <mat-form-field class="full-width" >
+                                      <mat-select placeholder="Seleccione" [(ngModel)]="selectedColumnnUsuario.fieldValue" name="usuario">
+                                        <mat-option value="orders_details.assigned_to">Asignado A</mat-option>            
+                                        <mat-option value="orders_details.create_by">Creado Por</mat-option>
+                                        <mat-option value="orders_details.update_by">Editado Por</mat-option>            
+                                      </mat-select>
+                                    </mat-form-field>
+                            
+                                    <mat-form-field class="full-width">
+                                      <mat-select [formControl]="inspectorCtrl"  placeholder="Inspector" #singleSelect   [(value)]="selectedColumnnUsuario.columnValue" >
+                                      <ngx-mat-select-search [formControl]="inspectorMultiFilterCtrl" ></ngx-mat-select-search>
+                                      <mat-option *ngFor="let inspector of filteredInspectorMulti | async" [value]="inspector.id">
+                                        {{inspector.name}}
+                                      </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>
+                            
+                            
+                              </mat-expansion-panel>    
+                              </mat-accordion>
+                              </div>
+                            
+                              <hr>
+                              <div mat-dialog-actions class="main-container">
+                            
+                                <div class="container">      
+                                  <div class="row justify-content-center">
+                                  <div class="footer-button-row">
+                            
+                                   <button type="button" class="btn btn-primary btn-sm"  
+                                   (click)="search()"
+                                    [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde || !selectedColumnnUsuario.fieldValue || !selectedColumnnUsuario.columnValue"
+                                   >
+                                   Buscar
+                                   </button>
+                                   
+                                   <button type="button" class="btn btn-secondary btn-sm" 
+                                   (click)="resetFilters()"
+                                   [disabled]="!selectedColumnnDate.columnValueHasta  || !selectedColumnnDate.columnValueDesde "
+                                   >Limpiar</button>
+                            
+                                  </div>
+                                  </div>
+                                </div>
+                              </div>
+                            
+                              </form>
+                            </mat-menu>
+                            
+                            
+                            </td>
+                            
+                            
+                            
+                            <td width="80%" align="left">
+                            <div class="animated fadeIn" style="top: 56px; left: 256px; visibility: visible; position: sticky; display: inline-block; z-index: 1;" *ngIf="show">
+                            
+                            
+                                      <mat-form-field class="margin" >
+                                      <mat-select placeholder="Filtro" [(ngModel)]="selectedColumnn.fieldValue">
+                                        <mat-option>Seleccione</mat-option>
+                                        <mat-option value="communes.commune_name">Comuna</mat-option>
+                                        <mat-option value="users.name">Creado Por</mat-option>            
+                                        <mat-option value="status.name">Estatus</mat-option>
+                                        <mat-option value="orders.order_number">N. Orden</mat-option>
+                                        <mat-option value="projects_customer.cc_number">N. Cliente</mat-option>
+                                        <mat-option value="provinces.province_name">Provincia</mat-option>
+                                        <mat-option value="regions.region_name">Región</mat-option>            
+                                        <p></p>
+                                        <div class="container">
+                                        <div class="button-row">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnn.fieldValue=''">Limpiar</button>            
+                                        </div>
+                                        </div>
+                                        <p></p>
+                                      </mat-select>
+                                    </mat-form-field>
+                            
+                              
+                                      <mat-form-field *ngIf="selectedColumnn.fieldValue" class="margin">
+                                        <input matInput placeholder="Valor" (keyup)="applyFilter()" [(ngModel)]="selectedColumnn.columnValue">
+                                        <button mat-button *ngIf="selectedColumnn.columnValue" matSuffix mat-icon-button aria-label="Clear" (click)="selectedColumnn.columnValue=''">
+                                          <mat-icon>close</mat-icon>
+                                        </button>  
+                                      </mat-form-field>
+                            
+                            
+                                      <mat-form-field class="margin" *ngIf="!selectedColumnn.fieldValue" >
+                                      <mat-select placeholder="Fecha" [(ngModel)]="selectedColumnnDate.fieldValue">
+                                        <mat-option>Seleccione</mat-option>
+                                        <mat-option value="orders.create_at">Creado El</mat-option>
+                                        <mat-option value="orders.update_at">Editado El</mat-option>            
+                                    <p></p>
+                                    <div class="container">
+                                    <div class="button-row">
+                                        <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnnDate.fieldValue=''">Limpiar</button>            
+                                    </div>
+                                    </div>
+                                    <p></p>
+                            
+                                      </mat-select>
+                                    </mat-form-field>
+                            
+                            
+                            
+                                    <mat-form-field *ngIf="selectedColumnnDate.fieldValue && !selectedColumnn.fieldValue" class="margin" >
+                                      <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde"disabled>
+                                      <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
+                                      <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
+                                    </mat-form-field>
+                            
+                            
+                            
+                                    <mat-form-field *ngIf="selectedColumnnDate.fieldValue && !selectedColumnn.fieldValue" class="margin">
+                                      <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" disabled >
+                                      <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
+                                      <mat-datepicker #fecha2 disabled="false"></mat-datepicker>
+                                    </mat-form-field>
+                            
+                            
+                              
+                            
+                                <mat-form-field class="margin" >
+                                  <mat-select [formControl]="regionMultiCtrl"  placeholder="Región" [multiple]="true" #multiSelect  >
+                                    <ngx-mat-select-search [formControl]="regionMultiFilterCtrl" ></ngx-mat-select-search>
+                                    <mat-option *ngFor="let region of filteredRegionMulti | async" [value]="region.name">
+                                      {{region.name}}
+                                    </mat-option>
+                                    <p></p>
+                                    <div class="container">
+                                    <div class="button-row">
+                                    <button type="button" class="btn btn-secondary btn-sm" (click)="resetRegionFilters()">Limpiar</button>
+                                    </div>
+                                    </div>
+                                    <p></p>
+                                  </mat-select>
+                                </mat-form-field>
+                            
+                            
+                            
+                            </div>
+                            </td>
+                            
+                            
+                            <td width="1%" >
+                            
+                                              <div class="btn-toolbar mb-2 mb-md-0" *ngIf="(selectedColumnn.fieldValue && selectedColumnn.columnValue) || (selectedColumnnDate.fieldValue && selectedColumnnDate.columnValueDesde && selectedColumnnDate.columnValueHasta) || (regionMultiCtrl.value)">
+                                              <div class="btn-group mr-2" align="right">
+                                   
+                                                <button type="button" class="btn btn-sm btn-outline-secondary"   (click)="search()">Buscar</button>
+                                                <button type="button" class="btn btn-sm btn-outline-secondary" (click)="resetFilters()">Limpiar</button>
+                            
+                                              </div>
+                                            </div>
+                            
+                            
+                            
+                            </td>          
+                            </tr>
+                        </table>
+              
+                    </mat-card-subtitle>
+                  </div>
+              </mat-card-header>
+              <mat-card-content >
+
+
+                  <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+                  No se encontraron registros que coincidan con su búsqueda.
+                  <button mat-button color="primary" (click)="refreshTable()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                  </div>
+                    
+                    
+                    <div class="example-container " >
+                    
+                      <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+                          <app-loading *ngIf="isLoadingResults"></app-loading>
+                      </div>
+                  
+                      
+                    
+                    <div class="example-table-container" >
+                    
+                    <table mat-table #table  [dataSource]="dataSource" 
+                      matSort    
+                      (matSortChange)="handleSortChange($event)" 
+                      [matSortActive]="sort.active" 
+                      [matSortDirection]="sort.direction" 
+                      matSortDisableClear  >
+                    
+                    
+                    <ng-container matColumnDef="select">
+                        <mat-header-cell *matHeaderCellDef>
+                          <mat-checkbox (change)="$event ? masterToggle() : null"
+                                        [checked]="selection.hasValue() && isAllSelected()"
+                                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                        >
+                          </mat-checkbox>
+                        </mat-header-cell>
+                        <mat-cell *matCellDef="let row">
+                          <mat-checkbox (click)="$event.stopPropagation()"
+                                        (change)="$event ? selection.toggle(row) : null"
+                                        [checked]="selection.isSelected(row)"
+                                        >
+                          </mat-checkbox>
+                        </mat-cell>
+                    </ng-container>
+                      
+                    
+                    
+                    <ng-container matColumnDef="order_number"  >  
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > N. Orden </mat-header-cell>
+                        <mat-cell *matCellDef="let order; let i = index" >      
+                            {{order.order_number}}
+                            <mat-icon class="material-icons md-13-color" *ngIf="order.imagen">image</mat-icon>        
+                            <mat-icon class="material-icons md-13-nocolor" *ngIf="!order.imagen">image</mat-icon>                
+                          </mat-cell>
+                    </ng-container>
+                    
+                    
+                      
+                    <ng-container matColumnDef="cc_number">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> N. Cliente </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> {{order.cc_number}} </mat-cell>
+                    </ng-container>
+                    
+                      
+                    <ng-container matColumnDef="orderdetail_direccion">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header  > Realizado En </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> {{order.orderdetail_direccion}} </mat-cell>
+                    </ng-container>
+                    
+                    
+                    <ng-container matColumnDef="direccion">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header  > Ubicación </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> {{order.direccion}} </mat-cell>
+                    </ng-container>
+                    
+                    
+                    
+                    <ng-container matColumnDef="servicetype" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Servicio </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> {{order.servicetype}} 
+                        
+                        </mat-cell>
+                    </ng-container>
+                    
+                    
+                    
+                    <ng-container matColumnDef="user" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Informador </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> {{order.user}} </mat-cell>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="create_at" >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
+                          <mat-cell *matCellDef="let order"> {{order.create_at }}</mat-cell>
+                      </ng-container>
+                    
+                    
+                    <ng-container matColumnDef="userassigned" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Responsable</mat-header-cell>
+                        <mat-cell *matCellDef="let order"> {{order.userassigned}} </mat-cell>
+                    </ng-container>
+                    
+                    
+                    
+                    
+                    <ng-container matColumnDef="time" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> T. Ejecución </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> <div *ngIf="order.time">{{order.time }}</div></mat-cell>
+                    </ng-container>
+                    
+                    
+                    <ng-container matColumnDef="update_at" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
+                        <mat-cell *matCellDef="let order"> 
+                          <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>  
+                        </mat-cell>
+                    </ng-container>
+                    
+                    <ng-container matColumnDef="estatus" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
+                      <mat-cell *matCellDef="let order; let i = index" > 
+                        <mat-chip-list>
+                            <mat-chip *ngIf="order.label==1" selected color="warn">
+                              {{order.estatus}}
+                            </mat-chip>
+                    
+                            <mat-chip *ngIf="order.label==2" selected color="primary">
+                              {{order.estatus}}
+                            </mat-chip>
+                    
+                            <mat-chip *ngIf="order.label==3" selected color="accent">
+                              {{order.estatus}}
+                            </mat-chip>
+                        </mat-chip-list>
+                      </mat-cell>
+                    </ng-container>
+                    
+                    
+                  
+                    <mat-header-row *matHeaderRowDef="columnsOrderToDisplay" color="primary" ></mat-header-row>
+                    <mat-row *matRowDef="let order; let i = index; columns: columnsOrderToDisplay;" ></mat-row>
+                    
+                    
+                    
+                    </table>
+                    </div>
+                    <mat-paginator    [length]="resultsLength"
+                                      [pageSize]="pageSize"
+                                      [pageSizeOptions]="pageSizeOptions"
+                                      (page)="onPaginateChange($event)"
+                                      [showFirstLastButtons]="true" 
+                                      [ngClass]="{'custom-card':true}"
+                                      ></mat-paginator>    
+                    
+                    </div>
+                    <P></P>
+                     
+                    
+                    </mat-card-content>
+                  
+              </mat-card>
+      </div>
+    </main>
+  </div>
+</div>
+
+
+
+
+</div>        
+  
+  
+  
+  
+  
