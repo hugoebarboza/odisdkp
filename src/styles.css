@@ -1,7 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 @import '~normalize.css/normalize.css';
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
-@import './assets/simple-sidebar.css';
+/*@import './assets/simple-sidebar.css';*/
 @import './assets/animate.css';
 @import "~@ng-select/ng-select/themes/material.theme.css";
 @import "~ng-pick-datetime/assets/style/picker.min.css";

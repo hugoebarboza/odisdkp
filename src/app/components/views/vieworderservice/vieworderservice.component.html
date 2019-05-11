@@ -243,7 +243,7 @@
 
 <td width="1%" >
 
-                  <div class="btn-toolbar mb-2 mb-md-0" *ngIf="(selectedColumnnDate.fieldValue && selectedColumnnDate.columnValueDesde && selectedColumnnDate.columnValueHasta) || (regionMultiCtrl.value)">
+                  <div class="btn-toolbar mb-2 mb-md-0" *ngIf="(selectedColumnn.fieldValue && selectedColumnn.columnValue) || (selectedColumnnDate.fieldValue && selectedColumnnDate.columnValueDesde && selectedColumnnDate.columnValueHasta) || (regionMultiCtrl.value)">
                   <div class="btn-group mr-2" align="right">
        
                     <button type="button" class="btn btn-sm btn-outline-secondary"   (click)="search()">Buscar</button>
@@ -261,16 +261,35 @@
   matTooltip="Exportar las actividades del día."
   [matTooltipPosition]="positionleftaction.value"
   (click)="ExportTOExcelDate(3)"
+  (event)="$event.stopinmediatePropagation()"
   >
     <mat-icon>save_alt</mat-icon>
   </button>  
 </td>
+
+<td width="1%" >
+  <button mat-icon-button [matMenuTriggerFor]="menuviewselect" *ngIf="!show"
+  matTooltip="Seleccione la operación que requiere."
+  [matTooltipPosition]="positionleftaction.value"
+  >
+    <mat-icon>more_horiz</mat-icon>
+  </button>
+
+  <mat-menu #menuviewselect="matMenu" [overlapTrigger]="false">
+    <button mat-menu-item (click)="toggleTemplate(3)">
+      <span >Cambiar Masivo</span>
+    </button>
+
+  </mat-menu>
+</td>
+
 
 
 <td width="1%" >
   <button mat-icon-button [matMenuTriggerFor]="menuview" *ngIf="!show"
   matTooltip="Cambiar vista."
   [matTooltipPosition]="positionleftaction.value"
+  aria-label="Button that displays a tooltip that hides when scrolled out of the container"
   >
     <mat-icon>view_headline</mat-icon>
   </button>
@@ -291,9 +310,10 @@
       <mat-icon class="material-icons md-20" *ngIf="portal !== 2">view_week</mat-icon>
       <span >Vista Tablero</span>
     </button>
-
   </mat-menu>
 </td>
+
+
 
 
 </tr>
@@ -315,12 +335,12 @@
 <div class="example-container " >
 
   <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
-    <app-loading *ngIf="isLoadingResults"></app-loading>  
+    <app-loading *ngIf="isLoadingResults"></app-loading>
   </div>
 
 <div class="example-table-container" >
 
-<table mat-table  #table  [dataSource]="dataSource" 
+<mat-table #table  [dataSource]="dataSource" 
   matSort    
   (matSortChange)="handleSortChange($event)" 
   [matSortActive]="sort.active" 
@@ -332,11 +352,9 @@
   <mat-header-cell *matHeaderCellDef mat-sort-header><i class="material-icons">unfold_more</i></mat-header-cell>
     <mat-cell *matCellDef="let order; let i = index" style="color:blue">
 
-      <div class="collapsible-header"  (click)="order.important=!order.important; onChangeIcon(order.important, category_id, order.order_id) ">
-        <i class="material-icons md-color-checkbox" matTooltip="Destacado"
-        [matTooltipPosition]="positiondatasourceaction.value" *ngIf="order.important">label_important</i>
-        <i class="material-icons md-nocolor-checkbox" matTooltip="Sin destacar"
-        [matTooltipPosition]="positiondatasourceaction.value" *ngIf="!order.important">label_important</i>
+      <div  (click)="order.important=!order.important; onChangeIcon(order.important, category_id, order.order_id) ">
+        <i class="material-icons md-color-checkbox" matTooltip="Destacado" [matTooltipPosition]="positiondatasourceaction.value" *ngIf="order.important">label_important</i>
+        <i class="material-icons md-nocolor-checkbox" matTooltip="Sin destacar" [matTooltipPosition]="positiondatasourceaction.value" *ngIf="!order.important">label_important</i>
       </div>      
 
       <!--
@@ -557,7 +575,7 @@
 
 
 
-</table>
+</mat-table>
 </div>
 <mat-paginator    [length]="resultsLength"
                   [pageSize]="pageSize"
@@ -612,29 +630,16 @@
 </mat-card>
 </div>
 </ng-template>
-  
-
-
-
-
-
-
-
-
-
-
-                    
 
 
 <ng-template cdkPortal #myTemplate2="cdkPortal" >
-  <div style="height: 100%">
-    <as-split  direction="horizontal" unit="percent" restrictMove="false" (dragEnd)="log($event)">
-        
+  <div style="height: 100%;">
+    <as-split  direction="horizontal" unit="percent" restrictMove="false" (dragEnd)="log($event)" >        
         <as-split-area size="70" minsize="50" >
         <ng-container [cdkPortalOutlet]="_home" ></ng-container>
         </as-split-area>
         
-        <as-split-area size="30" minsize="30" maxsize="30">
+        <as-split-area size="30" minsize="30" maxsize="30" >
         <div class="p-2">
         <app-vieworderdetail [orderid]="order_id"></app-vieworderdetail>
         </div>
@@ -647,5 +652,12 @@
 <ng-template cdkPortal #myTemplate3="cdkPortal" >
   <div style="height: 100%">
     <app-tablero [id]="id" (portalevent) = "toggleTemplate( $event )" [view]="portal"></app-tablero>
+  </div>
+</ng-template>
+
+
+<ng-template cdkPortal #myTemplate4="cdkPortal" >
+  <div style="height: 100%">
+    <app-vieworderserviceselect [id]="id" (portalevent) = "toggleTemplate( $event )" [view]="portal"></app-vieworderserviceselect>
   </div>
 </ng-template>

@@ -29,11 +29,6 @@
 
 
    <style>
-
-      html, body{
-        height: 100%
-      }
-
       .body{
         margin: 0;
         padding: 0;
@@ -49,7 +44,6 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        height: 100%;
       }
 
       .home-content {
@@ -59,6 +53,17 @@
       .title {
         font-size: 9px
       }
+
+      #page-content-wrapper {
+          width: 100%;
+          transition: all 0.3s;
+        }
+
+        #wrapper {
+          width: 100%;
+          overflow-y: auto;
+          align-items: stretch;
+        } 
 
       #loading{display:inline-block;width:55px;height: 55px;border:3px solid rgba(103,58,183,.3);border-radius:50%;border-top-color:#673ab7;animation:spin 1s ease-in-out infinite;position:fixed;left:calc(50% - 25px);top:calc(50% - 25px)}@keyframes spin{to{transform:rotate(360deg)}}
     </style>

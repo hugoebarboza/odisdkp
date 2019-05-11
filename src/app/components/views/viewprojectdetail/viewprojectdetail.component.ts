@@ -3,6 +3,8 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl  } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 
+declare var swal: any;
+
 //FIREBASE
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
@@ -180,12 +182,24 @@ addComment(value:any) {
 
 }
 
-deleteCommentDatabase(value$: any) {    
-  this.itemsCollection.doc(value$).delete();
-  this.snackBar.open('Eliminando Registro de Trabajo.', '', {duration: 2000,});
-  if(this.toggleContent){
-    this.toggleContent=false;
-  }   
+deleteCommentDatabase(item: any) {    
+  
+  swal({
+    title: '¿Esta seguro?',
+    text: 'Esta seguro de borrar registro de trabajo ' + item.comment,
+    icon: 'warning',
+    buttons: true,
+    dangerMode: true,
+  })
+  .then( borrar => {
+    if(borrar){
+      this.itemsCollection.doc(item.id).delete();
+      this.snackBar.open('Eliminando Registro de Trabajo.', '', {duration: 2000,});  
+      if(this.toggleContent){
+        this.toggleContent=false;
+      }    
+    }
+  });
 }  
 
 

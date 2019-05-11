@@ -3,6 +3,8 @@ import { FormControl} from '@angular/forms';
 import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+declare var swal: any;
+
 //MATERIAL
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource, TooltipPosition } from '@angular/material';
 
@@ -133,17 +135,20 @@ export class FilelistComponent implements OnInit {
 
 
   deleteItem(item: Item){
-     this.isLoadingResults = true;      
-     this.itemService.deleteDoc(this.CARPETA_ARCHIVOS, item).subscribe(
-     data => {      
-      this.items = data;
-      this.dataSource = new MatTableDataSource(this.items);      
-      this.isLoadingResults = false;
-      if(data.length == 0){
-        this.isRateLimitReached = true;        
+      if(item){
+        this.isLoadingResults = true;      
+        this.itemService.deleteDoc(this.CARPETA_ARCHIVOS, item).subscribe(
+        data => {      
+         this.items = data;
+         this.dataSource = new MatTableDataSource(this.items);      
+         this.isLoadingResults = false;
+         if(data.length == 0){
+           this.isRateLimitReached = true;        
+         }
+       });
+         this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});   
       }
-    });
-      this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});
+
   }
 
 

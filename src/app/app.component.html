@@ -1,11 +1,33 @@
 <div class="header">
-<app-header></app-header>
-</div>
-
-<div class="pagecontent">
-<router-outlet></router-outlet>
-</div>
-
-<div class="footer">
-<app-footer [identity]="identity"></app-footer>
-</div>
+        <app-header></app-header>
+        </div>
+        
+        
+        
+        <div class="pagecontent">
+        
+            <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+        
+                <mat-toolbar class="bg-white example-toolbar" *ngIf="identity">
+                        <a class="nav-link active" (click)="sidenav.toggle()"><i class="material-icons">menu</i></a>    
+                        <a class="nav-link active" href="https://mail.google.com" target="_blank"><i class="material-icons">email</i></a>
+                        <a class="nav-link active" routerLink="/dashboard"><i class="material-icons">dashboard</i></a>
+                </mat-toolbar>
+        
+                <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+        
+                    <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                                [fixedInViewport]="mobileQuery.matches" fixedTopGap="102">
+                                <app-menu  (RefreshMenu) = "refreshMenu($event)"></app-menu>
+                    </mat-sidenav>
+        
+                    <mat-sidenav-content>
+                            <router-outlet></router-outlet>
+                    </mat-sidenav-content>
+                </mat-sidenav-container>
+                
+            </div>
+            
+        
+        </div>
+        

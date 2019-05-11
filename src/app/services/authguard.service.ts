@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate } from '@angular/router';
+import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, ActivatedRoute } from '@angular/router';
 import { UserService } from '../services/service.index';
 
 
@@ -8,36 +8,51 @@ import { UserService } from '../services/service.index';
 })
 export class AuthguardService implements CanActivate {
 
+	token:any;
+	url:string;
+
   constructor(
-  	private auth : UserService,
+		private auth : UserService,
   	private _router: Router
-  ) { }
+  ) { 
+
+	}
 
   canActivate(next:ActivatedRouteSnapshot, state:RouterStateSnapshot):Promise<boolean> | boolean  { 
-  	  //console.log(next);
-  	if (this.auth.isAuthenticated()){
-
-			let token = this.auth.token.token;
-			if(token){
-				console.log('paso authguard true token');
-				let payload = JSON.parse( atob( token.split('.')[1] ));
-				let expirado = this.expirado( payload.exp );
-		
-				if ( expirado ) {
-					localStorage.removeItem('departamentos');
-					localStorage.removeItem('fotoprofile');
-					localStorage.removeItem('identity');
-					localStorage.removeItem('token');
-					localStorage.removeItem('proyectos');
-					localStorage.removeItem('expires_at');
-					this._router.navigate(["/login"]);
-					console.log('paso authguard false');
+			//console.log(next);
+				if (this.auth.isTokenValidate()){
+					console.log('paso authguard true token');
+					return true;					
+				}else{
+					console.log('paso authguard isTokenValidate false');
+					this.auth.logout();
+					this._router.navigate(["/login"]);										
 					return false;		
-				}	
-			}
-  		console.log('paso authguard true');
-  		return true;	
-  	}  	
+				}
+
+				/*
+				let token = this.auth.token.token;
+				if(token){
+					console.log('paso authguard true token');
+										
+					let payload = JSON.parse( atob( token.split('.')[1] ));								
+					let expirado = this.expirado( payload.exp );				
+					if ( expirado ) {
+						this.auth.logout();
+						this._router.navigate(["/login"]);					
+						console.log('paso authguard false');
+						return false;		
+					}
+				}else{
+					this.auth.logout();
+					this._router.navigate(["/login"]);					
+					console.log('paso authguard false');
+					return false;
+				}
+				console.log('paso authguard true');
+				return true;
+			}*/
+
 	}
 	
 

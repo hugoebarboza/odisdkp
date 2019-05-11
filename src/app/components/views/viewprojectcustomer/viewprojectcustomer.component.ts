@@ -254,12 +254,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
-            localStorage.removeItem('departamentos');
-            localStorage.removeItem('fotoprofile');
-            localStorage.removeItem('identity');
-            localStorage.removeItem('token');
-            localStorage.removeItem('proyectos');
-            localStorage.removeItem('expires_at');
+            this._userService.logout();
             this._router.navigate(["/login"]);          
             console.log(<any>error);
           }  
@@ -469,12 +464,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
             (error) => {                      
               this.isLoadingResults = false;
               this.isRateLimitReached = true;
-              localStorage.removeItem('departamentos');
-              localStorage.removeItem('fotoprofile');
-              localStorage.removeItem('identity');
-              localStorage.removeItem('token');
-              localStorage.removeItem('proyectos');
-              localStorage.removeItem('expires_at');
+              this._userService.logout();
               this._router.navigate(["/login"]);          
               console.log(<any>error);
             }  
@@ -580,12 +570,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
-            localStorage.removeItem('departamentos');
-            localStorage.removeItem('fotoprofile');
-            localStorage.removeItem('identity');
-            localStorage.removeItem('token');
-            localStorage.removeItem('proyectos');
-            localStorage.removeItem('expires_at');
+            this._userService.logout();
             this._router.navigate(["/login"]);          
             console.log(<any>error);
           }  
@@ -691,12 +676,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
-            localStorage.removeItem('departamentos');
-            localStorage.removeItem('identity');
-            localStorage.removeItem('fotoprofile');
-            localStorage.removeItem('token');
-            localStorage.removeItem('proyectos');
-            localStorage.removeItem('expires_at');
+            this._userService.logout();
             this._router.navigate(["/login"]);          
             console.log(<any>error);
           }  

@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
 import { SwUpdate } from '@angular/service-worker';
 import { Router, ActivationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
@@ -11,6 +11,14 @@ import { Proyecto } from './models/types';
 
 //SERVICES
 import { SettingsService, UserService } from './services/service.index';
+import { MediaMatcher } from '@angular/cdk/layout';
+
+//REDUX
+import { AppState } from './app.reducers';
+import { Store } from '@ngrx/store';
+import * as fromContador from './contador.actions';
+import { MatSidenav } from '@angular/material';
+
 
 
 @Component({
@@ -19,17 +27,21 @@ import { SettingsService, UserService } from './services/service.index';
   styleUrls: ['./app.component.css'],
   providers: [UserService]
 })
-export class AppComponent implements OnInit, DoCheck {
-  titulo: string;
+export class AppComponent implements OnInit, OnDestroy {
 
+  titulo: string;
   description: string;
   departamentos: Array<any> = [];
   identity: any;
-  public proyectos: Array<Proyecto>;
+  proyectos: Array<Proyecto>;
   subscription: Subscription;
   token: any;
   update: boolean = false;
 
+  mobileQuery: MediaQueryList;
+  private _mobileQueryListener: () => void;
+
+  @ViewChild('sidenav') sidenav: MatSidenav;  
 
   constructor(
   	private _userService: UserService,
@@ -37,7 +49,11 @@ export class AppComponent implements OnInit, DoCheck {
     private _router: Router,
     private _title: Title,
     private _meta: Meta,
-    updates: SwUpdate
+    private store: Store<AppState>,
+    updates: SwUpdate,
+    changeDetectorRef: ChangeDetectorRef,
+    media: MediaMatcher,
+
   	){
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();
@@ -46,6 +62,11 @@ export class AppComponent implements OnInit, DoCheck {
       //this.update = true;
       updates.activateUpdate().then( () => document.location.reload());
     })
+
+    this.mobileQuery = media.matchMedia('(max-width: 600px)');
+    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this.mobileQuery.addListener(this._mobileQueryListener);
+
 
     this.getDataRoute()
     .subscribe( data => {
@@ -58,26 +79,34 @@ export class AppComponent implements OnInit, DoCheck {
         name: 'description',
         content: this.description
       };
-
       this._meta.updateTag( metaTag );
-
-
     });
 
 
   }
 
-  ngOnInit(){
+  ngOnDestroy(): void {
+    this.mobileQuery.removeListener(this._mobileQueryListener);
+  }
 
 
+  ngOnInit() {
+    this.store.select('objNgrx')
+    .subscribe( objNgrx  => {
+      if (objNgrx) {
+        this.identity = objNgrx.identificacion;
+      }
+
+      this.proyectos = this._userService.getProyectos();
+      this.identity = this._userService.getIdentity();
+
+      if (!this.identity) {
+        this.sidenav.close();
+      }
+
+    });
   }
     
-  ngDoCheck(){
-    //this.identity = this._userService.getIdentity();
-    //this.token = this._userService.getToken();
-    //this.proyectos = this._proyectos.getProyectos(); 
-  }
-
 
   getDataRoute() {
     return this._router.events.pipe(
@@ -89,7 +118,9 @@ export class AppComponent implements OnInit, DoCheck {
     );
   }
 
-
-
+  refreshMenu(event:number){
+		if(event == 1){
+		}
+	}
 
 }

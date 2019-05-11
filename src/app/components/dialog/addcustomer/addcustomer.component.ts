@@ -250,7 +250,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
 
 
     public searchCustomer(termino: string){
-     this.termino = termino;     
+     this.termino = termino.trim();
      if(this.termino.length > 2){       
        this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
         response => {

@@ -2,17 +2,14 @@
 <div [class]="theme" >
 
     <div id="wrapper" *ngIf="proyectos">
-        <!-- Sidebar -->
-        <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>   
+        <!-- Sidebar <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>-->
+        
         <!-- /#sidebar-wrapper -->
 
         <!-- Page Content -->        
         <div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()" >
         <!-- TAB Content ------------------------------------------------------------------------------------------>
 
-<div class="container m-2">
-<!-- SPACE -->  
-</div>
 
         <mat-sidenav-container class="all-wrap" >        
   <div class="page-wrap">

@@ -21,7 +21,10 @@ import { MatProgressButtonOptions } from 'mat-progress-buttons'
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
 
-
+//NGRX REDUX
+import { AppState } from '../app.reducers';
+import { Store } from '@ngrx/store';
+import { LoginAction } from '../contador.actions';
 
 @Component({
   selector:'login',
@@ -47,7 +50,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   status: string;  
   title: string;
   token;
-  user: User;
+  usuario: User;
   userFirebase;
   useraccount: string;
   year: number;
@@ -113,10 +116,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     public _userService: UserService,
     public authService: AuthService,
     public label: SettingsService,
-    public toasterService: ToastrService,    
+    private store: Store<AppState>,
+    public toasterService: ToastrService,   
+
   ){
 
-    this.user = new User('','','','','','','', 1,'','',1,'','',1,1,1);
+    //this.user = new User('','','','','','','', 1,'','',1,'','',1,1,1);
     this.year = new Date().getFullYear();
     this.identity = this._userService.getIdentity();
     this.idaccount = this._userService.getIdaccount();
@@ -142,24 +147,30 @@ export class LoginComponent implements OnInit, OnDestroy {
     } else {
       this.rememberMe = 0;
     }
-
   }
 
 
+  loginAction(p: any, i: any) {
+    const obj: any = {project: p, identificacion: i};
+    const accion = new LoginAction(obj);
+    this.store.dispatch( accion );
+  }
+  
+
 	ngOnDestroy(){
 		if(this.subscription){
-			this.subscription.unsubscribe();
-		}
-		//console.log("ngOnDestroy unsuscribe");
+      this.subscription.unsubscribe();
+      //console.log("ngOnDestroy unsuscribeeeee");
+		}		
 	}
 
-    onChange(value) {
-        if (value.checked == true) {
-          this.rememberMe = 1;
-        } else {
+  onChange(value) {
+    if (value.checked == true) {
+      this.rememberMe = 1;
+    } else {
           this.rememberMe = 0;
-        }
-    }
+     }
+  }
 
 
 
@@ -170,11 +181,11 @@ export class LoginComponent implements OnInit, OnDestroy {
     return;
    }
 
-   let usuario = new User('', '', '', '', '', form.value.email, form.value.password, 1, '', this.version, 1, '','',1, 1, 1);
+   this.usuario = new User('', '', '', '', '', form.value.email, form.value.password, 1, '', this.version, 1, '','',1, 1, 1);
 
    if (this.rememberMe == 1){
     let key = 'idaccount';
-    this.useraccount = usuario.email;
+    this.useraccount = this.usuario.email;
     this._userService.saveStorage(key, this.useraccount);
    }else{
     if (localStorage['idaccount'] && localStorage['idaccount'] !== undefined && localStorage['idaccount'] !== null) {
@@ -183,68 +194,69 @@ export class LoginComponent implements OnInit, OnDestroy {
    }
 
 
-
-   this._userService.signup(usuario).subscribe(
+   this.subscription = this._userService.signup(this.usuario).subscribe(
      (response:any) => {   
+
        if(response.status != 'error' ){
          this.status = 'success';         
          this.token = response;
+
+         this.subscription = this._userService.signuptrue(this.usuario, true).subscribe(
+          (response:any) => { 
+            this.identity = response;
+            if(this.identity){
+              this.getPerfilUser(this.identity.sub);
+            }        
+            this._userService.handleAuthentication(this.identity, this.token);          
+            this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+              (response:any) => {
+                  if (response.status == 'success'){
+                    this.proyectos = response.datos;
+                    let key = 'proyectos';
+                    this._userService.saveStorage(key, this.proyectos);
+                    this.spinnerButtonOptions.active = false;                      
+                    this.spinnerButtonOptions.text = 'Iniciar sesión'
+                    this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
+                    this.afterSignIn();
+                  }
+                },
+                (error:any) => {
+                  this.spinnerButtonOptions.active = false;                      
+                  this.spinnerButtonOptions.text = 'Iniciar sesión'
+                  this._userService.logout();
+                  this._router.navigate(['/login']);
+                },
+              () => { /*console.log('Complete Get Proyectos');*/   });   
+          },
+          (error:any) => {
+            this.spinnerButtonOptions.active = false;                      
+            this.spinnerButtonOptions.text = 'Iniciar sesión'         
+            this.status = 'error';
+            this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });    
+          },
+          () => { /*console.log('Segundo Login success');*/});
+  
+
        }
      },
      (error:any) => {
+      //console.log(<any>error);
       this.spinnerButtonOptions.active = false;                      
       this.spinnerButtonOptions.text = 'Iniciar sesión'         
       this.status = 'error';
       this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
      },
-     () => { 
-
-      //console.log('Primer Login success')
-      this._userService.signuptrue(usuario, true).subscribe(
-        (response:any) => { 
-          this.identity = response;
-          if(this.identity){
-            this.getPerfilUser(this.identity.sub);
-          }        
-          this._userService.handleAuthentication(this.identity, this.token);          
-          this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
-            (response:any) => {
-                if (response.status == 'success'){
-                  this.proyectos = response.datos;
-                  let key = 'proyectos';
-                  this._userService.saveStorage(key, this.proyectos);
-                  this.spinnerButtonOptions.active = false;                      
-                  this.spinnerButtonOptions.text = 'Iniciar sesión'
-                  this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
-                  console.log('paso login')
-                  this._router.navigate(['dashboard']);        
-                }
-              },
-              (error:any) => {
-                this.spinnerButtonOptions.active = false;                      
-                this.spinnerButtonOptions.text = 'Iniciar sesión'
-                localStorage.removeItem('departamentos');
-                localStorage.removeItem('expires_at');
-                localStorage.removeItem('fotoprofile');
-                localStorage.removeItem('identity');
-                localStorage.removeItem('proyectos');
-                localStorage.removeItem('token');		    
-                this._router.navigate(['/login']);
-              },
-            () => { /*console.log('Complete');*/   });   
-        },
-        (error:any) => {
-          this.spinnerButtonOptions.active = false;                      
-          this.spinnerButtonOptions.text = 'Iniciar sesión'         
-          this.status = 'error';
-          this.toasterService.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });    
-        },
-        () => { /*console.log('Segundo Login success');*/});
-
-
-      }
+     () => { /*console.log('Primer Login success')*/  }
      );
 
+  }
+
+  private afterSignIn(): void {
+    // Do after login stuff here, such router redirects, toast messages, etc.
+    console.log('do after loggin');    
+    this._router.navigate(['dashboard']);
+    this.loginAction(this.proyectos, this.identity);
+    this.loginFirebase(this.token, this.usuario);
   }
 
 
@@ -257,7 +269,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   getPerfilUser(id: any){
     if(id && this.token.token){
-      this._userService.getPerfilUser(this.token.token, id).subscribe(
+      this.subscription = this._userService.getPerfilUser(this.token.token, id).subscribe(
         response => {        
           if(!response){
             return false;        
@@ -279,23 +291,62 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 
+  loginFirebase(token:any, value:User){
+    if(!token || !value){
+      return;
+    }
+
+    this.authService.login(token.token, value.email, value.password)
+    .then(res => {
+      console.log(res);
+    }, err => {
+      console.log(err);
+      switch (err.code) {
+        case 'auth/user-not-found': {
+            this.tryRegister(value);
+            return console.log('usuario registrado en Firebase');
+        }
+        case 'auth/wrong-password': {
+            this.authService.updateUser(value)
+            .then(res => {
+              //console.log(res);
+            }, err => {
+              //console.log(err);
+            })        
+            return console.log('update password');
+        }
+        default: {
+            return console.log('Login Firebase error try again later.');
+        }
+      }      
+
+    })
+  }
 
 
-  logout(){        
+  tryRegister(value:User){
+    if(!value){
+      return;
+    }
+
+    this.authService.doRegister(value)
+    .then(res => {
+      console.log(res);
+    }, err => {
+      console.log(err);
+    })
+  }
+
+
+  logout(){
+    console.log('viene');
     this._route.params.subscribe(params => {
       let logout = +params['sure'];
-      if(logout == 1){ 
-        
-        localStorage.removeItem('departamentos');
-        localStorage.removeItem('expires_at');
-        localStorage.removeItem('fotoprofile');
-        localStorage.removeItem('identity');
-        localStorage.removeItem('proyectos');
-        localStorage.removeItem('token');      
+      if(logout == 1){         
         this.identity = null;
         this.token = null;
         this.proyectos = null;        
-        //this._router.navigate(['']);
+        this._userService.logout();
         this.authService.logout();
         this._router.navigate(['/login']);
       }

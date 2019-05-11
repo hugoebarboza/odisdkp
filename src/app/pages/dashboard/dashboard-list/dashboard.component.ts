@@ -27,7 +27,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 	servicios: Array<Service>;
 	subscription: Subscription;
 	options: FormGroup;
-	token;	
+	token:any;	
 	
 
 	constructor(
@@ -40,7 +40,8 @@ export class DashboardComponent implements OnInit, OnDestroy {
 		this.identity = this._userService.getIdentity();
 		this.proyectos = this._userService.getProyectos();
   		this.token = this._userService.getToken();
-  		this._userService.handleAuthentication(this.identity, this.token);
+		this._userService.handleAuthentication(this.identity, this.token);
+		  
 		this.options = fb.group({
 		      bottom: 0,
 		      fixed: false,
@@ -64,12 +65,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 						}
 					},
 				(error: any) => {
-						localStorage.removeItem('departamentos');
-						localStorage.removeItem('expires_at');
-						localStorage.removeItem('fotoprofile');
-						localStorage.removeItem('identity');
-						localStorage.removeItem('proyectos');
-						localStorage.removeItem('token');		
+					this._userService.logout();
 						this._router.navigate(["/login"]);
 					   },
 				() => console.log('Complete Dashboard')

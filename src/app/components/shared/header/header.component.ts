@@ -18,6 +18,11 @@ import { MatDialog } from '@angular/material';
 import { AddSupportComponent } from '../../../components/dialog/widget/addsupport/addsupport.component';
 import { LogoutComponent } from '../../../components/dialog/logout/logout.component';
 
+//NGRX REDUX
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducers';
+import { ResetAction } from 'src/app/contador.actions';
+
 
 
 @Component({
@@ -48,7 +53,8 @@ export class HeaderComponent {
 		private _router: Router,		
 		private _userService: UserService,
 		public dialog: MatDialog,
-    private afs: AngularFirestore
+    private afs: AngularFirestore,
+    private store: Store<AppState>,
 
    ){
 		this.title = 'Header';	  	
@@ -98,7 +104,10 @@ export class HeaderComponent {
     
   }
 
-
+  resetAction() {
+    const accion = new ResetAction();
+    this.store.dispatch( accion );
+  }
 
   support(value:number) {
     const dialogRef = this.dialog.open(AddSupportComponent, {
@@ -128,7 +137,8 @@ export class HeaderComponent {
 
      dialogRef.afterClosed().subscribe(
            result => {       
-              if (result === 1) { 
+              if (result === 1) {
+              this.resetAction();
               // After dialog is closed we're doing frontend updates 
               // For add we're just pushing a new row inside DataService
               //this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  

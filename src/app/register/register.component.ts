@@ -34,7 +34,7 @@ export class RegisterComponent implements OnInit {
 	){
 		this.label.getDataRoute().subscribe(data => {
 			this.title = data.subtitle;
-		  });	  
+		  });
 	}
  
 	ngOnInit(){

@@ -36,6 +36,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AngularFireAuthModule } from 'angularfire2/auth';
 import { AngularFireStorageModule } from 'angularfire2/storage';
 import { FirestoreSettingsToken} from '@angular/fire/firestore';
+import { AuthService } from './services/firebase/auth.service';
 
 
 //ROUTER
@@ -80,6 +81,13 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyInterceptor } from './http-interceptors/my.interceptor';
 import { httpInterceptorProviders } from './http-interceptors/index';
 
+//REDUX
+import { contadorReducer } from './contador.reducer';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { StoreModule } from '@ngrx/store';
+
+
+
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -119,6 +127,11 @@ registerLocaleData(localeEs);
     SharedModule, 
     ServiceModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
+    StoreModule.forRoot({ objNgrx: contadorReducer }),
+    StoreDevtoolsModule.instrument({
+      maxAge: 5,
+      logOnly: environment.production
+    }),
     ToastrModule.forRoot(),
   ],
   entryComponents: [
@@ -127,6 +140,7 @@ registerLocaleData(localeEs);
   exports: [
   ],
   providers: [
+    AuthService,
     AuthguardService,
     { provide: FirestoreSettingsToken, useValue: {}},
     LoginGuardGuard,

@@ -6,6 +6,10 @@ import { Subscription } from 'rxjs/Subscription';
 //SERVICES
 import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
 
+//NGRX REDUX
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducers';
+
 
 @Component({  
   selector: 'app-menu',
@@ -45,6 +49,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     public _proyectoService: ProjectsService,
     public _userService: UserService,
     public label: SettingsService,
+    private store: Store<AppState>,
   ) { 
 
     this.identity = this._userService.getIdentity();
@@ -71,53 +76,27 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.selected = this.id;
         this.projectselected = 0;
       }
-      
-    });
 
-
-
-    this._route.params.subscribe(params => {
-    let id = +params['id'];        
-    this.id = id;
-    if(this.id >0){
-      //GET RUTA
-        this._route.url.subscribe(res =>{
-          if(res[0]){
-            this.url = res[0].path;
-          }
-      });
-      
-      if(this.url && this.url === 'calendar'){
-        this.selected = 0;
-        this.projectselected = this.id;
-      }
-
-      if(this.url && this.url === 'project'){
-        this.selected = 0;
-        this.projectselected = this.id;
-      }
-
-      if(this.url && this.url === 'users'){
-        this.selected = 0;
-        this.projectselected = this.id;
-      }
-
-
-      if(this.url && this.url === 'service'){
+      if(this.path === 'service'){
         this.selected = this.id;
         this.projectselected = 0;
       }
 
-
-    }    
     });
-
+    
   }
 
   ngOnInit() {
-    //this.proyectos = this._userService.proyectos;
-    //console.log(this.proyectos);
-    //console.log(this.identity);
+    this.store.select('objNgrx')
+      .subscribe( objNgrx  => {
+        if (objNgrx) {
+          this.proyectos = objNgrx.project;
+          this.identity = objNgrx.identificacion;
+          console.log(objNgrx);
+        }
+        this.identity = this._userService.getIdentity();
+        this.proyectos = this._userService.getProyectos();
+      });
   }
   
 
@@ -134,6 +113,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   refresh(){
+    console.log('paso');
     this.RefreshMenu.emit(1);
     this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
       response => {

@@ -24,9 +24,7 @@ import { PagesRoutingModule } from '../pages/pages.routes';
 import 'hammerjs';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularSplitModule } from 'angular-split';
-//import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule } from 'primeng/calendar';
-//import { CalendarModule as AngularCalendar, DateAdapter as AngularDateAdapter } from 'angular-calendar';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
 import { MarkdownModule } from 'ngx-markdown';
@@ -49,15 +47,13 @@ import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
 
-
+/*
 //COMPONENTS
 import { DateDialogComponent } from '../components/date-dialog/date-dialog.component';
 import { ExcelComponent, DialogOverviewDialog } from '../components/excel/excel.component';
 import { ExcelVehiculoComponent } from '../components/excel-vehiculo/excel-vehiculo.component';
 import { FileComponent } from '../components/dialog/file/file.component';
 import { FilelistComponent } from '../components/dialog/filelist/filelist.component';
-//import { FileListComponent } from '../components/file-list/file-list.component';
-//import { FileUploadComponent } from '../components/file-upload/file-upload.component';
 import { GestionComponent } from '../components/gestion/gestion.component';
 import { MapaComponent } from '../components/mapa/mapa/mapa.component';
 import { MapaFullWidthComponent } from '../components/mapa/mapafullwidth/mapafullwidth.component'; 
@@ -68,31 +64,22 @@ import { ViewOrderTimeSpentComponent } from '../components/views/viewordertimesp
 import { VieworderserviceComponent } from '../components/views/vieworderservice/vieworderservice.component';
 import { ViewprojectcustomerComponent } from '../components/views/viewprojectcustomer/viewprojectcustomer.component';
 import { ViewprojectorderComponent } from '../components/views/viewprojectorder/viewprojectorder.component';
-//import { ViewProjectDetailComponent } from '../components/views/viewprojectdetail/viewprojectdetail.component';
 import { ViewModule } from '../components/views/view.module';
 
 //DIALOG
 import { AddComponent } from '../components/dialog/add/add.component';
-//import { AddCalendarComponent } from '../components/dialog/addcalendar/addcalendar.component';
 import { AddcustomerComponent } from '../components/dialog/addcustomer/addcustomer.component';
-//import { AddUserComponent } from '../components/dialog/adduser/adduser.component';
-//import { AddServiceComponent } from '../components/dialog/addservice/addservice.component';
 import { AddSupportComponent } from '../components/dialog/widget/addsupport/addsupport.component';
 import { CargaComponent } from '../components/dialog/carga/carga.component';
 import { CsvComponent } from '../components/dialog/csv/csv.component';
 import { CsvCustomerComponentComponent } from '../components/dialog/csvcustomercomponent/csvcustomercomponent.component';
-//import { CsvServiceComponent } from '../components/dialog/csvservice/csvservice.component';
 import { DeleteComponent } from '../components/dialog/delete/delete.component';
 import { DeletecustomerComponent } from '../components/dialog/deletecustomer/deletecustomer.component';
-//import { DeleteServiceComponent } from '../components/dialog/deleteservice/deleteservice.component';
 import { DownloadComponent } from '../components/dialog/download/download.component';
 import { EditComponent } from '../components/dialog/edit/edit.component';
 import { EditcustomerComponent } from '../components/dialog/editcustomer/editcustomer.component';
-//import { EditServiceComponent } from '../components/dialog/editservice/editservice.component';
-//import { EditUserComponent } from '../components/dialog/edituser/edituser.component';
 import { ShowComponent } from '../components/dialog/show/show.component';
 import { ShowcustomerComponent } from '../components/dialog/showcustomer/showcustomer.component';
-//import { ShowProfileSecurityComponent } from '../components/dialog/showprofilesecurity/showprofilesecurity.component';
 import { ShowProfileComponent } from '../components/dialog/showprofile/showprofile.component';
 import { SettingsComponent } from '../components/dialog/settings/settings.component';
 import { SettingscustomerComponent } from '../components/dialog/settingscustomer/settingscustomer.component';
@@ -101,16 +88,14 @@ import { ZipComponent } from '../components/dialog/zip/zip.component';
 //MODAL
 import { ModalMapaComponent } from '../components/modal/modalmapa/modalmapa.component';
 import { ModalImageComponent } from '../components/modal/modalimage/modalimage.component';
-//import { ModalUploadImageComponent } from '../components/modal/modaluploadimage/modaluploadimage.component';
-
+*/
 
 //DIRECTIVES
-import { DropZoneDirective } from '../directives/drop-zone.directive';
-import { NgDropFilesDirective } from '../directives/ng-drop-files.directive';
+//import { DropZoneDirective } from '../directives/drop-zone.directive';
+//import { NgDropFilesDirective } from '../directives/ng-drop-files.directive';
 
 //PAGES
-//import { CalendarComponent } from './calendar/calendar.component';
-import { OrderserviceComponent } from '../components/orderservice/orderservice.component';
+//import { OrderserviceComponent } from '../components/orderservice/orderservice.component';
 
 
 // Global vars
@@ -151,106 +136,76 @@ registerLocaleData(localeEs);
     ToastModule,    
     ToastrModule.forRoot(),
     VerticalTimelineModule,
-    ViewModule
+    //ViewModule
   ],
   declarations: [
-    AddComponent,
-    //AddCalendarComponent,
-    AddcustomerComponent,
-    //AddServiceComponent,
-    AddSupportComponent,
-    //AddUserComponent,
-    //CalendarComponent,
-    CargaComponent,
-    CsvComponent,
-    CsvCustomerComponentComponent,
-    //CsvServiceComponent,
-    DeletecustomerComponent,
-    DeleteComponent,
-    //DeleteServiceComponent,
-    DownloadComponent,    
-    DateDialogComponent,
-    DialogOverviewDialog,
-    DropZoneDirective,
-    EditcustomerComponent,
-    EditComponent,
-    //EditServiceComponent,
-    //EditUserComponent,  
-    ExcelComponent,
-    ExcelVehiculoComponent,
-    FileComponent,
-    FilelistComponent,
-    //FileListComponent,
-    //FileUploadComponent,
-    GestionComponent,
-    MapaComponent, 
-    MapaFullWidthComponent,
-    ModalMapaComponent,
-    ModalImageComponent,
-    //ModalUploadImageComponent,
-    NgDropFilesDirective,
-    OrderserviceComponent,
-    //ServiceComponent,
-    SettingsComponent, 
-    SettingscustomerComponent, 
-    ShowComponent,
-    ShowcustomerComponent,
-    //ShowProfileSecurityComponent,
-    ShowProfileComponent,
-    TableroComponent,    
-    UsertableComponent,
-    ZipComponent,
-    VehiculoOverviewDialog,
-    ViewOrderTimeSpentComponent,
-    //ViewProjectDetailComponent,
-    ViewOrderDetailComponent,
-    ViewprojectorderComponent,
-    ViewprojectcustomerComponent, 
-    VieworderserviceComponent,
+    //AddComponent,
+    //AddcustomerComponent,
+    //AddSupportComponent,
+    //CargaComponent,
+    //CsvComponent,
+    //CsvCustomerComponentComponent,
+    //DeletecustomerComponent,
+    //DeleteComponent,
+    //DownloadComponent,    
+    //DateDialogComponent,
+    //DialogOverviewDialog,
+    //DropZoneDirective,
+    //EditcustomerComponent,
+    //EditComponent,
+    //ExcelComponent,
+    //ExcelVehiculoComponent,
+    //FileComponent,
+    //FilelistComponent,
+    //GestionComponent,
+    //MapaComponent, 
+    //MapaFullWidthComponent,
+    //ModalMapaComponent,
+    //ModalImageComponent,
+    //NgDropFilesDirective,
+    //OrderserviceComponent,
+    //SettingsComponent, 
+    //SettingscustomerComponent, 
+    //ShowComponent,
+    //ShowcustomerComponent,
+    //ShowProfileComponent,
+    //TableroComponent,    
+    //UsertableComponent,
+    //ZipComponent,
+    //VehiculoOverviewDialog,
+    //ViewOrderTimeSpentComponent,
+    //ViewOrderDetailComponent,
+    //ViewprojectorderComponent,
+    //ViewprojectcustomerComponent, 
+    //VieworderserviceComponent,
   ],
   exports: [
-    //ChangepasswordComponent,
-    //DashboardComponent,
-    //ProfileComponent,
-    //UsuariosComponent,
-    //FileListComponent,
-    //FileUploadComponent,
   ],
   entryComponents: [
-    AddComponent, 
-    //AddCalendarComponent,
-    AddcustomerComponent, 
-    //AddServiceComponent,
-    AddSupportComponent,
-    //AddUserComponent,
-    CsvComponent,
-    CsvCustomerComponentComponent,
-    //CsvServiceComponent,
-    DateDialogComponent,
-    DeleteComponent, 
-    DeletecustomerComponent, 
-    //DeleteServiceComponent,
-    DialogOverviewDialog, 
-    DownloadComponent, 
-    EditComponent,
-    EditcustomerComponent, 
-    //EditServiceComponent,
-    //EditUserComponent,
-    FileComponent, 
-    ModalMapaComponent, 
-    ModalImageComponent,
-    //ModalUploadImageComponent,
-    ModalMapaComponent, 
-    ModalImageComponent,
-    //ModalUploadImageComponent,
-    ShowComponent, 
-    ShowcustomerComponent,
-    //ShowProfileSecurityComponent,
-    ShowProfileComponent,
-    SettingsComponent, 
-    SettingscustomerComponent, 
-    VehiculoOverviewDialog,
-    ZipComponent    
+    //AddComponent, 
+    //AddcustomerComponent, 
+    //AddSupportComponent,
+    //CsvComponent,
+    //CsvCustomerComponentComponent,
+    //DateDialogComponent,
+    //DeleteComponent, 
+    //DeletecustomerComponent, 
+    //DialogOverviewDialog, 
+    //DownloadComponent, 
+    //EditComponent,
+    //EditcustomerComponent, 
+    //FileComponent, 
+    //ModalMapaComponent, 
+    //ModalImageComponent,
+    //ModalMapaComponent, 
+    //ModalImageComponent,
+    //ShowComponent, 
+    //ShowcustomerComponent,
+    //ShowProfileComponent,
+    //SettingsComponent, 
+    //SettingscustomerComponent, 
+    //VehiculoOverviewDialog,
+    //ZipComponent    
   ],
   providers: [
     NgbActiveModal, 
