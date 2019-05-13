@@ -339,7 +339,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   logout(){
-    console.log('viene');
+    //console.log('viene');
     this._route.params.subscribe(params => {
       let logout = +params['sure'];
       if(logout == 1){         

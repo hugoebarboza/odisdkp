@@ -30,13 +30,14 @@ export class LoginGuardGuard implements CanLoad  {
   canLoad(route: Route): boolean {
 
     let url: string = route.path;
-    console.log('Url:'+ url);
+    //console.log('Url:'+ url);
 
     if ( this.auth.isAuthenticated() ) {
       console.log( 'Paso por guard' );
       return true;
     } else {
       console.log( 'Bloqueado por guard' );
+      this.auth.resetAction();      
       this.auth.logout();
       this.router.navigate(['/login']);
       return false;

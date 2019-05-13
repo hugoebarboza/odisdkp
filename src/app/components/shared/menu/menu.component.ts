@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, EventEmitter, Output, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
@@ -8,7 +7,8 @@ import { ProjectsService, SettingsService, UserService } from '../../../services
 
 //NGRX REDUX
 import { Store } from '@ngrx/store';
-import { AppState } from 'src/app/app.reducers';
+import { AppState } from '../../../app.reducers';
+import { LoginAction } from '../../../contador.actions';
 
 
 @Component({  
@@ -44,8 +44,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   //@Input() proyectos : any = {};
   @Output() RefreshMenu: EventEmitter<number>;
 
-  constructor(
-    private _route: ActivatedRoute, 
+  constructor(    
     public _proyectoService: ProjectsService,
     public _userService: UserService,
     public label: SettingsService,
@@ -81,9 +80,7 @@ export class MenuComponent implements OnInit, OnDestroy {
         this.selected = this.id;
         this.projectselected = 0;
       }
-
-    });
-    
+    });    
   }
 
   ngOnInit() {
@@ -92,10 +89,10 @@ export class MenuComponent implements OnInit, OnDestroy {
         if (objNgrx) {
           this.proyectos = objNgrx.project;
           this.identity = objNgrx.identificacion;
-          console.log(objNgrx);
+          //console.log(objNgrx);
         }
-        this.identity = this._userService.getIdentity();
-        this.proyectos = this._userService.getProyectos();
+        //this.identity = this._userService.getIdentity();
+        //this.proyectos = this._userService.getProyectos();
       });
   }
   
@@ -112,19 +109,28 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.selected = item;
   }
 
-  refresh(){
-    console.log('paso');
-    this.RefreshMenu.emit(1);
+  refresh(){    
+    //this.RefreshMenu.emit(1);
+    this.identity = this._userService.getIdentity();
+    this.token = this._userService.getToken();
     this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
       response => {
           if (response.status == 'success'){
             this.proyectos = response.datos;
             let key = 'proyectos';
             this._userService.saveStorage(key, this.proyectos);
+            this.afterRefresch(this.proyectos, this.identity);
+
           }
         }
-      );		
+      );
+  }
 
+  private afterRefresch(p:any, i:any): void {
+    const obj: any = {project: p, identificacion: i};
+    const accion = new LoginAction(obj);
+    this.store.dispatch( accion );
+    console.log('redux dispacth action refresch menu')
   }
 
 }
