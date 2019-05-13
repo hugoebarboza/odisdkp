@@ -6,6 +6,13 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
+
+//NGRX REDUX
+import { AppState } from '../../app.reducers';
+import { Store } from '@ngrx/store';
+import { LoginAction, ResetAction } from '../../contador.actions';
+
+
 const httpOptions = {
   headers: new HttpHeaders({
     'Content-Type':  undefined,
@@ -39,6 +46,7 @@ export class UserService  {
 
 	constructor(
 		public _http: HttpClient,
+		private store: Store<AppState>,
 		//private _route: ActivatedRoute,
 		//private _router: Router
 
@@ -60,6 +68,13 @@ export class UserService  {
 			
     }
   }
+
+  storeAction(p: any, i: any) {
+    const obj: any = {project: p, identificacion: i};
+    const accion = new LoginAction(obj);
+    this.store.dispatch( accion );
+  }
+
 
   isLogin() {
 		if(this.token){
@@ -540,6 +555,10 @@ export class UserService  {
 		localStorage.removeItem('token');
 	}
 
+  resetAction() {
+    const accion = new ResetAction();
+    this.store.dispatch( accion );
+  }
 
 
 	private prepareHeader(headers: HttpHeaders | null, token:any): HttpHeaders  {
