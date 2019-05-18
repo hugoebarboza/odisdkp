@@ -51,9 +51,7 @@ export class AddUserServiceComponent implements OnInit, OnDestroy {
 
 
   cargarUsuarios() {
-
     this.isLoading = true;
-
     this.subscription = this._userService.getUserPaginate( this.token.token, this.id, this.page )
               .subscribe( (resp: any) => {
                 this.totalRegistros = resp.datos.total;

@@ -38,7 +38,7 @@ export class UserComponent implements OnInit {
 
   constructor(
     public _userService: UserService,
-    public dialogRef: MatDialogRef<UserComponent>,      
+    public dialogRef: MatDialogRef<UserComponent>,   
     @Inject(MAT_DIALOG_DATA) public data: Service
 
   ) { 

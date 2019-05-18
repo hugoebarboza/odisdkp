@@ -79,11 +79,15 @@ import { DeletecustomerComponent } from '../../components/dialog/deletecustomer/
 import { DownloadComponent } from '../../components/dialog/download/download.component';
 import { EditComponent } from '../../components/dialog/edit/edit.component';
 import { EditcustomerComponent } from '../../components/dialog/editcustomer/editcustomer.component';
+//import { EditServiceComponent } from '../../pages/service/dialog/editservice/editservice.component';
 import { ShowComponent } from '../../components/dialog/show/show.component';
 import { ShowcustomerComponent } from '../../components/dialog/showcustomer/showcustomer.component';
 import { ShowProfileComponent } from '../../components/dialog/showprofile/showprofile.component';
 import { SettingsComponent } from '../../components/dialog/settings/settings.component';
 import { SettingscustomerComponent } from '../../components/dialog/settingscustomer/settingscustomer.component';
+import { StatusComponent } from './components/dialog/status/status.component';
+import { StatusListComponent, SnackErrorComponent, SnackSuccessComponent } from './components/dialog/status-list/status-list.component';
+import { StatusCrudComponent } from './components/dialog/status-crud/status-crud.component';
 import { VehiculoOverviewDialog } from '../../components/excel-vehiculo/excel-vehiculo.component';
 import { ZipComponent } from '../../components/dialog/zip/zip.component';
 //MODAL
@@ -101,7 +105,6 @@ import { OrderserviceComponent } from '../../components/orderservice/orderservic
 
 // Global vars
 import { GLOBAL } from '../../services/global';
-
 
 registerLocaleData(localeEs);
 
@@ -171,6 +174,11 @@ registerLocaleData(localeEs);
     ShowComponent,
     ShowcustomerComponent,
     ShowProfileComponent,
+    StatusComponent,
+    StatusListComponent,
+    SnackErrorComponent,
+    SnackSuccessComponent,
+    StatusCrudComponent,
     TableroComponent,    
     UsertableComponent,
     ZipComponent,
@@ -180,7 +188,7 @@ registerLocaleData(localeEs);
     ViewprojectorderComponent,
     ViewprojectcustomerComponent, 
     VieworderserviceComponent, 
-    ViewOrderServiceSelectComponent
+    ViewOrderServiceSelectComponent, 
   ],
   exports: [
   ],
@@ -196,17 +204,20 @@ registerLocaleData(localeEs);
     DialogOverviewDialog, 
     DownloadComponent, 
     EditComponent,
-    EditcustomerComponent, 
+    EditcustomerComponent,    
     FileComponent, 
     ModalMapaComponent, 
     ModalImageComponent,
     ModalMapaComponent, 
     ModalImageComponent,
+    SnackErrorComponent,
+    SnackSuccessComponent,
     ShowComponent, 
     ShowcustomerComponent,
     ShowProfileComponent,
     SettingsComponent, 
     SettingscustomerComponent, 
+    StatusComponent,
     VehiculoOverviewDialog,
     ZipComponent    
   ],

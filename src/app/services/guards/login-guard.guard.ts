@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { CanLoad , Route, Router } from '@angular/router';
 
-import { UserService } from '../../services/service.index';
+import { UserService, AuthService } from '../../services/service.index';
 
 
 @Injectable()
@@ -10,6 +10,7 @@ export class LoginGuardGuard implements CanLoad  {
 
   constructor(
     public auth: UserService,
+    public authService: AuthService,
     public router: Router
   ) {
 
@@ -37,9 +38,10 @@ export class LoginGuardGuard implements CanLoad  {
       return true;
     } else {
       console.log( 'Bloqueado por guard' );
-      this.auth.resetAction();      
+      //this.auth.resetAction();    
       this.auth.logout();
-      this.router.navigate(['/login']);
+      this.authService.logout();
+      //this.router.navigate(['/login']);
       return false;
     }
 

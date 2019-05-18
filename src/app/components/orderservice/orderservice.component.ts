@@ -122,7 +122,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
     let id = +params['id'];            
     this.id = id;
   
-  if (this.id > 0 && this.token.token != null){
+  if (this.id > 0 && this.token && this.token.token != null){
 
       //GET PROJECT FROM SERVICEORDER
       this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(

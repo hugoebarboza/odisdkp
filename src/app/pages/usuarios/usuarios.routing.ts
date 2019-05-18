@@ -15,7 +15,8 @@ const routes: Routes = [
     component: UsuariosComponent,
     canActivate: [AuthguardService],
     data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Usuarios', descripcion: 'OCA Global - ODIS Users Managment' } 
-  }
+  },
+  { path:'**', pathMatch: 'full', redirectTo: '/notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
 ];
 
 @NgModule({

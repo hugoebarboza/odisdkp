@@ -9,8 +9,9 @@ declare var swal: any;
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
 //DIALOG
-import { EditServiceComponent } from '../../../pages/service/dialog/editservice/editservice.component';
+import { EditServiceComponent } from '../../../components/shared/shared.index';
 import { ShowcustomerComponent } from '../../../components/dialog/showcustomer/showcustomer.component';
+import { StatusComponent } from '../../../pages/orderservice/components/dialog/status/status.component';
 
 //MATERIAL
 import { MatDialog, MatSnackBar } from '@angular/material';
@@ -296,7 +297,7 @@ deleteCommentDatabase(item: any) {
     }
 
     loadUserProject(id:number){
-      this.subscription = this._project.getUserProject(this.token.token, id, 7).subscribe(
+      this.subscription = this._project.getUserProject(this.token.token, id, 8).subscribe(
       response => {
                 if(!response){
                   return;
@@ -306,7 +307,7 @@ deleteCommentDatabase(item: any) {
                 }
                 });        
   
-      this.subscription = this._project.getUserProject(this.token.token, id, 4).subscribe(
+      this.subscription = this._project.getUserProject(this.token.token, id, 8).subscribe(
       response => {
                 if(!response){
                   return;
@@ -402,6 +403,28 @@ deleteCommentDatabase(item: any) {
       });
     }
   
+
+    status(id: number) {
+      const dialogRef = this.dialog.open(StatusComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
 
     toggle() {
       this.toggleContent = !this.toggleContent;

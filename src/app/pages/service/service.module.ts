@@ -12,7 +12,8 @@ import { ServiceComponent } from './service-list/service.component';
 //DIALOG
 import { AddServiceComponent } from './dialog/addservice/addservice.component';
 import { CsvServiceComponent } from './dialog/csvservice/csvservice.component';
-import { EditServiceComponent } from './dialog/editservice/editservice.component';
+import { SettingServiceComponent } from './components/settingservice/settingservice.component';
+//import { EditServiceComponent } from './dialog/editservice/editservice.component';
 import { DeleteServiceComponent } from './dialog/deleteservice/deleteservice.component';
 import { UserComponent } from './dialog/user/user.component';
 
@@ -38,6 +39,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 
 //ROUTING
 import { ServiceRoutingModule } from './service.routing';
+
 
 
 @NgModule({
@@ -67,9 +69,10 @@ import { ServiceRoutingModule } from './service.routing';
     AddUserServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent,
-    EditServiceComponent,
+    //EditServiceComponent,
     RemoveUserComponent,    
     ServiceComponent,
+    SettingServiceComponent,
     UserComponent,
   ],
   entryComponents: [
@@ -77,7 +80,7 @@ import { ServiceRoutingModule } from './service.routing';
     AddUserServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent, 
-    EditServiceComponent,
+    //EditServiceComponent,
     UserComponent
   ],
   providers: [

@@ -6,7 +6,13 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 //MATERIAL
 import {MaterialModule} from '../../material-module';
 
+//MODULES
+import { CalendarModule } from 'primeng/calendar';
+
 //COMPONENTS
+import {
+    EditServiceComponent,
+   } from './shared.index';
 import { FooterComponent } from './footer/footer.component';
 import { FootermainComponent } from './footermain/footermain.component';
 import { HeaderComponent } from './header/header.component';
@@ -22,15 +28,17 @@ import { PipesModule } from '../../pipes/pipes.module';
 
 
 @NgModule({
-    imports: [        
-        RouterModule,
+    imports: [
+        CalendarModule,
         CommonModule,
         FormsModule,
+        RouterModule,
         ReactiveFormsModule,    
         MaterialModule,
         PipesModule
     ],
     declarations: [
+        EditServiceComponent,
         FooterComponent,
         FootermainComponent,
         HeaderComponent,
@@ -41,6 +49,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         ProgressSpinnerComponent
     ],
     exports: [
+        EditServiceComponent,
         FooterComponent,
         FootermainComponent,
         HeaderComponent,
@@ -49,6 +58,10 @@ import { PipesModule } from '../../pipes/pipes.module';
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent
-    ]
+    ],
+    entryComponents: [
+        EditServiceComponent,
+      ],
+    
 })
 export class SharedModule { }

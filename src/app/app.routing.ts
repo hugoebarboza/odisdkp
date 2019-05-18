@@ -61,7 +61,14 @@ const appRoute: Routes = [
 		loadChildren: './pages/service/service.module#ServiceModule',
 		data: { preload: true, delay: false }
 	},
-  { 	
+	{
+		path: 'project/:id/settings',
+		canLoad: [ LoginGuardGuard ],
+		loadChildren: './pages/service/service.module#ServiceModule',
+		data: { preload: true, delay: false }
+	},
+
+	{ 	
 		path: 'users', 
     canLoad: [LoginGuardGuard],
 		loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',

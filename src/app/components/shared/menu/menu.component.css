@@ -1,61 +1,3 @@
-/**.active-link{
-    background-color: #F3F3F3;
-    color: rgb(0,122,217);
-    font-weight: bold;
-    border-left: 2px solid rgb(0,122,217);
-}
-.example-headers-align .mat-expansion-panel-header-title, 
-.example-headers-align .mat-expansion-panel-header-description {
-  flex-basis: 0;
-}
-
-.example-headers-align .mat-expansion-panel-header-description {
-  justify-content: space-between;
-  align-items: center;
-}
-.material-icons.md-14 { font-size: 14px; color: #585858;}
-.material-icons.md-14-padding { font-size: 14px; color: #585858; padding: 2px;}
-.material-icons.md-14-padding-color { font-size: 14px; color: rgb(0,122,217); padding: 2px;}
-.material-icons.md-14-color { font-size: 14px; color: rgb(0,122,217);}
-.material-icons.md-17 { font-size: 17px; }
-
-.no-shadow {
-  box-shadow: none !important;
-  background-color: #FFFFFF;
-}
-
-::ng-deep .mat-expansion-panel-header {
-  padding: 17px !important;
-  padding-left: 17px !important;
-  background-color: transparent;
-}
-::ng-deep .mat-expansion-panel-body {
-  padding: 0px !important;
-  padding-left: 0px !important;
-  background-color: transparent;
-}
-
-.header-box-shadow {
-  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
-}
-
-.bottomright {
-
-  position: absolute;
-  top: 80%;
-  right: 0px;
-  font-size: 18px;
-}
-
-.spacer {
-flex: 1 1 auto;
-}
-
-
-.container {
-    position: relative;
-}*/
-
 .active-link{
   color: #0B3356;
   font-weight: bold;
@@ -134,16 +76,16 @@ a:focus {
   z-index: 1000;
   
   overflow-y: auto;
-  */
+  
 
 #sidebar-body {
   overflow: auto; 
   height: calc(100% - 100px);
-}
+}*/
 
 #sidebar {
-  height: 100%;
-  overflow: hidden; 
+  overflow: auto; 
+  height: calc(100% - 180px);
   min-width: 250px;
   max-width: 250px;
   background: #0B3356;
@@ -155,18 +97,13 @@ a:focus {
   transition: all 0.5s ease;
   box-shadow: 3px 0 6px rgba(0,0,0,.24);
   border-right: 1px solid #DDD;
+  margin-bottom: 0px;
 }
 
 /*
 #sidebar.active {
   margin-left: -250px;
 }*/
-
-#sidebar .sidebar-header {
-  padding: 20px;
-  background: #0B3356;
-  height: 249;
-}
 
 
 #sidebar ul.components {
@@ -239,33 +176,3 @@ a.article:hover {
   background: #C7C7C7 !important;
   color: #fff !important;
 }
-
-
-/* ---------------------------------------------------
-  CONTENT STYLE
------------------------------------------------------ 
-
-#content {
-  width: 100%;
-  padding: 20px;
-  min-height: 100vh;
-  transition: all 0.3s;
-}
-*/
-/* ---------------------------------------------------
-  MEDIAQUERIES
------------------------------------------------------ 
-
-@media (max-width: 768px) {
-  #sidebar {
-      margin-left: -250px;
-  }
-  #sidebar.active {
-      margin-left: 0;
-  }
-  #sidebarCollapse span {
-      display: none;
-  }
-}
-*/
-

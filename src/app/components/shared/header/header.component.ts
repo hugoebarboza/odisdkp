@@ -68,13 +68,26 @@ export class HeaderComponent {
 	}
  
 	ngOnInit(){
+    this.store.select('objNgrx')
+    .subscribe( objNgrx  => {
+      if (objNgrx) {
+        this.identity = objNgrx.identificacion;
+      }
+      this.identity = this._userService.getIdentity();
+      if(this.identity){
+        this.isLoading = false;
+      }  
+    });
+
+    
     if(this.identity){
       this.isLoading = false;
     }
     //this.addTodo(4);
     //console.log(this.itemsCollection);
 	  	if (this.identity == null ){
-	  		this._router.navigate([""]);
+        this._userService.logout();
+	  		//this._router.navigate([""]);
 	  	}else{
 	  		//console.log('header.component cargado'); 				
 	  	}
@@ -94,14 +107,11 @@ export class HeaderComponent {
       //console.log('paso');
   }
 
+  
   ngDoCheck(){
-    this.identity = this._userService.getIdentity();  
-    this.token = this._userService.getToken();
-    this.fotoperfil = this._userService.getFotoProfile();
-    if(this.identity){
-      this.isLoading = false;
-    }
-    
+    //this.identity = this._userService.getIdentity();
+    //this.token = this._userService.getToken();
+    this.fotoperfil = this._userService.getFotoProfile();    
   }
 
   resetAction() {
@@ -138,7 +148,7 @@ export class HeaderComponent {
      dialogRef.afterClosed().subscribe(
            result => {       
               if (result === 1) {
-              this.resetAction();
+              //this.resetAction();
               // After dialog is closed we're doing frontend updates 
               // For add we're just pushing a new row inside DataService
               //this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  

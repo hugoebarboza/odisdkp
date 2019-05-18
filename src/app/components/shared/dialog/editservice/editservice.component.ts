@@ -246,7 +246,7 @@ export class EditServiceComponent implements OnInit {
 
 
  loadUserProject(id:number){
-    this.subscription = this._project.getUserProject(this.token.token, id, 7).subscribe(
+    this.subscription = this._project.getUserProject(this.token.token, id, 8).subscribe(
     response => {
               if(!response){
                 return;
@@ -256,7 +256,7 @@ export class EditServiceComponent implements OnInit {
               }
               });        
 
-    this.subscription = this._project.getUserProject(this.token.token, id, 4).subscribe(
+    this.subscription = this._project.getUserProject(this.token.token, id, 8).subscribe(
     response => {
               if(!response){
                 return;

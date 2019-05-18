@@ -1,0 +1,1 @@
+export { EditServiceComponent } from './dialog/editservice/editservice.component';

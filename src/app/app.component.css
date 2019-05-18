@@ -64,4 +64,29 @@ h1.example-app-name {
 }
 
 
+.not-scroll {
+  height: 100%;
+  overflow: hidden !important; 
+}
 
+.sidebar-header {
+  min-width: 20px;
+  max-width: 250px;
+  background: #0B3356;
+  padding: 20px;
+  border-right: 1px solid #DDD;
+  height: 249;
+}
+
+.sidebar-footer {
+ height: 80px;
+ min-width: 20px;
+ max-width: 250px;
+ background: #0B3356;
+ border-right: 1px solid #DDD;
+ align-content: center;
+}
+
+.keyboard_arrow_left {
+  float: right !important; 
+}

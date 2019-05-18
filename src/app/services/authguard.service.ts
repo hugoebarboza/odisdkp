@@ -1,11 +1,10 @@
 import { Injectable } from '@angular/core';
-import { Router, ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, ActivatedRoute } from '@angular/router';
-import { UserService } from '../services/service.index';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, ActivatedRoute } from '@angular/router';
+import { AuthService, UserService } from '../services/service.index';
 
 //NGRX REDUX
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
-import { ResetAction } from '../contador.actions';
 
 
 @Injectable({
@@ -18,8 +17,8 @@ export class AuthguardService implements CanActivate {
 	token:any;
 	url:string;
 
-  constructor(		
-		private _router: Router,
+  constructor(
+		public authService: AuthService,
 		private auth : UserService,
 		private store: Store<AppState>,
   ) { 
@@ -34,17 +33,17 @@ export class AuthguardService implements CanActivate {
 					this.store.select('objNgrx').subscribe( 
 						objNgrx  => {
 						if (objNgrx) {
+							this.identity = this.auth.getIdentity();
+							this.proyectos = this.auth.getProyectos();
 							//console.log('connnn redux');
 						}else{
 							console.log('sinnnn redux');
 							this.identity = this.auth.getIdentity();
-							this.proyectos = this.auth.getProyectos();												
+							this.proyectos = this.auth.getProyectos();
 							if(this.proyectos && this.identity){
 								console.log('redux store accionnn');
 								this.auth.storeAction(this.proyectos, this.identity);
-							}else{
-								console.log('redux reset accionnn');
-								this.auth.resetAction();							}							
+							}							
 						}
 					});
 							
@@ -52,9 +51,9 @@ export class AuthguardService implements CanActivate {
 					return true;					
 				}else{
 					console.log('paso authguard isTokenValidate false');
-					this.auth.resetAction();
+					//this.auth.resetAction();
 					this.auth.logout();
-					this._router.navigate(["/login"]);										
+					this.authService.logout();		
 					return false;		
 				}
 

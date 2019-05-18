@@ -1,4 +1,4 @@
-import { Component, OnInit, DoCheck } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from "rxjs/Subscription";
 import { OnDestroy } from "@angular/core";
@@ -66,7 +66,6 @@ export class DashboardComponent implements OnInit, OnDestroy {
 					},
 				(error: any) => {
 					this._userService.logout();
-						this._router.navigate(["/login"]);
 					   },
 				() => console.log('Complete Dashboard')
 					);
@@ -80,11 +79,11 @@ export class DashboardComponent implements OnInit, OnDestroy {
 		}
 	}
 
-
+	/*
   	ngDoCheck(){
     	//this.identity = this._userService.getIdentity();
     	//this.token = this._userService.getToken();    
-  	}
+  	}*/
 
 
 	  refreshMenu(event:number){

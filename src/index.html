@@ -63,7 +63,36 @@
           width: 100%;
           overflow-y: auto;
           align-items: stretch;
-        } 
+        }
+
+        /* SCROLL */
+        ::-webkit-scrollbar {
+          width: 8px;
+          margin-top: 5%;
+          margin-bottom: 5%;
+          margin-left: 1px;
+          margin-right: 1px;
+          border-radius: 10px;
+        }
+
+        /*SCROLL Track */
+        ::-webkit-scrollbar-track {
+          background: #fff; 
+          border-radius: 10px;
+        }
+        
+        /*SCROLL Handle */
+        ::-webkit-scrollbar-thumb {
+          background: #C7C7C7; 
+          border-radius: 10px;
+        }
+
+        /*SCROLL Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #828282; 
+          border-radius: 10px;
+        }
+
 
       #loading{display:inline-block;width:55px;height: 55px;border:3px solid rgba(103,58,183,.3);border-radius:50%;border-top-color:#673ab7;animation:spin 1s ease-in-out infinite;position:fixed;left:calc(50% - 25px);top:calc(50% - 25px)}@keyframes spin{to{transform:rotate(360deg)}}
     </style>

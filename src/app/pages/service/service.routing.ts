@@ -3,9 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 
 //COMPONENT
 import { ServiceComponent } from './service-list/service.component';
+import { SettingServiceComponent } from './components/settingservice/settingservice.component';
 
 //Guards
 import { AuthguardService } from '../../services/authguard.service';
+
 
 
 
@@ -15,6 +17,13 @@ const routes: Routes = [
     canActivate: [AuthguardService],
     data: { path: 'project', titulo: 'OCA Global - ODIS Proyectos', subtitle: 'Proyectos', descripcion: 'OCA Global - ODIS Project Services Managment' }
     },
+    { path:':id/settings', 
+    component: SettingServiceComponent,
+    canActivate: [AuthguardService],
+    data: { path: 'project', titulo: 'OCA Global - ODIS Proyectos', subtitle: 'Configuración de Proyecto', descripcion: 'OCA Global - ODIS Project Services Managment' }
+    },
+    { path:'**', pathMatch: 'full', redirectTo: '/notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
+
 ];
 
 @NgModule({

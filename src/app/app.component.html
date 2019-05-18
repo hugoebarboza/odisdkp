@@ -1,34 +1,42 @@
 <div class="header">
-        <app-header></app-header>
-        </div>
+    <app-header></app-header>
+</div>
         
+<div class="pagecontent">
+
+    <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
+
+        <mat-toolbar class="bg-white example-toolbar" *ngIf="identity">
+                <a class="nav-link active pointer" (click)="sidenav.toggle()"><i class="material-icons">menu</i></a>    
+                <a class="nav-link active pointer" href="https://mail.google.com" target="_blank"><i class="material-icons">email</i></a>
+                <a class="nav-link active pointer" routerLink="/dashboard"><i class="material-icons">dashboard</i></a>
+        </mat-toolbar>
+
+        <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
+
+            <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                        [fixedInViewport]="mobileQuery.matches" fixedTopGap="102">
+
+                        <div class="not-scroll">
+                            <div class="sidebar-header">
+                                <img width="100%" src="./../assets/img/logo.png">
+                            </div>
+                            <app-menu (RefreshMenu) = "refreshMenu($event)" class="sidebar-body"></app-menu>
+                            <div class="sidebar-footer">
+                                <button mat-icon-button color="warn" class="keyboard_arrow_left">
+                                    <mat-icon (click)="sidenav.toggle()">keyboard_arrow_left</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                            
+            </mat-sidenav>
+
+            <mat-sidenav-content>
+                    <router-outlet></router-outlet>
+                    <app-footermain></app-footermain>
+            </mat-sidenav-content>
+        </mat-sidenav-container>
         
-        
-        <div class="pagecontent">
-        
-            <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
-        
-                <mat-toolbar class="bg-white example-toolbar" *ngIf="identity">
-                        <a class="nav-link active" (click)="sidenav.toggle()"><i class="material-icons">menu</i></a>    
-                        <a class="nav-link active" href="https://mail.google.com" target="_blank"><i class="material-icons">email</i></a>
-                        <a class="nav-link active" routerLink="/dashboard"><i class="material-icons">dashboard</i></a>
-                </mat-toolbar>
-        
-                <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-        
-                    <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                                [fixedInViewport]="mobileQuery.matches" fixedTopGap="102">
-                                <app-menu  (RefreshMenu) = "refreshMenu($event)"></app-menu>
-                    </mat-sidenav>
-        
-                    <mat-sidenav-content>
-                            <router-outlet></router-outlet>
-                            <app-footermain></app-footermain>
-                    </mat-sidenav-content>
-                </mat-sidenav-container>
-                
-            </div>
-            
-        
-        </div>
-        
+    </div>
+
+</div>

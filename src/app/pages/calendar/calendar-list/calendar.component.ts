@@ -147,7 +147,7 @@ export class CalendarComponent implements OnInit, OnDestroy
     this.sub = this._route.params.subscribe(params => { 
       let id = +params['id'];            
       this.id = id;
-      if(this.id){
+      if(this.id && this.proyectos){
         this.project = this.filter();
         this.project_name = this.project.project_name;
         this.calendarID = this.project.calendarID;

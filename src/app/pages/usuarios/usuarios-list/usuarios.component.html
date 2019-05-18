@@ -5,10 +5,8 @@
 </div>
 
 <div id="wrapper" *ngIf="proyectos && identity">
-<!-- Sidebar <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>-->
-<!-- /#sidebar-wrapper -->
-<!-- Page Content -->
-<div id="page-content-wrapper" >
+
+  <div  >
 
         <div class="container-fluid p-2">
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
@@ -52,18 +50,12 @@
           <div class="col-12">
               <div class="card">
                   <div class="card-body">
-
-
-                          <div class="row">
-                          <div class="col-10">
-                            <h3 class="card-title"><mat-icon>account_circle</mat-icon> Usuarios registrados ({{totalRegistros}})</h3>
-                          </div>
-                            <div class="col-2 float-right">
-                              <button type="button" class="btn btn-primary btn-sm" (click)="addNew(id, departamento_id)" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">people</mat-icon>Crear Usuario</button>                      
-                            </div>
-                          </div>
-
-
+                      
+                    <div class="d-flex bd-highlight">
+                          <div class="p-2 flex-grow-1 bd-highlight"><h3 class="card-title"><mat-icon>account_circle</mat-icon> Usuarios registrados ({{totalRegistros}})</h3></div>
+                          <div class="p-2 bd-highlight"><button type="button" class="btn btn-primary btn-sm" (click)="addNew(id, departamento_id)" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">people</mat-icon>Crear Usuario</button></div>
+                    </div>                      
+              
 
                       <table class="table table-hover">
                           <thead>

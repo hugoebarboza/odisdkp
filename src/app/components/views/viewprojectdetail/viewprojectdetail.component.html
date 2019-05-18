@@ -16,6 +16,10 @@
                   <div class="btn-group mr-2" role="group" aria-label="Tird group">
                       <button type="button" class="btn btn-light btn-sm" (click)="togglemain()"><mat-icon aria-label="Edit" class="material-icons md-14">chat_bubble_outline</mat-icon>Comentar</button>
                   </div>
+                  <div class="btn-group mr-2" role="group" aria-label="Tird group" *ngIf="_userService.isRole(7)">
+                    <button type="button" class="btn btn-light btn-sm" (click)="status(id)"><mat-icon aria-label="Edit" class="material-icons md-14">note</mat-icon>Estatus</button>
+                  </div>
+
               </div>
           </mat-card-subtitle>
           <span class="spacer"></span>

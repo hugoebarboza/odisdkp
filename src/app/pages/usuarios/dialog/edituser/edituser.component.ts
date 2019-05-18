@@ -112,7 +112,7 @@ export class EditUserComponent implements OnInit {
 
   getRoleUser(){
     if(this.token.token){
-      this._userService.getRoleUser(this.token.token).subscribe(
+      this._userService.getRoleUser(this.token.token, this.identity.role).subscribe(
         response => {        
           if(!response){
             return false;        

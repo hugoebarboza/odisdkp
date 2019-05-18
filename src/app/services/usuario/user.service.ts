@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import {  HttpHeaders } from '@angular/common/http';
 
@@ -32,6 +33,7 @@ import {
 //SETTINGS
 import { GLOBAL } from '../global';
 
+
 @Injectable()
 export class UserService  {
 	public url:string;
@@ -47,6 +49,7 @@ export class UserService  {
 	constructor(
 		public _http: HttpClient,
 		private store: Store<AppState>,
+		public _router: Router,
 		//private _route: ActivatedRoute,
 		//private _router: Router
 
@@ -301,9 +304,10 @@ export class UserService  {
 
 	getIdentity(){
 		let identity = JSON.parse(localStorage.getItem('identity'));
-		if (identity != "Undefined"){
+		if (identity != "Undefined" && identity !== null){
 			this.identity = identity;
 		}else{
+			this.logout();
 			this.identity = null;
 		}
 		return this.identity;
@@ -312,7 +316,7 @@ export class UserService  {
 
 	getFotoProfile(){
 		let identity = JSON.parse(localStorage.getItem('fotoprofile'));
-		if (identity != "Undefined"){
+		if (identity != "Undefined" && identity !== null){
 			this.identity = identity;
 		}else{
 			this.identity = null;
@@ -323,9 +327,10 @@ export class UserService  {
 
 	getToken(){
 		let token = JSON.parse(localStorage.getItem('token'));
-		if (token != "Undefined"){
+		if (token != "Undefined" && token !== null){
 			this.token = token;
 		}else{
+			this.logout();
 			this.token= null;
 		}
 		return this.token;
@@ -335,8 +340,8 @@ export class UserService  {
 		return this.getQuery('user/'+id+'/perfil', token);
 	}
 
-	getRoleUser(token: any): Observable<any> {								  
-		return this.getQuery('usersroles', token);
+	getRoleUser(token: any, role:number): Observable<any> {								  
+		return this.getQuery('usersroles/'+role, token);
 	}
 
 	getFirmaUser(token: any, id: string): Observable<any> {								  
@@ -426,6 +431,7 @@ export class UserService  {
 
 		let Url = this.url+'searchadduser/'+id+'/termino/'+termino+paginate;
 
+		//console.log(Url);
 		
 		return this._http.get<User[]>(Url, {headers: headers});		
 
@@ -457,22 +463,26 @@ export class UserService  {
 		if(!JSON.parse(localStorage.getItem('token'))){
 			return false;
 		}
-		const expiresAtToken = JSON.parse(localStorage.getItem('token'));		
-		const payload = JSON.parse( atob( expiresAtToken.token.split('.')[1] ));
-		const ahora = new Date().getTime() / 1000;
-		console.log(payload.exp);
-		console.log('----------');
-		console.log(ahora);
-		if ( ahora < payload.exp) {
-      return true;
-    }else{
-			return false;
+		const expiresAtToken = JSON.parse(localStorage.getItem('token'));
+		if (expiresAtToken.token){
+			const payload = JSON.parse( atob( expiresAtToken.token.split('.')[1] ));
+			const ahora = new Date().getTime() / 1000;
+			console.log(payload.exp);
+			console.log('----------');
+			console.log(ahora);
+			if ( ahora < payload.exp) {
+				return true;
+			}else{
+				return false;
+			}	
+		}else{
+			this.logout();
 		}
 		//return new Date().getTime() < expiresAt;
 	}
 
 
-	public isRole(role): boolean {		
+	public isRole(role:number): boolean {		
 		if(!role){
 			return;
 		}
@@ -488,9 +498,10 @@ export class UserService  {
 
 	getDepartamentos(){
 		let departamentos = JSON.parse(localStorage.getItem('departamentos'));
-		if (departamentos != "Undefined"){
+		if (departamentos != "Undefined" && departamentos != null){
 			this.departamentos = departamentos;
 		}else{
+			this.logout();
 			this.departamentos= null;
 		}
 		return this.departamentos;
@@ -501,9 +512,10 @@ export class UserService  {
 
 	getProyectos(){
 		let proyectos = JSON.parse(localStorage.getItem('proyectos'));
-		if (proyectos != "Undefined"){
+		if (proyectos != "Undefined" && proyectos != null){
 			this.proyectos = proyectos;
 		}else{
+			this.logout();
 			this.proyectos= null;
 		}
 		return this.proyectos;
@@ -553,6 +565,8 @@ export class UserService  {
 		localStorage.removeItem('identity');
 		localStorage.removeItem('proyectos');
 		localStorage.removeItem('token');
+		this.resetAction();
+		this._router.navigate(['/login']);
 	}
 
   resetAction() {

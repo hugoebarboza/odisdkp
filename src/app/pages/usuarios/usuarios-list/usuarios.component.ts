@@ -71,7 +71,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       this.termino = '';
       this.page = 1;
       this.pageSize = 0;
-      if(this.id){
+      if(this.id && this.proyectos){
         this.project = this.filter();
         this.departamento_id = this.project.department_id;
         this.project_name = this.project.project_name;
@@ -286,7 +286,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   getRoleUser(){
     if(this.token.token){
-      this._userService.getRoleUser(this.token.token).subscribe(
+      this._userService.getRoleUser(this.token.token, this.identity.role).subscribe(
         response => {        
           if(!response){
             return false;        

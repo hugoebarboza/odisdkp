@@ -46,6 +46,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     id: 0,
     value: 0
   }];*/
+  bootstrapClass: string = null;
   count: Array<Object> = [];
   datedesde: FormControl;
   datehasta: FormControl;
@@ -203,6 +204,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     }
       this.count.push({id: this.estatus[i]['id'], value: value});
     }
+    //console.log(this.count);
 
   }
 
@@ -385,7 +387,19 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
                }
                if(response.status == 'success'){                  
                  this.estatus = response.datos;
-                 //console.log(this.estatus);
+                 console.log(this.estatus.length);                 
+                 if(this.estatus.length == 1){
+                  this.bootstrapClass = 'col-md-12';
+                 }
+                 if(this.estatus.length == 2){
+                  this.bootstrapClass = 'col-md-6';
+                 }
+                 if(this.estatus.length == 3){
+                  this.bootstrapClass = 'col-md-4';
+                 }
+                 if(this.estatus.length == 4){
+                  this.bootstrapClass = 'col-md-2';
+                 }                 
                }
                });        
    }
