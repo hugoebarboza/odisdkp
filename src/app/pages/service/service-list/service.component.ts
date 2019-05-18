@@ -1,8 +1,9 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { OnDestroy } from "@angular/core";
-import { MatDialog } from '@angular/material';
+import { MatDialog, TooltipPosition } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription'
+import { FormControl } from '@angular/forms';
 
 //NGX TABLE
 import { Event } from 'ngx-easy-table';
@@ -13,10 +14,11 @@ import { Columns } from 'ngx-easy-table';
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
 
 //DIALOG
-import { AddUserServiceComponent } from '../components/adduserservice/adduserservice.component';
+//import { AddUserServiceComponent } from '../components/adduserservice/adduserservice.component';
 import { AddServiceComponent } from '../dialog/addservice/addservice.component';
 import { CsvServiceComponent } from '../dialog/csvservice/csvservice.component';
-import { EditServiceComponent } from '../dialog/editservice/editservice.component';
+//import { EditServiceComponent } from '../dialog/editservice/editservice.component';
+import { EditServiceComponent } from '../../../components/shared/shared.index';
 import { DeleteServiceComponent } from '../dialog/deleteservice/deleteservice.component';
 import { UserComponent } from '../dialog/user/user.component';
 
@@ -27,6 +29,7 @@ import { Order, Proyecto } from '../../../models/types';
 //SERVICES
 import { SettingsNgxEasyTableService } from '../../../services/settings/settings-ngx-easy-table.service';
 import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+
 
 
 
@@ -88,12 +91,14 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   public _portal: Portal<any>;
   public _home:Portal<any>;
 
+  positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  positiondatasourceaction = new FormControl(this.positionOptions[3]);
+  positionleftaction = new FormControl(this.positionOptions[4]);
 
 
   constructor(	
     private _route: ActivatedRoute,
-    private _router: Router,       
-    public _userService: UserService,  
+    public _userService: UserService,
     public _proyectoService: ProjectsService,
     public dialog: MatDialog,
     public label: SettingsService
@@ -133,7 +138,6 @@ export class ServiceComponent  implements OnInit, OnDestroy {
               this.loading = false;
               this.isRateLimitReached = true;
               this._userService.logout();
-              this._router.navigate(["/login"]);          
               console.log(<any>error);
             }
           );

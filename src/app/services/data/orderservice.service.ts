@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 import swal from 'sweetalert';
 
 //MODELS
-import { Order, ServiceType } from '../../models/types';
+import {  Order, ServiceType, ServiceEstatus } from 'src/app/models/types';
 
 
 //TOASTER MESSAGES
@@ -177,7 +177,7 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
 
-  add(token: any, order: Order, id:number): void {	
+  add(token: any, order: Order, id:number): void {
 		let json = JSON.stringify(order);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
@@ -195,12 +195,24 @@ import { ToastrService } from 'ngx-toastr';
 			      },
 			      (err: HttpErrorResponse) => {	
 						this.error = err.error.message;
-						swal('No fue posible procesar su solicitud', '', 'error');
+						swal('No fue posible procesar su solicitud', err.error.message, 'error');
 			      //console.log(err.error.message);
 			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 			    });
 	}
 
+
+	addEstatus(token: any, data: ServiceEstatus, id:number): Observable<any> {
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+										 .set('Authorization', token);	
+										 
+		return this._http.post(this.url+'service/'+id+'/estatus/', params, {headers: headers})
+		.map( (resp: any) => {
+			return resp;
+		});				
+	}
 
   update(token: any, orderid:number, order: Order, id:number): void {	
 		let json = JSON.stringify(order);
@@ -220,15 +232,41 @@ import { ToastrService } from 'ngx-toastr';
 								swal('N. Orden de Trabajo: ', this.dialogData.order_number +' no actualizada.' , 'error');
 							}
 			      },
-			      (err: HttpErrorResponse) => {	
+			      (err: HttpErrorResponse) => {
+						//this.error = err.error.message;							
 						//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-						this.error = err.error.message;
-						swal('No fue posible procesar su solicitud', '', 'error');
+						swal('No fue posible procesar su solicitud', err.error.message, 'error');
 					})
 					;
 	}
 
 
+	updateEstatus(token: any, data:ServiceEstatus, id:number): Observable<any>{
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+		//console.log(headers);
+
+		return this._http.post(this.url+'estatus/'+id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	deleteEstatus(token: any, id:number): Observable<any>{
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+		//console.log(headers);
+
+		return this._http.delete(this.url+'estatus/'+id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
 
 
  	delete(token: any, orderid:number, id: number): void { 	 	

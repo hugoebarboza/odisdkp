@@ -94,29 +94,6 @@ export class AddServiceComponent implements OnInit {
       this.project = this.filter();
       this.project_name = this.project.project_name;
       this.loading = false;
-
-
-      /*
-      this._project.getProject(this.token.token, this.data.project_id).then(
-        (res:any) => {
-          {
-            res.subscribe(
-              (some) => 
-              {
-                if(some.datos){                      
-                  this.project = some.datos.project_name
-                  this.loading = false;
-                }else{
-                }
-              },
-              (error) => { 
-              this.loading = false;
-              console.log(<any>error);
-              }  
-              )
-        }
-        }); */
-
     }
   }
 
@@ -213,7 +190,7 @@ export class AddServiceComponent implements OnInit {
 
 
  loadUserProject(){
-    this.subscription = this._project.getUserProject(this.token.token, this.data.project_id, 7).subscribe(
+    this.subscription = this._project.getUserProject(this.token.token, this.data.project_id, 8).subscribe(
     response => {
               if(!response){
                 return;
@@ -223,7 +200,7 @@ export class AddServiceComponent implements OnInit {
               }
               });        
 
-    this.subscription = this._project.getUserProject(this.token.token, this.data.project_id, 4).subscribe(
+    this.subscription = this._project.getUserProject(this.token.token, this.data.project_id, 7).subscribe(
     response => {
               if(!response){
                 return;

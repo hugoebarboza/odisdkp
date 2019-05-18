@@ -139,7 +139,8 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(){
     if (this._userService.isAuthenticated()) {
       this._router.navigate(['dashboard']);
-    }    
+    }
+    //console.log('paso');
     this.logout();
     if (this.idaccount) {
       this.rememberMe = 1;
@@ -224,7 +225,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                   this.spinnerButtonOptions.active = false;                      
                   this.spinnerButtonOptions.text = 'Iniciar sesión'
                   this._userService.logout();
-                  this._router.navigate(['/login']);
+                  //this._router.navigate(['/login']);
                 },
               () => { /*console.log('Complete Get Proyectos');*/   });   
           },
@@ -345,12 +346,11 @@ export class LoginComponent implements OnInit, OnDestroy {
       if(logout == 1){         
         this.identity = null;
         this.token = null;
-        this.proyectos = null;        
+        this.proyectos = null; 
         this._userService.logout();
         this.authService.logout();
-        this._router.navigate(['/login']);
+        //this._router.navigate(['/login']);
       }
-
     })
   }
 

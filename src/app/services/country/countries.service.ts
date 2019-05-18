@@ -20,7 +20,7 @@ export class CountriesService {
 	this.url = GLOBAL.url;
   }
 
-  	getQuery( query:string, token ){  		
+  getQuery( query:string, token:any ){  		
 		const url = this.url+query;
 		let headers = new HttpHeaders().set('Content-Type', 'application/json')
 									   .set('Authorization', token);							  							 
@@ -31,16 +31,30 @@ export class CountriesService {
 		});
  	}
 
-	getRegion(token, id): Observable<any>{		
+  getCountries(token:any): Observable<any>{		
+		return this.getQuery('countries/', token);
+	}
+
+	getCountryCustomer(token:any, id:number): Observable<any> {
+		return this.getQuery('country/'+id+'/customer', token);
+	}
+
+
+	getCountryDepartamentos(token:any, id:number): Observable<any> {
+		return this.getQuery('country/'+id+'/departamento', token);
+	}
+
+	
+	getRegion(token:any, id:number): Observable<any>{		
 		return this.getQuery('country/'+id+'/region', token);							  		
 	}
 
-	getProvincia(token, id): Observable<any>{		
+	getProvincia(token:any, id:number): Observable<any>{		
 		return this.getQuery('region/'+id+'/provincia', token);
 	}
 
 
-	getComuna(token, id): Observable<any>{		
+	getComuna(token:any, id:number): Observable<any>{		
 		return this.getQuery('provincia/'+id+'/comuna', token);
 	}
 

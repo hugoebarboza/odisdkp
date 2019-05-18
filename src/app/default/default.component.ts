@@ -12,8 +12,6 @@ import { UserService } from '../services/service.index';
 })
 export class DefaultComponent implements OnInit {
 	public title: string;
-	public identity;
-	public token;
 
 	mostrar = true;
 	
@@ -25,11 +23,9 @@ export class DefaultComponent implements OnInit {
 	};
 
 	constructor(
-		private _userService: UserService,
 
 	){
 		this.title = 'Inicio';
-		this.token = this._userService.getToken();
 	}
  
 	ngOnInit(){

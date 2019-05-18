@@ -255,7 +255,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             this._userService.logout();
-            this._router.navigate(["/login"]);          
+            //this._router.navigate(["/login"]);          
             console.log(<any>error);
           }  
           )
@@ -465,7 +465,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
               this.isLoadingResults = false;
               this.isRateLimitReached = true;
               this._userService.logout();
-              this._router.navigate(["/login"]);          
+              //this._router.navigate(["/login"]);          
               console.log(<any>error);
             }  
             )
@@ -571,7 +571,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             this._userService.logout();
-            this._router.navigate(["/login"]);          
+            //this._router.navigate(["/login"]);          
             console.log(<any>error);
           }  
           )
@@ -677,7 +677,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             this._userService.logout();
-            this._router.navigate(["/login"]);          
+            //this._router.navigate(["/login"]);          
             console.log(<any>error);
           }  
           )

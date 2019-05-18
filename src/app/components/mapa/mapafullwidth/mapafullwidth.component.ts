@@ -392,7 +392,7 @@ export class MapaFullWidthComponent implements OnInit {
                     },
                       error => {
                       this._userService.logout();
-                      this._router.navigate(["/login"]);
+                      //this._router.navigate(["/login"]);
                       console.log(<any>error);
                       } 
                     );    

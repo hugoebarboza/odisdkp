@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 
 //MODELS
-import { Order, Service } from '../../models/types';
+import { Order, Service, Proyecto } from '../../models/types';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
@@ -33,7 +33,9 @@ export class ProjectsService {
 		let json = JSON.stringify(service);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									.set('Authorization', token);	
+									.set('Authorization', token);
+
+		//console.log(params);
 
 		this._http.post(this.url+'project'+'/'+id+'/'+'service', params, {headers: headers}).subscribe(
 			(data:any) => { 
@@ -41,18 +43,34 @@ export class ProjectsService {
 				if(data.status === 'success'){
 					swal('Proyecto creado exitosamente con ID: ', data.lastInsertedId +'.', 'success' );
 				}else{
-					swal('No fue posible procesar su solicitud', '', 'error');
+					swal('No fue posible procesar su solicitud', data.message, 'error');
 				}
 
 				//this.toasterService.success('Proyecto creado.', 'Exito', {timeOut: 6000,});
 				},
 				(err: HttpErrorResponse) => {	
 				this.error = err.error.message;			      
-				//console.log(err.error.message);
+				console.log(err.error.message);
 				//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 				swal('No fue posible procesar su solicitud', '', 'error');
 				});
 	}
+
+
+	updateProject(token: any, project:Proyecto, id:number): Observable<any>{
+		let json = JSON.stringify(project);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
+		.set('Authorization', token);
+		//console.log(headers);
+
+		return this._http.post(this.url+'projectupdate/'+id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 
     updateService(token: any, service: Service, id:number, service_id:number): void {	
 		let json = JSON.stringify(service);
@@ -70,10 +88,10 @@ export class ProjectsService {
 					}				  
 			      },
 			      (err: HttpErrorResponse) => {	
-			      this.error = err.error.message;
+			      //this.error = err.error.message;
 			      //console.log(err.error.message);
 				  //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-				  swal('No fue posible procesar su solicitud', '', 'error');
+				  swal('No fue posible procesar su solicitud', err.error.message, 'error');
 			    });
 	}
 	
@@ -123,6 +141,10 @@ export class ProjectsService {
 	    return this.getProjectOrderData('project/'+id, token);
 	}
 
+	getProjectSelect(token:any, id:number){
+	    return this.getProjectOrderData('projectselect/'+id, token);
+	}
+
 
 	getProjectOrder(token, id:number, termino, date, idstatus, serviceid, servicetypeid) {
 		const paginate = `/${termino}/date/${date}/status/${idstatus}/service/${serviceid}/servicetype/${servicetypeid}?limit=All`;			           
@@ -168,7 +190,7 @@ export class ProjectsService {
 	}
 
 
-    getProjectOrderData(query:string, token) {
+    getProjectOrderData(query:string, token:any) {
 	    const url = this.url;
 	    const href = url+query;
 	    const requestUrl = href;
@@ -185,7 +207,7 @@ export class ProjectsService {
     }
 
 
-	getUserProject(token, id, role): Observable<any> {								  
+	getUserProject(token:any, id:number, role:any): Observable<any> {								  
 		return this.getQuery('project/'+id+'/role/'+role, token);
 	}
 

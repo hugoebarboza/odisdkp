@@ -320,7 +320,7 @@ prevStep() {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             this._userService.logout();
-            this._router.navigate(["/login"]);          
+            //this._router.navigate(["/login"]);          
             console.log(<any>error);
           });
     }else{

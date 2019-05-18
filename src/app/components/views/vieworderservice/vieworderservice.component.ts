@@ -88,7 +88,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   columnselect: string[] = new Array();
   datedesde: FormControl;
   datehasta: FormControl;
-  filterValue = '';
+  filterValue: string = '';
+  formfilterValue: FormControl = new FormControl();
   debouncedInputValue = this.filterValue;
   estatus: ServiceEstatus[] = [];  
   filterChanged: Subject<any> = new Subject();
@@ -438,6 +439,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.showcell = true;
     this.isactiveSearch = false;
     this.datasourceLength = 0;
+    this.filterValue = '';
+    this.termino = '';
     this.loadInfo();
     this.getZona(this.id);
     this.getProject(this.id);
@@ -615,7 +618,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             this._userService.logout();
-            this._router.navigate(["/login"]);          
+            //this._router.navigate(["/login"]);          
             console.log(<any>error);
           });
     }else{
@@ -886,7 +889,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }  
 
   applyFilter() {
-    if(this.filterValue.length > 0 && this.filterValue.trim() !== '' && this.termino !== this.filterValue){
+    if(this.filterValue.length > 1 && this.filterValue.trim() !== '' && this.termino !== this.filterValue){
       this.isLoadingResults = true;
       this.getParams();
       this.termino = this.filterValue;
@@ -993,7 +996,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   private setupSearchDebouncer(): void {
     this.searchDecouncer$.pipe(
       debounceTime(3000),
-      distinctUntilChanged(),
     ).subscribe((term: string) => {
       // Remember value after debouncing
       this.debouncedInputValue = term;
@@ -1004,6 +1006,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
         this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
         .then(response => {
+          //this.termino = '';
           this.getData(response);
           //console.log(<any>response);
         })

@@ -100,6 +100,33 @@ export class Customer  {
 	){}
 }
 
+export class Customers  {
+	
+	constructor(	
+	public id:number,
+	public company_name:string,
+	public contact_name:string,
+	public status:number,
+	public create_by:number,
+	public create_at:any,
+	public update_by:number,
+	public update_at:any
+	){}
+}
+
+
+export class Countries  {
+	
+	constructor(	
+	public id:number,
+	public country_name:string,
+	public status:number,
+	public create_by:number,
+	public create_at:any,
+	public update_by:number,
+	public update_at:any
+	){}
+}
 
 
 export class Departamento  {
@@ -107,12 +134,27 @@ export class Departamento  {
 	constructor(	
 	public id:number,
 	public dept_name:string,
-	public observacion:string,
+	public country_id:number,
+	public status:number,
+	public create_by:number,
+	public create_at:any,
+	public update_by:number,
+	public update_at:any
+	){}
+}
+
+
+export class Estatus  {
+	
+	constructor(	
+	public id:number,
+	public description:string,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
 	){}
 }
+
 
 export class FileItem {
 
@@ -273,13 +315,27 @@ export class Provincia  {
 
 export class Proyecto  {
 	
-	constructor(	
+	constructor(
+	public apikey: string,
+	public calendarID: string,
+	public clientid: string,
+	public country: any,
+	public country_id: number,
+	public customer: any,
+	public customer_id: number,
+	public departamento: any,
+	public department_id:number,
+	public from_date: string,
+	public gpstime: number,
 	public id:number,
 	public project_name:string,
-	public department_id:number,
 	public observation:string,
-	public status:number,	
+	public status:number,
+	public time_end: string,
+	public to_date: string,
+	public create_by: number,
 	public create_at:any,	
+	public update_by: number,
 	public update_at:any
 	){}
 }
@@ -379,8 +435,12 @@ export class ServiceEstatus  {
 	public id:number,
 	public service_id:number,
 	public name:string,
+	public code:string,
+	public clase:string,
 	public label:number,
+	public order_by:number,
 	public value:number,
+	public status:number,
 	public create_at:any,	
 	public update_at:any
 	){}

@@ -56,11 +56,11 @@
 
 	<div class="p-2">
 		<div class="container-fluid " >
-				<div class="row mb-2">
-					<div class="col-md-6 " *ngFor="let estatu of estatus; let i = index">	
+				<div class="row mb-2" *ngIf="bootstrapClass !== null">
+					<div class="{{bootstrapClass}}" *ngFor="let estatu of estatus; let i = index">	
 						<div class="card flex-md-row mb-4 shadow-sm h-md-250">
 							<div class="card-body d-flex flex-column align-items-start bg-light">
-								<strong class="d-inline-block mb-2 text-primary" *ngIf="estatu.label == 2"><h5 class="text-uppercase">{{estatu.name}}</h5></strong>
+								<strong class="d-inline-block mb-2 text-primary" *ngIf="estatu.label > 1"><h5 class="text-uppercase">{{estatu.name}}</h5></strong>
 								<strong class="d-inline-block mb-2 text-danger" *ngIf="estatu.label == 1"><h5 class="text-uppercase">{{estatu.name}}</h5></strong>
 								<div *ngIf="isLoadingResults">
 										<app-loading *ngIf="isLoadingResults"></app-loading>  

@@ -10,11 +10,12 @@
 <div class="p-2">
 <mat-card [ngStyle]="{'padding':'0px'}">
 <mat-card-header [ngClass]="{'custom-card':true}">
-<table class="example-full-width" cellspacing="0" border="0" class="main-table">
+<table class="table-responsive" cellspacing="0" border="0" class="main-table">
   <tr>
     <td>
     <mat-form-field>      
       <input  matInput placeholder="Buscar Orden" *ngIf="!isactiveSearch && datasourceLength == 0" disabled>
+
       <input  matInput (keyup)="applyFilter()" placeholder="Buscar Orden" [(ngModel)]="filterValue" *ngIf="isactiveSearch && datasourceLength > 0">
       <button mat-button *ngIf="filterValue && isLoadingResults" matSuffix mat-icon-button aria-label="Clear" >
           <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17"></mat-spinner>

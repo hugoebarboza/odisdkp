@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl, Validators, NgForm, } from '@angular/forms';
 import { Subscription } from 'rxjs';
@@ -70,8 +69,6 @@ export class AddComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
  constructor(
-  private _route: ActivatedRoute,
-  private _router: Router,           
  	public dialogRef: MatDialogRef<AddComponent>,
   public dataService: OrderserviceService, 
   private _userService: UserService,

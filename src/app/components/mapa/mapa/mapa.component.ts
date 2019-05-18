@@ -364,7 +364,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                     (error) => {                      
                       this.isLoadingResults = false;
                       this._userService.logout();
-                      this._router.navigate(["/login"]);          
+                      //this._router.navigate(["/login"]);          
                       console.log(<any>error);
                     }  
 
@@ -404,7 +404,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                     },
                       error => {
                       this._userService.logout();   
-                      this._router.navigate(["/login"]);
+                      //this._router.navigate(["/login"]);
                       console.log(<any>error);
                       } 
                     );    

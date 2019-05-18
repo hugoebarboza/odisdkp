@@ -24,16 +24,85 @@
                   <br>
 
                   <div class="row animated fadeIn">
-                      <div class="col-lg-7">
-                          <div class="card">
-                              <div class="card-body">
-                                  <div class="loading" *ngIf="isLoading">
-                                       <app-loading></app-loading> 
+                    <div class="loading" *ngIf="isLoading">
+                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                    </div>
+
+                    <div class="col-lg-7" *ngIf="!show">
+                        <div class="card">
+                            <div class="card-body">                                                                                                
+                                  <div class="d-flex ">
+                                    <div class="p-2 w-100 "><h6 class="card-subtitle mb-2 text-muted" *ngIf="identity && !isLoading"><mat-icon>account_circle</mat-icon> {{identity.name + ' ' + identity.surname}} </h6></div>
+                                    <div class="p-2 flex-shrink-1 "><a class="nav-link pointer" href="javascript:;" (click)="toggle()" >Editar</a></div>
                                   </div>
-                                  <h6 class="card-subtitle mb-2 text-muted" *ngIf="identity && !isLoading"><mat-icon>account_circle</mat-icon> {{identity.name + ' ' + identity.surname}} </h6>
+
+
+                                    <div class="form-group">
+                                        <label for="exampleInputuname">Primer Nombre</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><mat-icon>person_outline</mat-icon></div>
+                                            <p class="card-text"><span class="text-muted">{{identity.name}}</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputuname">Primer Apellido</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><mat-icon>person_outline</mat-icon></div>
+                                            <p class="card-text"><span class="text-muted">{{identity.surname}}</span></p>
+                                        </div>
+                                    </div>
+            
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email Primario</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><mat-icon>mail_outline</mat-icon></div>
+                                            <p class="card-text"><span class="text-muted">{{identity.email}}</span></p>
+                                        </div>
+                                    </div>
+            
+                                    <div class="form-group row">
+                                            <div class="col-12">
+                                            <label for="exampleInput">DNI</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><mat-icon>fingerprint</mat-icon></div>
+                                                <p class="card-text"><span class="text-muted">{{identity.dni}} <span class="text-muted" *ngIf="identity.dv">- {{identity.dv}}</span> </span></p>
+                                            </div>
+                                            </div>
+                                    </div>
+                                    
+            
+            
+                                    <div class="form-group">
+                                            <label for="exampleInput">Teléfono</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><mat-icon>smartphone</mat-icon></div>
+                                                <p class="card-text"><span class="text-muted">{{identity.telefono1}}</span></p>
+                                            </div>
+                                    </div>
+            
+                                    <div class="form-group">
+                                            <label for="exampleInput">Otro Teléfono</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><mat-icon>smartphone</mat-icon></div>
+                                                <p class="card-text"><span class="text-muted">{{identity.telefono2}}</span></p>
+                                            </div>
+                                     </div>
+                                                        
+                            </div>
+                        </div>
+                  </div>
                   
-                                  
-                                  <form ngNativeValidate #registerForm="ngForm" (ngSubmit)="guardar( registerForm.value )" class="form p-t-20" *ngIf="identity && !isLoading">
+
+                    <div class="col-lg-7" *ngIf="show">
+                          <div class="card">
+                              <div class="card-body">                                                                                                
+                                    <div class="d-flex ">
+                                            <div class="p-2 w-100 "><h6 class="card-subtitle mb-2 text-muted" *ngIf="identity && !isLoading"><mat-icon>account_circle</mat-icon> {{identity.name + ' ' + identity.surname}} </h6></div>
+                                            <div class="p-2 flex-shrink-1 "><a class="nav-link pointer" href="javascript:;" (click)="toggle()" >Cancelar</a></div>
+                                    </div>
+        
+
+                                    <form ngNativeValidate #registerForm="ngForm" (ngSubmit)="guardar( registerForm.value )" class="form p-t-20" *ngIf="identity && !isLoading">
                                       <div class="form-group">
                                           <label for="exampleInputuname">Primer Nombre</label>
                                           <div class="input-group">
@@ -90,16 +159,22 @@
                                                   <input type="text" class="form-control" id="inputTelefono" name="telefono2" [(ngModel)]="identity.telefono2" placeholder="Otro Teléfono del usuario">
                                               </div>
                                        </div>
-                  
+                                                                                                           
                                           
-                                      <button type="submit" class="btn btn-primary waves-effect waves-light m-r-10" [disabled]="!registerForm.form.valid">
-                                        <i class="fa fa-save"></i>
+                                      <button type="submit" class="btn btn-primary waves-effect waves-light m-r-10" [disabled]="!registerForm.form.valid" *ngIf="!isSave">
+                                        <i class="fa fa-save" ></i>
                                         Guardar
                                       </button>
-                                  </form>
+
+                                          
+                                      <button type="submit" class="btn btn-primary waves-effect waves-light m-r-10" [disabled]="true" *ngIf="isSave">
+                                        <i class="fa fa-spin fa-sync" ></i>
+                                        Guardando
+                                      </button>
+                                   </form>
                               </div>
                           </div>
-                      </div>
+                    </div>
               
                   
                   

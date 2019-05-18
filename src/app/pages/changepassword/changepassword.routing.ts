@@ -13,7 +13,8 @@ const routes: Routes = [
     component: ChangepasswordComponent, 
     canActivate: [AuthguardService],
     data: { path: 'change', titulo: 'OCA Global - ODIS Acceso', subtitle: 'Cambiar Clave', descripcion: 'OCA Global - ODIS User Change Password'  }
-  },	
+  },
+  { path:'**', pathMatch: 'full', redirectTo: '/notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }	
 ];
 
 @NgModule({

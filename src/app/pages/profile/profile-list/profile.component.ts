@@ -10,6 +10,7 @@ import { Proyecto, User } from '../../../models/types';
 import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
 
 
+
 @Component({
   selector: 'app-profile',
   templateUrl: './profile.component.html',
@@ -23,13 +24,16 @@ export class ProfileComponent implements OnInit, OnDestroy {
   identity: any;
   isLoading: boolean = true;
   isLoadingPerfil: boolean = true;
+  isSave: boolean = false;
   proyectos: Array<Proyecto>;
   subscription: Subscription;
+  show:boolean = false;
   title: string;
   token: any;
   usuario: User;
   user: User;
   urlImagenTemp: any;
+
 
   constructor(
     private _proyectoService: ProjectsService,
@@ -43,10 +47,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.label.getDataRoute().subscribe(data => {
       this.title = data.subtitle;
     });
+    this.show = false;
+    this.isSave = false;
 
   }
 
   ngOnInit() {
+    this.show = false;
+    this.isSave = false;
     this.isLoading = true;
     this.isLoadingPerfil = true;
     if(this.identity){
@@ -62,16 +70,18 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
   }
 
-
+  /*
   ngDoCheck(){
     this.identity = this._userService.getIdentity();  
-  }
+  }*/
 
 
   
   guardar( usuario: User ) {
 
-    this.isLoading = true;
+    this.show = true;
+    this.isLoading = false;
+    this.isSave = true;
 
 		if(!usuario){
 			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
@@ -86,6 +96,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 				if(response.status == 'success'){
           swal('Usuario actualizado', this.user.email, 'success' );
           this.isLoading = false;
+          this.isSave = false;
           //this.ngOnInit();
 					//this.status = response.status;	
 					//this.user = new User('','','','',1,'','',1);
@@ -93,6 +104,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
           swal('Importante', response.message, 'error');
           this.isLoading = false;
+          this.isSave = false;
 					//this.status = 'error';
 				}
 	 		},
@@ -100,6 +112,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
         swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
          console.log(<any>error);
          this.isLoading = false;
+         this.isSave = false;
 	 		}
 
     );
@@ -179,6 +192,11 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		if(event == 1){
 		}
 	}
+
+
+  toggle() {
+    this.show = !this.show;
+  }
 
 
 }

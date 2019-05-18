@@ -80,10 +80,7 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
 
   ngOnInit(){
       if (this.identity == null ){
-        localStorage.removeItem('identity');
-        localStorage.removeItem('token');
-        localStorage.removeItem('proyectos');
-        this._router.navigate(["/login"]);
+        this._userService.logout();
       }
   }
 

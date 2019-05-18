@@ -67,7 +67,7 @@ export class FileUploadComponent implements OnInit {
   constructor(
     private afs: AngularFirestore, 
     private storage: AngularFireStorage,
-    public snackBar: MatSnackBar,  
+    public snackBar: MatSnackBar,
     private toasterService: ToastrService,
     private _userService: UserService,
     ) 
