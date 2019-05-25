@@ -2,6 +2,8 @@ import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
+import { environment } from '../../../environments/environment';
+
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
@@ -24,8 +26,8 @@ export class CdfService  {
 		private _http: Http,
 		private afs: AngularFirestore,
 	){
-        this.url = GLOBAL.urlcdf;
-        this.key = GLOBAL.cdfkey;
+        this.url = environment.global.urlcdf;
+        this.key = environment.global.cdfkey;
         this.headers = undefined;
 	}
 
