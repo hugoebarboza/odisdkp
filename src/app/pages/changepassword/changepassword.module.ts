@@ -9,9 +9,12 @@ import { SharedModule } from '../../components/shared/shared.module';
 //PIPE MODULE
 import { PipesModule } from '../../pipes/pipes.module';
 
-
 import { ChangePasswordRoutingModule } from './changepassword.routing';
 import { ChangepasswordComponent } from './changepassword-list/changepassword.component';
+
+//SERVICES
+import { ServiceModule } from 'src/app/services/service.module';
+
 
 @NgModule({
   imports: [
@@ -21,6 +24,7 @@ import { ChangepasswordComponent } from './changepassword-list/changepassword.co
     MaterialModule,
     PipesModule,
     ReactiveFormsModule,
+    ServiceModule,
     SharedModule
   ],
   declarations: [ChangepasswordComponent]

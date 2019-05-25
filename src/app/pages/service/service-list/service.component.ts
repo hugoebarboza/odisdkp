@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OnDestroy } from "@angular/core";
 import { MatDialog, TooltipPosition } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription'
@@ -97,9 +97,10 @@ export class ServiceComponent  implements OnInit, OnDestroy {
 
 
   constructor(	
+    public _proyectoService: ProjectsService,    
     private _route: ActivatedRoute,
+    public _router: Router,
     public _userService: UserService,
-    public _proyectoService: ProjectsService,
     public dialog: MatDialog,
     public label: SettingsService
   ) 
@@ -122,26 +123,29 @@ export class ServiceComponent  implements OnInit, OnDestroy {
         this.services = [];
         this.datasource = [];  
         this.project = this.filter();
-        this.project_name = this.project.project_name;
-        this.subscription = this._proyectoService.getProjectServiceDetail(this.token.token, this.id).subscribe(
-          response => {
-              if (response.status == 'success'){
-                this.services = response.datos;
-                this.datasource = response.datos;
-                //console.log(this.services.length)
+        if (this.project != "Undefined" && this.project !== null && this.project){
+          this.project_name = this.project.project_name;
+          this.subscription = this._proyectoService.getProjectServiceDetail(this.token.token, this.id).subscribe(
+            response => {
+                if (response.status == 'success'){
+                  this.services = response.datos;
+                  this.datasource = response.datos;
+                  //console.log(this.services.length)
+                  this.loading = false;
+                  this.isRateLimitReached = false;
+                  this.ngOnInit();
+                }
+              },
+            (error: any) => {
                 this.loading = false;
-                this.isRateLimitReached = false;
-                this.ngOnInit();
+                this.isRateLimitReached = true;
+                this._userService.logout();
+                console.log(<any>error);
               }
-            },
-          (error: any) => {
-              this.loading = false;
-              this.isRateLimitReached = true;
-              this._userService.logout();
-              console.log(<any>error);
-            }
-          );
-        
+            );  
+        }else{
+          this._router.navigate(['/notfound']);
+        }        
       }
     });    
   }

@@ -28,8 +28,7 @@ export class AuthguardService implements CanActivate {
   canActivate(next:ActivatedRouteSnapshot, state:RouterStateSnapshot):Promise<boolean> | boolean  { 
 			//console.log(next);
 				if (this.auth.isTokenValidate()){
-					console.log('paso authguard true token');
-
+					console.log('Paso Authguard');
 					this.store.select('objNgrx').subscribe( 
 						objNgrx  => {
 						if (objNgrx) {
@@ -37,11 +36,11 @@ export class AuthguardService implements CanActivate {
 							this.proyectos = this.auth.getProyectos();
 							//console.log('connnn redux');
 						}else{
-							console.log('sinnnn redux');
+							//console.log('sinnnn redux');
 							this.identity = this.auth.getIdentity();
 							this.proyectos = this.auth.getProyectos();
 							if(this.proyectos && this.identity){
-								console.log('redux store accionnn');
+								//console.log('redux store accionnn');
 								this.auth.storeAction(this.proyectos, this.identity);
 							}							
 						}
@@ -50,7 +49,7 @@ export class AuthguardService implements CanActivate {
 
 					return true;					
 				}else{
-					console.log('paso authguard isTokenValidate false');
+					//console.log('paso authguard isTokenValidate false');
 					//this.auth.resetAction();
 					this.auth.logout();
 					this.authService.logout();		

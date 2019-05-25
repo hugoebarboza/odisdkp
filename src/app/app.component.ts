@@ -16,7 +16,6 @@ import { MediaMatcher } from '@angular/cdk/layout';
 //REDUX
 import { AppState } from './app.reducers';
 import { Store } from '@ngrx/store';
-import * as fromContador from './contador.actions';
 import { MatSidenav } from '@angular/material';
 
 

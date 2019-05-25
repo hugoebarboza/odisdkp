@@ -17,8 +17,14 @@
 
               <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
                 <h1 class="h4">Dashboard</h1>
+                <div *ngIf="message">
+                  MSJ
+                  {{ (message | async | json) }}
+                  {{ (message | async )?.notification.title }}
+                </div>
                 <div class="btn-toolbar mb-2 mb-md-0">
                   <div class="btn-group mr-2">
+                    <button (click)="sendMsj()">Send FCM via Cloud Function</button>
                   </div>
                 </div>
               </div>

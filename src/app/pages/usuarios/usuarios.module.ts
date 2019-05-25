@@ -20,6 +20,10 @@ import { ShowProfileSecurityComponent } from './dialog/showprofilesecurity/showp
 import { UsuariosRoutingModule } from './usuarios.routing';
 
 
+//SERVICES
+import { ServiceModule } from 'src/app/services/service.module';
+
+
 
 @NgModule({
   imports: [
@@ -28,6 +32,7 @@ import { UsuariosRoutingModule } from './usuarios.routing';
     MaterialModule,
     ReactiveFormsModule,
     PipesModule,
+    ServiceModule,
     SharedModule,
     UsuariosRoutingModule,
   ],

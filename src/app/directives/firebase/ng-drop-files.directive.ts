@@ -1,5 +1,5 @@
-import { Directive, EventEmitter, ElementRef, HostListener, Input, Output } from '@angular/core';
-import { FileItem } from '../models/types';
+import { Directive, EventEmitter, HostListener, Input, Output } from '@angular/core';
+import { FileItem } from 'src/app/models/types';
 
 @Directive({
   selector: '[appNgDropFiles]'

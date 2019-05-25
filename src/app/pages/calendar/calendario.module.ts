@@ -20,9 +20,12 @@ import { SharedModule } from '../../components/shared/shared.module';
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
-
 //ROUTING
 import { CalendarRoutingModule } from './calendario.routing';
+
+//SERVICES
+import { ServiceModule } from 'src/app/services/service.module';
+
 
 @NgModule({
   imports: [
@@ -37,6 +40,7 @@ import { CalendarRoutingModule } from './calendario.routing';
     MaterialModule,
     PipesModule,
     ReactiveFormsModule,
+    ServiceModule,
     SharedModule
   ],
   declarations: [

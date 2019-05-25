@@ -467,9 +467,9 @@ export class UserService  {
 		if (expiresAtToken.token){
 			const payload = JSON.parse( atob( expiresAtToken.token.split('.')[1] ));
 			const ahora = new Date().getTime() / 1000;
-			console.log(payload.exp);
-			console.log('----------');
-			console.log(ahora);
+			//console.log(payload.exp);
+			//console.log('----------');
+			//console.log(ahora);
 			if ( ahora < payload.exp) {
 				return true;
 			}else{

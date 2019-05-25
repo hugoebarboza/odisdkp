@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-
+import { AngularFireDatabase } from 'angularfire2/database';
 import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
@@ -14,8 +14,8 @@ export class AuthService {
   authState: any = null;
 
   constructor(
-    
-    private firebaseAuth: AngularFireAuth
+    private firebaseAuth: AngularFireAuth,
+    private db: AngularFireDatabase
   ) { 
     this.user = firebaseAuth.authState;
 
@@ -40,18 +40,32 @@ export class AuthService {
   }
 
 
+  emailLogin(token:string, email: string, password: string) {
+    if(!token){
+      return;
+    }
+    return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
+      .then((user) => {
+        this.authState = user
+        this.updateUserData()
+      })
+      .catch(error => console.log(error));
+  }
+
+
   login(token:string, email: string, password: string) {
     if(!token){
       return;
     }
     return new Promise<any>((resolve, reject) => {
-      firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(res => {
-        resolve(res);
+      this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
+      .then(user => {
+        this.authState = user
+        //console.log(this.authState);
+        //this.updateUserData()
+        resolve(user);
       }, err => reject(err))
     })
-
-
     /*
     this.firebaseAuth
       .auth
@@ -195,4 +209,35 @@ export class AuthService {
       .auth
       .signOut();*/
   }
+
+
+  // Returns true if user is logged in
+  get authenticated(): boolean {
+    return this.authState !== null;
+  }
+
+  // Returns current user data
+  get currentUser(): any {
+    return this.authenticated ? this.authState : null;
+  }
+
+  // Returns current user UID
+  get currentUserId(): string {
+    return this.authenticated ? this.authState.uid : '';
+  }
+
+ //// Helpers ////
+ private updateUserData(): void {
+  // Writes user name and email to realtime db
+  // useful if your app displays information about users or for admin features
+  let path = `users/${this.currentUserId}`; // Endpoint on firebase
+  let data = {
+    email: this.authState.email,
+    name: this.authState.displayName
+  }
+
+  this.db.object(path).update(data)
+    .catch(error => console.log(error));
+  }
+
 }

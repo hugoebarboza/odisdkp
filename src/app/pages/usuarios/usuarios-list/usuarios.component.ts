@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from "rxjs/Subscription";
 import { MatDialog } from '@angular/material';
 
@@ -12,10 +12,10 @@ import { ModalUploadImageComponent } from '../dialog/modaluploadimage/modaluploa
 import { ShowProfileSecurityComponent } from '../dialog/showprofilesecurity/showprofilesecurity.component';
 
 //MODEL
-import { Proyecto, User } from '../../../models/types';
+import { Proyecto } from '../../../models/types';
 
 //SERVICES
-import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+import { SettingsService, UserService } from '../../../services/service.index';
 
 
 
@@ -53,6 +53,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   
   constructor(
     private _route: ActivatedRoute,
+    public _router: Router,
     public _userService: UserService,
     public dialog: MatDialog,
     public label: SettingsService,
@@ -73,10 +74,14 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       this.pageSize = 0;
       if(this.id && this.proyectos){
         this.project = this.filter();
+        if (this.project != "Undefined" && this.project !== null && this.project){
         this.departamento_id = this.project.department_id;
         this.project_name = this.project.project_name;
         this.cargarUsuarios();
         this.getRoleUser();
+        }else{
+          this._router.navigate(['/notfound']);
+        }
       }
     });
     
