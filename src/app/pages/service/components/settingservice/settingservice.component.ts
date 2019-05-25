@@ -1,5 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
@@ -51,6 +51,7 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
     public _countryService: CountriesService,
     public _proyectoService: ProjectsService,
     private _route: ActivatedRoute,
+    public _router: Router,
     public _userService: UserService,
     public label: SettingsService
   ) { 
@@ -108,6 +109,8 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
                 )
           }
           });          
+      }else{
+        this._router.navigate(['/notfound']);
       }        
     }    
   }
@@ -260,7 +263,9 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
               return;        
             }
             if(resp.status == 'success'){ 
-              this._userService.logout();
+              swal('Proyecto actualizado', this.project.project_name, 'success' );
+              this.ngOnInit();
+              this.show = false;
             }else{
               swal('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
             }

@@ -4,7 +4,7 @@ import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from "rxjs/Subscription";
 import { MatDialog } from '@angular/material';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 //MODEL
 import { Proyecto } from '../../../models/types';
@@ -18,7 +18,7 @@ import {  startOfDay,  endOfDay,  subDays,  addDays,  endOfMonth,  isSameDay,  i
 import { AddCalendarComponent } from '../dialog/addcalendar/addcalendar.component';
 
 //SERVICES
-import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+import { SettingsService, UserService } from '../../../services/service.index';
 
 //MOMENT
 import * as moment from 'moment';
@@ -126,8 +126,8 @@ export class CalendarComponent implements OnInit, OnDestroy
 
   constructor(
     public _ngZone: NgZone,
-    private _proyectoService: ProjectsService,		
     private _route: ActivatedRoute,
+    public _router: Router,
     private _userService: UserService,
     public dialog: MatDialog,
     public label: SettingsService,
@@ -149,17 +149,19 @@ export class CalendarComponent implements OnInit, OnDestroy
       this.id = id;
       if(this.id && this.proyectos){
         this.project = this.filter();
-        this.project_name = this.project.project_name;
-        this.calendarID = this.project.calendarID;
-        this.apikey = this.project.apikey;
-        this.clientid = this.project.clientid;
-        this.calendarID = this.project.calendarID;
-        if(this.calendarID){
-          this.viewDate = new Date();
-          this.getCalendar(this.calendarID);      
-        }
-    
-      
+        if (this.project != "Undefined" && this.project !== null && this.project){
+          this.project_name = this.project.project_name;
+          this.calendarID = this.project.calendarID;
+          this.apikey = this.project.apikey;
+          this.clientid = this.project.clientid;
+          this.calendarID = this.project.calendarID;
+          if(this.calendarID){
+            this.viewDate = new Date();
+            this.getCalendar(this.calendarID);      
+          }  
+        }else{
+          this._router.navigate(['/notfound']);
+        }    
       }
     });
 

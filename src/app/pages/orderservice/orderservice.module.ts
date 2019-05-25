@@ -10,7 +10,10 @@ import { AgmDirectionModule} from 'agm-direction';
 import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
-import { ServiceModule } from '../../services/service.module';
+
+//SERVICES
+import { ServiceModule } from 'src/app/services/service.module';
+
 
 //MOMENT
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -96,8 +99,10 @@ import { ModalImageComponent } from '../../components/modal/modalimage/modalimag
 
 
 //DIRECTIVES
-import { DropZoneDirective } from '../../directives/drop-zone.directive';
-import { NgDropFilesDirective } from '../../directives/ng-drop-files.directive';
+import { DirectiveModule } from 'src/app/directives/directive.module';
+//import { DropZoneDirective } from '../../directives/drop-zone.directive';
+//import { NgDropFilesDirective } from '../../directives/ng-drop-files.directive';
+
 
 //PAGES
 import { OrderserviceComponent } from '../../components/orderservice/orderservice.component';
@@ -118,6 +123,7 @@ registerLocaleData(localeEs);
     }),
     CalendarModule,
     CommonModule,
+    DirectiveModule,
     FlexLayoutModule,
     FormsModule,
     HttpModule,
@@ -155,7 +161,6 @@ registerLocaleData(localeEs);
     DownloadComponent,    
     DateDialogComponent,
     DialogOverviewDialog,
-    DropZoneDirective,
     EditcustomerComponent,
     EditComponent,
     ExcelComponent,
@@ -167,7 +172,6 @@ registerLocaleData(localeEs);
     MapaFullWidthComponent,
     ModalMapaComponent,
     ModalImageComponent,
-    NgDropFilesDirective,
     OrderserviceComponent,
     SettingsComponent, 
     SettingscustomerComponent, 

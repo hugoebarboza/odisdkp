@@ -254,10 +254,10 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   private afterSignIn(): void {
     // Do after login stuff here, such router redirects, toast messages, etc.
-    console.log('do after loggin');    
-    this._router.navigate(['dashboard']);
+    //console.log('do after loggin');
     this.loginAction(this.proyectos, this.identity);
     this.loginFirebase(this.token, this.usuario);
+    this._router.navigate(['dashboard']);
   }
 
 
@@ -296,7 +296,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     if(!token || !value){
       return;
     }
-
     this.authService.login(token.token, value.email, value.password)
     .then(res => {
       console.log(res);

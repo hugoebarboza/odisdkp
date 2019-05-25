@@ -1,10 +1,11 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, AsyncPipe } from '@angular/common';
 import { HttpClientModule } from '@angular/common/http';
 
 import {
   AuthService,
   CargaImagenesService,
+  CdfService,
   CountriesService,
   CustomerService,
   DataService,
@@ -12,11 +13,12 @@ import {
   ExcelService,
   ItemFirebaseService,
   MapaService,
+  MessagingService,
   OrderserviceService,
   ProjectsService,
   SettingsService,
   UserService,
-  ZipService
+  ZipService,
  } from './service.index';
 
 
@@ -26,8 +28,10 @@ import {
     HttpClientModule
   ],
   providers: [
+    AsyncPipe,
     AuthService,
     CargaImagenesService,
+    CdfService,
     CountriesService,
     CustomerService,
     DataService,
@@ -35,6 +39,7 @@ import {
     ExcelService,
     ItemFirebaseService,
     MapaService,
+    MessagingService, 
     OrderserviceService,
     ProjectsService,
     SettingsService,

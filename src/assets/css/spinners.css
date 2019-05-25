@@ -2,7 +2,7 @@
 Preloader
 ********************/
 .loader__label {
-  float: left;
+  float: left;  
   margin-left: 50%;
   -webkit-transform: translateX(-50%);
   -moz-transform: translateX(-50%);

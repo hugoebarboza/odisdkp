@@ -11,14 +11,20 @@ import { SharedModule } from '../../components/shared/shared.module';
 //ROUTING
 import { DashboardRoutingModule } from './dashboard.routing';
 
+//SERVICES
+import { ServiceModule } from 'src/app/services/service.module';
+import { MessagingService } from 'src/app/services/service.index';
+
 
 @NgModule({
   imports: [
     CommonModule,
     DashboardRoutingModule,
     PipesModule,
+    ServiceModule,
     SharedModule
   ],
-  declarations: [DashboardComponent]
+  declarations: [DashboardComponent],
+  providers: [MessagingService],
 })
 export class DashboardModule { }
