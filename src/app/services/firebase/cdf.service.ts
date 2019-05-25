@@ -9,10 +9,6 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 
-//SETTINGS
-import { GLOBAL } from '../global';
-
-
 
 @Injectable()
 export class CdfService  {
