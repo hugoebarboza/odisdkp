@@ -47,58 +47,11 @@ import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
 
-/*
-//COMPONENTS
-import { DateDialogComponent } from '../components/date-dialog/date-dialog.component';
-import { ExcelComponent, DialogOverviewDialog } from '../components/excel/excel.component';
-import { ExcelVehiculoComponent } from '../components/excel-vehiculo/excel-vehiculo.component';
-import { FileComponent } from '../components/dialog/file/file.component';
-import { FilelistComponent } from '../components/dialog/filelist/filelist.component';
-import { GestionComponent } from '../components/gestion/gestion.component';
-import { MapaComponent } from '../components/mapa/mapa/mapa.component';
-import { MapaFullWidthComponent } from '../components/mapa/mapafullwidth/mapafullwidth.component'; 
-import { TableroComponent } from '../components/tablero/tablero.component';
-import { UsertableComponent } from '../components/usertable/usertable.component';
-import { ViewOrderDetailComponent } from '../components/views/vieworderdetail/vieworderdetail.component';
-import { ViewOrderTimeSpentComponent } from '../components/views/viewordertimespent/viewordertimespent.component';
-import { VieworderserviceComponent } from '../components/views/vieworderservice/vieworderservice.component';
-import { ViewprojectcustomerComponent } from '../components/views/viewprojectcustomer/viewprojectcustomer.component';
-import { ViewprojectorderComponent } from '../components/views/viewprojectorder/viewprojectorder.component';
-import { ViewModule } from '../components/views/view.module';
 
-//DIALOG
-import { AddComponent } from '../components/dialog/add/add.component';
-import { AddcustomerComponent } from '../components/dialog/addcustomer/addcustomer.component';
-import { AddSupportComponent } from '../components/dialog/widget/addsupport/addsupport.component';
-import { CargaComponent } from '../components/dialog/carga/carga.component';
-import { CsvComponent } from '../components/dialog/csv/csv.component';
-import { CsvCustomerComponentComponent } from '../components/dialog/csvcustomercomponent/csvcustomercomponent.component';
-import { DeleteComponent } from '../components/dialog/delete/delete.component';
-import { DeletecustomerComponent } from '../components/dialog/deletecustomer/deletecustomer.component';
-import { DownloadComponent } from '../components/dialog/download/download.component';
-import { EditComponent } from '../components/dialog/edit/edit.component';
-import { EditcustomerComponent } from '../components/dialog/editcustomer/editcustomer.component';
-import { ShowComponent } from '../components/dialog/show/show.component';
-import { ShowcustomerComponent } from '../components/dialog/showcustomer/showcustomer.component';
-import { ShowProfileComponent } from '../components/dialog/showprofile/showprofile.component';
-import { SettingsComponent } from '../components/dialog/settings/settings.component';
-import { SettingscustomerComponent } from '../components/dialog/settingscustomer/settingscustomer.component';
-import { VehiculoOverviewDialog } from '../components/excel-vehiculo/excel-vehiculo.component';
-import { ZipComponent } from '../components/dialog/zip/zip.component';
-//MODAL
-import { ModalMapaComponent } from '../components/modal/modalmapa/modalmapa.component';
-import { ModalImageComponent } from '../components/modal/modalimage/modalimage.component';
-*/
-
-//DIRECTIVES
-//import { DropZoneDirective } from '../directives/drop-zone.directive';
-//import { NgDropFilesDirective } from '../directives/ng-drop-files.directive';
-
-//PAGES
-//import { OrderserviceComponent } from '../components/orderservice/orderservice.component';
 
 
 // Global vars
+import { environment } from '../../environments/environment';
 import { GLOBAL } from '../services/global';
 
 registerLocaleData(localeEs);
@@ -109,7 +62,7 @@ registerLocaleData(localeEs);
     AgmDirectionModule,
     AngularSplitModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: GLOBAL.agmapikey
+      apiKey: environment.global.agmapikey
     }),
     CalendarModule,
     CommonModule,
@@ -139,73 +92,11 @@ registerLocaleData(localeEs);
     //ViewModule
   ],
   declarations: [
-    //AddComponent,
-    //AddcustomerComponent,
-    //AddSupportComponent,
-    //CargaComponent,
-    //CsvComponent,
-    //CsvCustomerComponentComponent,
-    //DeletecustomerComponent,
-    //DeleteComponent,
-    //DownloadComponent,    
-    //DateDialogComponent,
-    //DialogOverviewDialog,
-    //DropZoneDirective,
-    //EditcustomerComponent,
-    //EditComponent,
-    //ExcelComponent,
-    //ExcelVehiculoComponent,
-    //FileComponent,
-    //FilelistComponent,
-    //GestionComponent,
-    //MapaComponent, 
-    //MapaFullWidthComponent,
-    //ModalMapaComponent,
-    //ModalImageComponent,
-    //NgDropFilesDirective,
-    //OrderserviceComponent,
-    //SettingsComponent, 
-    //SettingscustomerComponent, 
-    //ShowComponent,
-    //ShowcustomerComponent,
-    //ShowProfileComponent,
-    //TableroComponent,    
-    //UsertableComponent,
-    //ZipComponent,
-    //VehiculoOverviewDialog,
-    //ViewOrderTimeSpentComponent,
-    //ViewOrderDetailComponent,
-    //ViewprojectorderComponent,
-    //ViewprojectcustomerComponent, 
-    //VieworderserviceComponent,
+
   ],
   exports: [
   ],
   entryComponents: [
-    //AddComponent, 
-    //AddcustomerComponent, 
-    //AddSupportComponent,
-    //CsvComponent,
-    //CsvCustomerComponentComponent,
-    //DateDialogComponent,
-    //DeleteComponent, 
-    //DeletecustomerComponent, 
-    //DialogOverviewDialog, 
-    //DownloadComponent, 
-    //EditComponent,
-    //EditcustomerComponent, 
-    //FileComponent, 
-    //ModalMapaComponent, 
-    //ModalImageComponent,
-    //ModalMapaComponent, 
-    //ModalImageComponent,
-    //ShowComponent, 
-    //ShowcustomerComponent,
-    //ShowProfileComponent,
-    //SettingsComponent, 
-    //SettingscustomerComponent, 
-    //VehiculoOverviewDialog,
-    //ZipComponent    
   ],
   providers: [
     NgbActiveModal, 

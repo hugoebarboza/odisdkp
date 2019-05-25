@@ -3,6 +3,7 @@ import { HttpHeaders } from '@angular/common/http';
 import { Http, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { environment } from '../../../environments/environment';
 import { GLOBAL } from '../global';
 
 
@@ -20,7 +21,7 @@ export class MapaService {
 	public _http: Http,  	
   	) { 
 	this.urlmap = GLOBAL.urlgooglemaps;
-	this.apikey = GLOBAL.agmapikey;
+	this.apikey = environment.global.agmapikey;
 	this.error = false;
 
 

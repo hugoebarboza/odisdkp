@@ -82,7 +82,6 @@ import { DeletecustomerComponent } from '../../components/dialog/deletecustomer/
 import { DownloadComponent } from '../../components/dialog/download/download.component';
 import { EditComponent } from '../../components/dialog/edit/edit.component';
 import { EditcustomerComponent } from '../../components/dialog/editcustomer/editcustomer.component';
-//import { EditServiceComponent } from '../../pages/service/dialog/editservice/editservice.component';
 import { ShowComponent } from '../../components/dialog/show/show.component';
 import { ShowcustomerComponent } from '../../components/dialog/showcustomer/showcustomer.component';
 import { ShowProfileComponent } from '../../components/dialog/showprofile/showprofile.component';
@@ -100,8 +99,6 @@ import { ModalImageComponent } from '../../components/modal/modalimage/modalimag
 
 //DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
-//import { DropZoneDirective } from '../../directives/drop-zone.directive';
-//import { NgDropFilesDirective } from '../../directives/ng-drop-files.directive';
 
 
 //PAGES
@@ -109,6 +106,7 @@ import { OrderserviceComponent } from '../../components/orderservice/orderservic
 
 
 // Global vars
+import { environment } from '../../../environments/environment';
 import { GLOBAL } from '../../services/global';
 
 registerLocaleData(localeEs);
@@ -119,7 +117,7 @@ registerLocaleData(localeEs);
     AgmDirectionModule,
     AngularSplitModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: GLOBAL.agmapikey
+      apiKey: environment.global.agmapikey
     }),
     CalendarModule,
     CommonModule,
