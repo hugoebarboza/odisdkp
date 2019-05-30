@@ -36,7 +36,6 @@ export class ProfileComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    private _proyectoService: ProjectsService,
     public _userService: UserService,
     public label: SettingsService,
   ) {

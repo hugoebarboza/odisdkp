@@ -195,7 +195,7 @@ export class MapaFullWidthComponent implements OnInit {
 
   private _onDestroy = new Subject<void>();
 
-  @ViewChild('drawer') drawer;
+  @ViewChild('drawer', { static: true }) drawer;
   @Input() id : number;
 
   constructor(

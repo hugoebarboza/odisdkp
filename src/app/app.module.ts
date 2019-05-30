@@ -14,8 +14,6 @@ import { LogoutComponent } from './components/dialog/logout/logout.component';
 import { PagesComponent } from './pages/pages.component';
 import { RegisterComponent } from './register/register.component';
 
-
-
 //MATERIAL
 import {MaterialModule} from './material-module';
 
@@ -42,15 +40,10 @@ import { AuthService } from './services/firebase/auth.service';
 //ROUTER
 import { RouterModule } from '@angular/router';
 
-
-//MAIN NG-BOOTSTRAP MODULE
-//import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-
 //UTILITYS
-import { AngularEditorModule } from '@kolkov/angular-editor';
-import { AngularSplitModule } from 'angular-split';
-import { LoadingBarModule } from '@ngx-loading-bar/core';
+//import { AngularEditorModule } from '@kolkov/angular-editor';
+//import { AngularSplitModule } from 'angular-split';
+//import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { RECAPTCHA_SETTINGS, RecaptchaModule,  RecaptchaSettings } from 'ng-recaptcha';
 import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 
@@ -85,6 +78,7 @@ import { httpInterceptorProviders } from './http-interceptors/index';
 import { contadorReducer } from './contador.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
+import { appReducers } from './app.reducers';
 
 
 
@@ -102,23 +96,22 @@ registerLocaleData(localeEs);
   ],
   imports: [    
     AppRoutingModule,
-    AngularEditorModule,
+    //AngularEditorModule,
     AngularFireModule.initializeApp(environment.firebase),
     AngularFirestoreModule.enablePersistence(),
     AngularFireAuthModule,
     AngularFireDatabaseModule,
     AngularFireStorageModule,
-    AngularSplitModule.forRoot(),
+    //AngularSplitModule.forRoot(),
     BrowserModule,    
     BrowserAnimationsModule,    
     CommonModule,
     FormsModule,    
     HttpModule,
     HttpClientModule,
-    LoadingBarModule,
+    //LoadingBarModule,
     MaterialModule,
     MatProgressButtonsModule,
-    //NgbModule,
     PipesModule,
     ReactiveFormsModule,    
     RecaptchaFormsModule,  
@@ -127,7 +120,7 @@ registerLocaleData(localeEs);
     SharedModule, 
     ServiceModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
-    StoreModule.forRoot({ objNgrx: contadorReducer }),
+    StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({
       maxAge: 5,
       logOnly: environment.production

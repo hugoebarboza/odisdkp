@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from "rxjs/Subscription";
-import { Router } from '@angular/router';
 
 //HELPERS
 import { MustMatch } from '../../../helpers/must-match.validator';
@@ -12,7 +11,7 @@ import { Proyecto, User } from '../../../models/types';
 
 
 //SERVICES
-import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+import { SettingsService, UserService } from '../../../services/service.index';
 
 
 @Component({    
@@ -26,6 +25,7 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
   changeForm: FormGroup; 
   currentpassword : string;
   identity: any;
+  isSave: boolean = false;
   newpassword : string;
   proyectos: Array<Proyecto>;
   password_confirmation : string;
@@ -38,8 +38,6 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
   
 
   constructor(
-  private _router: Router,
-  private _proyectoService: ProjectsService,
   public _userService: UserService,
   public label: SettingsService,
   ) 
@@ -79,9 +77,7 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
   }
 
   ngOnInit(){
-      if (this.identity == null ){
-        this._userService.logout();
-      }
+  this.isSave = false;
   }
 
 	ngOnDestroy(){
@@ -93,23 +89,26 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
 
 
   changepassword(formValue: any){
+
+    if(!formValue){
+      return;
+     }
     
+     this.isSave = true;
+      
     this._userService.changepassword(this.token.token, formValue).subscribe(
      response => {
        if(response.status != 'error' ){
-         //this.status = 'success';
-         //console.log('changepassword exitoso');
          swal('Cambio de clave exitoso.', this.identity.email, 'success' );
          this.changeForm.reset(this.changeForm);
        }else{
         swal('Importante', 'Verifique: 1) Su clave actual sea correcta, 2) La nueva clave no sea la misma que la actual.', 'error');
-         //this.status = 'error';
-         //console.log('changepassword no exitoso');
        }
+       this.isSave = false;
      },
      error => {
-      swal('Importante', error.error.message, 'error');
-       //this.status = 'error';
+      this.isSave = false;
+      swal('Importante', error, 'error');
      });
   }
 

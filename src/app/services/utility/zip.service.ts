@@ -26,7 +26,7 @@ export class ZipService {
   }
 
   getDataBD(href: string, token) {
-    const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
     return new Promise((resolve, reject) => {
       if (token === '') {
           reject();

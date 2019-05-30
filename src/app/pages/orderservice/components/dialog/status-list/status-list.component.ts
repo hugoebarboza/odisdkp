@@ -31,7 +31,7 @@ export class StatusListComponent implements OnInit, OnDestroy {
 
   @Input() id : number;
   @Output() totalEstatus: EventEmitter<number>;
-  @ViewChild('txtInputFisico') txtInputFisico: ElementRef;
+  @ViewChild('txtInputFisico', { static: true }) txtInputFisico: ElementRef;
 
   constructor(
     public _userService: UserService,
@@ -202,10 +202,10 @@ export class StatusListComponent implements OnInit, OnDestroy {
               }
             },
               error => {
-                this.snackBar.open(error.error.message, '', {duration:3000, });
+                //this.snackBar.open(error.error.message, '', {duration:3000, });
+                this.snackBar.open(error, '', {duration:3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-                console.log(<any>error);
               }       
             );
   }

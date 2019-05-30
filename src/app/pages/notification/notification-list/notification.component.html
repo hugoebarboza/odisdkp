@@ -1,0 +1,160 @@
+<meta name="Description" content="Users">
+<!--CONTENT-->
+
+<div id="wrapper" *ngIf="proyectos && identity">
+
+  <div  >
+
+        <div class="container-fluid p-2">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+            <h1 class="h4" >{{title}}</h1>
+        </div>
+        <br>
+
+        <div class="row animated fadeIn" >
+            
+          <div class="col-12">
+
+              <div class="container" *ngIf="isLoading">
+                  <div class="row justify-content-md-center">
+                    <div class="col col-lg-2">
+                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                    </div>
+                  </div>
+              </div>
+              
+
+              <mat-card [ngStyle]="{'padding':'0px'}" *ngIf="!isLoading && notifications$">
+                  <mat-card-header [ngClass]="{'custom-card':true}">
+                      <mat-card-title *ngIf="user$ | async as user">
+                        <h6 class="card-title">
+                            {{ user.email }}
+                        </h6>
+                      </mat-card-title>
+                  </mat-card-header>
+
+
+                  <mat-card-content>
+                    
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-3 float-left">
+
+                            <ul class="filter-list" data-pjax="">
+                                <li>
+                                  <a class="filter-item selected" [routerLink]="['/notification']" > 
+                                    <span class="count">{{resultCount}}</span>
+                                    Todas
+                                  </a>
+                                </li>
+                                <li>
+                                  <a [routerLink]="['/notification/unread']" class="filter-item ">
+                                    <span class="count">{{resultCountUnread}}</span>
+                                    No Leídas
+                                  </a>
+                                </li>
+                                <li>
+                                  <a [routerLink]="['/notification/read']" class="filter-item ">
+                                    <span class="count">{{resultCountRead}}</span>
+                                    Leídas
+                                  </a>
+                                </li>
+                            </ul>                          
+
+                        </div>
+                        <div class="col-9 float-right">
+                          <div class="rate-limit-reached" *ngIf="resultCount == 0">
+                                No se encontraron registros que coincidan con su búsqueda.
+                          </div>
+
+                          <table mat-table [dataSource]="notifications$" *ngIf="notifications$">
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="project">
+                                <th mat-header-cell *matHeaderCellDef> Proyecto </th>
+                                <td mat-cell *matCellDef="let element"> {{element.project}} </td>
+                             </ng-container>
+  
+                             <ng-container matColumnDef="service">
+                                <th mat-header-cell *matHeaderCellDef> Servicio </th>
+                                <td mat-cell *matCellDef="let element"> {{element.service}} </td>
+                             </ng-container>
+
+
+                            <ng-container matColumnDef="title">
+                              <th mat-header-cell *matHeaderCellDef> Titulo </th>
+                              <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+                            </ng-container>
+  
+  
+                              <!-- Name Column -->
+                            <ng-container matColumnDef="body">
+                                <th mat-header-cell *matHeaderCellDef> Mensaje </th>
+                                <td mat-cell *matCellDef="let element"> {{element.body}} </td>
+                            </ng-container>
+                          
+                          
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="create_by">
+                              <th mat-header-cell *matHeaderCellDef> Informador </th>
+                              <td mat-cell *matCellDef="let element">  {{element.users.name}} {{element.users.surname}}</td>
+                            </ng-container>
+                          
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="create_at">
+                              <th mat-header-cell *matHeaderCellDef> Creado El </th>
+                              <td mat-cell *matCellDef="let element"> {{element.create_at}} </td>
+                            </ng-container>
+  
+  
+  
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                                <td mat-cell *matCellDef="let element" > 
+                                  <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 1"
+                                  matTooltip="Marcar como leida."
+                                  [matTooltipPosition]="positionleftaction.value"                                                        
+                                  >
+                                  <div class="circle"  [style.color]="'red'"></div> 
+                                  </button>
+                                  <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 0" 
+                                  matTooltip="Marcar como no leida."
+                                  [matTooltipPosition]="positionleftaction.value"                        
+                                  >
+                                  <div class="circle"  [style.color]="'green'"></div>
+                                  </button>
+                            </ng-container>
+  
+                          
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                          </table>
+  
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </mat-card-content>
+
+                </mat-card>
+
+          </div>
+
+      </div>
+
+
+        
+      </div>
+
+</div>
+<!-- /#page-content-wrapper -->
+</div>
+
+<div *ngIf="getnotifications$ | async as All">  
+</div>  
+<div *ngIf="getnotificationsUnread$ | async as Unread">
+</div>
+<div *ngIf="getnotificationsRead$ | async as Unread">
+</div>

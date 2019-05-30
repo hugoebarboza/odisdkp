@@ -2,6 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
 
+//INTERCEPTOR
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+
+
 //MODULES
 import { MaterialModule } from '../../material-module';
 import { SharedModule } from '../../components/shared/shared.module';
@@ -21,12 +26,16 @@ import { ServiceModule } from 'src/app/services/service.module';
     CommonModule,
     ChangePasswordRoutingModule,
     FormsModule,
+    HttpClientModule,
     MaterialModule,
     PipesModule,
     ReactiveFormsModule,
     ServiceModule,
     SharedModule
   ],
-  declarations: [ChangepasswordComponent]
+  declarations: [ChangepasswordComponent],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+  ],
 })
 export class ChangePasswordModule { }

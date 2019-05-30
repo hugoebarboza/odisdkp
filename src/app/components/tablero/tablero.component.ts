@@ -117,7 +117,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
   @Input() view : number;
   @Output() portalevent: EventEmitter<number>;
   @Output() ServicioSeleccionado: EventEmitter<string>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
 
   public datasource: Order[];
 

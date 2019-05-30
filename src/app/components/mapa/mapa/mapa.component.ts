@@ -196,7 +196,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
 
   private _onDestroy = new Subject<void>();
 
-  @ViewChild('drawer') drawer;
+  @ViewChild('drawer', { static: true }) drawer;
   @Output() ServicioSeleccionado: EventEmitter<string>;
   @Input() id : number;
 

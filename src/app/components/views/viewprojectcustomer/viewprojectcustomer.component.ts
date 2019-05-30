@@ -128,7 +128,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   /** list of banks filtered by search keyword */
   public filteredRegion: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
   public filteredRegionMulti: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
-  @ViewChild('multiSelect') multiSelect: MatSelect;
+  @ViewChild('multiSelect', { static: true }) multiSelect: MatSelect;
   private _onDestroy = new Subject<void>();
   private unsubscribe= new Subject<void>();
 
@@ -151,9 +151,9 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   pageSizeOptions: number[] = [15, 30, 100, 200];
   pageEvent: PageEvent;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild('filter') filter: ElementRef;
-  @ViewChild(MatSort) matSort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild('filter', { static: true }) filter: ElementRef;
+  @ViewChild(MatSort, { static: true }) matSort: MatSort;
   @Output() ServicioSeleccionado: EventEmitter<string>;
   @Input() id : number;
   

@@ -71,7 +71,7 @@ export class AddComponent implements OnInit, OnDestroy {
  constructor(
  	public dialogRef: MatDialogRef<AddComponent>,
   public dataService: OrderserviceService, 
-  private _userService: UserService,
+  public _userService: UserService,
   private _orderService: OrderserviceService,
   private _projectService: ProjectsService,
   @Inject(MAT_DIALOG_DATA) public data: Order

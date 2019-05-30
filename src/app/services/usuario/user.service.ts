@@ -14,13 +14,6 @@ import { Store } from '@ngrx/store';
 import { LoginAction, ResetAction } from '../../contador.actions';
 
 
-const httpOptions = {
-  headers: new HttpHeaders({
-    'Content-Type':  undefined,
-    'Authorization': undefined
-	})
-};
-
 //MODELS
 import { 
 	Departamento,
@@ -87,8 +80,7 @@ export class UserService  {
 
   getQuery( query:string, token ){  		
 		const url = this.url+query;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  							 
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  							 
 
 		return this._http.get(url, {headers: headers});  			
   }
@@ -109,8 +101,7 @@ export class UserService  {
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this._http.post(this.url+'registeruseremployee', params, {headers: headers})
 						 .map( (resp: any) => {
 							   return resp;
@@ -120,8 +111,7 @@ export class UserService  {
 
 	delete(token: any, id:number): Observable<any>{
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 
 		return this._http.delete(this.url+'user/'+id, {headers: headers})
@@ -132,10 +122,8 @@ export class UserService  {
 
 	adduser(token: any, userid:number, id:number): Observable<any>{
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		
 		return this._http.post(this.url+'adduser/'+userid+'/project/'+id, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
@@ -145,14 +133,8 @@ export class UserService  {
 
 	remover(token: any, userid:number, id:number): Observable<any>{
 
-		/*
-		const expandedHeaders = this.prepareHeader(headers, token);
-		console.log(expandedHeaders);*/
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
-
-		//console.log(headers);
 		return this._http.post(this.url+'removeruser/'+userid+'/project/'+id, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
@@ -164,9 +146,7 @@ export class UserService  {
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
-		//console.log(headers);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this._http.post(this.url+'updateuser/'+id, params, {headers: headers})
 						 .map( (resp: any) => {
@@ -186,9 +166,7 @@ export class UserService  {
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
-
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this._http.post(this.url+'updateuser/'+id, params, {headers: headers})
 						 .map( (resp: any) => {
@@ -205,7 +183,7 @@ export class UserService  {
 	updateFotoProfile(token: any, archivo: any ): Observable<any> {
 		let params = new FormData(); 
 		params.append('image', archivo); 
-		let headers = new HttpHeaders().set('Authorization', token);
+		let headers = new HttpHeaders();
 
 		return this._http.post(this.url+'uploadfileperfil', params, {headers: headers})
 						 .map( (resp: any) => {
@@ -216,7 +194,7 @@ export class UserService  {
 	updateFotoProfileUser(token: any, archivo: any, id:number ): Observable<any> {
 		let params = new FormData(); 
 		params.append('image', archivo); 
-		let headers = new HttpHeaders().set('Authorization', token);
+		let headers = new HttpHeaders();
 
 		return this._http.post(this.url+'uploadfileperfiluser/'+id, params, {headers: headers})
 							.map( (resp: any) => {
@@ -226,8 +204,7 @@ export class UserService  {
 
 	verifyStatusUser(token: any, userid:number, status:number): Observable<any>{
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		//console.log(headers);
 
 		return this._http.post(this.url+'user/'+userid+'/verify/'+status, {headers: headers})
@@ -239,6 +216,7 @@ export class UserService  {
 	
 
 	signup(user:any, getToken=null): Observable<any>{
+
 		if(getToken != null){
 			user.getToken = 'true';
 		}
@@ -314,6 +292,17 @@ export class UserService  {
 	}
 
 
+	getUid(){
+		let uid = JSON.parse(localStorage.getItem('uid'));
+		if (uid != "Undefined" && uid !== null){
+		}else{
+			//console.log('bloqueado por getuid')
+			//this.logout();
+		}
+		return uid;
+	}
+
+
 	getFotoProfile(){
 		let identity = JSON.parse(localStorage.getItem('fotoprofile'));
 		if (identity != "Undefined" && identity !== null){
@@ -351,8 +340,7 @@ export class UserService  {
 	
 	getUserPaginate(token: string, id: number, page: number = 0): Observable<User[]>{		
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-										 .set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		
 		let paginate = `?page=${page}`;
 
@@ -364,8 +352,7 @@ export class UserService  {
 
 
 	getNotUserPaginate(token: string, id: number, page: number = 0, customerid:number): Observable<User[]>{
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-										 .set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		
 		let paginate = `?page=${page}&customerid=${customerid}`;
 
@@ -411,8 +398,7 @@ export class UserService  {
 
 	searchUser(token:string, id: number, page: number = 0, termino: string){
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-										 .set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		
 		let paginate = `?page=${page}`;
 
@@ -424,8 +410,7 @@ export class UserService  {
 
 	searchaddUser(token:string, id: number, page: number = 0, termino: string, customerid:number){
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-										 .set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		
 		let paginate = `?page=${page}&customerid=${customerid}`;
 
@@ -541,8 +526,7 @@ export class UserService  {
 
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
 							  
 		return this._http.post(this.url+'changepassword', params, {headers: headers});
 	}
@@ -551,8 +535,7 @@ export class UserService  {
 
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
 							  
 		return this._http.post(this.url+'changepasswordprofile/'+id, params, {headers: headers});
 	}
@@ -565,6 +548,7 @@ export class UserService  {
 		localStorage.removeItem('identity');
 		localStorage.removeItem('proyectos');
 		localStorage.removeItem('token');
+		localStorage.removeItem('uid');
 		this.resetAction();
 		this._router.navigate(['/login']);
 	}
@@ -579,7 +563,6 @@ export class UserService  {
     headers = new HttpHeaders();
     headers = headers.append('Content-Type', 'application/json');
 		headers = headers.append('Accept', 'application/json');
-		headers = headers.append('Authorization', token);		
 		return headers;
 	}	
 

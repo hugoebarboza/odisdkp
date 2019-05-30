@@ -54,8 +54,7 @@ export const columns: Columns[] = [
   styleUrls: ['./service.component.css'],
   providers: [SettingsNgxEasyTableService],
 })
-export class ServiceComponent  implements OnInit, OnDestroy {
-    
+export class ServiceComponent  implements OnInit, OnDestroy {  
   columns: Columns[] = [];
   configuration: any;
   datasource:any = [];
@@ -85,11 +84,13 @@ export class ServiceComponent  implements OnInit, OnDestroy {
       'High': 3,
   };
 
-  //CDK PORTAL
-  @ViewChild('myTemplate') myTemplate: TemplatePortal<any>;
-  @ViewChild('myTemplate2') myTemplate2: TemplatePortal<any>;
+//CDK PORTAL
+  @ViewChild('myTemplate', { static: true }) myTemplate: TemplatePortal<any>;
+  @ViewChild('myTemplate2', { static: true }) myTemplate2: TemplatePortal<any>;
   public _portal: Portal<any>;
   public _home:Portal<any>;
+
+
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positiondatasourceaction = new FormControl(this.positionOptions[3]);
@@ -105,6 +106,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     public label: SettingsService
   ) 
   { 	  
+
     this._userService.handleAuthentication(this.identity, this.token);    
     this.columns = columns;
     this.configuration = SettingsNgxEasyTableService.config;
@@ -155,8 +157,8 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     this.selectedRow = 0;  
     this._portal = this.myTemplate;
     this._home = this.myTemplate;
+    console.log(this._portal);
   }
-
 
 
   ngOnDestroy(){
@@ -336,6 +338,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   refresh(){
 
     if(this.id){
+      console.log(this.id);
       this.services = [];
       this.datasource = [];  
       this.isLoadingRefresh = true;
@@ -344,7 +347,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
             if (response.status == 'success'){
               this.services = response.datos;
               this.datasource = response.datos;
-              //console.log(this.datasource);
+              console.log(this.datasource);
               //console.log(this.services.length)
               this.loading = false;
               this.isRateLimitReached = false;

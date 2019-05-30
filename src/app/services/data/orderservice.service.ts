@@ -43,20 +43,11 @@ import { ToastrService } from 'ngx-toastr';
 
 
   getQuery( query:string, token: string | string[] ): Observable<any>{
-  	//console.log(query);
-  	//const body = JSON.stringify({data});
-		//const headers = new Headers({'Content-Type':'application/json'});
 		const url = this.url+query;
-		//console.log(url);
 		const headers = new HttpHeaders({
-		'Content-Type': 'application/json',
-		'Authorization': token
+		'Content-Type': 'application/json'
 		});
-		//console.log(url);
-		//console.log(headers);
-		//return this._http.get(url, {headers:headers});  			
 		return this._http.get(url, {headers: headers}).map((res: any) => {
-      			//console.log('res', res);
       			return res;
 		});		
   }
@@ -118,7 +109,7 @@ import { ToastrService } from 'ngx-toastr';
     const href = url+query;
     const requestUrl = href;
     //console.log(requestUrl);
-    const headers = new HttpHeaders({'Content-Type': 'application/json','Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
     //console.log(headers);
     return new Promise((resolve, reject) => {
       if (token == '')
@@ -180,8 +171,7 @@ import { ToastrService } from 'ngx-toastr';
   add(token: any, order: Order, id:number): void {
 		let json = JSON.stringify(order);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);	
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');	
 		this._http.post(this.url+'project'+'/'+id+'/'+'order', params, {headers: headers}).subscribe(
     		(data: any) => { 
     			  this.dialogData = order;    		      
@@ -205,8 +195,7 @@ import { ToastrService } from 'ngx-toastr';
 	addEstatus(token: any, data: ServiceEstatus, id:number): Observable<any> {
 		let json = JSON.stringify(data);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-										 .set('Authorization', token);	
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');	
 										 
 		return this._http.post(this.url+'service/'+id+'/estatus/', params, {headers: headers})
 		.map( (resp: any) => {
@@ -219,8 +208,7 @@ import { ToastrService } from 'ngx-toastr';
 		let params = 'json='+json;
 
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
 		this._http.put(this.url+'project'+'/'+id+'/'+'order/'+orderid, params, {headers: headers}).subscribe(
     		(data: any) => { 
 							//console.log(data.status);
@@ -245,9 +233,7 @@ import { ToastrService } from 'ngx-toastr';
 		let json = JSON.stringify(data);
 		let params = 'json='+json;
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
-		//console.log(headers);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this._http.post(this.url+'estatus/'+id, params, {headers: headers})
 						 .map( (resp: any) => {
@@ -258,10 +244,7 @@ import { ToastrService } from 'ngx-toastr';
 
 	deleteEstatus(token: any, id:number): Observable<any>{
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
-		//console.log(headers);
-
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this._http.delete(this.url+'estatus/'+id, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
@@ -270,8 +253,7 @@ import { ToastrService } from 'ngx-toastr';
 
 
  	delete(token: any, orderid:number, id: number): void { 	 	
-	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-								   .set('Authorization', token);							      
+	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							      
     
 		this._http.delete(this.url+'project'+'/'+id+'/'+'order/'+orderid, {headers: headers}).subscribe(
 			(data: any) => {
@@ -293,8 +275,7 @@ import { ToastrService } from 'ngx-toastr';
   important(token: any, id:number, orderid:number, label:number): void {	
 			let json = JSON.stringify(label);
 			let params = 'json='+json;
-			let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-											 .set('Authorization', token);							  
+			let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
 			this._http.post(this.url+'project'+'/'+id+'/'+'order/'+orderid+'/importantorder/'+label, params, {headers: headers}).subscribe(
 					data => { 
 							//console.log(data);

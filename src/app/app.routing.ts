@@ -50,6 +50,24 @@ const appRoute: Routes = [
 		data: { preload: true, delay: false }
 	},
 	{
+		path: 'notification',
+		canLoad: [ LoginGuardGuard ],
+		loadChildren: './pages/notification/notification.module#NotificationModule',
+		data: { preload: true, delay: false }
+  },
+	{
+		path: 'notification/read',
+		canLoad: [ LoginGuardGuard ],
+		loadChildren: './pages/notification/notification.module#NotificationModule',
+		data: { preload: true, delay: false }
+  },
+	{
+		path: 'notification/unread',
+		canLoad: [ LoginGuardGuard ],
+		loadChildren: './pages/notification/notification.module#NotificationModule',
+		data: { preload: true, delay: false }
+  },
+	{
 		path: 'profile',
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/profile/profile.module#ProfileModule',
@@ -67,17 +85,16 @@ const appRoute: Routes = [
 		loadChildren: './pages/service/service.module#ServiceModule',
 		data: { preload: true, delay: false }
 	},
-
-	{ 	
-		path: 'users', 
-    canLoad: [LoginGuardGuard],
-		loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
-		data: { preload: true, delay: false }
-  },
 	{
 		path: 'service',
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/orderservice/orderservice.module#OrderServiceModule',
+		data: { preload: true, delay: false }
+  },
+	{ 	
+		path: 'users', 
+    canLoad: [LoginGuardGuard],
+		loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
 		data: { preload: true, delay: false }
   },
 	{

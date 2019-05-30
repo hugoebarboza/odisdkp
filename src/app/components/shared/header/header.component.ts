@@ -1,17 +1,17 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
 
-
-//SERVICES
-import { UserService } from '../../../services/service.index';
-
-import {  AngularFirestore,  AngularFirestoreCollection } from 'angularfire2/firestore';
-import { Observable, Subscription } from 'rxjs';
-export interface Item { id: number; }
+//FIREBASE
+import {  AngularFirestore,  AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 
 //MATERIAL
 import { MatDialog } from '@angular/material';
+
+//MODELS
+import { User, UserFirebase } from 'src/app/models/types';
 
 
 //DIALOG
@@ -22,7 +22,16 @@ import { LogoutComponent } from '../../../components/dialog/logout/logout.compon
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
 import { ResetAction } from 'src/app/contador.actions';
+import { SetUserAction } from 'src/app/auth/auth.actions';
 
+
+
+//SERVICES
+import { UserService } from '../../../services/service.index';
+
+
+
+export interface Item { id: number; }
 
 
 @Component({
@@ -42,6 +51,16 @@ export class HeaderComponent {
 	public token: any;
   
 
+  notificationsRef: AngularFirestoreCollection<any>;
+  notifications$: any;
+  getnotifications$: Observable<any>;
+  resultCount: number = 0;
+  private userSubscription: Subscription = new Subscription();
+  private userDoc: AngularFirestoreDocument<User>;
+  user$: Observable<User>;
+  userid: any;
+  uid:any;
+
   //private itemsCollection: AngularFirestoreCollection<Item>;
 
   private itemsCollection: AngularFirestoreCollection<Item>;
@@ -50,10 +69,11 @@ export class HeaderComponent {
 	subscription: Subscription;
 
 	constructor(
-		private _router: Router,		
+    private afs: AngularFirestore,
+    private afAuth: AngularFireAuth,
+
 		private _userService: UserService,
 		public dialog: MatDialog,
-    private afs: AngularFirestore,
     private store: Store<AppState>,
 
    ){
@@ -71,7 +91,7 @@ export class HeaderComponent {
     this.store.select('objNgrx')
     .subscribe( objNgrx  => {
       if (objNgrx) {
-        this.identity = objNgrx.identificacion;
+        this.identity = objNgrx.identificacion; 
       }
       this.identity = this._userService.getIdentity();
       if(this.identity){
@@ -79,20 +99,47 @@ export class HeaderComponent {
       }  
     });
 
-    
+  /*    
     if(this.identity){
       this.isLoading = false;
     }
-    //this.addTodo(4);
-    //console.log(this.itemsCollection);
-	  	if (this.identity == null ){
-        this._userService.logout();
-	  		//this._router.navigate([""]);
-	  	}else{
-	  		//console.log('header.component cargado'); 				
-	  	}
+    if (this.identity == null ){
+      this._userService.logout();
+    }else{
+    }
+*/
 
-	}
+    this.afAuth.authState.subscribe((auth: any) => {
+    if ( auth ) {
+
+          const newUser = new UserFirebase( auth );
+
+          const accion = new SetUserAction(newUser);
+          this.store.dispatch( accion );
+
+          //this.store.dispatch( new SetUserAction( newUser ) );
+          console.log(newUser);
+
+          this.userDoc = this.afs.doc<User>(`/users/${auth.uid}`);
+          this.notificationsRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1'));
+          this.getnotifications$ = this.notificationsRef.snapshotChanges()
+          .map(actions => {
+            this.isLoading = false;
+            this.resultCount = actions.length;
+            return actions.map(a => {
+              const data = a.payload.doc.data() as any;
+              const id = a.payload.doc.id;
+              return { id, ...data };
+            });
+          });
+    } else {
+        //this.userSubscription.unsubscribe();
+    }
+    });
+
+  }
+  
+
 
   ngOnDestroy() {
     //console.log('La página se va a cerrar');

@@ -4,6 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
+//INTERCEPTOR
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from '../http-interceptors/my.interceptor';
+
 //MODULES
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule} from 'agm-direction'; 
@@ -54,6 +58,7 @@ import { registerLocaleData } from '@angular/common';
 import { environment } from '../../environments/environment';
 import { GLOBAL } from '../services/global';
 
+
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -67,8 +72,9 @@ registerLocaleData(localeEs);
     CalendarModule,
     CommonModule,
     FlexLayoutModule,
-    FormsModule,
+    FormsModule,    
     HttpModule,
+    HttpClientModule,
     MaterialModule,
     MatProgressButtonsModule,
     MarkdownModule.forRoot(),
@@ -104,6 +110,7 @@ registerLocaleData(localeEs);
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
   ],  
 })
 export class PagesModule { }

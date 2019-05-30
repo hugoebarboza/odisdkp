@@ -4,53 +4,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
-//MODULES
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule} from 'agm-direction'; 
-import { MaterialModule } from '../../material-module';
-import { PipesModule } from '../../pipes/pipes.module';
-import { SharedModule } from '../../components/shared/shared.module';
-
-//SERVICES
-import { ServiceModule } from 'src/app/services/service.module';
-
-
-//MOMENT
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
-
-//ROUTER
-import { OrderServiceRoutingModule } from './orderservice.routes';
-
-//UTILITY
-import 'hammerjs';
-import { AngularEditorModule } from '@kolkov/angular-editor';
-import { AngularSplitModule } from 'angular-split';
-import { CalendarModule } from 'primeng/calendar';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatProgressButtonsModule } from 'mat-progress-buttons';
-import { MarkdownModule } from 'ngx-markdown';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Ng5SliderModule } from 'ng5-slider';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { TableModule } from 'ngx-easy-table';
-import { VerticalTimelineModule } from 'angular-vertical-timeline';
-
-//Import toast module
-import { ToastModule } from 'primeng/toast';
-import { ToastrModule } from 'ngx-toastr';
-
-//ESPAÑOL DATE
-import localeEs from '@angular/common/locales/es';
-import { registerLocaleData } from '@angular/common';
-
-
-
 //COMPONENTS
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 import { ExcelComponent, DialogOverviewDialog } from '../../components/excel/excel.component';
@@ -100,6 +53,60 @@ import { ModalImageComponent } from '../../components/modal/modalimage/modalimag
 //DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
+//INTERCEPTOR
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+
+
+//MODULES
+import { AgmCoreModule } from '@agm/core';
+import { AgmDirectionModule} from 'agm-direction'; 
+import { MaterialModule } from '../../material-module';
+import { PipesModule } from '../../pipes/pipes.module';
+import { SharedModule } from '../../components/shared/shared.module';
+
+//SERVICES
+import { ServiceModule } from 'src/app/services/service.module';
+
+
+//MOMENT
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
+
+
+//ROUTER
+import { OrderServiceRoutingModule } from './orderservice.routes';
+
+//UTILITY
+import 'hammerjs';
+import { AngularEditorModule } from '@kolkov/angular-editor';
+import { AngularSplitModule } from 'angular-split';
+import { CalendarModule } from 'primeng/calendar';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatProgressButtonsModule } from 'mat-progress-buttons';
+import { MarkdownModule } from 'ngx-markdown';
+import { NgSelectModule } from '@ng-select/ng-select';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { Ng5SliderModule } from 'ng5-slider';
+import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { TableModule } from 'ngx-easy-table';
+import { VerticalTimelineModule } from 'angular-vertical-timeline';
+
+//Import toast module
+import { ToastModule } from 'primeng/toast';
+import { ToastrModule } from 'ngx-toastr';
+
+//ESPAÑOL DATE
+import localeEs from '@angular/common/locales/es';
+import { registerLocaleData } from '@angular/common';
+
+
+
+
+
 
 //PAGES
 import { OrderserviceComponent } from '../../components/orderservice/orderservice.component';
@@ -125,6 +132,7 @@ registerLocaleData(localeEs);
     FlexLayoutModule,
     FormsModule,
     HttpModule,
+    HttpClientModule,
     MaterialModule,
     MatProgressButtonsModule,
     MarkdownModule.forRoot(),
@@ -229,6 +237,7 @@ registerLocaleData(localeEs);
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
   ],  
 })
 export class OrderServiceModule { }

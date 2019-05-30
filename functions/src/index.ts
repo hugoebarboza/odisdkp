@@ -1,10 +1,26 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
-//import * as fcm from './fcm'
-//import * as express from 'express';
 admin.initializeApp(functions.config().firebase);
-
 const cors = require("cors")({ origin: true });
+
+
+function parseBody(req:any, userId:any, userIdTo:any) {
+
+  var payload = {
+      notification: {
+          title: req.title,
+          body: req.message,
+          create_at: req.create_at,
+          create_by: userId,
+          status: req.status,
+          userIdTo: userIdTo
+        }
+      };
+  
+
+  return payload;
+  
+}
 
 
 exports.fcmSend = functions.https.onRequest((req, res) => {
@@ -14,18 +30,24 @@ exports.fcmSend = functions.https.onRequest((req, res) => {
         message: 'Not allowed'
       })
     }
-    const userId  = req.body.userId
-  
+    const userId  = req.body.userId;
+    const userIdTo  = req.body.userIdTo;
+    const payload = parseBody(req.body, userId, userIdTo);
+    
+
+    /*
     const payload = {
           notification: {
             title: req.body.title,
-            body: req.body.message
+            body: req.body.message,
+            create_at: req.body.create_at,
+            create_by: userId,
+            status: req.body.status,
+            userIdTo: userIdTo
           }
-        };
+    };*/
 
-        //const db = admin.firestore();
-
-        return admin.firestore().collection('users').doc(userId).get()
+        return admin.firestore().collection('users').doc(userIdTo).get()
         .then((doc:any) => doc.data() )
         .then((user) => {
           const tokens = user.fcmTokens;
@@ -36,9 +58,32 @@ exports.fcmSend = functions.https.onRequest((req, res) => {
         })
         .then((response:any) => {
           if (response) {
-            console.log("Sent Successfully", response);
+              console.log("Sent Successfully FCM", response);
+
+              addNotification(req)
+              .then(notificacion => {
+                console.log("Save FCM Notification", notificacion);
+                }, err => {
+                console.log(err);
+              });
+
+              addUserNotification(req)
+              .then(notificacion => {
+                console.log("Save User Notification", notificacion);
+                }, err => {
+                console.log(err);
+              });
+
+              addUserNotificationSend(req)
+              .then(notificacion => {
+                console.log("Save User NotificationSend", notificacion);
+                }, err => {
+                console.log(err);
+              });
+                  
             res.end();
           } else {
+            console.log("No Sent", response);
             res.end();
           }
         })
@@ -54,6 +99,85 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
       res.send("Hello from a Severless Database!")
   });
 });
+
+
+function addNotification(data:any) {
+  return new Promise<any>((resolve, reject) => {
+  
+    const userId  = data.body.userId;
+    const userIdTo  = data.body.userIdTo;
+    const payload = parseBody(data.body, userId, userIdTo);
+
+    /*
+    const notificacion = {
+			body: data.body.message,
+			title: data.body.title,
+			create_at: data.body.create_at,
+      create_by: data.body.userId,
+      status: data.body.status,
+      send_to: data.body.userIdTo,
+    }*/
+
+		admin.firestore().collection('fcmnotification').add(payload.notification)
+		.then(function(docRef) {
+			console.log('Document FCM written with ID: ', docRef.id);
+			resolve(docRef);
+		}, err => reject(err))
+    });
+}
+
+
+function addUserNotification(data:any) {
+  return new Promise<any>((resolve, reject) => {
+
+    const userId  = data.body.userId;
+    const userIdTo  = data.body.userIdTo;
+    const payload = parseBody(data.body, userId, userIdTo);
+
+    /*
+    const notificacion = {
+			body: data.body.message,
+			title: data.body.title,
+			create_at: data.body.create_at,
+      create_by: data.body.userId,
+      status: data.body.status
+    }*/
+
+    admin.firestore().doc(`/users/${userIdTo}`).collection('notifications').add(payload.notification)
+		.then(function(docRef) {
+			console.log('Document USER FCM written with ID: ', docRef.id);
+			resolve(docRef);
+		}, err => reject(err))
+    });
+}
+
+
+function addUserNotificationSend(data:any) {
+  return new Promise<any>((resolve, reject) => {
+
+    const userId  = data.body.userId;
+    const userIdTo  = data.body.userIdTo;
+    const payload = parseBody(data.body, userId, userIdTo);
+
+    /*
+    const notificacion = {
+			body: data.body.message,
+			title: data.body.title,
+			create_at: data.body.create_at,
+      create_by: data.body.userId,
+      status: data.body.status
+    }*/
+
+
+
+    admin.firestore().doc(`/users/${userId}`).collection('notificationsend').add(payload.notification)
+		.then(function(docRef) {
+			console.log('Document USER FCM written with ID: ', docRef.id);
+			resolve(docRef);
+		}, err => reject(err))
+    });
+}
+
 
 
 /*

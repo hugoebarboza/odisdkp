@@ -60,7 +60,8 @@
                       <table class="table table-hover">
                           <thead>
                               <tr>
-                                  <th></th>                        
+                                  <th></th>
+                                  <th *ngIf="_userService.isRole(7)">QR</th>
                                   <th>Nombre</th>
                                   <th>Correo</th>                                  
                                   <th>Rut</th>                                  
@@ -79,6 +80,14 @@
                                 <td class="w10">
                                     <div class="circle" [style.color]="usuario.status? 'green' : 'red'"></div>
                                 </td>
+                                <td *ngIf="_userService.isRole(7)">                                  
+                                    <a href="https://barcode.tec-it.com/es/QRCode?data={{usuario.id}}" target="_blank" aria-current="page" class="filter-item selected">
+                                      {{ usuario.id}}
+                                    </a>                                  
+                                    
+                                </td>
+
+
                                   <td>{{ usuario.name | titlecase}} {{ usuario.surname | titlecase}}
                                       <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="usuario.status_foto">
                                           <mat-icon class="material-icons md-13-color" >image</mat-icon>        

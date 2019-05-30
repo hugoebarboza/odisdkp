@@ -132,8 +132,8 @@ export class AddUserComponent implements OnInit {
          }
         },
         error => {
-          swal('Importante', error.error.message, 'error');
-          console.log(<any>error);
+          //swal('Importante', error.error.message, 'error');
+          swal('Importante', error, 'error');
         }
       );
     }

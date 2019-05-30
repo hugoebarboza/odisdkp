@@ -101,10 +101,10 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
   displayedColumnsPicking: string[] = ['ubicacion_OCA', 'ubicacion_SAP', 'cc_number', 'marca', 'descripcion', 'color', 'estatus'];
   dataSourcePicking = new MatTableDataSource();
-  @ViewChild('paginatorPicking') paginatorPicking: MatPaginator;
-  @ViewChild('paginator') paginator: MatPaginator;
-  @ViewChild('paginatorClientes') paginatorClientes: MatPaginator;
-  @ViewChild('paginatorOrdenes') paginatorOrdenes: MatPaginator;
+  @ViewChild('paginatorPicking', { static: true }) paginatorPicking: MatPaginator;
+  @ViewChild('paginator', { static: true }) paginator: MatPaginator;
+  @ViewChild('paginatorClientes', { static: true }) paginatorClientes: MatPaginator;
+  @ViewChild('paginatorOrdenes', { static: true }) paginatorOrdenes: MatPaginator;
   @Output() ServicioSeleccionado: EventEmitter<string>;
   @Input() id: number;
   @Input() table: string;

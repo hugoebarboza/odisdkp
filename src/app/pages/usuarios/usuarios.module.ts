@@ -2,6 +2,11 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+//INTERCEPTOR
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+
+
 //MODULES
 import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
@@ -29,6 +34,7 @@ import { ServiceModule } from 'src/app/services/service.module';
   imports: [
     CommonModule,
     FormsModule,
+    HttpClientModule,
     MaterialModule,
     ReactiveFormsModule,
     PipesModule,
@@ -48,6 +54,9 @@ import { ServiceModule } from 'src/app/services/service.module';
     EditUserComponent,
     ModalUploadImageComponent,
     ShowProfileSecurityComponent,
+  ],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },    
   ],  
 })
 export class UsuariosModule { }
