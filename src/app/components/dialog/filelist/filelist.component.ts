@@ -21,6 +21,7 @@ import { Item } from '../../../models/types';
 import { filter } from 'rxjs/operators';
 
 
+
 @Component({
   selector: 'app-filelist',
   templateUrl: './filelist.component.html',
@@ -54,8 +55,8 @@ export class FilelistComponent implements OnInit {
   @Input() serviceid : number;
   @Input() orderid : number;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;  
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;  
 
 
   constructor(

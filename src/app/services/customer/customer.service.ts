@@ -27,19 +27,6 @@ export class CustomerService {
 	this.error = false;
   }
 
-  private handleError<T> (operation = 'operation', result?: T) {
-  return (error: any): Observable<T> => {
- 
-    // TODO: send the error to remote logging infrastructure
-    console.error(error); // log to console instead
- 
-    // TODO: better job of transforming error for user consumption
-    console.log(`${operation} failed: ${error.message}`);
- 
-    // Let the app keep running by returning an empty result.
-    return;
-  };
-}
 
 
   	getQuery( query:string, token ){  		
@@ -47,7 +34,6 @@ export class CustomerService {
 		//console.log(url);
 		const headers = new HttpHeaders({
 			'Content-Type': 'application/json',
-			'Authorization': token
 			});
 		return this._http.get(url, {headers: headers}).map((res: any) => {
 	      			return res;
@@ -58,7 +44,6 @@ export class CustomerService {
 
 
   getCustomerProject(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, sort: string, order: string, pageSize: number, page: number, id:number, token) {
-    //console.log(sort);
     if(!fieldValue){
       fieldValue = '';
     }
@@ -71,8 +56,6 @@ export class CustomerService {
     }
     
     const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
-    //console.log(paginate);
-    //const paginate = `?page=${page + 1}`;
     return this.getCustomerData('project/'+id+'/customer'+paginate, token);
 	}
 	
@@ -99,7 +82,7 @@ export class CustomerService {
     const href = url+query;
     const requestUrl = href;
     //console.log(requestUrl);
-    const headers = new HttpHeaders({'Content-Type': 'application/json','Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
     return new Promise((resolve, reject) => {
       if (token == '')
@@ -167,8 +150,7 @@ export class CustomerService {
     	
 		let json = JSON.stringify(customer);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
 		this._http.post(this.url+'project/'+id+'/customer', params, {headers: headers}).subscribe(
     		(data: any) => { 
     			  //console.log(data);
@@ -198,8 +180,7 @@ export class CustomerService {
     	
 		let json = JSON.stringify(customer);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
 		this._http.patch(this.url+'project/'+id+'/customer/'+customerid, params, {headers: headers}).subscribe(
     		data => { 
     			  //console.log(data);
@@ -218,17 +199,14 @@ export class CustomerService {
 
  	delete(token, id: number, customerid:number): void { 	 
  	//console.log(customerid);
-	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-								   .set('Authorization', token);							      
+	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							      
     
     this._http.delete(this.url+'project'+'/'+id+'/'+'customer/'+customerid, {headers: headers}).subscribe(data => {         
-			//this.toasterService.success('Cliente Eliminado.', 'Exito', {timeOut: 6000,});
 				swal('Cliente con ID: ', customerid +' eliminado exitosamente.', 'success' ); 		      
       },
       (err: HttpErrorResponse) => {
 				this.error = err.error.message;
 				swal('No fue posible procesar su solicitud', '', 'error');
-        //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
       });
   	}
 

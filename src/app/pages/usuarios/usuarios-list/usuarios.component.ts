@@ -125,8 +125,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                 swal('Solicitud procesada exitosamente', resp.message, 'success' );
               },
               error => {
-                swal('Importante', error.error.message, 'error');                
-                console.log(<any>error);
+                //swal('Importante', error.error.message, 'error');
+                swal('Importante', error, 'error');
               }
               );
 
@@ -249,8 +249,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                     }
                   },
                     error => {
-                      swal('Importante', error.error.message, 'error');
-                      console.log(<any>error);
+                      //swal('Importante', error.error.message, 'error');
+                      swal('Importante', error, 'error');
                       this.isLoadingDelete = false;
                       this.indexitemdelete = -1;
                     }                               
@@ -281,8 +281,8 @@ export class UsuariosComponent implements OnInit, OnDestroy {
               }
             },
               error => {
-                swal('Importante', error.error.message, 'error');
-                console.log(<any>error);
+                //swal('Importante', error.error.message, 'error');
+                swal('Importante', error, 'error');
                 this.isLoadingDownload = false;
                 this.indexitem = -1;
               }       

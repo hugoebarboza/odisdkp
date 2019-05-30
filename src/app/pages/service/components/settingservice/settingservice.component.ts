@@ -296,8 +296,8 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
         }
       },
         error => {
-          console.log(<any>error);
-          swal('Importante', error.error.message, 'error');
+          //swal('Importante', error.error.message, 'error');
+          swal('Importante', error, 'error');
         }       
       );     
     }

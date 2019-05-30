@@ -254,32 +254,40 @@
 
 
 
-
-
-
             <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos == '' && detailatributo.required == 0" class="full-width">
                 <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}"></textarea>
                 <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>            
   
 
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos == '' && detailatributo.required == 1" class="full-width">
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos == '' && detailatributo.required == 1 && identity.role <= 6" class="full-width">
               <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" required></textarea>
               <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>            
             
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos != '' && detailatributo.required == 0" class="full-width">
 
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos == '' && detailatributo.required == 1 && identity.role >= 7" class="full-width">
+                <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}"></textarea>
+                <mat-icon matSuffix>mode_edit</mat-icon>
+            </mat-form-field>            
+  
+
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos != '' && detailatributo.required == 0" class="full-width">
                 <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailatributo.datos" name="{{detailatributo.id}}"></textarea>
                 <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>            
   
 
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos != '' && detailatributo.required == 1" class="full-width">
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos != '' && detailatributo.required == 1 && identity.role <= 6" class="full-width">
               <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailatributo.datos" name="{{detailatributo.id}}" required></textarea>
               <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>            
             
+            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.datos != '' && detailatributo.required == 1 && identity.role >= 7" class="full-width">
+                <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailatributo.datos" name="{{detailatributo.id}}" ></textarea>
+                <mat-icon matSuffix>mode_edit</mat-icon>
+              </mat-form-field>            
+  
 
             <div  *ngIf="detailatributo.type == 'date' ">
               <div >

@@ -111,9 +111,9 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
   subscription: Subscription;
 
-  @ViewChild('paginator') paginator: MatPaginator;
-  @ViewChild('paginatorClientes') paginatorClientes: MatPaginator;
-  @ViewChild('paginatorOrdenes') paginatorOrdenes: MatPaginator;
+  @ViewChild('paginator', { static: true }) paginator: MatPaginator;
+  @ViewChild('paginatorClientes', { static: true }) paginatorClientes: MatPaginator;
+  @ViewChild('paginatorOrdenes', { static: true }) paginatorOrdenes: MatPaginator;
   @Output() ServicioSeleccionado: EventEmitter<string>;
   @Input() id: number;
   @Input() table: string;

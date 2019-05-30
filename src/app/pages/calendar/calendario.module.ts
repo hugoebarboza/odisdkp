@@ -7,6 +7,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddCalendarComponent } from './dialog/addcalendar/addcalendar.component';
 import { CalendarComponent } from './calendar-list/calendar.component';
 
+//INTERCEPTOR
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+
 
 //MODULES
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
@@ -37,6 +41,7 @@ import { ServiceModule } from 'src/app/services/service.module';
     CommonModule,
     CalendarRoutingModule,
     FormsModule,
+    HttpClientModule,
     MaterialModule,
     PipesModule,
     ReactiveFormsModule,
@@ -55,6 +60,7 @@ import { ServiceModule } from 'src/app/services/service.module';
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
   ],  
 })
 export class CalendarioModule { }

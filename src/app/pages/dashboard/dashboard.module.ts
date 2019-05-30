@@ -1,8 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
+
 //COMPONENTS
 import { DashboardComponent } from './dashboard-list/dashboard.component';
+
+//INTERCEPTOR
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+
 
 //MODULES
 import { PipesModule } from '../../pipes/pipes.module';
@@ -20,11 +26,15 @@ import { MessagingService } from 'src/app/services/service.index';
   imports: [
     CommonModule,
     DashboardRoutingModule,
+    HttpClientModule,
     PipesModule,
     ServiceModule,
     SharedModule
   ],
   declarations: [DashboardComponent],
-  providers: [MessagingService],
+  providers: [
+    MessagingService,
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+  ],
 })
 export class DashboardModule { }

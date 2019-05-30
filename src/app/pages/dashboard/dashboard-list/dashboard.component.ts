@@ -123,10 +123,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 		this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:MM'));
 		
 		let data = {
-			userId: 'otsLY91D66WnFul0UvMLxlL1dhF3',
+			userId: 'ghsMwBtcYLXKxd2boAuQc8encSk1',
+			userIdTo: 'otsLY91D66WnFul0UvMLxlL1dhF3',			
 			title: 'Titulo de Mensaje',
 			message: 'Cuerpo de Mensaje',
-			create_at: this.created.value
+			create_at: this.created.value,
+			status: '1'
 		};
 
 		this._cdf.fcmsend(this.token.token, data).subscribe(
@@ -135,12 +137,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 				return false;        
 			  }
 				if(response.status == 200){ 
-					this._cdf.addNotification(this.token.token, data)
-					.then(res => {
-					  //console.log(res);
-					}, err => {
-					  console.log(err);
-					});
+					console.log(response);
 				}
 			},
 				error => {

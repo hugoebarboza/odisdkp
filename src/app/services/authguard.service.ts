@@ -51,6 +51,7 @@ export class AuthguardService implements CanActivate {
 				}else{
 					//console.log('paso authguard isTokenValidate false');
 					//this.auth.resetAction();
+					console.log( 'Bloqueado por Authguard' );
 					this.auth.logout();
 					this.authService.logout();		
 					return false;		

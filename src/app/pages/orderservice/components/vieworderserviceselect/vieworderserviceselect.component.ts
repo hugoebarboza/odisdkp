@@ -137,8 +137,8 @@ prevStep() {
   @Input() id : number;
   @Input() view : number;
   @Output() portalevent: EventEmitter<number>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) matSort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) matSort: MatSort;
 
   columnsSelect: Array<any> = [
     { name: 'select', label: 'Select' },

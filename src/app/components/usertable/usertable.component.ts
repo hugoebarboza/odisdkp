@@ -19,8 +19,8 @@ export class UsertableComponent implements OnInit {
   //dataSource = new UserDataSource(this.userService);
   dataSource;
   displayedColumns = ['name','email', 'employee']; 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
   
   constructor(private userService: UserService) {   

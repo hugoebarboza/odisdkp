@@ -19,12 +19,11 @@ export class AuthService {
   ) { 
     this.user = firebaseAuth.authState;
 
+    /*
     this.firebaseAuth.authState.subscribe((auth) => {
       this.authState = auth;
-    });
+    });*/
   }
-
-
 
 
   signup(email: string, password: string) {
@@ -61,7 +60,9 @@ export class AuthService {
       this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
       .then(user => {
         this.authState = user
-        //console.log(this.authState);
+        //console.log(this.authState.user.uid);
+				let key = 'uid';
+				this.saveStorage(key, this.authState.user.uid);
         //this.updateUserData()
         resolve(user);
       }, err => reject(err))
@@ -239,5 +240,16 @@ export class AuthService {
   this.db.object(path).update(data)
     .catch(error => console.log(error));
   }
+
+	saveStorage( key:any, data: any ) {
+
+		if (key && data){
+			let value = JSON.stringify(data);
+			localStorage.setItem(key, value);
+		}else{
+			return;
+		}
+  }
+
 
 }

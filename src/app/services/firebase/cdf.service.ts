@@ -28,11 +28,19 @@ export class CdfService  {
 	}
 
 
+	/*
+	this._cdf.addNotification(this.token.token, data)
+	.then(res => {
+		//console.log(res);
+	}, err => {
+		console.log(err);
+	});*/
+
+
 	addNotification(token=null, params:any){
 	if(!token){
 		return;
 	}
-
 	return new Promise<any>((resolve, reject) => {
 		this.afs.collection('fcmnotification').add({
 			body: params.message,
@@ -44,7 +52,7 @@ export class CdfService  {
 			console.log('Document written with ID: ', docRef.id);
 			resolve(docRef);
 		}, err => reject(err))
-    	})	
+    	});
 	}
 
 

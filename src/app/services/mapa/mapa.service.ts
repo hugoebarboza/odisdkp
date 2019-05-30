@@ -51,10 +51,6 @@ export class MapaService {
 
 
 
-  const headers = new HttpHeaders({
-    'Content-Type': 'application/json',
-    'Authorization': token
-  });
     return this._http.get(requestUrl, { search: params }).map((res: any) => {
             //console.log(res.json());
             return res;
@@ -67,7 +63,7 @@ export class MapaService {
 	    const href = url+query;
 	    const requestUrl = url;
 	    //console.log(requestUrl);
-	    const headers = new HttpHeaders({'Content-Type': 'application/json','Authorization': token});
+	    const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
 	    return new Promise((resolve, reject) => {
 	      if (query == '')

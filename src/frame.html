@@ -1,4 +1,10 @@
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.required == 0" class="full-width">
+              
+                <small class="d-block text-center mt-3">
+                  <a href="#">&copy; {{year}}</a>
+                </small>
+
+
+<mat-form-field color="accent" *ngIf="detailatributo.type == 'text' && detailatributo.required == 0" class="full-width">
               <input matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}" >
               <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>

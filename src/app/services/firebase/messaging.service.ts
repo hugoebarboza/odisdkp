@@ -31,7 +31,7 @@ export class MessagingService {
       if (!user) return;
       console.log(user.uid);
       const data = { [user.uid]: token }
-      console.log(data);
+      //console.log(data);
       this.db.object('fcmTokens/').update(data)
     })
   }

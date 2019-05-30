@@ -84,8 +84,8 @@ export class UserComponent implements OnInit {
         },
         error => {
           this.dialogRef.close();
-          swal('No fue posible procesar su solicitud', error.error.message, 'error');  
-          console.log(<any>error);
+          //swal('No fue posible procesar su solicitud', error.error.message, 'error');
+          swal('No fue posible procesar su solicitud', error, 'error');
         }
       );
     }
@@ -113,8 +113,7 @@ export class UserComponent implements OnInit {
       },
       error => {
         this.dialogRef.close();
-        swal('No fue posible procesar su solicitud', '', 'error');
-        console.log(<any>error);
+        swal('No fue posible procesar su solicitud', error, 'error');
       }
     );
 

@@ -40,7 +40,7 @@ export class AppComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
-  @ViewChild('sidenav') sidenav: MatSidenav;  
+  @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;  
 
   constructor(
   	private _userService: UserService,

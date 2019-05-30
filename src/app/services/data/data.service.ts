@@ -27,7 +27,7 @@ export class DataService {
 
     const sjson = JSON.stringify(json);
     const params = 'json=' + sjson;
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return new Promise((resolve, reject) => {
       if (token === '') {
         reject();
@@ -40,7 +40,7 @@ export class DataService {
 
     const sjson = JSON.stringify(json);
     const params = 'json=' + sjson;
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return new Promise((resolve, reject) => {
       if (token === '') {
         reject();
@@ -51,7 +51,7 @@ export class DataService {
 
   deleteCustomer(cc_id: string, projectid:number, token) {
     console.log('dataservice customer');
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return new Promise((resolve, reject) => {
       if (token === '') {
           reject();
@@ -62,7 +62,7 @@ export class DataService {
 
   deleteOrdenBD(order_id: string, projectid:number, token) {
     console.log('dataservice orden');
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return new Promise((resolve, reject) => {
       if (token === '') {
         reject();
@@ -128,7 +128,7 @@ export class DataService {
 
 
   getDataBD(href: string, token) {
-    const headers = new HttpHeaders({'Content-Type': 'application/json', 'Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/json'});
     return new Promise((resolve, reject) => {
       if (token === '') {
           reject();
@@ -157,7 +157,7 @@ export class DataService {
 
     const sjson = JSON.stringify(json);
     const params = 'json=' + sjson;
-    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded', 'Authorization': token});
+    const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return new Promise((resolve, reject) => {
       if (token === '') {
           reject();

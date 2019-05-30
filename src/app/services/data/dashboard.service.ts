@@ -18,62 +18,27 @@ export class DashboardService {
 
 
   	getQuery( query:string, token ): Observable<any>{
-  	//const body = JSON.stringify({data});
-	//const headers = new Headers({'Content-Type':'application/json'});
 	const url = this.url+query;
 	const headers = new HttpHeaders({
 		'Content-Type': 'application/json',
-		'Authorization': token
 	});
-		//console.log(headers);
-		//return this._http.get(url, {headers:headers});  			
 		return this._http.get(url, {headers: headers}).map((res: any) => {
-      			//console.log('res', res);
       			return res;
 		});		
   	}
 
-/*
-  	getQuery( query:string, token ){  		
-		const url = this.url+query;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  							 
-
-		return this._http.get(url, {headers: headers});  			
-  	}
-*/
 	getDepartamentos(token): Observable<any> {
-		/*
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									.set('Authorization', token);							  
-							
-		return this._http.get(this.url+'departamento/'+id+'/proyecto',{headers: headers});
-		*/
 		return this.getQuery('departamento', token);
-
 	}
 
 
 	getProyectos(token, id): Observable<any> {
-		/*
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  
-							  
-		return this._http.get(this.url+'departamento/'+id+'/proyecto',{headers: headers});
-		*/
 		return this.getQuery('departamento/'+id+'/proyecto', token);
 
 	}
 
 	getServicios(token, id): Observable<any> {
-		/*
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);							  
-							  
-		return this._http.get(this.url+'departamento/'+id+'/proyecto',{headers: headers});
-		*/
 		return this.getQuery('project/'+id+'/service', token);
-
 	}
 
 

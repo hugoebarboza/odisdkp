@@ -32,10 +32,7 @@ export class ProjectsService {
 	addService(token: any, service: Service, id:number): void {	
 		let json = JSON.stringify(service);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									.set('Authorization', token);
-
-		//console.log(params);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 		this._http.post(this.url+'project'+'/'+id+'/'+'service', params, {headers: headers}).subscribe(
 			(data:any) => { 
@@ -61,8 +58,7 @@ export class ProjectsService {
 		let json = JSON.stringify(project);
 		let params = 'json='+json;
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-		.set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		//console.log(headers);
 
 		return this._http.post(this.url+'projectupdate/'+id, params, {headers: headers})
@@ -75,8 +71,7 @@ export class ProjectsService {
     updateService(token: any, service: Service, id:number, service_id:number): void {	
 		let json = JSON.stringify(service);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 		this._http.put(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, params, {headers: headers}).subscribe(
     		(data:any) => { 
@@ -96,8 +91,8 @@ export class ProjectsService {
 	}
 	
     deleteService(token: any, id:number, service_id:number): void {	
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-									   .set('Authorization', token);									   									   
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');									   									   
+		
 		this._http.delete(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, {headers: headers}).subscribe(
     		(data: any) => { 
 				  //this.toasterService.success('Proyecto eliminado.', 'Exito', {timeOut: 6000,});
@@ -120,7 +115,6 @@ export class ProjectsService {
 	const url = this.url+query;
 	const headers = new HttpHeaders({
 		'Content-Type': 'application/json',
-		'Authorization': token
 	});
 		return this._http.get(url, {headers: headers}).map((res: any) => {
       			return res;
@@ -195,7 +189,7 @@ export class ProjectsService {
 	    const href = url+query;
 	    const requestUrl = href;
 	    //console.log(requestUrl);
-	    const headers = new HttpHeaders({'Content-Type': 'application/json','Authorization': token});
+	    const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
 	    return new Promise((resolve, reject) => {
 	      if (token == '')
@@ -214,8 +208,7 @@ export class ProjectsService {
     status(token: any, id:number, serviceid:number, servicedetailid:number, label:number): void {	
 		let json = JSON.stringify(label);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded')
-										 .set('Authorization', token);		
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');		
 		this._http.post(this.url+'project'+'/'+id+'/'+'service/'+serviceid+'/'+'servicedetail/'+servicedetailid+'/status/'+label, params, {headers: headers}).subscribe(
 				data => { 
 						//console.log(data);

@@ -2,6 +2,10 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 
+//INTERCEPTOR
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+
 
 //COMPONENTS
 import { ProfileComponent } from './profile-list/profile.component';
@@ -22,13 +26,17 @@ import { ServiceModule } from 'src/app/services/service.module';
 @NgModule({
   imports: [
     CommonModule,
-    FormsModule,    
+    FormsModule,
+    HttpClientModule,
     MaterialModule,
     PipesModule,
     ProfileRoutingModule,
     ServiceModule,
     SharedModule
   ],
-  declarations: [ProfileComponent]
+  declarations: [ProfileComponent],
+  providers: [
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },    
+  ],  
 })
 export class ProfileModule { }

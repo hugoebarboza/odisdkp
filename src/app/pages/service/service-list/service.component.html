@@ -1,8 +1,8 @@
 <meta name="Description" content="Services">
-<div id="wrapper" *ngIf="proyectos && identity">
+<div id="wrapper" >
 <div id="page-content-wrapper" >
 <div class="container-fluid p-2">
-<div class="d-flex ">
+<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom ">
   <div class="p-2 w-100 "><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}<button mat-button color="primary" (click)="refresh()"> <mat-icon >sync</mat-icon></button></h1></div>
   <div class="p-2 flex-shrink-1 ">
     <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'" *ngIf="_userService.isRole(7)">
@@ -10,8 +10,9 @@
       matTooltip="Configuración del Proyecto"
       [matTooltipPosition]="positionleftaction.value">settings</i>
     </a>
+  </div>
 </div>
-</div>
+
 
 
 
@@ -27,12 +28,14 @@
 </div>
 
 <div class="portalHost" *ngIf="portal !== 1">
-    <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
- </div>
+<ng-container [cdkPortalOutlet]="_portal" ></ng-container>
+</div>
  
- <div class="portalHostSplit" *ngIf="portal === 1">
-     <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
-  </div>
+
+ 
+<div class="portalHostSplit" *ngIf="portal === 1">
+ <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
+</div>
 
 
 <ng-template cdkPortal #myTemplate="cdkPortal" >
@@ -193,24 +196,24 @@
 </ng-template>
 
 
-  <ng-template cdkPortal #myTemplate2="cdkPortal" >
-      <div style="height: 100%">
-        <as-split  direction="horizontal" unit="percent" restrictMove="false" >
-            
-            <as-split-area size="70" minsize="50" >
-            <ng-container [cdkPortalOutlet]="_home" ></ng-container>
-            </as-split-area>
-            
-            <as-split-area size="30" minsize="30" maxsize="30">
-            <div class="p-2">
-                <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>                                       
-                <app-viewprojectdetail *ngIf="selectedRow == 0"></app-viewprojectdetail>              
-            </div>
-        </as-split-area>
-    
-      </as-split>          
-      </div>
-  </ng-template>
+<ng-template cdkPortal #myTemplate2="cdkPortal" >
+    <div style="height: 100%">
+      <as-split  direction="horizontal" unit="percent" restrictMove="false" >
+          
+          <as-split-area size="70" minsize="50" >
+          <ng-container [cdkPortalOutlet]="_home" ></ng-container>
+          </as-split-area>
+          
+          <as-split-area size="30" minsize="30" maxsize="30">
+          <div class="p-2">
+              <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>                                       
+              <app-viewprojectdetail *ngIf="selectedRow == 0"></app-viewprojectdetail>              
+          </div>
+      </as-split-area>
+  
+    </as-split>          
+    </div>
+</ng-template>
 
   </div>
 </div>

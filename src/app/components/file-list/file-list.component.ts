@@ -52,8 +52,8 @@ export class FileListComponent implements OnInit {
   @Input() project_id : number;
   @Input() service_id : number;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) sort: MatSort;  
+  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) sort: MatSort;  
 
 
   constructor(

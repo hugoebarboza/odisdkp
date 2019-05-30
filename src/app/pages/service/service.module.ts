@@ -3,6 +3,11 @@ import { CommonModule } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+//INTERCEPTOR
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+
+
 //COMPONENTS
 import { AddUserServiceComponent } from './components/adduserservice/adduserservice.component';
 import { RemoveUserComponent } from './components/removeuser/removeuser.component';
@@ -49,6 +54,7 @@ import { ServiceRoutingModule } from './service.routing';
     CalendarModule,
     CommonModule,
     FormsModule,
+    HttpClientModule,
     MaterialModule,
     MatProgressButtonsModule,
     NgSelectModule,
@@ -69,7 +75,6 @@ import { ServiceRoutingModule } from './service.routing';
     AddUserServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent,
-    //EditServiceComponent,
     RemoveUserComponent,    
     ServiceComponent,
     SettingServiceComponent,
@@ -80,7 +85,6 @@ import { ServiceRoutingModule } from './service.routing';
     AddUserServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent, 
-    //EditServiceComponent,
     UserComponent
   ],
   providers: [
@@ -88,6 +92,7 @@ import { ServiceRoutingModule } from './service.routing';
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
   ],
 })
 export class ServiceModule { }

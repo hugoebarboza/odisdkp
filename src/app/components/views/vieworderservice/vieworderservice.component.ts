@@ -1,5 +1,4 @@
 import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
-import { Router } from '@angular/router';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
@@ -287,18 +286,18 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public buttonName:any = 'Show';
 
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
-  @ViewChild(MatSort) matSort: MatSort;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) matSort: MatSort;
   @Output() ServicioSeleccionado: EventEmitter<string>;
-  @ViewChild('filter') filter: ElementRef;
-  @ViewChild('multiSelect') multiSelect: MatSelect;
+  @ViewChild('filter', { static: true }) filter: ElementRef;
+  @ViewChild('multiSelect', { static: true }) multiSelect: MatSelect;
   @Input() id : number;
 
   //CDK PORTAL
-  @ViewChild('myTemplate') myTemplate: TemplatePortal<any>;
-  @ViewChild('myTemplate2') myTemplate2: TemplatePortal<any>;
-  @ViewChild('myTemplate3') myTemplate3: TemplatePortal<any>;
-  @ViewChild('myTemplate4') myTemplate4: TemplatePortal<any>;
+  @ViewChild('myTemplate', { static: true }) myTemplate: TemplatePortal<any>;
+  @ViewChild('myTemplate2', { static: true }) myTemplate2: TemplatePortal<any>;
+  @ViewChild('myTemplate3', { static: true }) myTemplate3: TemplatePortal<any>;
+  @ViewChild('myTemplate4', { static: true }) myTemplate4: TemplatePortal<any>;
   public _portal: Portal<any>;
   public _home:Portal<any>;
 
@@ -306,7 +305,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   subscription: Subscription;
 
   constructor(  
-    private _router: Router,      
     public _userService: UserService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,

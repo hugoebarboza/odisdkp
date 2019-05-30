@@ -516,6 +516,23 @@ export class UserGeoreference{
 	){}
 }
 
+export class UserFirebase {
+
+    public email: string;
+    public uid: string;
+
+    constructor( obj: DataObj ) {
+        this.uid    = obj && obj.uid || null;
+        this.email  = obj && obj.email || null;
+    }
+
+}
+
+interface DataObj {
+    uid: string;
+    email: string;
+}
+
 
 export class Vehiculo  {
 	

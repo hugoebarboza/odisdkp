@@ -22,11 +22,9 @@ export class CountriesService {
 
   getQuery( query:string, token:any ){  		
 		const url = this.url+query;
-		let headers = new HttpHeaders().set('Content-Type', 'application/json')
-									   .set('Authorization', token);							  							 
+		let headers = new HttpHeaders().set('Content-Type', 'application/json');							  							 
 
 		return this._http.get(url, {headers: headers}).map((res: any) => {			
-      			//console.log('res', res);
       			return res;
 		});
  	}

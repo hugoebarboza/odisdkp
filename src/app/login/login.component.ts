@@ -197,7 +197,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
    this.subscription = this._userService.signup(this.usuario).subscribe(
      (response:any) => {   
-
        if(response.status != 'error' ){
          this.status = 'success';         
          this.token = response;
@@ -225,7 +224,6 @@ export class LoginComponent implements OnInit, OnDestroy {
                   this.spinnerButtonOptions.active = false;                      
                   this.spinnerButtonOptions.text = 'Iniciar sesión'
                   this._userService.logout();
-                  //this._router.navigate(['/login']);
                 },
               () => { /*console.log('Complete Get Proyectos');*/   });   
           },
@@ -253,11 +251,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private afterSignIn(): void {
-    // Do after login stuff here, such router redirects, toast messages, etc.
     //console.log('do after loggin');
+    this._router.navigate(['dashboard']);
     this.loginAction(this.proyectos, this.identity);
     this.loginFirebase(this.token, this.usuario);
-    this._router.navigate(['dashboard']);
   }
 
 
@@ -298,7 +295,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
     this.authService.login(token.token, value.email, value.password)
     .then(res => {
-      console.log(res);
+      //console.log(res);
     }, err => {
       console.log(err);
       switch (err.code) {

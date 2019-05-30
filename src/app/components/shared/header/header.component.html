@@ -48,7 +48,7 @@
   </div>
   </ul>
 
-    
+  
 
   <ul class="nav navbar-nav navbar-right" *ngIf="identity">     
 
@@ -58,7 +58,12 @@
               </div>
 
               <div class="btn-group mr-1" role="group" aria-label="First group">
-              <button mat-icon-button><mat-icon class="material-icons md-14">notifications</mat-icon></button>
+              <button mat-icon-button routerLink="/notification">
+
+                <mat-icon class="material-icons md-14" *ngIf="resultCount == 0">notifications</mat-icon>
+                <mat-icon class="material-icons md-color" *ngIf="resultCount >= 1">notifications</mat-icon>
+
+              </button>
               </div>
               <div class="btn-group mr-1" role="group" aria-label="Second group">
 
@@ -85,7 +90,7 @@
                       <span>{{identity.email}}</span>
                   </button>
 
-                  <button mat-menu-item >
+                  <button mat-menu-item routerLink="/profile">
                       <mat-icon>person_outline</mat-icon>
                       <span><a routerLink="/profile"><i class="ti-user"></i>Mi Perfil</a> ({{identity.role_name}})</span>
                   </button>
@@ -122,6 +127,11 @@
 </nav>
 </HEADER>
 
+
+
+
+<div *ngIf="getnotifications$ | async as post">
+</div>
 <!--HEADER
  <ul>bb
       <li *ngFor="let item of items | async">
