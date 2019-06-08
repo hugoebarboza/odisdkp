@@ -3,7 +3,7 @@
 @import '~@angular/material/prebuilt-themes/deeppurple-amber.css';
 /*@import './assets/simple-sidebar.css';*/
 @import './assets/animate.css';
-@import "~@ng-select/ng-select/themes/material.theme.css";
+@import "~@ng-select/ng-select/themes/default.theme.css";
 @import "~ng-pick-datetime/assets/style/picker.min.css";
 @import url(./assets/css/spinners.css);
 @import './assets/css/toaster.css';

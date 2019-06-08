@@ -103,7 +103,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     public _router: Router,
     public _userService: UserService,
     public dialog: MatDialog,
-    public label: SettingsService
+    public label: SettingsService,
   ) 
   { 	  
 
@@ -153,11 +153,11 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
     this.portal = 0;
     this.selectedRow = 0;  
     this._portal = this.myTemplate;
     this._home = this.myTemplate;
-    console.log(this._portal);
   }
 
 

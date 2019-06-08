@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule }   from '@angular/forms';
 
-//INTERCEPTOR
+//PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 //COMPONENTS
@@ -12,10 +12,12 @@ import { NotificationComponent } from './notification-list/notification.componen
 import { NotificationReadComponent } from './components/notification-read/notificationread.component';
 import { NotificationUnreadComponent } from './components/notification-unread/notification-unread.component';
 
+
 //MODULES
 import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
+
 
 //ROUTING
 import { NotificationRoutingModule } from './notification.routing';

@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from "@angular/common"
 import { HttpModule } from '@angular/http';
-import { LOCALE_ID, NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule, ErrorHandler  } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 //COMPONENT
@@ -70,9 +70,12 @@ import { registerLocaleData } from '@angular/common';
 import { ServiceWorkerModule } from '@angular/service-worker';
 import { environment } from '../environments/environment';
 
+
+// Providers
+import { ErrorsHandler } from './providers/error/error-handler';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from './http-interceptors/my.interceptor';
-import { httpInterceptorProviders } from './http-interceptors/index';
+import { MyInterceptor } from './providers/interceptor/my.interceptor';
+//import { httpInterceptorProviders } from './http-interceptors/index';
 
 //REDUX
 import { contadorReducer } from './contador.reducer';
@@ -147,6 +150,7 @@ registerLocaleData(localeEs);
         siteKey: '6LdY_pwUAAAAANNCwxFDBNTGRDg2hrDvZSLTfxLl',
       } as RecaptchaSettings,
     },
+    { provide: ErrorHandler, useClass: ErrorsHandler },
     { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
     
   ],

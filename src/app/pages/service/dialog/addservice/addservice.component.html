@@ -10,10 +10,15 @@
 
 
 <br>
-  
-<div *ngIf="loading">
-    <app-loading *ngIf="loading"></app-loading>  
+
+<div class="container" *ngIf="loading">
+  <div class="row justify-content-md-center">
+    <div class="col col-lg-2">
+        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
+    </div>
+  </div>
 </div>
+
 
 <div *ngIf="!loading">
   <form class="mat-dialog-content" #formControl="ngForm" novalidate="novalidate" >

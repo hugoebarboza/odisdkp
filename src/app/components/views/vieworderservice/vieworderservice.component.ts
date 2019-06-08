@@ -170,6 +170,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     columnValue: ''
   };
 
+
+
   selectedColumnnDate = {
     fieldValue: 'orders.create_at',
     criteria: '',
@@ -412,8 +414,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     //VALORES POR DEFECTO DE FILTRO AVANZADO
     this.selectedColumnnDate.fieldValue = 'orders.create_at';
     this.selectedColumnn.fieldValue = 'orders.create_at';
-    this.selectedColumnnDate.columnValueDesde = this.date.value;
-    this.selectedColumnnDate.columnValueHasta = this.date.value;
+    
+    //this.selectedColumnnDate.columnValueDesde = this.date.value;
+    //this.selectedColumnnDate.columnValueHasta = this.date.value;
+
     //this._portal = this.myTemplate;
     //this.dataSource.paginator = this.paginator;
     //this.dataSource.sort = this.matSort;
@@ -672,6 +676,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   getParams(){
   
+    this.isLoadingResults = true;
+
     if(this.filterValue){
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
@@ -680,38 +686,36 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';    
+       this.selectedColumnnUsuario.columnValue = '';       
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
        this.regionMultiCtrl = new FormControl('');
-       this.inspectorCtrl = new FormControl('');
        //console.log('paso000')      
     }
 
-    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue){
+    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue && !this.selectedColumnnDate.fieldValue){
        this.selectedColumnnDate.fieldValue = '';
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';           
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
+       this.selectedColumnnUsuario.columnValue = '';              
+       //this.datedesde = new FormControl('');
+       //this.datehasta = new FormControl('');
        this.regionMultiCtrl = new FormControl('');
-       this.inspectorCtrl = new FormControl('');
        //console.log('paso111')
     }
 
-    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && !this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
+    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+       //this.selectedColumnn.fieldValue = '';
+       //this.selectedColumnn.columnValue = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
+       this.selectedColumnnUsuario.columnValue = '';              
        this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
        //console.log('paso222')
     }
 
@@ -722,7 +726,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
        this.filtersregion.fieldValue= 'regions.region_name';
@@ -732,12 +736,12 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     if(this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';           
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
        this.filtersregion.fieldValue = 'regions.region_name';
        //console.log('paso444') 
     }
@@ -751,21 +755,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
        //console.log('paso555')
-    }    
-
-    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnDate.fieldValue = '';       
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       //console.log('777')
-    }    
+    }  
 
   }
 
@@ -792,6 +782,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   search() {
     this.isLoadingResults = true;
+    this.getParams();
+
+    /*
     if(this.filterValue){
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
@@ -807,22 +800,22 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        //console.log('paso000')      
     }
 
-    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue){
+    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue && !this.selectedColumnnDate.fieldValue){
        this.selectedColumnnDate.fieldValue = '';
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
        this.selectedColumnnUsuario.columnValue = '';              
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
+       //this.datedesde = new FormControl('');
+       //this.datehasta = new FormControl('');
        this.regionMultiCtrl = new FormControl('');
        //console.log('paso111')
     }
 
     if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
+       //this.selectedColumnn.fieldValue = '';
+       //this.selectedColumnn.columnValue = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
        this.selectedColumnnUsuario.columnValue = '';              
@@ -868,10 +861,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       //console.log('paso777')
-    }
+       //console.log('paso555')
+    }*/
 
-    
     this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
@@ -887,107 +879,14 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }  
 
   applyFilter() {
+    this.filterValue = this.filterValue.trim();
     if(this.filterValue.length > 1 && this.filterValue.trim() !== '' && this.termino !== this.filterValue){
       this.isLoadingResults = true;
       this.getParams();
-      this.termino = this.filterValue;
-      this.searchDecouncer$.next(this.filterValue);
-    }
-    //console.log('paso');
-    /*
-    if(this.filterValue){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnDate.fieldValue = '';
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';       
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.regionMultiCtrl = new FormControl('');
-       //console.log('paso000')      
+      this.termino = this.filterValue.trim();
+      this.searchDecouncer$.next(this.filterValue.trim());
     }
 
-    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue){
-       this.selectedColumnnDate.fieldValue = '';
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';              
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.regionMultiCtrl = new FormControl('');
-       //console.log('paso111')
-    }
-
-    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';              
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
-       //console.log('paso222')
-    }
-
-    if(this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnDate.fieldValue = '';       
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.filtersregion.fieldValue= 'regions.region_name';
-       //console.log('paso333') 
-    }
-
-    if(this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
-       this.filtersregion.fieldValue = 'regions.region_name';
-       //console.log('paso444') 
-    }
-
-    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.filtersregion.fieldValue = '';
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       //console.log('paso777')
-    }*/
-
-    /*
-    this.dataService.getServiceOrder(
-      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
-      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
-      this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
-      .then(response => {this.getData(response)})
-      .catch(error => {                      
-            this.isLoadingResults = false;
-            this.isRateLimitReached = true;
-            console.log(<any>error);          
-      });*/    
-      //this.filterChanged.next(this.filterValue);
   }
 
 
@@ -1020,8 +919,13 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
  handleSortChange(sort: Sort): void {
+
     if (sort.active && sort.direction) {
-      this.sort = sort;      
+      this.sort = sort;
+      this.selectedColumnn.fieldValue = '';
+      this.selectedColumnnDate.fieldValue = '';
+      this.selectedColumnnDate.columnValueDesde = '';
+      this.selectedColumnnDate.columnValueHasta = '';  
     }
     this.isLoadingResults = true;
     this.getParams();
@@ -1434,6 +1338,10 @@ private filterRegionMulti() {
    this.isLoadingResults = true;
    this.regionMultiCtrl.reset();
    this.selectedColumnnDate.fieldValue = 'orders.create_at';
+   this.selectedColumnn.fieldValue = 'orders.create_at';
+   this.selectedColumnnDate.columnValueDesde = this.date.value;
+   this.selectedColumnnDate.columnValueHasta = this.date.value;
+
 
 
    if(!this.selectedColumnnEstatus.columnValue){
@@ -1540,15 +1448,23 @@ private filterRegionMulti() {
 
                        if(this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
                        valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
-                                             +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']
-                                             +';'+this.exportDataSource.data[j]['orderdetail_direccion']+';'+ubicacion
+                                             +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']+';';
+                                             
+                                             var obs = String(this.exportDataSource.data[j]['observation']).replace(/(\r\n|\n|\r)/gm,' ');
+
+                                             valuearrayexcel = valuearrayexcel+obs+';'+this.exportDataSource.data[j]['cc_number']+';'+this.exportDataSource.data[j]['orderdetail_direccion']+';'+ubicacion
+                                                                                         
                                              +';'+this.exportDataSource.data[j]['marca']+';'+this.exportDataSource.data[j]['modelo']+';'+this.exportDataSource.data[j]['color']+';'+this.exportDataSource.data[j]['description']+';'+this.exportDataSource.data[j]['secondcolor']
                                              +';'+this.exportDataSource.data[j]['patio']+';'+this.exportDataSource.data[j]['espiga']+';'+this.exportDataSource.data[j]['posicion']
                                              +';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
                        }else{
                          valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
                          +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']
-                         +';'+this.exportDataSource.data[j]['leido_por']+';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion                                              
+                         +';'+this.exportDataSource.data[j]['leido_por']+';';
+
+                         var obs = String(this.exportDataSource.data[j]['observation']).replace(/(\r\n|\n|\r)/gm,' ');
+                                                  
+                         valuearrayexcel = valuearrayexcel+obs+';'+ ';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion                                  
                          +';'+this.exportDataSource.data[j]['ruta']+';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']
                          +';'+this.exportDataSource.data[j]['transformador']+';'+this.exportDataSource.data[j]['medidor']+';'+this.exportDataSource.data[j]['tarifa']+';'+this.exportDataSource.data[j]['constante']
                          +';'+this.exportDataSource.data[j]['giro']+';'+this.exportDataSource.data[j]['sector']+';'+this.exportDataSource.data[j]['zona']+';'+this.exportDataSource.data[j]['mercado']                          
@@ -1580,7 +1496,7 @@ private filterRegionMulti() {
            this.isLoadingResults = false;
            this.error = 'No se encontraron actividades en el día.';            
            this.toasterService.error('Error: '+this.error, '', {timeOut: 6000,});
-           console.log(<any>error);
+           //console.log(<any>error);
          }  
          )
    })   
@@ -1755,8 +1671,12 @@ private filterRegionMulti() {
                         }
 
                         valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
-                                              +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']
-                                              +';'+this.exportDataSource.data[j]['observation']+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion
+                                              +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus'];
+
+                                              var obs = String(this.exportDataSource.data[j]['observation']).replace(/(\r\n|\n|\r)/gm,' ');
+
+                                              valuearrayexcel = valuearrayexcel+obs+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion
+                                              
                                               +';'+this.exportDataSource.data[j]['patio']+';'+this.exportDataSource.data[j]['espiga']+';'+this.exportDataSource.data[j]['posicion']+';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']+';'+this.exportDataSource.data[j]['tarifa']+';'+this.exportDataSource.data[j]['constante']
                                               +';'+this.exportDataSource.data[j]['giro']+';'+this.exportDataSource.data[j]['sector']+';'+this.exportDataSource.data[j]['zona']+';'+this.exportDataSource.data[j]['mercado']+';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
                         

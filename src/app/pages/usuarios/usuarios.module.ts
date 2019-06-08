@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-//INTERCEPTOR
+//PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 //MODULES

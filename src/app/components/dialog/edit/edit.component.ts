@@ -148,6 +148,10 @@ export class EditComponent implements OnInit, OnDestroy {
     var j = 0;
     this.myArray = editform.value;
 
+    if(this.data.observation){
+      this.data.observation = this.data.observation.replace(/[\s\n]/g,' ');
+    }
+
     for (var i=0; i<this.atributo.length; i++){
        if (this.myArray.hasOwnProperty(this.atributo[i]['id'])) { 
              if(this.atributo[i]['type'] !== 'label'){
@@ -176,9 +180,8 @@ export class EditComponent implements OnInit, OnDestroy {
          
     }
     let obj1 = {pila: this.pila };
-    let obj = Object.assign(this.data, obj1);    
-    this.dataService.update(this.token.token, this.data['order_id'], obj, this.category_id);
-    //console.log(obj);
+    let obj = Object.assign(this.data, obj1);
+    this.dataService.update(this.token.token, this.data['order_id'], obj, this.category_id);    
     /*
     for (var propiedad in this.pila) {
       console.log(propiedad);

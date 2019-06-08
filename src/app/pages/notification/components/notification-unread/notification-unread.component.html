@@ -25,13 +25,6 @@
               
 
               <mat-card [ngStyle]="{'padding':'0px'}" *ngIf="!isLoading">
-                  <mat-card-header [ngClass]="{'custom-card':true}">
-                      <mat-card-title *ngIf="user$ | async as user">
-                        <h6 class="card-title">
-                            {{ user.email }}
-                        </h6>
-                      </mat-card-title>
-                  </mat-card-header>
 
 
                   <mat-card-content>
@@ -66,10 +59,89 @@
                           <div class="rate-limit-reached" *ngIf="resultCountUnread == 0">
                               Sin notificaciones.
                           </div>
-                          
 
+                          <ul class="filter-list" *ngIf="notifications$ !== ''">
+
+                              <div class="container-fluid" >
+                                  <div class="row">
+                                    <div class="col">
+                                        Asunto
+                                    </div>
+                                    <div class="col">
+                                        Mensaje
+                                    </div>
+                                    <div class="col">
+                                        Informador
+                                    </div>
+
+                                    <div class="col">
+                                        Creado El
+                                    </div>
+
+                                    <div class="col">
+                                      Estatus
+                                    </div>    
+                                  </div>
+                              </div>
+
+                              <cdk-virtual-scroll-viewport itemSize="50" class="list-container list-group" *ngIf="notifications$ !== ''">
+                                  <div *cdkVirtualFor="let element of notifications$ | async; let i = index; let conteo = count">                                    
+
+
+                                    <div class="active-link-red list-group-item list-group-item-action" *ngIf="element.status == 1">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                              <div class="col">
+                                                  {{ i + 1 }}. {{element.title}}
+                                              </div>
+                                              <div class="col">
+                                                  {{element.body}}
+                                              </div>
+                                              <div class="col">
+                                                  {{element.users.name}} {{element.users.surname}}
+                                              </div>
+      
+                                              <div class="col">
+                                                  <code class="highlighter-rouge">{{element.create_at | countTime}}</code>
+                                              </div>
+      
+                                              <div class="col">
+                                                  <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 1"
+                                                  matTooltip="Marcar como leida."
+                                                  [matTooltipPosition]="positionleftaction.value"                                                        
+                                                  >
+                                                  <div class="circle"  [style.color]="'red'"></div> 
+                                                  </button>
+                                                  <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 0" 
+                                                  matTooltip="Marcar como no leida."
+                                                  [matTooltipPosition]="positionleftaction.value"                        
+                                                  >
+                                                  <div class="circle"  [style.color]="'green'"></div>
+                                                  </button>          
+                                              </div>    
+                                            </div>
+                                        </div>
+  
+                                    </div>
+
+                                  </div>
+                              </cdk-virtual-scroll-viewport>    
+                          </ul>
+
+                          <ul class="filter-list" *ngIf="notifications$ !== ''">
+                              <div class="row">                                                                
+                                  <div class="col text-right">                                       
+                                      <button mat-button color="primary" (click)="irInicio()"> <mat-icon aria-label="Example icon-button with a heart icon" >keyboard_arrow_up</mat-icon></button>                                      
+                                      <button mat-button color="primary" (click)="irFinal()"> <mat-icon aria-label="Example icon-button with a heart icon" >keyboard_arrow_down</mat-icon></button>                                        
+                                  </div>
+                                </div>    
+                           </ul>
+
+
+                          
+                          <!---
                           <table mat-table [dataSource]="notifications$" *ngIf="notifications$ !== ''">
-                            <!-- Position Column -->
+
                             <ng-container matColumnDef="project">
                                 <th mat-header-cell *matHeaderCellDef> Proyecto </th>
                                 <td mat-cell *matCellDef="let element"> {{element.project}} </td>
@@ -87,20 +159,20 @@
                             </ng-container>
   
   
-                              <!-- Name Column -->
+
                             <ng-container matColumnDef="body">
                                 <th mat-header-cell *matHeaderCellDef> Mensaje </th>
                                 <td mat-cell *matCellDef="let element"> {{element.body}} </td>
                             </ng-container>
                           
                           
-                            <!-- Weight Column -->
+
                             <ng-container matColumnDef="create_by">
                               <th mat-header-cell *matHeaderCellDef> Informador </th>
                               <td mat-cell *matCellDef="let element">  {{element.users.name}} {{element.users.surname}}</td>
                             </ng-container>
                           
-                            <!-- Symbol Column -->
+
                             <ng-container matColumnDef="create_at">
                               <th mat-header-cell *matHeaderCellDef> Creado El </th>
                               <td mat-cell *matCellDef="let element"> {{element.create_at}} </td>
@@ -108,7 +180,6 @@
   
   
   
-                            <!-- Symbol Column -->
                             <ng-container matColumnDef="status">
                                 <th mat-header-cell *matHeaderCellDef> Estatus </th>
                                 <td mat-cell *matCellDef="let element" > 
@@ -130,6 +201,7 @@
                             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                           </table>
+                          -->
 
   
                         </div>

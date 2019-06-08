@@ -1,7 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router, ActivatedRoute, Params } from '@angular/router';
-import { FormControl, Validators, FormBuilder, FormGroup, NgForm } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { Router, ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 

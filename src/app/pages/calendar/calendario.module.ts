@@ -9,7 +9,7 @@ import { CalendarComponent } from './calendar-list/calendar.component';
 
 //INTERCEPTOR
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 //MODULES

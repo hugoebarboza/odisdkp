@@ -53,9 +53,9 @@ import { ModalImageComponent } from '../../components/modal/modalimage/modalimag
 //DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
-//INTERCEPTOR
+//PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 //MODULES
@@ -114,7 +114,6 @@ import { OrderserviceComponent } from '../../components/orderservice/orderservic
 
 // Global vars
 import { environment } from '../../../environments/environment';
-import { GLOBAL } from '../../services/global';
 
 registerLocaleData(localeEs);
 

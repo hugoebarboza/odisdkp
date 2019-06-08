@@ -1,0 +1,27 @@
+
+<form ngNativeValidate *ngIf="forma && activationTag" [formGroup]="forma">
+<div class="container-fluid">
+    <div class="row">
+      <div class="col-1"><mat-checkbox formControlName="select" (click)='toggleDisable()'>Cc</mat-checkbox></div>
+      <div class="col-11">
+
+              <ng-select name="destinatario" formControlName="destinatario"  class="form-control" required       
+              [items]="usersFt | async"
+              [multiple]="true"
+              [clearable]="false" 
+              [closeOnSelect]="true"
+              [searchable]="true"
+              [loading]="userLoading"
+              [typeahead]="userinput"
+              bindLabel="email"
+              placeholder="Buscar usuario" 
+              class="example-full-width">
+              </ng-select>
+          
+      </div>
+    </div>
+</div>
+</form>
+
+
+

@@ -258,12 +258,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 
-  getPerfilFirebase(response: any){
-    if(response){
-    }else{
-
-    }
-  }
 
   getPerfilUser(id: any){
     if(id && this.token.token){
@@ -297,7 +291,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     .then(res => {
       //console.log(res);
     }, err => {
-      console.log(err);
+      //console.log(err);
       switch (err.code) {
         case 'auth/user-not-found': {
             this.tryRegister(value);
@@ -326,9 +320,9 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.authService.doRegister(value)
+    this.authService.doRegister(value, this.identity)
     .then(res => {
-      console.log(res);
+      //console.log(res);
     }, err => {
       console.log(err);
     })

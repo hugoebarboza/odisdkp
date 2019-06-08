@@ -1,7 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormControl, Validators, NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 //MODELS
 import { 
@@ -15,6 +15,11 @@ import {
   Service, 
   User } from '../../../../models/types';
 
+//NGRX REDUX
+import { AppState } from '../../../../app.reducers';
+import { Store } from '@ngrx/store';
+
+
 
 //SERVICES
 import { CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
@@ -24,7 +29,7 @@ import { CountriesService, OrderserviceService, ProjectsService, UserService } f
   templateUrl: './addservice.component.html',
   styleUrls: ['./addservice.component.css']  
 })
-export class AddServiceComponent implements OnInit {
+export class AddServiceComponent implements OnInit, OnDestroy {
   title: string = 'Agregar Proyecto';
   comunas: Comuna[] = [];
   customers: Customer [] = [];  
@@ -58,10 +63,11 @@ export class AddServiceComponent implements OnInit {
     public _regionService: CountriesService,
     public _userService: UserService,
     public dialogRef: MatDialogRef<AddServiceComponent>,      
-    @Inject(MAT_DIALOG_DATA) public data: Service
+    @Inject(MAT_DIALOG_DATA) public data: Service,
+    private store: Store<AppState>
   ) 
   { 
-    this.loading = true;
+    //this.loading = true;
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
@@ -85,6 +91,16 @@ export class AddServiceComponent implements OnInit {
   }  
 
   ngOnInit() {
+
+    
+    this.subscription = this.store.select('loading')
+    .subscribe( loading => 
+      {
+        this.loading = loading.isLoading;  
+      }
+    );
+
+
     if(this.data.project_id > 0){
       this.id = this.data.project_id;
       this.loadInfo();
@@ -93,13 +109,16 @@ export class AddServiceComponent implements OnInit {
       this.loadUserProject();
       this.project = this.filter();
       this.project_name = this.project.project_name;
-      this.loading = false;
+      //this.loading = false;
     }
   }
 
   ngOnDestroy() {
     //console.log('La página se va a cerrar');
-    this.subscription.unsubscribe();
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
+
   }
 
 

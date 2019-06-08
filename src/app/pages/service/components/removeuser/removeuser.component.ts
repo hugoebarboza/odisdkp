@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 
-import swal from 'sweetalert';
 
 //SERVICES
 import { UserService } from '../../../../services/service.index';
@@ -11,13 +11,14 @@ import { UserService } from '../../../../services/service.index';
   templateUrl: './removeuser.component.html',
   styleUrls: ['./removeuser.component.css']
 })
-export class RemoveUserComponent implements OnInit {
+export class RemoveUserComponent implements OnInit, OnDestroy {
 
   identity: any;
   isLoading: boolean = true;
   page: number = 1;
   pageSize: number = 0;
   status: string;
+  subscription: Subscription;
   termino: string = '';
   totalRegistros: number = 0;
   token: any;
@@ -43,11 +44,18 @@ export class RemoveUserComponent implements OnInit {
     }
   }
 
+  ngOnDestroy(): void {
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
+  }
+
+
   cargarUsuarios() {
 
     this.isLoading = true;
 
-    this._userService.getNotUserPaginate( this.token.token, this.id, this.page, this.customerid )
+    this.subscription = this._userService.getNotUserPaginate( this.token.token, this.id, this.page, this.customerid )
               .subscribe( (resp: any) => {
                 this.totalRegistros = resp.datos.total;
                 this.usuarios = resp.datos.data;
@@ -72,7 +80,7 @@ export class RemoveUserComponent implements OnInit {
 
     this.isLoading = true;
 
-    this._userService.searchaddUser(this.token.token, this.id, this.page, termino, this.customerid )
+    this.subscription = this._userService.searchaddUser(this.token.token, this.id, this.page, termino, this.customerid )
             .subscribe( (resp: any) => {
               this.totalRegistros = resp.datos.total;
               this.usuarios = resp.datos.data;

@@ -8,8 +8,9 @@
             </mat-toolbar>
 <P></P>
 
-<form name="customerForm" #customerForm="ngForm" class="col-md-12"  id="customerForm">
-<mat-accordion class="example-headers-align">
+<div class="app animated fadeIn" >
+<form ngNativeValidate name="customerForm" #customerForm="ngForm" class="col-md-12"  id="customerForm">
+<mat-accordion class="mat-dialog-content">
   <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
     <mat-expansion-panel-header>
       <mat-panel-title>
@@ -290,15 +291,16 @@
   </div>
 
     <mat-action-row>
-      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
-      <button mat-button color="primary"  [(disabled)]="!customerForm.form.valid" (click)="confirmUpdate(customerForm)">Actualizar</button>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>      
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
 </form>
-<div class="container">
-  <div mat-dialog-actions>    
-    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button >Cancelar</button>
-  </div>
-
 </div>
+
+<br>
+<div mat-dialog-actions>
+  <button mat-button color="primary" mat-raised-button  [(disabled)]="!customerForm.form.valid" (click)="confirmUpdate(customerForm)">Actualizar</button> 
+  <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button >Cancelar</button>
+</div>
+

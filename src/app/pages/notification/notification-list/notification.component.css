@@ -1,3 +1,11 @@
+.active-link-red{
+    border-left: 3px solid red;
+}
+.active-link-green{
+    border-left: 3px solid green;
+}
+
+
 mat-table {
     height: 100%;  
 }
@@ -29,7 +37,7 @@ ul {
     margin-block-end: 1em;
     margin-inline-start: 0px;
     margin-inline-end: 0px;
-    padding-inline-start: 40px;
+    padding-inline-start: 10px;
 }
 .filter-item.selected {
     background-color: #0366d6;
@@ -61,3 +69,9 @@ ul {
     position: relative;
     margin-top: 10px;
 }
+
+.list-container {
+    height: 250px;
+    /*height: 30vh;*/
+    border: 0px solid black;
+  }

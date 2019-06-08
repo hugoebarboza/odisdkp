@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { MatTabChangeEvent } from '@angular/material';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription'

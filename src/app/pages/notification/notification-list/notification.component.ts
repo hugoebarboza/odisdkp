@@ -1,10 +1,12 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { defer, combineLatest, of } from 'rxjs/';
 import { switchMap, map, tap, finalize } from 'rxjs/operators';
 import { TooltipPosition } from '@angular/material';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
+
 
 //FIREBASE
 import {
@@ -27,7 +29,7 @@ import { SettingsService, UserService } from 'src/app/services/service.index';
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.component.html',
-  styleUrls: ['./notification.component.css']
+  styleUrls: ['./notification.component.css'],
 })
 export class NotificationComponent implements OnInit, OnDestroy {
 
@@ -56,8 +58,10 @@ export class NotificationComponent implements OnInit, OnDestroy {
   user$: Observable<User>;
   userid: any;
 
+  @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
 
-  displayedColumns: string[] = ['project', 'service', 'title', 'body', 'create_by','create_at', 'status']; 
+
+  displayedColumns: string[] = ['title', 'body', 'create_by','create_at', 'status']; 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionleftaction = new FormControl(this.positionOptions[4]);  
 
@@ -90,21 +94,37 @@ export class NotificationComponent implements OnInit, OnDestroy {
       this.user$ = this.userDoc.valueChanges();      
 
       this.notificationsRef = this.userDoc.collection('notifications', ref => ref.orderBy('create_at', 'desc') )
-      this.getnotifications$ = this.notificationsRef.snapshotChanges()
+      this.notificationsRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.isLoading = false;
           this.resultCount = actions.length;
+          if (this.resultCount == 0){
+            console.log(this.resultCount);
+            this.notifications$ = null;
+            //return;
+          }
           return actions.map(a => {
             const data = a.payload.doc.data() as any;
             const id = a.payload.doc.id;
-            return { id, ...data };
+                return { id, ...data };
           });
         })
-      );
-      this.notifications$ = this.getnotifications$.pipe(
-        leftJoin(this.afs, 'create_by', 'users')
-      );
+      ).subscribe( (collection: any[]) => {
+        const count = Object.keys(collection).length;
+        if (count === 0) {
+          this.notifications$ = null;
+        } else {
+          this.gojoin(Observable.of(collection));
+        }
+      }
+    );
+
+
+
+
+
+      
 
 
 
@@ -132,12 +152,28 @@ export class NotificationComponent implements OnInit, OnDestroy {
     })
   }
 
+  gojoin(collection): Observable<any> {
+    return this.notifications$ = collection.pipe(
+      leftJoin(this.afs, 'create_by', 'users')
+    );
+
+  }
   ngOnDestroy() {
     if(this.subscription){
       this.subscription.unsubscribe();
     }
   }
 
+  irInicio() {
+    this.viewport.scrollToIndex( 0 );
+  }
+
+
+  irFinal() {
+    this.viewport.scrollToIndex( this.resultCount );
+  }
+
+  
   update(notificationKey, value) {
     if(!notificationKey){
       return
@@ -214,13 +250,12 @@ export const leftJoin = (
               reads$.push(of([]));
             }
           }
-
           return combineLatest(reads$);
         }),
         map(joins => {
-          return collectionData.map((v: any, i: any) => {
-            totalJoins += joins[i].length;
-            return { ...v, [collection]: joins[i] || null };
+            return collectionData.map((v: any, i: any) => {          
+              totalJoins += joins[i].length;
+              return { ...v, [collection]: joins[i] || null };  
           });
         }),
         tap(final => {

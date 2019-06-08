@@ -5,15 +5,53 @@
       <div class="sidebar-sticky">
           <div class="row">
               <div class="col-8">
-                <h5 >
+                <h6>
                       Operación masiva
-                </h5>        
+                </h6>
+                <form [formGroup]="form">
+                    <h6>
+                    <input type="radio" formControlName="action" value="1" ><small> Seleccione Órdenes</small> 
+                    </h6>
+                </form>            
+      
+                <form [formGroup]="form2">
+                    <h6>
+                    <input type="radio" formControlName="action2" value="2" ><small> Seleccione Operación</small>
+                    </h6>                   
+                </form>            
+      
+                <form [formGroup]="form3">
+                     <h6>
+                     <input type="radio" formControlName="action3" value="3"><small> Procesar</small>
+                     </h6>
+                </form>      
               </div>
-              <div class="col-4">
-                  <button type="button" class="btn btn-primary btn-sm">Siguiente</button>                
-              </div>
-            </div>        
+              <div class="col-4" *ngIf="form">
 
+                      <button type="submit" (click)="firstStep()" class="btn btn-primary btn-sm" [disabled]="selection.isEmpty()" *ngIf="form.value.action == 1 && form2.value.action2 != 2">Siguiente</button>
+                      <button type="submit" (click)="secondStep()" class="btn btn-primary btn-sm" [disabled]="!form4.value.action4" *ngIf="form2.value.action2 == 2 && form3.value.action3 != 3">Siguiente</button>
+                      <div class="btn-grid">
+                      <button type="submit" (click)="cancel()" class="btn btn-secondary btn-sm" [disabled]="selection.isEmpty()" *ngIf="form2.value.action2 == 2 && form3.value.action3 != 3">Cancelar</button>
+                      </div>
+                      <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || form5.value.estatus == 0" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 1">Procesar</button>
+                      <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || form5.value.asignado == 0" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 2">Procesar</button>
+                      <div class="btn-grid">
+                      <button type="submit" (click)="cancel()" class="btn btn-secondary btn-sm" [disabled]="selection.isEmpty()" *ngIf="form3.value.action3 == 3">Cancelar</button>
+                      </div>
+    
+
+              </div>
+          </div>       
+            
+            
+
+        <!----    
+            <p>Form value: {{ form.value | json }}</p>
+            <p>Form value: {{ form.value.action | json }}</p>
+        --->
+            
+
+        <!----
         <mat-radio-group aria-labelledby="radio-group-label" class="radio-group" [(ngModel)]="select">
           <div *ngFor="let option of columnsSelectToDisplay; let i = index">
               <mat-radio-button class="radio-button"  [value]="option.id" (change)="onSelectionChange(option)" checked *ngIf="select == 1 && option.id == 1">
@@ -28,12 +66,13 @@
               
            </div>
         </mat-radio-group>
+          
+        <div>Your favorite season is: {{select}}</div>-->
 
-        <div>Your favorite season is: {{select}}</div>
       </div>
     </nav>
 
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">      
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" *ngIf="form.value.action == 1 && form2.value.action2 != 2">      
       <div >
           <mat-card [ngStyle]="{'padding':'0px'}">
               <mat-card-header [ngClass]="{'custom-card':true}">
@@ -42,7 +81,7 @@
                         <div class="row">
                           <div class="col-8">
                               <div class="float-left">
-                              {{title}} <button mat-icon-button color="primary" (click)="refreshTable()" *ngIf="_userService.isRole(4) && id && category_id"><mat-icon  >refresh</mat-icon></button>                  
+                              Paso 1 de 3: Seleccione Órdenes <button mat-icon-button color="primary" (click)="refreshTable()" *ngIf="_userService.isRole(4) && id && category_id"><mat-icon  >refresh</mat-icon></button>                  
                               </div>
                           </div>
                           <div class="col-4">
@@ -206,95 +245,96 @@
                             </td>
                             
                             
-                            
                             <td width="80%" align="left">
-                            <div class="animated fadeIn" style="top: 56px; left: 256px; visibility: visible; position: sticky; display: inline-block; z-index: 1;" *ngIf="show">
-                            
-                            
-                                      <mat-form-field class="margin" >
-                                      <mat-select placeholder="Filtro" [(ngModel)]="selectedColumnn.fieldValue">
-                                        <mat-option>Seleccione</mat-option>
-                                        <mat-option value="communes.commune_name">Comuna</mat-option>
-                                        <mat-option value="users.name">Creado Por</mat-option>            
-                                        <mat-option value="status.name">Estatus</mat-option>
-                                        <mat-option value="orders.order_number">N. Orden</mat-option>
-                                        <mat-option value="projects_customer.cc_number">N. Cliente</mat-option>
-                                        <mat-option value="provinces.province_name">Provincia</mat-option>
-                                        <mat-option value="regions.region_name">Región</mat-option>            
-                                        <p></p>
-                                        <div class="container">
-                                        <div class="button-row">
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnn.fieldValue=''">Limpiar</button>            
-                                        </div>
-                                        </div>
-                                        <p></p>
-                                      </mat-select>
-                                    </mat-form-field>
-                            
+                              <div class="animated fadeIn" style="top: 56px; left: 256px; visibility: visible; position: sticky; display: inline-block; z-index: 1;" *ngIf="show">
                               
-                                      <mat-form-field *ngIf="selectedColumnn.fieldValue" class="margin">
-                                        <input matInput placeholder="Valor" (keyup)="applyFilter()" [(ngModel)]="selectedColumnn.columnValue">
-                                        <button mat-button *ngIf="selectedColumnn.columnValue" matSuffix mat-icon-button aria-label="Clear" (click)="selectedColumnn.columnValue=''">
-                                          <mat-icon>close</mat-icon>
-                                        </button>  
+                              
+                                        <mat-form-field class="margin" >
+                                        <mat-select placeholder="Filtro" [(ngModel)]="selectedColumnn.fieldValue">
+                                          <mat-option>Seleccione</mat-option>
+                                          <mat-option value="communes.commune_name">Comuna</mat-option>
+                                          <mat-option value="users.name">Creado Por</mat-option>            
+                                          <mat-option value="status.name">Estatus</mat-option>
+                                          <mat-option value="orders.order_number">N. Orden</mat-option>
+                                          <mat-option value="projects_customer.cc_number">N. Cliente</mat-option>
+                                          <mat-option value="provinces.province_name">Provincia</mat-option>
+                                          <mat-option value="regions.region_name">Región</mat-option>            
+                                          <p></p>
+                                          <div class="container">
+                                          <div class="button-row">
+                                          <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnn.fieldValue=''">Limpiar</button>            
+                                          </div>
+                                          </div>
+                                          <p></p>
+                                        </mat-select>
                                       </mat-form-field>
-                            
-                            
-                                      <mat-form-field class="margin" *ngIf="!selectedColumnn.fieldValue" >
-                                      <mat-select placeholder="Fecha" [(ngModel)]="selectedColumnnDate.fieldValue">
-                                        <mat-option>Seleccione</mat-option>
-                                        <mat-option value="orders.create_at">Creado El</mat-option>
-                                        <mat-option value="orders.update_at">Editado El</mat-option>            
-                                    <p></p>
-                                    <div class="container">
-                                    <div class="button-row">
-                                        <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnnDate.fieldValue=''">Limpiar</button>            
-                                    </div>
-                                    </div>
-                                    <p></p>
-                            
-                                      </mat-select>
-                                    </mat-form-field>
-                            
-                            
-                            
-                                    <mat-form-field *ngIf="selectedColumnnDate.fieldValue && !selectedColumnn.fieldValue" class="margin" >
-                                      <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde"disabled>
-                                      <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
-                                      <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
-                                    </mat-form-field>
-                            
-                            
-                            
-                                    <mat-form-field *ngIf="selectedColumnnDate.fieldValue && !selectedColumnn.fieldValue" class="margin">
-                                      <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" disabled >
-                                      <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
-                                      <mat-datepicker #fecha2 disabled="false"></mat-datepicker>
-                                    </mat-form-field>
-                            
-                            
                               
-                            
-                                <mat-form-field class="margin" >
-                                  <mat-select [formControl]="regionMultiCtrl"  placeholder="Región" [multiple]="true" #multiSelect  >
-                                    <ngx-mat-select-search [formControl]="regionMultiFilterCtrl" ></ngx-mat-select-search>
-                                    <mat-option *ngFor="let region of filteredRegionMulti | async" [value]="region.name">
-                                      {{region.name}}
-                                    </mat-option>
-                                    <p></p>
-                                    <div class="container">
-                                    <div class="button-row">
-                                    <button type="button" class="btn btn-secondary btn-sm" (click)="resetRegionFilters()">Limpiar</button>
-                                    </div>
-                                    </div>
-                                    <p></p>
-                                  </mat-select>
-                                </mat-form-field>
-                            
-                            
-                            
-                            </div>
-                            </td>
+                                
+                                        <mat-form-field *ngIf="selectedColumnn.fieldValue" class="margin">
+                                          <input matInput placeholder="Valor" (keyup)="applyFilter()" [(ngModel)]="selectedColumnn.columnValue">
+                                          <button mat-button *ngIf="selectedColumnn.columnValue" matSuffix mat-icon-button aria-label="Clear" (click)="selectedColumnn.columnValue=''">
+                                            <mat-icon>close</mat-icon>
+                                          </button>  
+                                        </mat-form-field>
+                              
+                              
+                                        <mat-form-field class="margin"  >
+                                        <mat-select placeholder="Fecha" [(ngModel)]="selectedColumnnDate.fieldValue">
+                                          <mat-option>Seleccione</mat-option>
+                                          <mat-option value="orders.create_at">Creado El</mat-option>
+                                          <mat-option value="orders.update_at">Editado El</mat-option>            
+                                      <p></p>
+                                      <div class="container">
+                                      <div class="button-row">
+                                          <button type="button" class="btn btn-secondary btn-sm" (click)="selectedColumnnDate.fieldValue=''">Limpiar</button>            
+                                      </div>
+                                      </div>
+                                      <p></p>
+                              
+                                        </mat-select>
+                                      </mat-form-field>
+                              
+                              
+                              
+                                      <mat-form-field *ngIf="selectedColumnnDate.fieldValue" class="margin" >
+                                        <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde"disabled>
+                                        <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
+                                        <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
+                                      </mat-form-field>
+                              
+                              
+                              
+                                      <mat-form-field *ngIf="selectedColumnnDate.fieldValue " class="margin">
+                                        <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" disabled >
+                                        <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
+                                        <mat-datepicker #fecha2 disabled="false"></mat-datepicker>
+                                      </mat-form-field>
+                              
+                               
+                                
+                                
+                              
+                                        <mat-form-field class="margin" *ngIf="!selectedColumnn.fieldValue">
+                                          <mat-select [formControl]="regionMultiCtrl"  placeholder="Región" [multiple]="true" #multiSelect  >
+                                            <ngx-mat-select-search [formControl]="regionMultiFilterCtrl" ></ngx-mat-select-search>
+                                            <mat-option *ngFor="let region of filteredRegionMulti | async" [value]="region.name">
+                                              {{region.name}}
+                                            </mat-option>
+                                            <p></p>
+                                            <div class="container">
+                                            <div class="button-row">
+                                            <button type="button" class="btn btn-secondary btn-sm" (click)="resetRegionFilters()">Limpiar</button>
+                                            </div>
+                                            </div>
+                                            <p></p>
+                                          </mat-select>
+                                        </mat-form-field>
+                              
+                              
+                              
+                              </div>
+                              </td>
+                                                          
                             
                             
                             <td width="1%" >
@@ -349,6 +389,7 @@
                           <mat-checkbox (change)="$event ? masterToggle() : null"
                                         [checked]="selection.hasValue() && isAllSelected()"
                                         [indeterminate]="selection.hasValue() && !isAllSelected()"
+                                        [aria-label]="checkboxLabel()"
                                         >
                           </mat-checkbox>
                         </mat-header-cell>
@@ -356,6 +397,7 @@
                           <mat-checkbox (click)="$event.stopPropagation()"
                                         (change)="$event ? selection.toggle(row) : null"
                                         [checked]="selection.isSelected(row)"
+                                        [aria-label]="checkboxLabel(row)"
                                         >
                           </mat-checkbox>
                         </mat-cell>
@@ -380,11 +422,7 @@
                     </ng-container>
                     
                       
-                    <ng-container matColumnDef="orderdetail_direccion">
-                      <mat-header-cell *matHeaderCellDef mat-sort-header  > Realizado En </mat-header-cell>
-                        <mat-cell *matCellDef="let order"> {{order.orderdetail_direccion}} </mat-cell>
-                    </ng-container>
-                    
+                   
                     
                     <ng-container matColumnDef="direccion">
                       <mat-header-cell *matHeaderCellDef mat-sort-header  > Ubicación </mat-header-cell>
@@ -419,21 +457,7 @@
                     </ng-container>
                     
                     
-                    
-                    
-                    <ng-container matColumnDef="time" >
-                      <mat-header-cell *matHeaderCellDef mat-sort-header> T. Ejecución </mat-header-cell>
-                        <mat-cell *matCellDef="let order"> <div *ngIf="order.time">{{order.time }}</div></mat-cell>
-                    </ng-container>
-                    
-                    
-                    <ng-container matColumnDef="update_at" >
-                      <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
-                        <mat-cell *matCellDef="let order"> 
-                          <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>  
-                        </mat-cell>
-                    </ng-container>
-                    
+                                      
                     <ng-container matColumnDef="estatus" >
                       <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
                       <mat-cell *matCellDef="let order; let i = index" > 
@@ -479,12 +503,223 @@
               </mat-card>
       </div>
     </main>
+
+
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" *ngIf="form2.value.action2 == 2 && form3.value.action3 != 3">      
+        <div >
+            <mat-card [ngStyle]="{'padding':'0px'}">
+                <mat-card-header [ngClass]="{'custom-card':true}">
+                    <div class="mat-card-header-text">
+                        <mat-card-title>
+                          <div class="row">
+                            <div class="col-6">
+                                <div class="float-left">
+                                Paso 2 de 3: Seleccione Operación
+                                </div>                                
+                            </div>
+                            <div class="col-6">
+                                <div class="float-right">
+                                    <button mat-icon-button [matMenuTriggerFor]="menuview">
+                                      <mat-icon>view_headline</mat-icon>
+                                    </button>
+                                    
+                                    <mat-menu #menuview="matMenu" [overlapTrigger]="false">
+                                      <button mat-menu-item (click)="toggleTemplate(0)">
+                                      <mat-icon class="material-icons md-20" >view_list</mat-icon>      
+                                      <span >Vista de Lista </span>
+                                      </button>
+                                      <button mat-menu-item (click)="toggleTemplate(1)">
+                                      <mat-icon class="material-icons md-20" >view_quilt</mat-icon>
+                                      <span >Vista de Detalle</span>
+                                      </button>
+                                      <button mat-menu-item (click)="toggleTemplate(2)">
+                                      <mat-icon class="material-icons md-20" >view_week</mat-icon>
+                                      <span >Vista de Tablero</span>
+                                      </button>
+                                    
+                                    </mat-menu>
+                                </div>
+                            </div>
+                
+                          </div>
+
+                        </mat-card-title>
+                        <mat-card-subtitle>Elige la operación que deseas realizar con las órdenes seleccionadas.</mat-card-subtitle>
+                      </div>
+                      
+                </mat-card-header>                                          
+                        <mat-card-content >
+                            <div class="container-fluid">
+                            <form [formGroup]="form4" *ngIf="form4">
+                                <div class="example-table-container">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                              <th scope="col"></th>
+                                              <th scope="col">Acción</th>
+                                              <th scope="col">Descripción</th>
+                                            </tr>
+                                          </thead>                                  
+                                        <tbody>
+                                            
+                                                <tr >                                                                                                
+                                                        <td class="cell-type-collapsed">
+                                                            <input type="radio" formControlName="action4" value="1" >
+                                                        </td>
+                                                        <td>
+                                                            <label for="bulk.edit.operation.name_id">Editar Órdenes</label>
+                                                        </td>
+                                                        <td>
+                                                            <label for="bulk.edit.operation.name_id">Editar valores de campo de órdenes</label>
+                                                        </td>
+                                                    
+                                                    
+                                                </tr>
+                                                </tbody>
+                                    </table>
+                                </div>    
+                            </form>
+                            </div>
+                        </mat-card-content>
+            </mat-card>
+        </div>
+    </main>
+
+
+
+
+
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" *ngIf="form3.value.action3 == 3 ">      
+        <div >
+            <mat-card [ngStyle]="{'padding':'0px'}">
+                <mat-card-header [ngClass]="{'custom-card':true}">
+                    <div class="mat-card-header-text">
+                        <mat-card-title>
+                          <div class="row">
+                            <div class="col-8">
+                                <div class="float-left">
+                                Paso 3 de 3: Procesar Operación
+                                </div>
+                            </div>
+                            <div class="col-4">
+                                <div class="float-right">
+                                    <button mat-icon-button [matMenuTriggerFor]="menuview">
+                                      <mat-icon>view_headline</mat-icon>
+                                    </button>
+                                    
+                                    <mat-menu #menuview="matMenu" [overlapTrigger]="false">
+                                      <button mat-menu-item (click)="toggleTemplate(0)">
+                                      <mat-icon class="material-icons md-20" >view_list</mat-icon>      
+                                      <span >Vista de Lista </span>
+                                      </button>
+                                      <button mat-menu-item (click)="toggleTemplate(1)">
+                                      <mat-icon class="material-icons md-20" >view_quilt</mat-icon>
+                                      <span >Vista de Detalle</span>
+                                      </button>
+                                      <button mat-menu-item (click)="toggleTemplate(2)">
+                                      <mat-icon class="material-icons md-20" >view_week</mat-icon>
+                                      <span >Vista de Tablero</span>
+                                      </button>
+                                    
+                                    </mat-menu>
+                                </div>
+                            </div>
+                
+                          </div>
+                        </mat-card-title>
+                        <mat-card-subtitle>Elige la(s) acción(es) masiva(s) que quieres realizar con las órdenes seleccionadas.</mat-card-subtitle>
+                      </div>
+                    </mat-card-header>
+    
+                        <mat-card-content >
+                            <div class="container-fluid">
+                            <div class="container" *ngIf="isLoadingResults">
+                                <div class="row justify-content-md-center">
+                                  <div class="col col-lg-2">
+                                      <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
+                                  </div>
+                                </div>
+                            </div>
+                                
+                                        
+                            <form [formGroup]="form5" *ngIf="form5 && !isLoadingResults">
+                                <div class="example-table-container">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                              <th scope="col"></th>
+                                              <th scope="col">Acción</th>
+                                              <th scope="col">Descripción</th>
+                                              <th scope="col" *ngIf="form5.value.action5">Opciones</th>
+                                            </tr>
+                                          </thead>                                  
+                                        <tbody>
+                                            
+                                                <tr >                                                                                                
+                                                        <td class="cell-type-collapsed">
+                                                            <input type="radio" formControlName="action5" value="1" >
+                                                        </td>
+                                                        <td>
+                                                            <label for="bulk.edit.operation.name_id">Cambiar Estatus</label>
+                                                        </td>
+                                                        <td>
+                                                          <label for="bulk.edit.operation.name_id">Editar estatus de órdenes seleccionadas</label>
+                                                        </td>
+                                                        <td *ngIf="form5.value.action5 == 1">
+                                                            <mat-form-field appearance="outline" class="middle-width" >
+                                                                <mat-select placeholder="Estatus: " formControlName="estatus" >
+                                                                  <mat-option value="0">Seleccione</mat-option>
+                                                                  <mat-option *ngFor="let status of serviceestatus" [value]="status.id">
+                                                                    {{status.name}}
+                                                                  </mat-option>
+                                                                </mat-select>
+                                                              </mat-form-field>                                                      
+                                                        </td>
+                                                    
+                                                    
+                                                </tr>
+
+                                                <tr >                                                                                                
+                                                    <td class="cell-type-collapsed">
+                                                        <input type="radio" formControlName="action5" value="2" >
+                                                    </td>
+                                                    <td>
+                                                        <label for="bulk.edit.operation.name_id">Cambiar Asignado</label>
+                                                    </td>
+                                                    <td>
+                                                      <label for="bulk.edit.operation.name_id">Editar responsable de órdenes seleccionadas</label>
+                                                    </td>
+                                                    <td *ngIf="form5.value.action5 == 2">
+                                                        <mat-form-field appearance="outline" class="middle-width" >
+                                                            <mat-select placeholder="Asignar a: " formControlName="asignado" >
+                                                              <mat-option value="0">Seleccione</mat-option>
+                                                              <mat-option *ngFor="let asignado of inspector" [value]="asignado.id">
+                                                                {{asignado.name}}
+                                                              </mat-option>
+                                                            </mat-select>
+                                                          </mat-form-field>                                                      
+                                                    </td>
+                                                
+                                                
+                                            </tr>
+
+
+                                        </tbody>
+                                    </table>
+                                </div>    
+                            </form>
+                          </div>
+                        </mat-card-content>
+            </mat-card>
+        </div>
+    </main>
+
+
+
   </div>
 </div>
-
-
-
-
 </div>        
   
   

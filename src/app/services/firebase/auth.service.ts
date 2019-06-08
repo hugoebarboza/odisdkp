@@ -4,6 +4,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import * as firebase from 'firebase/app';
 
 import { Observable } from 'rxjs/Observable';
+import { User } from 'src/app/models/types';
+import { AngularFirestore } from 'angularfire2/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -14,13 +16,19 @@ export class AuthService {
   authState: any = null;
 
   constructor(
+    private afs: AngularFirestore,
+    private db: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth,
-    private db: AngularFireDatabase
   ) { 
     this.user = firebaseAuth.authState;
+    
+    //firebase.auth().signOut();
 
     /*
     this.firebaseAuth.authState.subscribe((auth) => {
+      if(!auth){
+        console.log('no login');
+      }
       this.authState = auth;
     });*/
   }
@@ -81,17 +89,31 @@ export class AuthService {
   }
 
 
-  doRegister(value){
+  doRegister(value:User, identity: any){
     return new Promise<any>((resolve, reject) => {
       firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
       .then(res => {
+       // console.log(resp);
+        const userFirebase = {
+          uid: res.user.uid,
+          name: identity.name,
+          email: res.user.email,
+          role: identity.role,
+          surname: identity.surname,
+          timezone: identity.timezone
+        };
+
+        this.afs.doc(`users/${ userFirebase.uid }`)
+        .set( userFirebase )
+        .then( () => {  });
+
         resolve(res);
       }, err => reject(err))
     })
   }
 
 
-  updateUser(value){
+  updateUser(value:User){
     return new Promise<any>((resolve, reject) => {
       firebase.auth().sendPasswordResetEmail(value.email)
       .then(res => {

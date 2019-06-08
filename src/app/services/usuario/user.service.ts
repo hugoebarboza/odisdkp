@@ -12,6 +12,7 @@ import 'rxjs/add/operator/map';
 import { AppState } from '../../app.reducers';
 import { Store } from '@ngrx/store';
 import { LoginAction, ResetAction } from '../../contador.actions';
+import { ResetUserAction } from 'src/app/stores/auth/auth.actions';
 
 
 //MODELS
@@ -541,7 +542,7 @@ export class UserService  {
 	}
 
 
-  logout() {
+  logout() {		
 		localStorage.removeItem('departamentos');
 		localStorage.removeItem('expires_at');
 		localStorage.removeItem('fotoprofile');
@@ -554,7 +555,9 @@ export class UserService  {
 	}
 
   resetAction() {
-    const accion = new ResetAction();
+		const accion = new ResetAction();
+		const useraccion = new ResetUserAction();
+		this.store.dispatch( useraccion );
     this.store.dispatch( accion );
   }
 

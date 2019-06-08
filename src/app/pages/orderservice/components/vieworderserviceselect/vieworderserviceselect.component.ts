@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
-import { FormControl, Validators} from '@angular/forms';
+import { FormControl, Validators, FormGroup} from '@angular/forms';
 import { MatTableDataSource, MatPaginator, MatSort, Sort } from '@angular/material';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
@@ -9,18 +9,19 @@ import { Subject } from 'rxjs/Subject';
 import { takeUntil } from 'rxjs/operators/takeUntil';
 import { Subscription } from 'rxjs/Subscription';
 
-//SERVICES
-import { CountriesService, ExcelService, OrderserviceService, ProjectsService, UserService, ZipService } from '../../../../services/service.index';
-
 
 //MODELS
-import { Order, Proyecto, ServiceType, ServiceEstatus } from '../../../../models/types';
+import { Order, ServiceEstatus } from '../../../../models/types';
 
 
 //MOMENT
 import * as _moment from 'moment';
-import { Router } from '@angular/router';
 const moment = _moment;
+
+//SERVICES
+import { CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
+
+declare var swal: any;
 
 
 interface Inspector {
@@ -52,6 +53,11 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   filteredInspectorMulti: ReplaySubject<Inspector[]> = new ReplaySubject<Inspector[]>(1);
   filteredRegionMulti: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
   filterValue = '';
+  form: FormGroup;
+  form2: FormGroup;
+  form3: FormGroup;
+  form4: FormGroup;
+  form5: FormGroup;
   debouncedInputValue = this.filterValue;
   identity: any;
   inspectorCtrl: FormControl = new FormControl();
@@ -66,6 +72,8 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   pageIndex:number;
   pageSizeOptions: number[] = [15, 30, 100, 200];
   pageSize:number = 15;
+  paramset: string = '';
+  paramvalue: number = 0;
   project_id: number;
   region = new Array();
   role:number;
@@ -77,11 +85,12 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   selection = new SelectionModel<Order[]>(true, []);
   select: number= 0;
   selectedEntry;
+  serviceestatus: ServiceEstatus[] = [];
   resultsLength:number = 0;
   regionMultiCtrl: FormControl = new FormControl('', Validators.required );
   regionMultiFilterCtrl: FormControl = new FormControl('', Validators.required);  
   termino: string = '';
-  title:string = "Seleccione Incidencias";
+  //title:string = "Seleccione Incidencias";
   token:any;
 
   filtersregion = {
@@ -133,25 +142,29 @@ prevStep() {
 }  
   
 
+selectedColumnnEstatus = {
+  fieldValue: 'orders_details.status_id',
+  criteria: '',
+  columnValue: ''
+};
+
+
 
   @Input() id : number;
   @Input() view : number;
   @Output() portalevent: EventEmitter<number>;
-  @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) matSort: MatSort;
 
   columnsSelect: Array<any> = [
     { name: 'select', label: 'Select' },
     { name: 'order_number', label: 'N. Orden' },
     { name: 'cc_number', label: 'N. Cliente' },
-    { name: 'orderdetail_direccion', label: 'Realizado En' },
     { name: 'direccion', label: 'Ubicación' },
     { name: 'servicetype', label: 'Servicio' },
     { name: 'user', label: 'Informador' },
     { name: 'create_at', label: 'Creado El' },
     { name: 'userassigned', label: 'Responsable' },
-    { name: 'time', label: 'T. Ejecución' },
-    { name: 'update_at', label: 'T. Atención' },
     { name: 'estatus', label: 'Estatus' },
   ];  
 
@@ -166,11 +179,11 @@ prevStep() {
 
 
   constructor(
-    private _router: Router,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
     private _regionService: CountriesService,
     public _userService: UserService,
+    public dataService: OrderserviceService,
   ) { 
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();    
@@ -178,12 +191,156 @@ prevStep() {
     this.role = 5; //USUARIOS INSPECTORES
     this.dataSource = new MatTableDataSource();
     this.select = 1;
-    console.log(this.columnsSelectToDisplay);
+
+    this.form = new FormGroup({
+      action: new FormControl ({value: '1', disabled: false}, )
+    });
+
+    this.form2 = new FormGroup({
+      action2: new FormControl ({value: '', disabled: true}, )
+    });
+
+    this.form3 = new FormGroup({
+      action3: new FormControl ({value: '', disabled: true}, )
+    });
+
+    this.form4 = new FormGroup({
+      action4: new FormControl ({value: '', disabled: true}, )
+    });
+
+    this.form5 = new FormGroup({
+      action5: new FormControl ({value: '', disabled: true}, ),
+      estatus: new FormControl ({value: 0, disabled: true}, [Validators.required, Validators.minLength(1)]),
+      asignado: new FormControl ({value: 0, disabled: true}, [Validators.required, Validators.minLength(1)]),
+    });
+
+
   }
+
+
+  public firstStep(){
+
+    this.form2 = new FormGroup({
+      action2: new FormControl ({value: '2', disabled: false}, )
+    }); 
+
+    this.form4 = new FormGroup({
+      action4: new FormControl ({value: '', disabled: false}, )
+    });
+
+
+  }
+
+  secondStep(){
+
+    this.getServiceEstatus();
+
+    this.form3 = new FormGroup({
+      action3: new FormControl ({value: '3', disabled: false}, )
+    });
+
+    this.form5 = new FormGroup({
+      action5: new FormControl ({value: '', disabled: false}, ),
+      estatus: new FormControl ({value: 0, disabled: false}, [Validators.required, Validators.minLength(1)]),
+      asignado: new FormControl ({value: 0, disabled: false}, [Validators.required, Validators.minLength(1)]),
+
+    });
+  }
+
+
+  commit(){
+
+    if(!this.selection.selected){
+      swal('Solicitud no procesada', 'No existen órdenes seleccionadas', 'error');
+      return;
+    }
+
+    
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta a punto de editar las órdenes seleccionadas ',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+
+    .then( commit => {
+
+      if (commit) {
+        if(this.selection.selected){
+
+          if(this.form5.value){
+            if(this.form5.value.action5 == 1 && this.form5.value.estatus > 0){
+              this.paramset = 'status_id';
+              this.paramvalue = this.form5.value.estatus;
+            }
+            if(this.form5.value.action5 == 2 && this.form5.value.asignado > 0){
+              this.paramset = 'assigned_to';
+              this.paramvalue = this.form5.value.asignado;
+            }
+          }
+
+                    
+          if(this.selection.selected && this.id && this.paramset && this.paramvalue > 0){
+            this.isLoadingResults = true;
+            this.dataService.updateMass(this.token.token, this.selection.selected, this.id, this.paramset, this.paramvalue)
+            .subscribe( response => {
+              if(!response){
+                this.isLoadingResults = false;
+                return;        
+              }
+              if(response.status == 'success'){ 
+                this.isLoadingResults = false;
+                swal('Órdenes actualizadas', 'exitosamente', 'success' );
+              }else{
+                this.isLoadingResults = false;
+                swal('Importante', response.message, 'error');
+              }
+            },
+              error => {
+                this.isLoadingResults = false;                
+                //swal('Importante', error.error.message, 'error');
+                swal('Importante', error, 'error');
+              }                               
+            );
+          }else{            
+            swal('Solicitud no procesada', 'Los valores seleccionados no coinciden', 'error');
+            return;
+          }
+            
+
+
+        }
+      }
+    });
+
+  }
+
+  cancel(){
+    this.form2.setValue({
+      'action2': {value: '', disabled: true},
+    });
+
+    this.form3.setValue({
+      'action3': {value: '', disabled: true},
+    });
+    
+    this.form4.setValue({
+      'action4': {value: '', disabled: true},
+    });
+
+    this.form5.setValue({
+      'action5': {value: '', disabled: true},
+      'estatus': {value: 0, disabled: true},
+    });
+
+  }
+
 
   ngOnInit() {
     //console.log('on init');
     //VALORES POR DEFECTO DE FILTRO AVANZADO
+    
     this.selectedColumnnDate.fieldValue = 'orders.create_at';
     this.selectedColumnn.fieldValue = 'orders.create_at';
     this.selectedColumnnDate.columnValueDesde = this.date.value;
@@ -210,32 +367,36 @@ prevStep() {
       });    
   }
 
-  onSelectionChange(entry) {
-    this.selectedEntry = Object.assign({}, this.selectedEntry, entry);
-    console.log(this.selectedEntry);
-  }
-
 
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {
-    console.log('paso');
-    if (this.selection.isEmpty()) { return false; }
+  isAllSelected() {    
+    if (this.selection.isEmpty()) { 
+      return false; 
+    }
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
+    //console.log(this.selection.selected.length);
+    //console.log(this.selection.selected);
     return numSelected === numRows;
-    //console.log(this.selection);
   }
+
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
-    console.log('paso222');    
     this.isAllSelected() ?
         this.selection.clear() :
         this.dataSource.data.forEach(row => this.selection.select(row));    
-
-    //console.log(this.selection);
+        //console.log(this.selection);
   }  
 
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: any): string {
+  if (!row) {
+    return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+  }
+  return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+  
 
   hoverIn(index:number){
     this.indexitem = index;
@@ -246,6 +407,22 @@ prevStep() {
 
   }
 
+  getServiceEstatus(){  
+    this.dataService.getServiceEstatus(this.token, this.id)
+    .pipe(takeUntil(this._onDestroy))
+    .subscribe(
+    response => {
+              if(!response){
+                return;
+              }
+              if(response.status == 'success'){   
+                this.serviceestatus = response.datos;
+              }
+              });        
+    }  
+
+
+  
 
   public refreshTable() { 
     this.termino = '';
@@ -311,16 +488,12 @@ prevStep() {
               this.isactiveSearch = true;
               
             }
-            //console.log(this.dataSource.data.length);
-            //this.dataSource.paginator = this.paginator;
-            //this.dataSource.sort = this.matSort;            
             this.isLoadingResults = false;
           },
           (error) => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             this._userService.logout();
-            //this._router.navigate(["/login"]);          
             console.log(<any>error);
           });
     }else{
@@ -330,15 +503,12 @@ prevStep() {
 
 
 
-  ngOnDestroy() {
-    //console.log('La página se va a cerrar');
-    
+  ngOnDestroy() {   
     this._onDestroy.next();
     this._onDestroy.complete();
     if(this.subscription){
-    this.subscription.unsubscribe();
+      this.subscription.unsubscribe();
     }
-    console.log("ngOnDestroy ORDER complete");
   }  
 
 
@@ -457,9 +627,8 @@ prevStep() {
                   for (var i=0; i<this.inspector.length; i++){
                     const userid = this.inspector[i]['id'];
                     const username = this.inspector[i]['usuario'];
-                    this.inspector[i] = { name: username, id: userid };
+                    this.inspector[i] = { name: username, id: userid };                  
                   }
-                  //console.log(this.inspector);
                   this.filteredInspectorMulti.next(this.inspector.slice());                  
                 }else{
                 }
@@ -496,6 +665,8 @@ prevStep() {
 
   getParams(){
   
+    this.isLoadingResults = true;
+
     if(this.filterValue){
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
@@ -504,38 +675,36 @@ prevStep() {
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';    
+       this.selectedColumnnUsuario.columnValue = '';       
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
        this.regionMultiCtrl = new FormControl('');
-       this.inspectorCtrl = new FormControl('');
        //console.log('paso000')      
     }
 
-    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue){
+    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue && !this.selectedColumnnDate.fieldValue){
        this.selectedColumnnDate.fieldValue = '';
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';           
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
+       this.selectedColumnnUsuario.columnValue = '';              
+       //this.datedesde = new FormControl('');
+       //this.datehasta = new FormControl('');
        this.regionMultiCtrl = new FormControl('');
-       this.inspectorCtrl = new FormControl('');
        //console.log('paso111')
     }
 
-    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && !this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
+    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+       //this.selectedColumnn.fieldValue = '';
+       //this.selectedColumnn.columnValue = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
+       this.selectedColumnnUsuario.columnValue = '';              
        this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
        //console.log('paso222')
     }
 
@@ -546,7 +715,7 @@ prevStep() {
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
        this.filtersregion.fieldValue= 'regions.region_name';
@@ -556,12 +725,12 @@ prevStep() {
     if(this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';           
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
        this.filtersregion.fieldValue = 'regions.region_name';
        //console.log('paso444') 
     }
@@ -575,22 +744,7 @@ prevStep() {
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
        //console.log('paso555')
-    }    
-
-    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnDate.fieldValue = '';       
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       //console.log('777')
-    }    
-
+    }
   }
 
 
@@ -598,7 +752,7 @@ prevStep() {
     if (sort.active && sort.direction) {
       this.sort = sort;      
     }
-    this.isLoadingResults = true;
+    
     this.getParams();
 
     this._orderService.getServiceOrder(
@@ -639,88 +793,7 @@ prevStep() {
 
 
   search() {
-    this.isLoadingResults = true;
-    if(this.filterValue){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnDate.fieldValue = '';
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';       
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.regionMultiCtrl = new FormControl('');
-       //console.log('paso000')      
-    }
-
-    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue){
-       this.selectedColumnnDate.fieldValue = '';
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';              
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.regionMultiCtrl = new FormControl('');
-       //console.log('paso111')
-    }
-
-    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.filtersregion.fieldValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';              
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
-       //console.log('paso222')
-    }
-
-    if(this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnDate.fieldValue = '';       
-       this.selectedColumnnDate.columnValueDesde = '';
-       this.selectedColumnnDate.columnValueHasta = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';
-       this.datedesde = new FormControl('');
-       this.datehasta = new FormControl('');
-       this.filtersregion.fieldValue= 'regions.region_name';
-       //console.log('paso333') 
-    }
-
-    if(this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
-       this.filtersregion.fieldValue = 'regions.region_name';
-       //console.log('paso444') 
-    }
-
-    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.filtersregion.fieldValue = '';
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       //console.log('paso777')
-    }
-
-    
-    
+    this.getParams();    
     this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
@@ -735,9 +808,10 @@ prevStep() {
       });
   }
 
+
+
   onPaginateChange(event){
-    //console.log(this.paginator.pageIndex);
-    this.isLoadingResults = true;
+    //this.isLoadingResults = true;
     this.pageSize = event.pageSize;    
     this.getParams();
      this._orderService.getServiceOrder(

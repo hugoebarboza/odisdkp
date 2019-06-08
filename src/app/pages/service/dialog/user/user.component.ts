@@ -1,6 +1,7 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 
 import swal from 'sweetalert';
 
@@ -9,6 +10,7 @@ import {
   Proyecto,
   Service
   } from '../../../../models/types';
+
 
 //SERVICES
 import { UserService } from '../../../../services/service.index';
@@ -19,7 +21,7 @@ import { UserService } from '../../../../services/service.index';
   templateUrl: './user.component.html',
   styleUrls: ['./user.component.css']
 })
-export class UserComponent implements OnInit {
+export class UserComponent implements OnInit, OnDestroy {
 
   customerid:number
   id:number;
@@ -32,17 +34,17 @@ export class UserComponent implements OnInit {
   totalRegistros: number = 0;
   totalRegistrosNoActive: number = 0;
   selected = new FormControl(0);
-  subtitle:string = "Seleccione los usuarios de acuerdo a las siguientes opciones."
+  subtitle:string = "Seleccione los usuarios de acuerdo a las siguientes opciones.";
+  subscription: Subscription;
   status: string;
   token: any;
 
   constructor(
     public _userService: UserService,
     public dialogRef: MatDialogRef<UserComponent>,   
-    @Inject(MAT_DIALOG_DATA) public data: Service
-
+    @Inject(MAT_DIALOG_DATA) public data: Service,    
   ) { 
-    this.loading = true;
+    //this.loading = true;
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
@@ -50,14 +52,24 @@ export class UserComponent implements OnInit {
   }
 
   ngOnInit() {
+
     if(this.data.project_id > 0){
       this.id = this.data.project_id;
       this.project = this.filter();
       this.project_name = this.project.project_name;
       this.customerid = this.project.customer_id;
-      this.loading = false;
+      //this.loading = false;
     }
   }
+
+  ngOnDestroy() {
+    //console.log('La página se va a cerrar');
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
+
+  }
+
 
   loadDataUser(total:number){
     this.totalRegistros = total;

@@ -5,7 +5,6 @@ import { filter, map } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 
-
 //MODELS
 import { Proyecto } from './models/types';
 
@@ -69,7 +68,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
     this.getDataRoute()
     .subscribe( data => {
-      //console.log(data);
       this.titulo = data.titulo;
       this.description = data.descripcion
       this._title.setTitle( this.titulo );
@@ -94,12 +92,18 @@ export class AppComponent implements OnInit, OnDestroy {
     .subscribe( objNgrx  => {
       if (objNgrx) {
         this.identity = objNgrx.identificacion;
+        //this.identity = this._userService.getIdentity();
       }
 
       this.proyectos = this._userService.getProyectos();
       this.identity = this._userService.getIdentity();
 
+
       if (!this.identity) {
+        //console.log('no identity');
+        /*this.identity = {};
+        if(Object.keys(this.identity).length == 0){
+        }*/
         this.sidenav.close();
       }
 
@@ -121,5 +125,7 @@ export class AppComponent implements OnInit, OnDestroy {
 		if(event == 1){
 		}
 	}
+
+
 
 }
