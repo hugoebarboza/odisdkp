@@ -3,24 +3,13 @@ import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase);
 const cors = require("cors")({ origin: true });
 
+//SEND GRID API KEY
+const SENDGRID_API_KEY = functions.config().sendgrid.key;
+const sgMail = require('@sendgrid/mail');
+sgMail.setApiKey(SENDGRID_API_KEY);
+//sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
-function parseBody(req:any, userId:any, userIdTo:any) {
 
-  var payload = {
-      notification: {
-          title: req.title,
-          body: req.message,
-          create_at: req.create_at,
-          create_by: userId,
-          status: req.status,
-          userIdTo: userIdTo
-        }
-      };
-  
-
-  return payload;
-  
-}
 
 
 exports.fcmSend = functions.https.onRequest((req, res) => {
@@ -34,20 +23,7 @@ exports.fcmSend = functions.https.onRequest((req, res) => {
     const userIdTo  = req.body.userIdTo;
     const payload = parseBody(req.body, userId, userIdTo);
     
-
-    /*
-    const payload = {
-          notification: {
-            title: req.body.title,
-            body: req.body.message,
-            create_at: req.body.create_at,
-            create_by: userId,
-            status: req.body.status,
-            userIdTo: userIdTo
-          }
-    };*/
-
-        return admin.firestore().collection('users').doc(userIdTo).get()
+      return admin.firestore().collection('users').doc(userIdTo).get()
         .then((doc:any) => doc.data() )
         .then((user) => {
           const tokens = user.fcmTokens;
@@ -93,13 +69,24 @@ exports.fcmSend = functions.https.onRequest((req, res) => {
   });
 });
 
+function parseBody(req:any, userId:any, userIdTo:any) {
 
-exports.helloWorld = functions.https.onRequest((req, res) => {
-  return cors(req, res, () => {
-      res.send("Hello from a Severless Database!")
-  });
-});
-
+  var payload = {
+      notification: {
+          title: req.title,
+          body: req.message,
+          create_at: req.create_at,
+          create_by: userId,
+          status: req.status,
+          userIdTo: userIdTo,
+          idUx: req.idUx,
+          descriptionidUx: req.descriptionidUx,
+          route: req.routeidUx
+        }
+      };
+  
+  return payload;  
+}
 
 function addNotification(data:any) {
   return new Promise<any>((resolve, reject) => {
@@ -107,16 +94,6 @@ function addNotification(data:any) {
     const userId  = data.body.userId;
     const userIdTo  = data.body.userIdTo;
     const payload = parseBody(data.body, userId, userIdTo);
-
-    /*
-    const notificacion = {
-			body: data.body.message,
-			title: data.body.title,
-			create_at: data.body.create_at,
-      create_by: data.body.userId,
-      status: data.body.status,
-      send_to: data.body.userIdTo,
-    }*/
 
 		admin.firestore().collection('fcmnotification').add(payload.notification)
 		.then(function(docRef) {
@@ -134,15 +111,6 @@ function addUserNotification(data:any) {
     const userIdTo  = data.body.userIdTo;
     const payload = parseBody(data.body, userId, userIdTo);
 
-    /*
-    const notificacion = {
-			body: data.body.message,
-			title: data.body.title,
-			create_at: data.body.create_at,
-      create_by: data.body.userId,
-      status: data.body.status
-    }*/
-
     admin.firestore().doc(`/users/${userIdTo}`).collection('notifications').add(payload.notification)
 		.then(function(docRef) {
 			console.log('Document USER FCM written with ID: ', docRef.id);
@@ -159,17 +127,6 @@ function addUserNotificationSend(data:any) {
     const userIdTo  = data.body.userIdTo;
     const payload = parseBody(data.body, userId, userIdTo);
 
-    /*
-    const notificacion = {
-			body: data.body.message,
-			title: data.body.title,
-			create_at: data.body.create_at,
-      create_by: data.body.userId,
-      status: data.body.status
-    }*/
-
-
-
     admin.firestore().doc(`/users/${userId}`).collection('notificationsend').add(payload.notification)
 		.then(function(docRef) {
 			console.log('Document USER FCM written with ID: ', docRef.id);
@@ -178,6 +135,47 @@ function addUserNotificationSend(data:any) {
     });
 }
 
+
+exports.helloWorld = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+      res.send("Hello from a Severless Database!")
+  });
+});
+
+exports.httpEmail = functions.https.onRequest((req, res) => {
+
+  cors( req, res, () => { 
+
+      //const toName  = req.body.toName;
+      const toEmail = req.body.toEmail;
+      const fromTo = req.body.fromTo;
+      const subject = req.body.subject;
+      const message = req.body.message;
+
+      const msg = {
+          to: toEmail,
+          from: fromTo,
+          subject: subject,
+          html: message,
+          //html: `<strong>Hola ${toName}. Tiene una nueva notificación!!!</strong>`,
+          //text: `Hola ${toName}. Tiene una nueva notificación!!! `,
+          /* custom templates
+          templateId: 'd-3ce0b6c7294849e5bcdffee694bad8b9',
+          substitutionWrappers: ['{{', '}}'],
+          substitutions: {
+            name: toName
+            // and other custom properties here
+          }*/
+      };
+
+      return sgMail.send(msg)
+              
+          .then(() => res.status(200).send('email sent!') )
+          .catch((err:any) => res.status(400).send(err) )
+
+      });
+
+});
 
 
 /*

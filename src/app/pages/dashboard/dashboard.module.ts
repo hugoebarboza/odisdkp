@@ -5,9 +5,9 @@ import { CommonModule } from '@angular/common';
 //COMPONENTS
 import { DashboardComponent } from './dashboard-list/dashboard.component';
 
-//INTERCEPTOR
+//PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../http-interceptors/my.interceptor';
+import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 //MODULES

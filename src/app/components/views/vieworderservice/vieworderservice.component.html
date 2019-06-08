@@ -10,12 +10,13 @@
 <div class="p-2">
 <mat-card [ngStyle]="{'padding':'0px'}">
 <mat-card-header [ngClass]="{'custom-card':true}">
+
+
 <table class="table-responsive" cellspacing="0" border="0" class="main-table">
   <tr>
     <td>
     <mat-form-field>      
       <input  matInput placeholder="Buscar Orden" *ngIf="!isactiveSearch && datasourceLength == 0" disabled>
-
       <input  matInput (keyup)="applyFilter()" placeholder="Buscar Orden" [(ngModel)]="filterValue" *ngIf="isactiveSearch && datasourceLength > 0">
       <button mat-button *ngIf="filterValue && isLoadingResults" matSuffix mat-icon-button aria-label="Clear" >
           <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17"></mat-spinner>
@@ -38,6 +39,7 @@
 <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" (click)="toggle()" id="bt"  *ngIf="show">
   <mat-button-toggle value="bold">Filtros<i class="material-icons" style="color:blue">arrow_right</i></mat-button-toggle>
 </mat-button-toggle-group>
+
 </td>
 
 
@@ -45,9 +47,7 @@
 <td width="1%">
 <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="!show"
   matTooltip="Filtrar datos."
-  [matTooltipPosition]="positionrightaction.value"
-
->
+  [matTooltipPosition]="positionrightaction.value">
   <mat-icon>filter_list</mat-icon>
 </button>
 
@@ -185,7 +185,7 @@
           </mat-form-field>
 
 
-          <mat-form-field class="margin" *ngIf="!selectedColumnn.fieldValue" >
+          <mat-form-field class="margin"  >
           <mat-select placeholder="Fecha" [(ngModel)]="selectedColumnnDate.fieldValue">
             <mat-option>Seleccione</mat-option>
             <mat-option value="orders.create_at">Creado El</mat-option>
@@ -203,7 +203,7 @@
 
 
 
-        <mat-form-field *ngIf="selectedColumnnDate.fieldValue && !selectedColumnn.fieldValue" class="margin" >
+        <mat-form-field *ngIf="selectedColumnnDate.fieldValue" class="margin" >
           <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde"disabled>
           <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
           <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
@@ -211,30 +211,31 @@
 
 
 
-        <mat-form-field *ngIf="selectedColumnnDate.fieldValue && !selectedColumnn.fieldValue" class="margin">
+        <mat-form-field *ngIf="selectedColumnnDate.fieldValue " class="margin">
           <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" disabled >
           <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
           <mat-datepicker #fecha2 disabled="false"></mat-datepicker>
         </mat-form-field>
 
-
+ 
+  
   
 
-    <mat-form-field class="margin" >
-      <mat-select [formControl]="regionMultiCtrl"  placeholder="Región" [multiple]="true" #multiSelect  >
-        <ngx-mat-select-search [formControl]="regionMultiFilterCtrl" ></ngx-mat-select-search>
-        <mat-option *ngFor="let region of filteredRegionMulti | async" [value]="region.name">
-          {{region.name}}
-        </mat-option>
-        <p></p>
-        <div class="container">
-        <div class="button-row">
-        <button type="button" class="btn btn-secondary btn-sm" (click)="resetRegionFilters()">Limpiar</button>
-        </div>
-        </div>
-        <p></p>
-      </mat-select>
-    </mat-form-field>
+          <mat-form-field class="margin" *ngIf="!selectedColumnn.fieldValue">
+            <mat-select [formControl]="regionMultiCtrl"  placeholder="Región" [multiple]="true" #multiSelect  >
+              <ngx-mat-select-search [formControl]="regionMultiFilterCtrl" ></ngx-mat-select-search>
+              <mat-option *ngFor="let region of filteredRegionMulti | async" [value]="region.name">
+                {{region.name}}
+              </mat-option>
+              <p></p>
+              <div class="container">
+              <div class="button-row">
+              <button type="button" class="btn btn-secondary btn-sm" (click)="resetRegionFilters()">Limpiar</button>
+              </div>
+              </div>
+              <p></p>
+            </mat-select>
+          </mat-form-field>
 
 
 
@@ -321,7 +322,6 @@
 </table>
 
 </mat-card-header>
-
 <mat-card-content>
 
 
@@ -474,7 +474,7 @@
 <ng-container matColumnDef="update_at" >
   <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
     <mat-cell *matCellDef="let order"> 
-      <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>  
+      <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>
     </mat-cell>
 </ng-container>
 

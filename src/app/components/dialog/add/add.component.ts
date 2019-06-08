@@ -39,6 +39,7 @@ export class AddComponent implements OnInit, OnDestroy {
   public arrayservicetype: ObjectServiceType[] = [];
   public termino: string;  
   public results: Object = [];
+  role: number;
   public serviceestatus: ServiceEstatus[] = [];
   public show:boolean = false;
   public showdate:boolean = false;
@@ -58,7 +59,7 @@ export class AddComponent implements OnInit, OnDestroy {
   hour = new Date().getHours();
   minutes = new Date().getMinutes();
   seconds = new Date().getSeconds();
-  date = new FormControl(new Date());
+  date = new FormControl(new Date());  
   selectedUsers: any;
 
   serializedDate = new FormControl((new Date()).toISOString());
@@ -82,6 +83,7 @@ export class AddComponent implements OnInit, OnDestroy {
   this.title = "Agregar Orden";
   this.identity = this._userService.getIdentity();
   this.token = this._userService.getToken();
+  this.role = 5; //USUARIOS INSPECTORES
 
  }
 
@@ -145,6 +147,9 @@ export class AddComponent implements OnInit, OnDestroy {
 
     }
 
+    if(this.data.observation){
+      this.data.observation = this.data.observation.replace(/[\s\n]/g,' ');
+    }
 
 
     for (var i=0; i<this.atributo.length; i++){
@@ -217,7 +222,7 @@ export class AddComponent implements OnInit, OnDestroy {
     }
 
    public loadUserProject(id: number){
-    this.subscription = this._projectService.getUserProject(this.token.token, id, 6).subscribe(
+    this.subscription = this._projectService.getUserProject(this.token.token, id, this.role).subscribe(
     response => {
               if(!response){
                 return;

@@ -103,22 +103,10 @@ export class DashboardComponent implements OnInit, OnDestroy {
 		if(event == 1){
 		}
 	}
+	
 
 	sendMsj() {
 				
-		//let key = `key=AAAAkZ2TwWU:APA91bF2QumX_EAF8t_n5nNMWLRxSaOyCmcW0sKKPEF7tk2KAwQ35_Bv8IBCn2SIl_wHbq8sf8uUNutSxaFbAXnMjplb6nCqtW41eSnqYJgfHtQszi5K2k0VzWoN6R_gQ3Cs1SalV_i5`
-		//let url = `https://us-central1-odisdkp.cloudfunctions.net/fcmSend`
-		//let headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': key });
-		/*
-		return this.http.post(url, data, {headers: headers})
-						.toPromise()
-						.then( res => {
-						  console.log(res)
-						})
-						.catch(err => {
-						  console.log(err)
-						})
-		*/
 
 		this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:MM'));
 		
@@ -126,7 +114,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 			userId: 'ghsMwBtcYLXKxd2boAuQc8encSk1',
 			userIdTo: 'otsLY91D66WnFul0UvMLxlL1dhF3',			
 			title: 'Titulo de Mensaje',
-			message: 'Cuerpo de Mensaje',
+			message: 'Test Cuerpo de Mensaje',
 			create_at: this.created.value,
 			status: '1'
 		};

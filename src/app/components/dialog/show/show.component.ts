@@ -53,6 +53,7 @@ export class ShowComponent implements OnInit, OnDestroy {
   listfirmauser = new Array();
   orderatributo= new Array();
   orderatributofirma: OrderAtributoFirma[] = [];
+  rotationAmount:number = 0;
   usercreate:User[];
   userupdate:User[];
   
@@ -144,6 +145,11 @@ export class ShowComponent implements OnInit, OnDestroy {
       );      
    }
 
+
+  rotateImage(direction, image) {
+    this.rotationAmount += direction == 'left' ? -45 : 45;    
+    document.getElementById(image).style.transform = `rotate(${this.rotationAmount}deg)`;
+  }
 
   submit() {
   // emppty stuff

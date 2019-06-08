@@ -14,6 +14,12 @@ import { ShowProfileSecurityComponent } from '../dialog/showprofilesecurity/show
 //MODEL
 import { Proyecto } from '../../../models/types';
 
+
+//NGRX REDUX
+import { AppState } from '../../../app.reducers';
+import { Store } from '@ngrx/store';
+
+
 //SERVICES
 import { SettingsService, UserService } from '../../../services/service.index';
 
@@ -57,6 +63,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     public _userService: UserService,
     public dialog: MatDialog,
     public label: SettingsService,
+    private store: Store<AppState>
   ) { 
     this._userService.handleAuthentication(this.identity, this.token);
     this.identity = this._userService.getIdentity();
@@ -88,6 +95,15 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
+
+    /*
+    this.subscription = this.store.select('loading')
+    .subscribe( loading => 
+      {
+        this.isLoading = loading.isLoading;  
+      }
+    );*/
+
 
   }
 

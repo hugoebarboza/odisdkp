@@ -28,15 +28,6 @@ export class CdfService  {
 	}
 
 
-	/*
-	this._cdf.addNotification(this.token.token, data)
-	.then(res => {
-		//console.log(res);
-	}, err => {
-		console.log(err);
-	});*/
-
-
 	addNotification(token=null, params:any){
 	if(!token){
 		return;
@@ -68,6 +59,24 @@ export class CdfService  {
 				return resp;
 			}).catch( err => {
 				return Observable.throw( err );
+			});		
+	}
+
+
+	httpEmail(token=null, params:any): Observable<any>{
+		if(!token){
+            return;
+		}
+
+		let headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
+
+		const endpoint = 'https://us-central1-odisdkp.cloudfunctions.net/httpEmail';
+
+		return this._http.post(endpoint, params, {headers: headers})
+			.map( (resp: any) => {
+				return resp;
+			}).catch( err => {
+				return err ;
 			});		
 	}
 

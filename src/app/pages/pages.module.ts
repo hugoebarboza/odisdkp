@@ -4,9 +4,10 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
-//INTERCEPTOR
+//PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../http-interceptors/my.interceptor';
+import { MyInterceptor } from '../providers/interceptor/my.interceptor';
+
 
 //MODULES
 import { AgmCoreModule } from '@agm/core';
@@ -56,7 +57,6 @@ import { registerLocaleData } from '@angular/common';
 
 // Global vars
 import { environment } from '../../environments/environment';
-import { GLOBAL } from '../services/global';
 
 
 registerLocaleData(localeEs);

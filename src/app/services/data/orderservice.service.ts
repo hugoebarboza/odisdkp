@@ -169,6 +169,10 @@ import { ToastrService } from 'ngx-toastr';
 
 
   add(token: any, order: Order, id:number): void {
+		if (!token){
+			return;
+		}
+
 		let json = JSON.stringify(order);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');	
@@ -185,6 +189,8 @@ import { ToastrService } from 'ngx-toastr';
 			      },
 			      (err: HttpErrorResponse) => {	
 						this.error = err.error.message;
+						//console.log('viene');
+						//console.log(<any>err);
 						swal('No fue posible procesar su solicitud', err.error.message, 'error');
 			      //console.log(err.error.message);
 			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
@@ -193,6 +199,10 @@ import { ToastrService } from 'ngx-toastr';
 
 
 	addEstatus(token: any, data: ServiceEstatus, id:number): Observable<any> {
+		if (!token){
+			return;
+		}
+
 		let json = JSON.stringify(data);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');	
@@ -204,6 +214,10 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
   update(token: any, orderid:number, order: Order, id:number): void {	
+		if (!token){
+			return;
+		}
+
 		let json = JSON.stringify(order);
 		let params = 'json='+json;
 
@@ -230,6 +244,10 @@ import { ToastrService } from 'ngx-toastr';
 
 
 	updateEstatus(token: any, data:ServiceEstatus, id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
 		let json = JSON.stringify(data);
 		let params = 'json='+json;
 
@@ -241,8 +259,31 @@ import { ToastrService } from 'ngx-toastr';
 						 });				
 	}
 
+	updateMass(token: any, data:any, id:number, paramset: string, paramvalue: number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		let Url = this.url+'service/'+id+'/orderupdatemass/'+paramset+'/value/'+paramvalue;
+	
+
+		return this._http.post(Url, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
 
 	deleteEstatus(token: any, id:number): Observable<any>{
+
+		if (!token){
+			return;
+		}
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		return this._http.delete(this.url+'estatus/'+id, {headers: headers})
@@ -253,6 +294,10 @@ import { ToastrService } from 'ngx-toastr';
 
 
  	delete(token: any, orderid:number, id: number): void { 	 	
+		if (!token){
+			return;
+		}
+
 	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							      
     
 		this._http.delete(this.url+'project'+'/'+id+'/'+'order/'+orderid, {headers: headers}).subscribe(

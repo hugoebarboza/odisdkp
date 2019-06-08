@@ -77,7 +77,7 @@ export class AddUserServiceComponent implements OnInit, OnDestroy {
 
     this.isLoading = true;
 
-    this._userService.searchUser(this.token.token, this.id, this.page, termino )
+    this.subscription = this._userService.searchUser(this.token.token, this.id, this.page, termino )
             .subscribe( (resp: any) => {
               this.totalRegistros = resp.datos.total;
               this.usuarios = resp.datos.data;

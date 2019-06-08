@@ -238,9 +238,31 @@
         <table id="t09" width="100%"  >
           <tr *ngFor="let row of imageRows; let isEven = even;let i = index;">
             <td width="50%" align="center" *ngFor="let image of row; let j = index;" >
-                    <div class="zoom">
-                    <img *ngIf="image?.archivo" src="data:image/jpg;base64,{{image.archivo}}" style=" width: 300px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">            
-                    </div>
+              <div>
+                <div class="row" >
+                  <div class="col-6">
+                     <button mat-button (click)="rotateImage('left', image.id)" *ngIf="image && image.id">
+                        <i class="material-icons">
+                            keyboard_arrow_left
+                        </i>                       
+                     </button>
+                  </div>
+                  <div class="col-6">
+                      <button mat-button (click)="rotateImage('right', image.id)" *ngIf="image && image.id">
+                          <i class="material-icons">
+                              keyboard_arrow_right
+                          </i>                       
+                       </button>                    
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                      <div class="zoom">
+                      <img id="{{image.id}}" *ngIf="image?.archivo" src="data:image/jpg;base64,{{image.archivo}}" style=" width: 300px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">                            
+                      </div>
+                  </div>
+                </div>                                          
+              </div>
             </td>
           </tr>
         </table>

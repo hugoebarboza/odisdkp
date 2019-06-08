@@ -1,3 +1,6 @@
+.btn-grid {
+    margin-top: 7px;
+}
 .custom-card {
     background-color: #f2f4f7;
 }
@@ -100,3 +103,8 @@ justify-content: center;
 .radio-button {
     margin: 5px;
 }
+.middle-width {
+    width: 50%;
+    padding: 4px;
+}
+  

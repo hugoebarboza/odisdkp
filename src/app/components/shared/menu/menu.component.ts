@@ -130,7 +130,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     const obj: any = {project: p, identificacion: i};
     const accion = new LoginAction(obj);
     this.store.dispatch( accion );
-    console.log('redux dispacth action refresch menu')
+    //console.log('redux dispacth action refresch menu')
   }
 
 }

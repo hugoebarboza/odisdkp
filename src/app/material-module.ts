@@ -4,6 +4,7 @@ import { MatExpansionModule} from '@angular/material/expansion';
 
 //CDK MATERIAL
 import { PortalModule } from '@angular/cdk/portal';
+import {ScrollingModule} from '@angular/cdk/scrolling';
 
 
 import {
@@ -81,6 +82,7 @@ import {
     MatTooltipModule,
     MatTreeModule,
     PortalModule,
+    ScrollingModule,
   ]
 })
 export class MaterialModule {}

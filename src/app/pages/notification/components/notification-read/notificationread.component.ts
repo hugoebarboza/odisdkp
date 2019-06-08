@@ -1,10 +1,10 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { defer, combineLatest, of } from 'rxjs/';
 import { switchMap, map, tap, finalize } from 'rxjs/operators';
 import { TooltipPosition } from '@angular/material';
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 //FIREBASE
 import {
@@ -36,7 +36,6 @@ export class NotificationReadComponent implements OnInit {
   resultCount: number = 0;
   resultCountUnread: number = 0;
   resultCountRead: number = 0;
-  subscription: Subscription;
   show:boolean = false;
   status: string;
   title: string;
@@ -56,7 +55,7 @@ export class NotificationReadComponent implements OnInit {
   responsearray = [];
   count: number;
 
-
+  @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
 
   displayedColumns: string[] = ['project', 'service', 'title', 'body', 'create_by','create_at', 'status']; 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
@@ -108,6 +107,7 @@ export class NotificationReadComponent implements OnInit {
           this.resultCountUnread = actions.length;
         })
       );
+      
       /*********Get read */
       this.notificationsReadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '0') )
       this.getnotificationsRead$ = this.notificationsReadRef.snapshotChanges()
@@ -143,11 +143,15 @@ export class NotificationReadComponent implements OnInit {
     })
   }
 
-  ngOnDestroy() {
-    if(this.subscription){
-      this.subscription.unsubscribe();
-    }
+  irInicio() {
+    this.viewport.scrollToIndex( 0 );
   }
+
+
+  irFinal() {
+    this.viewport.scrollToIndex( this.resultCount );
+  }
+
 
   update(notificationKey, value) {
     if(!notificationKey){

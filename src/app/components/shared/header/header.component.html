@@ -61,7 +61,10 @@
               <button mat-icon-button routerLink="/notification">
 
                 <mat-icon class="material-icons md-14" *ngIf="resultCount == 0">notifications</mat-icon>
-                <mat-icon class="material-icons md-color" *ngIf="resultCount >= 1">notifications</mat-icon>
+                <mat-icon class="material-icons md-color" *ngIf="resultCount >= 1" 
+                  matTooltip="Notificaciones · Nuevas notificaciones"
+                  [matTooltipPosition]="positionheaderaction.value"                  
+                >notifications</mat-icon>
 
               </button>
               </div>

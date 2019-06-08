@@ -1,10 +1,12 @@
 import { Injectable } from '@angular/core';
-import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, ActivatedRoute } from '@angular/router';
+import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Router } from '@angular/router';
 import { AuthService, UserService } from '../services/service.index';
 
 //NGRX REDUX
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
+import { ResetAction } from '../contador.actions';
+import { ResetUserAction } from '../stores/auth/auth.actions';
 
 
 @Injectable({
@@ -20,6 +22,7 @@ export class AuthguardService implements CanActivate {
   constructor(
 		public authService: AuthService,
 		private auth : UserService,
+		public _router: Router,
 		private store: Store<AppState>,
   ) { 
 
@@ -52,7 +55,8 @@ export class AuthguardService implements CanActivate {
 					//console.log('paso authguard isTokenValidate false');
 					//this.auth.resetAction();
 					console.log( 'Bloqueado por Authguard' );
-					this.auth.logout();
+					this.resetAction();
+					//this.auth.logout();
 					this.authService.logout();		
 					return false;		
 				}
@@ -92,6 +96,19 @@ export class AuthguardService implements CanActivate {
     }
 	}
 	
-	
+	resetAction() {
+		const accion = new ResetAction();
+		const useraccion = new ResetUserAction();
+		localStorage.removeItem('departamentos');
+		localStorage.removeItem('expires_at');
+		localStorage.removeItem('fotoprofile');
+		localStorage.removeItem('identity');
+		localStorage.removeItem('proyectos');
+		localStorage.removeItem('token');
+		localStorage.removeItem('uid');		
+		this.store.dispatch( accion );
+		this.store.dispatch( useraccion );
+		this._router.navigate(['/login']);
+  }	
 
 }

@@ -147,6 +147,9 @@ export class CustomerService {
 
 
     add(token, customer: Customer, id:number): void {	
+			if(!token){
+				return;
+			}
     	
 		let json = JSON.stringify(customer);
 		let params = 'json='+json;
@@ -170,13 +173,17 @@ export class CustomerService {
 			      },
 			      (err: HttpErrorResponse) => {	
 						this.error = err.error.message;
-						swal('No fue posible procesar su solicitud', '', 'error');
+						swal('No fue posible procesar su solicitud', err.error.message, 'error');
 			      //console.log(err.error.message);
 			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 			    });			   
 	}
 
     update(token, customer: Customer, id:number, customerid:number): void {	
+
+			if(!token){
+				return;
+			}
     	
 		let json = JSON.stringify(customer);
 		let params = 'json='+json;
@@ -190,7 +197,8 @@ export class CustomerService {
 			      },
 			      (err: HttpErrorResponse) => {	
 						this.error = err.error.message;
-						swal('No fue posible procesar su solicitud', '', 'error');
+						//console.log(<any>err);
+						swal('No fue posible procesar su solicitud', err.error.message, 'error');
 			      //console.log(err.error.message);
 			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 			    });			   

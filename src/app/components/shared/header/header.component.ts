@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { Subscription } from 'rxjs/Subscription';
+import { FormControl } from '@angular/forms';
 
 //FIREBASE
 import {  AngularFirestore,  AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
@@ -9,6 +10,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 
 //MATERIAL
 import { MatDialog } from '@angular/material';
+import { TooltipPosition } from '@angular/material';
 
 //MODELS
 import { User, UserFirebase } from 'src/app/models/types';
@@ -22,9 +24,7 @@ import { LogoutComponent } from '../../../components/dialog/logout/logout.compon
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
 import { ResetAction } from 'src/app/contador.actions';
-import { SetUserAction } from 'src/app/auth/auth.actions';
-
-
+import { SetUserAction } from 'src/app/stores/auth/auth.actions';
 
 //SERVICES
 import { UserService } from '../../../services/service.index';
@@ -65,6 +65,9 @@ export class HeaderComponent {
 
   private itemsCollection: AngularFirestoreCollection<Item>;
   items: Observable<Item[]>;
+
+  positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  positionheaderaction = new FormControl(this.positionOptions[3]);
   
 	subscription: Subscription;
 
@@ -94,7 +97,7 @@ export class HeaderComponent {
         this.identity = objNgrx.identificacion; 
       }
       this.identity = this._userService.getIdentity();
-      if(this.identity){
+      if(this.identity){        
         this.isLoading = false;
       }  
     });
@@ -118,7 +121,7 @@ export class HeaderComponent {
           this.store.dispatch( accion );
 
           //this.store.dispatch( new SetUserAction( newUser ) );
-          console.log(newUser);
+          //console.log(newUser);
 
           this.userDoc = this.afs.doc<User>(`/users/${auth.uid}`);
           this.notificationsRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1'));

@@ -7,6 +7,7 @@ declare var swal: any;
 
 //FIREBASE
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 //DIALOG
 import { EditServiceComponent } from '../../../components/shared/shared.index';
@@ -25,7 +26,8 @@ import {
   ProjectServiceType,
   Region, 
   Service, 
-  User } from '../../../models/types';
+  User, 
+  UserFirebase} from '../../../models/types';
 
 //MOMENT
 import * as _moment from 'moment';
@@ -33,10 +35,19 @@ const moment = _moment;
 
 
 //SERVICES
-import { CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
+import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
 
 
 export interface Item { id: any, comment: string; created: any, identity: string}
+
+export interface Users {
+  id: any;
+  name: string;
+  surname: string;
+  email: string;
+}
+
+
 
 
 @Component({
@@ -52,11 +63,14 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public country_id: number;
   public created: FormControl;
   public customer: Customer[] = [];
+  public descriptionidUx: string = ''
+  public idUx: any;
   public identity: any;
   public isRateLimitReached = true;
   public isLoadingResults = false;
   public items: Observable<Item[]>;
   private itemsCollection: AngularFirestoreCollection<Item>;
+  destinatario = [];
   private path = '';
   public project: string;
   public project_id: number;
@@ -66,6 +80,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public projectContent: Item[];
   public regiones: Region[] = [];  
   public row: any = {expand: false};
+  public route: string = '';
   public service_id: number;
   public services: Service;
   public service_detail: Service;
@@ -77,6 +92,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public toggleContentMain: boolean = false;
   public users: User[] = [];
   public users_ito: User[] = [];
+  userFirebase: UserFirebase;
   
 
   editorConfig: AngularEditorConfig = {
@@ -119,16 +135,26 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
 
   constructor(
     private _afs: AngularFirestore,
+    private _cdf: CdfService,
     private _dataService: OrderserviceService,
     private _project: ProjectsService,
     public _regionService: CountriesService,
     public _userService: UserService,
+    private firebaseAuth: AngularFireAuth,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,  
   ) { 
-    this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:MM:SS'));
+    this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+
+    this.firebaseAuth.authState.subscribe(
+      (auth) => {
+        if(auth){
+          this.userFirebase = auth;
+        }
+    });
+
   }
 
   ngOnInit() {
@@ -157,6 +183,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
     
   if (this.id > 0 && id > 0){
     this.path = 'comments/'+id+'/'+this.service_id;
+    this.route = this.path;
     this.itemsCollection = this._afs.collection<Item>(this.path, ref => ref.orderBy('created','desc'));      
     this.items = this.itemsCollection.valueChanges();
     
@@ -164,7 +191,13 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
 }
 
 addComment(value:any) { 
+  
+  //value = `${value}`;
+  //value = String(value).replace(/(\n)/gm,' ');
+  value = value.replace(/[\s\n]/g,' ');
+
   const docid = this._afs.createId();
+  this.idUx = docid;
   this.snackBar.open('Guardadon Registro de Trabajo.', '', {duration: 2000,});
   this.itemsCollection.doc(docid).set(
     {
@@ -174,12 +207,88 @@ addComment(value:any) {
       identity: this.identity.name + ' ' + this.identity.surname
     }      
   );
+
+
+  if(this.destinatario.length > 0)  {
+    //SEND CDF MESSAGING AND NOTIFICATION
+    this.sendCdf(this.destinatario, value);
+  }
+
+
   if(this.toggleContent){
     this.toggleContent=false;
-  }   
+  }
   if(this.toggleContentMain){
     this.toggleContentMain=false;
   }   
+
+}
+
+sendCdf(data, message){
+  if(!data){
+    return;
+  }
+
+  const body = 'Registro de trabajo en Proyecto: '+this.project+', Servicio: '+this.servicename+', con el siguiente Comentario: ' + message;
+  
+  if(this.destinatario.length > 0 && this.userFirebase.uid){
+    for (let d of data) {
+      
+      const notification = {
+        userId: this.userFirebase.uid,
+        userIdTo: d.id,			
+        title: 'Registro de Trabajo',
+        message: body,
+        create_at: this.created.value,
+        status: '1',
+        idUx: this.idUx,
+        descriptionidUx: 'collection',
+        routeidUx: `${this.route}`
+      };  
+
+      
+      this._cdf.fcmsend(this.token.token, notification).subscribe(
+        response => {        
+          if(!response){
+          return false;        
+          }
+          if(response.status == 200){ 
+            //console.log(response);
+          }
+        },
+          error => {
+          console.log(<any>error);
+          }   
+        );			
+          
+
+
+        const msg = {
+          toEmail: d.email,
+          fromTo: this.userFirebase.email,
+          subject: 'OCA GLOBAL - Nueva notificación',
+          message: `<strong>Hola ${d.name} ${d.surname}. <hr> <div>&nbsp;</div> Tiene una nueva notificación, enviada a las ${this.created.value} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+        };
+
+        this._cdf.httpEmail(this.token.token, msg).subscribe(
+          response => {        
+            if(!response){
+            return false;        
+            }
+            if(response.status == 200){ 
+              //console.log(response);
+            }
+          },
+            error => {
+            //console.log(<any>error);
+            }   
+          );			
+          
+
+      
+    }
+  
+  }
 
 }
 
@@ -423,6 +532,18 @@ deleteCommentDatabase(item: any) {
           // And lastly refresh table
         }
       });
+    }
+
+    taguser(data){
+      if(data.length == 0){
+        data = '';
+        return;
+      }
+
+      if(data.length > 0){
+        this.destinatario = data;
+        //console.log(this.destinatario);
+      }
     }
 
 

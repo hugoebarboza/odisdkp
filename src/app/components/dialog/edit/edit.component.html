@@ -6,12 +6,17 @@
      </button>
 </mat-toolbar>
 <p></p>
-<div class="example-loading-shade" *ngIf="loading">
-  <app-loading *ngIf="loading"></app-loading>  
+
+<div class="container" *ngIf="loading">
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-2">
+          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
+      </div>
+    </div>
 </div>
 
  
-  <form class="mat-dialog-content" #formControl="ngForm"  novalidate="novalidate">
+  <form class="mat-dialog-content" #formControl="ngForm"  novalidate="novalidate" >
 
     <div class="form">
       <mat-form-field color="accent">
@@ -118,10 +123,9 @@
 
     <!--Contains mat-hint for characters count and has maxLengt set-->
     <div class="form">
-      <mat-form-field color="accent">
+      <mat-form-field appearance="outline" color="accent">
         <textarea matInput #inputstate class="form-control" placeholder="Observación" [(ngModel)]="data.observation" name="observation" maxlength="277"  ></textarea>        
         <mat-hint align="end">{{inputstate.value?.length || 0}}/277</mat-hint>
-        <mat-icon matSuffix>mode_edit</mat-icon>
       </mat-form-field>
     </div>
 
@@ -177,9 +181,7 @@
     </div>
 
 
-<div class="example-loading-shade" *ngIf="isOrderLoading && show">
-  <app-loading *ngIf="isOrderLoading"></app-loading>  
-</div>
+
 
 
 <div *ngIf="orderatributo.length == 0 && atributo.length > 0">
@@ -190,6 +192,14 @@
   <mat-button-toggle-group  name="fontStyle" aria-label="Font Style" (click)="toggle()" id="bt"  *ngIf="show">
      <mat-button-toggle color="primary" value="bold">Más Datos<i class="material-icons" style="color:blue">arrow_drop_down</i></mat-button-toggle>
   </mat-button-toggle-group>              
+</div>
+
+<div class="container" *ngIf="isOrderLoading && show">
+    <div class="row justify-content-md-center">
+      <div class="col col-lg-2">
+          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isOrderLoading" ></mat-spinner>
+      </div>
+    </div>
 </div>
 
     <div class="animated fadeIn" *ngIf="this.orderatributo.length > 0 && this.atributo.length > 0">   
@@ -275,14 +285,13 @@
 
 
 
-            <mat-form-field class="full-width" color="accent" *ngIf="(detailatributo.type == 'textarea' && detailatributo.required == 0) || (detailatributo.type == 'textarea' && detailatributo.required == 1 && role >= 7)" >
+            <mat-form-field appearance="outline" class="full-width" color="accent" *ngIf="(detailatributo.type == 'textarea' && detailatributo.required == 0) || (detailatributo.type == 'textarea' && detailatributo.required == 1 && role >= 7)" >
               <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" ></textarea>
               <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
                 <mat-icon>close</mat-icon>
               </button>              
-              <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>            
-            <mat-form-field class="full-width" color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.required == 1 && role < 7" class="full-width">
+            <mat-form-field appearance="outline" class="full-width" color="accent" *ngIf="detailatributo.type == 'textarea' && detailatributo.required == 1 && role < 7" class="full-width">
               <textarea matInput placeholder="{{detailatributo.descripcion}}" [(ngModel)]="detailorderatributo.valor" name="{{detailatributo.id}}" required ></textarea>
               <button mat-button *ngIf="detailorderatributo.valor" matSuffix mat-icon-button aria-label="Clear" (click)="detailorderatributo.valor=''">
                 <mat-icon>close</mat-icon>
@@ -397,9 +406,8 @@
             </mat-form-field>            
 
 
-            <mat-form-field color="accent" *ngIf="detailatributo.type == 'textarea' " class="full-width">
+            <mat-form-field appearance="outline" color="accent" *ngIf="detailatributo.type == 'textarea' " class="full-width">
               <textarea matInput placeholder="{{detailatributo.descripcion}}" ngModel name="{{detailatributo.id}}"></textarea>
-              <mat-icon matSuffix>mode_edit</mat-icon>
             </mat-form-field>            
 
 
