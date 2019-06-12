@@ -11,6 +11,8 @@ import { MatSnackBar } from '@angular/material';
 import { MatSelect } from '@angular/material';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
+import {Observable} from 'rxjs/Observable';
+import {map} from 'rxjs/operators';
 
 //CDK
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
@@ -51,6 +53,7 @@ import jsPDF from 'jspdf';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
+
 
 
 interface Inspector {
@@ -103,6 +106,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   servicetypeid: number = 0;
   servicetype: ServiceType[] = [];
   selectedValueOrdeno: string;
+  sub: any;
   token:any;
   termino: string = '';
   oken: any;
@@ -316,8 +320,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     private excelService:ExcelService,
     private toasterService: ToastrService,
     public zipService: ZipService,
-
-
   ) 
   
   { 
@@ -331,6 +333,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.error = '';
     this.role = 5; //USUARIOS INSPECTORES
     this.open = false;
+
+    
+  
   }
 
   hoverIn(index:number){
@@ -1030,7 +1035,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   addNew(id:number, category_id:number, order: Order[]) {
      const dialogRef = this.dialog.open(AddComponent, {
-     width: '777px',
+     width: '1000px',
      disableClose: true,        
      data: { service_id: id, category_id: category_id, order: Order }
      });
@@ -1052,7 +1057,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     let service_id = this.id;    
     //console.log(assigned_to);    
     const dialogRef = this.dialog.open(EditComponent, {
-      width: '777px',
+      width: '1000px',
       disableClose: true,  
       data: {order_id: order_id, order_number: order_number, service_id: service_id, category_id: category_id, customer_id: customer_id, cc_number: cc_number, 
         servicetype_id: servicetype_id, status_id: status_id, 
@@ -1077,7 +1082,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   deleteItem(order_id: number, order_number: string, category_id:number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, estatus: string, order_date: string, required_date: string, observation: string, create_at: string, project_name: string, service_name: string, servicetype:string) {
     let service_id = this.id;    
     const dialogRef = this.dialog.open(DeleteComponent, {
-      width: '777px',
+      width: '1000px',
       disableClose: true,      
       data: {order_id: order_id, order_number: order_number, service_id: service_id, category_id: category_id, customer_id: customer_id, cc_number: cc_number, servicetype_id: servicetype_id, status_id: status_id, estatus:estatus, order_date: order_date, required_date: required_date, observation: observation, create_at: create_at, project_name: project_name, service_name: service_name, servicetype:servicetype}
     });
@@ -1096,7 +1101,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   showItem(order_id: number, order_number: string, category_id:number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, estatus: string, order_date: string, required_date: string, vencimiento_date: string, observation: string, create_at: string, usercreate:string, project_name: string, service_name: string, servicetype:string, update_at: string, userupdate:string, region:string, provincia:string, comuna:string, direccion:string) {
     let service_id = this.id;    
     const dialogRef = this.dialog.open(ShowComponent, {      
-      width: '1024px',
+      width: '1000px',
       disableClose: true,
       data: {order_id: order_id, order_number: order_number, service_id: service_id, 
         category_id: category_id, customer_id: customer_id, cc_number: cc_number, 

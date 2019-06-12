@@ -50,7 +50,7 @@ export class MessagingService {
         .doc(user.uid)
         .update({fcmTokens: token})
         .then(() => {
-          console.log('done token user update');
+          //console.log('done token user update');
         })
         .catch(function(error) {
           console.error('Error writing document: ', error);
@@ -66,7 +66,7 @@ export class MessagingService {
   getPermission() {
       this.messaging.requestPermission()
       .then(() => {
-        console.log('Have permission');
+        //console.log('Have permission');
         return this.messaging.getToken()
       })
       .then(token => {

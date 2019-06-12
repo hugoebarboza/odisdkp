@@ -1,5 +1,132 @@
               
-                <small class="d-block text-center mt-3">
+<div class="c_activity-notification ud-component--header-v6--notification-dropdown-button visible-lg-block visible-xl-block" ng-non-bindable="">
+  <div class="dropdown--open-on-hover dropdown--icon dropdown--notification dropdown--open-on-hover dropdown">
+    <a href="/user/view-notifications/" rel=" noopener noreferrer" target="_self" id="header.notifications" role="button" class="dropdown-toggle" aria-haspopup="true" aria-expanded="false">
+      <div class="fx pos-r text-center">
+        <span class="sr-only">Notificaciones</span>
+        <span class="dropdown__main-icon udi udi-bell-line"></span>
+        <span aria-label="7 notificaciones sin leer" class="badge">7</span>
+      </div>
+    </a>
+    <ul role="menu" class="dropdown-menu dropdown-menu-right" aria-labelledby="header.notifications">
+      <li role="presentation" tabindex="-1">
+        <div class="fx-lt notification__header">
+          <div class="fx pr-space-sm">Notificaciones</div>
+          <div class="pl-space-sm">
+            <a class="notification__settings" data-purpose="notification-settings" href="/user/edit-notifications/" target="_self" aria-label="Configuración de notificaciones">
+              <span class="udi udi-settings"></span>
+            </a>
+          </div>
+        </div>
+
+          <div data-purpose="notification-tab-pane" class="">
+            <div class="notification__list scroll--at-top" tabindex="-1">
+              <div data-purpose="notification" class="pos-r">
+                <a href="/crear-un-api-restful-con-slim-php-y-usarla-con-ajax/learn/#announcements/2428438" target="_self" class="fx-lt notification__url" data-purpose="notification-link">
+                  <div>
+                    <img alt="Víctor Robles" aria-label="Víctor Robles" class="user-avatar user-avatar--image" data-purpose="user-avatar" height="64" width="64" src="https://i.udemycdn.com/user/75x75/16661812_b24c.jpg">
+                  </div>
+                  <div class="fx ml-space-xs mr-space-sm">
+                    <div class="notification__message" data-purpose="notification-message"><span>Víctor Robles han hecho un anuncio: 
+                      <span class="bold">Hola ¿que tal? :)Todas las semanas, muchos alumnos me preguntan ¿que hostin
+                       </span>
+                       </span>
+                    </div>
+                    <div class="notification__time">hace 13 horas</div>
+                  </div>
+                </a>
+                <div class="notification__status-container">
+                  <div class="tooltip-container">
+                    <a class="notification__status" data-purpose="mark-as-read-status-icon" href="javascript:void(0)">
+                      <div class="notification__status-icon" aria-label="Marcar como leído"></div></a>
+                      <div id="mark-notification-32407444-as-read" data-purpose="base-tooltip" role="tooltip" class="notification__status-tooltip tooltip tooltip-blue bottom">
+                        <div class="tooltip-arrow"></div><div class="tooltip-inner"><div class="">Marcar como leído</div></div></div></div></div>
+              </div>
+                        
+              <!--
+              <div data-purpose="notification" class="pos-r"><a href="/angular-2-fernando-herrera/learn/#questions/7264204" target="_self" class="fx-lt notification__url" data-purpose="notification-link">
+                <div>
+                <img alt="Eduardo Trujillo González" aria-label="Eduardo Trujillo González" class="user-avatar user-avatar--image" data-purpose="user-avatar" height="64" width="64" src="https://i.udemycdn.com/user/75x75/37156474_2a3d.jpg"></div><div class="fx ml-space-xs mr-space-sm"><div class="notification__message" data-purpose="notification-message"><span>Eduardo Trujillo González y 5 más han respondido a la pregunta: <span class="bold">FileUpload</span></span></div><div class="notification__time">hace 3 días</div></div></a><div class="notification__status-container"><div class="tooltip-container"><a class="notification__status" data-purpose="mark-as-read-status-icon" href="javascript:void(0)"><div class="notification__status-icon" aria-label="Marcar como leído"></div></a><div id="mark-notification-32297096-as-read" data-purpose="base-tooltip" role="tooltip" class="notification__status-tooltip tooltip tooltip-blue bottom"><div class="tooltip-arrow"></div><div class="tooltip-inner"><div class="">Marcar como leído</div></div></div></div></div></div><div data-purpose="notification" class="pos-r notification--is-read"><a href="/angular-avanzado-fernando-herrera/learn/#questions/7185364" target="_self" class="fx-lt notification__url" data-purpose="notification-link"><div><img alt="Jaime Sastre" aria-label="Jaime Sastre" class="user-avatar user-avatar--image" data-purpose="user-avatar" height="64" width="64" src="https://i.udemycdn.com/user/75x75/38896044_b748.jpg"></div><div class="fx ml-space-xs mr-space-sm"><div class="notification__message" data-purpose="notification-message"><span>Jaime Sastre han respondido a la pregunta: <span class="">App Shell</span></span></div><div class="notification__time">hace 4 días</div></div></a><div class="notification__status-container"><div class="tooltip-container"><a class="notification__status" data-purpose="mark-as-read-status-icon" href="javascript:void(0)"><div class="notification__status-icon" aria-label="Se ha leído"></div></a><div id="mark-notification-32282310-as-read" data-purpose="base-tooltip" role="tooltip" class="notification__status-tooltip hidden tooltip tooltip-blue bottom"><div class="tooltip-arrow"></div><div class="tooltip-inner"><div class="">Marcar como leído</div></div></div></div></div></div><div data-purpose="notification" class="pos-r notification--is-read"><a href="/redux-ngrx-angular/learn/#announcements/2418380" target="_self" class="fx-lt notification__url" data-purpose="notification-link"><div><img alt="Fernando Herrera" aria-label="Fernando Herrera" class="user-avatar user-avatar--image" data-purpose="user-avatar" height="64" width="64" src="https://i.udemycdn.com/user/75x75/11767934_4361_2.jpg"></div><div class="fx ml-space-xs mr-space-sm"><div class="notification__message" data-purpose="notification-message"><span>Fernando Herrera y 1 más han hecho un anuncio: <span class="">Este mes les traigo 18 tipos de logins diferentes para aplicaciones web18 diseños de logins para aplicaciones webSaludos a todos, espero que se encuentren de lo mejor este inicio de mes!, hoy les traigo 18 pantallas de login para aplicaciones web, con su respectiva fuente para que puedan obtener más aún, estos logins en lo personal me gustaron y espero que les sirva mucho a ustedes.Pueden descargar el paquete del mes desde mi sitio webMaterial gratuito del mes de Junio 2019!(No hay que registrarse, es una descarga directa)¿Qué viene?Muchos me preguntan "¿Cuál es el próximo curso?, ¿Qué viene ahora?" pues déjenme decirles que por el futuro cercano, tengo unos meses un poco duros, me estoy mudando de país de Honduras a Canadá y después puede que regrese a Costa Rica (aún no se cuando) y todo este proceso es complicado, muchos papeles y amigos a quienes decir "nos vemos pronto"...&nbsp; Pero no los aburro con detalles de mi vida jejeNota:Recuerden subir sus certificados de cumplimiento de sus cursos aquíhttps://fernando-herrera.com/#/logrosEspero poder hacer detalles en base a eso pronto, después que me estabilice un poco en cuanto a mi nuevo lugar de trabajo!Posible próximo curso:Estoy con los planes de hacer un curso de Dart propiamente, aprender la sintaxis, dominar el lenguaje, parecido a mis cursos de JavaScript, este curso no me debería de tomar más de 2 meses hacerlo, pero actualmente me cuesta mucho grabar videos porque no tengo un lugar dónde grabar videos con la calidad de audio que deseo... pero ya veremos qué depara el futuroSin más, me despido por ahora, les deseo muchos éxitos y sobre todo recuerden que el objetivo de todo profesor, es que sus alumnos lo superen, y se que muchos de ustedes ya lo hicieron y otros el día de mañana lo harán, y cuando eso suceda, sentiré que mi labor como instructor valió la pena!Pronto subiré más videos a Youtube por cierto!, a ver cómo me va jejejeDisfruten el material de Junio 2019! y nos vemos en el próximo video!atte:Fernando Herrera</span></span></div><div class="notification__time">hace 5 días</div></div></a><div class="notification__status-container"><div class="tooltip-container"><a class="notification__status" data-purpose="mark-as-read-status-icon" href="javascript:void(0)"><div class="notification__status-icon" aria-label="Se ha leído"></div></a><div id="mark-notification-32206386-as-read" data-purpose="base-tooltip" role="tooltip" class="notification__status-tooltip hidden tooltip tooltip-blue bottom"><div class="tooltip-arrow"></div><div class="tooltip-inner"><div class="">Marcar como leído</div></div></div></div></div></div><div data-purpose="notification" class="pos-r notification--is-read"><a href="/the-complete-guide-to-angular-2/learn/#announcements/2401942" target="_self" class="fx-lt notification__url" data-purpose="notification-link"><div><img alt="Maximilian Schwarzmüller" aria-label="Maximilian Schwarzmüller" class="user-avatar user-avatar--image" data-purpose="user-avatar" height="64" width="64" src="https://i.udemycdn.com/user/75x75/13952972_e853.jpg"></div><div class="fx ml-space-xs mr-space-sm"><div class="notification__message" data-purpose="notification-message"><span>Maximilian Schwarzmüller han hecho un anuncio: <span class="">Please read the full announcement!You'll learn what changed about Angular (no worries, no breaking changes :-)), in the course (some updated sections) and how it affects you.---Hi Everyone!If you've followed the course over the years, you certainly recognized that I continuously kept it up-to-date.And of course, I continue doing this: With Angular 8 released (a few hours ago), I just released another update to the course!---No worries, there are no breaking or huge changes :-) There are some adjustments in the course though (to improve it), see below.---What's new in Angular 8?There are no huge or breaking changes - also check out lectures 472 &amp;&nbsp;472 in section 29 for more infos.There are a couple of "behind the scenes" improvements but there's also one more important change: @angular/http (=&gt; the "old" http client) was removed!Use @angular/common/http instead - I did cover that "new" client in the course right from the point of time on it was released. With the removal of the "old" client, I&nbsp;replaced all lectures &amp;&nbsp;sections where I&nbsp;still used that old client.---What did change in the course though?I used the opportunity to get rid of a couple of smaller issues that accumulated over the months and years. And, of course, I got rid of the old, now unsupported Http client.Here's a general explanation of what I changed - further down below, you find a detailed list of which sections were added or removed/ changed!With Angular 6, RxJS brought some changes regarding how you import RxJS functionalities. I did cover that right when Angular 6 was released but now was the time to completely swap the videos which still used the old import syntax.Angular 8 also removes the @angular/http client which was already depecrecated in Angular 4/ 5. I did cover the newer Angular client (@angular/common/http) right from its start in a separate section. Now was the time to remove the old @angular/http-focused section and instead re-create the section with the new Angular Http clientThe "Authentication" section used to use the Firebase SDK. Not only did some things change there, it also wasn't that useful since it doesn't help you with authentication if you're NOT using the Firebase SDK. That's why I replaced it entirely with a brand-new section (which still uses Firebase as a dummy backend but without the SDK - instead I use the new Angular Http client now).The NgRx as well as the "Modules &amp; Optimizations" sections built up on the old RxJS import syntax, the old Angular Http client and the old "Authentication" sections =&gt; Hence I also re-recorded and replaced these sectionsI added a brand-new section on "Dynamic Components" - a highly requested feature :)---What changed in detail?No worries, this list looks worse than it is. I had to update a couple of sections because of the points mentioned above OR because they depended on other sections which had to change.Sections 13, 14, 18, 19 and 20 were re-recorded and swapped for new ones (these are the sections that cover "Http" and "Authentication")Section 21 (“Dynamic components”) is brand-new! It was added between “Authentication” and “Angular Modules &amp; Optimizing Angular Apps”Sections 22 (“Angular Modules &amp; Optimizing Angular Apps” =&gt; previously section 21) and 23 (previously 22) were re-recorded and swapped for new onesPrevious section 23 (“Bonus: HttpClient”) was removed =&gt; This covered the “new” Http client when both the “old” and the “new” one were covered in the course. Due to the updated sections 18 and 19 this section was now redundant and hence was removedSection 24 (“Bonus: Working with NgRx in our Project”) stays where it was but all videos were re-recorded and swapped for new ones =&gt; Temporarily (for one month, until end of June), 
+                  I’ll keep the old lectures around (marked as “[LEGACY]“) </span>
+                  </span></div><div class="notification__time">hace 10 días</div></div></a>
+                  <div class="notification__status-container"><div class="tooltip-container">
+                    <a class="notification__status" data-purpose="mark-as-read-status-icon" href="javascript:void(0)">
+                      <div class="notification__status-icon" aria-label="Se ha leído"></div></a><div id="mark-notification-32044776-as-read" data-purpose="base-tooltip" role="tooltip" class="notification__status-tooltip hidden tooltip tooltip-blue bottom"><div class="tooltip-arrow"></div><div class="tooltip-inner"><div class="">Marcar como leído</div></div></div></div></div></div><div data-purpose="notification" class="pos-r notification--is-read"><a href="/angular-2-fernando-herrera/learn/#announcements/2401078" target="_self" class="fx-lt notification__url" data-purpose="notification-link"><div><img alt="Fernando Herrera" aria-label="Fernando Herrera" class="user-avatar user-avatar--image" data-purpose="user-avatar" height="64" width="64" src="https://i.udemycdn.com/user/75x75/11767934_4361_2.jpg"></div><div class="fx ml-space-xs mr-space-sm"><div class="notification__message" data-purpose="notification-message"><span>Fernando Herrera han hecho un anuncio: <span class="">Saludos a todos, me complace anunciar que la sección 12 fue renovadaAngular de cero a expertoEspero que se encuentren de lo mejor... les informo que la sección 12 fue renovada completamente (meno
+                      </span></span></div><div class="notification__time">hace 10 días</div></div></a><div class="notification__status-container"><div class="tooltip-container"><a class="notification__status" data-purpose="mark-as-read-status-icon" href="javascript:void(0)"><div class="notification__status-icon" aria-label="Se ha leído"></div></a><div id="mark-notification-32033762-as-read" data-purpose="base-tooltip" role="tooltip" class="notification__status-tooltip hidden tooltip tooltip-blue bottom"><div class="tooltip-arrow"></div><div class="tooltip-inner"><div class="">Marcar como leído</div></div></div></div></div></div></div>
+                      -->
+                      <div class="dropdown__footer">
+                        <a data-purpose="mark-all-as-read" class="pull-left" href="javascript:void(0)">
+                          Marcar todo como leído</a>
+                          <a href="/user/view-notifications/" data-purpose="see-all" class="pull-right" target="_self">Ver todo
+                            <span class="udi udi-next"></span>
+                          </a>
+                  
+
+            </div>
+          </div>                                
+      </li>
+    </ul>
+  </div>
+</div>
+
+
+
+
+<ul role="menu" class="dropdown-content dropdown-menu-right" aria-labelledby="header.notifications">
+    <li role="presentation" tabindex="-1">
+      <div class="fx-lt notification__header">
+        <div class="fx pr-space-sm">Notificaciones</div>
+        <div class="pl-space-sm">
+          <a class="notification__settings" data-purpose="notification-settings" href="/user/edit-notifications/" target="_self" aria-label="Configuración de notificaciones">
+            <span class="udi udi-settings"></span>
+          </a>
+        </div>
+      </div>
+
+        <div data-purpose="notification-tab-pane" class="">
+
+            <div class="notification__list scroll--at-top" tabindex="-1">
+                <div data-purpose="notification" class="pos-r">
+                  <a href="/crear-un-api-restful-con-slim-php-y-usarla-con-ajax/learn/#announcements/2428438" target="_self" class="fx-lt notification__url" data-purpose="notification-link">
+                    <div>
+                      <img alt="Víctor Robles" aria-label="Víctor Robles" class="user-avatar user-avatar--image" data-purpose="user-avatar" height="64" width="64" src="https://i.udemycdn.com/user/75x75/16661812_b24c.jpg">
+                    </div>
+                    <div class="fx ml-space-xs mr-space-sm">
+                      <div class="notification__message" data-purpose="notification-message"><span>Víctor Robles han hecho un anuncio: 
+                        <span class="bold">Hola ¿que tal? :)Todas las semanas, muchos alumnos me preguntan ¿que hostin
+                         </span>
+                         </span>
+                      </div>
+                      <div class="notification__time">hace 13 horas</div>
+                    </div>
+                  </a>
+                  <div class="notification__status-container">
+                    <div class="tooltip-container">
+                      <a class="notification__status" data-purpose="mark-as-read-status-icon" href="javascript:void(0)">
+                        <div class="notification__status-icon" aria-label="Marcar como leído"></div></a>
+                        <div id="mark-notification-32407444-as-read" data-purpose="base-tooltip" role="tooltip" class="notification__status-tooltip tooltip tooltip-blue bottom">
+                          <div class="tooltip-arrow"></div><div class="tooltip-inner"><div class="">Marcar como leído</div></div></div></div></div>
+                </div>
+                <div class="dropdown__footer">
+                    <a data-purpose="mark-all-as-read" class="pull-left" href="javascript:void(0)">
+                      Marcar todo como leído</a>
+                      <a href="/user/view-notifications/" data-purpose="see-all" class="pull-right" target="_self">Ver todo
+                        <span class="udi udi-next"></span>
+                      </a>                                        
+                </div>
+
+  
+
+        </div>
+      </div>
+    </li>
+</ul>
+
+
+
+
+
+<small class="d-block text-center mt-3">
                   <a href="#">&copy; {{year}}</a>
                 </small>
 

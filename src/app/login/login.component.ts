@@ -290,6 +290,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     this.authService.login(token.token, value.email, value.password)
     .then(res => {
       //console.log(res);
+      this.tryUpdate(value);
     }, err => {
       //console.log(err);
       switch (err.code) {
@@ -321,6 +322,19 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     this.authService.doRegister(value, this.identity)
+    .then(res => {
+      //console.log(res);
+    }, err => {
+      console.log(err);
+    })
+  }
+
+  tryUpdate(value:User){
+    if(!value){
+      return;
+    }
+
+    this.authService.doUpdate(this.identity)
     .then(res => {
       //console.log(res);
     }, err => {

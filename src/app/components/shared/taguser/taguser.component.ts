@@ -1,10 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
-import {FormControl, FormGroup, Validators} from '@angular/forms';
+import { FormControl, FormGroup, Validators} from '@angular/forms';
 import { Subject, Observable, concat, of } from 'rxjs';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
-import { UserFirebase } from 'src/app/models/types';
 
+//MODELS
+import { UserFirebase } from 'src/app/models/types';
 
 export interface Users {
   id: any;
@@ -12,7 +13,6 @@ export interface Users {
   surname: string;
   email: string;
 }
-
 
 @Component({
   selector: 'app-taguser',
@@ -54,7 +54,7 @@ export class TagUserComponent implements OnInit {
 
     this.forma = new FormGroup({
       select: new FormControl (false),
-      destinatario: new FormControl ({value: null, disabled: true}, [Validators.required, Validators.minLength(1)]),
+      destinatario: new FormControl ({value: null, disabled: false}, [Validators.required, Validators.minLength(1)]),
     });
 
     this.forma.setValue({
@@ -73,7 +73,7 @@ export class TagUserComponent implements OnInit {
   }
 
 
-  public loadusers() {
+public loadusers() {
 
     this.usersFt = concat(
       of(null), // default items

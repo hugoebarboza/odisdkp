@@ -1,19 +1,25 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Router } from '@angular/router';
 import { FormControl, Validators, NgForm} from '@angular/forms';
 import { Subscription } from 'rxjs';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 //import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 //import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
+//FIREBASE
+import { AngularFireAuth } from 'angularfire2/auth';
+
 //MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
 //SERVICES
-import { OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
+import { CdfService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
 
 //MODELS
-import { Order, Service, ServiceType, ServiceEstatus, User } from '../../../models/types';
+import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from '../../../models/types';
+
+
 
 @Component({
   selector: 'app-edit',
@@ -34,6 +40,8 @@ import { Order, Service, ServiceType, ServiceEstatus, User } from '../../../mode
 export class EditComponent implements OnInit, OnDestroy {
   public title: string;
   public identity;
+  created: FormControl;
+  destinatario = [];
   public token;
   public services: Service[] = [];
   public project: string;    
@@ -67,25 +75,39 @@ export class EditComponent implements OnInit, OnDestroy {
   atributo = new Array();
   orderatributo = new Array();
   role: number;
-  //orderatributo:Object;
+  route: string = '';
   subscription: Subscription;
+  userFirebase: UserFirebase;
 
   constructor(
-
-    private _userService: UserService,
-    public dataService: OrderserviceService,
-	  public dialogRef: MatDialogRef<EditComponent>,    
+    private _cdf: CdfService,
     private _orderService: OrderserviceService,
     private _projectService: ProjectsService,      
+    private _route: Router,
+    private _userService: UserService,
+    public dataService: OrderserviceService,
+    public dialogRef: MatDialogRef<EditComponent>,
+    private firebaseAuth: AngularFireAuth,
     @Inject(MAT_DIALOG_DATA) public data: any
 
   ) 
   {
+    this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
   	this.title = "Editar Orden N.";
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this._userService.handleAuthentication(this.identity, this.token);
     this.role = this._userService.identity.role;
+
+    this.firebaseAuth.authState.subscribe(
+      (auth) => {
+        if(auth){
+          this.userFirebase = auth;
+        }
+    });
+  
+    this.route = this._route.url.split("?")[0];
+  
 
     if(this.token.token != null){
       //console.log(this.data['order_id']);
@@ -192,7 +214,78 @@ export class EditComponent implements OnInit, OnDestroy {
     //console.log(this.data);
     //console.log(this.pila);
    //this.dataService.update(this.token.token, this.data['order_id'], editform.value, this.category_id);
+
+   if(this.destinatario.length > 0)  {
+    //SEND CDF MESSAGING AND NOTIFICATION
+    this.sendCdf(this.destinatario);
+   }
   }
+
+
+  sendCdf(data){
+    if(!data){
+      return;
+    }
+  
+    const body = 'Edición de orden en Proyecto: '+this.project+', Servicio: '+this.service_name+', con Orden N.: ' + this.data.order_number;
+    
+    if(this.destinatario.length > 0 && this.userFirebase.uid){
+      for (let d of data) {
+        
+        const notification = {
+          userId: this.userFirebase.uid,
+          userIdTo: d.id,			
+          title: 'Edición de orden de trabajo',
+          message: body,
+          create_at: this.created.value,
+          status: '1',
+          idUx: this.data.order_number,
+          descriptionidUx: 'bd',
+          routeidUx: `${this.route}`
+        };  
+  
+        
+        this._cdf.fcmsend(this.token.token, notification).subscribe(
+          response => {        
+            if(!response){
+            return false;        
+            }
+            if(response.status == 200){ 
+              //console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }   
+          );			
+            
+  
+  
+          const msg = {
+            toEmail: d.email,
+            fromTo: this.userFirebase.email,
+            subject: 'OCA GLOBAL - Nueva notificación',
+            message: `<strong>Hola ${d.name} ${d.surname}. <hr> <div>&nbsp;</div> Tiene una nueva notificación, enviada a las ${this.created.value} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+          };
+  
+          this._cdf.httpEmail(this.token.token, msg).subscribe(
+            response => {        
+              if(!response){
+              return false;        
+              }
+              if(response.status == 200){ 
+                //console.log(response);
+              }
+            },
+              error => {
+              //console.log(<any>error);
+              }   
+            );			                    
+      }
+    
+    }
+  
+  }    
 
 
 
@@ -343,6 +436,19 @@ export class EditComponent implements OnInit, OnDestroy {
         this.results = null;
       }
    }
+
+
+  taguser(data){
+    if(data.length == 0){
+      data = '';
+      return;
+    }
+
+    if(data.length > 0){
+      this.destinatario = data;
+      console.log(this.destinatario);
+    }
+  }
 
 
   onSelectMethod(event) {

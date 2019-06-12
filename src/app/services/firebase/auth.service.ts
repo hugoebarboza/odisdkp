@@ -6,20 +6,28 @@ import * as firebase from 'firebase/app';
 import { Observable } from 'rxjs/Observable';
 import { User } from 'src/app/models/types';
 import { AngularFirestore } from 'angularfire2/firestore';
+import { FormControl } from '@angular/forms';
+
+//MOMENT
+import * as _moment from 'moment';
+const moment = _moment;
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-
-  user: Observable<firebase.User>;
+  
   authState: any = null;
+  created: FormControl;
+  user: Observable<firebase.User>;
 
   constructor(
     private afs: AngularFirestore,
     private db: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth,
   ) { 
+    this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
     this.user = firebaseAuth.authState;
     
     //firebase.auth().signOut();
@@ -89,6 +97,31 @@ export class AuthService {
   }
 
 
+  addUser(identity: any){
+
+    const userFirebase = {
+      uid: this.authState.user.uid,
+      name: identity.name,
+      email: this.authState.user.email,
+      role: identity.role,
+      surname: identity.surname,
+      timezone: identity.timezone,
+      create_at: this.created.value,
+      country: [identity.country]
+    };
+
+
+    return new Promise<any>((resolve, reject) => {
+      this.afs.collection('users').doc(this.authState.user.uid).set(userFirebase)
+      .then(res => {
+        //console.log('paso add');
+        resolve(res);
+      }, err => reject(err))
+    });
+
+  }
+
+
   doRegister(value:User, identity: any){
     return new Promise<any>((resolve, reject) => {
       firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
@@ -111,6 +144,56 @@ export class AuthService {
       }, err => reject(err))
     })
   }
+
+
+  doUpdate(identity: any){
+    let path = `users/${this.authState.user.uid}`; // Endpoint on firebase
+    const userFirebase = {
+      uid: this.authState.user.uid,
+      name: identity.name,
+      email: this.authState.user.email,
+      role: identity.role,
+      surname: identity.surname,
+      timezone: identity.timezone,
+      update_at: this.created.value,
+      country: [identity.country]
+    };
+    //console.log(userFirebase);
+
+    let userDocument = this.afs.collection('users').doc(this.authState.user.uid);
+
+    return new Promise<any>((resolve, reject) => {
+
+          userDocument.ref.get()
+          .then(doc => {
+                if (doc.exists) {
+                  this.afs.doc(path).update(userFirebase)
+                  .then(res => {
+                    resolve(res);
+                  }, err => reject(err))
+                } else {
+                  this.addUser(identity);
+                  //console.log('Error: Getting document exist:');
+                }
+              })
+          .catch(error => {
+            switch (error.code) {
+              case 'invalid-argument': {
+                  this.addUser(identity);
+                  return console.log('usuario registrado en Firebase');
+              }
+              default: {
+                  return console.log('Error: Getting document:');
+              }
+            }      
+  
+          });
+
+    })
+
+  }
+
+  
 
 
   updateUser(value:User){

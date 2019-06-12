@@ -109,7 +109,7 @@ export class NotificationReadComponent implements OnInit {
       );
       
       /*********Get read */
-      this.notificationsReadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '0') )
+      this.notificationsReadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '0').orderBy('create_at', 'desc') )
       this.getnotificationsRead$ = this.notificationsReadRef.snapshotChanges()
       .pipe(
         map(actions => {

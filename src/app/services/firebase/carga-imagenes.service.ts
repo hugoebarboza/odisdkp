@@ -19,14 +19,13 @@ export class CargaImagenesService {
   item: Observable<Item>;
 
 
- //private CARPETA_IMAGENES = 'img';
+ // private CARPETA_IMAGENES = 'img';
 
-  constructor( 
+  constructor(
     private afs: AngularFirestore
     ) { }
 
-
-  cargarImagenesFirebase( imagenes: FileItem[], carpeta_archivo: string, created: any ) {
+  cargarImagenesFirebase( imagenes: FileItem[], carpeta_archivo: string, created: any , extra?) {
     const storageRef = firebase.storage().ref();
     for ( const item of imagenes ) {
       item.estaSubiendo = true;
@@ -34,37 +33,65 @@ export class CargaImagenesService {
         continue;
       }
 
-      
+      console.log(item);
       const uploadTask: firebase.storage.UploadTask =
                   storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
                             .put( item.archivo );
 
       uploadTask.on( 'state_changed',
         (snapshot: firebase.storage.UploadTaskSnapshot) => {
-          item.progreso = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+
+          const count = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          if (count < 99) {
+            item.progreso = Math.round(count);
+          }
+
+          if (count > 99 && count < 100) {
+            item.progreso = 99;
+          }
+
+          if (count === 100) {
+            item.progreso = 100;
+          }
+
+          console.log('PROGESOO:   ' + item.progreso );
         }, (error) => {
-          console.error("Error al subir");
+          console.error('Error al subir');
         }, () => {
           // Handle successful uploads on complete
           // For instance, get the download URL: https://firebasestorage.googleapis.com/...
           uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-            //console.log('File available at', downloadURL);
+            // console.log('File available at', downloadURL);
             item.url = downloadURL;
             item.estaSubiendo = false;
             item.created = created;
-            this.guardarImagen({ nombre: item.nombreArchivo, type: item.type, url: item.url, created:item.created  }, carpeta_archivo );
+            // tslint:disable-next-line:max-line-length
+
+            if (extra) {
+              // tslint:disable-next-line:max-line-length
+              this.guardarImagenExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id_case: extra }, carpeta_archivo );
+            } else {
+              this.guardarImagen({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created  }, carpeta_archivo);
+            }
+
           });
         }
       );
-
 
     }
 
   }
 
+  private guardarImagenExtra( imagen: { nombre: string, type: string, url: string, created: any, id_case: any },  path: string ) {
 
-  private guardarImagen( imagen: { nombre: string, type: string, url: string, created: any },  path: string ) {
-    //this.itemDoc = this.db.doc(`${ path }/${ item.id }`);
+    console.log(path);
+    this.afs.collection(`${ path }`).add( imagen );
+
+  }
+
+
+  private guardarImagen( imagen: { nombre: string, type: string, url: string, created: any },  path: string) {
+    // this.itemDoc = this.db.doc(`${ path }/${ item.id }`);
 
     /*
     this.afs.collection(`${ path }/`).get().subscribe((querySnapshot) => {
@@ -74,23 +101,25 @@ export class CargaImagenesService {
     });
     });*/
 
+
+    console.log(path);
     this.afs.collection<Item>(path, ref => ref.where('nombre', '==', imagen.nombre).limit(1))
     .get()
-    .subscribe((data) => 
-        { if(data.size > 0) 
-          {            
-          data.forEach((doc) =>
-              {                
-                this.afs.collection(`/${ path }`).doc(doc.id).set(imagen);
+    .subscribe((data) => { if (data.size > 0) {
+          console.log(data);
+          data.forEach((doc) => {
+                console.log(doc.id);
+                console.log(doc.id);
+                this.afs.collection(`${ path }`).doc(doc.id).set(imagen);
               }
-            );               
-          }else{
-          this.afs.collection(`/${ path }`).add( imagen );
+            );
+          } else {
+          this.afs.collection(`${ path }`).add( imagen );
           }
 
         }
       );
 
-  }
+  } 
 
 }

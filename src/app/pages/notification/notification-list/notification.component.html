@@ -75,9 +75,7 @@
                                         Informador
                                     </div>
 
-                                    <div class="col">
-                                        Creado El
-                                    </div>
+                          
 
                                     <div class="col">
                                       Estatus
@@ -98,15 +96,12 @@
                                                     {{ i + 1 }}. {{element.title}}
                                                 </div>
                                                 <div class="col">
-                                                    {{element.body}}
+                                                    {{element.body}}. Hace <code class="highlighter-rouge">{{element.create_at | countTime}}</code>
                                                 </div>
                                                 <div class="col">
                                                     {{element.users.name}} {{element.users.surname}}
                                                 </div>
         
-                                                <div class="col">
-                                                    <code class="highlighter-rouge">{{element.create_at | countTime}}</code>                                                                                              
-                                                </div>
         
                                                 <div class="col">
                                                     <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 1"
@@ -133,15 +128,12 @@
                                                     {{ i + 1 }}. {{element.title}}
                                                 </div>
                                                 <div class="col">
-                                                    {{element.body}}
+                                                    {{element.body}}. Hace <code class="highlighter-rouge">{{element.create_at | countTime}}</code>
                                                 </div>
                                                 <div class="col">
                                                     {{element.users.name}} {{element.users.surname}}
                                                 </div>
         
-                                                <div class="col">
-                                                    <code class="highlighter-rouge">{{element.create_at | countTime}}</code>                                                                                              
-                                                </div>
         
                                                 <div class="col">
                                                     <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 1"
