@@ -366,9 +366,15 @@
                                   <textarea matInput #inputstate  placeholder="Observación" [(ngModel)]="projectContent" name="observation" maxlength="177"  ></textarea>
                                 </mat-form-field>
 
-                                <div class="button-row p-2" *ngIf="toggleContentMain">
-                                    <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" ></app-taguser>
+                                <div *ngIf="toggleContentMain">
+                                    <div class="row">
+                                        <div class="col-12" >
+                                          <h2 class="jeEmY">Etiquetados</h2>
+                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" *ngIf="userFirebase"> </app-taguser>
+                                        </div>
+                                    </div>                                                                      
                                 </div>
+                                <div class="dropdown-divider"></div>
                                 <div class="button-row p-2" *ngIf="toggleContentMain">
                                     <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="!projectContent" disabled>Guardar</button>                                    
                                     <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="projectContent && projectContent.length <= 3" disabled>Guardar</button>
@@ -433,9 +439,15 @@
                                 <mat-form-field appearance="outline" class="full-width" *ngIf="toggleContent">
                                   <textarea matInput #inputstate  placeholder="Observación" [(ngModel)]="projectContent" name="observation" maxlength="177"  ></textarea>
                                 </mat-form-field>
-                                <div class="button-row p-2" *ngIf="toggleContent">
-                                  <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" ></app-taguser>
+                                <div *ngIf="toggleContent">
+                                    <div class="row">
+                                        <div class="col-12" >
+                                          <h2 class="jeEmY">Etiquetados</h2>
+                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" *ngIf="userFirebase"> </app-taguser>
+                                        </div>
+                                    </div>                                                                      
                                 </div>
+                                <div class="dropdown-divider"></div>
                                 <div class="button-row p-2" *ngIf="toggleContent">
                                     <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="!projectContent" disabled>Guardar</button>                                    
                                     <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="projectContent && projectContent.length <= 3" disabled>Guardar</button>

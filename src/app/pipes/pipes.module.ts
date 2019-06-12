@@ -7,6 +7,7 @@ import { HighlightSearch } from './highlight.pipe';
 import { KeysPipe } from './keys.pipe';
 import { SearchPipe } from './search.pipe';
 import { SplitPipe } from './split.pipe';
+import { TruncatePipe } from './truncate.pipe';
 
 
 @NgModule({
@@ -16,7 +17,8 @@ import { SplitPipe } from './split.pipe';
     HighlightSearch,
     KeysPipe, 
     SearchPipe,
-    SplitPipe
+    SplitPipe,
+    TruncatePipe
   ],
   imports: [
     
@@ -27,7 +29,8 @@ import { SplitPipe } from './split.pipe';
     HighlightSearch,
     KeysPipe, 
     SearchPipe,
-    SplitPipe
+    SplitPipe,
+    TruncatePipe
   ]  
 })
 export class PipesModule { }

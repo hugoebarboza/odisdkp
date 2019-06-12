@@ -47,9 +47,6 @@ export interface Users {
   email: string;
 }
 
-
-
-
 @Component({
   selector: 'app-viewprojectdetail',
   templateUrl: './viewprojectdetail.component.html',

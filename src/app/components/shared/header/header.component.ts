@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
+import { defer, combineLatest, of } from 'rxjs/';
 import { Subscription } from 'rxjs/Subscription';
+import { switchMap, map, tap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 
 //FIREBASE
@@ -25,6 +27,8 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
 import { ResetAction } from 'src/app/contador.actions';
 import { SetUserAction } from 'src/app/stores/auth/auth.actions';
+import { SetNotificationAction, ResetNotificationAction } from '../../../stores/notification/notification.actions';
+
 
 //SERVICES
 import { UserService } from '../../../services/service.index';
@@ -72,10 +76,9 @@ export class HeaderComponent {
 	subscription: Subscription;
 
 	constructor(
+    private _userService: UserService,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
-
-		private _userService: UserService,
 		public dialog: MatDialog,
     private store: Store<AppState>,
 
@@ -120,21 +123,35 @@ export class HeaderComponent {
           const accion = new SetUserAction(newUser);
           this.store.dispatch( accion );
 
-          //this.store.dispatch( new SetUserAction( newUser ) );
-          //console.log(newUser);
-
           this.userDoc = this.afs.doc<User>(`/users/${auth.uid}`);
-          this.notificationsRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1'));
-          this.getnotifications$ = this.notificationsRef.snapshotChanges()
-          .map(actions => {
-            this.isLoading = false;
-            this.resultCount = actions.length;
-            return actions.map(a => {
-              const data = a.payload.doc.data() as any;
-              const id = a.payload.doc.id;
-              return { id, ...data };
-            });
-          });
+          this.notificationsRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1').orderBy('create_at', 'desc'));
+          this.notificationsRef.snapshotChanges()
+          .pipe(
+            map(actions => {
+              this.isLoading = false;
+              this.resultCount = actions.length;
+              if (this.resultCount == 0){
+               // console.log(this.resultCount);
+                this.notifications$ = null;
+                //return;
+              }
+              return actions.map(a => {
+                const data = a.payload.doc.data() as any;
+                const id = a.payload.doc.id;
+                    return { id, ...data };
+              });
+            })
+          ).subscribe( (collection: any[]) => {
+            const count = Object.keys(collection).length;
+            if (count === 0) {
+              this.notifications$ = null;
+            } else {
+              this.gojoin(Observable.of(collection));
+            }
+          }
+        );
+              
+          
     } else {
         //this.userSubscription.unsubscribe();
     }
@@ -142,6 +159,12 @@ export class HeaderComponent {
 
   }
   
+  gojoin(collection): Observable<any> {
+    return this.notifications$ = collection.pipe(
+      leftJoin(this.afs, 'create_by', 'users')
+    );
+
+  }
 
 
   ngOnDestroy() {
@@ -211,6 +234,55 @@ export class HeaderComponent {
 }
 
 
+export const leftJoin = (
+  afs: AngularFirestore,
+  field,
+  collection,
+  limit = 100
+) => {
+  return source =>
+    defer(() => {
+      // Operator state
 
+      let collectionData;
+
+      // Track total num of joined doc reads
+      let totalJoins = 0;
+
+      return source.pipe(
+        switchMap(data => {
+          // Clear mapping on each emitted val ;
+          // Save the parent data state
+          collectionData = data as any[];
+
+          // console.log(collectionData);
+
+          const reads$ = [];
+          for (const doc of collectionData) {
+            // Push doc read to Array
+            if (doc[field]) {
+              // Perform query on join key, with optional limit
+              // const q = ref => ref.where(field, '==', doc[field]).limit(limit);
+              //console.log(collection + '/' + doc[field]);
+              reads$.push(afs.doc(collection + '/' + doc[field]).valueChanges());
+            } else {
+              reads$.push(of([]));
+            }
+          }
+          return combineLatest(reads$);
+        }),
+        map(joins => {
+            return collectionData.map((v: any, i: any) => {          
+              totalJoins += joins[i].length;
+              return { ...v, [collection]: joins[i] || null };  
+          });
+        }),
+        tap(final => {
+            // console.log( `Queried ${(final as any).length}, Joined ${totalJoins} docs`);
+          totalJoins = 0;
+        })
+      );
+    });
+};
 
 

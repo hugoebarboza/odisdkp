@@ -1,0 +1,215 @@
+<meta name="Description" content="Support">
+<!--CONTENT-->
+<div class="loading" *ngIf="!proyectos && identity">
+    <app-loading></app-loading>  
+</div>
+        
+<div id="wrapper" *ngIf="proyectos && identity">
+
+    <div id="page-content-wrapper" >
+        
+        <div class="container-fluid p-2">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                <h1 class="h4">{{title}}</h1>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="row animated fadeIn" *ngIf="!isLoading">
+                    <div class="col-sm-12">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </div>
+                </div>
+                          
+                <div class="row animated fadeIn" >
+                    
+                    <div class="col-12">
+        
+                        <div class="card">
+        
+                            <div class="card-body">
+        
+                                <div class="row">
+                                    <div class="col-10"> 
+                                        <h3 class="card-title"><mat-icon>list_alt</mat-icon> Casos </h3>
+                                        <!--<div *ngFor="let blogPost of joined$ | async" > <p>{{blogPost}}</p><br><p>{{blogPost | json}}</p></div>-->
+                                    </div>
+                                    <div class="col-2" style="position: relative;">
+                                        <div style="position: absolute; right: 20px; top: 0px;">
+                                            <button type="button" class="btn btn-primary btn-sm leftFloat" (click)="addNew()" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">add_circle_outline</mat-icon>Crear Caso</button>                      
+                                        </div>
+                                    </div>
+                                </div>
+        
+                                <mat-radio-group (change)="changeRadio($event.value)" [(ngModel)]="radioselect" *ngIf="radioOpciones">
+                                    <mat-radio-button class="marginleft" *ngFor="let opciones of radioOpciones;" [value]="opciones.value">{{opciones.descripcion}}</mat-radio-button>
+                                </mat-radio-group>
+                                <br><br>
+        
+                                <div class="row">
+        
+                                    <div class="col"  *ngIf="departamentos && radioselect === 3">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">Departamento</span>
+                                            </div>
+                                            <ng-select  
+                                                [items]="departamentos"
+                                                [clearable]="false"
+                                                bindLabel="name"
+                                                bindValue="id"
+                                                [(ngModel)]="selectedDepto"
+                                                (change)="selectChangedepto($event)"
+                                                class="width-40percentage">
+                                            </ng-select>
+                                        </div>            
+                                    </div>
+        
+                                    <div class="col">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">Asunto</span>
+                                            </div>
+                                            <input type="text"  #asuntoinput>
+                                        </div>            
+                                    </div>
+                                    
+                                    <div class="col">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">N° de Caso</span>
+                                            </div>
+                                            <input type="number"  #numbercaseinput>
+                                        </div>            
+                                    </div>
+                            
+                                    <div class="col">
+                                        <div class="input-group input-group-sm mb-3">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="inputGroup-sizing-sm">Estatus</span>
+                                            </div>
+                                            <input type="text" #statusinput>
+                                        </div>            
+                                    </div>
+        
+                                </div>
+                                
+                               <!-- <app-tablecustom [condition]="condition"></app-tablecustom>  -->
+        
+                                <table mat-table  [dataSource]="joined$ | async">
+        
+                                    <!--- Note that these columns can be defined in any order.
+                                          The actual rendered columns are set as a property on the row definition" -->
+                                  
+                                    <!-- Position Column -->
+                                    <ng-container matColumnDef="ncase">
+                                        <th mat-header-cell *matHeaderCellDef> N° de Caso </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.ncase}} </td>
+                                    </ng-container>
+        
+                                    <!-- Name Column -->
+                                    <ng-container matColumnDef="asunto">
+                                        <th mat-header-cell *matHeaderCellDef> Asunto </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.asunto}} </td>
+                                    </ng-container>
+        
+                                    <!-- Name Column {element.departments.name}}-->
+                                    <ng-container matColumnDef="departments">
+                                        <th mat-header-cell *matHeaderCellDef> Departamento </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.depto_desc}} </td>
+                                    </ng-container>
+        
+                                      <!-- Name Column {{element.supporttype.name}} -->
+                                    <ng-container matColumnDef="supporttype">
+                                        <th mat-header-cell *matHeaderCellDef> Tipo </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.type_desc}} </td>
+                                    </ng-container>
+        
+                                     <!-- Name Column {{element.supportcategory.name}} -->
+                                    <ng-container matColumnDef="supportcategory">
+                                        <th mat-header-cell *matHeaderCellDef> Categoría </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.category_desc}} </td>
+                                    </ng-container>
+        
+                                    <!-- Weight Column -->
+                                    <ng-container matColumnDef="users">
+                                      <th mat-header-cell *matHeaderCellDef> Creado por </th>
+                                      <td mat-cell *matCellDef="let element"> {{element.users.name}} {{element.users.surname}} </td>
+                                    </ng-container>
+                                  
+                                    <!-- Symbol Column -->
+                                    <ng-container matColumnDef="create_at">
+                                      <th mat-header-cell *matHeaderCellDef> Creado hace </th>
+                                      <td mat-cell *matCellDef="let element"> {{element.create_at | countTime}} </td>
+                                    </ng-container>
+        
+                                    <!-- Symbol Column {{element.supportstatus.name}} -->
+                                    <ng-container matColumnDef="supportstatus">
+                                        <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                                        <td mat-cell *matCellDef="let element"> {{element.status_desc}} </td>
+                                    </ng-container>
+        
+                                    <!-- Symbol Column -->
+                                    <ng-container matColumnDef="accions">
+                                        <th mat-header-cell *matHeaderCellDef></th>
+                                        <td mat-cell *matCellDef="let element">
+        
+                                            <div class="row" align="right">
+        
+                                                <button mat-icon-button color="warn" 
+                                                matTooltip="Eliminar caso." (click)="deleteItem(element.id)"> <!-- -->
+                                                    <div>
+                                                    <mat-icon aria-label="Delete">delete</mat-icon>
+                                                    </div>
+                                                </button>
+                                        
+                                                <button mat-icon-button color="primary"  (click)="abrirCaso(element.id)" 
+                                                matTooltip="Abrir caso.">
+                                                    <div>
+                                                    <mat-icon aria-label="launch">launch</mat-icon>
+                                                    </div>
+                                                </button>
+                                        
+                                            </div>
+        
+                                        </td>
+                                    </ng-container>
+                                  
+                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        
+                                </table>
+        
+                                <div class="button-row saltox20">
+        
+                                    <div class="button-row">
+                                        
+                                        <button (click)="paginate(-2, -1)" mat-raised-button  color="primary" class="btn btn-secondary" [disabled]="page==1">
+                                            Inicio
+                                        </button>
+                
+                                        <button (click)="paginate(2, 1)" mat-raised-button  color="accent" class="btn btn-secondary" [disabled]="limit > resultCount">
+                                            Siguiente
+                                        </button>
+                                    
+                                    </div>
+        
+                                </div>
+        
+                            </div>
+        
+                        </div>
+        
+                    </div>
+        
+                </div>
+        
+        </div>
+  
+
+    </div>
+        
+</div>

@@ -1,3 +1,4 @@
+export { DropdownNotificationComponent } from './dropdown-notification/dropdown-notification.component';
 export { EditServiceComponent } from './dialog/editservice/editservice.component';
 export { FooterComponent } from './footer/footer.component';
 export { FootermainComponent } from './footermain/footermain.component';

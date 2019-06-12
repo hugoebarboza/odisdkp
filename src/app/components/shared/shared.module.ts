@@ -12,6 +12,7 @@ import { CalendarModule } from 'primeng/calendar';
 
 //COMPONENTS
 import {
+    DropdownNotificationComponent,
     EditServiceComponent,
     FooterComponent,
     FootermainComponent,
@@ -30,6 +31,7 @@ import { PipesModule } from '../../pipes/pipes.module';
 
 
 
+
 @NgModule({
     imports: [
         CalendarModule,
@@ -42,6 +44,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         PipesModule
     ],
     declarations: [
+        DropdownNotificationComponent,
         EditServiceComponent,
         FooterComponent,
         FootermainComponent,
@@ -51,9 +54,11 @@ import { PipesModule } from '../../pipes/pipes.module';
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent,
-        TagUserComponent
+        TagUserComponent,
+        DropdownNotificationComponent
     ],
     exports: [
+        DropdownNotificationComponent,
         EditServiceComponent,
         FooterComponent,
         FootermainComponent,

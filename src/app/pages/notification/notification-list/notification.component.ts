@@ -20,6 +20,7 @@ import { AngularFireAuth } from 'angularfire2/auth';
 //MODELS
 import { Proyecto, User } from 'src/app/models/types';
 
+
 //SERVICES
 import { SettingsService, UserService } from 'src/app/services/service.index';
 
@@ -59,17 +60,18 @@ export class NotificationComponent implements OnInit, OnDestroy {
   userid: any;
 
   @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
+  
 
 
   displayedColumns: string[] = ['title', 'body', 'create_by','create_at', 'status']; 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
-  positionleftaction = new FormControl(this.positionOptions[4]);  
+  positionleftaction = new FormControl(this.positionOptions[4]);
 
   constructor(
+    public _userService: UserService,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
     public label: SettingsService,
-    public _userService: UserService,
   ) {
     this.identity = this._userService.getIdentity();
     this.isSave = false;
@@ -100,7 +102,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
           this.isLoading = false;
           this.resultCount = actions.length;
           if (this.resultCount == 0){
-            console.log(this.resultCount);
+           // console.log(this.resultCount);
             this.notifications$ = null;
             //return;
           }
@@ -121,22 +123,13 @@ export class NotificationComponent implements OnInit, OnDestroy {
     );
 
 
-
-
-
-      
-
-
-
-
-
       
       /*********Get unread */
       this.notificationsUnreadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1') )
       this.getnotificationsUnread$ = this.notificationsUnreadRef.snapshotChanges()
       .pipe(
         map(actions => {
-          this.resultCountUnread = actions.length;
+          this.resultCountUnread = actions.length;          
         })
       );
       /*********Get read */

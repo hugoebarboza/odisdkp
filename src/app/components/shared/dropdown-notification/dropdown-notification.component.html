@@ -1,0 +1,28 @@
+
+<div *ngIf="notifications">
+    <div class="card" *ngFor="let element of notifications | async; let i = index; let conteo = count" >    
+        <div class="d-flex ">
+            <div class="flex-grow-1 "><h6>{{element.title}} </h6></div>        
+            <div class="bd-highlight"><small class="text-muted">Hace {{element.create_at | countTime}}</small></div>
+        </div>
+        <div class="dropdown-divider"></div>
+  
+        <div >
+            <div class="d-flex bd-highlight">
+                <div class="p-2 w-100 bd-highlight">{{element.body | truncate : 77}} </div>
+                <div class="p-2 flex-shrink-1 bd-highlight"><div class="circle"  [style.color]="'red'"></div></div>
+            </div>              
+        </div>
+    </div>  
+</div>
+
+
+
+
+<!-----
+  
+<a class="dropdown-item" routerLink="/notification">Notificaciones </a>
+<div class="dropdown-divider"></div>
+<a class="dropdown-item" routerLink="/notification/unread">No Leídas <span class="badge badge-danger"> {{resultCount}}</span></a>
+<a class="dropdown-item" routerLink="/notification/read">Leídas </a>
+-->

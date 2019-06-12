@@ -1,0 +1,85 @@
+.button-row button,
+.button-row a {
+  margin-right: 7px;
+}
+.
+-card {
+    background-color: #f2f4f7;
+}
+.circle:before {
+  content: ' \25CF';
+  font-size: 20px;
+}
+.example-rate-limit-reached {
+  color: #980000;
+  background: #f2f4f7;
+  max-width: 100%;
+  text-align: center;
+}
+.row__email {
+  width: 100px;
+}
+
+.row__progressbar {
+  width: 100px;
+}
+.mat-card-header-text {
+  padding-top: 7px;
+  width: 100%;
+}
+.material-icons.md-14 { font-size: 14px; }
+.material-icons.md-20 { font-size: 20px; }
+.material-icons.md-20-color { font-size: 20px; color: #FB8C00;}
+.portalHost {
+  border: 0px solid red;
+  height: 100%;
+}
+
+.portalHostSplit {
+border: 0px solid red;
+height: 700px;
+}
+.font-small{
+  cursor: pointer;
+}
+
+
+table {
+  width: 100%;
+}
+
+.saltox20 {
+  margin-top: 20px;
+}
+.leftFloat{ justify-content: flex-end}
+
+.marginleft{
+  margin-right: 10px;
+}
+
+
+.jeEmY {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.857143em;
+  font-style: inherit;
+  color: rgb(94, 108, 132);
+  font-weight: 600;
+  margin-top: 20px;
+  text-transform: uppercase;
+  line-height: 12px;
+  overflow: hidden;
+}
+
+::ng-deep .mat-status .mat-form-field-wrapper {
+  padding-bottom: 0px !important;
+}
+
+::ng-deep .mat-status .mat-form-field-flex .mat-form-field-infix {
+border-top-width: 0px !important;
+}
+
+
+.width-40percentage{
+  width: 45%;
+}

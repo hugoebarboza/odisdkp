@@ -36,7 +36,7 @@ const appRoute: Routes = [
     canLoad: [ LoginGuardGuard ],
     loadChildren: './pages/calendar/calendario.module#CalendarioModule',        
 		data: { preload: true, delay: false }
-  },    
+	},    
 	{ 
 		path:'change', 
 		canLoad: [ LoginGuardGuard ],
@@ -54,19 +54,19 @@ const appRoute: Routes = [
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/notification/notification.module#NotificationModule',
 		data: { preload: true, delay: false }
-  },
+  	},
 	{
 		path: 'notification/read',
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/notification/notification.module#NotificationModule',
 		data: { preload: true, delay: false }
-  },
+  	},
 	{
 		path: 'notification/unread',
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/notification/notification.module#NotificationModule',
 		data: { preload: true, delay: false }
-  },
+  	},
 	{
 		path: 'profile',
 		canLoad: [ LoginGuardGuard ],
@@ -90,19 +90,25 @@ const appRoute: Routes = [
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/orderservice/orderservice.module#OrderServiceModule',
 		data: { preload: true, delay: false }
-  },
+  	},
+	  {
+		path: 'support',
+		canLoad: [ LoginGuardGuard ],
+		loadChildren: './pages/support/support.module#SupportModule',
+		data: { preload: true, delay: false }
+  	},
 	{ 	
 		path: 'users', 
     canLoad: [LoginGuardGuard],
 		loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
 		data: { preload: true, delay: false }
-  },
+  	},
 	{
 		path: '',
 		component: PagesComponent,
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/pages.module#PagesModule'
-  },
+  	},
 	{ path:'**', pathMatch: 'full', redirectTo: 'notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
 
 ];

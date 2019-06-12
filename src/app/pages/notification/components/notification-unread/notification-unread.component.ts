@@ -103,7 +103,7 @@ export class NotificationUnreadComponent implements OnInit {
       );
 
       /*********Get unread */
-      this.notificationsUnreadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1') )
+      this.notificationsUnreadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1').orderBy('create_at', 'desc') )
       this.getnotificationsUnread$ = this.notificationsUnreadRef.snapshotChanges()
       .pipe(
         map(actions => {
