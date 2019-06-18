@@ -8,22 +8,29 @@
                 <h6>
                       Operación masiva
                 </h6>
+
                 <form [formGroup]="form">
-                    <h6>
-                    <input type="radio" formControlName="action" value="1" ><small> Seleccione Órdenes</small> 
-                    </h6>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                        <input type="radio" formControlName="action" value="1" ><small> Seleccione Órdenes <span *ngIf="!selection.isEmpty()"  style="font-weight:bold">Seleccionada(s) {{selection.selected.length}}</span></small>
+                        </li>
+                    </ul>                  
                 </form>            
       
                 <form [formGroup]="form2">
-                    <h6>
-                    <input type="radio" formControlName="action2" value="2" ><small> Seleccione Operación</small>
-                    </h6>                   
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                        <input type="radio" formControlName="action2" value="2" ><small> Seleccione Operación</small>
+                        </li>
+                    </ul>
                 </form>            
       
                 <form [formGroup]="form3">
-                     <h6>
-                     <input type="radio" formControlName="action3" value="3"><small> Procesar</small>
-                     </h6>
+                    <ul class="list-group list-group-flush">
+                        <li class="list-group-item">
+                        <input type="radio" formControlName="action3" value="3"><small> Procesar</small>
+                        </li>
+                    </ul>
                 </form>      
               </div>
               <div class="col-4" *ngIf="form">

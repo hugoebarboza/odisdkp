@@ -170,7 +170,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
 
   addNew(id:number) {
     const dialogRef = this.dialog.open(AddServiceComponent, {
-    width: '777px',
+    width: '1000px',
     disableClose: true,        
     data: { project_id: id }
     });
@@ -189,7 +189,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
 
   startEdit(id: number) {
     const dialogRef = this.dialog.open(EditServiceComponent, {
-      width: '777px',
+      width: '1000px',
       disableClose: true,  
       data: {service_id: id}
     });
@@ -208,7 +208,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
 
   deleteItem(id: number) {
     const dialogRef = this.dialog.open(DeleteServiceComponent, {
-      width: '777px',
+      width: '1000px',
       disableClose: true,  
       data: {service_id: id}
     });
@@ -338,7 +338,6 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   refresh(){
 
     if(this.id){
-      console.log(this.id);
       this.services = [];
       this.datasource = [];  
       this.isLoadingRefresh = true;
@@ -347,7 +346,6 @@ export class ServiceComponent  implements OnInit, OnDestroy {
             if (response.status == 'success'){
               this.services = response.datos;
               this.datasource = response.datos;
-              console.log(this.datasource);
               //console.log(this.services.length)
               this.loading = false;
               this.isRateLimitReached = false;

@@ -1,7 +1,12 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
 import { FormControl, Validators, NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
+import { AngularFireAuth } from 'angularfire2/auth';
+
+import swal from 'sweetalert';
 
 //MODELS
 import { 
@@ -13,16 +18,18 @@ import {
   ProjectServiceType,
   Region, 
   Service, 
-  User } from '../../../../models/types';
+  User, 
+  UserFirebase} from '../../../../models/types';
 
-//NGRX REDUX
-import { AppState } from '../../../../app.reducers';
-import { Store } from '@ngrx/store';
-
-
+//MOMENT
+import * as _moment from 'moment';
+const moment = _moment;
 
 //SERVICES
-import { CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
+import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
+
+
+
 
 @Component({
   selector: 'app-addservice',
@@ -32,7 +39,9 @@ import { CountriesService, OrderserviceService, ProjectsService, UserService } f
 export class AddServiceComponent implements OnInit, OnDestroy {
   title: string = 'Agregar Proyecto';
   comunas: Comuna[] = [];
-  customers: Customer [] = [];  
+  customers: Customer [] = [];
+  created: FormControl;
+  destinatario = [];
   en: any;
   id:number;
   identity: any;
@@ -45,6 +54,7 @@ export class AddServiceComponent implements OnInit, OnDestroy {
   projectservicetype: ProjectServiceType[] = [];
   provincias: Provincia[] = [];
   regiones: Region[] = [];
+  route: string = '';
   termino: any;
   users: User[] = [];
   users_ito: User[] = [];
@@ -54,23 +64,28 @@ export class AddServiceComponent implements OnInit, OnDestroy {
 	user_itoelec_assigned_to: any;
   subscription: Subscription;
   token: any;
+  userFirebase: UserFirebase;
 
 
 
   constructor(
+    private _cdf: CdfService,
     public _customer: OrderserviceService,
     public _project: ProjectsService,
     public _regionService: CountriesService,
+    private _route: Router,
     public _userService: UserService,
-    public dialogRef: MatDialogRef<AddServiceComponent>,      
+    public dialogRef: MatDialogRef<AddServiceComponent>,
+    private firebaseAuth: AngularFireAuth,  
     @Inject(MAT_DIALOG_DATA) public data: Service,
-    private store: Store<AppState>
   ) 
   { 
-    //this.loading = true;
+    this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
+    this.loading = true;
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
+    this.route = this._route.url.split("?")[0];
     this.en = {
       firstDayOfWeek: 0,
       dayNames: ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
@@ -82,6 +97,14 @@ export class AddServiceComponent implements OnInit, OnDestroy {
       clear: 'Borrar'
     };
 
+    this.firebaseAuth.authState.subscribe(
+      (auth) => {
+        if(auth){
+          this.userFirebase = auth;
+        }
+    });
+      
+
   }
 
   formControl = new FormControl('', [Validators.required]);
@@ -91,16 +114,6 @@ export class AddServiceComponent implements OnInit, OnDestroy {
   }  
 
   ngOnInit() {
-
-    
-    this.subscription = this.store.select('loading')
-    .subscribe( loading => 
-      {
-        this.loading = loading.isLoading;  
-      }
-    );
-
-
     if(this.data.project_id > 0){
       this.id = this.data.project_id;
       this.loadInfo();
@@ -109,7 +122,7 @@ export class AddServiceComponent implements OnInit, OnDestroy {
       this.loadUserProject();
       this.project = this.filter();
       this.project_name = this.project.project_name;
-      //this.loading = false;
+      this.loading = false;
     }
   }
 
@@ -140,10 +153,91 @@ export class AddServiceComponent implements OnInit, OnDestroy {
     //let obj = Object.assign(this.data);
     //console.log(obj);
 
-    this._project.addService(this.token.token, this.data, this.data.project_id);
+    this._project.addService(this.token.token, this.data, this.data.project_id).subscribe(
+			(data:any) => { 
+
+				if(data.status === 'success'){
+          swal('Proyecto creado exitosamente con ID: ', data.lastInsertedId +'.', 'success' );
+          if(this.destinatario.length > 0)  {
+            //SEND CDF MESSAGING AND NOTIFICATION
+            this.sendCdf(this.destinatario);
+          }                
+				}else{
+					swal('No fue posible procesar su solicitud', data.message, 'error');
+				}
+
+				},
+				(err: HttpErrorResponse) => {	
+				swal('No fue posible procesar su solicitud', err.error.message, 'error');
+				});
 
   }
 
+
+  sendCdf(data){
+    if(!data){
+      return;
+    }
+  
+    const body = 'Creación de Servicio en Proyecto: '+this.project_name+', con Num. OT: ' + this.data.order_number + ', y descripción: '+ this.data.service_name;
+    
+    if(this.destinatario.length > 0 && this.userFirebase.uid){
+      for (let d of data) {
+        
+        const notification = {
+          userId: this.userFirebase.uid,
+          userIdTo: d.id,			
+          title: 'Nuevo Servicio',
+          message: body,
+          create_at: this.created.value,
+          status: '1',
+          idUx: this.data.order_number,
+          descriptionidUx: 'bd',
+          routeidUx: `${this.route}`
+        };  
+  
+        
+        this._cdf.fcmsend(this.token.token, notification).subscribe(
+          response => {        
+            if(!response){
+            return false;        
+            }
+            if(response.status == 200){ 
+              //console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }   
+          );			
+            
+  
+  
+          const msg = {
+            toEmail: d.email,
+            fromTo: this.userFirebase.email,
+            subject: 'OCA GLOBAL - Nueva notificación',
+            message: `<strong>Hola ${d.name} ${d.surname}. <hr> <div>&nbsp;</div> Tiene una nueva notificación, enviada a las ${this.created.value} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+          };
+  
+          this._cdf.httpEmail(this.token.token, msg).subscribe(
+            response => {        
+              if(!response){
+              return false;        
+              }
+              if(response.status == 200){ 
+                //console.log(response);
+              }
+            },
+              error => {
+              //console.log(<any>error);
+              }   
+            );			                    
+      }
+    
+    }
+  
+  }    
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -291,6 +385,19 @@ export class AddServiceComponent implements OnInit, OnDestroy {
       this.customers = [];
      }
   }
+
+  taguser(data){
+    if(data.length == 0){
+      data = '';
+      return;
+    }
+
+    if(data.length > 0){
+      this.destinatario = data;
+      //console.log(this.destinatario);
+    }
+  }
+
  
 
 

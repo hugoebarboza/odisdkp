@@ -282,6 +282,9 @@ export class ProjectServiceCategorie  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
+	public observacion:string,
+	public order_by:number,
+	public status: number,
 	public create_at:any,	
 	public update_at:any
 	){}
@@ -294,7 +297,10 @@ export class ProjectServiceType  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
-	public create_at:any,	
+	public observacion:string,
+	public order_by:number,
+	public create_at:any,
+	public status: number,
 	public update_at:any
 	){}
 }

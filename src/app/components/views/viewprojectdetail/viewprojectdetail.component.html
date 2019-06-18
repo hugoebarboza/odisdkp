@@ -366,11 +366,11 @@
                                   <textarea matInput #inputstate  placeholder="Observación" [(ngModel)]="projectContent" name="observation" maxlength="177"  ></textarea>
                                 </mat-form-field>
 
-                                <div *ngIf="toggleContentMain">
-                                    <div class="row">
+                                <div *ngIf="toggleContentMain" >
+                                    <div class="row" *ngIf="userFirebase">
                                         <div class="col-12" >
                                           <h2 class="jeEmY">Etiquetados</h2>
-                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" *ngIf="userFirebase"> </app-taguser>
+                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>
                                         </div>
                                     </div>                                                                      
                                 </div>
@@ -439,11 +439,11 @@
                                 <mat-form-field appearance="outline" class="full-width" *ngIf="toggleContent">
                                   <textarea matInput #inputstate  placeholder="Observación" [(ngModel)]="projectContent" name="observation" maxlength="177"  ></textarea>
                                 </mat-form-field>
-                                <div *ngIf="toggleContent">
-                                    <div class="row">
+                                <div *ngIf="toggleContent" >
+                                    <div class="row" *ngIf="userFirebase">
                                         <div class="col-12" >
                                           <h2 class="jeEmY">Etiquetados</h2>
-                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" *ngIf="userFirebase"> </app-taguser>
+                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>
                                         </div>
                                     </div>                                                                      
                                 </div>

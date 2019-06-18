@@ -179,7 +179,7 @@ export class StatusListComponent implements OnInit, OnDestroy {
     this.indexitem = i;
     this.isLoadingDelete = true;
     //this.snackBar.open('Procesando solicitud.', '', {duration: 2000,});
-    console.log(estatus.id);
+    //console.log(estatus.id);
     this.dataService.deleteEstatus(this.token.token, estatus.id)
             .subscribe( (resp: any) => {
               if(!resp){

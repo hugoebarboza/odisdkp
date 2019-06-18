@@ -1,9 +1,9 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { AngularFirestore, AngularFirestoreDocument, AngularFirestoreCollection } from 'angularfire2/firestore';
-import { UserService, CargaImagenesService } from 'src/app/services/service.index';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSlideToggleChange, throwMatDialogContentAlreadyAttachedError } from '@angular/material';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { UserService, CargaImagenesService, CdfService } from 'src/app/services/service.index';
 import { ToastrService } from 'ngx-toastr';
-import { Proyecto, FileItem } from 'src/app/models/types';
+import { Proyecto, FileItem, UserFirebase } from 'src/app/models/types';
 import { defer, combineLatest, Observable, Subject, of, concat } from 'rxjs';
 import { distinctUntilChanged, tap, switchMap, catchError, debounceTime, map } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import swal from 'sweetalert';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import * as _moment from 'moment';
+import { AngularFireAuth } from 'angularfire2/auth';
 const moment = _moment;
 
 @Component({
@@ -23,7 +24,9 @@ export class ShowcaseComponent implements OnInit {
 
   @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
 
+  datacase: any;
   identity: any;
+  array_usersInfo = [];
   proyectos: Array<Proyecto> = [];
   userinput = new Subject<string>();
   isLoading = false;
@@ -34,9 +37,13 @@ export class ShowcaseComponent implements OnInit {
   limit = 2;
   resultCount = 0;
   title = 'Soporte';
+  token: any;
   countEtiq = false;
 
   formComentar: FormGroup;
+  userFirebase: UserFirebase;
+
+  checkedToggle = false;
 
   // FILE
 
@@ -44,10 +51,13 @@ export class ShowcaseComponent implements OnInit {
   archivos: FileItem[] = [];
   archivosTem: Array<number> = [];
 
+  arrayResponsables = [];
+
   public CARPETA_ARCHIVOS = '';
 
 
   infocaso$: any;
+  supportcase = 'supportcase';
 
   public caso$: Observable<any>;
 
@@ -59,22 +69,38 @@ export class ShowcaseComponent implements OnInit {
   public users$: Observable<any[]>;
   private usersCollection: AngularFirestoreCollection<any>;
 
+  public comentarios$: Observable<any[]>;
   private comentariosCollection: AngularFirestoreCollection<any>;
 
-  public comentarios$: Observable<any[]>;
+  public actividad$: Observable<any[]>;
+  public actividadCollection: AngularFirestoreCollection<any>;
+
+  public arrayEtiquetados = [];
+  public arrayEtiquetadosDefault = [];
 
   constructor(
     private _afs: AngularFirestore,
+    private _cdf: CdfService,
     public _userService: UserService,
     private toasterService: ToastrService,
     public _cargaImagenes: CargaImagenesService,
+    private firebaseAuth: AngularFireAuth,
     public dialogRef: MatDialogRef<ShowcaseComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
     ) {
       this.identity = this._userService.getIdentity();
       this.proyectos = this._userService.getProyectos();
+      this.token = this._userService.getToken();
+      this.supportcase = this.supportcase + '/' + this.identity.country + '/cases';
       this.page = 1;
       this.pageSize = 2;
+
+      this.firebaseAuth.authState.subscribe(
+        (auth) => {
+          if (auth) {
+            this.userFirebase = auth;
+          }
+      });
      }
 
   ngOnInit() {
@@ -87,7 +113,7 @@ export class ShowcaseComponent implements OnInit {
       'comentario': ''
     });
 
-    this.documentosCollection = this._afs.collection('supportcase/' + this.data.id + '/caseFiles');
+    this.documentosCollection = this._afs.collection(this.supportcase + '/' + this.data.id + '/caseFiles');
     this.documentos$ = this.documentosCollection.snapshotChanges()
       .map(actions => {
         return actions.map(a => {
@@ -110,13 +136,18 @@ export class ShowcaseComponent implements OnInit {
       }
     );/*/
 
-    this._afs.doc('supportcase/' + this.data.id).get().subscribe(
+    this._afs.doc(this.supportcase + '/' + this.data.id).get().subscribe(
       res => {
         if (res.exists) {
-            const docData = res.data();
-            docData.etiquetados = this.getUserInfo(docData.etiquetados);
-            this.collectionJoin(Observable.of(docData));
-            // Do something with doc data
+          this.arrayEtiquetados = [];
+          this.arrayEtiquetadosDefault = [];
+          this.datacase = res.data();
+          const docData = res.data();
+          //console.log(docData.etiquetados);
+          //console.log(this.datacase);
+          docData.etiquetados = this.getUserInfo(docData.etiquetados);
+          this.collectionJoin(Observable.of(docData));
+          // Do something with doc data
          } else {
           this.infocaso$ = null;
           console.log('Document does not exist');
@@ -124,9 +155,25 @@ export class ShowcaseComponent implements OnInit {
       }
     );
 
+    this._afs.doc('countries/' + this.identity.country + '/departments/' + this.data.depto_id).get()
+      .subscribe(res => {
+        if (res.exists) {
+          this.arrayResponsables = [];
+          // res.data();
+          // console.log(res.data());
+          if (res.data().admins && res.data().admins.length > 0) {
+            //console.log(res.data().admins);
+            this.arrayResponsables = this.getUserResponsables(res.data().admins);
+          }
+         } else {
+          this.arrayResponsables = [];
+          console.log('Document does not exist');
+         }
+      });
+
 
     // tslint:disable-next-line:max-line-length
-    this.comentariosCollection = this._afs.collection('supportcase/' + this.data.id + '/comments', ref => ref.orderBy('create_at', 'desc'));
+    this.comentariosCollection = this._afs.collection(this.supportcase + '/' + this.data.id + '/comments', ref => ref.orderBy('create_at', 'desc'));
     this.comentariosCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
@@ -141,6 +188,26 @@ export class ShowcaseComponent implements OnInit {
           this.comentarios$ = null;
         } else {
           this.collectionJoinUser(Observable.of(collection));
+        }
+      }
+    );
+
+    // tslint:disable-next-line:max-line-length
+    this.actividadCollection = this._afs.collection(this.supportcase + '/' + this.data.id + '/activity', ref => ref.orderBy('create_at', 'desc'));
+    this.actividadCollection.snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    ).subscribe( (collection: any[]) => {
+        const count = Object.keys(collection).length;
+        if (count === 0) {
+          this.actividad$ = null;
+        } else {
+          this.collectionJoinUserActivity(Observable.of(collection));
         }
       }
     );
@@ -162,14 +229,71 @@ export class ShowcaseComponent implements OnInit {
 
   }
 
-  etiquetadosChanged(event) {
 
-    const arr: any = [];
-    for (let i = 0; i < event.length; i++) {
-        arr.push(event[i]._id);
+  onChangeToggle(ob: MatSlideToggleChange) {
+    // console.log(ob.checked);
+    this.checkedToggle = ob.checked;
+
+  }
+
+  etiquetadosChanged(number) {
+
+    const that = this;
+
+    if (number === 0) {
+      this.arrayEtiquetados = this.arrayEtiquetadosDefault;
+      this.checkedToggle = false;
+      return;
     }
-    this._afs.doc('supportcase/' + this.data.id).update({etiquetados: arr});
 
+    let cc = '';
+    const arr: any = [];
+
+    for (let i = 0; i < this.arrayEtiquetados.length; i++) {
+        arr.push(this.arrayEtiquetados[i].uid);
+        cc = cc +  this.arrayEtiquetados[i].email + '; ';
+    }
+
+    if (arr) {
+      this.array_usersInfo = this.arrayEtiquetados.filter(value =>
+        !this.arrayEtiquetadosDefault.some(element =>
+          element.uid === value.uid
+        )
+      );
+    }
+
+
+    this.arrayEtiquetadosDefault = this.arrayEtiquetados;
+    this.checkedToggle = false;
+
+    const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
+    if (arr.length > 0) {
+      this._afs.collection(this.supportcase + '/' + this.data.id + '/activity').add({
+        create_to: this.userFirebase.uid,
+        create_at: date,
+        comentario: 'Actualizó etiquetados a ' + cc
+      });
+    } else {
+      this._afs.collection(this.supportcase + '/' + this.data.id + '/activity').add({
+        create_to: this.userFirebase.uid,
+        create_at: date,
+        comentario: 'Elimino etiquetados'
+      });
+    }
+
+    this._afs.doc(this.supportcase + '/' + this.data.id).update({etiquetados: arr})
+    .then(function(docRef) {
+       if (that.array_usersInfo && that.array_usersInfo.length > 0) {
+        that.array_usersInfo.forEach(res => {
+          // console.log(element);
+          that.sendCdfTag(res, that.data, 'Etiquetado(a) en');
+        });
+      }
+    })
+    .catch(function(error) {
+      console.error('Error updating document: ', error);
+    });
   }
 
   removeFile(index: number): void {
@@ -183,46 +307,41 @@ export class ShowcaseComponent implements OnInit {
 
   }
 
-  /*
-  removeAllFile(index: number): void {
+  getUserResponsables(to): Array<any> {
 
-    if (this.archivosTem.length > 0) {
-      let bandera = false;
+    const arr: any = [];
+    for (let ii = 0; ii < to.length; ii++) {
 
-      for (let i = 0; i < this.archivosTem.length; i++) {
-        if (this.archivosTem[i] === index) {
-            bandera = true;
-        }
-      }
-
-      if (!bandera) {
-        this.archivosTem.push(index);
-        if (this.archivosTem.length === this.archivos.length) {
-            this.archivos = [];
-        }
-      }
-    } else {
-      this.archivosTem.push(index);
-      if (this.archivosTem.length === this.archivos.length) {
-          this.archivos = [];
-      }
+      this._afs.doc('users/' + to[ii]).get()
+      .subscribe(res => {
+        if (res.exists) {
+          //console.log(res.data());
+          arr.push(res.data());
+         }
+      });
     }
+    return arr;
+  }
 
-  }*/
 
   getUserInfo(to): Array<any> {
 
     const arr: any = [];
     for (let ii = 0; ii < to.length; ii++) {
       this.documentJoin(Observable.of({id: to[ii]})).subscribe(res => {
-        console.log(res);
+        res.etiquetado.disabled = true;
+        // console.log(res);
+        this.arrayEtiquetadosDefault.push(res.etiquetado);
+        this.arrayEtiquetados.push(res.etiquetado);
         arr.push(res.etiquetado);
       });
     }
     return arr;
+
   }
 
   documentJoin(document): Observable<any> {
+    //console.log(document);
     return document.pipe(
       docJoin(this._afs, { id: 'users'},  2, '', '', 'etiquetado'),
     );
@@ -253,6 +372,12 @@ export class ShowcaseComponent implements OnInit {
                 return actions.map(a => {
                   const data = a.payload.doc.data();
                   const _id = a.payload.doc.id;
+
+                  for (let i = 0; i < this.arrayEtiquetadosDefault.length; i++) {
+                    if (this.arrayEtiquetadosDefault[i]['uid'] === _id ) {
+                      data.disabled = true;
+                    }
+                  }
                   return { _id, ...data };
                 });
               })
@@ -270,17 +395,29 @@ export class ShowcaseComponent implements OnInit {
     );
   }
 
+  collectionJoinUserActivity(document): Observable<any> {
+    return this.actividad$ = document.pipe(
+      leftJoin(this._afs, 'create_to', 'users', 0, '', '', 'usercomment'),
+      leftJoin(this._afs, 'id', this.supportcase + '/' + this.data.id + '/commentsFiles', 1, 'id_case', '==', 'adjuntos')
+    );
+  }
 
   collectionJoinUser(document): Observable<any> {
     return this.comentarios$ = document.pipe(
       leftJoin(this._afs, 'create_to', 'users', 0, '', '', 'usercomment'),
-      leftJoin(this._afs, 'id', 'supportcase/' + this.data.id + '/commentsFiles', 1, 'id_case', '==', 'adjuntos')
+      leftJoin(this._afs, 'id', this.supportcase + '/' + this.data.id + '/commentsFiles', 1, 'id_case', '==', 'adjuntos')
     );
   }
 
   ngChangeEstatus(value) {
-    console.log(value);
-    this._afs.doc('supportcase/' + this.data.id).update({status_id: value._iddoc, status_desc: value.name});
+   // console.log(value);
+    const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    this._afs.doc(this.supportcase + '/' + this.data.id).update({status_id: value._iddoc, status_desc: value.name, label: value.label});
+    this._afs.collection(this.supportcase + '/' + this.data.id + '/activity').add({
+      create_to: this.userFirebase.uid,
+      create_at: date,
+      comentario: 'Actualizó estado a ' + value.name
+    });
   }
 
   onNoClick(): void {
@@ -291,7 +428,7 @@ export class ShowcaseComponent implements OnInit {
 
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
-    this.CARPETA_ARCHIVOS = 'supportcase/';
+    this.CARPETA_ARCHIVOS = this.supportcase + '/';
 
     if (this.formComentar.invalid ) {
       swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
@@ -300,85 +437,182 @@ export class ShowcaseComponent implements OnInit {
 
     const that = this;
 
-    this._afs.collection('supportcase/' + this.data.id + '/comments').add({
-      create_to: 'jZFGCO1vsjSvkXb6GJQG',
+    this._afs.collection(this.supportcase + '/' + this.data.id + '/comments').add({
+      create_to: this.userFirebase.uid,
       create_at: date,
       comentario: this.formComentar.value.comentario
     })
     .then(function(docRef) {
+
+      const comment = that.formComentar.value.comentario;
+
+        if(that.arrayEtiquetadosDefault && that.arrayEtiquetadosDefault.length > 0 && docRef){
+          that.arrayEtiquetadosDefault.forEach(res => {
+            that.sendCdfUser(res, docRef, 'Comentario en ', comment);
+          });
+        }
+
+        if(that.arrayResponsables && that.arrayResponsables.length > 0 && docRef){
+          that.arrayResponsables.forEach(res => {
+            that.sendCdfUser(res, docRef, 'Comentario en ', comment);
+          });
+        }
+
+        if(that.datacase){
+
+          that._afs.doc('users/' + that.datacase.create_to).get().subscribe(
+            res => {
+              if (res.exists) {
+                  that.sendCdfUser(res.data(), docRef, 'Comentario en ', comment);
+               } 
+            }
+          );          
+
+        }
+
         // console.log('Document written with ID: ', docRef.id);
         if (that.archivos.length > 0) {
           that.toasterService.success('Caso registrado, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
           that.CARPETA_ARCHIVOS =  that.CARPETA_ARCHIVOS + that.data.id + '/commentsFiles';
           that._cargaImagenes.cargarImagenesFirebase( that.archivos,  that.CARPETA_ARCHIVOS, date, docRef.id);
-          that.formComentar.reset();
-        } else {
-          that.formComentar.reset();
-          // that.onNoClick();
-          // swal('Comentado registrado', '', 'success');
         }
+
+        that.formComentar.reset();
 
     })
     .catch(function(error) {
         console.error('Error adding document: ', error);
     });
-
   }
 
+  sendCdfTag(data, element, content) {
+    if (!data) {
+      return;
+    }
+    // tslint:disable-next-line:max-line-length
+    const body = content + ' incidencia #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', con Descripción: ' + this.datacase.description + ' y Prioridad: ' + this.datacase.important;
+    const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
+    if (data && this.userFirebase.uid) {
+
+        const notification = {
+          userId: this.userFirebase.uid,
+          userIdTo: data.uid,
+          title: 'Etiquetado en incidencia',
+          message: body,
+          create_at: created,
+          status: '1',
+          idUx: element.id,
+          descriptionidUx: 'cases',
+          routeidUx: `${this.supportcase}`
+        };
+
+        this._cdf.fcmsend(this.token.token, notification).subscribe(
+          response => {
+            if (!response) {
+            return false;
+            }
+            if (response.status === 200) {
+              // console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }
+          );
+
+          const msg = {
+            toEmail: data.email,
+            fromTo: this.userFirebase.email,
+            subject: 'OCA GLOBAL - Etiquetado en Incidencia #' + this.datacase.ncase,
+            // tslint:disable-next-line:max-line-length
+            message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Ha sido etiquetado en incidencia, enviada a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+          };
+
+          this._cdf.httpEmail(this.token.token, msg).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              // console.log(<any>error);
+              }
+            );
+      }
+
+    }
+
+    sendCdfUser(data, element, content, comment) {
+      if (!data) {
+        return;
+      }
+
+      //console.log(element);
+      // console.log(data);
+      // tslint:disable-next-line:max-line-length
+      const body = content + ' incidencia #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
+      const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+  
+      if (data && this.userFirebase.uid) {
+  
+          const notification = {
+            userId: this.userFirebase.uid,
+            userIdTo: data.uid,
+            title: 'Comentario en incidencia',
+            message: body,
+            create_at: created,
+            status: '1',
+            idUx: element.id,
+            descriptionidUx: 'cases',
+            routeidUx: `${this.supportcase}`
+          };
+  
+          this._cdf.fcmsend(this.token.token, notification).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              console.log(<any>error);
+              }
+            );
+  
+            const msg = {
+              toEmail: data.email,
+              fromTo: this.userFirebase.email,
+              subject: 'OCA GLOBAL - Comentario en Incidencia #' + this.datacase.ncase,
+              // tslint:disable-next-line:max-line-length
+              message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Se agregó comentario en incidencia a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+            };
+  
+            this._cdf.httpEmail(this.token.token, msg).subscribe(
+              response => {
+                if (!response) {
+                return false;
+                }
+                if (response.status === 200) {
+                  // console.log(response);
+                }
+              },
+                error => {
+                // console.log(<any>error);
+                }
+              );
+        }
+  
+      }    
+
+
 }
 
-/**
-export interface Caso {
-  id: any;
-  depto_id: any;
-  type_id: any;
-  category_id: any;
-  topic_id: string;
-  description_id: string;
-  to_id: any;
-  departamento: any;
-  tipo: any;
-  create_to: any;
-}
-
-export interface Estatus {
-  id: any;
-  name: string;
-}
-
-export interface Users {
-  id: any;
-  name: string;
-  surname: string;
-  email: string;
-}
-
-export interface Comentarios {
-  id: any;
-  create_to: any;
-  create_at: string;
-  comentario: string;
-  adjuntos: any;
-}
-
-export interface Departamento {
-  _id: string;
-  nombre: string;
-  created: string;
-  type: string;
-  url: string;
-}
-
-export interface Tipo {
-  _id: string;
-  name: string;
-}
-
-export interface Documentos {
-  _id: string;
-  name: string;
-}
-*/
 export const leftJoin = (
   afs: AngularFirestore,
   field,

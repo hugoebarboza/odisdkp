@@ -52,9 +52,15 @@
 
   <ul class="nav navbar-nav navbar-right" *ngIf="identity">     
 
-            <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-              <div class="btn-group mr-2" role="group" aria-label="Cero group">              
-              <button mat-icon-button><mat-icon class="material-icons md-14">apps</mat-icon></button>
+              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+              
+              <div class="btn-group mr-2" role="group" aria-label="Cero group" *ngIf="_userService.isRole(4)">              
+              <button mat-icon-button [matMenuTriggerFor]="menusupport"><mat-icon class="material-icons md-14">contact_support</mat-icon></button>
+              <mat-menu #menusupport="matMenu">                
+                <button [routerLink]="['/support']" class="mat-menu-item">
+                    <span>Centro de soporte</span>
+                </button>                                
+              </mat-menu>
               </div>
 
               <div class="btn-group mr-1" role="group" aria-label="First group">
@@ -103,6 +109,7 @@
               </div>
 
               </div>
+
               <div class="btn-group mr-1" role="group" aria-label="Second group">
 
                 <button mat-icon-button [matMenuTriggerFor]="menu">
@@ -154,6 +161,9 @@
 
 
               </div>
+
+
+ 
             </div> 
 
 

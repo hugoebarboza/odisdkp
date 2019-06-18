@@ -76,7 +76,7 @@ export class HeaderComponent {
 	subscription: Subscription;
 
 	constructor(
-    private _userService: UserService,
+    public _userService: UserService,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
 		public dialog: MatDialog,
@@ -98,6 +98,11 @@ export class HeaderComponent {
     .subscribe( objNgrx  => {
       if (objNgrx) {
         this.identity = objNgrx.identificacion; 
+      }else{
+        if(this.subscription){
+          //console.log('header unsubscribe');
+          this.subscription.unsubscribe();
+         }    
       }
       this.identity = this._userService.getIdentity();
       if(this.identity){        
@@ -115,19 +120,21 @@ export class HeaderComponent {
     }
 */
 
-    this.afAuth.authState.subscribe((auth: any) => {
+   this. subscription = this.afAuth.authState.subscribe((auth: any) => {
     if ( auth ) {
 
           const newUser = new UserFirebase( auth );
+          //console.log(auth.uid);
 
           const accion = new SetUserAction(newUser);
           this.store.dispatch( accion );
 
           this.userDoc = this.afs.doc<User>(`/users/${auth.uid}`);
           this.notificationsRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1').orderBy('create_at', 'desc'));
-          this.notificationsRef.snapshotChanges()
+          this.subscription = this.notificationsRef.snapshotChanges()
           .pipe(
             map(actions => {
+              //console.log(actions);
               this.isLoading = false;
               this.resultCount = actions.length;
               if (this.resultCount == 0){

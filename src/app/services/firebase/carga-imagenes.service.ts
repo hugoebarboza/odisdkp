@@ -33,7 +33,7 @@ export class CargaImagenesService {
         continue;
       }
 
-      console.log(item);
+      //console.log(item);
       const uploadTask: firebase.storage.UploadTask =
                   storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
                             .put( item.archivo );
@@ -54,7 +54,7 @@ export class CargaImagenesService {
             item.progreso = 100;
           }
 
-          console.log('PROGESOO:   ' + item.progreso );
+          //console.log('PROGESOO:   ' + item.progreso );
         }, (error) => {
           console.error('Error al subir');
         }, () => {
@@ -84,7 +84,7 @@ export class CargaImagenesService {
 
   private guardarImagenExtra( imagen: { nombre: string, type: string, url: string, created: any, id_case: any },  path: string ) {
 
-    console.log(path);
+    //console.log(path);
     this.afs.collection(`${ path }`).add( imagen );
 
   }

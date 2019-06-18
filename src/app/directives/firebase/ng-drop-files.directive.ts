@@ -47,6 +47,7 @@ export class NgDropFilesDirective {
     // tslint:disable-next-line:forin
     for ( const propiedad in Object.getOwnPropertyNames( archivosLista ) ) {
       const archivoTemporal = archivosLista[propiedad];
+      //console.log(archivoTemporal);
 
       /*if (archivoTemporal.type === '') {
         const type = this.extensionsName(archivoTemporal.name);

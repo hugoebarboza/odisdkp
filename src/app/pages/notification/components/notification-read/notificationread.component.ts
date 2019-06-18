@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { defer, combineLatest, of } from 'rxjs/';
@@ -27,7 +28,7 @@ import { SettingsService, UserService } from 'src/app/services/service.index';
   templateUrl: './notificationread.component.html',
   styleUrls: ['./notificationread.component.css']
 })
-export class NotificationReadComponent implements OnInit {
+export class NotificationReadComponent implements OnInit, OnDestroy {
 
   identity: any;
   isLoading: boolean = false;
@@ -38,6 +39,9 @@ export class NotificationReadComponent implements OnInit {
   resultCountRead: number = 0;
   show:boolean = false;
   status: string;
+  subscription: Subscription;
+  subscriptionunread: Subscription;
+  subscriptionread: Subscription;
   title: string;
   totalNotifications: number = 0;
 
@@ -91,26 +95,27 @@ export class NotificationReadComponent implements OnInit {
 
       /*********Get All */
       this.notificationsRef = this.userDoc.collection('notifications', ref => ref.orderBy('create_at', 'desc') )
-      this.getnotifications$ = this.notificationsRef.snapshotChanges()
+      this.subscription = this.notificationsRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.isLoading = false;
           this.resultCount = actions.length;
         })
-      );
+      ).subscribe();
 
       /*********Get unread */
       this.notificationsUnreadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1') )
-      this.getnotificationsUnread$ = this.notificationsUnreadRef.snapshotChanges()
+      this.subscriptionunread = this.notificationsUnreadRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.resultCountUnread = actions.length;
         })
-      );
+      ).subscribe();
+
       
       /*********Get read */
       this.notificationsReadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '0').orderBy('create_at', 'desc') )
-      this.getnotificationsRead$ = this.notificationsReadRef.snapshotChanges()
+      this.subscriptionread = this.notificationsReadRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.resultCountRead = actions.length;
@@ -121,8 +126,18 @@ export class NotificationReadComponent implements OnInit {
           });
 
         })
+      ).subscribe((collection: any[]) => {
+        //this.responsearray = response;
+        this.count = Object.keys(collection).length;
+        if(this.count == 0){
+          this.notifications$ = '';    
+        }else{
+          this.gojoin(Observable.of(collection));
+        }
+      }
       );
 
+      /*
       this.getnotificationsRead$
       .subscribe(response => {
         this.responsearray = response;
@@ -136,12 +151,38 @@ export class NotificationReadComponent implements OnInit {
 
       this.notifications$ = this.getnotificationsRead$.pipe(
         leftJoin(this.afs, 'create_by', 'users')
-      );
+      );*/
 
 
 
     })
   }
+
+  gojoin(collection): Observable<any> {
+    return this.notifications$ = collection.pipe(
+      leftJoin(this.afs, 'create_by', 'users')
+    );
+  }
+
+
+  ngOnDestroy() {
+    if(this.subscription){
+      //console.log('unsubscribe notification');
+      this.subscription.unsubscribe();
+    }
+
+    if(this.subscriptionunread){
+      //console.log('unsubscribe notification unread');
+      this.subscriptionunread.unsubscribe();
+    }
+
+    if(this.subscriptionread){
+      //console.log('unsubscribe notification read');
+      this.subscriptionread.unsubscribe();
+    }
+  }
+
+
 
   irInicio() {
     this.viewport.scrollToIndex( 0 );

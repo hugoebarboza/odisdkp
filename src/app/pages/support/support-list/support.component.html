@@ -1,10 +1,10 @@
 <meta name="Description" content="Support">
 <!--CONTENT-->
-<div class="loading" *ngIf="!proyectos && identity">
+<div class="loading" *ngIf="!identity">
     <app-loading></app-loading>  
 </div>
         
-<div id="wrapper" *ngIf="proyectos && identity">
+<div id="wrapper" *ngIf="identity">
 
     <div id="page-content-wrapper" >
         
@@ -19,195 +19,231 @@
             <br>
 
             <div class="row animated fadeIn" *ngIf="!isLoading">
-                    <div class="col-sm-12">
-                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-                    </div>
+                <div class="col-sm-12">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                 </div>
+            </div>
                           
-                <div class="row animated fadeIn" >
-                    
-                    <div class="col-12">
-        
-                        <div class="card">
-        
-                            <div class="card-body">
-        
-                                <div class="row">
-                                    <div class="col-10"> 
-                                        <h3 class="card-title"><mat-icon>list_alt</mat-icon> Casos </h3>
-                                        <!--<div *ngFor="let blogPost of joined$ | async" > <p>{{blogPost}}</p><br><p>{{blogPost | json}}</p></div>-->
-                                    </div>
-                                    <div class="col-2" style="position: relative;">
-                                        <div style="position: absolute; right: 20px; top: 0px;">
-                                            <button type="button" class="btn btn-primary btn-sm leftFloat" (click)="addNew()" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">add_circle_outline</mat-icon>Crear Caso</button>                      
-                                        </div>
-                                    </div>
-                                </div>
-        
-                                <mat-radio-group (change)="changeRadio($event.value)" [(ngModel)]="radioselect" *ngIf="radioOpciones">
-                                    <mat-radio-button class="marginleft" *ngFor="let opciones of radioOpciones;" [value]="opciones.value">{{opciones.descripcion}}</mat-radio-button>
-                                </mat-radio-group>
-                                <br><br>
-        
-                                <div class="row">
-        
-                                    <div class="col"  *ngIf="departamentos && radioselect === 3">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">Departamento</span>
-                                            </div>
-                                            <ng-select  
-                                                [items]="departamentos"
-                                                [clearable]="false"
-                                                bindLabel="name"
-                                                bindValue="id"
-                                                [(ngModel)]="selectedDepto"
-                                                (change)="selectChangedepto($event)"
-                                                class="width-40percentage">
-                                            </ng-select>
-                                        </div>            
-                                    </div>
-        
-                                    <div class="col">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">Asunto</span>
-                                            </div>
-                                            <input type="text"  #asuntoinput>
-                                        </div>            
-                                    </div>
-                                    
-                                    <div class="col">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">N° de Caso</span>
-                                            </div>
-                                            <input type="number"  #numbercaseinput>
-                                        </div>            
-                                    </div>
-                            
-                                    <div class="col">
-                                        <div class="input-group input-group-sm mb-3">
-                                            <div class="input-group-prepend">
-                                                <span class="input-group-text" id="inputGroup-sizing-sm">Estatus</span>
-                                            </div>
-                                            <input type="text" #statusinput>
-                                        </div>            
-                                    </div>
-        
-                                </div>
-                                
-                               <!-- <app-tablecustom [condition]="condition"></app-tablecustom>  -->
-        
-                                <table mat-table  [dataSource]="joined$ | async">
-        
-                                    <!--- Note that these columns can be defined in any order.
-                                          The actual rendered columns are set as a property on the row definition" -->
-                                  
-                                    <!-- Position Column -->
-                                    <ng-container matColumnDef="ncase">
-                                        <th mat-header-cell *matHeaderCellDef> N° de Caso </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.ncase}} </td>
-                                    </ng-container>
-        
-                                    <!-- Name Column -->
-                                    <ng-container matColumnDef="asunto">
-                                        <th mat-header-cell *matHeaderCellDef> Asunto </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.asunto}} </td>
-                                    </ng-container>
-        
-                                    <!-- Name Column {element.departments.name}}-->
-                                    <ng-container matColumnDef="departments">
-                                        <th mat-header-cell *matHeaderCellDef> Departamento </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.depto_desc}} </td>
-                                    </ng-container>
-        
-                                      <!-- Name Column {{element.supporttype.name}} -->
-                                    <ng-container matColumnDef="supporttype">
-                                        <th mat-header-cell *matHeaderCellDef> Tipo </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.type_desc}} </td>
-                                    </ng-container>
-        
-                                     <!-- Name Column {{element.supportcategory.name}} -->
-                                    <ng-container matColumnDef="supportcategory">
-                                        <th mat-header-cell *matHeaderCellDef> Categoría </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.category_desc}} </td>
-                                    </ng-container>
-        
-                                    <!-- Weight Column -->
-                                    <ng-container matColumnDef="users">
-                                      <th mat-header-cell *matHeaderCellDef> Creado por </th>
-                                      <td mat-cell *matCellDef="let element"> {{element.users.name}} {{element.users.surname}} </td>
-                                    </ng-container>
-                                  
-                                    <!-- Symbol Column -->
-                                    <ng-container matColumnDef="create_at">
-                                      <th mat-header-cell *matHeaderCellDef> Creado hace </th>
-                                      <td mat-cell *matCellDef="let element"> {{element.create_at | countTime}} </td>
-                                    </ng-container>
-        
-                                    <!-- Symbol Column {{element.supportstatus.name}} -->
-                                    <ng-container matColumnDef="supportstatus">
-                                        <th mat-header-cell *matHeaderCellDef> Estatus </th>
-                                        <td mat-cell *matCellDef="let element"> {{element.status_desc}} </td>
-                                    </ng-container>
-        
-                                    <!-- Symbol Column -->
-                                    <ng-container matColumnDef="accions">
-                                        <th mat-header-cell *matHeaderCellDef></th>
-                                        <td mat-cell *matCellDef="let element">
-        
-                                            <div class="row" align="right">
-        
-                                                <button mat-icon-button color="warn" 
-                                                matTooltip="Eliminar caso." (click)="deleteItem(element.id)"> <!-- -->
-                                                    <div>
-                                                    <mat-icon aria-label="Delete">delete</mat-icon>
-                                                    </div>
-                                                </button>
-                                        
-                                                <button mat-icon-button color="primary"  (click)="abrirCaso(element.id)" 
-                                                matTooltip="Abrir caso.">
-                                                    <div>
-                                                    <mat-icon aria-label="launch">launch</mat-icon>
-                                                    </div>
-                                                </button>
-                                        
-                                            </div>
-        
-                                        </td>
-                                    </ng-container>
-                                  
-                                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        
-                                </table>
-        
-                                <div class="button-row saltox20">
-        
-                                    <div class="button-row">
-                                        
-                                        <button (click)="paginate(-2, -1)" mat-raised-button  color="primary" class="btn btn-secondary" [disabled]="page==1">
-                                            Inicio
-                                        </button>
+            <div class="row animated fadeIn" >
                 
-                                        <button (click)="paginate(2, 1)" mat-raised-button  color="accent" class="btn btn-secondary" [disabled]="limit > resultCount">
-                                            Siguiente
-                                        </button>
-                                    
-                                    </div>
-        
+                <div class="col-12">
+    
+                    <div class="card">
+    
+                        <div class="card-body">
+    
+                            <div class="row">
+                                <div class="col-10"> 
+                                    <h3 class="card-title"><mat-icon>list_alt</mat-icon> Casos ({{datacount}})</h3>
+                                    <!--<div *ngFor="let blogPost of joined$ | async" > <p>{{blogPost}}</p><br><p>{{blogPost | json}}</p></div>-->
                                 </div>
-        
+                                <div class="col-2" style="position: relative;">
+                                    <div style="position: absolute; right: 20px; top: 0px;">
+                                        <button type="button" class="btn btn-primary btn-sm leftFloat" (click)="addNew()" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">add_circle_outline</mat-icon>Crear Caso</button>                      
+                                    </div>
+                                </div>
                             </div>
-        
+
+                            <div class="row">
+                                <div class="col" >
+                                    <mat-radio-group (change)="changeRadio($event.value)" [(ngModel)]="radioselect" *ngIf="radioOpciones">
+                                        <mat-radio-button class="marginleft" *ngFor="let opciones of radioOpciones;" [value]="opciones.value">{{opciones.descripcion}}</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+    
+                            <div class="row">
+
+                                <div class="col">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Mes</span>
+                                        </div>
+                                        <ng-select  
+                                            [items]="allMeses"
+                                            [clearable]="false"
+                                            bindLabel="mes"
+                                            bindValue="value"
+                                            [(ngModel)]="selectedMes"
+                                            (change)="selectChangeMes($event)"
+                                            class="width-40percentage">
+                                        </ng-select>
+                                    </div>            
+                                </div>
+    
+                                <div class="col"  *ngIf="departamentos && departamentos.length > 0  && radioselect === 3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Departamento</span>
+                                        </div>
+                                        <ng-select  
+                                            [items]="departamentos"
+                                            [clearable]="false"
+                                            bindLabel="name"
+                                            bindValue="id"
+                                            [(ngModel)]="selectedDepto"
+                                            (change)="selectChangedepto($event)"
+                                            class="width-40percentage">
+                                        </ng-select>
+                                    </div>            
+                                </div>
+
+                                <div class="col"  *ngIf="allDepartamentos.length > 1 && radioselect !== 3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Departamento</span>
+                                        </div>
+                                        <ng-select  
+                                            [items]="allDepartamentos"
+                                            [clearable]="false"
+                                            bindLabel="name"
+                                            bindValue="id"
+                                            [(ngModel)]="selectedDeptoAll"
+                                            (change)="selectChangedeptoAll($event)"
+                                            class="width-40percentage">
+                                        </ng-select>
+                                    </div>            
+                                </div>
+    
+
+                                <div class="col">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text" id="inputGroup-sizing-sm">Busqueda</span>
+                                        </div>
+                                        <input type="text"  (keyup)="applyFilter($event.target.value)" class="width-40percentage">
+                                    </div>            
+                                </div>
+    
+                            </div>
+                            
+                            <div class="example-rate-limit-reached" *ngIf="joined$ === null && datacount === 0 && isLoading">
+                                No se encontraron registros que coincidan con su búsqueda.
+                            <button mat-button color="primary" (click)="refreshTable()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                                
+                            </div>
+
+                            <table mat-table  [dataSource]="joined$"  matSort>
+    
+                                <!--- Note that these columns can be defined in any order.
+                                        The actual rendered columns are set as a property on the row definition" -->
+                                
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="ncase">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> N° de Caso </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.ncase}} </td>
+                                </ng-container>
+    
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="asunto">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Asunto </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.asunto}} </td>
+                                </ng-container>
+    
+                                <!-- Name Column {element.departments.name}}-->
+                                <ng-container matColumnDef="departments">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Departamento </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.depto_desc}} </td>
+                                </ng-container>
+    
+                                    <!-- Name Column {{element.supporttype.name}} -->
+                                <ng-container matColumnDef="supporttype">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.type_desc}} </td>
+                                </ng-container>
+    
+                                    <!-- Name Column {{element.supportcategory.name}} -->
+                                <ng-container matColumnDef="supportcategory">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.category_desc}} </td>
+                                </ng-container>
+    
+                                <!-- Weight Column -->
+                                <ng-container matColumnDef="users">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Creado por </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.users.name}} {{element.users.surname}} </td>
+                                </ng-container>
+                                
+                                <!-- Symbol Column -->
+                                <ng-container matColumnDef="create_at">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Creado hace </th>
+                                    <td mat-cell *matCellDef="let element"> {{element.create_at | countTime}} </td>
+                                </ng-container>
+                                
+                                <!-- Symbol Column {{element.supportstatus.name}} -->
+                                <ng-container matColumnDef="supportstatus">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </th>
+                                    <td mat-cell *matCellDef="let element"> 
+                                            <mat-chip-list>
+                                                    <mat-chip *ngIf="element.label==1" selected color="warn">
+                                                        {{element.status_desc}} 
+                                                    </mat-chip>
+                                            
+                                                    <mat-chip *ngIf="element.label==2" selected color="primary">
+                                                        {{element.status_desc}} 
+                                                    </mat-chip>
+                                            
+                                                    <mat-chip *ngIf="element.label==3" selected color="accent">
+                                                        {{element.status_desc}} 
+                                                    </mat-chip>
+                                                </mat-chip-list>                                        
+                                    </td>
+                                </ng-container>
+
+                                <ng-container matColumnDef="important">
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Urgencia </th>
+                                    <td mat-cell *matCellDef="let element">
+                                        <span [ngClass]="element.important == 'Bajo' ? 'important-bajo' : element.important == 'Medio' ? 'important-medio' : element.important == 'Alto' ? 'important-alto': element.important == 'Urgente' ? 'important-urgente'  : 'important-default'">
+                                            {{element.important}}
+                                        </span>
+                                    </td>
+                                </ng-container>
+    
+                                <!-- Symbol Column -->
+                                <ng-container matColumnDef="accions">
+                                    <th mat-header-cell *matHeaderCellDef></th>
+                                    <td mat-cell *matCellDef="let element">
+    
+                                        <div class="row" align="right">
+    
+                                            <button mat-icon-button color="warn" 
+                                            matTooltip="Eliminar caso." (click)="deleteItem(element.id)" *ngIf="userFirebase.uid === element.create_to || identity.role === 8"> <!-- -->
+                                                <div>
+                                                <mat-icon aria-label="Delete">delete</mat-icon>
+                                                </div>
+                                            </button>
+                                    
+                                            <button mat-icon-button color="primary"  (click)="abrirCaso(element)" 
+                                            matTooltip="Abrir caso.">
+                                                <div>
+                                                <mat-icon aria-label="launch">launch</mat-icon>
+                                                </div>
+                                            </button>
+                                    
+                                        </div>
+    
+                                    </td>
+                                </ng-container>
+                                
+                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    
+                            </table>
+
+                            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    
                         </div>
-        
+    
                     </div>
-        
+    
                 </div>
+    
+            </div>
         
         </div>
+
+        <br>
+        <br>
   
 
     </div>

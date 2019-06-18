@@ -42,6 +42,8 @@ export class NotificationComponent implements OnInit, OnDestroy {
   resultCountUnread: number;
   resultCountRead: number;
   subscription: Subscription;
+  subscriptionunread: Subscription;
+  subscriptionread: Subscription;
   show:boolean = false;
   status: string;
   title: string;
@@ -96,7 +98,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
       this.user$ = this.userDoc.valueChanges();      
 
       this.notificationsRef = this.userDoc.collection('notifications', ref => ref.orderBy('create_at', 'desc') )
-      this.notificationsRef.snapshotChanges()
+      this.subscription = this.notificationsRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.isLoading = false;
@@ -126,20 +128,21 @@ export class NotificationComponent implements OnInit, OnDestroy {
       
       /*********Get unread */
       this.notificationsUnreadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1') )
-      this.getnotificationsUnread$ = this.notificationsUnreadRef.snapshotChanges()
+      this.subscriptionunread = this.notificationsUnreadRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.resultCountUnread = actions.length;          
         })
-      );
+      ).subscribe();
+
       /*********Get read */
       this.notificationsReadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '0') )
-      this.getnotificationsRead$ = this.notificationsReadRef.snapshotChanges()
+      this.subscriptionread = this.notificationsReadRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.resultCountRead = actions.length;
         })
-      );
+      ).subscribe();
 
 
     })
@@ -151,9 +154,21 @@ export class NotificationComponent implements OnInit, OnDestroy {
     );
 
   }
+
   ngOnDestroy() {
     if(this.subscription){
+      //console.log('unsubscribe notification');
       this.subscription.unsubscribe();
+    }
+
+    if(this.subscriptionunread){
+      //console.log('unsubscribe notification unread');
+      this.subscriptionunread.unsubscribe();
+    }
+
+    if(this.subscriptionread){
+      //console.log('unsubscribe notification read');
+      this.subscriptionread.unsubscribe();
     }
   }
 

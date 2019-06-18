@@ -3,6 +3,13 @@ import { FormControl, Validators, NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
+import { HttpErrorResponse } from '@angular/common/http';
+import { Router } from '@angular/router';
+
+import swal from 'sweetalert';
+
+//FIREBASE
+import { AngularFireAuth } from 'angularfire2/auth';
 
 //MODELS
 import { 
@@ -13,11 +20,16 @@ import {
   ProjectServiceType,
   Region, 
   Service, 
-  User } from '../../../../models/types';
+  User, 
+  UserFirebase} from '../../../../models/types';
+
+//MOMENT
+import * as _moment from 'moment';
+const moment = _moment;
 
 
 //SERVICES
-import { CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
+import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
 
 
 @Component({
@@ -28,7 +40,9 @@ import { CountriesService, OrderserviceService, ProjectsService, UserService } f
 export class EditServiceComponent implements OnInit {
   public title: string = 'Editar';
   public comunas: Comuna[] = [];
-  public customers: Customer [] = [];  
+  public customers: Customer [] = [];
+  created: FormControl;
+  destinatario = [];
   public en: any;
   public identity: any;
   public isLoading:boolean = false;
@@ -64,20 +78,26 @@ export class EditServiceComponent implements OnInit {
 	public user_itocivil_assigned_to: any;
 	public user_itoelec_assigned_to: any;
   public subscription: Subscription;
+  route: string = '';
   public token: any;
+  userFirebase: UserFirebase;
 
   constructor(
+    private _cdf: CdfService,
     public _customer: OrderserviceService,
     public _project: ProjectsService,
     public _regionService: CountriesService,
+    private _route: Router,
     public _userService: UserService,
     public dialogRef: MatDialogRef<EditServiceComponent>,
+    private firebaseAuth: AngularFireAuth,
     public snackBar: MatSnackBar,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) { 
-    
+    this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
     this.identity = this._userService.getIdentity();
     this.loading = true;
+    this.route = this._route.url.split("?")[0];
     this.token = this._userService.getToken();
     this.en = {
       firstDayOfWeek: 0,
@@ -89,6 +109,14 @@ export class EditServiceComponent implements OnInit {
       today: 'Hoy',
       clear: 'Borrar'
     };
+
+    this.firebaseAuth.authState.subscribe(
+      (auth) => {
+        if(auth){
+          this.userFirebase = auth;
+        }
+    });
+
   }
 
   formControl = new FormControl('', [Validators.required]);
@@ -184,8 +212,87 @@ export class EditServiceComponent implements OnInit {
 
     let obj = Object.assign(this.service_data);
     //console.log(obj);
-    this._project.updateService(this.token.token, this.service_data, this.project_id, this.data.service_id);
+    this._project.updateService(this.token.token, this.service_data, this.project_id, this.data.service_id).subscribe(
+      (data:any) => { 
+        if(data.status === 'success'){
+          swal('Proyecto actualizado exitosamente ', '', 'success' );
+          if(this.destinatario.length > 0)  {
+            //SEND CDF MESSAGING AND NOTIFICATION
+            this.sendCdf(this.destinatario);
+          }                
+        }else{
+          swal('No fue posible procesar su solicitud', '', 'error');
+        }				  
+          },
+          (err: HttpErrorResponse) => {	
+        swal('No fue posible procesar su solicitud', err.error.message, 'error');
+        });
   }
+
+  sendCdf(data){
+    if(!data){
+      return;
+    }
+  
+    const body = 'Edición de Servicio en Proyecto: '+this.project+', con Num. OT: ' + this.service_data.order_number + ', y descripción: '+ this.services.service_name;
+    
+    if(this.destinatario.length > 0 && this.userFirebase.uid){
+      for (let d of data) {
+        
+        const notification = {
+          userId: this.userFirebase.uid,
+          userIdTo: d.id,			
+          title: 'Edición de Servicio',
+          message: body,
+          create_at: this.created.value,
+          status: '1',
+          idUx: this.service_data.order_number,
+          descriptionidUx: 'bd',
+          routeidUx: `${this.route}`
+        };  
+  
+        
+        this._cdf.fcmsend(this.token.token, notification).subscribe(
+          response => {        
+            if(!response){
+            return false;        
+            }
+            if(response.status == 200){ 
+              //console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }   
+          );			
+            
+  
+  
+          const msg = {
+            toEmail: d.email,
+            fromTo: this.userFirebase.email,
+            subject: 'OCA GLOBAL - Nueva notificación',
+            message: `<strong>Hola ${d.name} ${d.surname}. <hr> <div>&nbsp;</div> Tiene una nueva notificación, enviada a las ${this.created.value} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+          };
+  
+          this._cdf.httpEmail(this.token.token, msg).subscribe(
+            response => {        
+              if(!response){
+              return false;        
+              }
+              if(response.status == 200){ 
+                //console.log(response);
+              }
+            },
+              error => {
+              //console.log(<any>error);
+              }   
+            );			                    
+      }
+    
+    }
+  
+  }      
 
   onNoClick(): void {
     this.dialogRef.close();
@@ -341,6 +448,19 @@ export class EditServiceComponent implements OnInit {
       this.snackBar.open('Se ha desactivado el Proyecto.', '', {duration: 2000,});             
     }           
   }
+
+  taguser(data){
+    if(data.length == 0){
+      data = '';
+      return;
+    }
+
+    if(data.length > 0){
+      this.destinatario = data;
+      //console.log(this.destinatario);
+    }
+  }
+
 
 
 }

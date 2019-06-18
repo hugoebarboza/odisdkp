@@ -1,121 +1,152 @@
-<mat-toolbar color="primary">
-  <h3>Nuevo Caso</h3> 
-  <span class="mat-spacer"></span>
-  <button mat-icon-button (click)="onNoClick()" tabindex="-1">
-    <mat-icon class="mat-icon">close</mat-icon>       
-  </button>
-</mat-toolbar>
-<p></p>
-  
-<div *ngIf="isLoading">
-  <app-loading *ngIf="isLoading"></app-loading>  
-</div>
-  
-<form class="mat-dialog-content" *ngIf="forma" [formGroup]="forma">
-  <div class="app animated fadeIn row">
-    <div class="col-8">
 
-      <h2 class="jeEmY">Asunto</h2>
-      <mat-form-field appearance="outline" class="example-full-width mat-status">
-        <input matInput placeholder="Añadir asunto..." name="asunto" formControlName="asunto"   class="form-control" required>
-      </mat-form-field>
 
-      <h2 class="jeEmY">Descripción</h2>
-      <mat-form-field appearance="outline" class="example-full-width mat-status">
-        <textarea matInput placeholder="Añadir descripción..." matTextareaAutosize matAutosizeMinRows=5 name="descripcion" formControlName="descripcion"   class="form-control" required></textarea>
-      </mat-form-field>
+<div class="app">
+  <mat-toolbar color="primary">
+    <h3>Nuevo Caso</h3> 
+    <span class="mat-spacer"></span>
+    <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+      <mat-icon class="mat-icon">close</mat-icon>       
+    </button>
+  </mat-toolbar>
+  <br>
 
-      <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
-        <mat-icon>attachment</mat-icon>
-        <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="startUpload($event)"  (click)="$event.target.value = null; archivos = []"  multiple >              
-        <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 3, Max. 3 </strong></span>
-      </button>
 
-      <div *ngIf="archivos" >
-        <mat-chip-list>
-          <mat-chip *ngFor="let forFile of archivos; let i = index;" 
-            color="primary"
-            [selectable]="selectable"
-            [removable]="true"
-            (removed)="removeFile(i)">
-            <span>{{ forFile.archivo.name }}</span>
-            <span *ngIf="forFile.progreso &&  forFile.progreso > 0" style="margin-left: 6px; margin-right: 6px;"><strong>{{forFile.progreso}}%</strong></span>
-            <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
-            <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
-            <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
-          
-            <div class="progress container-fluid">
-              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
-            </div>
-          </mat-chip>
-        </mat-chip-list>
-      </div>
-        
-      <br>
+  <div *ngIf="isLoading">
+    <app-loading *ngIf="isLoading"></app-loading>  
+  </div>
+    
+  <form class="mat-dialog-content" *ngIf="forma" [formGroup]="forma">
+    <div class="animated fadeIn row">
+      <div class="col-8">
 
-      <div class="row row-custom">
-          
-        <button mat-raised-button color="primary" class="margin-left" [disabled]="forma.invalid" (click)="confirmAdd()">
-            Guardar           
+        <h2 class="jeEmY">Asunto</h2>
+        <mat-form-field appearance="outline" class="example-full-width mat-status">
+          <input matInput  #asunto placeholder="Añadir asunto..." maxlength="60"  name="asunto" formControlName="asunto"   class="form-control" required>
+          <mat-hint align="end">{{asunto.value.length}} / 60</mat-hint>
+        </mat-form-field>
+
+        <h2 class="jeEmY">Descripción</h2>
+        <mat-form-field appearance="outline" class="example-full-width mat-status">
+          <textarea matInput #descripcion placeholder="Añadir descripción..." matAutosizeMinRows=5  maxlength="256" name="descripcion" formControlName="descripcion"   class="form-control" required></textarea>
+          <mat-hint align="end">{{descripcion.value.length}} / 256</mat-hint>
+        </mat-form-field>
+
+        <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
+          <mat-icon>attachment</mat-icon>
+          <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="startUpload($event)"  (click)="$event.target.value = null; archivos = []"  multiple >              
+          <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 3, Max. 3 </strong></span>
         </button>
 
-      </div>
-  
-    </div>
-  
-    <div class="col-4">
+        <div *ngIf="archivos" >
+          <mat-chip-list>
+            <mat-chip *ngFor="let forFile of archivos; let i = index;" 
+              color="primary"
+              [removable]="true"
+              (removed)="removeFile(i)">
+              <span>{{ forFile.archivo.name }}</span>
+              <span *ngIf="forFile.progreso &&  forFile.progreso > 0" style="margin-left: 6px; margin-right: 6px;"><strong>{{forFile.progreso}}%</strong></span>
+              <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
+              <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
+              <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
+            
+              <div class="progress container-fluid">
+                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
+              </div>
+            </mat-chip>
+          </mat-chip-list>
+        </div>
+          
+        <br>
 
-      <div *ngIf="departamento$">
-        <h2 class="jeEmY">Departamento</h2>
-        <ng-select  (change)="selectChangedepto($event)"
-                    [items]="departamento$ | async"
-                    bindLabel="name"
-                    class="example-full-width"
-                    name="departamento" formControlName="departamento" required>
-        </ng-select>
-      </div>
+        <div class="row row-custom">
+            
+          <button mat-raised-button color="primary" class="margin-left" [disabled]="forma.invalid" (click)="confirmAdd()">
+              Guardar           
+          </button>
 
-      <div *ngIf="tipo$">
-        <h2 class="jeEmY">Tipo</h2>
-        <ng-select  (change)="selectChangetype($event)"
-                    [items]="tipo$ | async"
-                    bindLabel="name"
-                    class="example-full-width"
-                    name="tipo" formControlName="tipo" required>
-        </ng-select>
+        </div>
+    
       </div>
-      
-      <div *ngIf="categoria$">
-        <h2 class="jeEmY">Categoria</h2>
-        <ng-select  [items]="categoria$ | async"
-                    bindLabel="name"
-                    class="example-full-width"
-                    name="categoria" formControlName="categoria" required>
-        </ng-select>
-      </div>
-      <div>
-        <h2 class="jeEmY">Etiquetar</h2>
-        <ng-select name="etiquetado" 
-              [items]="users$ | async"
-              [multiple]="true"
-              [clearable]="false" 
-              [closeOnSelect]="true"
-              [searchable]="true"
-              [loading]="userLoading"
-              [typeahead]="userinput"
-              bindLabel="email"
-              placeholder="Seleccione usuario" 
-              class="example-full-width"
-              formControlName="etiquetado">
+    
+      <div class="col-4">
+
+
+        <div *ngIf="tagImportant$">
+          <h2 class="jeEmY">Nivel de Urgencia</h2>
+          <ng-select  [items]="tagImportant$ | async"
+                      [clearable]="false" 
+                      bindLabel="name"
+                      class="example-full-width"
+                      name="tagImportant" formControlName="tagImportant">
           </ng-select>
-      </div>
+        </div>
+
+        <h2 class="jeEmY" *ngIf="arrayResponsables && arrayResponsables.length > 0">Responsable</h2>
+        <div class="sc-cUDvuO fOqogj" *ngFor="let arrayresp of arrayResponsables">
+          <div class="sc-jQGbeF SZsdL">
+            <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+              <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+              </span>
+            </div>
+          </div>
+          <div class="sc-gwVKww fLcKLS">  {{arrayresp.email}}
+          </div>
+        </div>
+
+        <div *ngIf="departamento$">
+          <h2 class="jeEmY">Departamento</h2>
+          <ng-select  (change)="selectChangedepto($event)"
+                      [items]="departamento$ | async"
+                      bindLabel="name"
+                      class="example-full-width"
+                      name="departamento" formControlName="departamento" required>
+          </ng-select>
+        </div>
+
+        <div *ngIf="tipo$">
+          <h2 class="jeEmY">Tipo</h2>
+          <ng-select  (change)="selectChangetype($event)"
+                      [items]="tipo$ | async"
+                      bindLabel="name"
+                      class="example-full-width"
+                      name="tipo" formControlName="tipo" required>
+          </ng-select>
+        </div>
+        
+        <div *ngIf="categoria$">
+          <h2 class="jeEmY">Categoria</h2>
+          <ng-select  [items]="categoria$ | async"
+                      bindLabel="name"
+                      class="example-full-width"
+                      name="categoria" formControlName="categoria" required>
+          </ng-select>
+        </div>
+        <div>
+          <h2 class="jeEmY">Etiquetar</h2>
+          <ng-select name="etiquetado" 
+                [items]="users$ | async"
+                [multiple]="true"
+                [clearable]="false" 
+                [closeOnSelect]="true"
+                [searchable]="true"
+                [loading]="userLoading"
+                [typeahead]="userinput"
+                bindLabel="email"
+                placeholder="Seleccione usuario" 
+                class="example-full-width"
+                formControlName="etiquetado">
+            </ng-select>
+        </div>
         <br><br>
-  
+    
+      </div>
+      <!--{{infocaso.to | json}}-->
     </div>
-    <!--{{infocaso.to | json}}-->
-    </div>
-</form>
+  </form>
   
+</div>
+
   
   
   
