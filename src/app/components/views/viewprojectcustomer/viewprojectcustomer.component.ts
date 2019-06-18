@@ -1,10 +1,9 @@
-import {HttpClient} from '@angular/common/http';
 import {Component, OnInit, OnDestroy, ViewChild, Input, ElementRef, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
 import {  Subject ,  ReplaySubject ,  SubscriptionLike as ISubscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material';
 import { FormControl, Validators} from '@angular/forms';
 import { MatSelect } from '@angular/material';
@@ -160,11 +159,9 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
 
   constructor(
-    private http: HttpClient,
     private _userService: UserService,
     private _proyectoService: UserService,
     private _route: ActivatedRoute,
-    private _router: Router, 
     public dialog: MatDialog,
     private _regionService: CountriesService,
     private excelService:ExcelService,
@@ -688,7 +685,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
   addNew(id:number, customer: Customer[]) {      
      const dialogRef = this.dialog.open(AddcustomerComponent, {
-      width: '777px',
+      width: '1000px',
        disableClose: true,
      data: { service_id: id, customer: Customer }
      });
@@ -708,7 +705,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     let service_id = this.id;    
     //console.log(order_date); 
     const dialogRef = this.dialog.open(EditcustomerComponent, {
-      width: '777px',
+      width: '1000px',
       disableClose: true,
       data: {service_id: id, cc_id: cc_id, cc_number: cc_number, category_id: category_id}
     });
@@ -729,7 +726,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 deleteItem(id:number, cc_id: number, cc_number: string, category_id:number) {
     let service_id = this.id;    
     const dialogRef = this.dialog.open(DeletecustomerComponent, {
-      width: '777px',
+      width: '1000px',
       disableClose: true,  
       data: {service_id: id, cc_id: cc_id, cc_number: cc_number, category_id: category_id}
     });

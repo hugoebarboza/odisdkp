@@ -129,9 +129,9 @@
               </ng-select>
               </div>
               
-              <div>
+              <div *ngIf="userFirebase">
                   <h2 class="jeEmY">Etiquetados</h2>
-                  <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" *ngIf="userFirebase"> </app-taguser>
+                  <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>
               </div>
                 
           </div>

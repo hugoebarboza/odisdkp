@@ -2,7 +2,8 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl  } from '@angular/forms';
 
-import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+//import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
+import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 
 //SERVICES

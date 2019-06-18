@@ -2,16 +2,22 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
-//import swal from 'sweetalert';
+import { TooltipPosition, MatDialog } from '@angular/material';
 
 declare var swal: any;
+
+//DIALOG
+import { AddProjectTypeComponent } from '../../dialog/add-project-type/add-project-type.component';
+import { AddProjectCategorieComponent } from '../../dialog/add-project-categorie/add-project-categorie.component';
+
+
 
 //MODELS
 import { Countries, Customers, Departamento, Estatus, Proyecto, Service, User } from 'src/app/models/types';
 
 //SERVICES
 import { CountriesService, ProjectsService, SettingsService, UserService} from 'src/app/services/service.index';
+
 
 
 @Component({  
@@ -47,12 +53,18 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
     {id: 0, description: 'Desactivo', status: 1, create_at: '', update_at: ''},
   ];  
 
+
+  positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  positiondatasourceaction = new FormControl(this.positionOptions[3]);
+  positionleftaction = new FormControl(this.positionOptions[4]);
+    
   constructor(
     public _countryService: CountriesService,
     public _proyectoService: ProjectsService,
     private _route: ActivatedRoute,
     public _router: Router,
     public _userService: UserService,
+    public dialog: MatDialog,
     public label: SettingsService
   ) { 
     this.identity = this._userService.getIdentity();
@@ -315,6 +327,50 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
       }
     }    
   }
+
+
+  projectType(id: number) {
+    const dialogRef = this.dialog.open(AddProjectTypeComponent, {
+      width: '777px',
+      disableClose: true,  
+      data: {
+        project_id: this.id,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        // When using an edit things are little different, firstly we find record inside DataService by id
+        //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+        // Then you update that record using data from dialogData (values you enetered)
+      // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+        // And lastly refresh table
+      }
+    });
+  }
+
+
+  projectCategorie(id: number) {
+    const dialogRef = this.dialog.open(AddProjectCategorieComponent, {
+      width: '777px',
+      disableClose: true,  
+      data: {
+        project_id: this.id,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        // When using an edit things are little different, firstly we find record inside DataService by id
+        //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+        // Then you update that record using data from dialogData (values you enetered)
+      // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+        // And lastly refresh table
+      }
+    });
+  }
+
+
 
   toggle() {
     this.show = !this.show;

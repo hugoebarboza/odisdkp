@@ -39,10 +39,12 @@
     border-left: 2px solid #42A948; /* green */
     padding-left: 5px;
   }
-  .example-radio-group {
-    display: inline-flex;
-    flex-direction: column;
+
+  .ng-invalid[required], .ng-invalid.required  {
+    border-left: 2px solid rgb(255, 0, 0); /* red */
+    padding-left: 5px;
   }
+
   
   .example-radio-button {
     margin: 5px;
@@ -207,11 +209,19 @@
 }
 
 ::ng-deep .mat-status .mat-form-field-wrapper {
-    padding-bottom: 0px !important;
+   padding-bottom: 0px !important;
 }
 
 ::ng-deep .mat-status .mat-form-field-flex .mat-form-field-infix {
   border-top-width: 0px !important;
+}
+
+::ng-deep .mat-status .mat-form-field-wrapper .mat-form-field-subscript-wrapper{
+  margin-top: 0px !important;
+}
+
+::ng-deep .mat-status .mat-form-field-flex .mat-form-field-infix .mat-input-element{
+  margin-bottom: 12px !important;
 }
 
 .ng-select.custom {
@@ -228,8 +238,6 @@
   margin-right: 0px;
 }
 
-
-
 .margin-left {
   margin-right: 6px;
 }
@@ -239,3 +247,5 @@
   /*height: 30vh;*/
   border: 0px solid black;
 }
+
+

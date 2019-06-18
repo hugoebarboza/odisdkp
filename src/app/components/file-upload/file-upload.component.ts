@@ -1,7 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
 import { AngularFirestore } from 'angularfire2/firestore';
-import { AngularFirestoreCollection } from '@angular/fire/firestore';
+//import { AngularFirestoreCollection } from '@angular/fire/firestore';
+import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { FormControl} from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';

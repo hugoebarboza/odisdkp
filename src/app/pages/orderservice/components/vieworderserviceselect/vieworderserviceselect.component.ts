@@ -332,6 +332,7 @@ selectedColumnnEstatus = {
     this.form5.setValue({
       'action5': {value: '', disabled: true},
       'estatus': {value: 0, disabled: true},
+      'asignado': {value: 0, disabled: true},
     });
 
   }

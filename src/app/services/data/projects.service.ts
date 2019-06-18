@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 
 //MODELS
-import { Order, Service, Proyecto } from '../../models/types';
+import { Order, Service, Proyecto, ProjectServiceType } from '../../models/types';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
@@ -29,11 +29,20 @@ export class ProjectsService {
 
   }
 
-	addService(token: any, service: Service, id:number): void {	
+	addService(token: any, service: Service, id:number): Observable<any> {	
+		if (!token){
+			return;
+		}
+
 		let json = JSON.stringify(service);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
+		return this._http.post(this.url+'project'+'/'+id+'/'+'service', params, {headers: headers})
+		  		  .map( (resp: any) => {
+						return resp;
+				  });			
+		/*
 		this._http.post(this.url+'project'+'/'+id+'/'+'service', params, {headers: headers}).subscribe(
 			(data:any) => { 
 
@@ -47,14 +56,35 @@ export class ProjectsService {
 				},
 				(err: HttpErrorResponse) => {	
 				this.error = err.error.message;			      
-				console.log(err.error.message);
+				//console.log(err.error.message);
 				//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-				swal('No fue posible procesar su solicitud', '', 'error');
-				});
+				swal('No fue posible procesar su solicitud', err.error.message, 'error');
+				});*/
+	}
+
+
+	addProjecType(token: any, id:number, data:ProjectServiceType): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'project/'+id+'/servicetype', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
 	}
 
 
 	updateProject(token: any, project:Proyecto, id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
 		let json = JSON.stringify(project);
 		let params = 'json='+json;
 
@@ -68,11 +98,39 @@ export class ProjectsService {
 	}
 
 
-    updateService(token: any, service: Service, id:number, service_id:number): void {	
+
+	updateProjecType(token: any, id:number, data:ProjectServiceType, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'project/'+id+'/servicetype/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+    updateService(token: any, service: Service, id:number, service_id:number): Observable <any> {	
+		if (!token){
+			return;
+		}
+
 		let json = JSON.stringify(service);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
+		return this._http.put(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, params, {headers: headers})
+						 .map( (resp: any) => {
+						 	 return resp;
+						 });				
+
+		/*
 		this._http.put(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, params, {headers: headers}).subscribe(
     		(data:any) => { 
 				  //this.toasterService.success('Proyecto actualizado.', 'Exito', {timeOut: 6000,});
@@ -87,10 +145,14 @@ export class ProjectsService {
 			      //console.log(err.error.message);
 				  //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 				  swal('No fue posible procesar su solicitud', err.error.message, 'error');
-			    });
+			    });*/
 	}
 	
     deleteService(token: any, id:number, service_id:number): void {	
+		if (!token){
+			return;
+		}
+
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');									   									   
 		
 		this._http.delete(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, {headers: headers}).subscribe(
@@ -108,6 +170,20 @@ export class ProjectsService {
 				  //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 				  swal('No fue posible procesar su solicitud', '', 'error');
 			    });
+	}
+
+
+
+	deleteProjecType(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'project/'+id+'/servicetype/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
 	}
 
 

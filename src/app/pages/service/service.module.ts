@@ -10,12 +10,16 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 //COMPONENTS
 import { AddUserServiceComponent } from './components/adduserservice/adduserservice.component';
+import { ProjectCategorieListComponent } from './dialog/project-categorie-list/project-categorie-list.component';
+import { ProjectTypeListComponent } from './dialog/project-type-list/project-type-list.component';
 import { RemoveUserComponent } from './components/removeuser/removeuser.component';
 import { ServiceComponent } from './service-list/service.component';
 
 
 //DIALOG
 import { AddServiceComponent } from './dialog/addservice/addservice.component';
+import { AddProjectTypeComponent } from './dialog/add-project-type/add-project-type.component';
+import { AddProjectCategorieComponent } from './dialog/add-project-categorie/add-project-categorie.component';
 import { CsvServiceComponent } from './dialog/csvservice/csvservice.component';
 import { SettingServiceComponent } from './components/settingservice/settingservice.component';
 //import { EditServiceComponent } from './dialog/editservice/editservice.component';
@@ -71,6 +75,8 @@ import { ServiceRoutingModule } from './service.routing';
   ],
   declarations: 
   [
+    AddProjectTypeComponent,
+    AddProjectCategorieComponent,
     AddServiceComponent,
     AddUserServiceComponent,
     CsvServiceComponent,
@@ -79,8 +85,12 @@ import { ServiceRoutingModule } from './service.routing';
     ServiceComponent,
     SettingServiceComponent,
     UserComponent,
+    ProjectCategorieListComponent,
+    ProjectTypeListComponent,
   ],
   entryComponents: [
+    AddProjectTypeComponent,
+    AddProjectCategorieComponent,
     AddServiceComponent,
     AddUserServiceComponent,
     CsvServiceComponent,

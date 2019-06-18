@@ -6,8 +6,10 @@ import { Subscription, Observable } from 'rxjs';
 declare var swal: any;
 
 //FIREBASE
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+//import { AngularFirestoreCollection } from '@angular/fire/firestore';
+
 
 //DIALOG
 import { EditServiceComponent } from '../../../components/shared/shared.index';
@@ -149,12 +151,14 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
       (auth) => {
         if(auth){
           this.userFirebase = auth;
+          //console.log(this.userFirebase);
         }
     });
 
   }
 
   ngOnInit() {
+    console.log('viene');
   }
 
   ngOnDestroy() {
@@ -181,6 +185,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   if (this.id > 0 && id > 0){
     this.path = 'comments/'+id+'/'+this.service_id;
     this.route = this.path;
+
     this.itemsCollection = this._afs.collection<Item>(this.path, ref => ref.orderBy('created','desc'));      
     this.items = this.itemsCollection.valueChanges();
     

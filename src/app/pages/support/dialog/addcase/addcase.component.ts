@@ -1,27 +1,31 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { UserService, CargaImagenesService } from 'src/app/services/service.index';
 import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { FileItem } from 'src/app/models/types';
+import { Observable, of, Subject, concat, defer } from 'rxjs';
+import { FormGroup, Validators, FormControl} from '@angular/forms';
+import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map, combineLatest } from 'rxjs/operators';
 
 // FIREBASE
-import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
-import { Observable, of, Subject, concat } from 'rxjs';
-import { FormGroup, Validators, FormControl} from '@angular/forms';
-
-import swal from 'sweetalert';
-import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map } from 'rxjs/operators';
-import { ToastrService } from 'ngx-toastr';
+import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireUploadTask } from 'angularfire2/storage';
 
-import * as _moment from 'moment';
-import { AngularFireAuth } from 'angularfire2/auth';
 
-//MODEL
+import swal from 'sweetalert';
+
+import { ToastrService } from 'ngx-toastr';
+
+import * as _moment from 'moment';
+
+// MODEL
 import { UserFirebase } from '../../../../models/types';
 
-//MOMENT
+// MOMENT
 const moment = _moment;
+
+// SERVICES
+import { CargaImagenesService, CdfService, UserService } from 'src/app/services/service.index';
 
 @Component({
   selector: 'app-addcase',
@@ -41,9 +45,13 @@ export class AddcaseComponent implements OnInit {
   userinput = new Subject<string>();
   file: FileItem[] = [];
   archivos: FileItem[] = [];
-  type: any;
-  selectstatus: {id: any; name: any};
+  ncase: any;
+  urgencia: any;
+  type: any;    
+  selectstatus: {id: any; name: any; label: any};
+  token: any;
   userFirebase: UserFirebase;
+  arrayResponsables = [];
 
   public CARPETA_ARCHIVOS = '';
 
@@ -54,11 +62,16 @@ export class AddcaseComponent implements OnInit {
   percentage: Observable<number>;
   snapshot: Observable<any>;
 
+  supportcase = 'supportcase';
+
   public departamento$: Observable<any[]>;
   private departamentosCollection: AngularFirestoreCollection<any>;
 
   public users$: Observable<any[]>;
   private usersCollection: AngularFirestoreCollection<any>;
+
+  public tagImportant$: Observable<any[]>;
+  private tagImportantCollection: AngularFirestoreCollection<any>;
 
   public tipo$: Observable<any[]>;
   private tipoCollection: AngularFirestoreCollection<any>;
@@ -68,18 +81,21 @@ export class AddcaseComponent implements OnInit {
 
   constructor(
     private _afs: AngularFirestore,
+    private _cdf: CdfService,
     public _cargaImagenes: CargaImagenesService,
     public _userService: UserService,
     public dialogRef: MatDialogRef<AddcaseComponent>,
     private firebaseAuth: AngularFireAuth,
     private toasterService: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
+  ) {
 
     this.identity = this._userService.getIdentity();
+    this.supportcase = this.supportcase + '/' + this.identity.country + '/cases';
+    this.token = this._userService.getToken();
     this.firebaseAuth.authState.subscribe(
       (auth) => {
-        if(auth){
+        if (auth) {
           this.userFirebase = auth;
         }
     });
@@ -93,7 +109,8 @@ export class AddcaseComponent implements OnInit {
       categoria: new FormControl ('', [Validators.required]),
       etiquetado: new FormControl (null),
       asunto: new FormControl (null, [Validators.required, Validators.minLength(1)]),
-      descripcion: new FormControl (null, [Validators.required, Validators.minLength(1)])
+      descripcion: new FormControl (null, [Validators.required, Validators.minLength(1)]),
+      tagImportant: new FormControl ({})
     });
 
     this.forma.setValue({
@@ -102,7 +119,8 @@ export class AddcaseComponent implements OnInit {
       'categoria': '',
       'etiquetado': '',
       'asunto': '',
-      'descripcion': ''
+      'descripcion': '',
+      'tagImportant': {}
     });
 
     this.getRouteFirebase();
@@ -131,6 +149,7 @@ export class AddcaseComponent implements OnInit {
 
   public getListuser(term: string) {
 
+    // tslint:disable-next-line:max-line-length
     this.usersCollection = this._afs.collection('users', ref => ref.where('country', 'array-contains', this.identity.country).where('email', '>=', term));
     return this.usersCollection.snapshotChanges().pipe(
               map(actions => {
@@ -163,7 +182,27 @@ export class AddcaseComponent implements OnInit {
         })
       );
 
+      // arrayResponsables
+      this._afs.doc('countries/' + this.identity.country + '/departments/' + value.id).get()
+      .subscribe(res => {
+        if (res.exists) {
+          this.arrayResponsables = [];
+          // res.data();
+          // console.log(res.data());
+          if (res.data().admins && res.data().admins.length > 0) {
+            console.log(res.data().admins);
+            this.arrayResponsables = this.getUserResponsables(res.data().admins);
+            //console.log(this.arrayResponsables);
+          }
+         } else {
+          this.arrayResponsables = [];
+          console.log('Document does not exist');
+         }
+      });
+
     } else {
+
+      this.arrayResponsables = [];
       this.tipo$ = null;
       this.categoria$ = null;
       this.selectstatus = null;
@@ -172,6 +211,24 @@ export class AddcaseComponent implements OnInit {
     }
 
   }
+
+
+  getUserResponsables(to): Array<any> {
+
+    const arr: any = [];
+    for (let ii = 0; ii < to.length; ii++) {
+
+      this._afs.doc('users/' + to[ii]).get()
+      .subscribe(res => {
+        if (res.exists) {
+          console.log(res.data());
+          arr.push(res.data());
+         }
+      });
+    }
+    return arr;
+  }
+
 
   selectChangetype(value) {
 
@@ -250,6 +307,24 @@ export class AddcaseComponent implements OnInit {
       })
     );
 
+    const that = this;
+    // tslint:disable-next-line:max-line-length
+    this.tagImportantCollection = this._afs.collection('supportImportant/' + this.identity.country + '/tag', ref => ref.orderBy('order_by', 'asc'));
+    this.tagImportant$ = this.tagImportantCollection.snapshotChanges().pipe(
+      map(actions => {
+        let count = 1;
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          if (count === 1 ) {
+            this.forma.controls.tagImportant.setValue({ id, ...data });
+          }
+          count = count + 1;
+          return { id, ...data };
+        });
+      })
+    );
+
   }
 
   generatorcasenumber() {
@@ -260,8 +335,9 @@ export class AddcaseComponent implements OnInit {
   confirmAdd() {
 
     const numbercase = this.generatorcasenumber();
+    this.ncase = numbercase;
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-    this.CARPETA_ARCHIVOS = 'supportcase/';
+    this.CARPETA_ARCHIVOS = this.supportcase;
 
     if (this.forma.invalid) {
       swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
@@ -270,15 +346,29 @@ export class AddcaseComponent implements OnInit {
 
     const array_users: [] = this.forma.value.etiquetado;
     const array_usersNew: Array<Object> = [];
+    const array_usersInfo = [];
 
     for (let ii = 0; ii < array_users.length; ii++) {
       // const obj: Object = {id: array_users[ii]['id']}; // , email: array_users[ii]['email']
       array_usersNew.push(array_users[ii]['id']);
+      array_usersInfo.push(array_users[ii]);
+    }
+
+
+    let important = '';
+    let important_id = '';
+
+    if (this.forma.value.tagImportant) {
+      important = this.forma.value.tagImportant.name;
+      important_id = this.forma.value.tagImportant.id;
+      this.urgencia = this.forma.value.tagImportant.name;
     }
 
     const that = this;
 
-    this._afs.collection('supportcase').add({
+    const indexasunto = this.forma.value.asunto.toLowerCase();
+
+    this._afs.collection(this.supportcase).add({
       ncase: parseInt(numbercase, 0),
       asunto: this.forma.value.asunto,
       description: this.forma.value.descripcion,
@@ -290,24 +380,45 @@ export class AddcaseComponent implements OnInit {
       type_desc: this.forma.value.tipo.name,
       status_id: this.selectstatus.id,
       status_desc: this.selectstatus.name,
+      label: this.selectstatus.label,
       category_id: this.forma.value.categoria.id,
       category_desc: this.forma.value.categoria.name,
-      etiquetados: array_usersNew
+      important: important,
+      important_id: important_id,
+      etiquetados: array_usersNew,
+      asuntoIndex: indexasunto.split(' ')
     })
     .then(function(docRef) {
-        console.log('Document written with ID: ', docRef.id);
+        // console.log('Document written with ID: ', docRef.id);
 
         if (that.archivos.length > 0) {
           that.toasterService.success('Caso registrado, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
-          that.CARPETA_ARCHIVOS =  that.CARPETA_ARCHIVOS + docRef.id + '/caseFiles';
+          that.CARPETA_ARCHIVOS =  that.CARPETA_ARCHIVOS + '/' + docRef.id + '/caseFiles';
           that._cargaImagenes.cargarImagenesFirebase( that.archivos,  that.CARPETA_ARCHIVOS, date);
           that.forma.reset();
           that.tipo$ = null;
           that.categoria$ = null;
           that.selectstatus = null;
-        } else {
-          that.onNoClick();
-          swal('Caso registrado', '', 'success');
+        }
+
+        that.onNoClick();
+        swal('Caso registrado', '', 'success');
+
+        if (array_usersInfo && array_usersInfo.length > 0 && docRef) {
+          array_usersInfo.forEach(res => {
+            that.sendCdfTag(res, docRef, 'Etiquetado(a) en');
+          });
+        }
+
+        if(that.arrayResponsables && that.arrayResponsables.length > 0 && docRef){
+          that.arrayResponsables.forEach(res => {
+            that.sendCdfTag(res, docRef, 'Creada');
+          });
+        }
+
+        if(that.userFirebase && docRef){
+          //console.log(that.userFirebase);
+          that.sendCdfUser(that.userFirebase, docRef, 'Nueva incidencia de servicio');
         }
 
     })
@@ -321,5 +432,200 @@ export class AddcaseComponent implements OnInit {
     this.dialogRef.close();
   }
 
+
+
+
+  sendCdfTag(data, element, content) {
+    if (!data) {
+      return;
+    }
+
+    // console.log(data);
+
+    // tslint:disable-next-line:max-line-length
+    const body = content + ' nueva incidencia #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
+    if (data && this.userFirebase.uid) {
+
+        const notification = {
+          userId: this.userFirebase.uid,
+          userIdTo: data.uid,
+          title: 'Nueva incidencia',
+          message: body,
+          create_at: created,
+          status: '1',
+          idUx: element.id,
+          descriptionidUx: 'cases',
+          routeidUx: `${this.supportcase}`
+        };
+
+        this._cdf.fcmsend(this.token.token, notification).subscribe(
+          response => {
+            if (!response) {
+            return false;
+            }
+            if (response.status === 200) {
+              // console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }
+          );
+
+          const msg = {
+            toEmail: data.email,
+            fromTo: this.userFirebase.email,
+            subject: 'OCA GLOBAL - Nueva incidencia #' + this.ncase,
+            // tslint:disable-next-line:max-line-length
+            message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Nueva incidencia, enviada a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+          };
+
+          this._cdf.httpEmail(this.token.token, msg).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              // console.log(<any>error);
+              }
+            );
+    }
+
+  }
+
+
+  sendCdfUser(data, element, content) {
+    if (!data) {
+      return;
+    }
+
+    // console.log(data);
+
+    // tslint:disable-next-line:max-line-length
+    const body = content + '. El número de ticket es #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
+    if (data && this.userFirebase.uid) {
+        const notification = {
+          userId: this.userFirebase.uid,
+          userIdTo: this.userFirebase.uid,
+          title: 'Nueva incidencia',
+          message: body,
+          create_at: created,
+          status: '1',
+          idUx: element.id,
+          descriptionidUx: 'cases',
+          routeidUx: `${this.supportcase}`
+        };
+
+        this._cdf.fcmsend(this.token.token, notification).subscribe(
+          response => {
+            if (!response) {
+            return false;
+            }
+            if (response.status === 200) {
+              // console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }
+          );
+
+          const msg = {
+            toEmail: this.userFirebase.email,
+            fromTo: this.userFirebase.email,
+            subject: 'OCA GLOBAL - Nueva incidencia #' + this.ncase,
+            // tslint:disable-next-line:max-line-length
+            message: `<strong>Hola ${this.identity.name} ${this.identity.surname}. <hr> <div>&nbsp;</div> Gracias por enviar su incidencia de servicio a las ${created}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+          };
+
+          this._cdf.httpEmail(this.token.token, msg).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              // console.log(<any>error);
+              }
+            );
+    }
+
+  }  
+
 }
 
+export const docJoin = (
+  afs: AngularFirestore,
+  paths: { [key: string]: string },
+  type: number,
+  where: string,
+  condition,
+  nameObject
+) => {
+  return source =>
+    defer(() => {
+      let parent;
+      const keys = Object.keys(paths);
+      let _id = '';
+
+      return source.pipe(
+        switchMap(data => {
+          // Save the parent data state
+          parent = data;
+          // Map each path to an Observable
+          const docs$ = keys.map(k => {
+            const fullPath = `${paths[k]}/${parent[k]}`;
+            _id = parent[k];
+
+            if (type === 0 || type === 2) {
+              return afs.doc(fullPath).valueChanges();
+            }
+
+            if (type === 1) {
+              // tslint:disable-next-line:max-line-length
+              return afs.collection(`${paths[k]}`, ref => ref.where( where, condition, `${parent[k]}`)).snapshotChanges().pipe(
+                map(actions => {
+                  return actions.map(a => {
+                    const datos = a.payload.doc.data();
+                    const _iddoc = a.payload.doc.id;
+                    return { _iddoc, ...datos };
+                  });
+                })
+                );
+            }
+
+          });
+
+          // return combineLatest, it waits for all reads to finish
+          return combineLatest(docs$);
+        }),
+        map(arr => {
+
+          // We now have all the associated douments
+          // Reduce them to a single object based on the parent's keys
+          const joins = keys.reduce((acc, cur, idx) => {
+            if (type === 0) {
+              arr[idx] = Object.assign(arr[idx], {'_id': _id});
+            }
+            // cur nombre valor entrada que tiene ID
+            return { ...acc, [nameObject]: arr[idx] };
+
+          }, {});
+
+          // Return the parent doc with the joined objects
+          return { ...parent, ...joins };
+        })
+      );
+    });
+};

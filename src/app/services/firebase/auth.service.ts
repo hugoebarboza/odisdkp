@@ -310,6 +310,7 @@ export class AuthService {
 
   async logout() {
     await firebase.auth().signOut();
+    
     /*
     this.firebaseAuth
       .auth

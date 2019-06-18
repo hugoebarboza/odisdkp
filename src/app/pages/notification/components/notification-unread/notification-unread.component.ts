@@ -1,4 +1,5 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
+import { Subscription } from 'rxjs/Subscription';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { defer, combineLatest, of } from 'rxjs/';
@@ -27,7 +28,7 @@ import { SettingsService, UserService } from 'src/app/services/service.index';
   templateUrl: './notification-unread.component.html',
   styleUrls: ['./notification-unread.component.css']
 })
-export class NotificationUnreadComponent implements OnInit {
+export class NotificationUnreadComponent implements OnInit, OnDestroy {
 
 
 
@@ -40,6 +41,9 @@ export class NotificationUnreadComponent implements OnInit {
   resultCountUnread: number;
   resultCountRead: number;
   show:boolean = false;
+  subscription: Subscription;
+  subscriptionunread: Subscription;
+  subscriptionread: Subscription;
   status: string;
   title: string;
   totalNotifications: number = 0;
@@ -95,16 +99,18 @@ export class NotificationUnreadComponent implements OnInit {
 
       /*********Get All */
       this.notificationsRef = this.userDoc.collection('notifications', ref => ref.orderBy('create_at', 'desc') )
-      this.getnotifications$ = this.notificationsRef.snapshotChanges()
+      this.subscription = this.notificationsRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.resultCount = actions.length;
         })
-      );
+      ).subscribe();
+
+
 
       /*********Get unread */
       this.notificationsUnreadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1').orderBy('create_at', 'desc') )
-      this.getnotificationsUnread$ = this.notificationsUnreadRef.snapshotChanges()
+      this.subscriptionunread = this.notificationsUnreadRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.resultCountUnread = actions.length;
@@ -115,38 +121,54 @@ export class NotificationUnreadComponent implements OnInit {
             return { id, ...data };
           });
         })        
+      ).subscribe((collection: any[]) => {
+        //this.responsearray = response;
+        this.count = Object.keys(collection).length;
+        if(this.count == 0){
+          this.notifications$ = '';    
+        }else{
+          this.gojoin(Observable.of(collection));
+        }
+      }
       );
 
 
-      this.getnotificationsUnread$
-      .subscribe(response => {
+      /*
+      this.getnotificationsUnread$.subscribe(response => {
         this.responsearray = response;
         this.count = Object.keys(this.responsearray).length;
         if(this.count == 0){
           this.notifications$ = '';    
         }
       }
-      );
-
+      );*/
+      /*
       this.notifications$ = this.getnotificationsUnread$
       .pipe(
           leftJoin(this.afs, 'create_by', 'users')
-      );
+      );*/
   
 
       /*********Get read */
       this.notificationsReadRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '0') )
-      this.getnotificationsRead$ = this.notificationsReadRef.snapshotChanges()
+      this.subscriptionread = this.notificationsReadRef.snapshotChanges()
       .pipe(
         map(actions => {
           this.resultCountRead = actions.length;
         })
-      );
+      ).subscribe();
 
 
 
     })
   }
+
+  gojoin(collection): Observable<any> {
+    return this.notifications$ = collection.pipe(
+      leftJoin(this.afs, 'create_by', 'users')
+    );
+  }
+
 
   irInicio() {
     this.viewport.scrollToIndex( 0 );
@@ -155,6 +177,23 @@ export class NotificationUnreadComponent implements OnInit {
 
   irFinal() {
     this.viewport.scrollToIndex( this.resultCount );
+  }
+
+  ngOnDestroy() {
+    if(this.subscription){
+      //console.log('unsubscribe notification');
+      this.subscription.unsubscribe();
+    }
+
+    if(this.subscriptionunread){
+      //console.log('unsubscribe notification unread');
+      this.subscriptionunread.unsubscribe();
+    }
+
+    if(this.subscriptionread){
+      //console.log('unsubscribe notification read');
+      this.subscriptionread.unsubscribe();
+    }
   }
 
 
