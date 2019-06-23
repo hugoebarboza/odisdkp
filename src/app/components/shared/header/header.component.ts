@@ -31,7 +31,7 @@ import { SetNotificationAction, ResetNotificationAction } from '../../../stores/
 
 
 //SERVICES
-import { UserService } from '../../../services/service.index';
+import { SidenavService, UserService } from '../../../services/service.index';
 
 
 
@@ -52,17 +52,20 @@ export class HeaderComponent {
   public fotoperfil: string = '';
   public identity: any;
   public isLoading: boolean = true;
-	public token: any;
+  public token: any;
+  userid: any;
+
+  getnotifications$: Observable<any>;
+  private notificationsCollection: AngularFirestoreCollection<any>;
   
 
   notificationsRef: AngularFirestoreCollection<any>;
   notifications$: any;
-  getnotifications$: Observable<any>;
   resultCount: number = 0;
-  private userSubscription: Subscription = new Subscription();
+
   private userDoc: AngularFirestoreDocument<User>;
   user$: Observable<User>;
-  userid: any;
+
   uid:any;
 
   //private itemsCollection: AngularFirestoreCollection<Item>;
@@ -81,6 +84,7 @@ export class HeaderComponent {
     private afAuth: AngularFireAuth,
 		public dialog: MatDialog,
     private store: Store<AppState>,
+    private supportDrawer: SidenavService
 
    ){
 		this.title = 'Header';	  	
@@ -125,11 +129,11 @@ export class HeaderComponent {
 
           const newUser = new UserFirebase( auth );
           //console.log(auth.uid);
-
+          this.userid = auth.uid;
           const accion = new SetUserAction(newUser);
           this.store.dispatch( accion );
 
-          this.userDoc = this.afs.doc<User>(`/users/${auth.uid}`);
+          this.userDoc = this.afs.doc<User>(`/users/${this.userid}`);
           this.notificationsRef = this.userDoc.collection('notifications', ref => ref.where('status', '==', '1').orderBy('create_at', 'desc'));
           this.subscription = this.notificationsRef.snapshotChanges()
           .pipe(
@@ -160,7 +164,7 @@ export class HeaderComponent {
               
           
     } else {
-        //this.userSubscription.unsubscribe();
+
     }
     });
 
@@ -235,6 +239,28 @@ export class HeaderComponent {
               }
             });
   }
+
+  readAllNotifications(){    
+    const userDoc = this.afs.doc<User>(`/users/${this.userid}`);
+    userDoc.collection('notifications',  ref => ref.where('status', '==', '1'))    
+    .get()
+    .subscribe((data: any) => 
+      { 
+        if (data) {
+          data.forEach((doc) => {
+            if(doc.id){
+              userDoc.collection('notifications').doc(doc.id).update({status : '0'});
+            }            
+            }
+          );
+        }
+      }
+    );
+  }
+
+  toggleRightSidenav() {
+    this.supportDrawer.toggle();
+  }  
 
 
 

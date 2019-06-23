@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 
 //MODELS
-import { Order, Service, Proyecto, ProjectServiceType } from '../../models/types';
+import { Constante, Order, Proyecto, ProjectServiceType, Service } from '../../models/types';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
@@ -62,6 +62,22 @@ export class ProjectsService {
 				});*/
 	}
 
+	addProjectServiceCategorie(token: any, id:number, data:ProjectServiceType): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'project/'+id+'/servicecategorie', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 
 	addProjecType(token: any, id:number, data:ProjectServiceType): Observable<any>{
 		if (!token){
@@ -78,6 +94,24 @@ export class ProjectsService {
 							 return resp;
 						 });				
 	}
+
+
+	addServiceConstante(token: any, id:number, data:Constante): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'service/'+id+'/constante', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 
 
 	updateProject(token: any, project:Proyecto, id:number): Observable<any>{
@@ -97,6 +131,22 @@ export class ProjectsService {
 						 });				
 	}
 
+
+	updateProjectServiceCategorie(token: any, id:number, data:ProjectServiceType, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'project/'+id+'/servicecategorie/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
 
 
 	updateProjecType(token: any, id:number, data:ProjectServiceType, data_id:number): Observable<any>{
@@ -147,7 +197,25 @@ export class ProjectsService {
 				  swal('No fue posible procesar su solicitud', err.error.message, 'error');
 			    });*/
 	}
+
 	
+	updateServiceConstante(token: any, id:number, data:Constante, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'service/'+id+'/constante/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
     deleteService(token: any, id:number, service_id:number): void {	
 		if (!token){
 			return;
@@ -173,6 +241,18 @@ export class ProjectsService {
 	}
 
 
+	deleteProjectServiceCategorie(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'project/'+id+'/servicecategorie/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 
 	deleteProjecType(token: any, id:number, data_id:number): Observable<any>{
 		if (!token){
@@ -183,11 +263,27 @@ export class ProjectsService {
 		return this._http.delete(this.url+'project/'+id+'/servicetype/'+data_id, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
+						 });
+	}
+
+	deleteServiceConstante(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'service/'+id+'/constante/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
 						 });				
 	}
 
 
+
   	getQuery( query:string, token ): Observable<any>{
+	if(!token){
+		return;
+	}
 	const url = this.url+query;
 	const headers = new HttpHeaders({
 		'Content-Type': 'application/json',
@@ -195,7 +291,13 @@ export class ProjectsService {
 		return this._http.get(url, {headers: headers}).map((res: any) => {
       			return res;
 		});		
-  	}
+	}
+
+	getConstante(token, id): Observable<any>{
+		return this.getQuery('service/'+id+'/constante', token);							  		
+	}
+
+
 
     getDepartamentos(token): Observable<any> {
 		return this.getQuery('departamento', token);

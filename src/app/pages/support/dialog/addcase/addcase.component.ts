@@ -171,7 +171,7 @@ export class AddcaseComponent implements OnInit {
       this.forma.controls['tipo'].setValue('');
       this.forma.controls['categoria'].setValue('');
 
-      this.tipoCollection = this._afs.collection('supporttype', ref => ref.where('depto_id', '==', value.id) );
+      this.tipoCollection = this._afs.collection('supporttype', ref => ref.where('depto_id', '==', value.id).orderBy('name', 'asc'));
       this.tipo$ = this.tipoCollection.snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
@@ -190,7 +190,7 @@ export class AddcaseComponent implements OnInit {
           // res.data();
           // console.log(res.data());
           if (res.data().admins && res.data().admins.length > 0) {
-            console.log(res.data().admins);
+            //console.log(res.data().admins);
             this.arrayResponsables = this.getUserResponsables(res.data().admins);
             //console.log(this.arrayResponsables);
           }
@@ -221,7 +221,7 @@ export class AddcaseComponent implements OnInit {
       this._afs.doc('users/' + to[ii]).get()
       .subscribe(res => {
         if (res.exists) {
-          console.log(res.data());
+          //console.log(res.data());
           arr.push(res.data());
          }
       });
@@ -233,7 +233,7 @@ export class AddcaseComponent implements OnInit {
   selectChangetype(value) {
 
     if (value) {
-      this.categoriaCollection = this._afs.collection('supportcategory', ref => ref.where('type_id', '==', value.id));
+      this.categoriaCollection = this._afs.collection('supportcategory', ref => ref.where('type_id', '==', value.id).orderBy('name', 'asc'));
       this.categoria$ = this.categoriaCollection.snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
@@ -296,7 +296,7 @@ export class AddcaseComponent implements OnInit {
 
   getRouteFirebase() {
 
-    this.departamentosCollection = this._afs.collection('countries/' + this.identity.country + '/departments');
+    this.departamentosCollection = this._afs.collection('countries/' + this.identity.country + '/departments', ref => ref.orderBy('name', 'asc'));
     this.departamento$ = this.departamentosCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
@@ -392,7 +392,7 @@ export class AddcaseComponent implements OnInit {
         // console.log('Document written with ID: ', docRef.id);
 
         if (that.archivos.length > 0) {
-          that.toasterService.success('Caso registrado, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
+          that.toasterService.success('Solicitud registrada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
           that.CARPETA_ARCHIVOS =  that.CARPETA_ARCHIVOS + '/' + docRef.id + '/caseFiles';
           that._cargaImagenes.cargarImagenesFirebase( that.archivos,  that.CARPETA_ARCHIVOS, date);
           that.forma.reset();
@@ -402,7 +402,7 @@ export class AddcaseComponent implements OnInit {
         }
 
         that.onNoClick();
-        swal('Caso registrado', '', 'success');
+        swal('Solicitud registrada', '', 'success');
 
         if (array_usersInfo && array_usersInfo.length > 0 && docRef) {
           array_usersInfo.forEach(res => {

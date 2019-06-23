@@ -2,7 +2,7 @@
 <div class="app">
 <form class="mat-dialog-content" novalidate="novalidate">
   
-  <h1 mat-dialog-title>{{title}} {{project_name}}</h1>
+  <h1 mat-dialog-title>{{title}} - {{project_name}}</h1>
   <div class="mat-app-background" >
     <div class="card-body">
         <p class="card-text"><mat-icon mat-list-icon>people</mat-icon> {{subtitle}}</p>        
@@ -21,7 +21,7 @@
 
                 <mat-tab label="Ordenes">
                   <ng-template mat-tab-label>
-                      <h6>Estatus <span class="badge badge-secondary">{{totalRegistros}}</span></h6>
+                      <h6>Total <span class="badge badge-secondary">{{totalRegistros}}</span></h6>
                   </ng-template>
                   <ng-template matTabContent>
                   <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >

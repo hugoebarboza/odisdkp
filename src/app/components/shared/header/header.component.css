@@ -181,3 +181,7 @@
   max-width: 100%;
   position: relative;
 }
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}

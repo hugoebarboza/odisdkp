@@ -4,19 +4,18 @@ import { Router, ActivationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
+import { MediaMatcher } from '@angular/cdk/layout';
 
 //MODELS
 import { Proyecto } from './models/types';
 
 //SERVICES
-import { SettingsService, UserService } from './services/service.index';
-import { MediaMatcher } from '@angular/cdk/layout';
+import { SettingsService, SidenavService, UserService } from './services/service.index';
 
 //REDUX
 import { AppState } from './app.reducers';
 import { Store } from '@ngrx/store';
 import { MatSidenav } from '@angular/material';
-
 
 
 @Component({
@@ -39,9 +38,12 @@ export class AppComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
-  @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;  
+  @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
+  @ViewChild('supportDrawer', { static: true }) supportDrawer: MatSidenav;
+
 
   constructor(
+    private sidenavService: SidenavService,
   	private _userService: UserService,
     public _ajustes: SettingsService,
     private _router: Router,
@@ -69,7 +71,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.getDataRoute()
     .subscribe( data => {
       this.titulo = data.titulo;
-      this.description = data.descripcion
+      this.description = data.descripcion;
       this._title.setTitle( this.titulo );
 
       const metaTag: MetaDefinition = {
@@ -108,8 +110,10 @@ export class AppComponent implements OnInit, OnDestroy {
       }
 
     });
+
+    this.sidenavService.setSidenav(this.supportDrawer);
   }
-    
+
 
   getDataRoute() {
     return this._router.events.pipe(

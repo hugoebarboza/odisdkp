@@ -46,6 +46,7 @@ export class Constante  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
+	public order_by:number,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
@@ -284,8 +285,8 @@ export class ProjectServiceCategorie  {
 	public descripcion:string,
 	public observacion:string,
 	public order_by:number,
+	public create_at:any,
 	public status: number,
-	public create_at:any,	
 	public update_at:any
 	){}
 }
@@ -459,6 +460,10 @@ export class ServiceType  {
 	public id:number,
 	public service_id:number,
 	public name:string,
+	public shortname:string,
+	public ndocumento:string,
+	public ddocumento:string,
+	public status:number,
 	public create_at:any,	
 	public update_at:any
 	){}

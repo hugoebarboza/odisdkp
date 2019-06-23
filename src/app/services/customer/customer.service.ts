@@ -110,9 +110,8 @@ export class CustomerService {
 		
 	}
 
-	getConstante(token, id): Observable<any>{		
-		return this.getQuery('service/'+id+'/constante', token);
-							  		
+	getConstante(token, id): Observable<any>{
+		return this.getQuery('service/'+id+'/constante', token);							  		
 	}
 
 	getGiro(token, id): Observable<any>{

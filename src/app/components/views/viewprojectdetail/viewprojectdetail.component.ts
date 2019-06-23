@@ -15,6 +15,14 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { EditServiceComponent } from '../../../components/shared/shared.index';
 import { ShowcustomerComponent } from '../../../components/dialog/showcustomer/showcustomer.component';
 import { StatusComponent } from '../../../pages/orderservice/components/dialog/status/status.component';
+import { AddConstanteComponent } from   '../../../pages/orderservice/components/dialog/add-constante/add-constante.component';
+import { AddGiroComponent } from '../../../pages/orderservice/components/dialog/add-giro/add-giro.component';
+import { AddMercadoComponent } from '../../../pages/orderservice/components/dialog/add-mercado/add-mercado.component';
+import { AddSectorComponent } from '../../../pages/orderservice/components/dialog/add-sector/add-sector.component';
+import { AddServiceTypeComponent } from '../../../pages/orderservice/components/dialog/add-service-type/add-service-type.component';
+import { AddTarifaComponent } from '../../../pages/orderservice/components/dialog/add-tarifa/add-tarifa.component';
+import { AddZonaComponent } from '../../../pages/orderservice/components/dialog/add-zona/add-zona.component';
+
 
 //MATERIAL
 import { MatDialog, MatSnackBar } from '@angular/material';
@@ -73,6 +81,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   private path = '';
   public project: string;
   public project_id: number;
+  project_type: number;
   public projectservicecategorie: ProjectServiceCategorie[] = [];
   public projectservicetype: ProjectServiceType[] = [];
   public provincias: Provincia[] = [];
@@ -158,7 +167,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   }
 
   ngOnInit() {
-    console.log('viene');
+    
   }
 
   ngOnDestroy() {
@@ -320,9 +329,10 @@ deleteCommentDatabase(item: any) {
     this._dataService.getService(this.token.token, this.id).subscribe(
                 response => 
                       {
-                        if(response.status == 'success'){
+                        if(response.status == 'success'){                          
                           this.services = response.datos;
                           this.project = response.datos.project.project_name;
+                          this.project_type = response.datos.project.project_type;
                           this.project_id = Number (response.datos.project.id);
                           this.country_id = Number (response.datos.project.country_id);
                           this.servicename = String (response.datos.service_name);
@@ -515,8 +525,163 @@ deleteCommentDatabase(item: any) {
     }
   
 
+    constante(id: number) {
+      const dialogRef = this.dialog.open(AddConstanteComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    giro(id: number) {
+      const dialogRef = this.dialog.open(AddGiroComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    mercado(id: number) {
+      const dialogRef = this.dialog.open(AddMercadoComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    sector(id: number) {
+      const dialogRef = this.dialog.open(AddSectorComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    tarifa(id: number) {
+      const dialogRef = this.dialog.open(AddTarifaComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    zona(id: number) {
+      const dialogRef = this.dialog.open(AddZonaComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+
     status(id: number) {
       const dialogRef = this.dialog.open(StatusComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    servicetype(id: number) {
+      const dialogRef = this.dialog.open(AddServiceTypeComponent, {
         width: '777px',
         disableClose: true,  
         data: {

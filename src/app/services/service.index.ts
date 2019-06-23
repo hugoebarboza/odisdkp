@@ -12,5 +12,6 @@ export { MessagingService } from 'src/app/services/firebase/messaging.service';
 export { OrderserviceService } from './data/orderservice.service';
 export { ProjectsService } from './data/projects.service';
 export { SettingsService } from './settings/settings.service';
+export { SidenavService } from './shared/sidenav.service';
 export { UserService } from './usuario/user.service';
 export { ZipService } from './utility/zip.service';

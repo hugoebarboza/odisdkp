@@ -34,12 +34,12 @@
     
                             <div class="row">
                                 <div class="col-10"> 
-                                    <h3 class="card-title"><mat-icon>list_alt</mat-icon> Casos ({{datacount}})</h3>
+                                    <h3 class="card-title"><mat-icon>list_alt</mat-icon> Solicitudes ({{datacount}})</h3>
                                     <!--<div *ngFor="let blogPost of joined$ | async" > <p>{{blogPost}}</p><br><p>{{blogPost | json}}</p></div>-->
                                 </div>
                                 <div class="col-2" style="position: relative;">
                                     <div style="position: absolute; right: 20px; top: 0px;">
-                                        <button type="button" class="btn btn-primary btn-sm leftFloat" (click)="addNew()" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">add_circle_outline</mat-icon>Crear Caso</button>                      
+                                        <button type="button" class="btn btn-primary btn-sm leftFloat" (click)="addNew()" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">add_circle_outline</mat-icon>Nueva Solicitud</button>                      
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +130,7 @@
                                 
                                 <!-- Position Column -->
                                 <ng-container matColumnDef="ncase">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> N° de Caso </th>
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> N° de Solicitud </th>
                                     <td mat-cell *matCellDef="let element"> {{element.ncase}} </td>
                                 </ng-container>
     
@@ -207,14 +207,14 @@
                                         <div class="row" align="right">
     
                                             <button mat-icon-button color="warn" 
-                                            matTooltip="Eliminar caso." (click)="deleteItem(element.id)" *ngIf="userFirebase.uid === element.create_to || identity.role === 8"> <!-- -->
+                                            matTooltip="Eliminar Solicitud." (click)="deleteItem(element.id)" *ngIf="userFirebase.uid === element.create_to || identity.role === 8"> <!-- -->
                                                 <div>
                                                 <mat-icon aria-label="Delete">delete</mat-icon>
                                                 </div>
                                             </button>
                                     
                                             <button mat-icon-button color="primary"  (click)="abrirCaso(element)" 
-                                            matTooltip="Abrir caso.">
+                                            matTooltip="Abrir Solicitud.">
                                                 <div>
                                                 <mat-icon aria-label="launch">launch</mat-icon>
                                                 </div>

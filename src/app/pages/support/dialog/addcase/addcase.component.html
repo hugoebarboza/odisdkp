@@ -2,7 +2,8 @@
 
 <div class="app">
   <mat-toolbar color="primary">
-    <h3>Nuevo Caso</h3> 
+    <!--<mat-icon class="mat-icon">add_comment</mat-icon>-->
+    <h3 style="margin-left: 4px;">Nueva Solicitud</h3> 
     <span class="mat-spacer"></span>
     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
       <mat-icon class="mat-icon">close</mat-icon>       
@@ -27,7 +28,7 @@
 
         <h2 class="jeEmY">Descripción</h2>
         <mat-form-field appearance="outline" class="example-full-width mat-status">
-          <textarea matInput #descripcion placeholder="Añadir descripción..." matAutosizeMinRows=5  maxlength="256" name="descripcion" formControlName="descripcion"   class="form-control" required></textarea>
+          <textarea matInput #descripcion placeholder="Añadir descripción..." matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" name="descripcion" formControlName="descripcion"   class="form-control" required></textarea>
           <mat-hint align="end">{{descripcion.value.length}} / 256</mat-hint>
         </mat-form-field>
 
@@ -61,7 +62,7 @@
         <div class="row row-custom">
             
           <button mat-raised-button color="primary" class="margin-left" [disabled]="forma.invalid" (click)="confirmAdd()">
-              Guardar           
+              Enviar           
           </button>
 
         </div>
@@ -105,7 +106,7 @@
         </div>
 
         <div *ngIf="tipo$">
-          <h2 class="jeEmY">Tipo</h2>
+          <h2 class="jeEmY">Tipo de Solicitud</h2>
           <ng-select  (change)="selectChangetype($event)"
                       [items]="tipo$ | async"
                       bindLabel="name"
@@ -122,6 +123,7 @@
                       name="categoria" formControlName="categoria" required>
           </ng-select>
         </div>
+        <!----
         <div>
           <h2 class="jeEmY">Etiquetar</h2>
           <ng-select name="etiquetado" 
@@ -138,6 +140,7 @@
                 formControlName="etiquetado">
             </ng-select>
         </div>
+        -->
         <br><br>
     
       </div>
