@@ -102,14 +102,14 @@ export class CargaImagenesService {
     });*/
 
 
-    console.log(path);
+    //console.log(path);
     this.afs.collection<Item>(path, ref => ref.where('nombre', '==', imagen.nombre).limit(1))
     .get()
     .subscribe((data) => { if (data.size > 0) {
-          console.log(data);
+          //console.log(data);
           data.forEach((doc) => {
-                console.log(doc.id);
-                console.log(doc.id);
+                //console.log(doc.id);
+                //console.log(doc.id);
                 this.afs.collection(`${ path }`).doc(doc.id).set(imagen);
               }
             );

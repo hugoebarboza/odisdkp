@@ -53,7 +53,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   notificationsRef: AngularFirestoreCollection<any>;
   notificationsUnreadRef: AngularFirestoreCollection<any>;
   notificationsReadRef: AngularFirestoreCollection<any>;
-  notifications$: any;
+  notifications$: any = null;
   getnotifications$: Observable<any>;
   getnotificationsUnread$: Observable<any>;
   getnotificationsRead$: Observable<any>;
@@ -170,6 +170,11 @@ export class NotificationComponent implements OnInit, OnDestroy {
       //console.log('unsubscribe notification read');
       this.subscriptionread.unsubscribe();
     }
+
+    if(this.notifications$){
+      this.notifications$ = null;
+    }
+    
   }
 
   irInicio() {
@@ -197,7 +202,6 @@ export class NotificationComponent implements OnInit, OnDestroy {
     if (value.status==0){
       this.status = '1';
     }
-    //return  this.afs.doc<User>(`/users/${this.userid}`).collection('notifications').set(value);
 
     const userDoc = this.afs.doc<User>(`/users/${this.userid}`);
     return userDoc.collection('notifications').doc(notificationKey).update({status : this.status});

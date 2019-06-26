@@ -63,6 +63,7 @@ export class AddcaseComponent implements OnInit {
   snapshot: Observable<any>;
 
   supportcase = 'supportcase';
+  showlist: boolean = false;
 
   public departamento$: Observable<any[]>;
   private departamentosCollection: AngularFirestoreCollection<any>;
@@ -78,6 +79,14 @@ export class AddcaseComponent implements OnInit {
 
   public categoria$: Observable<any[]>;
   private categoriaCollection: AngularFirestoreCollection<any>;
+
+  limitDay = 0;
+  day = 0;
+  nota = null;
+  categoriaPlazo = null;
+
+  public  categoriaDocumentos$: Observable<any[]>;
+  private categoriaDocCollection: AngularFirestoreCollection<any>;
 
   constructor(
     private _afs: AngularFirestore,
@@ -102,6 +111,9 @@ export class AddcaseComponent implements OnInit {
   }
 
   ngOnInit() {
+
+    const date = moment(new Date()).format('DD');
+    this.day = parseInt(date, 0);    
 
     this.forma = new FormGroup({
       departamento: new FormControl (null, [Validators.required]),
@@ -165,13 +177,25 @@ export class AddcaseComponent implements OnInit {
   selectChangedepto(value) {
 
     if (value) {
+
+      if (value.day && value.note && value.day > 0) {
+        if (this.day >= value.day) {
+          this.nota = value.note;
+        }
+      } else if (value.day && value.note && value.day === 0) {
+        this.nota = value.note;
+      } else {
+        this.nota = null;
+      }
+
       this.tipo$ = null;
       this.categoria$ = null;
+      this.categoriaDocumentos$ = null;
       this.selectstatus  = null;
       this.forma.controls['tipo'].setValue('');
       this.forma.controls['categoria'].setValue('');
 
-      this.tipoCollection = this._afs.collection('supporttype', ref => ref.where('depto_id', '==', value.id) );
+      this.tipoCollection = this._afs.collection('supporttype', ref => ref.where('depto_id', '==', value.id).orderBy('name'));
       this.tipo$ = this.tipoCollection.snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
@@ -190,11 +214,14 @@ export class AddcaseComponent implements OnInit {
           // res.data();
           // console.log(res.data());
           if (res.data().admins && res.data().admins.length > 0) {
-            console.log(res.data().admins);
+            //console.log(res.data().admins);
             this.arrayResponsables = this.getUserResponsables(res.data().admins);
-            //console.log(this.arrayResponsables);
           }
          } else {
+          this.categoria$ = null;
+          this.categoriaDocumentos$ = null;
+          this.selectstatus  = null;
+          this.forma.controls['categoria'].setValue('');
           this.arrayResponsables = [];
           console.log('Document does not exist');
          }
@@ -205,6 +232,7 @@ export class AddcaseComponent implements OnInit {
       this.arrayResponsables = [];
       this.tipo$ = null;
       this.categoria$ = null;
+      this.categoriaDocumentos$ = null;
       this.selectstatus = null;
       this.forma.controls['tipo'].setValue('');
       this.forma.controls['categoria'].setValue('');
@@ -221,7 +249,7 @@ export class AddcaseComponent implements OnInit {
       this._afs.doc('users/' + to[ii]).get()
       .subscribe(res => {
         if (res.exists) {
-          console.log(res.data());
+          //console.log(res.data());
           arr.push(res.data());
          }
       });
@@ -233,7 +261,12 @@ export class AddcaseComponent implements OnInit {
   selectChangetype(value) {
 
     if (value) {
-      this.categoriaCollection = this._afs.collection('supportcategory', ref => ref.where('type_id', '==', value.id));
+      this.categoriaDocumentos$ = null;
+      this.categoria$ = null;
+      this.categoriaPlazo = null;
+      this.forma.controls['categoria'].setValue('');
+
+      this.categoriaCollection = this._afs.collection('supportcategory', ref => ref.where('type_id', '==', value.id).orderBy('name'));
       this.categoria$ = this.categoriaCollection.snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
@@ -259,6 +292,8 @@ export class AddcaseComponent implements OnInit {
       );
     } else {
       this.categoria$ = null;
+      this.categoriaDocumentos$ = null;
+      this.categoriaPlazo = null;
       this.selectstatus = null;
       this.forma.controls['categoria'].setValue('');
     }
@@ -283,6 +318,27 @@ export class AddcaseComponent implements OnInit {
 
   }
 
+  selectChangeCategoria(value) {
+
+    if (value && value.plazo) {
+      this.categoriaPlazo = value.plazo;
+    } else {
+      this.categoriaPlazo = null;
+    }
+
+    this.categoriaDocCollection = this._afs.collection('supportcategory/' + value.id + '/documentos', ref => ref.orderBy('name'));
+      this.categoriaDocumentos$ = this.categoriaDocCollection.snapshotChanges().pipe(
+        map(actions => {
+          return actions.map(a => {
+            const data = a.payload.doc.data();
+            const id = a.payload.doc.id;
+            return { id, ...data };
+          });
+        })
+      );
+
+  }  
+
   removeFile(index: number): void {
 
     if (index >= 0) {
@@ -296,7 +352,7 @@ export class AddcaseComponent implements OnInit {
 
   getRouteFirebase() {
 
-    this.departamentosCollection = this._afs.collection('countries/' + this.identity.country + '/departments');
+    this.departamentosCollection = this._afs.collection('countries/' + this.identity.country + '/departments', ref => ref.orderBy('name', 'asc'));
     this.departamento$ = this.departamentosCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {
@@ -374,6 +430,7 @@ export class AddcaseComponent implements OnInit {
       description: this.forma.value.descripcion,
       create_to: this.userFirebase.uid,
       create_at: date,
+      update_at: date,
       depto_id: this.forma.value.departamento.id,
       depto_desc: this.forma.value.departamento.name,
       type_id: this.forma.value.tipo.id,
@@ -392,17 +449,17 @@ export class AddcaseComponent implements OnInit {
         // console.log('Document written with ID: ', docRef.id);
 
         if (that.archivos.length > 0) {
-          that.toasterService.success('Caso registrado, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
+          that.toasterService.success('Solicitud registrada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
           that.CARPETA_ARCHIVOS =  that.CARPETA_ARCHIVOS + '/' + docRef.id + '/caseFiles';
           that._cargaImagenes.cargarImagenesFirebase( that.archivos,  that.CARPETA_ARCHIVOS, date);
-          that.forma.reset();
+          //that.forma.reset();
           that.tipo$ = null;
           that.categoria$ = null;
           that.selectstatus = null;
         }
 
         that.onNoClick();
-        swal('Caso registrado', '', 'success');
+        swal('Solicitud registrada', '', 'success');
 
         if (array_usersInfo && array_usersInfo.length > 0 && docRef) {
           array_usersInfo.forEach(res => {

@@ -5,28 +5,101 @@
           <mat-card-title *ngIf="!project">Proyecto: S/N</mat-card-title>
           <mat-card-subtitle *ngIf="servicename">Servicio: <b>{{servicename}} </b></mat-card-subtitle>
           <mat-card-subtitle *ngIf="!servicename">Detalles de: <b>S/N</b></mat-card-subtitle>
-          <mat-card-subtitle *ngIf="_userService.isRole(7) && id > 0">
-              <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
-                  <div class="btn-group mr-2" role="group" aria-label="First group">
-                      <button type="button" class="btn btn-light btn-sm" (click)="startEdit(id)"><mat-icon aria-label="Edit" class="material-icons md-14">edit</mat-icon>Editar</button>
+          <mat-card-subtitle *ngIf="_userService.isRole(7) && id > 0" style="width: 100%">
+              <div *ngIf="_userService.isRole(7) && id > 0" class="d-flex">
+                  <div class="p-2">
+                      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                          <div class="btn-group mr-2" role="group" aria-label="First group">
+                              <button type="button" class="btn btn-light btn-sm" (click)="startEdit(id)"><mat-icon aria-label="Edit" class="material-icons md-14">edit</mat-icon>Editar</button>
+                          </div>
+                          <div class="btn-group mr-2" role="group" aria-label="Second group">
+                              <button type="button" class="btn btn-light btn-sm" (click)="loadInfo()"><mat-icon aria-label="Edit" class="material-icons md-14">sync</mat-icon>Refrescar</button>            
+                          </div>
+                          <div class="btn-group mr-2" role="group" aria-label="Tird group">
+                              <button type="button" class="btn btn-light btn-sm" (click)="togglemain()"><mat-icon aria-label="Edit" class="material-icons md-14">chat_bubble_outline</mat-icon>Comentar</button>
+                          </div>
+                      </div>        
                   </div>
-                  <div class="btn-group mr-2" role="group" aria-label="Second group">
-                      <button type="button" class="btn btn-light btn-sm" (click)="loadInfo()"><mat-icon aria-label="Edit" class="material-icons md-14">sync</mat-icon>Refrescar</button>            
-                  </div>
-                  <div class="btn-group mr-2" role="group" aria-label="Tird group">
-                      <button type="button" class="btn btn-light btn-sm" (click)="togglemain()"><mat-icon aria-label="Edit" class="material-icons md-14">chat_bubble_outline</mat-icon>Comentar</button>
-                  </div>
-                  <div class="btn-group mr-2" role="group" aria-label="Tird group" *ngIf="_userService.isRole(7)">
-                    <button type="button" class="btn btn-light btn-sm" (click)="status(id)"><mat-icon aria-label="Edit" class="material-icons md-14">note</mat-icon>Estatus</button>
-                  </div>
-
-              </div>
+              </div>               
           </mat-card-subtitle>
           <span class="spacer"></span>
           <img src="assets/img/logoocaorden.png" width="70" height="39">
           </mat-card-header>
           <hr>
         <mat-card-content>
+
+        <div class="d-flex">
+            <div class="mr-auto p-2"></div>
+            <div class="p-2"></div>
+
+            <div class="p-2" *ngIf="project_type == 0">
+                <button type="button" class="btn btn-primary btn-sm" [matMenuTriggerFor]="menuviewselect" >
+                <mat-icon class="material-icons md-14">settings</mat-icon>Gestiona</button>
+                <mat-menu #menuviewselect="matMenu" [overlapTrigger]="false">
+
+                        <button mat-menu-item (click)="constante(id)">
+                            <span >Constante</span>
+                        </button>
+
+                        <button mat-menu-item (click)="status(id)">
+                          <span >Estatus</span>
+                        </button>
+
+
+                        <button mat-menu-item (click)="giro(id)">
+                            <span >Giro</span>
+                        </button>
+
+                        <button mat-menu-item (click)="mercado(id)">
+                            <span >Mercado</span>
+                        </button>
+
+                        <button mat-menu-item (click)="sector(id)">
+                            <span >Sector</span>
+                        </button>
+
+                        <button mat-menu-item (click)="tarifa(id)">
+                            <span >Tarifa</span>
+                        </button>
+
+                        <button mat-menu-item (click)="servicetype(id)">
+                            <span >Tipos de Servicio</span>
+                        </button>
+  
+                        <button mat-menu-item (click)="zona(id)">
+                            <span >Zona</span>
+                        </button>
+                        
+                </mat-menu>              
+            </div>
+
+            <div class="p-2" *ngIf="project_type && project_type == 1">
+              <button type="button" class="btn btn-primary btn-sm" [matMenuTriggerFor]="menuviewselect" >
+              <mat-icon class="material-icons md-14">settings</mat-icon>Gestiona</button>
+              <mat-menu #menuviewselect="matMenu" [overlapTrigger]="false">
+
+                    <button mat-menu-item (click)="color(id)">
+                      <span >Color</span>
+                    </button>
+
+                      <button mat-menu-item (click)="status(id)">
+                        <span >Estatus</span>
+                      </button>
+
+                      <button mat-menu-item (click)="marca(id)">
+                          <span >Marca</span>
+                      </button>
+
+                      <button mat-menu-item (click)="modelo(id)">
+                          <span >Modelo</span>
+                      </button>
+
+
+                      
+              </mat-menu>              
+          </div>
+
+        </div>          
 
         <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
         Favor seleccione Proyecto.
@@ -55,27 +128,27 @@
                   </div>
 
                   <div *ngIf="model.id === 0 && model.expand && service_detail && service_detail.length == 0">
-                      <div class="col"><div class="p-3 border bg-light">Todavía no hay información.</div></div>
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
                   </div>
 
                   <div *ngIf="model.id === 1 && model.expand && service_detail && service_detail.length == 0">
-                      <div class="col"><div class="p-3 border bg-light">Todavía no hay información.</div></div>
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
                   </div>
 
                   <div *ngIf="model.id === 2 && model.expand && service_detail && service_detail.length == 0">
-                      <div class="col"><div class="p-3 border bg-light">Todavía no hay información.</div></div>
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
                   </div>
 
                   <div *ngIf="model.id === 3 && model.expand && service_detail && service_detail.length == 0">
-                      <div class="col"><div class="p-3 border bg-light">Todavía no hay información.</div></div>
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
                   </div>
 
                   <div *ngIf="model.id === 4 && model.expand && service_detail && service_detail.length == 0">
-                      <div class="col"><div class="p-3 border bg-light">Todavía no hay información.</div></div>
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
                   </div>
 
                   <div *ngIf="model.id === 5 && model.expand && service_detail && service_detail.length == 0">
-                      <div class="col"><div class="p-3 border bg-light">Todavía no hay información.</div></div>
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
                   </div>
 
 

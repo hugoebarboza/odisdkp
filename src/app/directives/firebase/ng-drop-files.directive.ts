@@ -116,7 +116,7 @@ export class NgDropFilesDirective {
   }
 
   private _esImagen( tipoArchivo: string ): boolean { 
-    console.log(tipoArchivo);
+    //console.log(tipoArchivo);
     if ( tipoArchivo === '' || tipoArchivo === undefined ) {
       return false;  
     }

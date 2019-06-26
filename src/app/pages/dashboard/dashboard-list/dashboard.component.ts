@@ -57,9 +57,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 			});
 		this.label.getDataRoute().subscribe(data => {
 			this.title = data.subtitle;
-		});
-		  
-			
+		});					
 	}
  
 	ngOnInit(){

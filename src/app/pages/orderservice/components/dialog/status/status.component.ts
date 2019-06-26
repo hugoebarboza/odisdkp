@@ -23,7 +23,7 @@ export class StatusComponent implements OnInit {
   proyectos: Array<Proyecto> = [];
   selected = new FormControl(0);
   subtitle:string = "Seleccione cualquiera de las siguientes opciones."
-  title:string = "Estatus del Proyecto";
+  title:string = "Estatus";
   totalRegistros: number = 0;
   token: any;
 

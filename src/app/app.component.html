@@ -1,20 +1,51 @@
 <div class="header">
-    <app-header></app-header>
-</div>
-<div class="pagecontent">           
-    <div class="example-container" [class.example-is-mobile]="mobileQuery.matches">
-
-        <mat-toolbar class="bg-white example-toolbar" *ngIf="identity">
-                <a class="nav-link active pointer" (click)="sidenav.toggle()"><i class="material-icons">menu</i></a>    
-                <a class="nav-link active pointer" href="https://mail.google.com" target="_blank"><i class="material-icons">email</i></a>
-                <a class="nav-link active pointer" routerLink="/dashboard"><i class="material-icons">dashboard</i></a>
-        </mat-toolbar>
-
-        <mat-sidenav-container class="example-sidenav-container" [style.marginTop.px]="mobileQuery.matches ? 56 : 0">
-
-            <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                        [fixedInViewport]="mobileQuery.matches" fixedTopGap="102">
-
+        <app-header></app-header>
+    </div>
+    
+    <mat-drawer-container class="container-drawer">
+        <mat-drawer #supportDrawer class="example-sidenav" mode="over" position="end">
+            <div class="not-scroll">
+                <div class="drawer-header">
+                    <mat-list>
+                        <div class="magin-center">
+                            <h2 mat-subheader class="center-support">
+                                Centro de Soporte
+                                <button mat-icon-button class="mat-menu-item">
+                                    <mat-icon (click)="supportDrawer.toggle()">close</mat-icon>
+                                </button>
+                            </h2>
+                        </div>
+                        <mat-divider></mat-divider>
+                        <mat-list-item [routerLink]="['/support']" class="pointer" (click)="supportDrawer.toggle()">
+                            <mat-icon mat-list-icon  class="color-matIcon" >list_alt</mat-icon>
+                            <h4 mat-line>Mis Solicitudes</h4>
+                        </mat-list-item>
+                        <mat-list-item [routerLink]="['/formview']" class="pointer" (click)="supportDrawer.toggle()">
+                            <mat-icon mat-list-icon  class="color-matIcon" >add_circle_outline</mat-icon>
+                            <h4 mat-line>Nueva Solicitud</h4>
+                        </mat-list-item>                        
+                    </mat-list>
+                </div>
+                <div class="drawer-footer">
+                </div>
+            </div>
+        </mat-drawer>
+    
+        <div class="pagecontent">           
+            <div class="example-container" ><!--[class.example-is-mobile]="mobileQuery.matches"-->
+    
+                <mat-toolbar class="bg-white example-toolbar" *ngIf="identity">
+                        <a class="nav-link active pointer" (click)="sidenav.toggle()"><i class="material-icons">menu</i></a>    
+                        <a class="nav-link active pointer" href="https://mail.google.com" target="_blank"><i class="material-icons">email</i></a>
+                        <a class="nav-link active pointer" routerLink="/dashboard"><i class="material-icons">dashboard</i></a>
+                </mat-toolbar>
+    
+    
+                <mat-sidenav-container class="example-sidenav-container"> <!--[style.marginTop.px]="mobileQuery.matches ? 56 : 0"-->
+    
+                    <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                                [fixedInViewport]="mobileQuery.matches" fixedTopGap="102">
+    
                         <div class="not-scroll">
                             <div class="sidebar-header">
                                 <img width="100%" src="./../assets/img/logo.png">
@@ -26,15 +57,21 @@
                                 </button>
                             </div>
                         </div>
-                            
-            </mat-sidenav>
-
-            <mat-sidenav-content>
-                    <router-outlet></router-outlet>
-                    <app-footermain></app-footermain>
-            </mat-sidenav-content>
-        </mat-sidenav-container>
-        
-    </div>
-
-</div>
+                                    
+                    </mat-sidenav>
+    
+                    <mat-sidenav-content>
+                            <router-outlet></router-outlet>
+                            <app-footermain></app-footermain>
+                    </mat-sidenav-content>
+                </mat-sidenav-container>
+                
+            </div>
+    
+        </div>
+            
+          
+    </mat-drawer-container>
+    
+    
+            

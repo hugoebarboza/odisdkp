@@ -279,7 +279,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   //columnsOrderToDisplay: string[] = this.displayedColumns.slice();  
 
   data: Order[] = [];
-  dataSource: MatTableDataSource<Order[]>;  
+  dataSource: MatTableDataSource<Order[]>;
   exportDataSource: MatTableDataSource<Order[]>;  
 
   isLoadingResults = true;

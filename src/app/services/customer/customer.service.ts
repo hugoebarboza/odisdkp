@@ -107,12 +107,10 @@ export class CustomerService {
 
 	getTarifa(token, id): Observable<any>{
 		return this.getQuery('service/'+id+'/tarifa', token);
-		
 	}
 
-	getConstante(token, id): Observable<any>{		
-		return this.getQuery('service/'+id+'/constante', token);
-							  		
+	getConstante(token, id): Observable<any>{
+		return this.getQuery('service/'+id+'/constante', token);							  		
 	}
 
 	getGiro(token, id): Observable<any>{
@@ -123,8 +121,8 @@ export class CustomerService {
 		return this.getQuery('service/'+id+'/sector', token);				
 	}
 
-	getZona(token, id): Observable<any>{		
-		return this.getQuery('service/'+id+'/zona', token);						  		
+	getZona(token, id): Observable<any>{
+		return this.getQuery('service/'+id+'/zona', token);
 	}
 
 	getMercado(token, id): Observable<any>{		
@@ -141,8 +139,8 @@ export class CustomerService {
 	}
 
 
-	getColor(token): Observable<any>{		
-		return this.getQuery('colors', token);						  		
+	getColor(token): Observable<any>{
+		return this.getQuery('colors', token);
 	}
 
 

@@ -21,7 +21,10 @@ import { SupportRoutingModule } from './support.routing';
 
 //DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
-
+import { SupportsettingsComponent } from './support-settings/supportsettings.component';
+import { TypesettingsComponent } from './support-settings/components/typesettings/typesettings.component';
+import { CategorysettingsComponent } from './support-settings/components/categorysettings/categorysettings.component';
+import { StatussettingsComponent } from './support-settings/components/statussettings/statussettings.component';
 
 
 //DIRECTIVE
@@ -38,10 +41,18 @@ import { DirectiveModule } from 'src/app/directives/directive.module';
     SupportRoutingModule,
     NgSelectModule,
     SharedModule,
-    NgbTypeaheadModule
+    NgbTypeaheadModule,
+    
   ],
   exports: [CommonModule],
-  declarations: [SupportComponent, AddcaseComponent, ShowcaseComponent],
+  // tslint:disable-next-line:max-line-length
+  declarations: [SupportComponent,
+    AddcaseComponent,
+    ShowcaseComponent,
+    SupportsettingsComponent,
+    TypesettingsComponent,
+    CategorysettingsComponent,
+    StatussettingsComponent],
   entryComponents: [
     AddcaseComponent, ShowcaseComponent
   ],

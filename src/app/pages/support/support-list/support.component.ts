@@ -76,7 +76,8 @@ export class SupportComponent implements OnInit, OnDestroy  {
   public casosCollectionPagination: AngularFirestoreCollection<any>;
 
   // tslint:disable-next-line:max-line-length
-  displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'supportstatus', 'important', 'accions'];
+  //displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'supportstatus', 'important', 'accions'];
+  displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'countTime', 'update_at', 'supportstatus', 'important', 'accions'];
 
   constructor(
     private _afs: AngularFirestore,
@@ -126,7 +127,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
 
         if (this.identity.role === 8) {
           // tslint:disable-next-line:max-line-length
-          this.radioOpciones = [{value: 1, descripcion: 'Mís Casos'}, {value: 2,  descripcion: 'Etiquetado'}, {value: 3, descripcion: 'Departamento'}];
+          this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}, {value: 3, descripcion: 'Departamento'}];
           this.radioselect = 1;
           this.changeRadio(1);
         } else {
@@ -134,7 +135,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
           this.depto = this._afs.collection('countries/' + this.identity.country + '/departments', ref => ref.where('admins', 'array-contains', this.userFirebase.uid)).
           get().subscribe((data: any) => { if (data.size > 0) {
               // tslint:disable-next-line:max-line-length
-              this.radioOpciones = [{value: 1, descripcion: 'Mís Casos'}, {value: 2,  descripcion: 'Etiquetado'}, {value: 3, descripcion: 'Departamento'}];
+              this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}, {value: 3, descripcion: 'Departamento'}];
               this.radioselect = 1;
               this.changeRadio(1);
               let count = 1;
@@ -150,7 +151,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
                   }
                 );
               } else {
-                this.radioOpciones = [{value: 1, descripcion: 'Mís Casos'}, {value: 2,  descripcion: 'Etiquetado'}];
+                this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}];
                 this.radioselect = 1;
                 this.changeRadio(1);
               }
@@ -240,7 +241,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
       map(actions => {
         this.isLoading = true;
         this.datacount = actions.length;
-        console.log('PASO selectChangedeptoAll() ----------------------------------->');
+        //console.log('PASO selectChangedeptoAll() ----------------------------------->');
         return actions.map(a => {
           const data = a.payload.doc.data();
           const id = a.payload.doc.id;
@@ -445,7 +446,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
       const that = this;
       swal({
         title: '¿Esta seguro?',
-        text: 'Esta seguro de borrar registro de caso ',
+        text: 'Esta seguro de borrar registro de solicitud ',
         icon: 'warning',
         buttons: true,
         dangerMode: true,
@@ -464,28 +465,28 @@ export class SupportComponent implements OnInit, OnDestroy  {
                       });
                     }
                   });
-                swal('Importante', 'No se puede eliminar caso ya que contiene comentarios', 'error');
+                swal('Importante', 'No se puede eliminar solicitud ya que contiene comentarios', 'error');
                } else {
                 // console.log('Document does not exist comments');
                 this._afs.collection(this.supportcase + '/' + item + '/caseFiles').get().subscribe(
                   caseFiles => {
                     if (caseFiles.size > 0) {
-                      console.log(caseFiles);
+                      //console.log(caseFiles);
 
                       caseFiles.forEach((doc) => {
                         const cfiles = doc.data();
                         cfiles.id = doc.id;
-                        console.log(cfiles);
+                        //console.log(cfiles);
                         const storageRef = firebase.storage().ref();
                         storageRef.child(this.supportcase + '/' + item + '/caseFiles/' + cfiles.nombre).delete();
                         this._afs.doc(this.supportcase + '/' + item + '/caseFiles/' + cfiles.id).delete();
                       });
 
                       this._afs.collection(this.supportcase).doc(item).delete().then(function() {
-                        swal('Caso eliminado', '', 'success');
-                        that.snackBar.open('Eliminando Registro de Caso.', '', {duration: 2000 } );
+                        swal('Solicitud eliminada', '', 'success');
+                        that.snackBar.open('Eliminando Registro de Solicitud.', '', {duration: 2000 } );
                       }).catch(function(error) {
-                        swal('A ocurrido un error al eliminar caso', '', 'error');
+                        swal('A ocurrido un error al eliminar solicitud', '', 'error');
                       });
 
                       this._afs.collection(this.supportcase + '/' + item + '/activity').get().subscribe(
@@ -500,9 +501,9 @@ export class SupportComponent implements OnInit, OnDestroy  {
                      } else {
                       // console.log('Document does not exist caseFiles');
                       this._afs.collection(this.supportcase).doc(item).delete().then(function() {
-                        swal('Caso eliminado', '', 'success');
+                        swal('Solicitud eliminada', '', 'success');
                       }).catch(function(error) {
-                        swal('A ocurrido un error al eliminar caso', '', 'error');
+                        swal('A ocurrido un error al eliminar solicitud', '', 'error');
                       });
                      }
                   }

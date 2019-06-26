@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 
 //MODELS
-import { Order, Service, Proyecto, ProjectServiceType } from '../../models/types';
+import { Color, Constante, Giro, Mercado, Order, Proyecto, ProjectServiceType, Sector, Service, Tarifa,  Zona } from '../../models/types';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
@@ -28,6 +28,23 @@ export class ProjectsService {
 	this.error = false;
 
   }
+
+  	addColor(token: any, data:Color): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'colors/', params, {headers: headers})
+						.map( (resp: any) => {
+							console.log(resp);
+							return resp;
+						});				
+	}  
 
 	addService(token: any, service: Service, id:number): Observable<any> {	
 		if (!token){
@@ -62,6 +79,22 @@ export class ProjectsService {
 				});*/
 	}
 
+	addProjectServiceCategorie(token: any, id:number, data:ProjectServiceType): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'project/'+id+'/servicecategorie', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 
 	addProjecType(token: any, id:number, data:ProjectServiceType): Observable<any>{
 		if (!token){
@@ -74,6 +107,107 @@ export class ProjectsService {
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this._http.post(this.url+'project/'+id+'/servicetype', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	addServiceConstante(token: any, id:number, data:Constante): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'service/'+id+'/constante', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	addServiceGiro(token: any, id:number, data:Giro): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'service/'+id+'/giro', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+	addServiceMercado(token: any, id:number, data:Mercado): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'service/'+id+'/mercado', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	addServiceSector(token: any, id:number, data:Sector): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'service/'+id+'/sector', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	addServiceTarifa(token: any, id:number, data:Tarifa): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'service/'+id+'/tarifa', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	addServiceZona(token: any, id:number, data:Zona): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'service/'+id+'/zona', params, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
 						 });				
@@ -97,6 +231,22 @@ export class ProjectsService {
 						 });				
 	}
 
+
+	updateProjectServiceCategorie(token: any, id:number, data:ProjectServiceType, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'project/'+id+'/servicecategorie/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
 
 
 	updateProjecType(token: any, id:number, data:ProjectServiceType, data_id:number): Observable<any>{
@@ -147,7 +297,127 @@ export class ProjectsService {
 				  swal('No fue posible procesar su solicitud', err.error.message, 'error');
 			    });*/
 	}
+
 	
+	updateServiceConstante(token: any, id:number, data:Constante, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'service/'+id+'/constante/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+
+	updateServiceGiro(token: any, id:number, data:Giro, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'service/'+id+'/giro/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	updateServiceMercado(token: any, id:number, data:Mercado, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'service/'+id+'/mercado/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+	updateServiceSector(token: any, id:number, data:Sector, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'service/'+id+'/sector/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	updateServiceTarifa(token: any, id:number, data:Tarifa, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'service/'+id+'/tarifa/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	updateServiceZona(token: any, id:number, data:Zona, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'service/'+id+'/zona/'+data_id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
+	updateColor(token: any, id:number, data:Color): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.put(this.url+'colors/'+id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+
     deleteService(token: any, id:number, service_id:number): void {	
 		if (!token){
 			return;
@@ -173,6 +443,18 @@ export class ProjectsService {
 	}
 
 
+	deleteProjectServiceCategorie(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'project/'+id+'/servicecategorie/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 
 	deleteProjecType(token: any, id:number, data_id:number): Observable<any>{
 		if (!token){
@@ -183,11 +465,103 @@ export class ProjectsService {
 		return this._http.delete(this.url+'project/'+id+'/servicetype/'+data_id, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
+						 });
+	}
+
+	deleteServiceConstante(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'service/'+id+'/constante/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });
+	}
+
+
+	deleteServiceGiro(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'service/'+id+'/giro/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
 						 });				
 	}
 
 
-  	getQuery( query:string, token ): Observable<any>{
+	deleteServiceMercado(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'service/'+id+'/mercado/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
+	deleteServiceSector(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'service/'+id+'/sector/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}	
+
+
+	deleteServiceTarifa(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'service/'+id+'/tarifa/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}	
+
+
+	deleteServiceZona(token: any, id:number, data_id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'service/'+id+'/zona/'+data_id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}	
+
+
+	deleteColor(token: any, id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'colors/'+id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}	
+
+
+  	getQuery( query:string, token:any ): Observable<any>{
+	if(!token){
+		return;
+	}
 	const url = this.url+query;
 	const headers = new HttpHeaders({
 		'Content-Type': 'application/json',
@@ -195,72 +569,167 @@ export class ProjectsService {
 		return this._http.get(url, {headers: headers}).map((res: any) => {
       			return res;
 		});		
-  	}
+	}
 
-    getDepartamentos(token): Observable<any> {
+	getColor(token:any): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('colors', token);
+	}
+
+
+	getConstante(token:any, id): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('service/'+id+'/constante', token);							  		
+	}
+
+
+
+    getDepartamentos(token:any): Observable<any> {
+		if(!token){
+			return;
+		}
 		return this.getQuery('departamento', token);
+	}
+
+	getGiro(token, id): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('service/'+id+'/giro', token);							  		
+	}
+
+	getMercado(token, id): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('service/'+id+'/mercado', token);
 	}
 
 
 	getProyectos(token, id): Observable<any> {
+		if(!token){
+			return;
+		}
 		return this.getQuery('departamento/'+id+'/proyecto', token);
 	}
 
 
 	getProject(token:any, id:number){
+		if(!token){
+			return;
+		}
 	    return this.getProjectOrderData('project/'+id, token);
 	}
 
 	getProjectSelect(token:any, id:number){
+		if(!token){
+			return;
+		}	
 	    return this.getProjectOrderData('projectselect/'+id, token);
 	}
 
 
 	getProjectOrder(token, id:number, termino, date, idstatus, serviceid, servicetypeid) {
+		if(!token){
+			return;
+		}
 		const paginate = `/${termino}/date/${date}/status/${idstatus}/service/${serviceid}/servicetype/${servicetypeid}?limit=All`;			           
 	    //console.log(paginate);
 	    return this.getProjectOrderData('project/'+id+'/searchorder'+paginate, token);
 	}
 
 	getProjectService(token:any, id:number){
+		if(!token){
+			return;
+		}
 	    return this.getQuery('project/'+id+'/service', token);
 	}
 
 
 	getProjectServiceCategorie(token:any, id:number){
+		if(!token){
+			return;
+		}
 	    return this.getQuery('project/'+id+'/servicecategorie', token);
 	}
 
 	getProjectServiceDetail(token:any, id:number){
+		if(!token){
+			return;
+		}
 	    return this.getQuery('project/'+id+'/servicedetail', token);
 	}
 
 
 	getProjectServiceType(token:any, id:number){
+		if(!token){
+			return;
+		}
 	    return this.getQuery('project/'+id+'/servicetype', token);
 	}
 
 
-	getProjectUser(token, id:number, role:number) {
+	getProjectUser(token:any, id:number, role:number) {
+		if(!token){
+			return;
+		}
 	    return this.getProjectOrderData('project/'+id+'/role/'+role, token);
 	}
 
 
-	getProjectUserGeoreference(token, id:number) {
+	getProjectUserGeoreference(token:any, id:number) {
+		if(!token){
+			return;
+		}
 	    return this.getProjectOrderData('project/'+id+'/usergeoreference', token);
 	}
 
-	gettUserGeoreference(token, id:number, columnDateDesdeValue:string, columnTimeFromValue:any, columnTimeUntilValue:any) {
+	getSector(token:any, id:number): Observable<any>{	
+		if(!token){
+			return;
+		}
+		return this.getQuery('service/'+id+'/sector', token);				
+	}
+
+	getTarifa(token:any, id:number): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('service/'+id+'/tarifa', token);
+	}
+
+	getZona(token:any, id): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('service/'+id+'/zona', token);
+	}
+
+
+	gettUserGeoreference(token:any, id:number, columnDateDesdeValue:string, columnTimeFromValue:any, columnTimeUntilValue:any) {
+		if(!token){
+			return;
+		}
 	    const paginate = `?columnDateDesdeValue=${columnDateDesdeValue}&columnTimeFromValue=${columnTimeFromValue}&columnTimeUntilValue=${columnTimeUntilValue}`;		
 	    return this.getProjectOrderData('user/'+id+'/georeference'+paginate, token);
 	}
 
-	gettUserOrdenesGeoreference(token, id:number, userid:number) {
+	gettUserOrdenesGeoreference(token:any, id:number, userid:number) {
+		if(!token){
+			return;
+		}
 	    return this.getProjectOrderData('project/'+id+'/user/'+userid+'/ordergeoreference', token);
 	}
 
 
     getProjectOrderData(query:string, token:any) {
+		if(!token){
+			return;
+		}
 	    const url = this.url;
 	    const href = url+query;
 	    const requestUrl = href;
@@ -277,11 +746,17 @@ export class ProjectsService {
     }
 
 
-	getUserProject(token:any, id:number, role:any): Observable<any> {								  
+	getUserProject(token:any, id:number, role:any): Observable<any> {
+		if(!token){
+			return;
+		}
 		return this.getQuery('project/'+id+'/role/'+role, token);
 	}
 
-    status(token: any, id:number, serviceid:number, servicedetailid:number, label:number): void {	
+    status(token: any, id:number, serviceid:number, servicedetailid:number, label:number): void {
+		if(!token){
+			return;
+		}
 		let json = JSON.stringify(label);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');		

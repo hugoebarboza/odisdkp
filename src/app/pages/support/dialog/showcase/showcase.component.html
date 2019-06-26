@@ -2,7 +2,7 @@
 <div class="app">
 
   <mat-toolbar color="primary">
-    <h3 *ngIf="(infocaso$ | async) as infocaso" >Caso N°{{ infocaso.ncase }}</h3> 
+    <h3 *ngIf="(infocaso$ | async) as infocaso" >Seguimiento Solicitud N°{{ infocaso.ncase }}</h3> 
     <span class="mat-spacer"></span>
     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
       <mat-icon class="mat-icon">close</mat-icon>       
@@ -55,13 +55,15 @@
           </div>
         </div>
         
-        <h2 class="sc-mWPeY jeEmY">Descripción</h2>
+        <h2 class="jeEmY">Descripción</h2>
         <p>{{infocaso.description}}</p>
+        <mat-divider></mat-divider>
 
         <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar">
 
+            <h2 class="jeEmY">Responder</h2>
             <mat-form-field appearance="outline" class="example-full-width mat-status">
-              <textarea matInput #comentario placeholder="Añadir un comentario..."  name="comentario" matAutosizeMinRows=5 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
+              <textarea matInput #comentario placeholder="Añadir una respuesta..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
               <mat-hint align="end">{{comentario.value.length}} / 256</mat-hint>
             </mat-form-field>
 
@@ -75,7 +77,6 @@
               <mat-chip-list>
                 <mat-chip *ngFor="let forFile of archivos; let i = index;" 
                   color="primary"
-                  [selectable]="selectable"
                   [removable]="true"
                   (removed)="removeFile(i)">
                   <span>{{ forFile.archivo.name }}</span>
@@ -110,7 +111,7 @@
 
         <br>
         <mat-tab-group animationDuration="0ms" class="mat-tab-style">
-          <mat-tab label="Comentarios">
+          <mat-tab label="Respuestas">
             <br>
             <cdk-virtual-scroll-viewport itemSize="60" class="list-container list-group" *ngIf="comentarios$ !== null">
             <!--<div style="height: 250px; overflow: auto;" *ngIf="comentarios$">-->
@@ -126,7 +127,7 @@
                   </div>
                   <div class="sc-gwVKww fLcKLS">  
                       <span class="sc-fdcRnX jmTFIN">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
-                      ha comentado hace
+                      ha respondido hace
                       <span class="sc-fdcRnX jmTFIN">{{comentarios.create_at | countTime}}</span>
                   </div>
                 </div>
@@ -238,7 +239,7 @@
             </div>
           </div>
 
-          <h2 class="jeEmY" *ngIf="arrayResponsables && arrayResponsables.length > 0">Responsable</h2>
+          <h2 class="jeEmY" *ngIf="arrayResponsables && arrayResponsables.length > 0">Responsable(s)</h2>
           <div class="sc-cUDvuO fOqogj" *ngFor="let arrayresp of arrayResponsables">
             <div class="sc-jQGbeF SZsdL">
               <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
@@ -251,6 +252,7 @@
             </div>
           </div>
 
+          <!----
           <h2 class="jeEmY" *ngIf="arrayEtiquetadosDefault && arrayEtiquetadosDefault.length > 0">Etiquetados
           </h2>
           <div class="sc-cUDvuO fOqogj" *ngFor="let etiq of arrayEtiquetadosDefault">
@@ -287,12 +289,13 @@
                     class="example-full-width"
                     >
                 </ng-select>
-                <!--<button mat-stroked-button color="primary" *ngIf="arrayEtiquetadosDefault.length < arrayEtiquetados.length" style="margin-top: 6px;" (click)="etiquetadosChanged()">Guardar</button>-->
                 
                 <div class="row float-right row-custom"  *ngIf="arrayEtiquetadosDefault.length < arrayEtiquetados.length" style="margin-top: 6px;">
                     <button mat-stroked-button color="warn"  (click)="etiquetadosChanged(0);"><mat-icon>close</mat-icon></button>
                     <button mat-stroked-button color="primary" (click)="etiquetadosChanged(1);"><mat-icon>check</mat-icon></button>
                 </div>
+              -->
+
                 
                 <br>
           <span class="smallfont">Fecha de creación {{infocaso.create_at}}</span>

@@ -17,6 +17,7 @@ import {
   OrderserviceService,
   ProjectsService,
   SettingsService,
+  SidenavService,
   UserService,
   ZipService,
  } from './service.index';
@@ -43,6 +44,7 @@ import {
     OrderserviceService,
     ProjectsService,
     SettingsService,
+    SidenavService,
     UserService,
     ZipService
   ],

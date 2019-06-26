@@ -52,7 +52,8 @@ export class AddProjectCategorieComponent implements OnInit {
     }
   }
 
-  loadDataEstatus(total:number){
+
+  loadDataTotal(total:number){
     this.totalRegistros = total;    
   }
 

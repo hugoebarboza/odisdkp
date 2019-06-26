@@ -1,0 +1,244 @@
+<meta name="Description" content="Settings Cases">
+<!--CONTENT-->
+<div class="loading" *ngIf="!identity">
+    <app-loading></app-loading>  
+</div>
+        
+<div id="wrapper" *ngIf="identity">
+
+    <div id="page-content-wrapper" >
+        
+        <div class="container-fluid p-2">
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                <div class="p-2 "><a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'/support/'" ><i class="material-icons">keyboard_backspace</i></a></div>
+                <div class="p-2 "><h1 class="h4">{{title}}</h1></div>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="row animated fadeIn" *ngIf="!isLoading">
+                <div class="col-sm-12">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div>
+            </div>
+                          
+            <div class="row animated fadeIn" >
+                
+                <div class="col-12">
+    
+                    <div class="card">
+    
+                        <div class="card-body">
+    
+                            <div class="row">
+                                <div class="col-10"> 
+                                    <h3 class="card-title"><mat-icon>list_alt</mat-icon> Configuración </h3>
+                                </div>
+                            </div>
+    
+                            <div class="row">
+    
+                                <div *ngIf="departamento$"  class="col-12">
+                                    
+                                    <mat-accordion class="full-width">
+                                        
+                                        <mat-expansion-panel>
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                <button mat-icon-button ><mat-icon>add</mat-icon><span style="margin-left: 4px;">Agregar nuevo departamento</span></button>
+                                                </mat-panel-title>
+                                                <mat-panel-description>
+                                                
+                                                </mat-panel-description>
+                                            </mat-expansion-panel-header>
+                                            
+                                            <form *ngIf="forma" [formGroup]="forma" style="min-height: 200px;">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <h2 class="jeEmY">Nombre del departamento</h2>
+                                                        <input class="full-width" name="namedepto" formControlName="namedepto" class="form-control" required>
+                                                        <table>
+                                                            <tr>
+                                                                <td>
+                                                                    <h2 class="jeEmY">Nota de departamento</h2>
+                                                                </td>
+                                                                <td style=" width: 102px; padding-left: 20px;">
+                                                                    <h2 class="jeEmY">Día activación</h2>
+                                                                </td>
+                                                                <td style=" width: 102px; padding-left: 20px;">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    <textarea name="notedepto" formControlName="notedepto" class="form-control" required></textarea>
+                                                                </td>
+                                                                <td style=" width: 102px; padding-left: 20px;">
+                                                                    <input type="number" max="30" min="0" (keyup)="onKey($event.target.value)" name="daydepto" formControlName="daydepto" class="form-control" required>
+                                                                </td>
+                                                            <tr>
+                                                        </table>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div>
+                                                            <h2 class="jeEmY">Asingnar responsable (s)</h2>
+                                                            <ng-select name="responsable" 
+                                                                    formControlName="responsable"
+                                                                    required
+                                                                    class="full-width"
+                                                                    [items]="users$ | async"
+                                                                    [multiple]="true"
+                                                                    [clearable]="false" 
+                                                                    [closeOnSelect]="true"
+                                                                    [searchable]="true"
+                                                                    [loading]="userLoading"
+                                                                    [typeahead]="userinput"
+                                                                    bindLabel="email"
+                                                                    placeholder="Seleccione responsable">
+                                                            </ng-select>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                </div>
+                                                <div style="margin-top: 10px;">
+                                                    <button mat-raised-button color="primary" [disabled]="forma.invalid" (click)="addDepto()">
+                                                        Agregar           
+                                                    </button>
+                                                </div>
+                                            </form>
+
+                                        </mat-expansion-panel>
+                                        <mat-expansion-panel *ngFor="let departamento of departamento$ | async; let i = index">
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                <button mat-icon-button><mat-icon>domain</mat-icon><span style="margin-left: 4px;">{{departamento.name}}</span></button>
+                                                </mat-panel-title>
+                                                <mat-panel-description>
+                                                </mat-panel-description>
+                                            </mat-expansion-panel-header>
+                                            <div style="float: right;">
+                                                <button mat-icon-button color="warn" (click)="borrardepto(departamento)">
+                                                    <mat-icon matTooltip="Borrar departamento">close</mat-icon>                             
+                                                </button>
+                                            </div>
+                                            <div class="row">
+                                                
+                                                <div class="col-6">
+                                                    <h2 class="jeEmY">Responsable (s)</h2>
+                                                    <div class="fOqogj" *ngFor="let arrayresp of departamento.admins">
+                                                        <div class="SZsdL">
+                                                        <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                                                            <span>
+                                                            <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                                                            </span>
+                                                        </div>
+                                                        </div>
+                                                        <div class="fLcKLS">  {{arrayresp.email}}
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <h2 class="jeEmY">Nota de departamento</h2>
+                                                            </td>
+                                                            <td style=" width: 102px; padding-left: 20px;">
+                                                                <h2 class="jeEmY">Día activación</h2>
+                                                            </td>
+                                                            <td style=" width: 102px; padding-left: 20px;">
+                                                            </td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>
+                                                                <label *ngIf="i !== indexitem">{{departamento.note}}</label>
+                                                                <textarea class="form-control" [(ngModel)]="departamento.note_tem" *ngIf="i == indexitem"  required> {{departamento.note_tem}}</textarea>
+                                                            </td>
+                                                            <td style=" width: 102px; padding-left: 20px;">
+                                                                <label *ngIf="i !== indexitem">{{departamento.day}}</label>
+                                                                <input type="number" 
+                                                                maxlength="2" 
+                                                                min="0" 
+                                                                max="30" 
+                                                                required 
+                                                                mdInput 
+                                                                class="form-control"  [(ngModel)]="departamento.day_tem" *ngIf="i == indexitem">
+                                                            </td>
+                                                            <td style=" width: 102px; padding-left: 20px;">
+                                                                <button mat-icon-button color="primary" *ngIf="i != indexitem" (click)="startEdit(i)">
+                                                                    <mat-icon aria-label="Edit">edit</mat-icon>          
+                                                                </button>          
+                                                                <button mat-icon-button color="primary" *ngIf="departamento.note_tem.length > 1  && departamento.day_tem !== null &&  departamento.day_tem >= 0 &&  departamento.day_tem <= 30  && i == indexitem && editando" (click)="guardarNota(i, departamento)" >
+                                                                    <mat-icon aria-label="Edit">done</mat-icon>                            
+                                                                </button>
+                                                                <button mat-icon-button color="primary" *ngIf="i == indexitem && editando" (click)="close()" >
+                                                                    <mat-icon aria-label="Edit">close</mat-icon>                            
+                                                                </button>
+                                                            </td>
+                                                        <tr>
+                                                    </table>
+                                                </div>
+                                                <div class="col-6">
+                                                    <h2 class="jeEmY">Agregar Respondable
+                                                    <mat-slide-toggle
+                                                        style="margin-left: 20px;"
+                                                        [color]="warn"
+                                                        [checked]="departamento.checkedToggle"
+                                                        (change)="departamento.checkedToggle = !departamento.checkedToggle">
+                                                    </mat-slide-toggle>
+                                                    </h2>
+                                                    <ng-select *ngIf="departamento.checkedToggle"
+                                                            [items]="users$ | async"
+                                                            [multiple]="true"
+                                                            [clearable]="false" 
+                                                            [closeOnSelect]="true"
+                                                            [loading]="userLoading"
+                                                            [typeahead]="userinput"
+                                                            [virtualScroll]="true"
+                                                            bindLabel="email"
+                                                            [(ngModel)]="departamento.admins"
+                                                            class="full-width"
+                                                            >
+                                                        </ng-select>   
+                                                    <div class="float-right" style="margin-top: 4px;" *ngIf="departamento.checkedToggle">
+                                                        <button mat-stroked-button color="warn" (click)="departamento.checkedToggle = !departamento.checkedToggle"><mat-icon>close</mat-icon></button>
+                                                        <button mat-stroked-button color="primary" (click)="responsablesChanged(departamento);"><mat-icon>check</mat-icon></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <br>
+                                            <mat-divider></mat-divider>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <app-typesettings [id]="departamento.id"></app-typesettings>
+                                                </div>
+                                            </div>
+
+                                        </mat-expansion-panel>
+                                    </mat-accordion>
+                                            
+                                </div>
+                              
+                            </div>
+                            
+                        </div>
+    
+                    </div>
+    
+                </div>
+    
+            </div>
+        
+        </div>
+
+        <br>
+        <br>
+  
+
+    </div>
+        
+</div>
+  
+
+    

@@ -9,13 +9,19 @@
     <div id="page-content-wrapper" >
         
         <div class="container-fluid p-2">
-            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
-                <h1 class="h4">{{title}}</h1>
-                <div class="btn-toolbar mb-2 mb-md-0">
-                    <div class="btn-group mr-2">
-                    </div>
-                </div>
-            </div>
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                        <h1 class="h4">{{title}}</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group mr-2">
+                            </div>
+                        </div>
+                        <div class="p-2 flex-shrink-1 " *ngIf="identity && identity.role === 8">
+                            <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'" >
+                            <i class="material-icons"
+                              matTooltip="Configuración de soporte">settings</i>
+                            </a>
+                        </div>
+                </div>            
             <br>
 
             <div class="row animated fadeIn" *ngIf="!isLoading">
@@ -34,12 +40,12 @@
     
                             <div class="row">
                                 <div class="col-10"> 
-                                    <h3 class="card-title"><mat-icon>list_alt</mat-icon> Casos ({{datacount}})</h3>
+                                    <h3 class="card-title"><mat-icon>list_alt</mat-icon> Solicitudes ({{datacount}})</h3>
                                     <!--<div *ngFor="let blogPost of joined$ | async" > <p>{{blogPost}}</p><br><p>{{blogPost | json}}</p></div>-->
                                 </div>
                                 <div class="col-2" style="position: relative;">
                                     <div style="position: absolute; right: 20px; top: 0px;">
-                                        <button type="button" class="btn btn-primary btn-sm leftFloat" (click)="addNew()" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">add_circle_outline</mat-icon>Crear Caso</button>                      
+                                        <button type="button" class="btn btn-primary btn-sm leftFloat" (click)="addNew()" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">add_circle_outline</mat-icon>Nueva Solicitud</button>                      
                                     </div>
                                 </div>
                             </div>
@@ -130,7 +136,7 @@
                                 
                                 <!-- Position Column -->
                                 <ng-container matColumnDef="ncase">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> N° de Caso </th>
+                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> N° de Solicitud </th>
                                     <td mat-cell *matCellDef="let element"> {{element.ncase}} </td>
                                 </ng-container>
     
@@ -166,10 +172,24 @@
                                 
                                 <!-- Symbol Column -->
                                 <ng-container matColumnDef="create_at">
-                                    <th mat-header-cell *matHeaderCellDef mat-sort-header> Creado hace </th>
-                                    <td mat-cell *matCellDef="let element"> {{element.create_at | countTime}} </td>
-                                </ng-container>
-                                
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Creado el </th>
+                                        <td mat-cell *matCellDef="let element" matTooltip="Creado hace {{element.create_at | countTime}}"> {{element.create_at}} </td>
+                                    </ng-container>
+    
+                                    <!-- Symbol Column -->
+                                    <ng-container matColumnDef="countTime">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> T. Atención </th>
+                                        <td mat-cell *matCellDef="let element"> 
+                                            <app-viewordertimespent [timefrom]="element.create_at"  [timeuntil]="element.update_at"></app-viewordertimespent> 
+                                        </td>
+                                    </ng-container>
+    
+                                    <!-- Symbol Column -->
+                                    <ng-container matColumnDef="update_at">
+                                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Editado el</th>
+                                        <td mat-cell *matCellDef="let element"> {{element.update_at}} </td>
+                                    </ng-container>
+
                                 <!-- Symbol Column {{element.supportstatus.name}} -->
                                 <ng-container matColumnDef="supportstatus">
                                     <th mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </th>
@@ -207,14 +227,14 @@
                                         <div class="row" align="right">
     
                                             <button mat-icon-button color="warn" 
-                                            matTooltip="Eliminar caso." (click)="deleteItem(element.id)" *ngIf="userFirebase.uid === element.create_to || identity.role === 8"> <!-- -->
+                                            matTooltip="Eliminar Solicitud." (click)="deleteItem(element.id)" *ngIf="userFirebase.uid === element.create_to || identity.role === 8"> <!-- -->
                                                 <div>
                                                 <mat-icon aria-label="Delete">delete</mat-icon>
                                                 </div>
                                             </button>
                                     
                                             <button mat-icon-button color="primary"  (click)="abrirCaso(element)" 
-                                            matTooltip="Abrir caso.">
+                                            matTooltip="Abrir Solicitud.">
                                                 <div>
                                                 <mat-icon aria-label="launch">launch</mat-icon>
                                                 </div>

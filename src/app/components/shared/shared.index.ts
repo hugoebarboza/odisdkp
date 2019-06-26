@@ -9,3 +9,4 @@ export { MynavComponent } from './mynav/mynav.component';
 export { NotfoundComponent } from './notfound/notfound.component';
 export { ProgressSpinnerComponent } from './progress-spinner/progress-spinner.component';
 export { TagUserComponent } from './taguser/taguser.component';
+export { ViewOrderTimeSpentComponent } from '../../components/views/viewordertimespent/viewordertimespent.component';
