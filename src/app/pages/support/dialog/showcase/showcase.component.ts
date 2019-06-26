@@ -282,6 +282,7 @@ export class ShowcaseComponent implements OnInit {
       });
     }
 
+    this._afs.doc(this.supportcase + '/' + this.data.id).update({update_at: date});
     this._afs.doc(this.supportcase + '/' + this.data.id).update({etiquetados: arr})
     .then(function(docRef) {
        if (that.array_usersInfo && that.array_usersInfo.length > 0) {
@@ -412,6 +413,7 @@ export class ShowcaseComponent implements OnInit {
   ngChangeEstatus(value) {
    // console.log(value);
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    this._afs.doc(this.supportcase + '/' + this.data.id).update({update_at: date});
     this._afs.doc(this.supportcase + '/' + this.data.id).update({status_id: value._iddoc, status_desc: value.name, label: value.label});
     this._afs.collection(this.supportcase + '/' + this.data.id + '/activity').add({
       create_to: this.userFirebase.uid,
@@ -436,7 +438,7 @@ export class ShowcaseComponent implements OnInit {
     }
 
     const that = this;
-
+    this._afs.doc(this.supportcase + '/' + this.data.id).update({update_at: date});
     this._afs.collection(this.supportcase + '/' + this.data.id + '/comments').add({
       create_to: this.userFirebase.uid,
       create_at: date,

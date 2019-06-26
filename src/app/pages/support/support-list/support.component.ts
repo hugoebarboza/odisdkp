@@ -76,7 +76,8 @@ export class SupportComponent implements OnInit, OnDestroy  {
   public casosCollectionPagination: AngularFirestoreCollection<any>;
 
   // tslint:disable-next-line:max-line-length
-  displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'supportstatus', 'important', 'accions'];
+  //displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'supportstatus', 'important', 'accions'];
+  displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'countTime', 'update_at', 'supportstatus', 'important', 'accions'];
 
   constructor(
     private _afs: AngularFirestore,
@@ -470,12 +471,12 @@ export class SupportComponent implements OnInit, OnDestroy  {
                 this._afs.collection(this.supportcase + '/' + item + '/caseFiles').get().subscribe(
                   caseFiles => {
                     if (caseFiles.size > 0) {
-                      console.log(caseFiles);
+                      //console.log(caseFiles);
 
                       caseFiles.forEach((doc) => {
                         const cfiles = doc.data();
                         cfiles.id = doc.id;
-                        console.log(cfiles);
+                        //console.log(cfiles);
                         const storageRef = firebase.storage().ref();
                         storageRef.child(this.supportcase + '/' + item + '/caseFiles/' + cfiles.nombre).delete();
                         this._afs.doc(this.supportcase + '/' + item + '/caseFiles/' + cfiles.id).delete();

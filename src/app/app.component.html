@@ -18,8 +18,12 @@
                         <mat-divider></mat-divider>
                         <mat-list-item [routerLink]="['/support']" class="pointer" (click)="supportDrawer.toggle()">
                             <mat-icon mat-list-icon  class="color-matIcon" >list_alt</mat-icon>
-                            <h4 mat-line>Solicitudes</h4>
+                            <h4 mat-line>Mis Solicitudes</h4>
                         </mat-list-item>
+                        <mat-list-item [routerLink]="['/formview']" class="pointer" (click)="supportDrawer.toggle()">
+                            <mat-icon mat-list-icon  class="color-matIcon" >add_circle_outline</mat-icon>
+                            <h4 mat-line>Nueva Solicitud</h4>
+                        </mat-list-item>                        
                     </mat-list>
                 </div>
                 <div class="drawer-footer">

@@ -1,7 +1,7 @@
-import { Component, OnInit, Output, EventEmitter, Input, OnDestroy, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter, Input, OnDestroy, ViewChild } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
 import swal from 'sweetalert';
 
@@ -17,9 +17,19 @@ import { UserService, ProjectsService } from 'src/app/services/service.index';
   templateUrl: './constante-list.component.html',
   styleUrls: ['./constante-list.component.css']
 })
-export class ConstanteListComponent implements OnInit {
+export class ConstanteListComponent implements OnInit, OnDestroy {
+
+
+  @Input() id : number;
+  @Output() total: EventEmitter<number>;
+
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatSort, {static: false}) sort: MatSort;
+
 
   data: Constante;
+  displayedColumns: string[] = ['descripcion', 'order_by', 'status', 'actions'];
+  dataSource = new MatTableDataSource() ;
   editando: boolean = false;
   forma: FormGroup;
   datatype: Constante[] = [];
@@ -28,6 +38,8 @@ export class ConstanteListComponent implements OnInit {
   isLoadingSave: boolean = false;
   isLoadingDelete: boolean = false;
   label:number = 0;
+  pageSize = 5;
+  resultsLength:number = 0;
   status: string;
   subscription: Subscription;
   show:boolean = false;
@@ -35,8 +47,6 @@ export class ConstanteListComponent implements OnInit {
   token: any;
 
 
-  @Input() id : number;
-  @Output() total: EventEmitter<number>;
 
   constructor(    
     public _userService: UserService,
@@ -61,6 +71,15 @@ export class ConstanteListComponent implements OnInit {
     }  
   }
 
+
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }  
+
   cargar(){
     this.isLoading = true;
     //console.log(this.id);
@@ -73,7 +92,13 @@ export class ConstanteListComponent implements OnInit {
                 this.isLoading = false;
                 return;
               }
-              if(response.status == 'success'){   
+              if(response.status == 'success'){
+                //console.log(response.datos.constante);
+                this.dataSource = new MatTableDataSource(response.datos.constante);
+                this.dataSource.paginator = this.paginator;
+                this.dataSource.sort = this.sort; 
+                this.resultsLength = this.datatype.length;
+                //console.log(this.resultsLength);
                 this.datatype = response.datos.constante;
                 this.total.emit(this.datatype.length);
                 this.isLoading = false;
@@ -109,27 +134,6 @@ export class ConstanteListComponent implements OnInit {
   }  
 
 
-  buscar( termino: string ) {
-    if ( termino.length <= 0 || !termino) {
-      this.cargar();
-      return;
-    }
-
-    this.isLoading = true;
-
-    this._userService.searchUser(this.token.token, this.id, this.page, termino )
-            .subscribe( (resp: any) => {              
-              this.datatype = resp.datos.data;
-              this.isLoading = false;
-              this.status = 'success';
-            },
-            error => {
-              this.status = 'error';
-              this.isLoading = false;
-              console.log(<any>error);
-            }
-            );
-  }
 
   onSubmit(){
   

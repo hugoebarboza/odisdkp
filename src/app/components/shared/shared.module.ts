@@ -22,7 +22,8 @@ import {
     MynavComponent,
     NotfoundComponent,
     ProgressSpinnerComponent,
-    TagUserComponent
+    TagUserComponent,
+    ViewOrderTimeSpentComponent,
    } from './shared.index';
 
 // Pipes
@@ -45,6 +46,7 @@ import { PipesModule } from '../../pipes/pipes.module';
     ],
     declarations: [
         DropdownNotificationComponent,
+        DropdownNotificationComponent,
         EditServiceComponent,
         FooterComponent,
         FootermainComponent,
@@ -55,7 +57,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         NotfoundComponent,
         ProgressSpinnerComponent,
         TagUserComponent,
-        DropdownNotificationComponent
+        ViewOrderTimeSpentComponent,
     ],
     exports: [
         DropdownNotificationComponent,
@@ -68,7 +70,8 @@ import { PipesModule } from '../../pipes/pipes.module';
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent,
-        TagUserComponent
+        TagUserComponent,
+        ViewOrderTimeSpentComponent
     ],
     entryComponents: [
         EditServiceComponent,

@@ -81,7 +81,7 @@
   <div class="form" appearance="legacy" class="margin">
     <mat-form-field>
      <mat-select class="form-control" placeholder="Region" [(ngModel)]="data.id_region" name="id_region"  (selectionChange)="onSelectRegion(data.id_region)">
-      <mat-option [value]=0>None</mat-option>
+      <mat-option [value]=0>No informa</mat-option>
      <mat-option *ngFor="let regiones of region" [value]="regiones.id">
       {{regiones.region_name}}
     </mat-option>
@@ -91,7 +91,7 @@
 
     <mat-form-field appearance="legacy" class="margin">
      <mat-select class="form-control" placeholder="Provincia" [(ngModel)]="data.id_provincia" name="id_provincia"  (selectionChange)="onSelectProvincia(data.id_provincia)">
-      <mat-option *ngIf='data.id_region == 0'  [value]=0>None</mat-option>
+      <mat-option *ngIf='data.id_region == 0'  [value]=0>No informa</mat-option>
      <mat-option *ngFor="let provincia of resultsprovincias" [value]="provincia.id">
       {{provincia.province_name}}
     </mat-option>
@@ -103,7 +103,7 @@
 
     <mat-form-field appearance="legacy" class="margin">
      <mat-select class="form-control" placeholder="Comuna" [(ngModel)]="data.id_comuna" name="id_comuna"  (selectionChange)="onSelectComuna($event)">
-      <mat-option *ngIf='data.id_provincia == 0' [value]=0>None</mat-option>
+      <mat-option *ngIf='data.id_provincia == 0' [value]=0>No informa</mat-option>
      <mat-option *ngFor="let comuna of resultscomunas" [value]="comuna.id">
       {{comuna.commune_name}}
     </mat-option>
@@ -141,7 +141,7 @@
       </mat-panel-description>
     </mat-expansion-panel-header>
 
-  <div class="form">
+  <div class="form" *ngIf="project_type == 0">
     <mat-form-field class="margin">
       <input matInput type="text" placeholder="Medidor" name="medidor" [(ngModel)]="data.medidor" class="form-control" >
     </mat-form-field>
@@ -153,7 +153,7 @@
 
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Tarifa" [(ngModel)]="data.id_tarifa" name="id_tarifa" >
-      <mat-option *ngIf='data.id_tarifa == 0' [value]=0>None</mat-option>
+     <mat-option [value]=0>No informa</mat-option>
      <mat-option *ngFor="let tarifa of tarifas" [value]="tarifa.id">
       {{tarifa.descripcion}}
     </mat-option>
@@ -162,7 +162,7 @@
 
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Constante" [(ngModel)]="data.id_constante" name="id_constante" >
-      <mat-option *ngIf='data.id_constante == 0' [value]=0>None</mat-option>
+     <mat-option [value]=0>No informa</mat-option>
      <mat-option *ngFor="let constante of constantes" [value]="constante.id">
       {{constante.descripcion}}
     </mat-option>
@@ -170,10 +170,10 @@
     </mat-form-field>
 </div>
 
-<div class="form">
+<div class="form" *ngIf="project_type == 0">
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Giro" [(ngModel)]="data.id_giro" name="id_giro" >
-      <mat-option *ngIf='data.id_giro == 0' [value]=0>None</mat-option>
+     <mat-option  [value]=0>No informa</mat-option>
      <mat-option *ngFor="let giro of giros" [value]="giro.id">
       {{giro.descripcion}}
     </mat-option>
@@ -182,7 +182,7 @@
 
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Sector" [(ngModel)]="data.id_sector" name="id_sector" >
-      <mat-option *ngIf='data.id_sector == 0' [value]=0>None</mat-option>
+     <mat-option [value]=0>No informa</mat-option>
      <mat-option *ngFor="let sector of sectores" [value]="sector.id">
       {{sector.descripcion}}
     </mat-option>
@@ -192,7 +192,7 @@
 
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Zona" [(ngModel)]="data.id_zona" name="id_zona" >
-      <mat-option *ngIf='data.id_zona == 0' [value]=0>None</mat-option>
+     <mat-option [value]=0>No informa</mat-option>
      <mat-option *ngFor="let zona of zonas" [value]="zona.id">
       {{zona.descripcion}}
     </mat-option>
@@ -202,7 +202,7 @@
 
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Mercado" [(ngModel)]="data.id_mercado" name="id_mercado" >
-      <mat-option *ngIf='data.id_mercado == 0' [value]=0>None</mat-option>
+     <mat-option [value]=0>No informa</mat-option>
      <mat-option *ngFor="let mercado of mercados" [value]="mercado.id">
       {{mercado.descripcion}}
     </mat-option>
@@ -211,10 +211,10 @@
   </div>
 
 
-<div class="form">
+<div class="form" *ngIf="project_type == 1">
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Marca Vehículo" [(ngModel)]="data.marca_id" name="marca_id" (selectionChange)="onSelectMarca(data.marca_id)">
-      <mat-option *ngIf='data.marca_id == 0' [value]=0>None</mat-option>
+     <mat-option  [value]=0>No informa</mat-option>
      <mat-option *ngFor="let marca of marcas" [value]="marca.id">
       {{marca.title}}
     </mat-option>
@@ -223,7 +223,7 @@
 
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Modelo Vehículo" [(ngModel)]="data.modelo_id" name="modelo_id" >
-      <mat-option *ngIf='data.modelo_id == 0' [value]=0>None</mat-option>
+     <mat-option  [value]=0>No informa</mat-option>
      <mat-option *ngFor="let modelo of modelos" [value]="modelo.id">
       {{modelo.description}}
     </mat-option>
@@ -232,7 +232,7 @@
 
     <mat-form-field class="margin">
      <mat-select class="form-control" placeholder="Color Vehículo" [(ngModel)]="data.color_id" name="color_id" >
-      <mat-option *ngIf='data.color_id == 0' [value]=0>None</mat-option>
+     <mat-option  [value]=0>No informa</mat-option>
      <mat-option *ngFor="let color of colors" [value]="color.id">
       {{color.title}}
     </mat-option>
@@ -246,7 +246,7 @@
 
 
 
-<div class="form">
+<div class="form" *ngIf="project_type == 1">
     <mat-form-field class="margin">
       <input matInput type="text" placeholder="Patio Vehículo" name="patio" [(ngModel)]="data.patio" class="form-control" >
     </mat-form-field>

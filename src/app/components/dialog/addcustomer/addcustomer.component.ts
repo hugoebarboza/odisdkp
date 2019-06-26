@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -56,6 +55,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
   public modelos: Modelo;
   public colors: Color;
 
+  project_type: number;
   public project: string;
   project_id: number;
 
@@ -74,8 +74,6 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,            
     private _userService: UserService,
     private _orderService: OrderserviceService,
     private _regionService: CountriesService,
@@ -133,6 +131,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                         this.category_id = this.services['projects_categories_customers']['id'];
                         this.project = this.services['project']['project_name'];
                         this.project_id = this.services['project']['id'];
+                        this.project_type = response.datos.project.project_type;
                       }
                     });   
                     

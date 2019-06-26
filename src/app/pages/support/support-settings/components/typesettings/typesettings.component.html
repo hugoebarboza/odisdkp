@@ -1,0 +1,119 @@
+
+<div class="row">
+  <div class="col-5">
+    <div class="container-fluid p-2">
+      <div class="row animated fadeIn" *ngIf="isLoading">
+        <div class="col-sm-12">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+      </div>
+      <!--
+      <div class="row animated fadeIn" *ngIf="!isLoading">
+          <div class="col-sm-12">
+              <div class="alert alert-danger">
+                  No se encontraron registros que coincidan con su búsqueda. 
+                  <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+              </div>
+          </div>
+      </div>-->
+      <h2 class="jeEmY">Tipo de solicitud</h2>
+      <div class="row animated fadeIn" *ngIf="!isLoading">
+        <div class="col-12">
+              <div class="alert alert-danger" *ngIf="tipo$ == null">
+                        No se encontraron registros que coincidan con su búsqueda. 
+              </div>
+  
+            <div>
+                    
+              <table class="table table-hover" >
+                  <thead>
+                      <tr>                       
+                          <th>Descripción</th> 
+                          <th>Estatus</th> 
+                          <th>Categorias</th>                                
+                          <th></th>
+                      </tr>
+                  </thead>
+  
+                  <tbody>
+                      <tr *ngFor="let tipo of tipo$ | async; let i = index" [class.active]="i == selectedRow">
+                        <td>
+                          <label *ngIf="i !== indexitem || isLoadingDelete">{{tipo.name}}</label>
+                          <input type="text" class="form-control" id="{{tipo.id}}" [(ngModel)]="tipo.name" *ngIf="i == indexitem && !isLoadingDelete"  required>
+                        </td>
+                        <td>
+                          <button mat-stroked-button color="primary" (click)="showcategory = false; showstatus = true; datasend = tipo; selectedRow = i; " >Ver Estatus</button>
+                        </td>
+                        <td>
+                          <button mat-stroked-button color="accent" (click)="showcategory = true; showstatus = false; datasend = tipo; selectedRow = i; ">Ver Categorias</button>
+                        </td>
+                        <td>
+                          <button mat-icon-button color="primary" *ngIf="tipo.id.length > 1 && i != indexitem" (click)="selectedRow = i; startEdit(i)">
+                          <mat-icon aria-label="Edit">edit</mat-icon>          
+                          </button>            
+  
+                          <button mat-icon-button color="primary" *ngIf="tipo.name.trim().length > 0 && i == indexitem && editando && !isLoadingDelete" (click)="selectedRow = i; guardartipo(i, tipo)" >
+                          <mat-icon aria-label="Edit">done</mat-icon>                            
+                          </button>
+  
+                          <button mat-icon-button color="primary" *ngIf="tipo.name.trim().length > 0 && i == indexitem && editando && !isLoadingDelete" (click)="selectedRow = i; close()" >
+                              <mat-icon aria-label="Edit">close</mat-icon>                            
+                          </button>
+  
+                          <button mat-icon-button color="primary" *ngIf="isLoadingSave && i == indexitem && !editando">
+                          <app-progress-spinner></app-progress-spinner>
+                          </button>
+  
+                          <button mat-icon-button color="warn" (click)="selectedRow = i; datasend = null; borrartipo(i, tipo)" *ngIf="i != indexitem">
+                              <mat-icon aria-label="Edit">delete</mat-icon>                             
+                          </button>
+  
+                          <button mat-icon-button color="primary" *ngIf="isLoadingDelete && i == indexitem && !editando">
+                          <app-progress-spinner></app-progress-spinner>
+                          </button>
+  
+                        </td>
+                      </tr>
+                  </tbody>
+              </table>
+  
+            </div>
+  
+            <form ngNativeValidate #registerForm="ngForm" class="form p-t-20" >
+              <table class="table table-hover">                    
+                  <tbody>
+                      <tr >
+                        <td class="w10">
+                            <button mat-icon-button (click)="show = !show" >
+                                <mat-icon class="material-icons md-20-color">add</mat-icon><span *ngIf="!show">Agregar</span>
+                            </button>                            
+                        </td>
+                        <td>
+                          <input type="text" name="name" class="form-control"  placeholder="Descripción Tipo de solicitud" [(ngModel)]="newtype" *ngIf="show" required>
+                        </td>
+                        <td>
+                            <button  mat-icon-button color="primary" *ngIf="show && !isLoadingSave && !isLoadingDelete && newtype.length > 1" (click)="addType(registerForm.value)" >
+                                <mat-icon aria-label="Edit">done</mat-icon>                            
+                            </button>  
+                            <button  mat-icon-button color="primary" *ngIf="show && !isLoadingSave && !isLoadingDelete" (click)="show = !show" >
+                              <mat-icon aria-label="Close">close</mat-icon>
+                            </button>       
+                        </td>
+                      </tr>
+                  </tbody>                    
+              </table>
+            </form>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-7">
+      <div *ngIf="showcategory && !showstatus && datasend">
+          <app-categorysettings [data]="datasend"></app-categorysettings>
+      </div>
+      <div *ngIf="showstatus && !showcategory && datasend">
+          <app-statussettings [data]="datasend"></app-statussettings>
+      </div>
+  </div>
+</div>

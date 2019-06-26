@@ -4,6 +4,7 @@ import { CommonModule } from '@angular/common';
 
 //COMPONENTS
 import { DashboardComponent } from './dashboard-list/dashboard.component';
+import { ProjectListComponent } from './components/project-list/project-list.component';
 
 //PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
@@ -22,6 +23,7 @@ import { ServiceModule } from 'src/app/services/service.module';
 import { MessagingService } from 'src/app/services/service.index';
 
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -31,7 +33,7 @@ import { MessagingService } from 'src/app/services/service.index';
     ServiceModule,
     SharedModule
   ],
-  declarations: [DashboardComponent],
+  declarations: [DashboardComponent, ProjectListComponent],
   providers: [
     MessagingService,
     { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },

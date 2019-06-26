@@ -63,9 +63,14 @@
             
           <button mat-raised-button color="primary" class="margin-left" [disabled]="forma.invalid" (click)="confirmAdd()">
               Enviar           
-          </button>
+          </button>          
 
         </div>
+
+        <div *ngIf="nota">
+            <h2 class="jeEmY">*Importante</h2>
+            <span class="smallfontRed">{{nota}}</span>
+        </div>        
     
       </div>
     
@@ -82,7 +87,7 @@
           </ng-select>
         </div>
 
-        <h2 class="jeEmY" *ngIf="arrayResponsables && arrayResponsables.length > 0">Responsable</h2>
+        <h2 class="jeEmY" *ngIf="arrayResponsables && arrayResponsables.length > 0">Responsable(s)</h2>
         <div class="sc-cUDvuO fOqogj" *ngFor="let arrayresp of arrayResponsables">
           <div class="sc-jQGbeF SZsdL">
             <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
@@ -117,12 +122,34 @@
         
         <div *ngIf="categoria$">
           <h2 class="jeEmY">Categoria</h2>
-          <ng-select  [items]="categoria$ | async"
+          <ng-select  
+                      (change)="selectChangeCategoria($event)"
+                      [items]="categoria$ | async"
                       bindLabel="name"
                       class="example-full-width"
                       name="categoria" formControlName="categoria" required>
           </ng-select>
         </div>
+
+        <div *ngIf="categoriaPlazo">
+            <h2 class="jeEmY">Plazo</h2>
+            <span class="smallfont">{{categoriaPlazo}}</span>
+          </div>
+          <div *ngIf="(categoriaDocumentos$ | async) as catdoc">
+            <div class="fLcKLS pointer" (click)="showlist= !showlist" *ngIf="catdoc.length > 0">  
+                <span class="important-medio">
+                    Ver documentos requeridos
+                </span>
+            </div>
+            <ul class="list-group" *ngIf="showlist">
+              <li class="list-group-item" *ngFor="let document of catdoc" >
+                  <a mat-icon-button href="{{document.link}}" target="_blank"  color="primary" *ngIf="document.link">
+                      {{document.name}} <mat-icon>get_app</mat-icon>
+                  </a>
+                  <span *ngIf="!document.link">{{document.name}}</span>
+              </li>
+            </ul>
+          </div>
         <!----
         <div>
           <h2 class="jeEmY">Etiquetar</h2>

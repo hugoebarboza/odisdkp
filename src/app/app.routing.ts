@@ -50,6 +50,12 @@ const appRoute: Routes = [
 		data: { preload: true, delay: false }
 	},
 	{
+        path: 'formview',
+        canLoad: [ LoginGuardGuard ],
+        loadChildren: './pages/customform/customform.module#CustomformModule',
+        data: { preload: true, delay: false }
+    },	
+	{
 		path: 'notification',
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/notification/notification.module#NotificationModule',

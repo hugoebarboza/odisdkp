@@ -33,16 +33,19 @@ import { CountriesService, CustomerService, OrderserviceService, UserService } f
   styleUrls: ['./editcustomer.component.css']
 })
 export class EditcustomerComponent implements OnInit {
-  public title: string;
-  public identity;
-  public token;  
-  public termino: string;
+  
+  public identity:any;
+  public provincia: Provincia;
+  project_type: number;
   public results: Object = [];
   public resultsprovincias: Object = [];
-  public resultscomunas: Object = [];   
-  private services: Service[] = [];
+  public resultscomunas: Object = [];
   public region: Region;
-  public provincia: Provincia;
+  private services: Service[] = [];
+  public title: string;
+  public token:any;  
+  public termino: string;
+  
   public comuna: Comuna;
   public customer: Customer[] = [];
 
@@ -194,6 +197,8 @@ export class EditcustomerComponent implements OnInit {
                         this.category_id = this.services['projects_categories_customers']['id'];
                         this.project = this.services['project']['project_name'];
                         this.project_id = this.services['project']['id'];
+                        this.project_type = response.datos.project.project_type;
+                        //console.log(this.project_type);
                         this.loadData(this.project_id);
                       }
                     });   

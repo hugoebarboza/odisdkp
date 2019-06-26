@@ -13,7 +13,7 @@ export class Color  {
 	
 	constructor(	
 	public id:number,
-	public descripcion:string,
+	public title:string,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
@@ -185,6 +185,7 @@ export class Giro  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
+	public order_by:number,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
@@ -198,6 +199,7 @@ export class Marca  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
+	public order_by:number,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
@@ -209,6 +211,7 @@ export class Mercado  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
+	public order_by:number,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
@@ -220,6 +223,7 @@ export class Modelo  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
+	public order_by:number,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
@@ -364,6 +368,7 @@ export class Sector  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
+	public order_by:number,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
@@ -488,6 +493,7 @@ export class Tarifa  {
 	constructor(	
 	public id:any,
 	public descripcion:string,
+	public order_by:number,
 	public status:any,	
 	public create_at:any,	
 	public update_at:any
@@ -566,6 +572,7 @@ export class Zona  {
 	constructor(	
 	public id:number,
 	public descripcion:string,
+	public order_by:number,
 	public status:number,	
 	public create_at:any,	
 	public update_at:any
