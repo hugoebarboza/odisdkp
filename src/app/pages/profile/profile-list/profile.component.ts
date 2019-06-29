@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 import { Proyecto, User } from '../../../models/types';
 
 //SERVICES
-import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+import { SettingsService, UserService } from '../../../services/service.index';
 
 
 

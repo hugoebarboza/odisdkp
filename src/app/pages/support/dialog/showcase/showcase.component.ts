@@ -492,7 +492,7 @@ export class ShowcaseComponent implements OnInit {
       return;
     }
     // tslint:disable-next-line:max-line-length
-    const body = content + ' incidencia #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', con Descripción: ' + this.datacase.description + ' y Prioridad: ' + this.datacase.important;
+    const body = content + ' solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', con Descripción: ' + this.datacase.description + ' y Prioridad: ' + this.datacase.important;
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (data && this.userFirebase.uid) {
@@ -500,7 +500,7 @@ export class ShowcaseComponent implements OnInit {
         const notification = {
           userId: this.userFirebase.uid,
           userIdTo: data.uid,
-          title: 'Etiquetado en incidencia',
+          title: 'Etiquetado en solicitud',
           message: body,
           create_at: created,
           status: '1',
@@ -526,9 +526,9 @@ export class ShowcaseComponent implements OnInit {
           const msg = {
             toEmail: data.email,
             fromTo: this.userFirebase.email,
-            subject: 'OCA GLOBAL - Etiquetado en Incidencia #' + this.datacase.ncase,
+            subject: 'OCA GLOBAL - Etiquetado en solicitud #' + this.datacase.ncase,
             // tslint:disable-next-line:max-line-length
-            message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Ha sido etiquetado en incidencia, enviada a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+            message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Ha sido etiquetado en solicitud, enviada a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
           };
 
           this._cdf.httpEmail(this.token.token, msg).subscribe(
@@ -556,7 +556,7 @@ export class ShowcaseComponent implements OnInit {
       //console.log(element);
       // console.log(data);
       // tslint:disable-next-line:max-line-length
-      const body = content + ' incidencia #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
+      const body = content + ' solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
       const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   
       if (data && this.userFirebase.uid) {
@@ -564,7 +564,7 @@ export class ShowcaseComponent implements OnInit {
           const notification = {
             userId: this.userFirebase.uid,
             userIdTo: data.uid,
-            title: 'Comentario en incidencia',
+            title: 'Comentario en solicitud',
             message: body,
             create_at: created,
             status: '1',
@@ -590,9 +590,9 @@ export class ShowcaseComponent implements OnInit {
             const msg = {
               toEmail: data.email,
               fromTo: this.userFirebase.email,
-              subject: 'OCA GLOBAL - Comentario en Incidencia #' + this.datacase.ncase,
+              subject: 'OCA GLOBAL - Comentario en solicitud #' + this.datacase.ncase,
               // tslint:disable-next-line:max-line-length
-              message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Se agregó comentario en incidencia a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+              message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Se agregó comentario en solicitud a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
             };
   
             this._cdf.httpEmail(this.token.token, msg).subscribe(

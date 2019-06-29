@@ -14,6 +14,9 @@ import { LogoutComponent } from './components/dialog/logout/logout.component';
 import { PagesComponent } from './pages/pages.component';
 import { RegisterComponent } from './register/register.component';
 
+//DIRECTIVE
+import { DirectiveModule } from 'src/app/directives/directive.module';
+
 //MATERIAL
 import {MaterialModule} from './material-module';
 
@@ -41,7 +44,6 @@ import { AuthService } from './services/firebase/auth.service';
 import { RouterModule } from '@angular/router';
 
 //UTILITYS
-//import { AngularEditorModule } from '@kolkov/angular-editor';
 //import { AngularSplitModule } from 'angular-split';
 //import { LoadingBarModule } from '@ngx-loading-bar/core';
 import { RECAPTCHA_SETTINGS, RecaptchaModule,  RecaptchaSettings } from 'ng-recaptcha';
@@ -78,7 +80,7 @@ import { MyInterceptor } from './providers/interceptor/my.interceptor';
 //import { httpInterceptorProviders } from './http-interceptors/index';
 
 //REDUX
-import { contadorReducer } from './contador.reducer';
+//import { contadorReducer } from './contador.reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from './app.reducers';
@@ -106,9 +108,10 @@ registerLocaleData(localeEs);
     AngularFireDatabaseModule,
     AngularFireStorageModule,
     //AngularSplitModule.forRoot(),
-    BrowserModule,    
+    BrowserModule.withServerTransition({ appId: 'serverApp' }),    
     BrowserAnimationsModule,    
     CommonModule,
+    DirectiveModule,
     FormsModule,    
     HttpModule,
     HttpClientModule,

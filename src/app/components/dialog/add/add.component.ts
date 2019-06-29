@@ -35,6 +35,8 @@ interface ObjectServiceType {
 export class AddComponent implements OnInit, OnDestroy {
 
   public title: string;
+  active:boolean = false;
+  isvalid:boolean = true;
   destinatario = [];
   created: FormControl;
   public identity: any;
@@ -155,6 +157,8 @@ export class AddComponent implements OnInit, OnDestroy {
   onGenerarOrder() {
   const order =this.identity.sub+''+this.day+''+this.month+''+this.year+''+this.hour+''+this.minutes+''+this.seconds+''+Math.round(Math.random()*100+1);
   this.data.order_number = order;
+  let isWhitespace = order.trim().length === 0;
+  this.isvalid = !isWhitespace;
   }
 
 
@@ -330,12 +334,19 @@ export class AddComponent implements OnInit, OnDestroy {
 
    }
 
+   public noWhitespace(termino: string){
+    let isWhitespace = termino.trim().length === 0;
+    this.isvalid = !isWhitespace;
+  }
+
    public searchCustomer(termino: string){          
      this.termino = termino.trim();
      if(this.termino.length > 0){       
        this.isLoading = true;
+       this.active = true;
      }else{
        this.isLoading = false;
+       this.active = false;
      }
      if(this.termino.length > 1){       
 

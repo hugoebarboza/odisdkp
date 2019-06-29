@@ -49,6 +49,7 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   datehasta: FormControl;
   datasourceLength: number = 0;
   dataSource: MatTableDataSource<Order[]>;
+  es:any;
   filteredRegion: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
   filteredInspectorMulti: ReplaySubject<Inspector[]> = new ReplaySubject<Inspector[]>(1);
   filteredRegionMulti: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
@@ -73,7 +74,7 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   pageSizeOptions: number[] = [15, 30, 100, 200];
   pageSize:number = 15;
   paramset: string = '';
-  paramvalue: number = 0;
+  paramvalue: any;
   project_id: number;
   region = new Array();
   role:number;
@@ -212,6 +213,7 @@ selectedColumnnEstatus = {
       action5: new FormControl ({value: '', disabled: true}, ),
       estatus: new FormControl ({value: 0, disabled: true}, [Validators.required, Validators.minLength(1)]),
       asignado: new FormControl ({value: 0, disabled: true}, [Validators.required, Validators.minLength(1)]),
+      vencimiento: new FormControl ({value: '0000-00-00 00:00:00', disabled: true}, [Validators.required]),
     });
 
 
@@ -243,6 +245,7 @@ selectedColumnnEstatus = {
       action5: new FormControl ({value: '', disabled: false}, ),
       estatus: new FormControl ({value: 0, disabled: false}, [Validators.required, Validators.minLength(1)]),
       asignado: new FormControl ({value: 0, disabled: false}, [Validators.required, Validators.minLength(1)]),
+      vencimiento: new FormControl ({value: '0000-00-00 00:00:00', disabled: false}, [Validators.required]),
 
     });
   }
@@ -278,10 +281,16 @@ selectedColumnnEstatus = {
               this.paramset = 'assigned_to';
               this.paramvalue = this.form5.value.asignado;
             }
+            if(this.form5.value.action5 == 3 && this.form5.value.vencimiento){
+              this.paramset = 'vencimiento_date';
+              this.paramvalue = this.form5.value.vencimiento;          
+            }
+
           }
 
+
                     
-          if(this.selection.selected && this.id && this.paramset && this.paramvalue > 0){
+          if(this.selection.selected && this.id && this.paramset && this.paramvalue){
             this.isLoadingResults = true;
             this.dataService.updateMass(this.token.token, this.selection.selected, this.id, this.paramset, this.paramvalue)
             .subscribe( response => {
@@ -333,12 +342,25 @@ selectedColumnnEstatus = {
       'action5': {value: '', disabled: true},
       'estatus': {value: 0, disabled: true},
       'asignado': {value: 0, disabled: true},
+      'vencimiento': {value: '0000-00-00 00:00:00', disabled: true},
     });
 
   }
 
 
   ngOnInit() {
+
+    this.es = {
+      firstDayOfWeek: 1,
+      dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
+      dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
+      dayNamesMin: [ "D","L","M","X","J","V","S" ],
+      monthNames: [ "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre" ],
+      monthNamesShort: [ "ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic" ],
+      today: 'Hoy',
+      clear: 'Borrar'
+  }
+
     //console.log('on init');
     //VALORES POR DEFECTO DE FILTRO AVANZADO
     

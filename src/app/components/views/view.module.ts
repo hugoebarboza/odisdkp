@@ -8,7 +8,6 @@ import { FileUploadComponent } from '../../components/file-upload/file-upload.co
 
 
 //MODULES
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
@@ -20,7 +19,6 @@ import {
 
 @NgModule({
   imports: [
-    AngularEditorModule,
     CommonModule,
     FormsModule,
     MaterialModule,

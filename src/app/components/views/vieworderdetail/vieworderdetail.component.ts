@@ -1,8 +1,6 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl  } from '@angular/forms';
 
-//import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
 import { Observable } from 'rxjs';
 
@@ -61,6 +59,7 @@ export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
         {id:5, name:'Tiempos Atención', description:'Tiempo de OT', expand: true}
   ];
 
+  /*
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -84,7 +83,7 @@ export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
         tag: "h1",
       },
     ]
-  };  
+  };  */
 
 	row: any = {expand: false};
 

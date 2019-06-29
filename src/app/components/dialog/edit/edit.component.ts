@@ -38,6 +38,8 @@ import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 
   ],
 })
 export class EditComponent implements OnInit, OnDestroy {
+
+  active: boolean = true;
   public title: string;
   public identity;
   created: FormControl;
@@ -227,7 +229,7 @@ export class EditComponent implements OnInit, OnDestroy {
       return;
     }
   
-    const body = 'Edición de orden en Proyecto: '+this.project+', Servicio: '+this.service_name+', con Orden N.: ' + this.data.order_number;
+    const body = 'Edición de orden en Proyecto: '+this.project+', Servicio: '+this.service_name+', con Orden N.: ' + this.data.order_number + ' y, Observación: ' + this.data.observation;
     
     if(this.destinatario.length > 0 && this.userFirebase.uid){
       for (let d of data) {
@@ -421,7 +423,14 @@ export class EditComponent implements OnInit, OnDestroy {
 
 
    public searchCustomer(termino: string){
-     this.termino = termino;     
+
+    this.termino = termino.trim();
+    if(this.termino.length > 0){       
+      this.active = true;
+    }else{
+      this.active = false;
+    }
+
      if(this.termino.length > 2){
        this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
         response => {
@@ -446,7 +455,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
     if(data.length > 0){
       this.destinatario = data;
-      console.log(this.destinatario);
+      //console.log(this.destinatario);
     }
   }
 

@@ -473,7 +473,7 @@ export class FormviewComponent implements OnInit {
 
         if (that.userFirebase && docRef) {
           // console.log(that.userFirebase);
-          that.sendCdfUser(that.userFirebase, docRef, 'Nueva incidencia de servicio');
+          that.sendCdfUser(that.userFirebase, docRef, 'Nueva solicitud de servicio');
         }
 
         that._router.navigate(['support']);
@@ -494,7 +494,7 @@ export class FormviewComponent implements OnInit {
     // console.log(data);
 
     // tslint:disable-next-line:max-line-length
-    const body = content + ' nueva incidencia #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    const body = content + ' nueva solicitud #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (data && this.userFirebase.uid) {
@@ -502,7 +502,7 @@ export class FormviewComponent implements OnInit {
         const notification = {
           userId: this.userFirebase.uid,
           userIdTo: data.uid,
-          title: 'Nueva incidencia',
+          title: 'Nueva solicitud',
           message: body,
           create_at: created,
           status: '1',
@@ -528,9 +528,9 @@ export class FormviewComponent implements OnInit {
           const msg = {
             toEmail: data.email,
             fromTo: this.userFirebase.email,
-            subject: 'OCA GLOBAL - Nueva incidencia #' + this.ncase,
+            subject: 'OCA GLOBAL - Nueva solicitud #' + this.ncase,
             // tslint:disable-next-line:max-line-length
-            message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Nueva incidencia, enviada a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+            message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Nueva solicitud, enviada a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
           };
 
           this._cdf.httpEmail(this.token.token, msg).subscribe(
@@ -559,14 +559,14 @@ export class FormviewComponent implements OnInit {
     // console.log(data);
 
     // tslint:disable-next-line:max-line-length
-    const body = content + '. El número de ticket es #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    const body = content + '. El número de solicitud es #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (data && this.userFirebase.uid) {
         const notification = {
           userId: this.userFirebase.uid,
           userIdTo: this.userFirebase.uid,
-          title: 'Nueva incidencia',
+          title: 'Nueva solicitud',
           message: body,
           create_at: created,
           status: '1',
@@ -592,9 +592,9 @@ export class FormviewComponent implements OnInit {
           const msg = {
             toEmail: this.userFirebase.email,
             fromTo: this.userFirebase.email,
-            subject: 'OCA GLOBAL - Nueva incidencia #' + this.ncase,
+            subject: 'OCA GLOBAL - Nueva solicitud #' + this.ncase,
             // tslint:disable-next-line:max-line-length
-            message: `<strong>Hola ${this.identity.name} ${this.identity.surname}. <hr> <div>&nbsp;</div> Gracias por enviar su incidencia de servicio a las ${created}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+            message: `<strong>Hola ${this.identity.name} ${this.identity.surname}. <hr> <div>&nbsp;</div> Gracias por enviar su solicitud de servicio a las ${created}</strong><div>&nbsp;</div> <div> ${body}</div>`,
           };
 
           this._cdf.httpEmail(this.token.token, msg).subscribe(
