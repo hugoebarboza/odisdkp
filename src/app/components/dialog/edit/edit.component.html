@@ -500,8 +500,7 @@
 
 <br>
 <div mat-dialog-actions>      
-  <button mat-button color="primary" [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmEdit(formControl)" mat-raised-button color="primary" class="btnsave">Actualizar</button>
-
+  <button mat-button color="primary" [type]="submit" [disabled]="!formControl.valid || !active" [mat-dialog-close]="1" (click)="confirmEdit(formControl)" mat-raised-button color="primary" class="btnsave">Actualizar</button>
   <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
 </div>
 

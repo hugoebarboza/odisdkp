@@ -180,7 +180,10 @@
                                     <mat-icon class="material-icons md-14-color" >comment</mat-icon>
                                     Comentar
                                   </button>
-                                  <angular-editor [(ngModel)]="orderContent" [config]="editorConfig" *ngIf="toggleContent"></angular-editor>
+
+                                  <mat-form-field appearance="outline" class="full-width" *ngIf="toggleContent">
+                                      <textarea matInput #inputstate  placeholder="Observación" [(ngModel)]="orderContent" name="observation" maxlength="177"  ></textarea>
+                                  </mat-form-field>                                  
                                   <div class="button-row p-2" *ngIf="toggleContent">
                                       <button mat-raised-button color="primary" (click)="addComment(orderContent)">Guardar</button>                                    
                                       <button mat-raised-button (click)="toggle()">Cancelar</button>

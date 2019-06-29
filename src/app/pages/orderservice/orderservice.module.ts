@@ -101,7 +101,6 @@ import { OrderServiceRoutingModule } from './orderservice.routes';
 
 //UTILITY
 import 'hammerjs';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import { AngularSplitModule } from 'angular-split';
 import { CalendarModule } from 'primeng/calendar';
 import { FlexLayoutModule } from '@angular/flex-layout';
@@ -143,7 +142,6 @@ registerLocaleData(localeEs);
 
 @NgModule({
   imports: [
-    AngularEditorModule,
     AgmDirectionModule,
     AngularSplitModule.forRoot(),
     AgmCoreModule.forRoot({

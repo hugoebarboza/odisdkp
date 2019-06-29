@@ -1,8 +1,10 @@
 <meta name="Description" content="Component">
 <div class="app">
 <mat-toolbar role="heading" color="primary">
-     <h3>{{title}} </h3>
-     <span class="mat-spacer"></span>
+     <h3>
+       {{title}} 
+      </h3>
+     <span class="mat-spacer"></span>     
      <button mat-icon-button (click)="onNoClick()" tabindex="-1">
      <mat-icon class="mat-icon">close</mat-icon>       
      </button>
@@ -26,7 +28,9 @@
           <div class="col-8">  
               <div class="form">
                   <mat-form-field color="accent">
-                     <input matInput #input  placeholder="Num. Orden" [(ngModel)]="data.order_number" name="order_number" required  #order_number="ngModel">
+                     <input matInput #input  placeholder="Num. Orden" [(ngModel)]="data.order_number" name="order_number" required  #order_number="ngModel" 
+                     (keyup)="noWhitespace(data.order_number)"
+                     >
                      <button mat-button *ngIf="data.order_number" matSuffix mat-icon-button aria-label="Clear" (click)="data.order_number=''">
                          <mat-icon>close</mat-icon>
                        </button>
@@ -385,8 +389,9 @@
   </form>
 </div>
 <br>
+
 <div mat-dialog-actions>
-    <button mat-button color="primary" [type]="submit" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmAdd(formControl)" mat-raised-button color="primary" class="btnsave">Guardar</button>
+    <button mat-button color="primary" [type]="submit" [disabled]="!formControl.valid || !active || !isvalid " [mat-dialog-close]="1" (click)="confirmAdd(formControl)" mat-raised-button color="primary" class="btnsave">Guardar</button>
     <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cerrar</button>      
 </div>
 

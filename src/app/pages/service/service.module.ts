@@ -22,13 +22,11 @@ import { AddProjectTypeComponent } from './dialog/add-project-type/add-project-t
 import { AddProjectCategorieComponent } from './dialog/add-project-categorie/add-project-categorie.component';
 import { CsvServiceComponent } from './dialog/csvservice/csvservice.component';
 import { SettingServiceComponent } from './components/settingservice/settingservice.component';
-//import { EditServiceComponent } from './dialog/editservice/editservice.component';
 import { DeleteServiceComponent } from './dialog/deleteservice/deleteservice.component';
 import { UserComponent } from './dialog/user/user.component';
 
 //MODULES
 import { AngularSplitModule } from 'angular-split';
-import { AngularEditorModule } from '@kolkov/angular-editor';
 import { CalendarModule } from 'primeng/calendar';
 import { MaterialModule } from '../../material-module';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
@@ -54,7 +52,6 @@ import { ServiceRoutingModule } from './service.routing';
 @NgModule({
   imports: [
     AngularSplitModule.forRoot(),
-    AngularEditorModule,
     CalendarModule,
     CommonModule,
     FormsModule,

@@ -25,7 +25,6 @@ export class HeaderInterceptor implements HttpInterceptor {
   intercept (req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
 		const authToken = this.token.token;
-    console.log('viene');
 		const authReq = req.clone({
 			headers: new HttpHeaders({
 				'Content-Type':  'application/x-www-form-urlencoded',
@@ -33,7 +32,7 @@ export class HeaderInterceptor implements HttpInterceptor {
 			})
 		});
 	
-		console.log('Intercepted HTTP call', authReq);
+		//console.log('Intercepted HTTP call', authReq);
 	
 		return next.handle(authReq);
 	}

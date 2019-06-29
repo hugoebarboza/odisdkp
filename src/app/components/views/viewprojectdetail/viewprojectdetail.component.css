@@ -93,3 +93,7 @@
     max-width: 100%;
     position: relative;
   }
+
+  .border{
+    border-radius: 4px;
+  }

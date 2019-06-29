@@ -112,16 +112,18 @@
         <div class="row" *ngIf="!isRateLimitReached && !isLoadingResults">
           <div class="col-6"  *ngFor="let model of models; let i = index">
             
-                  <div class="container-fluid mb-2 bg-light text-dark" (click)="enableDiv(i)">
-                  <button mat-icon-button  id="bt" *ngIf="!model.expand">
+            
+
+                  <div class="container-fluid mb-2 bg-light text-dark border" (click)="enableDiv(i)" *ngIf="!model.expand">
+                  <button mat-icon-button  id="bt" >
                   <mat-icon class="material-icons md-14-color" >keyboard_arrow_right</mat-icon>
                   {{model.name}}
                   </button>
                   </div>
 
                   
-                  <div class="container-fluid" class="mb-2 bg-light text-dark" (click)="enableDiv(i)">
-                  <button mat-icon-button  id="bt" *ngIf="model.expand">
+                  <div class="container-fluid mb-2 bg-light text-dark border" (click)="enableDiv(i)" *ngIf="model.expand">
+                  <button mat-icon-button  id="bt" >
                   <mat-icon class="material-icons md-14-color">keyboard_arrow_down</mat-icon>
                   {{model.name}}
                   </button>
@@ -152,7 +154,7 @@
                   </div>
 
 
-
+                      
                       <div class="card bg-light mb-3" *ngIf="model.id === 0 && model.expand && service_detail && service_detail.length > 0">
                           <div class="card-body">
                             <h5 class="card-title">N° OT</h5>
@@ -173,7 +175,8 @@
                             <mat-chip-list><mat-chip color="primary" selected *ngIf="service_data.status == 1">ACTIVO</mat-chip></mat-chip-list>
                             <mat-chip-list><mat-chip color="accent" selected *ngIf="service_data.status == 0">INACTIVO</mat-chip></mat-chip-list>
                           </div>
-                        </div>
+                      </div>
+
 
 
                       <div class="card bg-light mb-3" *ngIf="model.id === 1 && model.expand && service_detail && service_detail.length > 0">

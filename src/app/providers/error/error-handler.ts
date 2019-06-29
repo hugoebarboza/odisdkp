@@ -1,9 +1,14 @@
 import { ErrorHandler, Injectable } from '@angular/core';
 import { HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
 
 @Injectable()
 export class ErrorsHandler implements ErrorHandler {
+
+    public errorMessage: string = "500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!";
+
+    constructor(private _snackBar: MatSnackBar) { }
 
     handleError(error: Error | HttpErrorResponse) {
         if (!navigator.onLine) {
@@ -17,6 +22,7 @@ export class ErrorsHandler implements ErrorHandler {
               } else {
                   // Handle Http Error (4xx, 5xx, ect.)
                   if(error.status == 500){
+                    this._snackBar.open(this.errorMessage, '', {duration:3000, });                  
                     //Se debe redireccionar a pagina 500
                   }
                   console.warn(error);      

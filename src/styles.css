@@ -80,3 +80,23 @@ mark {
 .w150{
   width: 150px;
 }
+._1fH43YlMAnPCr8RI9qH98P {
+  position: relative;
+  overflow: hidden;
+  border-radius: 50%;
+}
+.M_s6agPZfWvz2OH8iRoGk {
+  position: absolute;
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  text-align: center;
+  display: inline-block;
+  height: 100%;
+  width: 100%;
+  color: #fff;
+  font-family: SegoeUI-SemiLight-final,"Segoe UI Semilight",SegoeUI-Regular-final,"Segoe UI","Segoe UI Web (West European)",Segoe,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
+  line-height: 195%;
+}
+
+

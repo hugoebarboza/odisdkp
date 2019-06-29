@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { FormControl  } from '@angular/forms';
 import { Subscription, Observable } from 'rxjs';
 
@@ -8,7 +7,6 @@ declare var swal: any;
 //FIREBASE
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-//import { AngularFirestoreCollection } from '@angular/fire/firestore';
 
 
 //DIALOG
@@ -106,6 +104,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   userFirebase: UserFirebase;
   
 
+  /*
   editorConfig: AngularEditorConfig = {
     editable: true,
     spellcheck: true,
@@ -129,7 +128,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
         tag: "h1",
       },
     ]
-  };  
+  };*/  
 
 
   models: any[] = [

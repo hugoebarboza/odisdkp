@@ -42,7 +42,7 @@
 
         <div class="login-container">
           <mat-form-field >
-            <input ngModel matInput placeholder="Password" [type]="hide ? 'password' : 'text'" name="password"  min="4" required>
+            <input preventCutCopyPaste ngModel matInput placeholder="Password" [type]="hide ? 'password' : 'text'" name="password"  min="4" required >
             <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
             <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
           </mat-form-field>
@@ -82,15 +82,8 @@
             <div class="col-sm-12 text-center">
                 <a class="nav-link" [routerLink]="['/register']"> <b>Crear cuenta</b></a>
             </div>
-            </div>
-  
+          </div>
           
-            <small class="d-block text-center mt-3">
-              <p>Por seguridad <code>no comparta sus credenciales</code> con ningún usuario.</p>          
-              <p >&copy; {{year}}</p>
-            </small>
-
-
         </form>
       </mat-card-content>
       
@@ -109,3 +102,5 @@
           </div>
       </div>
     </main>
+
+    

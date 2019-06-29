@@ -42,6 +42,7 @@
                       </div>
                       <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || form5.value.estatus == 0" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 1">Procesar</button>
                       <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || form5.value.asignado == 0" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 2">Procesar</button>
+                      <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || !form5.value.vencimiento" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 3">Procesar</button>
                       <div class="btn-grid">
                       <button type="submit" (click)="cancel()" class="btn btn-secondary btn-sm" [disabled]="selection.isEmpty()" *ngIf="form3.value.action3 == 3">Cancelar</button>
                       </div>
@@ -707,10 +708,28 @@
                                                               </mat-option>
                                                             </mat-select>
                                                           </mat-form-field>                                                      
-                                                    </td>
-                                                
-                                                
+                                                    </td>                                                                                          
                                             </tr>
+
+                                            <tr >                                                                                                
+                                                <td class="cell-type-collapsed">
+                                                    <input type="radio" formControlName="action5" value="3" >
+                                                </td>
+                                                <td>
+                                                    <label for="bulk.edit.operation.name_id">Cambiar Fecha</label>
+                                                </td>
+                                                <td>
+                                                  <label for="bulk.edit.operation.name_id">Editar fecha de vencimiento de órdenes seleccionadas (yyyy-mm-dd hh:mm:ss)</label>
+                                                </td>
+                                                <td *ngIf="form5.value.action5 == 3">
+                                                    <div class="form">
+                                                        <mat-form-field appearance="outline" class="middle-width" color="accent">
+                                                        <input matInput type="datetime" placeholder="Fecha Vencimiento" formControlName="vencimiento" name="vencimiento" >
+                                                        </mat-form-field>
+                                                    </div>                                                  
+                                                </td>                                                                                          
+                                        </tr>
+
 
 
                                         </tbody>

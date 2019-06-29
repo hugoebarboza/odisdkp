@@ -32,7 +32,13 @@
                         <div class="card">
                             <div class="card-body">                                                                                                
                                   <div class="d-flex ">
-                                    <div class="p-2 w-100 "><h6 class="card-subtitle mb-2 text-muted" *ngIf="identity && !isLoading"><mat-icon>account_circle</mat-icon> {{identity.name + ' ' + identity.surname}} </h6></div>
+                                    <div class="p-2 w-100 ">
+                                            <div class="_1fH43YlMAnPCr8RI9qH98P" style="width: 44px; height: 44px;">
+                                            <div id="meInitialsButton" class="M_s6agPZfWvz2OH8iRoGk" style="background-color: #DE473C; font-size: 22px;">
+                                                <span>{{identity.name | slice:0:1}}{{identity.surname | slice:0:1}}</span>
+                                            </div>
+                                            </div>                                        
+                                    </div>
                                     <div class="p-2 flex-shrink-1 "><a class="nav-link pointer" href="javascript:;" (click)="toggle()" >Editar</a></div>
                                   </div>
 
@@ -97,7 +103,13 @@
                           <div class="card">
                               <div class="card-body">                                                                                                
                                     <div class="d-flex ">
-                                            <div class="p-2 w-100 "><h6 class="card-subtitle mb-2 text-muted" *ngIf="identity && !isLoading"><mat-icon>account_circle</mat-icon> {{identity.name + ' ' + identity.surname}} </h6></div>
+                                            <div class="p-2 w-100 ">
+                                                    <div class="_1fH43YlMAnPCr8RI9qH98P" style="width: 44px; height: 44px;">
+                                                            <div id="meInitialsButton" class="M_s6agPZfWvz2OH8iRoGk" style="background-color: #DE473C; font-size: 22px;">
+                                                                <span>{{identity.name | slice:0:1}}{{identity.surname | slice:0:1}}</span>
+                                                            </div>
+                                                    </div>                                                        
+                                            </div>
                                             <div class="p-2 flex-shrink-1 "><a class="nav-link pointer" href="javascript:;" (click)="toggle()" >Cancelar</a></div>
                                     </div>
         
