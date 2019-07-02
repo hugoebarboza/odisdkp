@@ -491,10 +491,8 @@ export class FormviewComponent implements OnInit {
       return;
     }
 
-    // console.log(data);
-
-    // tslint:disable-next-line:max-line-length
-    const body = content + ' nueva solicitud #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    const body = content + '. El número de solicitud es #' + this.ncase + '. Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    //const body = content + ' nueva solicitud #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (data && this.userFirebase.uid) {
@@ -525,6 +523,23 @@ export class FormviewComponent implements OnInit {
             }
           );
 
+
+          this._cdf.httpEmailToSupport(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Nueva solicitud #' + this.ncase, created, body).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              // console.log(<any>error);
+              }
+            );
+
+
+          /*
           const msg = {
             toEmail: data.email,
             fromTo: this.userFirebase.email,
@@ -545,7 +560,7 @@ export class FormviewComponent implements OnInit {
               error => {
               // console.log(<any>error);
               }
-            );
+            );*/
     }
 
   }
@@ -559,7 +574,8 @@ export class FormviewComponent implements OnInit {
     // console.log(data);
 
     // tslint:disable-next-line:max-line-length
-    const body = content + '. El número de solicitud es #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    const body = 'El número de solicitud es #' + this.ncase + '. Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    //const body = content + '. El número de solicitud es #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (data && this.userFirebase.uid) {
@@ -589,6 +605,22 @@ export class FormviewComponent implements OnInit {
             }
           );
 
+
+          this._cdf.httpEmailFromOrigin(this.token.token, this.userFirebase.email, this.userFirebase.email, 'OCA GLOBAL - Nueva solicitud #' + this.ncase, created, body).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              // console.log(<any>error);
+              }
+          );
+
+          /*
           const msg = {
             toEmail: this.userFirebase.email,
             fromTo: this.userFirebase.email,
@@ -609,7 +641,7 @@ export class FormviewComponent implements OnInit {
               error => {
               // console.log(<any>error);
               }
-            );
+            );*/
     }
 
   }  

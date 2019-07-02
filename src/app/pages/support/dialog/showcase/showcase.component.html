@@ -140,7 +140,7 @@
                     
                     <div *ngFor="let adjuntos of comentarios.adjuntos">
               
-                        <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'image/png' || adjuntos.type == 'image/jpg'">
+                        <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'image/png' || adjuntos.type == 'image/jpg' || adjuntos.type == 'image/jpeg'">
                             <mat-icon aria-label="launch">image</mat-icon>
                         </a>
               

@@ -428,6 +428,7 @@ export class ShowcaseComponent implements OnInit {
 
   addComentario() {
 
+
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     this.CARPETA_ARCHIVOS = this.supportcase + '/';
@@ -465,7 +466,7 @@ export class ShowcaseComponent implements OnInit {
           that._afs.doc('users/' + that.datacase.create_to).get().subscribe(
             res => {
               if (res.exists) {
-                  that.sendCdfUser(res.data(), docRef, 'Comentario en ', comment);
+                  that.sendCdfUserOrigin(res.data(), docRef, 'Comentario en ', comment);
                } 
             }
           );          
@@ -485,6 +486,8 @@ export class ShowcaseComponent implements OnInit {
     .catch(function(error) {
         console.error('Error adding document: ', error);
     });
+
+
   }
 
   sendCdfTag(data, element, content) {
@@ -556,7 +559,7 @@ export class ShowcaseComponent implements OnInit {
       //console.log(element);
       // console.log(data);
       // tslint:disable-next-line:max-line-length
-      const body = content + ' solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
+      const body = 'Comentario en solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
       const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   
       if (data && this.userFirebase.uid) {
@@ -587,15 +590,8 @@ export class ShowcaseComponent implements OnInit {
               }
             );
   
-            const msg = {
-              toEmail: data.email,
-              fromTo: this.userFirebase.email,
-              subject: 'OCA GLOBAL - Comentario en solicitud #' + this.datacase.ncase,
-              // tslint:disable-next-line:max-line-length
-              message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Se agregó comentario en solicitud a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
-            };
-  
-            this._cdf.httpEmail(this.token.token, msg).subscribe(
+
+            this._cdf.httpEmailCommentToSupport(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario en solicitud #' + this.datacase.ncase, created, body).subscribe(
               response => {
                 if (!response) {
                 return false;
@@ -608,10 +604,120 @@ export class ShowcaseComponent implements OnInit {
                 // console.log(<any>error);
                 }
               );
+
+
+
+            /*
+            const msg = {
+              toEmail: data.email,
+              fromTo: this.userFirebase.email,
+              subject: 'OCA GLOBAL - Comentario en solicitud #' + this.datacase.ncase,
+              // tslint:disable-next-line:max-line-length
+              message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Se agregó comentario en solicitud a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+            };*/
+  
+
+            /*
+            this._cdf.httpEmail(this.token.token, msg).subscribe(
+              response => {
+                if (!response) {
+                return false;
+                }
+                if (response.status === 200) {
+                  // console.log(response);
+                }
+              },
+                error => {
+                // console.log(<any>error);
+                }
+              );*/
         }
   
       }    
 
+
+
+      sendCdfUserOrigin(data, element, content, comment) {
+        if (!data) {
+          return;
+        }
+  
+        //console.log(element);
+        // console.log(data);
+        // tslint:disable-next-line:max-line-length
+        const body =  'Solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', con Descripción: ' + this.datacase.description + ' y Prioridad: ' + this.datacase.important;
+        const bodycomment = 'Comentario en solicitud #' + this.datacase.ncase + ', y Comentario: ' + comment ;
+        const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    
+        if (data && this.userFirebase.uid) {
+    
+            const notification = {
+              userId: this.userFirebase.uid,
+              userIdTo: data.uid,
+              title: 'Comentario en solicitud',
+              message: body,
+              create_at: created,
+              status: '1',
+              idUx: element.id,
+              descriptionidUx: 'cases',
+              routeidUx: `${this.supportcase}`
+            };
+    
+            this._cdf.fcmsend(this.token.token, notification).subscribe(
+              response => {
+                if (!response) {
+                return false;
+                }
+                if (response.status === 200) {
+                  // console.log(response);
+                }
+              },
+                error => {
+                console.log(<any>error);
+                }
+              );
+    
+
+
+              this._cdf.httpEmailCommentFromOrigin(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario en solicitud #' + this.datacase.ncase, this.datacase.create_at, created, body, bodycomment).subscribe(
+                response => {
+                  if (!response) {
+                  return false;
+                  }
+                  if (response.status === 200) {
+                    // console.log(response);
+                  }
+                },
+                  error => {
+                  // console.log(<any>error);
+                  }
+                );
+
+              /*
+              const msg = {
+                toEmail: data.email,
+                fromTo: this.userFirebase.email,
+                subject: 'OCA GLOBAL - Comentario en solicitud #' + this.datacase.ncase,
+                // tslint:disable-next-line:max-line-length
+                message: `<strong>Hola ${data.name} ${data.surname}. <hr> <div>&nbsp;</div> Se agregó comentario en solicitud a las ${created} por ${this.userFirebase.email}</strong><div>&nbsp;</div> <div> ${body}</div>`,
+              };
+    
+              this._cdf.httpEmail(this.token.token, msg).subscribe(
+                response => {
+                  if (!response) {
+                  return false;
+                  }
+                  if (response.status === 200) {
+                    // console.log(response);
+                  }
+                },
+                  error => {
+                  // console.log(<any>error);
+                  }
+                );*/
+          }
+    
+        }          
 
 }
 

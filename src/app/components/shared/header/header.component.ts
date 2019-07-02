@@ -27,7 +27,7 @@ import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
 import { ResetAction } from 'src/app/contador.actions';
 import { SetUserAction } from 'src/app/stores/auth/auth.actions';
-import { SetNotificationAction, ResetNotificationAction } from '../../../stores/notification/notification.actions';
+//import { SetNotificationAction, ResetNotificationAction } from '../../../stores/notification/notification.actions';
 
 
 //SERVICES
@@ -56,7 +56,7 @@ export class HeaderComponent {
   userid: any;
 
   getnotifications$: Observable<any>;
-  private notificationsCollection: AngularFirestoreCollection<any>;
+  //private notificationsCollection: AngularFirestoreCollection<any>;
   
 
   notificationsRef: AngularFirestoreCollection<any>;
