@@ -531,6 +531,24 @@ export class AddcaseComponent implements OnInit {
             }
           );
 
+
+
+          this._cdf.httpEmailToSupport(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Nueva solicitud #' + this.ncase, created, body).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              // console.log(<any>error);
+              }
+            );
+
+            
+          /*
           const msg = {
             toEmail: data.email,
             fromTo: this.userFirebase.email,
@@ -627,21 +645,10 @@ export class AddcaseComponent implements OnInit {
             </html>
             `,
 
-          };
+          };*/
 
-          this._cdf.httpEmail(this.token.token, msg).subscribe(
-            response => {
-              if (!response) {
-              return false;
-              }
-              if (response.status === 200) {
-                // console.log(response);
-              }
-            },
-              error => {
-              // console.log(<any>error);
-              }
-            );
+
+
     }
 
   }
@@ -685,11 +692,26 @@ export class AddcaseComponent implements OnInit {
             }
           );
 
+
+          this._cdf.httpEmailFromOrigin(this.token.token, this.userFirebase.email, this.userFirebase.email, 'OCA GLOBAL - Nueva solicitud #' + this.ncase, created, body).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              // console.log(<any>error);
+              }
+            );
+
+          /*
           const msg = {
             toEmail: this.userFirebase.email,
             fromTo: this.userFirebase.email,
             subject: 'OCA GLOBAL - Nueva solicitud #' + this.ncase,
-            //message: `<strong>Hola ${this.identity.name} ${this.identity.surname}. <hr> <div>&nbsp;</div> Gracias por enviar su solicitud de servicio a las ${created}</strong><div>&nbsp;</div> <div> ${body}</div>`,
             message: `
             <!DOCTYPE html>
             <html>
@@ -788,21 +810,9 @@ export class AddcaseComponent implements OnInit {
             </body>
             </html>
             `,            
-          };
+          };*/
 
-          this._cdf.httpEmail(this.token.token, msg).subscribe(
-            response => {
-              if (!response) {
-              return false;
-              }
-              if (response.status === 200) {
-                // console.log(response);
-              }
-            },
-              error => {
-              // console.log(<any>error);
-              }
-            );
+
     }
 
   }  

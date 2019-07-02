@@ -9,7 +9,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "prod": "node --max-old-space-size=8192 ./node_modules/@angular/cli/bin/ng build --prod",
-    "fix-memory-limit": "cross-env LIMIT=8192 increase-memory-limit"
+    "fix-memory-limit": "cross-env LIMIT=8192 increase-memory-limit",
+    "analyze": "webpack-bundle-analyzer dist/odisdkp/stats.json"
   },
   "private": true,
   "dependencies": {
@@ -34,7 +35,7 @@
     "@firebase/firestore": "^1.4.3",
     "@firebase/messaging": "^0.4.3",
     "@ng-bootstrap/ng-bootstrap": "^4.2.1",
-    "@ng-select/ng-select": "^2.20.2",
+    "@ng-select/ng-select": "^2.20.3",
     "@ngrx/store": "^8.0.1",
     "@ngrx/store-devtools": "^8.0.1",
     "@ngx-loading-bar/core": "^4.2.0",
@@ -67,7 +68,7 @@
     "ng-recaptcha": "^4.3.0",
     "ng2-search-filter": "^0.5.1",
     "ng5-slider": "^1.2.4",
-    "ngx-easy-table": "^10.1.0",
+    "ngx-easy-table": "^10.1.1",
     "ngx-markdown": "^8.0.2",
     "ngx-mat-select-search": "^1.7.6",
     "ngx-toastr": "^10.0.4",
