@@ -1,3 +1,235 @@
-<p>
-  service-type-list works!
-</p>
+<div class="container-fluid p-2">
+
+  <div class="row animated fadeIn" *ngIf="isLoading">
+      <div class="col-sm-12">
+        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+      </div>
+    </div>
+
+    <div class="row animated fadeIn" *ngIf="!isLoading">
+      <div class="col-12">    
+            <div class="animated fadeIn" *ngIf="isLoading">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+
+           <div class="alert alert-danger" *ngIf="datatype.length == 0">
+                      No se encontraron registros.
+           </div>
+        
+          <div *ngIf="datatype.length > 0">
+
+              <mat-form-field class="full-width">
+                  <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+              </mat-form-field>
+
+              <div>
+                  <table mat-table [dataSource]="dataSource" matSort >
+
+                      <!-- ID Column -->
+                      <ng-container matColumnDef="descripcion">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción </th>
+                        <td mat-cell *matCellDef="let row; let i = index"> 
+                          <div *ngIf="i !== indexitem || isLoadingDelete">{{row.name}}</div>
+                          <input type="text" class="form-control" id="{{row.name}}" [(ngModel)]="row.name" *ngIf="i == indexitem && !isLoadingDelete" required>
+                        </td>
+                      </ng-container>
+                  
+                      <!-- Progress Column -->
+                      <ng-container matColumnDef="shortname">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Siglas </th>
+                        <td mat-cell *matCellDef="let row; let i = index"> 
+                          <div *ngIf="i !== indexitem || isLoadingDelete">{{row.shortname}}</div>
+                          <input type="text" class="form-control"  id="{{row.shortname}}" [(ngModel)]="row.shortname" *ngIf="i == indexitem && !isLoadingDelete" required>
+                        </td>
+                      </ng-container>
+
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="ndocumento">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> N° Documento </th>
+                        <td mat-cell *matCellDef="let row; let i = index">
+                          <div *ngIf="i !== indexitem || isLoadingDelete">
+                            <div *ngIf="i !== indexitem || isLoadingDelete">{{row.ndocumento}}</div>                        
+                          </div>
+                          <input type="text" class="form-control" id="{{row.ndocumento}}" [(ngModel)]="row.ndocumento" *ngIf="i == indexitem && !isLoadingDelete">
+                        </td>
+                      </ng-container>
+
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="ddocumento">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Descripción documento </th>
+                        <td mat-cell *matCellDef="let row; let i = index">
+                          <div *ngIf="i !== indexitem || isLoadingDelete">
+                            <div *ngIf="i !== indexitem || isLoadingDelete">{{row.ddocumento}}</div>                        
+                          </div>
+                          <input type="text" class="form-control" id="{{row.ddocumento}}" [(ngModel)]="row.ddocumento" *ngIf="i == indexitem && !isLoadingDelete">
+                        </td>
+                      </ng-container>
+
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="observation">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Observación </th>
+                        <td mat-cell *matCellDef="let row; let i = index">
+                          <div *ngIf="i !== indexitem || isLoadingDelete">
+                            <div *ngIf="i !== indexitem || isLoadingDelete">{{row.observation}}</div>                        
+                          </div>
+                          <input type="text" class="form-control" id="{{row.observation}}" [(ngModel)]="row.observation" *ngIf="i == indexitem && !isLoadingDelete">
+                        </td>
+                      </ng-container>
+
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="status">
+                          <th mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </th>
+                          <td mat-cell *matCellDef="let row; let i = index">
+                            <div *ngIf="i !== indexitem || isLoadingDelete">
+                              <div *ngIf="i !== indexitem || isLoadingDelete">{{row.status}}</div>                        
+                            </div>
+                            <select [(ngModel)]="row.status" name="label" class="form-control" *ngIf="i == indexitem && !isLoadingDelete" required>
+                              <option value="">Seleccione</option>
+                              <option value="1">Activo</option>
+                              <option value="0">Desactivo</option>
+                          </select>
+                          </td>
+                        </ng-container>
+
+                      <!-- Name Column -->
+                      <ng-container matColumnDef="sign">
+                        <th mat-header-cell *matHeaderCellDef mat-sort-header> Firma </th>
+                        <td mat-cell *matCellDef="let row; let i = index">
+                          <div *ngIf="i !== indexitem || isLoadingDelete">
+                            <div *ngIf="i !== indexitem || isLoadingDelete">{{row.sign}}</div>                        
+                          </div>
+                          <select [(ngModel)]="row.sign" name="label" class="form-control" *ngIf="i == indexitem && !isLoadingDelete" required>
+                            <option value="">Seleccione</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Desactivo</option>
+                        </select>
+                        </td>
+                      </ng-container>
+                  
+                      <!-- Color Column -->
+                      <ng-container matColumnDef="actions">
+                        <th mat-header-cell *matHeaderCellDef >  </th>
+                        <td mat-cell *matCellDef="let row; let i = index"> 
+                            <button mat-icon-button color="primary" *ngIf="row.name.length > 0 && i != indexitem" (click)="edit(i)">
+                            <mat-icon aria-label="Edit">edit</mat-icon>
+                            </button>            
+      
+                            <button mat-icon-button color="primary" *ngIf="row.name.trim().length > 0  && row.shortname.trim().length > 0  && row.sign !== '' && row.status !== '' && i == indexitem && editando && !isLoadingDelete" (click)="save(i, row)" >
+                            <mat-icon aria-label="Edit">done</mat-icon>                            
+                            </button>
+
+                            <button mat-icon-button color="primary" *ngIf="row.name.length > 0 && i == indexitem && editando && !isLoadingDelete" (click)="close()" >
+                                <mat-icon aria-label="Edit">close</mat-icon>                            
+                            </button>
+
+                            <button mat-icon-button color="primary" *ngIf="isLoadingSave && i == indexitem && !editando">
+                            <app-progress-spinner ></app-progress-spinner>
+                            </button>
+
+                            <button mat-icon-button color="warn" (click)="delete(i, row)" *ngIf="i != indexitem">
+                                <mat-icon aria-label="Edit" >delete</mat-icon>                             
+                            </button>
+
+                            <button mat-icon-button color="primary" *ngIf="isLoadingDelete && i == indexitem && !editando">
+                            <app-progress-spinner ></app-progress-spinner>
+                            </button>
+                        </td>
+                      </ng-container>
+                  
+                      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                      <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;">                    
+                      </tr>
+                    </table>
+    
+              </div>
+
+          </div>
+
+          <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="form p-t-20" >
+              <table class="table" *ngIf="_userService.isRole(7)">                    
+                  <tbody>
+                      <tr >
+                        <td class="w10">
+                            <button mat-icon-button (click)="toggle()" >
+                                <mat-icon class="material-icons md-20-color">add</mat-icon> <span *ngIf="!show">Agregar</span>
+                            </button>                            
+                        </td>
+                        <td>
+                          <input type="text" name="name" class="form-control" placeholder="Descripción" formControlName="name"  *ngIf="show" required>
+                        </td>
+                        <td>
+                            <input type="text" name="shortname" class="form-control" placeholder="Siglas" formControlName="shortname" *ngIf="show" required>
+                        </td>
+                        <td>
+                          <input type="text" name="ndocumento" class="form-control" placeholder="N° Documento" formControlName="ndocumento" *ngIf="show">
+                        </td>
+                        <td>
+                          <input type="text" name="ddocumento" class="form-control" placeholder="Descripción documento" formControlName="ddocumento" *ngIf="show">
+                        </td>
+                        <td>
+                          <input type="text" name="observation" class="form-control" placeholder="Observación" formControlName="observation" *ngIf="show">
+                        </td>
+                        <td>
+                          <select name="status" class="form-control" formControlName="status"  *ngIf="show">
+                            <option value="">Seleccione</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Desactivo</option>
+                          </select>
+                        </td>
+                        <td>
+                          <select name="sign" class="form-control" formControlName="sign"  *ngIf="show">
+                            <option value="">Seleccione</option>
+                            <option value="1">Activo</option>
+                            <option value="0">Desactivo</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <tr *ngIf="show">
+                        <td class="w10">
+                        </td>
+                        <td colspan=7> 
+                          <div class="row">
+                              <div class="col-md-6">
+                                <h2 class="jeEmY">Asignar formulario existente
+                                  <mat-slide-toggle
+                                      name="checkedToggle" formControlName="checkedToggle"
+                                      style="margin-left: 20px;"
+                                      [color]="warn"
+                                      [checked]="checkedToggle"
+                                      (change)="checkedToggle = !checkedToggle">
+                                  </mat-slide-toggle>
+                                </h2>
+                              </div>
+                              <div class="col-md-6">
+                                <div *ngIf="checkedToggle && allFormularios.length > 0">
+                                  <h2 class="jeEmY">Seleccione Formularios</h2>
+                                  <ng-select  name="formulario" class="form-control" formControlName="formulario"
+                                              [items]="allFormularios"
+                                              bindLabel="name"
+                                              class="full-width">
+                                  </ng-select>
+                                </div>
+                              </div>
+                          </div>
+                        </td>
+                      </tr>
+                      <tr *ngIf="show">
+                        <td colspan="8">
+                          <div class="text-center">
+                              <button  mat-raised-button color="primary" [disabled]="forma.invalid || forma.value.name.trim().length === 0 || forma.value.shortname.trim().length === 0 ||  forma.value.status === '' || forma.value.sign === '' || (forma.value.checkedToggle && forma.value.formulario === null)" *ngIf="show && !isLoadingSave && !isLoadingDelete" (click)="onSubmit()" style="margin-right: 2px;">
+                                  <mat-icon aria-label="Edit">done</mat-icon>Guardar                           
+                              </button>
+                              <button  mat-raised-button color="warn" (click)="toggle()" *ngIf="show && !isLoadingSave && !isLoadingDelete" style="margin-left: 2px;">
+                                  <mat-icon aria-label="Edit">close</mat-icon>Cancelar
+                              </button>  
+                          </div>
+                                
+                        </td>
+                      </tr>
+                  </tbody>                    
+              </table>
+            </form>
+  
+      </div>
+    </div>
+  </div>

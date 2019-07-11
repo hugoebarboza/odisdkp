@@ -1,0 +1,247 @@
+<div class="app">
+
+    <mat-toolbar color="primary">
+      <h3 >Registrar Trabajo Orden N°{{ data.order_number }}</h3> 
+      <span class="mat-spacer"></span>
+      <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+        <mat-icon class="mat-icon">close</mat-icon>  
+      </button>
+    </mat-toolbar>
+<br>
+<div *ngIf="isLoading">
+<app-loading *ngIf="isLoading"></app-loading>  
+</div>
+
+
+<div class="mat-dialog-content">
+
+    <div class="animated fadeIn row">
+      <div class="col-md-8">
+        
+          <div class="example-full-width" style="text-align:right;">
+              <!--{{infocaso.depto_id.name}} / {{infocaso.category_id.name}} / {{infocaso.typeselect.name}}-->
+                <span><strong>{{project.project_name}} / {{service.service_name}} </strong></span>
+          </div>    
+          <h3 class="titulo">{{service.service_name}}</h3>
+          <h2 class="jeEmY">Tipo de Servicio</h2>
+          <p *ngIf="service_type">{{service_type.name}}</p>
+          <mat-divider></mat-divider>
+
+          <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar">
+
+              <h2 class="jeEmY">Descripción del Trabajo</h2>
+              <mat-form-field appearance="outline" class="example-full-width mat-status">
+                <textarea matInput #comentario placeholder="Añadir descripción..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
+                <mat-hint align="end">{{comentario.value.length}} / 256</mat-hint>
+              </mat-form-field>
+  
+              <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
+                <mat-icon>attachment</mat-icon>
+                <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >              
+                <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 3, Max. 3 </strong></span>
+              </button>
+              
+              <div *ngIf="archivos" >
+                <mat-chip-list>
+                  <mat-chip *ngFor="let forFile of archivos; let i = index;" 
+                    color="primary"
+                    [removable]="true"
+                    (removed)="removeFile(i)">
+                    <span>{{ forFile.archivo.name }}</span>
+                    <span *ngIf="forFile.progreso &&  forFile.progreso > 0" style="margin-left: 6px; margin-right: 6px;"><strong>{{forFile.progreso}}%</strong></span>
+                    <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
+                    <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
+                    <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
+                  
+                    <div class="progress container-fluid">
+                      <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
+                    </div>
+                  </mat-chip>
+                </mat-chip-list>
+              </div>
+              
+              <br>
+  
+              <div class="row row-custom">
+                  
+                  <button mat-raised-button color="primary" class="margin-left" [disabled]="formComentar.invalid" (click)="addComentario()">
+                      Guardar           
+                  </button>
+  
+                  <!--
+                  <button mat-raised-button color="warn"> 
+                      cancelar           
+                  </button>-->
+                  
+              </div>
+  
+          </form>
+          <br>
+          
+          <mat-tab-group animationDuration="0ms" class="mat-tab-style">
+            <mat-tab label="Actividad">
+              <br>
+              <cdk-virtual-scroll-viewport itemSize="60" class="list-container list-group" *ngIf="comentarios$ !== null">
+              <!--<div style="height: 250px; overflow: auto;" *ngIf="comentarios$">-->
+                <div *cdkVirtualFor="let comentarios of comentarios$ | async">
+                  
+                  <div class="fOqogj">
+                    <div class="SZsdL">
+                      <div style="display: inline-block; position: relative; outline: 0px; height: 22px; width: 22px;">
+                        <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                            <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="fLcKLS">  
+                        <span class="sc-fdcRnX jmTFIN">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
+                        ha realizado registro de trabajo hace
+                        <span class="sc-fdcRnX jmTFIN">{{comentarios.create_at | countTime}}</span>
+                    </div>
+                  </div>
+                  <div class="fOqogj" style="padding-left: 30px">
+                    → {{comentarios.comentario}}
+                  </div>
+          
+                  <div class="fOqogj" style="padding-left: 30px">
+                    <div class="row float-right row-custom" *ngIf="comentarios.adjuntos">
+                      
+                      <div *ngFor="let adjuntos of comentarios.adjuntos">
+                
+                          <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'image/png' || adjuntos.type == 'image/jpg' || adjuntos.type == 'image/jpeg'">
+                              <mat-icon aria-label="launch">image</mat-icon>
+                          </a>
+                
+                          <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent"*ngIf="adjuntos.type == 'application/x-zip-compressed' || adjuntos.type == 'application/x-rar-compressed'">
+                            <mat-icon aria-label="launch">work</mat-icon>
+                          </a> 
+                
+                          <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'application/pdf' || adjuntos.type == 'application/msword' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || adjuntos.type == 'application/vnd.ms-excel' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+                            <mat-icon aria-label="launch">insert_drive_file</mat-icon>
+                          </a>
+                
+                      </div>
+                      
+                    </div>
+                  </div>
+          
+                  <hr width="96%"  noshade="noshade" size="4px" style="color: #303f9f;"/>
+                  
+                </div>
+              <!--</div>-->
+              </cdk-virtual-scroll-viewport>
+            </mat-tab>
+          </mat-tab-group>          
+
+          
+      </div>
+
+      <div class="col-md-4 order-first order-md-last">
+          <h2 class="jeEmY" *ngIf="data.estatus">Estatus</h2>
+          <div class="fOqogj">
+              <div class="SZsdL">
+                <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                  <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                    <span role="img" style="background-color: transparent; background-image: url('../../assets/icons/level-512x512.png'); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="fLcKLS">  
+                  <span [ngClass]="data.estatus == 'Pendiente' ? 'important-bajo' : data.estatus == 'Atendido' ? 'important-medio' : data.estatus == 'Baja' ? 'important-alto': data.estatus == 'Vencido' ? 'important-urgente'  : 'important-default'">
+                      {{data.estatus}}
+                  </span>
+              </div>
+          </div>
+
+          <h2 class="jeEmY animated fadeIn" *ngIf="services">Informador</h2>
+          <div class="fOqogj">
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS" *ngIf="user_informador">
+              {{user_informador.name}} {{user_informador.surname}}
+            </div>
+            <div class="fLcKLS" *ngIf="!user_informador">
+              <span class="smallfont" style="margin-bottom: 20px;">Sin Informador</span>
+            </div>
+          </div>
+
+          <h2 class="jeEmY animated fadeIn" *ngIf="services">Responsable</h2>
+          <div class="fOqogj" >
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS" *ngIf="user_responsable">
+              {{user_responsable.name}} {{user_responsable.surname}}
+            </div>
+            <div class="fLcKLS" *ngIf="!user_responsable">
+              <span class="smallfont" style="margin-bottom: 20px;">Sin Responsable</span>
+            </div>
+          </div>          
+
+          <h2 class="jeEmY animated fadeIn" *ngIf="services">Otro(s) Responsable(s)</h2>
+          <div class="fOqogj" >
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS" *ngIf="user_itocivil_assigned_to">
+              Civil: {{user_itocivil_assigned_to.name}} {{user_itocivil_assigned_to.surname}}
+            </div>
+            <div class="fLcKLS" *ngIf="!user_itocivil_assigned_to">
+              <span class="smallfont" style="margin-bottom: 20px;">Sin ITO Civil</span>
+            </div>
+          </div>          
+
+          <div class="fOqogj animated fadeIn" *ngIf="services">
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS" *ngIf="user_itoelec_assigned_to">
+              Eléctrico: {{user_itoelec_assigned_to.name}} {{user_itoelec_assigned_to.surname}}
+            </div>
+            <div class="fLcKLS" *ngIf="!user_itoelec_assigned_to">
+              <span class="smallfont" style="margin-bottom: 20px;">Sin ITO Eléctrico</span>
+            </div>
+          </div>          
+
+          <div class="fOqogj animated fadeIn" *ngIf="services">
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS" *ngIf="user_responsable_obra">
+              Obra: {{user_responsable_obra}}
+            </div>
+            <div class="fLcKLS" *ngIf="!user_responsable_obra">
+              <span class="smallfont" style="margin-bottom: 20px;">Sin Responsable de Obra</span>
+            </div>
+          </div>
+          
+          
+          <span class="smallfont" style="margin-bottom: 20px;" *ngIf="services && services.create_at">Fecha de creación {{services.create_at}}</span>
+
+      </div>
+    </div>
+
+</div>
+</div>
+

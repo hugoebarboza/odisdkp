@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSlideToggleChange, throwMatDialogContentAlreadyAttachedError } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef, MatSlideToggleChange } from '@angular/material';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { UserService, CargaImagenesService, CdfService } from 'src/app/services/service.index';
 import { ToastrService } from 'ngx-toastr';

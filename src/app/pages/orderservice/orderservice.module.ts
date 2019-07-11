@@ -9,10 +9,11 @@ import { DateDialogComponent } from '../../components/date-dialog/date-dialog.co
 import { ExcelComponent, DialogOverviewDialog } from '../../components/excel/excel.component';
 import { ExcelVehiculoComponent } from '../../components/excel-vehiculo/excel-vehiculo.component';
 import { FileComponent } from '../../components/dialog/file/file.component';
-import { FilelistComponent } from '../../components/dialog/filelist/filelist.component';
+//import { FilelistComponent } from '../../components/dialog/filelist/filelist.component';
 import { GestionComponent } from '../../components/gestion/gestion.component';
+import { MakeinspectionComponent } from './components/makeinspection/makeinspection.component';
 import { MapaComponent } from '../../components/mapa/mapa/mapa.component';
-import { MapaFullWidthComponent } from '../../components/mapa/mapafullwidth/mapafullwidth.component'; 
+import { MapaFullWidthComponent } from '../../components/mapa/mapafullwidth/mapafullwidth.component';
 import { TableroComponent } from '../../components/tablero/tablero.component';
 import { UsertableComponent } from '../../components/usertable/usertable.component';
 import { ViewOrderDetailComponent } from '../../components/views/vieworderdetail/vieworderdetail.component';
@@ -26,6 +27,7 @@ import { ViewModule } from '../../components/views/view.module';
 //DIALOG
 import { AddComponent } from '../../components/dialog/add/add.component';
 import { AddcustomerComponent } from '../../components/dialog/addcustomer/addcustomer.component';
+import { AddJobComponent } from './components/dialog/add-job/add-job.component';
 import { AddSupportComponent } from '../../components/dialog/widget/addsupport/addsupport.component';
 import { AddConstanteComponent } from './components/dialog/add-constante/add-constante.component';
 import { AddColorComponent } from './components/dialog/add-color/add-color.component';
@@ -35,6 +37,8 @@ import { AddMarcaComponent } from './components/dialog/add-marca/add-marca.compo
 import { AddModeloComponent } from './components/dialog/add-modelo/add-modelo.component';
 import { AddSectorComponent } from './components/dialog/add-sector/add-sector.component';
 import { AddServiceTypeComponent } from './components/dialog/add-service-type/add-service-type.component';
+import { AddServiceValueComponent } from './components/dialog/add-service-value/add-service-value.component';
+import { AddServiceTypeValueComponent } from './components/dialog/add-service-type-value/add-service-type-value.component';
 import { AddTarifaComponent } from './components/dialog/add-tarifa/add-tarifa.component';
 import { AddZonaComponent } from './components/dialog/add-zona/add-zona.component';
 import { ColorListComponent } from './components/dialog/color-list/color-list.component';
@@ -53,6 +57,8 @@ import { MercadoListComponent } from './components/dialog/mercado-list/mercado-l
 import { ModeloListComponent } from './components/dialog/modelo-list/modelo-list.component';
 import { SectorListComponent } from './components/dialog/sector-list/sector-list.component';
 import { ServiceTypeListComponent } from './components/dialog/service-type-list/service-type-list.component';
+import { ServiceTypeValueListComponent } from './components/dialog/service-type-value-list/service-type-value-list.component';
+import { ServiceValueListComponent } from './components/dialog/service-value-list/service-value-list.component';
 import { ShowComponent } from '../../components/dialog/show/show.component';
 import { ShowcustomerComponent } from '../../components/dialog/showcustomer/showcustomer.component';
 import { ShowProfileComponent } from '../../components/dialog/showprofile/showprofile.component';
@@ -124,17 +130,13 @@ import { ToastrModule } from 'ngx-toastr';
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
-
-
-
-
-
 //PAGES
 import { OrderserviceComponent } from '../../components/orderservice/orderservice.component';
 
 
 // Global vars
 import { environment } from '../../../environments/environment';
+
 
 
 
@@ -182,11 +184,14 @@ registerLocaleData(localeEs);
     AddColorComponent,
     AddcustomerComponent,
     AddGiroComponent,
+    AddJobComponent,
     AddMarcaComponent,
     AddMercadoComponent,
     AddModeloComponent,
     AddSupportComponent,
     AddServiceTypeComponent,
+    AddServiceTypeValueComponent,
+    AddServiceValueComponent,     
     AddSectorComponent,
     AddTarifaComponent,
     AddZonaComponent,
@@ -205,12 +210,13 @@ registerLocaleData(localeEs);
     ExcelComponent,
     ExcelVehiculoComponent,
     FileComponent,
-    FilelistComponent,    
+    //FilelistComponent,
     GestionComponent,
     GiroListComponent,
     MapaComponent,
     MarcaListComponent,
     MapaFullWidthComponent,
+    MakeinspectionComponent,
     MercadoListComponent,
     ModalMapaComponent,
     ModalImageComponent,
@@ -220,6 +226,8 @@ registerLocaleData(localeEs);
     SettingsComponent, 
     SettingscustomerComponent,
     SectorListComponent,
+    ServiceTypeValueListComponent, 
+    ServiceValueListComponent, 
     ShowComponent,
     ShowcustomerComponent,
     ShowProfileComponent,
@@ -238,7 +246,7 @@ registerLocaleData(localeEs);
     ViewprojectorderComponent,
     ViewprojectcustomerComponent, 
     VieworderserviceComponent, 
-    ViewOrderServiceSelectComponent, 
+    ViewOrderServiceSelectComponent,  
   ],
   exports: [
   ],
@@ -248,12 +256,15 @@ registerLocaleData(localeEs);
     AddColorComponent,
     AddcustomerComponent,
     AddGiroComponent,
+    AddJobComponent,
     AddMarcaComponent,
     AddMercadoComponent,
     AddModeloComponent,
     AddSectorComponent,
     AddSupportComponent,
     AddServiceTypeComponent,
+    AddServiceTypeValueComponent,
+    AddServiceValueComponent,
     AddTarifaComponent,
     AddZonaComponent,
     CsvComponent,

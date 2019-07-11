@@ -79,7 +79,12 @@ export class UserService  {
 		}
   }
 
-  getQuery( query:string, token ){  		
+  getQuery( query:string, token ){
+
+	if(!token){
+		return;
+	}
+
 		const url = this.url+query;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  							 
 
@@ -513,6 +518,14 @@ export class UserService  {
 		//return this._http.get<User[]>('https://jsonplaceholder.typicode.com/users', {headers: headers});		
 		return this._http.get<User[]>(this.url+'users', {headers: headers});		
 	}
+
+	getUserInfo(token:any, id:number): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('usersinfo/'+id, token);		
+	}
+
 
 	forgotpassword(user): Observable<any>{
 		let json = JSON.stringify(user);

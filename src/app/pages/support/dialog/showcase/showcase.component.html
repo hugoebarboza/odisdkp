@@ -20,7 +20,7 @@
     
   <div class="mat-dialog-content">
     <div class="animated fadeIn row" *ngIf="(infocaso$| async) as infocaso">
-      <div class="col-8">
+      <div class="col-md-8">
         <div class="example-full-width" style="text-align:right;">
           <!--{{infocaso.depto_id.name}} / {{infocaso.category_id.name}} / {{infocaso.typeselect.name}}-->
             <span><strong>{{infocaso.depto_desc}} / {{infocaso.type_desc}} / {{infocaso.category_desc}} </strong></span>
@@ -100,10 +100,7 @@
                     Guardar           
                 </button>
 
-                <!--
-                <button mat-raised-button color="warn"> 
-                    cancelar           
-                </button>-->
+        
                 
             </div>
 
@@ -117,25 +114,25 @@
             <!--<div style="height: 250px; overflow: auto;" *ngIf="comentarios$">-->
               <div *cdkVirtualFor="let comentarios of comentarios$ | async">
                 
-                <div class="sc-cUDvuO fOqogj">
-                  <div class="sc-jQGbeF SZsdL">
+                <div class="fOqogj">
+                  <div class="SZsdL">
                     <div style="display: inline-block; position: relative; outline: 0px; height: 22px; width: 22px;">
                       <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                           <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
                       </span>
                     </div>
                   </div>
-                  <div class="sc-gwVKww fLcKLS">  
+                  <div class="fLcKLS">  
                       <span class="sc-fdcRnX jmTFIN">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
                       ha respondido hace
                       <span class="sc-fdcRnX jmTFIN">{{comentarios.create_at | countTime}}</span>
                   </div>
                 </div>
-                <div class="sc-cUDvuO fOqogj" style="padding-left: 30px">
+                <div class="fOqogj" style="padding-left: 30px">
                   → {{comentarios.comentario}}
                 </div>
         
-                <div class="sc-cUDvuO fOqogj" style="padding-left: 30px">
+                <div class="fOqogj" style="padding-left: 30px">
                   <div class="row float-right row-custom" *ngIf="comentarios.adjuntos">
                     
                     <div *ngFor="let adjuntos of comentarios.adjuntos">
@@ -169,21 +166,21 @@
               <!--<div style="height: 250px; overflow: auto;" *ngIf="actividad$">-->
                 <div *cdkVirtualFor="let actividad of actividad$ | async">
                   
-                  <div class="sc-cUDvuO fOqogj">
-                    <div class="sc-jQGbeF SZsdL">
+                  <div class="fOqogj">
+                    <div class="SZsdL">
                       <div style="display: inline-block; position: relative; outline: 0px; height: 22px; width: 22px;">
                         <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                             <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
                         </span>
                       </div>
                     </div>
-                    <div class="sc-gwVKww fLcKLS">  
+                    <div class="fLcKLS">  
                         <span class="sc-fdcRnX jmTFIN">{{actividad.usercomment.name}} {{actividad.usercomment.surname}}</span>
                         ha comentado hace
                         <span class="sc-fdcRnX jmTFIN">{{actividad.create_at | countTime}}</span>
                     </div>
                   </div>
-                  <div class="sc-cUDvuO fOqogj" style="padding-left: 30px">
+                  <div class="fOqogj" style="padding-left: 30px">
                     → {{actividad.comentario}}
                   </div>
         
@@ -200,18 +197,18 @@
 
       </div>
 
-      <div class="col-4">
+      <div class="col-md-4 order-first order-md-last">
 
           <h2 class="jeEmY">Nivel de Urgencia</h2>
-          <div class="sc-cUDvuO fOqogj">
-              <div class="sc-jQGbeF SZsdL">
+          <div class="fOqogj">
+              <div class="SZsdL">
                 <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
                   <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                     <span role="img" style="background-color: transparent; background-image: url('../../assets/icons/level-512x512.png'); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
                   </span>
                 </div>
               </div>
-              <div class="sc-gwVKww fLcKLS">  
+              <div class="fLcKLS">  
                   <span [ngClass]="infocaso.important == 'Bajo' ? 'important-bajo' : infocaso.important == 'Medio' ? 'important-medio' : infocaso.important == 'Alto' ? 'important-alto': infocaso.important == 'Urgente' ? 'important-urgente'  : 'important-default'">
                       {{infocaso.important}}
                   </span>
@@ -227,43 +224,43 @@
           </ng-select>
 
           <h2 class="jeEmY">Informador</h2>
-          <div class="sc-cUDvuO fOqogj">
-            <div class="sc-jQGbeF SZsdL">
+          <div class="fOqogj">
+            <div class="SZsdL">
               <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
                 <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                   <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
                 </span>
               </div>
             </div>
-            <div class="sc-gwVKww fLcKLS">  {{infocaso.create_to.name}} {{infocaso.create_to.surname}}
+            <div class="fLcKLS">  {{infocaso.create_to.name}} {{infocaso.create_to.surname}}
             </div>
           </div>
 
           <h2 class="jeEmY" *ngIf="arrayResponsables && arrayResponsables.length > 0">Responsable(s)</h2>
-          <div class="sc-cUDvuO fOqogj" *ngFor="let arrayresp of arrayResponsables">
-            <div class="sc-jQGbeF SZsdL">
+          <div class="fOqogj" *ngFor="let arrayresp of arrayResponsables">
+            <div class="SZsdL">
               <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
                 <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                   <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
                 </span>
               </div>
             </div>
-            <div class="sc-gwVKww fLcKLS">  {{arrayresp.email}}
+            <div class="fLcKLS">  {{arrayresp.email}}
             </div>
           </div>
 
           <!----
           <h2 class="jeEmY" *ngIf="arrayEtiquetadosDefault && arrayEtiquetadosDefault.length > 0">Etiquetados
           </h2>
-          <div class="sc-cUDvuO fOqogj" *ngFor="let etiq of arrayEtiquetadosDefault">
-            <div class="sc-jQGbeF SZsdL">
+          <div class="fOqogj" *ngFor="let etiq of arrayEtiquetadosDefault">
+            <div class="SZsdL">
               <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
                 <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                   <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
                 </span>
               </div>
             </div>
-            <div class="sc-gwVKww fLcKLS">  {{etiq.email}}
+            <div class="fLcKLS">  {{etiq.email}}
             </div>
           </div>
 
@@ -295,10 +292,8 @@
                     <button mat-stroked-button color="primary" (click)="etiquetadosChanged(1);"><mat-icon>check</mat-icon></button>
                 </div>
               -->
-
-                
-                <br>
-          <span class="smallfont">Fecha de creación {{infocaso.create_at}}</span>
+              <span class="smallfont" style="margin-bottom: 20px;">Fecha de creación {{infocaso.create_at}}</span>
+          
           <!--{{infocaso.to | json}}-->
       </div>
     

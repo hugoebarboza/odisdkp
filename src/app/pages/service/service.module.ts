@@ -15,6 +15,9 @@ import { ProjectTypeListComponent } from './dialog/project-type-list/project-typ
 import { RemoveUserComponent } from './components/removeuser/removeuser.component';
 import { ServiceComponent } from './service-list/service.component';
 
+//DIRECTIVES
+import { DirectiveModule } from 'src/app/directives/directive.module';
+
 
 //DIALOG
 import { AddServiceComponent } from './dialog/addservice/addservice.component';
@@ -54,6 +57,7 @@ import { ServiceRoutingModule } from './service.routing';
     AngularSplitModule.forRoot(),
     CalendarModule,
     CommonModule,
+    DirectiveModule,
     FormsModule,
     HttpClientModule,
     MaterialModule,

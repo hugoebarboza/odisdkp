@@ -40,11 +40,6 @@ height: 700px;
   cursor: pointer;
 }
 
-
-table {
-  width: 100%;
-}
-
 .saltox20 {
   margin-top: 20px;
 }
@@ -78,7 +73,11 @@ border-top-width: 0px !important;
 
 
 .width-40percentage{
-  width: 45%;
+  width: 60%;
+}
+
+.input-group-text {
+  width: 108px;
 }
 
 .important-bajo {
@@ -174,4 +173,36 @@ border-top-width: 0px !important;
 
 .example-full-width {
   width: 100%;
+}
+
+.mat-table {
+  overflow: auto;
+  width: 100%;
+}
+
+.mobile-label {
+  display: none;
+}
+
+@media(max-width: 600px) {
+  .mobile-label {
+      width: 95px;
+      display: inline-block;
+      font-weight: bold;
+      margin-right: 5px;    
+  }
+
+  .mat-cell:first-of-type {
+      padding-left: 0px; 
+  }
+
+  .mat-header-row {
+      display: none;
+  }
+
+  .mat-row { 
+      flex-direction: column;
+      align-items: start;
+      padding: 8px 24px;
+  }
 }

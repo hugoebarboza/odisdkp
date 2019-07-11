@@ -79,15 +79,16 @@
               </ng-template>
   
               <!-- /#page-content -->
-              <div class="p-2" style="width: 100%;" *ngIf="selected.value==1 && table != null">
-  
-                <app-excel (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'address' ">
-                </app-excel>
-  
-  
-                <app-excel-vehiculo (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'vehiculos'">                
-                </app-excel-vehiculo> 
-  
+              <div  style="width: 100%;" *ngIf="selected.value==1 && table != null">
+                  <mat-tab-group mat-align-tabs="center">
+                      <mat-tab label="Carga Masiva"> 
+                        <app-excel (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'address' "></app-excel>
+                        <app-excel-vehiculo (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'vehiculos'"></app-excel-vehiculo> 
+                      </mat-tab>
+                      <mat-tab label="Carga de Inspecciones"> 
+                        <app-makeinspection (ServicioSeleccionado) = "loadDataServicio($event)" [id]="id"></app-makeinspection> 
+                      </mat-tab>
+                    </mat-tab-group>  
               </div>
   
               <!-- /#end page-content -->

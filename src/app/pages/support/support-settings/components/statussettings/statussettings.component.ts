@@ -103,7 +103,8 @@ export class StatussettingsComponent implements OnInit, OnChanges {
             respons.forEach((doc) => {
                 // const info = doc.data();
                 // info.id = doc.id;
-                this._afs.doc('supportcase/' + this.identity.country + '/cases/' + doc.id).update({status_desc: data.name.trim()});
+                //this._afs.doc('supportcase/' + this.identity.country + '/cases/' + doc.id).update({status_desc: data.name.trim()});
+                this._afs.doc('supportcase/' + this.identity.country + '/cases/' + doc.id).update({status_desc: data.name.trim(), label: data.label});
             });
             this.isLoadingSave = false;
           }

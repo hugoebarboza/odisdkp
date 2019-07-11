@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
-import { UserService } from 'src/app/services/service.index';
+import { UserService, SettingsService } from 'src/app/services/service.index';
 import { AddcaseComponent } from '../dialog/addcase/addcase.component';
 import { MatDialog, MatTableDataSource, MatSnackBar, MatPaginator, MatSort } from '@angular/material';
 import { Observable, combineLatest, defer, of, Subscription } from 'rxjs';
@@ -27,7 +27,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
 
   identity: any;
   isLoading = false;
-  title = 'Soporte';
+  title: string;
   joined$ = new MatTableDataSource();
 
   todo = {name: 'Todo', id: '0'};
@@ -83,11 +83,16 @@ export class SupportComponent implements OnInit, OnDestroy  {
     private _afs: AngularFirestore,
     public _userService: UserService,
     private firebaseAuth: AngularFireAuth,
+    public label: SettingsService,
     public dialog: MatDialog,
     public snackBar: MatSnackBar
   ) {
     this.identity = this._userService.getIdentity();
     this.supportcase = this.supportcase + '/' + this.identity.country + '/cases';
+		this.label.getDataRoute().subscribe(data => {
+			this.title = data.subtitle;
+		});					
+
   }
 
   ngOnInit() {
