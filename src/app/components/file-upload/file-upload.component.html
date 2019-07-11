@@ -1,7 +1,7 @@
 <div class="dropzone" 
      dropZone
      (hovered)="toggleHover($event)"
-     (dropped)="startUpload($event)"
+     (dropped)="onDrop($event)"
      [class.hovering]="isHovering">
 
 
@@ -12,7 +12,7 @@
         <label class="file-label">
 
 
-        <input class="file-input" type="file" (change)="startUpload($event.target.files)">
+        <input class="file-input" type="file" (change)="onDrop($event.target.files)" multiple>
 
 
           <span class="file-cta">
@@ -27,6 +27,12 @@
       </div>
 </div>
 
+
+<div *ngFor="let file of files">
+    <app-upload-task [file]="file" [project_id]="project_id" [service_id]="service_id"></app-upload-task>
+</div>
+
+<!---
 <div *ngIf="percentage | async as pct">
 
     <progress class="progress is-info" 
@@ -51,4 +57,5 @@
     <button (click)="task.resume()" class="button is-info"   [disabled]="!(snap?.state === 'paused')">Resume</button>
   
   </div>
-  
+-->
+

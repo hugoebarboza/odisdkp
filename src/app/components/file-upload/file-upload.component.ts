@@ -35,6 +35,7 @@ export class FileUploadComponent implements OnInit {
   private CARPETA_ARCHIVOS = '';
   created: any;
   file:any;
+  files: File[] = [];
   identity: any;
   item: Observable<Item>;
   private itemsCollection: AngularFirestoreCollection<Item>;
@@ -87,12 +88,19 @@ export class FileUploadComponent implements OnInit {
     this.isHovering = event;
   }
 
+  onDrop(files: FileList) {
+    for (let i = 0; i < files.length; i++) {
+      this.files.push(files.item(i));
+    }
+  }  
 
+
+  /*
   startUpload(event: FileList) {
     // The File object
     if(event){
       this.file = event.item(0);
-      this.type = this.file.type.split('/')[1];  
+      this.type = this.file.type.split('/')[1];
     }
   
     // Client-side validation example
@@ -102,8 +110,9 @@ export class FileUploadComponent implements OnInit {
       return;
     }
     // The storage path
-    const path = `filesprojects/`+this.project_id+'/'+this.service_id+'/'+`${this.file.name}`;
-    this.CARPETA_ARCHIVOS = 'filesprojects/'+this.project_id+'/'+this.service_id;
+    const path = 'allfiles/projects/' + this.project_id + '/' + this.service_id + '/files';    
+    //const path = `filesprojects/`+this.project_id+'/'+this.service_id+'/'+`${this.file.name}`;
+    this.CARPETA_ARCHIVOS = path;
     const fileRef = this.storage.ref(path);    
 
     // Totally optional metadata
@@ -162,9 +171,7 @@ export class FileUploadComponent implements OnInit {
 
         }
       );
-  
-
-  }
+  }*/
 
 
 }

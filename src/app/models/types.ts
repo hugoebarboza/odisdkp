@@ -130,6 +130,21 @@ export class Countries  {
 }
 
 
+export class CurrencyValue  {
+	
+	constructor(	
+	public id:number,
+	public currency_id:number,
+	public value:string,
+	public status:number,
+	public create_by:number,
+	public create_at:any,
+	public update_by:number,
+	public update_at:any
+	){}
+}
+
+
 export class Departamento  {
 	
 	constructor(	
@@ -461,6 +476,7 @@ export class ServiceEstatus  {
 }
 
 
+
 export class ServiceType  {
 	
 	constructor(	
@@ -471,10 +487,42 @@ export class ServiceType  {
 	public ndocumento:string,
 	public ddocumento:string,
 	public status:number,
+	public observation:number,
+	public sign:number,
 	public create_at:any,	
 	public update_at:any
 	){}
 }
+
+export class ServiceTypeValue  {
+	
+	constructor(	
+	public id:number,
+	public service_id:number,
+	public value_id:number,
+	public from_date:string,
+	public to_date:string,
+	public status:number,
+	public create_at:any,	
+	public update_at:any
+	){}
+}
+
+
+export class ServiceValue  {
+	
+	constructor(	
+	public id:number,
+	public service_id:number,
+	public value_id:number,
+	public from_date:string,
+	public to_date:string,
+	public status:number,
+	public create_at:any,	
+	public update_at:any
+	){}
+}
+
 
 export class Status  {	
 

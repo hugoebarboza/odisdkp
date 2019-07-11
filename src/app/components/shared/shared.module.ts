@@ -4,6 +4,10 @@ import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 
+
+//DIRECTIVE
+import { DirectiveModule } from 'src/app/directives/directive.module';
+
 //MATERIAL
 import {MaterialModule} from '../../material-module';
 
@@ -12,8 +16,12 @@ import { CalendarModule } from 'primeng/calendar';
 
 //COMPONENTS
 import {
+    AddDocComponent,
     DropdownNotificationComponent,
     EditServiceComponent,
+    FilelistComponent,
+    FileListComponent,
+    FileUploadComponent,
     FooterComponent,
     FootermainComponent,
     HeaderComponent,
@@ -23,6 +31,8 @@ import {
     NotfoundComponent,
     ProgressSpinnerComponent,
     TagUserComponent,
+    UploaderComponent,
+    UploadTaskComponent,
     ViewOrderTimeSpentComponent,
    } from './shared.index';
 
@@ -37,6 +47,7 @@ import { PipesModule } from '../../pipes/pipes.module';
     imports: [
         CalendarModule,
         CommonModule,
+        DirectiveModule,
         FormsModule,
         RouterModule,
         ReactiveFormsModule,    
@@ -45,9 +56,13 @@ import { PipesModule } from '../../pipes/pipes.module';
         PipesModule
     ],
     declarations: [
+        AddDocComponent,
         DropdownNotificationComponent,
         DropdownNotificationComponent,
         EditServiceComponent,
+        FilelistComponent,
+        FileListComponent,
+        FileUploadComponent,    
         FooterComponent,
         FootermainComponent,
         HeaderComponent,
@@ -57,11 +72,17 @@ import { PipesModule } from '../../pipes/pipes.module';
         NotfoundComponent,
         ProgressSpinnerComponent,
         TagUserComponent,
+        UploaderComponent,
+        UploadTaskComponent,
         ViewOrderTimeSpentComponent,
     ],
     exports: [
+        AddDocComponent,
         DropdownNotificationComponent,
         EditServiceComponent,
+        FilelistComponent,
+        FileListComponent,
+        FileUploadComponent,    
         FooterComponent,
         FootermainComponent,
         HeaderComponent,
@@ -71,9 +92,12 @@ import { PipesModule } from '../../pipes/pipes.module';
         NotfoundComponent,
         ProgressSpinnerComponent,
         TagUserComponent,
+        UploaderComponent,
+        UploadTaskComponent,
         ViewOrderTimeSpentComponent
     ],
     entryComponents: [
+        AddDocComponent,
         EditServiceComponent,
       ],
     

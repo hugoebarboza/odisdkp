@@ -1,224 +1,238 @@
 <meta name="Description" content="Services">
-<div id="wrapper" >
-<div id="page-content-wrapper" >
-<div class="container-fluid p-2">
-<div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom ">
-  <div class="p-2 w-100 "><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}<button mat-button color="primary" (click)="refresh()"> <mat-icon >sync</mat-icon></button></h1></div>
-  <div class="p-2 flex-shrink-1 ">
-    <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'" *ngIf="_userService.isRole(7)">
-    <i class="material-icons"
-      matTooltip="Configuración del Proyecto"
-      [matTooltipPosition]="positionleftaction.value">settings</i>
-    </a>
-  </div>
-</div>
-
-
-
-
-<div class="row animated fadeIn">
-  <div class="col-12">
-
-<div class="container" *ngIf="loading">
-    <div class="row justify-content-md-center">
-      <div class="col col-lg-2">
-          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
-      </div>
-    </div>
-</div>
-
-<div class="portalHost" *ngIf="portal !== 1">
-<ng-container [cdkPortalOutlet]="_portal" ></ng-container>
-</div>
- 
-
- 
-<div class="portalHostSplit" *ngIf="portal === 1">
- <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
-</div>
-
-
-<ng-template cdkPortal #myTemplate="cdkPortal" >
-<div class="p-2 animated fadeIn">
-<mat-card  [ngStyle]="{'padding':'0px'}">
-  <mat-card-header [ngClass]="{'custom-card':true, 'padding':'0px'}">     
-
-    <div class="mat-card-header-text">
-    <mat-card-title >
-       <div class="d-flex justify-content-end" >
-            <div class="p-2 "><button type="button" class="btn btn-light btn-sm" (click)="openDialogCsv()"><mat-icon class="material-icons md-14">save_alt</mat-icon>CSV</button></div>
-            <div class="p-2 "><button type="button" class="btn btn-light btn-sm" (click)="openDialogUser(id)"><mat-icon class="material-icons md-14">people</mat-icon>Usuarios</button></div>
-            <div class="p-2 "><button type="button" class="btn btn-primary btn-sm" (click)="addNew(id)"><mat-icon class="material-icons md-14">folder_open</mat-icon>Crear Proyecto</button></div>
-      </div>
-    </mat-card-title>
-    </div>
-
-    <mat-card-subtitle>
-    </mat-card-subtitle>
-  </mat-card-header>
-
-
-  <mat-card-content>
-   <br>
-   <div class="container-fluid p-2">
-
-        
-    <!-- CONTENT -->
-    <div class="example-loading-shade" *ngIf="isLoadingRefresh">
-      <app-loading *ngIf="isLoadingRefresh"></app-loading>  
-    </div>    
-
-    <!--CONTENT SEARCH-->
-    <div class="container-fluid" *ngIf="!loading && datasource.length > 0">
-      <div class="row">
-          <div class="col">
-              <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Proyecto</span>
-                  </div>
-                  <input type="text" (input)="onServiceSearch($event.target.value)" id="filter-servicio" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-              </div>            
-          </div>
-
-          <div class="col">
-              <div class="input-group input-group-sm mb-3">
-                  <div class="input-group-prepend">
-                    <span class="input-group-text" id="inputGroup-sizing-sm">Tipo Proyecto</span>
-                  </div>
-                  <input type="text" (input)="onServiceTypeSearch($event.target.value)" id="filter-servicio" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-              </div>            
-          </div>
-
-          <div class="col">
-            <div class="input-group input-group-sm mb-3">
-                <div class="input-group-prepend">
-                  <span class="input-group-text" id="inputGroup-sizing-sm">Dirección</span>
-                </div>
-                <input type="text" (input)="onAddressSearch($event.target.value)" id="filter-address" class="form-control" aria-label="Sizing example input" aria-describedby="inputGroup-sizing-sm">
-            </div>            
-        </div>
-
-          <div class="col">
-              <div class="form-group">
-                <select class="custom-select" (change)="onStatusChange($event.target.value)">
-                  <option>Seleccione Estatus</option>
-                  <option [value]="1">Activo</option>
-                  <option [value]="0">Desactivo</option>
-                </select>
-              </div>
-          </div>
-
-          <div class="col">
-              <div class="float-right">
-                <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style">                  
-                  <mat-button-toggle value="bold" (click)="toggleTemplate(0)" *ngIf="portal ==0"><mat-icon class="material-icons md-20-color" >view_list</mat-icon></mat-button-toggle>
-                  <mat-button-toggle value="bold" (click)="toggleTemplate(0)" *ngIf="portal !== 0 "><mat-icon class="material-icons md-20" >view_list</mat-icon></mat-button-toggle>
-                  <mat-button-toggle value="italic" (click)="toggleTemplate(1)" *ngIf="portal == 1"><mat-icon class="material-icons md-20-color" >vertical_split</mat-icon></mat-button-toggle>
-                  <mat-button-toggle value="italic" (click)="toggleTemplate(1)" *ngIf="portal !== 1"><mat-icon class="material-icons md-20" >vertical_split</mat-icon></mat-button-toggle>
-                </mat-button-toggle-group>  
-                </div>
-          </div>
-
-          <div class="col">
-              <div class="form-group">
-                <div class="float-right">
-                <button type="button" class="btn btn-light" (click)="reset()">Reset</button>
-                </div>                
-              </div>
-          </div>
-      </div>
-    </div>
-
-    <!-- CONTENT LIST -->
-    <ngx-table 
-    [configuration]="configuration" 
-    [data]="services" 
-    [columns]="columns" 
-    (event)="onEvent($event)"
-    *ngIf="!loading && datasource.length > 0"    
-    >
-      <ng-template let-row >
-        <td>
-          <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', row.id]" > 
-          <span class="font-small"><span class="circle" [style.color]="row.status? 'green' : 'red'"></span> {{row.service_name}}</span>
+<div id="wrapper">
+  <div id="page-content-wrapper">
+    <div class="container-fluid p-2">
+      <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom ">
+        <div class="p-2 w-100 "><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}<button mat-button color="primary" (click)="refresh()"> <mat-icon >sync</mat-icon></button></h1></div>
+        <div class="p-2 flex-shrink-1 ">
+          <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'" *ngIf="_userService.isRole(7)">
+          <i class="material-icons"
+            matTooltip="Configuración del Proyecto"
+            [matTooltipPosition]="positionleftaction.value">settings</i>
           </a>
-        </td>
-        <td >
-          <div *ngIf="row.servicedetail[0] && row.servicedetail[0].order_number" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].order_number}}</div>
-        </td>
-        <td>
-          <span *ngIf="row.servicedetail[0] && row.servicedetail[0].gom_number" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].gom_number}}</span>
-        </td>
-        <td >
-            <div *ngIf="row.servicecategorie_name" class="font-small" (click)="setClickedRow(row.id)">{{row.servicecategorie_name}}</div>
-        </td>   
-        <td >
-          <div *ngIf="row.servicedetail[0] && row.servicedetail[0].address" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].address}}</div>
-        </td>   
-        <td >
-          <div *ngIf="row.servicedetail[0] && row.servicedetail[0].gestor" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].gestor}}</div>
-        </td>   
-        <td >
-          <div *ngIf="row.servicedetail[0] && row.servicedetail[0].contratista" class="font-small" (click)="setClickedRow(row.id)">{{row.servicedetail[0].contratista}}</div>
-        </td>   
-        <td >
-          <div *ngIf="row.user" class="font-small" (click)="setClickedRow(row.id)">{{row.user}}</div>
-        </td>   
-
-        <td >
-          <div *ngIf="row.create_at" class="font-small" (click)="setClickedRow(row.id)">{{row.create_at}}</div>
-        </td>   
-
-        <td>
-          <div class="button-row">
-              <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="startEdit(row.id)">
-                <mat-icon aria-label="Edit" >edit</mat-icon>          
-              </button>            
-              <button mat-icon-button color="warn" *ngIf="_userService.isRole(7)" (click)="deleteItem(row.id)">
-                <mat-icon aria-label="Delete" >delete</mat-icon>
-              </button>
-          </div>
-        </td>
-      </ng-template>
-    </ngx-table>    
-    <!-- /CONTENT -->
+        </div>
       </div>
+      <div class="row animated fadeIn">
+        <div class="col-12">
 
-  <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
-    No se encontraron registros que coincidan con su búsqueda.
-    <button mat-button color="primary" (click)="refresh()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
-  </div>
-  </mat-card-content>
-  <mat-card-actions>
-  </mat-card-actions>
-</mat-card>
-</div>
-</ng-template>
-
-
-<ng-template cdkPortal #myTemplate2="cdkPortal" >
-    <div style="height: 100%">
-      <as-split  direction="horizontal" unit="percent" restrictMove="false" >
-          
-          <as-split-area size="70" minsize="50" >
-          <ng-container [cdkPortalOutlet]="_home" ></ng-container>
-          </as-split-area>
-          
-          <as-split-area size="30" minsize="30" maxsize="30">
-          <div class="p-2">
-              <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>                                       
-              <app-viewprojectdetail *ngIf="selectedRow == 0"></app-viewprojectdetail>              
+          <div class="container" *ngIf="loading">
+              <div class="row justify-content-md-center">
+                <div class="col col-lg-2">
+                    <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
+                </div>
+              </div>
           </div>
-      </as-split-area>
+
+          <div class="portalHost" *ngIf="portal !== 1">
+            <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
+          </div>
+
+          <div class="portalHostSplit" *ngIf="portal === 1">
+            <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
+          </div>
+
+          <ng-template cdkPortal #myTemplate="cdkPortal" >
+            <div class="p-2 animated fadeIn">
+              <mat-card  [ngStyle]="{'padding':'0px'}">
+                <mat-card-header [ngClass]="{'custom-card':true, 'padding':'0px'}">     
+
+                  <div class="mat-card-header-text">
+                    <mat-card-title >
+                      <div class="d-flex justify-content-end" >
+                            <div class="p-2 "><button type="button" class="btn btn-light btn-sm" (click)="openDialogCsv()"><mat-icon class="material-icons md-14">save_alt</mat-icon>CSV</button></div>
+                            <div class="p-2 "><button type="button" class="btn btn-light btn-sm" (click)="openDialogUser(id)"><mat-icon class="material-icons md-14">people</mat-icon>Usuarios</button></div>
+                            <div class="p-2 "><button type="button" class="btn btn-primary btn-sm" (click)="addNew(id)"><mat-icon class="material-icons md-14">folder_open</mat-icon>Crear Proyecto</button></div>
+                      </div>
+                    </mat-card-title>
+                  </div>
+
+                  <mat-card-subtitle>
+                  </mat-card-subtitle>
+                </mat-card-header>
+
+
+                <mat-card-content>
+                  <br>
+                  <div class="container-fluid p-2">
+                        
+                    <!-- CONTENT -->
+                    <div class="example-loading-shade" *ngIf="isLoadingRefresh">
+                      <app-loading *ngIf="isLoadingRefresh"></app-loading>  
+                    </div>    
+
+                    <!--CONTENT SEARCH-->
+                    <div class="container-fluid" *ngIf="!loading && datasource != null">
+                      <div class="row">
+                        <div class="col-md-6">
+                            <div class="input-group input-group-sm mb-3">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text">Busqueda</span>
+                                </div>
+                                <input type="text"  (keyup)="applyFilter($event.target.value)" class="width-40percentage">
+                            </div>              
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="float-right">
+                              <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style" style="margin-left: 2px">                  
+                                <mat-button-toggle value="bold" (click)="toggleTemplate(0)" *ngIf="portal ==0"><mat-icon class="material-icons md-20-color" >view_list</mat-icon></mat-button-toggle>
+                                <mat-button-toggle value="bold" (click)="toggleTemplate(0)" *ngIf="portal !== 0 "><mat-icon class="material-icons md-20" >view_list</mat-icon></mat-button-toggle>
+                                <mat-button-toggle value="italic" (click)="toggleTemplate(1)" *ngIf="portal == 1"><mat-icon class="material-icons md-20-color" >vertical_split</mat-icon></mat-button-toggle>
+                                <mat-button-toggle value="italic" (click)="toggleTemplate(1)" *ngIf="portal !== 1"><mat-icon class="material-icons md-20" >vertical_split</mat-icon></mat-button-toggle>
+                              </mat-button-toggle-group>  
+
+                                <mat-button-toggle-group appearance="legacy" name="fontStyle" aria-label="Font Style">
+                                <mat-button-toggle value="bold" (click)="reset()">Reset</mat-button-toggle>
+                                </mat-button-toggle-group>
+                            </div>
+                        </div>
+
+                      </div>
+                    </div>
+
+                    <mat-table #table [dataSource]="datasource" matSort [class.isMobile]="isMobile">
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="service_name">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Proyecto </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">Proyecto:</span>
+                                <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', element.id]" > 
+                                <span class="font-small"><span class="circle" [style.color]="element.status? 'green' : 'red'"></span> {{element.service_name}}</span>
+                                </a>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="order_number">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> N° OT </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">N° OT:</span>
+                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].order_number">{{element.servicedetail[0].order_number}}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="gom_number">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> GOM </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">GOM:</span>
+                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].gom_number">{{element.servicedetail[0].gom_number}}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="servicecategorie_name">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Proyecto </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">Tipo Proyecto:</span>
+                                <span *ngIf="element.servicecategorie_name">{{element.servicecategorie_name}}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="address">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Dirección </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">Dirección:</span>
+                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].address">{{element.servicedetail[0].address}}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="gestor">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Gestor </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">Gestor:</span>
+                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].gestor">{{element.servicedetail[0].gestor}}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="contratista">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Contratista </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">Contratista:</span>
+                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].contratista">{{element.servicedetail[0].contratista}}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="user">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Informador </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">Informador:</span>
+                                <span  *ngIf="element.user">{{element.user}}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="create_at">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <span class="mobile-label">Creado El:</span>
+                                <span *ngIf="element.create_at">{{element.create_at}}</span>
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="action">
+                            <mat-header-cell *matHeaderCellDef mat-sort-header> Opciones </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> 
+                                <div class="row" align="right">
+                                    <div class="col-md-12">
+                                        <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="startEdit(element.id)">
+                                            <mat-icon aria-label="Edit" >edit</mat-icon>          
+                                          </button>            
+                                          <button mat-icon-button color="warn" *ngIf="_userService.isRole(7)" (click)="deleteItem(element.id)">
+                                            <mat-icon aria-label="Delete" >delete</mat-icon>
+                                          </button>
+                                          <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="addDoc(element.id)">
+                                              <mat-icon aria-label="Publish" >publish</mat-icon>
+                                            </button>
   
-    </as-split>          
+                                    </div>
+                                </div>
+                            </mat-cell>
+                        </ng-container>
+                        
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let element; let i = index; columns: displayedColumns;" (click)="setClickedRow(element.id); setClickedElement(i)" (mouseenter)="hoverIn(i)" (mouseleave)="hoverOut(i)" [class.active]="i == selectedElement"></mat-row>
+
+                    </mat-table>
+
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                    <!-- /CONTENT -->
+                  </div>
+
+                  <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+                    No se encontraron registros que coincidan con su búsqueda.
+                    <button mat-button color="primary" (click)="refresh()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                  </div>
+                </mat-card-content>
+                <mat-card-actions>
+                </mat-card-actions>
+              </mat-card>
+            </div>
+          </ng-template>
+
+          <ng-template cdkPortal #myTemplate2="cdkPortal" >
+              <div style="height: 100%">
+                <as-split  direction="horizontal" unit="percent" restrictMove="false" >
+                  <as-split-area size="70" minsize="50" >
+                    <ng-container [cdkPortalOutlet]="_home" ></ng-container>
+                  </as-split-area>
+                  <as-split-area size="30" minsize="30" maxsize="30">
+                      <div class="p-2">
+                          <app-viewprojectdetail [id]="selectedRow" *ngIf="selectedRow > 0"></app-viewprojectdetail>                                       
+                          <app-viewprojectdetail *ngIf="selectedRow == 0"></app-viewprojectdetail>              
+                      </div>
+                  </as-split-area>
+                </as-split>          
+              </div>
+          </ng-template>
+        </div>
+      </div>
     </div>
-</ng-template>
-
   </div>
-</div>
-</div>
-
-</div>
-<!-- /#page-content-wrapper -->
-</div>
+</div><!-- /#page-content-wrapper -->

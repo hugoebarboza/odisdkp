@@ -66,10 +66,12 @@ export class FileListComponent implements OnInit {
 
   ngOnInit() {
     if (this.project_id > 0 && this.service_id > 0){
-        this.CARPETA_ARCHIVOS = 'filesprojects/'+this.project_id+'/'+this.service_id;
+        //this.CARPETA_ARCHIVOS = 'filesprojects/'+this.project_id+'/'+this.service_id;
+        this.CARPETA_ARCHIVOS = 'allfiles/projects/' + this.project_id + '/' + this.service_id + '/files';
 
         this.itemService.getItems(this.CARPETA_ARCHIVOS).subscribe(
           data => {
+            //console.log(data);
             if(data.length > 0){
             this.items = data;
             this.dataSource = new MatTableDataSource(this.items);

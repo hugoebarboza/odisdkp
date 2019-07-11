@@ -12,7 +12,7 @@
 <mat-card-header [ngClass]="{'custom-card':true}">
 
 
-<table class="table-responsive" cellspacing="0" border="0" class="main-table">
+<table  cellspacing="0" border="0" class="main-table" width="100%" role="table">
   <tr>
     <td>
     <mat-form-field>      
@@ -338,244 +338,298 @@
     <app-loading *ngIf="isLoadingResults"></app-loading>
   </div>
 
-<div class="example-table-container" >
-
-<mat-table #table  [dataSource]="dataSource" 
-  matSort    
-  (matSortChange)="handleSortChange($event)" 
-  [matSortActive]="sort.active" 
-  [matSortDirection]="sort.direction" 
-  matSortDisableClear  >
-
-
-<ng-container matColumnDef="important" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header><i class="material-icons">unfold_more</i></mat-header-cell>
-    <mat-cell *matCellDef="let order; let i = index" style="color:blue">
-
-      <div  (click)="order.important=!order.important; onChangeIcon(order.important, category_id, order.order_id) ">
-        <i class="material-icons md-color-checkbox" matTooltip="Destacado" [matTooltipPosition]="positiondatasourceaction.value" *ngIf="order.important">label_important</i>
-        <i class="material-icons md-nocolor-checkbox" matTooltip="Sin destacar" [matTooltipPosition]="positiondatasourceaction.value" *ngIf="!order.important">label_important</i>
-      </div>      
-
-      <!--
-      <div *ngIf="order.important==0">   
-
-      <mat-checkbox
-      color="primary"
-      [checked]="false"
-      (change)="onChange($event, category_id, order.order_id)"
-      matTooltip="Marcar orden como importante."
-      [matTooltipPosition]="positiondatasourceaction.value"
-      >      
-      </mat-checkbox>
-      </div>
-
-      <div *ngIf="order.important==1">   
-      <mat-checkbox
-      color="primary"
-      [checked]="true"
-      (change)="onChange($event, category_id, order.order_id)" 
-      matTooltip="No marcar orden como importante."
-      [matTooltipPosition]="positiondatasourceaction.value"
-      >        
-      </mat-checkbox>
-      </div>
-      -->
-
-    </mat-cell>
-</ng-container>
+<div class="row" >
+<div class="col-md-12">
+  <mat-table #table  [dataSource]="dataSource" 
+    matSort    
+    (matSortChange)="handleSortChange($event)" 
+    [matSortActive]="sort.active" 
+    [matSortDirection]="sort.direction" 
+    matSortDisableClear  
+    [class.isMobile]="isMobile"
+    >
 
 
-
-<ng-container matColumnDef="order_number"  >  
-  <mat-header-cell *matHeaderCellDef mat-sort-header > N. Orden </mat-header-cell>
-    <mat-cell *matCellDef="let order; let i = index" >      
-        {{order.order_number}}
-        <mat-icon class="material-icons md-13-color" *ngIf="order.imagen">image</mat-icon>        
-        <mat-icon class="material-icons md-13-nocolor" *ngIf="!order.imagen">image</mat-icon>                
-      </mat-cell>
-</ng-container>
-
-
-  
-<ng-container matColumnDef="cc_number">
-  <mat-header-cell *matHeaderCellDef mat-sort-header> N. Cliente </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.cc_number}} </mat-cell>
-</ng-container>
-
-
-<ng-container matColumnDef="region"  >
-  <mat-header-cell *matHeaderCellDef mat-sort-header  > Región </mat-header-cell>
-    <mat-cell *matCellDef="let order" [ngClass]="{'hidden-item': true}"> {{order.region}} </mat-cell>
-</ng-container>
-
-<ng-container matColumnDef="provincia"  >
-  <mat-header-cell *matHeaderCellDef mat-sort-header  > Provincia </mat-header-cell>
-    <mat-cell *matCellDef="let order" [ngClass]="{'hidden-item': true}"> {{order.provincia}} </mat-cell>
-</ng-container>
-
-
-<ng-container matColumnDef="comuna"  >
-  <mat-header-cell *matHeaderCellDef mat-sort-header  > Comuna </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.comuna}} </mat-cell>
-</ng-container>
-
-<ng-container matColumnDef="orderdetail_direccion">
-  <mat-header-cell *matHeaderCellDef mat-sort-header  > Realizado En </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.orderdetail_direccion}} </mat-cell>
-</ng-container>
-
-
-<ng-container matColumnDef="direccion">
-  <mat-header-cell *matHeaderCellDef mat-sort-header  > Ubicación </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.direccion}} </mat-cell>
-</ng-container>
-
-
-
-<ng-container matColumnDef="servicetype" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Servicio </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.servicetype}} 
-    
-    </mat-cell>
-</ng-container>
-
-
-
-<ng-container matColumnDef="user" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Informador </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.user}} </mat-cell>
-</ng-container>
-
-<ng-container matColumnDef="userupdate" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Editado </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.userupdate}} </mat-cell>
-</ng-container>
-
-<ng-container matColumnDef="userassigned" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Responsable</mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.userassigned}} </mat-cell>
-</ng-container>
-
-
-<ng-container matColumnDef="create_at" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
-    <mat-cell *matCellDef="let order"> {{order.create_at }}</mat-cell>
-</ng-container>
-
-
-<ng-container matColumnDef="time" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> T. Ejecución </mat-header-cell>
-    <mat-cell *matCellDef="let order"> <div *ngIf="order.time">{{order.time }}</div></mat-cell>
-</ng-container>
-
-
-<ng-container matColumnDef="update_at" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
-    <mat-cell *matCellDef="let order"> 
-      <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>
-    </mat-cell>
-</ng-container>
-
-<ng-container matColumnDef="estatus" >
-  <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
-  <mat-cell *matCellDef="let order; let i = index" > 
-    <mat-chip-list>
-        <mat-chip *ngIf="order.label==1" selected color="warn">
-          {{order.estatus}}
-        </mat-chip>
-
-        <mat-chip *ngIf="order.label==2" selected color="primary">
-          {{order.estatus}}
-        </mat-chip>
-
-        <mat-chip *ngIf="order.label==3" selected color="accent">
-          {{order.estatus}}
-        </mat-chip>
-    </mat-chip-list>
-  </mat-cell>
-</ng-container>
-
-
-<!-- actions -->
-    <ng-container matColumnDef="actions" >
-      <mat-header-cell *matHeaderCellDef >        
-        <button mat-icon-button color="primary" (click)="addNew(id, category_id)" *ngIf="_userService.isRole(4) && id && category_id"
-        matTooltip="Agregar orden."
-        [matTooltipPosition]="positionheaderaction.value"
-        >
-          <mat-icon  >add</mat-icon>
-        </button>
-        <button mat-icon-button color="primary" (click)="refreshTable()"
-        matTooltip="Refrescar datos."
-        [matTooltipPosition]="positionheaderaction.value"
-        *ngIf="_userService.isRole(4) && id && category_id"
-        >
-          <mat-icon  >refresh</mat-icon>
-        </button>
-        <button mat-icon-button color="primary" (click)="settings(columnsOrderToDisplay)"
-        matTooltip="Ver/Ocultar columnas."
-        [matTooltipPosition]="positionheaderaction.value"
-        *ngIf="_userService.isRole(4) && id && category_id"
-        >
-        <mat-icon >settings</mat-icon>
-        </button>
-
-        <button mat-icon-button color="primary" (click)="publish()"
-        matTooltip="Almacenar información."
-        [matTooltipPosition]="positionheaderaction.value"
-        *ngIf="_userService.isRole(4) && id && category_id"
-        >
-        <mat-icon class="material-icons">publish</mat-icon>
-        </button>
-
-      </mat-header-cell>
+  <ng-container matColumnDef="important" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header><i class="material-icons">unfold_more</i></mat-header-cell>
       <mat-cell *matCellDef="let order; let i = index" >
-        <button mat-icon-button color="primary" *ngIf="_userService.isRole(4)" (click)="startEdit(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.assigned_to, order.order_date, order.required_date, order.vencimiento_date, order.leido_por, order.observation, order.create_at)"
-        matTooltip="Editar orden."
+        <span class="mobile-label">Destacado:</span>
+        <div  (click)="order.important=!order.important; onChangeIcon(order.important, category_id, order.order_id) ">
+          <i class="material-icons md-color-checkbox" matTooltip="Destacado" [matTooltipPosition]="positiondatasourceaction.value" *ngIf="order.important">label_important</i>
+          <i class="material-icons md-nocolor-checkbox" matTooltip="Sin destacar" [matTooltipPosition]="positiondatasourceaction.value" *ngIf="!order.important">label_important</i>
+        </div>      
+
+        <!--
+        <div *ngIf="order.important==0">   
+
+        <mat-checkbox
+        color="primary"
+        [checked]="false"
+        (change)="onChange($event, category_id, order.order_id)"
+        matTooltip="Marcar orden como importante."
         [matTooltipPosition]="positiondatasourceaction.value"
-        
-        >
-          <mat-icon class="material-icons md-color" aria-label="Edit" *ngIf="i != indexitem">edit</mat-icon>          
-          <mat-icon aria-label="Edit" *ngIf="i == indexitem">edit</mat-icon>          
-        </button>
+        >      
+        </mat-checkbox>
+        </div>
 
-        <button mat-icon-button color="warn" *ngIf="_userService.isRole(5)" (click)="deleteItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id,  order.estatus, order.order_date, order.required_date, order.observation, order.create_at, order.project_name, order.service_name, order.servicetype )"
-        matTooltip="Eliminar orden."
+        <div *ngIf="order.important==1">   
+        <mat-checkbox
+        color="primary"
+        [checked]="true"
+        (change)="onChange($event, category_id, order.order_id)" 
+        matTooltip="No marcar orden como importante."
         [matTooltipPosition]="positiondatasourceaction.value"
-        >
-          <mat-icon class="material-icons md-color" aria-label="Delete" *ngIf="i != indexitem">delete</mat-icon>
-          <mat-icon aria-label="Delete" *ngIf="i == indexitem">delete</mat-icon>
-        </button>
+        >        
+        </mat-checkbox>
+        </div>
+        -->
 
-        <button mat-icon-button color="" (click)="showItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.estatus, order.order_date, order.required_date, order.vencimiento_date, order.observation, order.create_at, order.user, order.project_name, order.service_name, order.servicetype, order.update_at, order.userupdate, order.region, order.provincia, order.comuna, order.direccion)"
-        matTooltip="Ver orden."
-        [matTooltipPosition]="positiondatasourceaction.value"
-        >
-          <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
-          <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
-        </button>
-
-        <button mat-icon-button color="primary" (click)="publishOrder(order.order_id)"
-        matTooltip="Almacenar información."
-        [matTooltipPosition]="positionheaderaction.value"
-        >
-          <mat-icon class="material-icons md-color" *ngIf="i != indexitem">publish</mat-icon>
-          <mat-icon  *ngIf="i == indexitem">publish</mat-icon>
-        </button>
-
-
-          
       </mat-cell>
-    </ng-container>
-
-
-<mat-header-row *matHeaderRowDef="columnsOrderToDisplay" color="primary" ></mat-header-row>
-<mat-row *matRowDef="let order; let i = index; columns: columnsOrderToDisplay;" (click)="setClickedRow(i, order.order_id)" (mouseenter)="hoverIn(i)" (mouseleave)="hoverOut(i)" [class.active]="i == selectedRow"></mat-row>
+  </ng-container>
 
 
 
-</mat-table>
+  <ng-container matColumnDef="order_number"  >  
+    <mat-header-cell *matHeaderCellDef mat-sort-header > N. Orden </mat-header-cell>
+      <mat-cell *matCellDef="let order; let i = index" >
+          <span class="mobile-label">N. Orden:</span>
+          {{order.order_number}}
+          <mat-icon class="material-icons md-13-color" *ngIf="order.imagen">image</mat-icon>        
+          <mat-icon class="material-icons md-13-nocolor" *ngIf="!order.imagen">image</mat-icon>                
+        </mat-cell>
+  </ng-container>
+
+
+    
+  <ng-container matColumnDef="cc_number">
+    <mat-header-cell *matHeaderCellDef mat-sort-header> N. Cliente </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">N. Cliente:</span>
+        {{order.cc_number}} 
+      </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="region"  >
+    <mat-header-cell *matHeaderCellDef mat-sort-header  > Región </mat-header-cell>
+      <mat-cell *matCellDef="let order" [ngClass]="{'hidden-item': true}"> 
+          <span class="mobile-label">Región:</span>
+        {{order.region}} 
+      </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="provincia"  >
+    <mat-header-cell *matHeaderCellDef mat-sort-header  > Provincia </mat-header-cell>
+      <mat-cell *matCellDef="let order" [ngClass]="{'hidden-item': true}"> 
+          <span class="mobile-label">Provincia:</span>
+        {{order.provincia}} 
+      </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="comuna"  >
+    <mat-header-cell *matHeaderCellDef mat-sort-header  > Comuna </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">Comuna:</span>
+        {{order.comuna}} 
+      </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="orderdetail_direccion">
+    <mat-header-cell *matHeaderCellDef mat-sort-header  > Realizado En </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">Realizado En:</span>
+        {{order.orderdetail_direccion}} 
+      </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="direccion">
+    <mat-header-cell *matHeaderCellDef mat-sort-header  > Ubicación </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">Ubicación:</span>
+        {{order.direccion}} 
+      </mat-cell>
+  </ng-container>
+
+
+
+  <ng-container matColumnDef="servicetype" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Servicio </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">T. Serv.:</span>
+        {{order.servicetype}}     
+      </mat-cell>
+  </ng-container>
+
+
+
+  <ng-container matColumnDef="user" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Informador </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">Informador:</span>
+        {{order.user}} 
+      </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="userupdate" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Editado </mat-header-cell>
+      <mat-cell *matCellDef="let order"> {{order.userupdate}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="userassigned" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Responsable</mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">Responsable:</span>
+        {{order.userassigned}} 
+      </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="create_at" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">Creado El:</span>
+        {{order.create_at }}
+      </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="time" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> T. Ejecución </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">T. Ejecución:</span>
+        <div *ngIf="order.time">{{order.time }}</div></mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="update_at" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
+      <mat-cell *matCellDef="let order">
+          <span class="mobile-label">T. Atención:</span>
+        <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>
+      </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="estatus" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
+    <mat-cell *matCellDef="let order; let i = index" >
+        <span class="mobile-label">Estatus:</span>
+      <mat-chip-list>
+          <mat-chip *ngIf="order.label==1" selected color="warn">
+            {{order.estatus}}
+          </mat-chip>
+
+          <mat-chip *ngIf="order.label==2" selected color="primary">
+            {{order.estatus}}
+          </mat-chip>
+
+          <mat-chip *ngIf="order.label==3" selected color="accent">
+            {{order.estatus}}
+          </mat-chip>
+      </mat-chip-list>
+    </mat-cell>
+  </ng-container>
+
+
+  <!-- actions -->
+      <ng-container matColumnDef="actions" >
+        <mat-header-cell *matHeaderCellDef >        
+          <button mat-icon-button color="primary" (click)="addNew(id, category_id)" *ngIf="_userService.isRole(4) && id && category_id"
+          matTooltip="Agregar orden."
+          [matTooltipPosition]="positionheaderaction.value"
+          >
+            <mat-icon  >add</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="refreshTable()"
+          matTooltip="Refrescar datos."
+          [matTooltipPosition]="positionheaderaction.value"
+          *ngIf="_userService.isRole(4) && id && category_id"
+          >
+            <mat-icon  >refresh</mat-icon>
+          </button>
+          <button mat-icon-button color="primary" (click)="settings(columnsOrderToDisplay)"
+          matTooltip="Ver/Ocultar columnas."
+          [matTooltipPosition]="positionheaderaction.value"
+          *ngIf="_userService.isRole(4) && id && category_id"
+          >
+          <mat-icon >settings</mat-icon>
+          </button>
+
+
+
+          <button mat-icon-button color="primary" [matMenuTriggerFor]="menuviewselectaction"  *ngIf="_userService.isRole(4) && id && category_id">
+          <mat-icon class="material-icons">publish</mat-icon>
+          </button>
+
+          <mat-menu #menuviewselectaction="matMenu" [overlapTrigger]="false" >
+            <button mat-menu-item *ngIf="_userService.isRole(8)" (click)="publish()" matTooltip="Almacenar información." [matTooltipPosition]="positionheaderaction.value">
+              <span >Documentos de Proyecto</span>
+            </button>            
+            <button mat-menu-item (click)="addDoc()">
+              <span >Adjuntar Documento</span>
+            </button>
+          </mat-menu>
+
+
+        </mat-header-cell>
+        <mat-cell *matCellDef="let order; let i = index" >
+          <button mat-icon-button color="primary" *ngIf="_userService.isRole(4)" (click)="startEdit(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.assigned_to, order.order_date, order.required_date, order.vencimiento_date, order.leido_por, order.observation, order.create_at)"
+          matTooltip="Editar orden."
+          [matTooltipPosition]="positiondatasourceaction.value"
+          
+          >
+            <mat-icon class="material-icons md-color" aria-label="Edit" *ngIf="i != indexitem">edit</mat-icon>          
+            <mat-icon aria-label="Edit" *ngIf="i == indexitem">edit</mat-icon>          
+          </button>
+
+          <button mat-icon-button color="warn" *ngIf="_userService.isRole(5)" (click)="deleteItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id,  order.estatus, order.order_date, order.required_date, order.observation, order.create_at, order.project_name, order.service_name, order.servicetype )"
+          matTooltip="Eliminar orden."
+          [matTooltipPosition]="positiondatasourceaction.value"
+          >
+            <mat-icon class="material-icons md-color" aria-label="Delete" *ngIf="i != indexitem">delete</mat-icon>
+            <mat-icon aria-label="Delete" *ngIf="i == indexitem">delete</mat-icon>
+          </button>
+
+          <button mat-icon-button color="" (click)="showItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.estatus, order.order_date, order.required_date, order.vencimiento_date, order.observation, order.create_at, order.user, order.project_name, order.service_name, order.servicetype, order.update_at, order.userupdate, order.region, order.provincia, order.comuna, order.direccion)"
+          matTooltip="Ver orden."
+          [matTooltipPosition]="positiondatasourceaction.value"
+          >
+            <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
+            <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
+          </button>
+
+
+          <button mat-icon-button [matMenuTriggerFor]="menuviewselectorder" *ngIf="!show"  matTooltip="Acciones (Presiona para acceder a las acciones de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
+            <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">more_horiz</mat-icon>
+            <mat-icon aria-label="launch" *ngIf="i == indexitem">more_horiz</mat-icon>
+          </button>
+        
+          <mat-menu #menuviewselectorder="matMenu" [overlapTrigger]="false">
+            <button mat-menu-item (click)="publishOrder(order.order_id)" *ngIf="_userService.isRole(8)">
+              <span >Documentos de Orden</span>
+            </button>
+            <button mat-menu-item (click)="addJob(order.order_id, order.order_number, order.estatus, order.servicetype_id)">
+              <span >Registrar trabajo</span>
+            </button>
+
+          </mat-menu>        
+
+
+
+
+            
+        </mat-cell>
+      </ng-container>
+
+
+  <mat-header-row *matHeaderRowDef="columnsOrderToDisplay" color="primary" ></mat-header-row>
+  <mat-row *matRowDef="let order; let i = index; columns: columnsOrderToDisplay;" (click)="setClickedRow(i, order.order_id)" (mouseenter)="hoverIn(i)" (mouseleave)="hoverOut(i)" [class.active]="i == selectedRow"></mat-row>
+
+
+
+  </mat-table>
+</div>
 </div>
 <mat-paginator    [length]="resultsLength"
                   [pageSize]="pageSize"

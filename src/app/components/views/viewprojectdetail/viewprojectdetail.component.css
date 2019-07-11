@@ -7,9 +7,17 @@
     max-width: 100%;
     text-align: center;
   }
+  .example-full-width {
+    width: 100%;
+    }
   .spacer {
     flex: 1 1 auto;
   }
+  .list-container {
+    height: 250px;
+    /*height: 30vh;*/
+    border: 0px solid black;
+    }
   .material-icons.md-14-color { font-size: 14px; background-color: #F8F8F8;}
   .material-icons.md-16-color { font-size: 16px; background-color: #F8F8F8;}
   
@@ -50,8 +58,7 @@
       color: #333;
   }
   .project-tab a{
-      text-decoration: none;
-      color: #333;
+      text-decoration: none;      
       font-weight: 600;
   }
   
@@ -96,4 +103,43 @@
 
   .border{
     border-radius: 4px;
+  }
+    
+  .fLcKLS {
+    -webkit-appearance: none;
+    color: inherit;
+    font-size: 14px;
+    font-family: inherit;
+    letter-spacing: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.jmTFIN {
+font-weight: 500;
+}
+
+.fOqogj {
+-webkit-box-align: center;
+align-items: center;
+display: flex;
+padding-top: 1px;
+}
+.progress {
+  display: flex;
+  height: 2px;
+  overflow: hidden;
+  width: 100%;
+  margin: 0 auto;
+  font-size: .75rem;
+  background-color: #e9ecef;
+  border-radius: .25rem;
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  }
+  
+  .progress-bar {
+  height: 2px;
   }

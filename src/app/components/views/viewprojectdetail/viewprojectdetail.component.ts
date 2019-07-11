@@ -1,6 +1,9 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy } from '@angular/core';
-import { FormControl  } from '@angular/forms';
-import { Subscription, Observable } from 'rxjs';
+import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy, ViewChild } from '@angular/core';
+import { FormControl, FormGroup, Validators  } from '@angular/forms';
+import { ToastrService } from 'ngx-toastr';
+import { defer, combineLatest, Observable, of, Subscription } from 'rxjs';
+import { tap, switchMap, map } from 'rxjs/operators';
+
 
 declare var swal: any;
 
@@ -21,6 +24,8 @@ import { AddMercadoComponent } from '../../../pages/orderservice/components/dial
 import { AddModeloComponent } from '../../../pages/orderservice/components/dialog/add-modelo/add-modelo.component';
 import { AddSectorComponent } from '../../../pages/orderservice/components/dialog/add-sector/add-sector.component';
 import { AddServiceTypeComponent } from '../../../pages/orderservice/components/dialog/add-service-type/add-service-type.component';
+import { AddServiceTypeValueComponent } from '../../../pages/orderservice/components/dialog/add-service-type-value/add-service-type-value.component';
+import { AddServiceValueComponent } from '../../../pages/orderservice/components/dialog/add-service-value/add-service-value.component';
 import { AddTarifaComponent } from '../../../pages/orderservice/components/dialog/add-tarifa/add-tarifa.component';
 import { AddZonaComponent } from '../../../pages/orderservice/components/dialog/add-zona/add-zona.component';
 
@@ -32,6 +37,7 @@ import { MatDialog, MatSnackBar } from '@angular/material';
 import { 
   Comuna,
   Customer,
+  FileItem,
   Provincia,
   ProjectServiceCategorie,
   ProjectServiceType,
@@ -46,7 +52,10 @@ const moment = _moment;
 
 
 //SERVICES
-import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
+import { CargaImagenesService, CdfService, CountriesService, OrderserviceService, ProjectsService, ZipService, UserService } from '../../../services/service.index';
+
+//UTILITY
+import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 
 export interface Item { id: any, comment: string; created: any, identity: string}
@@ -64,14 +73,21 @@ export interface Users {
   styleUrls: ['./viewprojectdetail.component.css']
 })
 export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges {
+
+  @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
   
+  archivos: FileItem[] = [];
   public cc_id:number;
   public category_id:number;
+  CARPETA_ARCHIVOS:string = '';
   public comunas: Comuna[] = [];
   public country_id: number;
+  comentarios$: Observable<any[]>;
+  private comentariosCollection: AngularFirestoreCollection<any>;
   public created: FormControl;
   public customer: Customer[] = [];
   public descriptionidUx: string = ''
+  formComentar: FormGroup;
   public idUx: any;
   public identity: any;
   public isRateLimitReached = true;
@@ -80,6 +96,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   private itemsCollection: AngularFirestoreCollection<Item>;
   destinatario = [];
   private path = '';
+  newpath: string;
   public project: string;
   public project_id: number;
   project_type: number;
@@ -96,6 +113,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public service_data: Service;
   public servicename: string;
   public subscription: Subscription;
+  tipoServicio: any;
   private token: any;
   public toggleContent: boolean = false;
   public toggleContentMain: boolean = false;
@@ -145,6 +163,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
 
   constructor(
     private _afs: AngularFirestore,
+    public _cargaImagenes: CargaImagenesService,
     private _cdf: CdfService,
     private _dataService: OrderserviceService,
     private _project: ProjectsService,
@@ -152,11 +171,14 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
     public _userService: UserService,
     private firebaseAuth: AngularFireAuth,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,  
+    public snackBar: MatSnackBar,
+    private toasterService: ToastrService,
+    public zipService: ZipService,
   ) { 
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+    
 
     this.firebaseAuth.authState.subscribe(
       (auth) => {
@@ -169,7 +191,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   }
 
   ngOnInit() {
-    
+  
   }
 
   ngOnDestroy() {
@@ -177,14 +199,36 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
 
   
   ngOnChanges(changes: SimpleChanges) {
+
+    this.newpath = 'allfiles/projects/';
+
+    this.formComentar = new FormGroup({
+      comentario: new FormControl ('', [Validators.required]),
+    });
+
+    this.formComentar.setValue({
+      'comentario': ''
+    });
+
     if(this.token.token != null && this.id > 0){
       this.isRateLimitReached = false;
       this.service_id = this.id;
-       this.loadInfo();    
+       this.loadInfo();
+       this.getTipoServicio(this.id);
     }else{
        this.isRateLimitReached = true;        
-    } 
+    }
+
+
   }
+
+  collectionJoinUser(document, path:string): Observable<any> {
+    return this.comentarios$ = document.pipe(
+      leftJoin(this._afs, 'create_to', 'users', 0, '', '', 'usercomment'),
+      leftJoin(this._afs, 'id', path + 'files', 1, 'id', '==', 'adjuntos')
+    );
+  }
+
 
 	enableDiv(row:any){
     this.row.expand = !this.row.expand;
@@ -203,6 +247,24 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   }        
 }
 
+getTipoServicio(id:number) {
+  this.zipService.getTipoServicio(id, this.token.token).then(
+    (res: any) => {
+      res.subscribe(
+        (some: any) => {
+          this.tipoServicio = some['datos'];
+          //console.log(this.tipoServicio);
+          //console.log(this.tipoServicio.length);
+        },
+        (error: any) => {
+          console.log(<any>error);
+        }
+      );
+    }
+  );
+}
+
+/*
 addComment(value:any) { 
   
   //value = `${value}`;
@@ -234,8 +296,74 @@ addComment(value:any) {
   if(this.toggleContentMain){
     this.toggleContentMain=false;
   }   
+}*/
+
+loadcomentario(path:string){
+
+    //SELECT DE COMMENTS FIREBASE
+    this.comentariosCollection = this._afs.collection(path + 'comments', ref => ref.orderBy('create_at', 'desc'));
+    this.comentariosCollection.snapshotChanges().pipe(
+      map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
+        });
+      })
+    ).subscribe( (collection: any[]) => {
+        const count = Object.keys(collection).length;
+        if (count === 0) {
+          this.comentarios$ = null;
+        } else {
+          this.collectionJoinUser(Observable.of(collection), path);
+        }
+      }
+    );
+
 
 }
+
+
+addComentario() {
+
+  if(!this.newpath){
+    return;
+  }
+
+  const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
+  this.CARPETA_ARCHIVOS = this.newpath;
+
+  if (this.formComentar.invalid ) {
+    swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+    return;
+  }
+
+  const that = this;
+  this._afs.collection(this.newpath + 'comments').add({
+    create_to: this.userFirebase.uid,
+    create_at: date,
+    comentario: this.formComentar.value.comentario
+  })
+  .then(function(docRef) {
+
+    //const comment = that.formComentar.value.comentario;
+    if (that.archivos.length > 0) {
+      that.toasterService.success('Solicitud actualizada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
+      const storage = that.newpath + 'files';
+      that._cargaImagenes.cargarImagenesProjectServiceFirebase( that.archivos, storage, {}, date, docRef.id);
+    }
+
+    that.formComentar.reset();
+    //that.toggleContent = false;
+
+  })
+  .catch(function(error) {
+      console.error('Error adding document: ', error);
+  });
+}
+
+
 
 sendCdf(data, message){
   if(!data){
@@ -340,6 +468,8 @@ deleteCommentDatabase(item: any) {
                           this.servicename = String (response.datos.service_name);
                           if(this.project_id >0){
                             this.getRouteFirebase(this.project_id);
+                            this.newpath = this.newpath + this.project_id + '/' + this.id + '/';
+                            this.loadcomentario(this.newpath);
                           }
                           
 
@@ -659,6 +789,53 @@ deleteCommentDatabase(item: any) {
     }
 
 
+    servicevalue(id: number) {
+      const dialogRef = this.dialog.open(AddServiceValueComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    servicetypevalue(id: number, servicetype_id:number) {
+      //console.log(id);
+      //console.log(servicetype_id);
+
+      const dialogRef = this.dialog.open(AddServiceTypeValueComponent, {
+        width: '777px',
+        disableClose: true,  
+        data: {
+          project_id: this.project_id,
+          service_id: id,
+          servicetype_id: servicetype_id
+        }
+      });
+  
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
 
     status(id: number) {
       const dialogRef = this.dialog.open(StatusComponent, {
@@ -684,7 +861,7 @@ deleteCommentDatabase(item: any) {
 
     servicetype(id: number) {
       const dialogRef = this.dialog.open(AddServiceTypeComponent, {
-        width: '777px',
+        width: '1000px',
         disableClose: true,  
         data: {
           project_id: this.project_id,
@@ -793,4 +970,91 @@ deleteCommentDatabase(item: any) {
     }
       
 
+
+    removeFile(index: number): void {
+      if (index >= 0) {
+        this.archivos.splice(index, 1);
+      }
+      if (this.archivos.length === 0) {
+        this.archivos = [];
+      }
+    }
+  
+  
+    selectFiles(event) {
+  
+      const filevalidation = event.target.files;
+      if (filevalidation && filevalidation.length > 0 && filevalidation.length <= 3) {
+      } else {
+        this.archivos = [];
+        if (filevalidation && filevalidation.length > 3) {
+          this.toasterService.warning('Error: Supero limite de 3 archivos', 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
+        }
+      }
+  
+    }
+
 }
+
+
+export const leftJoin = (
+  afs: AngularFirestore,
+  field,
+  collection,
+  type: number,
+  where: string,
+  condition,
+  nameObject
+  ) => {
+  return source =>
+    defer(() => {
+
+      // Operator state
+      let collectionData;
+
+      // Track total num of joined doc reads
+      let totalJoins = 0;
+
+      return source.pipe(
+        switchMap(data => {
+          // Clear mapping on each emitted val ;
+          // Save the parent data state
+          collectionData = data as any[];
+
+          const reads$ = [];
+          for (const doc of collectionData) {
+
+            // Push doc read to Array
+            if (doc[field]) {
+              // Perform query on join key, with optional limit
+              // const q = ref => ref.where(field, '==', doc[field]).limit(limit);
+
+              if (type === 0) {
+                reads$.push(afs.doc(collection + '/' + doc[field]).valueChanges());
+              }
+
+              if (type === 1) {
+                // tslint:disable-next-line:max-line-length
+                reads$.push(afs.collection(collection, ref => ref.where( where, condition, doc[field])).valueChanges());
+              }
+
+            } else {
+              reads$.push(of([]));
+            }
+          }
+
+          return combineLatest(reads$);
+        }),
+        map(joins => {
+          return collectionData.map((v: any, i: any) => {
+            totalJoins += joins[i].length;
+            return { ...v, [nameObject]: joins[i] || null };
+          });
+        }),
+        tap(final => {
+            // console.log( `Queried ${(final as any).length}, Joined ${totalJoins} docs`);
+          totalJoins = 0;
+        })
+      );
+    });
+};

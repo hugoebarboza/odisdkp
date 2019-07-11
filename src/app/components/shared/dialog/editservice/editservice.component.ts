@@ -1,4 +1,4 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormControl, Validators, NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs';
@@ -37,7 +37,7 @@ import { CdfService, CountriesService, OrderserviceService, ProjectsService, Use
   templateUrl: './editservice.component.html',
   styleUrls: ['./editservice.component.css']
 })
-export class EditServiceComponent implements OnInit {
+export class EditServiceComponent implements OnInit, OnDestroy {
   public title: string = 'Editar';
   public comunas: Comuna[] = [];
   public customers: Customer [] = [];
@@ -48,6 +48,8 @@ export class EditServiceComponent implements OnInit {
   public isLoading:boolean = false;
   public label: boolean;
   public loading: boolean = true;
+
+  /** 
   public new_accept_edpdate: any;
   public new_assigned_date_touser1: any;
   public new_assigned_date_touser2: any;
@@ -60,6 +62,7 @@ export class EditServiceComponent implements OnInit {
   public new_required_date: any;
   public new_reception_crodate: any;
   public new_send_edpdate: any;
+  */
   public project: string;
   public project_id: number = 0;
   public projectservicecategorie: ProjectServiceCategorie[] = [];
@@ -144,6 +147,78 @@ export class EditServiceComponent implements OnInit {
                     if(this.services['servicedetail'][0]){
                       this.service_detail = response.datos.servicedetail;                      
                       this.service_data = response.datos.servicedetail[0];
+
+                      if (this.service_data.reception_date !== '0000-00-00 00:00:00') {
+                        this.service_data.reception_date =  moment(this.service_data.reception_date).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.reception_date = null;
+                      }
+                  
+                      if (this.service_data.required_date !== '0000-00-00 00:00:00') {
+                        this.service_data.required_date =  moment(this.service_data.required_date).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.required_date = null;
+                      }
+                  
+                      if (this.service_data.due_date !== '0000-00-00 00:00:00') {
+                        this.service_data.due_date =  moment(this.service_data.due_date).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.due_date = null;
+                      }
+                  
+                      if (this.service_data.other_assigned_date_toitocivil !== '0000-00-00 00:00:00') {
+                        this.service_data.other_assigned_date_toitocivil =  moment(this.service_data.other_assigned_date_toitocivil).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.other_assigned_date_toitocivil = null;
+                      }
+                  
+                      if (this.service_data.other_assigned_date_toitoelec !== '0000-00-00 00:00:00') {
+                        this.service_data.other_assigned_date_toitoelec =  moment(this.service_data.other_assigned_date_toitoelec).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.other_assigned_date_toitoelec = null;
+                      }
+                  
+                      if (this.service_data.reception_crodate !== '0000-00-00 00:00:00') {
+                        this.service_data.reception_crodate =  moment(this.service_data.reception_crodate).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.reception_crodate = null;
+                      }
+                  
+                      if (this.service_data.checked_crodate !== '0000-00-00 00:00:00') {
+                        this.service_data.checked_crodate =  moment(this.service_data.checked_crodate).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.checked_crodate = null;
+                      }
+                  
+                      if (this.service_data.send_edpdate !== '0000-00-00 00:00:00') {
+                        this.service_data.send_edpdate =  moment(this.service_data.send_edpdate).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.send_edpdate = null;
+                      }
+                  
+                      if (this.service_data.accept_edpdate !== '0000-00-00 00:00:00') {
+                        this.service_data.accept_edpdate =  moment(this.service_data.accept_edpdate).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.accept_edpdate = null;
+                      }
+                  
+                      if (this.service_data.reject_edpdate !== '0000-00-00 00:00:00') {
+                        this.service_data.reject_edpdate =  moment(this.service_data.reject_edpdate).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.reject_edpdate = null;
+                      }
+                  
+                      if (this.service_data.assigned_date_touser1 !== '0000-00-00 00:00:00') {
+                        this.service_data.assigned_date_touser1 =  moment(this.service_data.assigned_date_touser1).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.assigned_date_touser1 = null;
+                      }
+                  
+                      if (this.service_data.assigned_date_touser2 !== '0000-00-00 00:00:00') {
+                        this.service_data.assigned_date_touser2 =  moment(this.service_data.assigned_date_touser2).format('YYYY-MM-DD HH:mm');
+                      } else {
+                        this.service_data.assigned_date_touser2 = null;
+                      }
                       //console.log(this.service_data);
                       if(this.service_data.region_id > 0){
                         this.onSelectRegion(this.service_data.region_id);
@@ -172,6 +247,7 @@ export class EditServiceComponent implements OnInit {
     if(this.services.service_name){
       this.service_data.service_name = this.services.service_name;
     }
+    /*
     if(this.new_due_date){
       this.service_data.due_date = this.new_due_date;
     }
@@ -208,7 +284,8 @@ export class EditServiceComponent implements OnInit {
     }
     if(this.new_reject_edpdate){
       this.service_data.reject_edpdate = this.new_reject_edpdate;
-    }
+    } */
+
 
     let obj = Object.assign(this.service_data);
     //console.log(obj);
@@ -300,7 +377,10 @@ export class EditServiceComponent implements OnInit {
 
   ngOnDestroy() {
     //console.log('La página se va a cerrar');
-    this.subscription.unsubscribe();
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
+    
   }
 
 

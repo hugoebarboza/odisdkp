@@ -34,6 +34,8 @@ import { Order, ServiceType, ServiceEstatus } from '../../../models/types';
 
 //DIALOG
 import { AddComponent } from '../../dialog/add/add.component';
+import { AddDocComponent } from '../../../components/shared/dialog/add-doc/add-doc.component';
+import { AddJobComponent } from '../../../pages/orderservice/components/dialog/add-job/add-job.component';
 import { FileComponent } from '../../dialog/file/file.component';
 import { CsvComponent } from '../../dialog/csv/csv.component';
 import { DeleteComponent } from '../../dialog/delete/delete.component';
@@ -592,11 +594,14 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   public getData(response: any){
+
+    //console.log(response);
     if(response){
         response.subscribe(
           (some: any) => 
           {
-            if(some.datos.data){  
+            if(some.datos.data){
+            //console.log(some.datos.data);
             this.resultsLength = some.datos.total;
             this.servicename = some.datos.data[0]['service_name'];
             this.category_id =  some.datos.data[0]['category_id'];
@@ -1187,6 +1192,44 @@ private filterRegionMulti() {
        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
         // And lastly refresh table
         //this.refreshTable();
+      }
+    });
+  }
+
+  addDoc() {
+    const dialogRef = this.dialog.open(AddDocComponent, {
+      width: '1000px',
+      disableClose: true,                 
+      data: { project_id: this.project_id,
+              service_id: this.id
+            }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) { 
+
+      }
+    });
+  }
+
+
+
+  addJob(order_id: any, order_number: any, estatus: any, servicetype_id:number) {
+    const dialogRef = this.dialog.open(AddJobComponent, {
+      width: '1000px',
+      disableClose: true,                 
+      data: { project: this.project_id,
+              service_id: this.id,
+              tiposervicio: servicetype_id,              
+              orderid: order_id,
+              order_number: order_number,
+              estatus: estatus
+            }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) { 
+
       }
     });
   }

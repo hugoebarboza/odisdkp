@@ -25,7 +25,7 @@
       </div>
 
       <div class="row">
-          <div class="col-8">  
+          <div class="col-md-8">  
               <div class="form">
                   <mat-form-field color="accent">
                      <input matInput #input  placeholder="Num. Orden" [(ngModel)]="data.order_number" name="order_number" required  #order_number="ngModel" 
@@ -91,7 +91,7 @@
             
 
           </div>
-          <div class="col-4">
+          <div class="col-md-4 order-first order-md-last">
 
               <div class="form">
                   <mat-form-field color="accent">
@@ -166,7 +166,8 @@
               </div>
         
               <div class="form">
-              <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.order_date" name="order_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+              <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.order_date" name="order_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true" showButtonBar="true">
+                  <p-footer></p-footer>
               </p-calendar>
               </div>
         
@@ -176,7 +177,8 @@
               </div>
         
               <div class="form">
-              <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.required_date" name="required_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+              <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.required_date" name="required_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true" showButtonBar="true">
+                  <p-footer></p-footer>
               </p-calendar>
               </div>
         
@@ -186,7 +188,8 @@
               </div>
         
               <div class="form">
-              <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="date.value" [(ngModel)]="data.vencimiento_date" name="vencimiento_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true">
+              <p-calendar placeholder="yyyy-mm-dd hh:mm" [minDate]="date.value" [(ngModel)]="data.vencimiento_date" name="vencimiento_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true" showButtonBar="true">
+                  <p-footer></p-footer>
               </p-calendar>
               </div>
           </div>            
@@ -314,10 +317,8 @@
                             <label>{{detailatributo.descripcion}}</label>
                             </div>              
                             <div class="form">
-                            <p-calendar placeholder="dd/mm/yy"  [(ngModel)]="myDate" name="{{detailatributo.id}}"  
-                            dateFormat="dd/mm/yy"
-                            [showIcon]="true"
-                            >
+                            <p-calendar placeholder="dd/mm/yy"  [(ngModel)]="myDate" name="{{detailatributo.id}}" dateFormat="dd/mm/yy" [showIcon]="true" showButtonBar="true">
+                            <p-footer></p-footer>
                             </p-calendar>
                             </div>              
                           </div>            
@@ -392,6 +393,6 @@
 
 <div mat-dialog-actions>
     <button mat-button color="primary" [type]="submit" [disabled]="!formControl.valid || !active || !isvalid " [mat-dialog-close]="1" (click)="confirmAdd(formControl)" mat-raised-button color="primary" class="btnsave">Guardar</button>
-    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cerrar</button>      
+    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>      
 </div>
 

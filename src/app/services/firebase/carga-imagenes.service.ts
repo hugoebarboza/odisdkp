@@ -6,6 +6,7 @@ import { AngularFirestore,  AngularFirestoreCollection, AngularFirestoreDocument
 import { FileItem, Item } from '../../models/types';
 
 import { Observable } from 'rxjs';
+import { image } from 'html2canvas/dist/types/css/types/image';
 
 
 
@@ -82,9 +83,136 @@ export class CargaImagenesService {
 
   }
 
+
+  cargarImagenesProjectFirebase( imagenes: FileItem[], carpeta_archivo: string, source: string, data:any, created: any , extra: any) {
+    const storageRef = firebase.storage().ref();
+    for ( const item of imagenes ) {
+      item.estaSubiendo = true;
+      if ( item.progreso >= 100 ) {
+        continue;
+      }
+
+      //console.log(item);
+      const uploadTask: firebase.storage.UploadTask =
+                  storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
+                            .put( item.archivo );
+
+      uploadTask.on( 'state_changed',
+        (snapshot: firebase.storage.UploadTaskSnapshot) => {
+
+          const count = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          if (count < 99) {
+            item.progreso = Math.round(count);
+          }
+
+          if (count > 99 && count < 100) {
+            item.progreso = 99;
+          }
+
+          if (count === 100) {
+            item.progreso = 100;
+          }
+
+          //console.log('PROGESOO:   ' + item.progreso );
+        }, (error) => {
+          console.error('Error al subir');
+        }, () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            // console.log('File available at', downloadURL);
+            item.url = downloadURL;
+            item.estaSubiendo = false;
+            item.created = created;
+            this.guardarImagenProjectExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra }, carpeta_archivo, source, data );
+
+          });
+        }
+      );
+
+    }
+
+  }
+
+
+  cargarImagenesProjectServiceFirebase( imagenes: FileItem[], carpeta_archivo: string, data:any, created: any , extra: any) {
+    const storageRef = firebase.storage().ref();
+    for ( const item of imagenes ) {
+      item.estaSubiendo = true;
+      if ( item.progreso >= 100 ) {
+        continue;
+      }
+
+      //console.log(item);
+      const uploadTask: firebase.storage.UploadTask =
+                  storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
+                            .put( item.archivo );
+
+      uploadTask.on( 'state_changed',
+        (snapshot: firebase.storage.UploadTaskSnapshot) => {
+
+          const count = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+          if (count < 99) {
+            item.progreso = Math.round(count);
+          }
+
+          if (count > 99 && count < 100) {
+            item.progreso = 99;
+          }
+
+          if (count === 100) {
+            item.progreso = 100;
+          }
+
+          //console.log('PROGESOO:   ' + item.progreso );
+        }, (error) => {
+          console.error('Error al subir');
+        }, () => {
+          // Handle successful uploads on complete
+          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
+          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
+            // console.log('File available at', downloadURL);
+            item.url = downloadURL;
+            item.estaSubiendo = false;
+            item.created = created;
+            this.guardarImagenProjectServiceExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra }, carpeta_archivo );
+
+          });
+        }
+      );
+
+    }
+
+  }
+
+
   private guardarImagenExtra( imagen: { nombre: string, type: string, url: string, created: any, id_case: any },  path: string ) {
 
     //console.log(path);
+    this.afs.collection(`${ path }`).add( imagen );
+
+  }
+
+  private guardarImagenProjectExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any },  path: string, source:string, data:any ) {
+
+    //console.log(path);
+    this.afs.collection(`${ path }`).add( imagen );
+    let obj = {
+      nombre: imagen.nombre,
+      type: imagen.type, 
+      url:  imagen.url, 
+      created: imagen.created, 
+      id: imagen.id,
+      ref: path,
+      data: data
+    }
+    this.afs.collection(`${ source }`).add( obj );
+
+  }
+
+
+  private guardarImagenProjectServiceExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any },  path: string ) {
+
     this.afs.collection(`${ path }`).add( imagen );
 
   }
