@@ -1,5 +1,4 @@
 <div class="app">
-
         <mat-toolbar color="primary">
           <h3 >Adjuntar Documento - {{project.project_name}} / {{service.service_name}}</h3> 
           <span class="mat-spacer"></span>
@@ -11,30 +10,47 @@
 <div *ngIf="isLoading">
 <app-loading *ngIf="isLoading"></app-loading>  
 </div>
-<div class="col-12"  *ngIf="!isLoading && data">
-        <section id="tabs" class="project-tab">
-                <div class="row">
-                    <div class="col-12">
-                        <nav>
-                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home-file" role="tab" aria-controls="nav-home" aria-selected="true">Listado</a>
-                                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile-file" role="tab" aria-controls="nav-profile" aria-selected="false">Adjuntos</a>
-                            </div>
-                        </nav>
-                        <div class="tab-content" id="nav-tabContent">
-                            <div class="tab-pane fade show active" id="nav-home-file" role="tabpanel" aria-labelledby="nav-home-tab">
-                            <div class="p-3">
-                              <app-file-list [project_id]="data.project_id" [service_id]="data.service_id"></app-file-list>
-                            </div>                  
-                            </div>
-                        <div class="tab-pane fade" id="nav-profile-file" role="tabpanel" aria-labelledby="nav-profile-tab">
-                          <div class="p-3">
-                            <!---<app-uploader></app-uploader>-->
-                            <file-upload [project_id]="data.project_id"  [service_id]="data.service_id"></file-upload>
-                          </div>
+
+<div class="mat-dialog-content"  *ngIf="!isLoading && data">
+  <div class="col-12" >
+    <section id="tabs" class="project-tab">
+            <div class="row">
+                <div class="col-12">
+                    <nav>
+                        <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                            <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home-file" role="tab" aria-controls="nav-home" aria-selected="true">Listado</a>
+                            <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile-file" role="tab" aria-controls="nav-profile" aria-selected="false">Adjuntos</a>
                         </div>
+                    </nav>
+                    <div class="tab-content" id="nav-tabContent">
+                        <div class="tab-pane fade show active" id="nav-home-file" role="tabpanel" aria-labelledby="nav-home-tab">
+                        <div class="p-3">
+                          <app-file-list [project_id]="data.project_id" [service_id]="data.service_id"></app-file-list>
+                        </div>                  
                         </div>
+                    <div class="tab-pane fade" id="nav-profile-file" role="tabpanel" aria-labelledby="nav-profile-tab">
+                      <div class="p-3">
+                        <!---<app-uploader></app-uploader>-->
+                        <file-upload [project_id]="data.project_id"  [service_id]="data.service_id"></file-upload>
+                      </div>
+                    </div>
                     </div>
                 </div>
-        </section>          
+            </div>
+    </section>          
+</div>
+
+</div>
+
+</div>
+<div mat-dialog-actions>
+
+  <div class="container">      
+    <div class="row justify-content-center">
+    <div class="footer-button-row">
+    <button mat-button (click)="onNoClick()" >Cancelar</button>
+    </div>
+
+    </div>
+  </div>
 </div>

@@ -4,6 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { OrderserviceService, UserService } from 'src/app/services/service.index';
 import { ServiceEstatus } from 'src/app/models/types';
 import { MatSnackBar } from '@angular/material';
+import { CodeNode } from 'source-list-map';
 
 @Component({
   selector: 'app-status-list',
@@ -12,6 +13,8 @@ import { MatSnackBar } from '@angular/material';
 })
 export class StatusListComponent implements OnInit, OnDestroy {
 
+  code: string;
+  clase: string;
   editando: boolean = false;
   estatus: ServiceEstatus;
   indexitem:number;
@@ -74,7 +77,26 @@ export class StatusListComponent implements OnInit, OnDestroy {
 
     //this.snackBar.open('Procesando solicitud.', '', {duration: 2000,});
   
-    this.estatus = new ServiceEstatus (0, this.id, data.name,'','',data.label , data.order_by, 0, 1, '', '');
+
+    if(data.label  == 1){
+      this.code = '#E52320';
+      this.clase = 'warn';
+    }
+
+    if(data.label  == 2){
+      this.code = '#00E900';
+      this.clase = 'primary';
+    }
+  
+
+    if(data.label  == 3){
+      this.code = '#c51162';
+      this.clase = 'accent';
+    }
+
+
+    this.estatus = new ServiceEstatus (0, this.id, data.name, this.code, this.clase, data.label , data.order_by, 0, 1, '', '');
+
 
     this.dataService.addEstatus(this.token.token, this.estatus, this.id)
             .subscribe( (resp: any) => {              

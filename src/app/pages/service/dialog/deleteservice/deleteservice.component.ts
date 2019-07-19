@@ -3,7 +3,13 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs';
 
 //MODELS
-import { Service, User } from '../../../../models/types';
+import { Proyecto, Service, User } from 'src/app/models/types';
+
+//REDUX
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducers';
+import { LoginAction } from 'src/app/contador.actions';
+
 
 //SERVICES
 import { OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
@@ -15,8 +21,11 @@ import { OrderserviceService, ProjectsService, UserService } from '../../../../s
   styleUrls: ['./deleteservice.component.css']
 })
 export class DeleteServiceComponent implements OnInit {
+
+  identity: any;
   public title: string = 'Eliminar';
   public loading: boolean = true;
+  proyectos: Array<Proyecto> = [];
   public project: string;
   public project_id: number = 0;
   public services: Service;
@@ -35,8 +44,11 @@ export class DeleteServiceComponent implements OnInit {
     public _project: ProjectsService,
     public _userService: UserService,
     public dialogRef: MatDialogRef<DeleteServiceComponent>,
+    private store: Store<AppState>,
     @Inject(MAT_DIALOG_DATA) public data: any, 
-  ) {     
+  ) {
+    this.identity = this._userService.getIdentity();   
+    this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
   }
 
@@ -71,6 +83,7 @@ export class DeleteServiceComponent implements OnInit {
 
   confirmDelete(){
     this._project.deleteService(this.token.token, this.project_id, this.data.service_id);
+    this.refresh();
   }
 
   loadUserProject(id:number){
@@ -100,6 +113,29 @@ export class DeleteServiceComponent implements OnInit {
     this.subscription.unsubscribe();
   }
 
+
+  refresh(){    
+    //this.RefreshMenu.emit(1);
+    this.subscription = this._project.getProyectos(this.token.token, this.identity.dpto).subscribe(
+      response => {
+          if (response.status == 'success'){
+            this.proyectos = response.datos;
+            let key = 'proyectos';
+            this._userService.saveStorage(key, this.proyectos);
+            this.afterRefresch(this.proyectos, this.identity);
+          }
+        }
+      );
+  }
+
+  private afterRefresch(p:any, i:any): void {
+    const obj: any = {project: p, identificacion: i};
+    const accion = new LoginAction(obj);
+    this.store.dispatch( accion );
+    //console.log('redux dispacth action refresch menu')
+  }
+
+  
   ngOnDestroy() {
     //console.log('La página se va a cerrar');
     this.subscription.unsubscribe();

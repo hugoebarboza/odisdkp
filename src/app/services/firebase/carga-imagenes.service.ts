@@ -84,7 +84,7 @@ export class CargaImagenesService {
   }
 
 
-  cargarImagenesProjectFirebase( imagenes: FileItem[], carpeta_archivo: string, source: string, data:any, created: any , extra: any) {
+  cargarImagenesProjectFirebase( imagenes: FileItem[], carpeta_archivo: string, source: string, data:any, created: any , extra: any, uid: any) {
     const storageRef = firebase.storage().ref();
     for ( const item of imagenes ) {
       item.estaSubiendo = true;
@@ -124,7 +124,7 @@ export class CargaImagenesService {
             item.url = downloadURL;
             item.estaSubiendo = false;
             item.created = created;
-            this.guardarImagenProjectExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra }, carpeta_archivo, source, data );
+            this.guardarImagenProjectExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra, uid:uid }, carpeta_archivo, source, data );
 
           });
         }
@@ -135,7 +135,7 @@ export class CargaImagenesService {
   }
 
 
-  cargarImagenesProjectServiceFirebase( imagenes: FileItem[], carpeta_archivo: string, data:any, created: any , extra: any) {
+  cargarImagenesProjectServiceFirebase( imagenes: FileItem[], carpeta_archivo: string, data:any, created: any , extra: any, uid: any) {
     const storageRef = firebase.storage().ref();
     for ( const item of imagenes ) {
       item.estaSubiendo = true;
@@ -175,7 +175,7 @@ export class CargaImagenesService {
             item.url = downloadURL;
             item.estaSubiendo = false;
             item.created = created;
-            this.guardarImagenProjectServiceExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra }, carpeta_archivo );
+            this.guardarImagenProjectServiceExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra, uid: uid }, carpeta_archivo );
 
           });
         }
@@ -193,25 +193,37 @@ export class CargaImagenesService {
 
   }
 
-  private guardarImagenProjectExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any },  path: string, source:string, data:any ) {
+  private guardarImagenProjectExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any, uid: any },  path: string, source:string, data:any ) {
 
     //console.log(path);
-    this.afs.collection(`${ path }`).add( imagen );
-    let obj = {
-      nombre: imagen.nombre,
-      type: imagen.type, 
-      url:  imagen.url, 
-      created: imagen.created, 
-      id: imagen.id,
-      ref: path,
-      data: data
-    }
-    this.afs.collection(`${ source }`).add( obj );
+    const that = this;
+    this.afs.collection(`${ path }`).add( imagen )
+    .then(function(docRef) {      
+      if (docRef) {        
+        let obj = {
+          nombre: imagen.nombre,
+          type: imagen.type, 
+          url:  imagen.url, 
+          created: imagen.created, 
+          id: imagen.id,
+          iddocfile: docRef.id,
+          ref: path,
+          data: data,
+          uid: imagen.uid
+        }
+        that.afs.collection(`${ source }`).add( obj )
+        .then(function(docColRef) {
+          that.afs.collection(`${ path }`).doc(docRef.id).update({iddoccol : docColRef.id})
+        }
+        );    
+      }
+      
+    });
 
   }
 
 
-  private guardarImagenProjectServiceExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any },  path: string ) {
+  private guardarImagenProjectServiceExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any, uid:any },  path: string ) {
 
     this.afs.collection(`${ path }`).add( imagen );
 

@@ -18,6 +18,14 @@ main {
     padding: 7 !important;
     background-color: #FFFFFF;
 }
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}
+.mat-menu-item {
+  outline: 0;
+  border: none;
+}
 .material-icons.md-15 { font-size: 15px; }
 .material-icons.md-15-colorblue { font-size: 15px; color: #1A237E; }
 .material-icons.md-15-colorgreen { font-size: 15px; color: #00796B; }

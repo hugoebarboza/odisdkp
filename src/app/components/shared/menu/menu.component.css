@@ -176,3 +176,7 @@ a.article:hover {
   background: #C7C7C7 !important;
   color: #fff !important;
 }
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}

@@ -13,7 +13,7 @@
 </div>
 
 
-<div class="mat-dialog-content">
+<div class="mat-dialog-content" *ngIf="!isLoading">
 
     <div class="animated fadeIn row">
       <div class="col-md-8">
@@ -27,14 +27,21 @@
           <p *ngIf="service_type">{{service_type.name}}</p>
           <mat-divider></mat-divider>
 
-          <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar">
+          <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar" *ngIf="formComentar" class="aui">
 
-              <h2 class="jeEmY">Descripción del Trabajo</h2>
+              <h2 class="jeEmY">Actividad Realizada</h2>
               <mat-form-field appearance="outline" class="example-full-width mat-status">
-                <textarea matInput #comentario placeholder="Añadir descripción..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
+                <textarea matInput #comentario placeholder="Añadir actividad realizada..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
                 <mat-hint align="end">{{comentario.value.length}} / 256</mat-hint>
               </mat-form-field>
   
+              <h2 class="jeEmY">Observaciones</h2>
+              <mat-form-field appearance="outline" class="example-full-width mat-status">
+                <textarea matInput #observacion placeholder="Añadir observaciones..."  name="observacion" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="observacion"   class="form-control"></textarea>
+                <mat-hint align="end">{{observacion.value.length}} / 256</mat-hint>
+              </mat-form-field>
+
+
               <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
                 <mat-icon>attachment</mat-icon>
                 <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >              
@@ -61,12 +68,38 @@
               </div>
               
               <br>
+
+              <button mat-flat-button style=" background:#F8F8F8;" (click)="toggle()" *ngIf="!toggleContent">
+                <mat-icon class="material-icons md-14-color" >comment</mat-icon>
+                Más datos
+              </button>
+              <br>
+              <div [formGroup]="formJob" *ngIf="toggleContent" class="full-width">                                
+                <div formArrayName="items"                
+                  *ngFor="let item of getControls(formJob, 'items'); let i = index;">
+                  <div [formGroupName]="i">
+                      <input class="text" formControlName="name" placeholder="Nombre"  type="text">
+                      <input class="text" formControlName="description" placeholder="Descripción" type="text">
+                  </div>
+                
+                  <!---
+                  Chosen name: {{ formJob.controls.items.controls[i].controls.name.value }}
+                  Chosen value: {{ formJob.controls.items.controls[i].controls.description.value }}
+                  -->
+                </div>
+              <br>
+              <button mat-raised-button (click)="addItem()">Agregar</button>
+              <button mat-raised-button (click)="toggle()" style="margin-left: 4px">Cancelar</button>              
+              <br>
+              </div>
   
+              <br>
               <div class="row row-custom">
                   
                   <button mat-raised-button color="primary" class="margin-left" [disabled]="formComentar.invalid" (click)="addComentario()">
                       Guardar           
                   </button>
+                  
   
                   <!--
                   <button mat-raised-button color="warn"> 
@@ -102,7 +135,22 @@
                   <div class="fOqogj" style="padding-left: 30px">
                     → {{comentarios.comentario}}
                   </div>
-          
+
+                  <div class="fOqogj" style="padding-left: 30px" *ngIf="comentarios.observacion">
+                      → {{comentarios.observacion}}
+                  </div>
+                    
+                  <div class="fOqogj" style="padding-left: 30px" >
+                    <div class="row float-right row-custom" *ngIf="comentarios.pila && comentarios.pila.length > 0">
+                        → Más datos:
+                        <br>
+                        <div *ngFor="let info of comentarios.pila" style="width: 100%; margin-left: 17px;">
+                            <span class="form-text text-muted">{{info.name}}: {{info.description}}</span>
+                        </div>                              
+                    </div>
+                  </div>
+
+
                   <div class="fOqogj" style="padding-left: 30px">
                     <div class="row float-right row-custom" *ngIf="comentarios.adjuntos">
                       
@@ -182,14 +230,16 @@
             <div class="fLcKLS" *ngIf="user_responsable">
               {{user_responsable.name}} {{user_responsable.surname}}
             </div>
+            
             <div class="fLcKLS" *ngIf="!user_responsable">
-              <span class="smallfont" style="margin-bottom: 20px;">Sin Responsable</span>
+              <span class="smallfont" style="margin-bottom: 20px;">Sin Información</span>
             </div>
+            
           </div>          
 
-          <h2 class="jeEmY animated fadeIn" *ngIf="services">Otro(s) Responsable(s)</h2>
+          <h2 class="jeEmY animated fadeIn" *ngIf="services && (user_itocivil_assigned_to || user_itoelec_assigned_to || user_responsable_obra)">Otro(s) Responsable(s)</h2>
           <div class="fOqogj" >
-            <div class="SZsdL">
+            <div class="SZsdL" *ngIf="user_itocivil_assigned_to">
               <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
                 <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                   <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
@@ -199,13 +249,15 @@
             <div class="fLcKLS" *ngIf="user_itocivil_assigned_to">
               Civil: {{user_itocivil_assigned_to.name}} {{user_itocivil_assigned_to.surname}}
             </div>
+            <!---
             <div class="fLcKLS" *ngIf="!user_itocivil_assigned_to">
-              <span class="smallfont" style="margin-bottom: 20px;">Sin ITO Civil</span>
+              <span class="smallfont" style="margin-bottom: 20px;">Sin Información</span>
             </div>
+            -->
           </div>          
 
           <div class="fOqogj animated fadeIn" *ngIf="services">
-            <div class="SZsdL">
+            <div class="SZsdL" *ngIf="user_itoelec_assigned_to">
               <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
                 <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                   <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
@@ -215,13 +267,15 @@
             <div class="fLcKLS" *ngIf="user_itoelec_assigned_to">
               Eléctrico: {{user_itoelec_assigned_to.name}} {{user_itoelec_assigned_to.surname}}
             </div>
+            <!--
             <div class="fLcKLS" *ngIf="!user_itoelec_assigned_to">
-              <span class="smallfont" style="margin-bottom: 20px;">Sin ITO Eléctrico</span>
+              <span class="smallfont" style="margin-bottom: 20px;">Sin Información</span>
             </div>
+            -->
           </div>          
 
           <div class="fOqogj animated fadeIn" *ngIf="services">
-            <div class="SZsdL">
+            <div class="SZsdL" *ngIf="user_responsable_obra">
               <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
                 <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
                   <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
@@ -229,11 +283,13 @@
               </div>
             </div>
             <div class="fLcKLS" *ngIf="user_responsable_obra">
-              Obra: {{user_responsable_obra}}
+              {{user_responsable_obra}}
             </div>
+            <!--
             <div class="fLcKLS" *ngIf="!user_responsable_obra">
-              <span class="smallfont" style="margin-bottom: 20px;">Sin Responsable de Obra</span>
+              <span class="smallfont" style="margin-bottom: 20px;">Sin Información</span>
             </div>
+            --->
           </div>
           
           

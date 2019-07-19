@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { FormControl, Validators, FormGroup, } from '@angular/forms';
+import { FormBuilder, FormGroup, FormArray, FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs/Subscription';
 import { defer, combineLatest, Observable, of } from 'rxjs';
@@ -15,7 +15,7 @@ import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/fires
 import { FileItem, Proyecto, Service, User, UserFirebase } from 'src/app/models/types';
 
 //SERVICES
-import { CargaImagenesService, OrderserviceService, UserService, ZipService } from 'src/app/services/service.index';
+import { CargaImagenesService, CdfService, OrderserviceService, UserService, ZipService } from 'src/app/services/service.index';
 
 
 import * as _moment from 'moment';
@@ -37,6 +37,18 @@ export class AddJobComponent implements OnInit, OnDestroy {
   CARPETA_ARCHIVOS:string = '';
   comentarios$: Observable<any[]>;
   private comentariosCollection: AngularFirestoreCollection<any>;
+  destinatarios = [];
+  
+  emailaddress: string = '';
+  emailbody:string ='';
+  emailcompany: string = '';
+  emaildescription:string ='';
+  emailorder_number: string = '';
+  emailpila = [];
+
+  formJob: FormGroup;
+  items: FormArray;
+
   formComentar: FormGroup;
   id:number;
   identity: any;
@@ -53,6 +65,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
   tipoServicio: any;
   title:string = "Registrar trabajo";
   token: any;
+  toggleContent: boolean = false;
   user_informador: User;
 	user_responsable:User;
 	user_itocivil_assigned_to: User;
@@ -66,10 +79,12 @@ export class AddJobComponent implements OnInit, OnDestroy {
   constructor(
     private _afs: AngularFirestore,
     public _cargaImagenes: CargaImagenesService,
+    private _cdf: CdfService,
     public _userService: UserService,
     public dataservice: OrderserviceService,
     public dialogRef: MatDialogRef<AddJobComponent>,
     private firebaseAuth: AngularFireAuth,
+    private formBuilder: FormBuilder,
     private toasterService: ToastrService,
     public zipService: ZipService,
     @Inject(MAT_DIALOG_DATA) public data: any
@@ -105,11 +120,19 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
       this.formComentar = new FormGroup({
         comentario: new FormControl ('', [Validators.required]),
+        observacion: new FormControl ('', ),
       });
   
       this.formComentar.setValue({
-        'comentario': ''
+        'comentario': '',
+        'observacion': ''
       });  
+
+
+
+      this.formJob = this.formBuilder.group({
+        items: this.formBuilder.array([ this.createItem() ])
+      });      
     }
 
     if(this.data.service_id > 0){
@@ -120,6 +143,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
                     return;
                   }
                   if(response.status == 'success'){
+                    //console.log(response.datos);
                     this.services = response.datos;
                     if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_informador){                      
                       this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_informador).subscribe(
@@ -129,6 +153,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
                           }
                           if(response.status == 'success'){
                             this.user_informador = response.data[0];
+                            //console.log(this.user_informador);
                           }
                         }
                       )
@@ -143,6 +168,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
                           }
                           if(response.status == 'success'){
                             this.user_responsable = response.data[0];
+                            //console.log(this.user_responsable);
                           }
                         }
                       )
@@ -189,6 +215,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
        });
     }
 
+    
 
 
     //SELECT DE COMMENTS FIREBASE
@@ -217,6 +244,16 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
   addComentario() {
 
+    //console.log(this.formJob.controls.items.controls);
+
+    if(this.formJob.controls.items){
+      this.formJob.controls.items['controls'].forEach(res => {
+        if(res.value.name !== ''){
+          this.emailpila.push(res.value);
+        }
+        
+      });  
+    }
 
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
@@ -227,31 +264,183 @@ export class AddJobComponent implements OnInit, OnDestroy {
       return;
     }
 
+
     const that = this;
-    //this._afs.doc(this.path).update({update_at: date});
     this._afs.collection(this.path + 'comments').add({
       create_to: this.userFirebase.uid,
       create_at: date,
-      comentario: this.formComentar.value.comentario
+      comentario: this.formComentar.value.comentario,
+      observacion: this.formComentar.value.observacion,
+      pila: this.emailpila
     })
-    .then(function(docRef) {
-
-      //const comment = that.formComentar.value.comentario;
+    .then(function(docRef) {      
       if (that.archivos.length > 0) {
         that.toasterService.success('Solicitud actualizada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
         const storage = that.path + 'commentsFiles';
-        that._cargaImagenes.cargarImagenesProjectFirebase( that.archivos, storage, that.source, that.data, date, docRef.id);
+        that._cargaImagenes.cargarImagenesProjectFirebase( that.archivos, storage, that.source, that.data, date, docRef.id, that.userFirebase.uid );
       }
-
+      
+      that.afterAddComentario();
       that.formComentar.reset();
+      that.toggle();
 
     })
     .catch(function(error) {
         console.error('Error adding document: ', error);
     });
+  }
 
+
+  private afterAddComentario(){
+    if (!this.data || !this.services || !this.formComentar) {
+      //console.log('paso return');
+      return;
+    }
+
+
+    if(this.user_informador && this.user_informador.email){
+      this.destinatarios.push(this.user_informador.email);
+    }
+
+    if(this.user_responsable && this.user_responsable.email){
+      this.destinatarios.push(this.user_responsable.email);
+    }
+
+    if(this.user_itocivil_assigned_to && this.user_itocivil_assigned_to.email){
+      this.destinatarios.push(this.user_itocivil_assigned_to.email);
+    }
+
+
+    if(this.user_itoelec_assigned_to && this.user_itoelec_assigned_to.email){
+      this.destinatarios.push(this.user_itoelec_assigned_to.email);
+    }
+
+
+    if(this.user_responsable_obra && this.email_responsable_obra){
+      this.destinatarios.push(this.email_responsable_obra);
+    }
+
+    
+    if(this.project.project_name){
+      //this.emailbody = 'Nombre del Proyecto: ' + this.project.project_name;
+    }
+
+    if(this.service.service_name){
+      //this.emailbody = this.emailbody + ' / ' + this.service.service_name + '.';
+    }
+    
+    if(this.service.service_name){
+      //this.emailbody = this.emailbody + ' Tipo de Servicio: (' + this.service_type.name + ')';
+    }
+
+    
+    this.emailbody = this.formComentar.value.comentario;
+    
+    if(this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].address){
+      this.emailaddress = this.services['servicedetail'][0].address;
+    }
+
+    if(this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].contratista){
+      this.emailcompany = this.services['servicedetail'][0].contratista;
+    }
+
+    if(this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].description){
+      this.emaildescription = this.services['servicedetail'][0].description;
+    }
+    
+
+    if(this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].order_number){
+      this.emailorder_number = this.services['servicedetail'][0].order_number;      
+    }
+
+    //console.log(this.destinatarios);
+    //console.log(this.emailbody);
+    //console.log(this.emailaddress);
+    //console.log(this.emailcompany);
+    //console.log(this.emaildescription);
+    //console.log(this.emailorder_number);
+    //console.log(this.formComentar.value.comentario);
+    //console.log(this.formComentar.value.observacion);
+
+    if (this.data && this.userFirebase.uid && this.destinatarios.length > 0) {
+      this.destinatarios.forEach(res => {
+        //console.log(res);
+        this.sendCdfUser(res, this.emailbody);
+      });
+    }
+  }
+
+
+  addItem(): void {
+    this.items = this.formJob.get('items') as FormArray;
+    this.items.push(this.createItem());
+  }
+
+
+  createItem(): FormGroup {
+    return this.formBuilder.group({
+      name: '',
+      description: '',
+    });
+  }
+
+  getControls(frmGrp: FormGroup, key: string) {
+    return (<FormArray>frmGrp.controls[key]).controls;
+  }
+
+  sendCdfUser(to:string, body: string){
+
+    if(!to || !body){
+      return;
+    }
+
+    //console.log(to);
+    //console.log(this.data);
+    //return;
+
+    const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    const project = {
+      address: this.emailaddress,
+      company : this.emailcompany,
+      comentario: this.formComentar.value.comentario,
+      name: this.project.project_name,      
+      observacion: this.formComentar.value.observacion,
+      description : this.emaildescription, 
+      order_number: this.emailorder_number,
+      service_name: this.service.service_name,
+      service_type_name: this.service_type.name,
+      id : this.id,
+      pila: this.emailpila
+    };
+
+    if (to && body && project){
+      const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name;
+      this._cdf.httpEmailAddComment(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
+        response => {
+          if (!response) {
+          return false;
+          }
+          if (response.status === 200) {
+            //console.log(response);
+          }
+        },
+          error => {
+           //console.log(<any>error);
+          }
+        );
+    }
 
   }
+
+  toggle() {
+    this.toggleContent = !this.toggleContent;
+    this.emailpila = [];
+    //this.formJob.reset();
+    this.formJob = this.formBuilder.group({
+      items: this.formBuilder.array([ this.createItem() ])
+    });
+  }
+
 
 
   collectionJoinUser(document): Observable<any> {

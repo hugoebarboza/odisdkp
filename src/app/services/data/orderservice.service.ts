@@ -81,10 +81,13 @@ import { ToastrService } from 'ngx-toastr';
     return this.getOrderData('service/'+id+'/order'+paginate, token);
   }
 
-
+  
 
   getProjectShareOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, fieldValueEstatus:string, columnValueEstatus:string, columnTimeFromValue:any, columnTimeUntilValue:any, columnValueZona:number, idservicetype:number, sort: string, order: string, pageSize: number, page: number, id:number, idservice:number, token: any, event: number) {
-    //console.log(sort);
+
+ 
+
+	//console.log(sort);
     if(!fieldValue){
       fieldValue = '';
     }
@@ -98,7 +101,9 @@ import { ToastrService } from 'ngx-toastr';
     
     const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&fieldValueEstatus=${fieldValueEstatus}&columnValueEstatus=${columnValueEstatus}&columnTimeFromValue=${columnTimeFromValue}&columnTimeUntilValue=${columnTimeUntilValue}&columnValueZona=${columnValueZona}&idservicetype=${idservicetype}&event=${event}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
     //console.log('-----------------------------');
-    //console.log(paginate);
+	//console.log(paginate);
+	//console.log(id);
+	//console.log(idservice);
     //const paginate = `?page=${page + 1}`;
     return this.getOrderData('projectservice/'+id+'/service/'+idservice+'/share'+paginate, token);
   }

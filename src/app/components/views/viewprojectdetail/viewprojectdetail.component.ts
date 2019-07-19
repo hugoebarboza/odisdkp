@@ -351,7 +351,7 @@ addComentario() {
     if (that.archivos.length > 0) {
       that.toasterService.success('Solicitud actualizada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
       const storage = that.newpath + 'files';
-      that._cargaImagenes.cargarImagenesProjectServiceFirebase( that.archivos, storage, {}, date, docRef.id);
+      that._cargaImagenes.cargarImagenesProjectServiceFirebase( that.archivos, storage, {}, date, docRef.id, that.userFirebase.uid);
     }
 
     that.formComentar.reset();
@@ -839,7 +839,7 @@ deleteCommentDatabase(item: any) {
 
     status(id: number) {
       const dialogRef = this.dialog.open(StatusComponent, {
-        width: '777px',
+        width: '1000px',
         disableClose: true,  
         data: {
           project_id: this.project_id,

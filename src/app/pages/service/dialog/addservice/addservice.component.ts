@@ -19,14 +19,19 @@ import {
   Region, 
   Service, 
   User, 
-  UserFirebase} from '../../../../models/types';
+  UserFirebase} from 'src/app/models/types';
 
 //MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
 //SERVICES
-import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
+import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
+
+//REDUX
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducers';
+import { LoginAction } from 'src/app/contador.actions';
 
 
 
@@ -42,7 +47,15 @@ export class AddServiceComponent implements OnInit, OnDestroy {
   customers: Customer [] = [];
   created: FormControl;
   destinatario = [];
+  destinatarios = [];
   en: any;
+
+  lastInsertedId:number;
+  emailbody:string ='';
+  emailprojectservicetype:any;
+  emailcomuna:any;
+  
+
   id:number;
   identity: any;
   isLoading:boolean = false;
@@ -76,7 +89,8 @@ export class AddServiceComponent implements OnInit, OnDestroy {
     private _route: Router,
     public _userService: UserService,
     public dialogRef: MatDialogRef<AddServiceComponent>,
-    private firebaseAuth: AngularFireAuth,  
+    private firebaseAuth: AngularFireAuth,
+    private store: Store<AppState>,
     @Inject(MAT_DIALOG_DATA) public data: Service,
   ) 
   { 
@@ -136,7 +150,7 @@ export class AddServiceComponent implements OnInit, OnDestroy {
 
 
   public confirmAdd(form:NgForm): void {
-    var addform = form;
+
     if(this.user_informador){
       this.data.user_informador = this.user_informador.id;
     }
@@ -150,14 +164,18 @@ export class AddServiceComponent implements OnInit, OnDestroy {
       this.data.user_itoelec_assigned_to = this.user_itoelec_assigned_to.id;
     }
 
-    //let obj = Object.assign(this.data);
-    //console.log(obj);
+    //console.log(this.data);
+    //return;
+    
 
     this._project.addService(this.token.token, this.data, this.data.project_id).subscribe(
 			(data:any) => { 
 
 				if(data.status === 'success'){
           swal('Proyecto creado exitosamente con ID: ', data.lastInsertedId +'.', 'success' );
+          this.lastInsertedId = data.lastInsertedId;
+          this.afterAddService();
+          this.refresh();
           if(this.destinatario.length > 0)  {
             //SEND CDF MESSAGING AND NOTIFICATION
             this.sendCdf(this.destinatario);
@@ -173,6 +191,123 @@ export class AddServiceComponent implements OnInit, OnDestroy {
 
   }
 
+  refresh(){    
+    //this.RefreshMenu.emit(1);
+    this.subscription = this._project.getProyectos(this.token.token, this.identity.dpto).subscribe(
+      response => {
+          if (response.status == 'success'){
+            this.proyectos = response.datos;
+            let key = 'proyectos';
+            this._userService.saveStorage(key, this.proyectos);
+            this.afterRefresch(this.proyectos, this.identity);
+          }
+        }
+      );
+  }
+
+
+  private afterAddService(){
+    if (!this.data) {
+      return;
+    }
+
+    this.emailprojectservicetype = this.filterProjectservicetype();
+    this.emailcomuna = this.filterComuna();
+
+    if(this.user_informador && this.user_informador.email){
+      this.destinatarios.push(this.user_informador.email);
+    }
+
+    if(this.user_responsable && this.user_responsable.email){
+      this.destinatarios.push(this.user_responsable.email);
+    }
+
+    if(this.user_itocivil_assigned_to && this.user_itocivil_assigned_to.email){
+      this.destinatarios.push(this.user_itocivil_assigned_to.email);
+    }
+
+
+    if(this.user_itoelec_assigned_to && this.user_itoelec_assigned_to.email){
+      this.destinatarios.push(this.user_itoelec_assigned_to.email);
+    }
+
+
+    if(this.data && this.data.responsable_email){
+      this.destinatarios.push(this.data.responsable_email);
+    }
+
+    //console.log(this.destinatarios);
+    //this.data.contratista
+    //console.log(this.emailprojectservicetype.descripcion);
+    //console.log(this.emailcomuna.commune_name);
+    //console.log(this.emailbody);
+    //console.log(created);
+
+    
+    if(this.emailprojectservicetype.descripcion){
+      this.emailbody = 'El Tipo de Proyecto es (' + this.emailprojectservicetype.descripcion + ').';
+    }
+
+    if(this.emailcomuna.commune_name){
+      this.emailbody = this.emailbody + ' Comuna: (' + this.emailcomuna.commune_name + ').';
+    }
+    
+    if(this.data.contratista){
+      this.emailbody = this.emailbody + ' Contratista: (' + this.data.contratista + ')';
+    }
+    
+
+    if (this.data && this.userFirebase.uid && this.destinatarios.length > 0) {
+      this.destinatarios.forEach(res => {
+        this.sendCdfUser(res, this.emailbody);
+        //that.sendCdfTag(res, docRef, 'Nueva solicitud');
+      });
+    }
+  }
+
+
+  sendCdfUser(to:string, body: string){
+
+    //console.log(to);
+    //console.log(this.data);
+    //return;
+
+    const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    const project = { 
+      numot : this.data.order_number,
+      description : this.data.service_name, 
+      lastInsertedId : this.lastInsertedId 
+    };
+
+    if (to && body && project && project.lastInsertedId > 0){
+      this._cdf.httpEmailAddService(this.token.token, to, this.userFirebase.email, 'OCA GLOBAL - Gestión de Proyecto', created, body, project ).subscribe(
+        response => {
+          if (!response) {
+          return false;
+          }
+          if (response.status === 200) {
+            //console.log(response);
+          }
+        },
+          error => {
+           //console.log(<any>error);
+          }
+        );
+    }
+
+  }
+
+
+
+  private afterRefresch(p:any, i:any): void {
+    const obj: any = {project: p, identificacion: i};
+    const accion = new LoginAction(obj);
+    this.store.dispatch( accion );
+    //console.log('redux dispacth action refresch menu')
+  }
+
+
+ 
 
   sendCdf(data){
     if(!data){
@@ -310,6 +445,7 @@ export class AddServiceComponent implements OnInit, OnDestroy {
               }
               if(response.status == 'success'){    
                 this.users = response.datos;
+                //console.log(this.users);
               }
               });        
 
@@ -398,7 +534,28 @@ export class AddServiceComponent implements OnInit, OnDestroy {
     }
   }
 
- 
+  filterProjectservicetype(){
+    if(this.projectservicetype && this.data.type_id){
+      for(var i = 0; i < this.projectservicetype.length; i += 1){
+        var result = this.projectservicetype[i];
+        if(result.id === this.data.type_id){
+            return result;
+        }
+      }
+    }    
+  }
 
+  filterComuna(){
+    if(this.comunas && this.data.comuna_id){
+      for(var i = 0; i < this.comunas.length; i += 1){
+        var result = this.comunas[i];
+        if(result.id === this.data.comuna_id){
+            return result;
+        }
+      }
+    }    
+  }
+
+  
 
 }

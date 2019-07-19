@@ -82,3 +82,11 @@ height: 700px;
 .mat-row:hover {
   background-color: #f2f4f7; 
 }
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}
+.mat-button {
+  outline: 0;
+  border: none;
+}
