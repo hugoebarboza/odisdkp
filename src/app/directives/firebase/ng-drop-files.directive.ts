@@ -115,9 +115,34 @@ export class NgDropFilesDirective {
     return false;
   }
 
-  private _esImagen( tipoArchivo: string ): boolean { 
+  private _esImagen( tipoArchivo: string ): boolean {
     //console.log(tipoArchivo);
     if ( tipoArchivo === '' || tipoArchivo === undefined ) {
+
+      const type = tipoArchivo.split('.')[1];
+      
+      if ( type === 'dwg') {
+        return true;
+      }
+
+      if ( type === 'xls') {
+        return true;
+      }
+
+
+      if ( type === 'xlsx') {
+        return true;
+      }
+
+
+      if ( type === 'doc') {
+        return true;
+      }
+
+      if ( type === 'docx') {
+        return true;
+      }
+      
       return false;  
     }
 

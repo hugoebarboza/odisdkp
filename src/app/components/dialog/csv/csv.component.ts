@@ -78,7 +78,7 @@ export class CsvComponent implements OnInit, OnDestroy {
   serviceid: number;
   servicetypeid: number = 0;
   selectedValueFormat: number;
-  public servicetype: ServiceType[] = [];
+  servicetype: ServiceType[] = [];
   tipoServicio_id = 0;
   tiposervicio: Array<Object> = [];
   token: any;
@@ -435,6 +435,8 @@ export class CsvComponent implements OnInit, OnDestroy {
     }      
 
     //console.log(this.servicetypeid);
+    //console.log(this.serviceid);
+    //console.log(this.project_id);
     //console.log(this.pageSize);
     this.dataService.getProjectShareOrder(      
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
@@ -452,8 +454,7 @@ export class CsvComponent implements OnInit, OnDestroy {
           (some) => 
           { 
             if(some.datos){
-            //console.log(some.datos);
-
+            console.log(some.datos);
             this.exportDataSource = new MatTableDataSource(some.datos);
             
             if(!this.exportDataSource.data.length){
@@ -541,7 +542,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                         }
 
                         
-
+                        //console.log(this.exportDataSource.data[j]['orderatributo']);
                         if(Object.keys(this.exportDataSource.data[j]['orderatributo']).length > 0){
                         for (var keyatributovalue in this.exportDataSource.data[j]['atributo_share']) {
                           if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue] !== null){                        

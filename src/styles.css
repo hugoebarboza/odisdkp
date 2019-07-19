@@ -28,6 +28,13 @@ html{
 .mat-tab-label{  
   color:white;
 }
+/*
+.mat-tab-labels {
+  background: #0b3356 !important;
+}
+.mat-toolbar.mat-primary  {
+  background: #0b3356 !important;  
+}*/
 .mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar{
   height: 4px;
 } 
@@ -98,5 +105,4 @@ mark {
   font-family: SegoeUI-SemiLight-final,"Segoe UI Semilight",SegoeUI-Regular-final,"Segoe UI","Segoe UI Web (West European)",Segoe,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
   line-height: 195%;
 }
-
 

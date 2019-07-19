@@ -68,10 +68,13 @@
               </mat-select>      
             </mat-form-field>
 
+
         <br *ngIf="serviceid">
         <mat-form-field class="middle-width" *ngIf="serviceid">
-          <mat-select placeholder="Seleccione Formato" [(ngModel)]="selectedValueFormat.fieldValue" name="format" required>
-            <mat-option value="3">Sólo datos de la orden</mat-option>            
+          <mat-select placeholder="Seleccione Formato" [(ngModel)]="selectedValueFormat" name="format" required>
+            <mat-option *ngFor="let formato of formatos" [value]="formato.value">
+              {{formato.name}}
+            </mat-option>
           </mat-select>
           <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>          
         </mat-form-field>

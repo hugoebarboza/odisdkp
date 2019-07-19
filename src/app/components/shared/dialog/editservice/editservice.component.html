@@ -504,6 +504,7 @@
             <ng-select 
                 [items]="users"
                 bindLabel="usuario"
+                bindValue="id"
                 name="user_informador"
                 placeholder="Informa Proyecto"
                 [(ngModel)]="service_data.user_informador">
@@ -517,6 +518,7 @@
             <ng-select
                 [items]="users"
                 bindLabel="usuario"
+                bindValue="id"
                 name="user_responsable"
                 placeholder="Responsable Proyecto"
                 [(ngModel)]="service_data.user_responsable">
@@ -530,6 +532,7 @@
             <ng-select 
               [items]="users_ito"
               bindLabel="usuario"
+              bindValue="id"
               name="user_itocivil_assigned_to"
               placeholder="ITO Civil"
               [(ngModel)]="service_data.user_itocivil_assigned_to">
@@ -551,6 +554,7 @@
               <ng-select 
                 [items]="users_ito"
                 bindLabel="usuario"
+                bindValue="id"
                 name="user_itoelec_assigned_to"
                 placeholder="ITO Eléctrico"
                 [(ngModel)]="service_data.user_itoelec_assigned_to">

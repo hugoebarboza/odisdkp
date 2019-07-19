@@ -43,7 +43,15 @@ export class EditServiceComponent implements OnInit, OnDestroy {
   public customers: Customer [] = [];
   created: FormControl;
   destinatario = [];
+
+  destinatarios = [];
   public en: any;
+  emailbody:string ='';
+  emailprojectservicetype:any;
+  emailcomuna:any;
+  emailuser: any;
+
+
   public identity: any;
   public isLoading:boolean = false;
   public label: boolean;
@@ -131,7 +139,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     if(this.data.service_id > 0){
-      //console.log(this.data.service_id);
+      //console.log(this.data);
       this.subscription = this._customer.getService(this.token.token, this.data.service_id).subscribe(
         response => {
                   if(!response){
@@ -287,12 +295,17 @@ export class EditServiceComponent implements OnInit, OnDestroy {
     } */
 
 
-    let obj = Object.assign(this.service_data);
+    //let obj = Object.assign(this.service_data);
     //console.log(obj);
+
+    //console.log(this.service_data);
+    //return;
+
     this._project.updateService(this.token.token, this.service_data, this.project_id, this.data.service_id).subscribe(
       (data:any) => { 
         if(data.status === 'success'){
           swal('Proyecto actualizado exitosamente ', '', 'success' );
+          this.afterEditService();
           if(this.destinatario.length > 0)  {
             //SEND CDF MESSAGING AND NOTIFICATION
             this.sendCdf(this.destinatario);
@@ -305,6 +318,103 @@ export class EditServiceComponent implements OnInit, OnDestroy {
         swal('No fue posible procesar su solicitud', err.error.message, 'error');
         });
   }
+
+
+  private afterEditService(){
+    if (!this.service_data) {
+      return;
+    }
+
+    this.emailprojectservicetype = this.filterProjectservicetype();
+    this.emailcomuna = this.filterComuna();
+
+
+    if(this.service_data.user_informador){
+      this.emailuser = null;
+      this.emailuser = this.filterUser(this.service_data.user_informador);
+      if(this.emailuser !== null){
+        this.destinatarios.push(this.emailuser.email);
+      }
+      
+    }
+
+    if(this.service_data.user_responsable){
+      this.emailuser = null;
+      this.emailuser = this.filterUser(this.service_data.user_responsable);
+      if(this.emailuser !== null){
+        this.destinatarios.push(this.emailuser.email);
+      }      
+    }
+
+    if(this.service_data.user_itocivil_assigned_to ){
+      this.emailuser = null;
+      this.emailuser = this.filterUser(this.service_data.user_itocivil_assigned_to);
+      if(this.emailuser !== null){
+        this.destinatarios.push(this.emailuser.email);
+      }      
+    }
+
+
+    if(this.service_data.user_itoelec_assigned_to ){
+      this.emailuser = null;
+      this.emailuser = this.filterUser(this.service_data.user_itoelec_assigned_to);
+      if(this.emailuser !== null){
+        this.destinatarios.push(this.emailuser.email);
+      }      
+    }
+
+
+    if(this.service_data && this.service_data.responsable_email){      
+        this.destinatarios.push(this.service_data.responsable_email);
+    }
+
+    if(this.emailprojectservicetype.descripcion){
+      this.emailbody = 'El Tipo de Proyecto es (' + this.emailprojectservicetype.descripcion + ').';
+    }
+
+    if(this.emailcomuna.commune_name){
+      this.emailbody = this.emailbody + ' Comuna: (' + this.emailcomuna.commune_name + ').';
+    }
+    
+    if(this.service_data.contratista){
+      this.emailbody = this.emailbody + ' Contratista: (' + this.service_data.contratista + ')';
+    }
+    
+
+    if (this.service_data && this.userFirebase.uid && this.destinatarios.length > 0) {
+      this.destinatarios.forEach(res => {
+        this.sendCdfUser(res, this.emailbody);
+        //that.sendCdfTag(res, docRef, 'Nueva solicitud');
+      });
+    }
+  }
+
+  sendCdfUser(to:string, body: string){
+    const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+    const project = { 
+      numot : this.service_data.order_number,
+      description : this.service_data.service_name, 
+      lastInsertedId : this.data.service_id
+    };
+
+    if (to && body && project && project.lastInsertedId > 0){
+      this._cdf.httpEmailEditService(this.token.token, to, this.userFirebase.email, 'OCA GLOBAL - Gestión de Proyecto', created, body, project ).subscribe(
+        response => {
+          if (!response) {
+          return false;
+          }
+          if (response.status === 200) {
+            //console.log(response);
+          }
+        },
+          error => {
+           //console.log(<any>error);
+          }
+        );
+    }
+
+  }
+
 
   sendCdf(data){
     if(!data){
@@ -441,7 +551,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
               if(response.status == 'success'){    
                 this.users = response.datos;
               }
-              });        
+              });
 
     this.subscription = this._project.getUserProject(this.token.token, id, 8).subscribe(
     response => {
@@ -451,8 +561,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
               if(response.status == 'success'){    
                 this.users_ito = response.datos;
               }
-              });        
-
+              });
    }
 
 
@@ -541,6 +650,39 @@ export class EditServiceComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  filterProjectservicetype(){
+    if(this.projectservicetype && this.service_data.type_id){
+      for(var i = 0; i < this.projectservicetype.length; i += 1){
+        var result = this.projectservicetype[i];
+        if(result.id === this.service_data.type_id){
+            return result;
+        }
+      }
+    }    
+  }
+
+  filterComuna(){
+    if(this.comunas && this.service_data.comuna_id){
+      for(var i = 0; i < this.comunas.length; i += 1){
+        var result = this.comunas[i];
+        if(result.id === this.service_data.comuna_id){
+            return result;
+        }
+      }
+    }    
+  }
+
+  filterUser(id: number){
+    if(this.users && id){
+      for(var i = 0; i < this.users.length; i += 1){
+        var result = this.users[i];
+        if(result.id === id){
+            return result;
+        }
+      }
+    }    
+  }
 
 
 }

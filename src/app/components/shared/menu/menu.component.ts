@@ -132,5 +132,4 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.store.dispatch( accion );
     //console.log('redux dispacth action refresch menu')
   }
-
 }

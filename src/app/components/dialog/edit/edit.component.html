@@ -79,8 +79,60 @@
                       <textarea matInput #inputstate class="form-control" placeholder="Observación" [(ngModel)]="data.observation" name="observation" maxlength="277"  ></textarea>        
                       <mat-hint align="end">{{inputstate.value?.length || 0}}/277</mat-hint>
                     </mat-form-field>
-                  </div>                                     
+                  </div>
+                  
+                  <div class="form">
+                    <mat-form-field color="accent">
+                      <input matInput type="datetime" placeholder="Fecha de Solicitud" [(ngModel)]="data.order_date" name="order_date">
+                        <mat-icon matSuffix>date_range</mat-icon>
+                    </mat-form-field>    
+                  </div>
+              
+                  
+              
+                  <div class="form">
+                    <mat-form-field color="accent">
+                      <input matInput type="datetime" placeholder="Fecha Requerida" [(ngModel)]="data.required_date" name="required_date" 
+                      >
+                      <mat-icon matSuffix>date_range</mat-icon>
+                    </mat-form-field>        
+                  </div>
+              
+              
+                  <div class="form">
+                    <mat-form-field color="accent">
+                      <input matInput type="datetime" placeholder="Fecha Vencimiento" [(ngModel)]="data.vencimiento_date" name="vencimiento_date" 
+                      >
+                      <mat-icon matSuffix>date_range</mat-icon>
+                    </mat-form-field>        
+                  </div>    
+              
+                  <div class="form">
+                    <mat-form-field color="accent">
+                      <input matInput placeholder="Creada El" [(ngModel)]="data.create_at" name="created_at" disabled>
+                    </mat-form-field>
+                  </div>
+              
+                  <div class="form" *ngIf="data.patio">
+                    <mat-form-field color="accent">
+                      <input matInput placeholder="Patio" [(ngModel)]="data.patio" name="patio">
+                    </mat-form-field>
+                  </div>
+              
+                  <div class="form" *ngIf="data.espiga">
+                    <mat-form-field color="accent">
+                      <input matInput placeholder="Espiga" [(ngModel)]="data.espiga" name="espiga">
+                    </mat-form-field>
+                  </div>
+              
+                  <div class="form" *ngIf="data.posicion">
+                    <mat-form-field color="accent">
+                      <input matInput placeholder="Posición" [(ngModel)]="data.posicion" name="posicion">
+                    </mat-form-field>
+                  </div>                   
           </div>
+
+         
 
           <div class="col-md-4 order-first order-md-last">
               <div class="form">
@@ -137,60 +189,7 @@
           </div>
       </div>      
 
-      <div class="row">
-          <div class="col-8">
-              <div class="form">
-                  <mat-form-field color="accent">
-                    <input matInput type="datetime" placeholder="Fecha de Solicitud" [(ngModel)]="data.order_date" name="order_date">
-                      <mat-icon matSuffix>date_range</mat-icon>
-                  </mat-form-field>    
-                </div>
-            
-                
-            
-                <div class="form">
-                  <mat-form-field color="accent">
-                    <input matInput type="datetime" placeholder="Fecha Requerida" [(ngModel)]="data.required_date" name="required_date" 
-                    >
-                    <mat-icon matSuffix>date_range</mat-icon>
-                  </mat-form-field>        
-                </div>
-            
-            
-                <div class="form">
-                  <mat-form-field color="accent">
-                    <input matInput type="datetime" placeholder="Fecha Vencimiento" [(ngModel)]="data.vencimiento_date" name="vencimiento_date" 
-                    >
-                    <mat-icon matSuffix>date_range</mat-icon>
-                  </mat-form-field>        
-                </div>    
-            
-                <div class="form">
-                  <mat-form-field color="accent">
-                    <input matInput placeholder="Creada El" [(ngModel)]="data.create_at" name="created_at" disabled>
-                  </mat-form-field>
-                </div>
-            
-                <div class="form" *ngIf="data.patio">
-                  <mat-form-field color="accent">
-                    <input matInput placeholder="Patio" [(ngModel)]="data.patio" name="patio">
-                  </mat-form-field>
-                </div>
-            
-                <div class="form" *ngIf="data.espiga">
-                  <mat-form-field color="accent">
-                    <input matInput placeholder="Espiga" [(ngModel)]="data.espiga" name="espiga">
-                  </mat-form-field>
-                </div>
-            
-                <div class="form" *ngIf="data.posicion">
-                  <mat-form-field color="accent">
-                    <input matInput placeholder="Posición" [(ngModel)]="data.posicion" name="posicion">
-                  </mat-form-field>
-                </div>
-          </div>
-          <div class="col-4"></div>
-      </div>      
+   
 
       <div class="row">
           <div class="col-12">

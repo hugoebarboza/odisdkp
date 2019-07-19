@@ -43,6 +43,7 @@ import { PipesModule } from '../../pipes/pipes.module';
 
 
 
+
 @NgModule({
     imports: [
         CalendarModule,
@@ -96,6 +97,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         UploadTaskComponent,
         ViewOrderTimeSpentComponent
     ],
+    providers: [  ],
     entryComponents: [
         AddDocComponent,
         EditServiceComponent,
