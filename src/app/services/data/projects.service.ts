@@ -951,4 +951,27 @@ export class ProjectsService {
 	}
 
 
+    statusKpi(token: any, id:number, serviceid:number, label:number): void {
+		if(!token){
+			return;
+		}
+		let json = JSON.stringify(label);
+		let params = 'json='+json;
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		this._http.post(this.url+'project'+'/'+id+'/'+'service'+'/'+serviceid+'/'+'statuskpi'+'/'+label, params, {headers: headers}).subscribe(
+				data => { 
+						//console.log(data);
+						//this.dialogData = order;    		      
+						//this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});			      
+						},
+						(err: HttpErrorResponse) => {	
+						this.error = err.error.message;
+						//console.log(err.error.message);
+						//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+					});
+	}
+
+
+
 }

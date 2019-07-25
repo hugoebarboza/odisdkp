@@ -4,3 +4,7 @@ table {
 mat-table {
     height: 100%;  
 }
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}

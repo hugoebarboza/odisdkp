@@ -180,7 +180,8 @@ export class FileItem {
     public url: string;
     public created: string;
     public estaSubiendo: boolean;
-    public progreso: number;
+	public progreso: number;
+	public status: string;
 
     constructor( archivo: File ) {
 

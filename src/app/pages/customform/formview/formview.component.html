@@ -19,7 +19,7 @@
             <form *ngIf="forma" [formGroup]="forma">
                 <div class="row">
 
-                    <div class="col-md-8">
+                    <div class="col-md-8 order-first">
             
                         <h2 class="jeEmY">Asunto</h2>
                         <mat-form-field appearance="outline" class="full-width mat-status">
@@ -74,7 +74,7 @@
                         </div>        
                 
                     </div>
-                    <div class="col-md-4 order-first order-md-last">
+                    <div class="col-md-4 order-md-last">
         
                         <div *ngIf="tagImportant$">
                             <h2 class="jeEmY">Nivel de Urgencia</h2>

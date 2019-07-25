@@ -10,9 +10,9 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 // COMPONENTS
 import { FormviewComponent } from './formview/formview.component';
+import { OrderViewComponent } from './order-view/order-view.component';
 
 // DIALOG
-
 
 // MODULES
 import { MaterialModule } from '../../material-module';
@@ -50,7 +50,8 @@ import { SupportModule } from '../support/support.module';
   ],
   declarations:
   [
-    FormviewComponent
+    FormviewComponent,
+    OrderViewComponent,
   ],
   entryComponents: [
   ],

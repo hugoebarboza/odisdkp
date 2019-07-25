@@ -39,12 +39,16 @@ export class AddJobComponent implements OnInit, OnDestroy {
   private comentariosCollection: AngularFirestoreCollection<any>;
   destinatarios = [];
   
+  listimageorder = [];
+  imageRows = [];
   emailaddress: string = '';
   emailbody:string ='';
   emailcompany: string = '';
   emaildescription:string ='';
   emailorder_number: string = '';
   emailpila = [];
+  emailfiles = [];
+  emailimages = [];
 
   formJob: FormGroup;
   items: FormArray;
@@ -128,12 +132,15 @@ export class AddJobComponent implements OnInit, OnDestroy {
         'observacion': ''
       });  
 
-
-
       this.formJob = this.formBuilder.group({
         items: this.formBuilder.array([ this.createItem() ])
       });      
     }
+
+    if(this.data.orderid){
+      this.getListImage();
+    }
+
 
     if(this.data.service_id > 0){
       //console.log(this.data.service_id);
@@ -208,9 +215,6 @@ export class AddJobComponent implements OnInit, OnDestroy {
                     if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_email){
                       this.email_responsable_obra = this.services['servicedetail'][0].responsable_email;
                     }
-
-
-
                   }
        });
     }
@@ -242,7 +246,8 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
 
 
-  addComentario() {
+  addComentario(event:number) {
+
 
     //console.log(this.formJob.controls.items.controls);
 
@@ -277,12 +282,32 @@ export class AddJobComponent implements OnInit, OnDestroy {
       if (that.archivos.length > 0) {
         that.toasterService.success('Solicitud actualizada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
         const storage = that.path + 'commentsFiles';
-        that._cargaImagenes.cargarImagenesProjectFirebase( that.archivos, storage, that.source, that.data, date, docRef.id, that.userFirebase.uid );
-      }
-      
-      that.afterAddComentario();
-      that.formComentar.reset();
-      that.toggle();
+        that._cargaImagenes.cargarImagenesProjectFirebase( that.archivos, storage, that.source, that.data, date, docRef.id, that.userFirebase.uid )
+        .then(
+          response => {
+            that.emailfiles = response;
+            that.archivos = [];
+            if(event == 1){
+              that.afterAddComentario();
+            }            
+            that.formComentar.reset();   
+            that.toggleContent = false;
+            that.resetForm();
+          }
+        )
+        .catch(
+          error => {
+            console.log(<any>error);          
+          }          
+        );
+      }else{
+        if(event == 1){
+          that.afterAddComentario();
+        }
+        that.formComentar.reset();   
+        that.toggleContent = false;
+        that.resetForm();  
+      }      
 
     })
     .catch(function(error) {
@@ -364,7 +389,6 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
     if (this.data && this.userFirebase.uid && this.destinatarios.length > 0) {
       this.destinatarios.forEach(res => {
-        //console.log(res);
         this.sendCdfUser(res, this.emailbody);
       });
     }
@@ -388,6 +412,55 @@ export class AddJobComponent implements OnInit, OnDestroy {
     return (<FormArray>frmGrp.controls[key]).controls;
   }
 
+
+  public getListImage(){     
+    this.subscription = this.dataservice.getImageOrder(this.token.token, this.data.orderid).subscribe(
+    response => {        
+      if(!response){
+        return;        
+      }
+        if(response.status == 'success'){ 
+          this.listimageorder = response.datos;
+          //console.log(this.listimageorder);
+          if(this.listimageorder.length>0){
+            //this.getSplitArray(this.listimageorder, 2);
+          }
+        }
+    },
+        error => {
+        console.log(<any>error);
+        }   
+    );
+  }
+
+
+  public getSplitArray (list, columns) {
+    let array = list;
+    if (array.length <= columns) {
+      array.length = 2;
+    };
+
+       var rowsNum = Math.ceil(array.length / columns);
+       var rowsArray = new Array(rowsNum);
+
+       for (var i = 0; i < rowsNum; i++) {
+           var columnsArray = new Array(columns);
+           for (var j = 0; j < columns; j++) {
+               var index = i * columns + j;
+
+               if (index < array.length) {
+                   columnsArray[j] = array[index];                   
+               } else {
+                   break;
+               }
+           }
+           rowsArray[i] = columnsArray;
+       }
+       this.imageRows = rowsArray
+       console.log(this.imageRows)
+   }    
+
+
   sendCdfUser(to:string, body: string){
 
     if(!to || !body){
@@ -410,37 +483,83 @@ export class AddJobComponent implements OnInit, OnDestroy {
       service_name: this.service.service_name,
       service_type_name: this.service_type.name,
       id : this.id,
-      pila: this.emailpila
+      orderid: this.data.orderid,
+      pila: this.emailpila,
+      file: this.emailfiles,
+      image: this.listimageorder
     };
 
-    if (to && body && project){
-      const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name;
-      this._cdf.httpEmailAddComment(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
+
+    if (to && body && project && this.emailfiles.length > 0){
+      const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + ' ' + this.data.order_number;
+      this._cdf.httpEmailAddCommentFile(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
         response => {
           if (!response) {
+            this.emailfiles = [];
+            this.destinatarios = [];
           return false;
           }
           if (response.status === 200) {
+            this.emailfiles = [];
+            this.destinatarios = [];
             //console.log(response);
           }
         },
           error => {
-           //console.log(<any>error);
+            this.emailfiles = [];
+            this.destinatarios = [];
+            console.log(<any>error);
           }
         );
     }
 
-  }
+
+    if (to && body && project && this.emailfiles.length == 0){
+      const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + ' ' + this.data.order_number;
+      this._cdf.httpEmailAddComment(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
+        response => {
+          if (!response) {
+            this.destinatarios = [];
+            return false;
+          }
+          if (response.status === 200) {
+            this.destinatarios = [];
+            //console.log(response);
+          }
+        },
+          error => {
+            this.destinatarios = [];
+            console.log(<any>error);
+          }
+        );
+    }
+  }  
 
   toggle() {
     this.toggleContent = !this.toggleContent;
+  }
+
+  resetValue(){
+    this.listimageorder = [];
+    this.imageRows = [];
+    this.emailaddress = '';
+    this.emailbody ='';
+    this.emailcompany = '';
+    this.emaildescription ='';
+    this.emailorder_number = '';
     this.emailpila = [];
+    this.emailfiles = [];
+    this.emailimages = [];
+  
+  }
+
+  resetForm(){
     //this.formJob.reset();
+    this.emailpila = [];
     this.formJob = this.formBuilder.group({
       items: this.formBuilder.array([ this.createItem() ])
     });
   }
-
 
 
   collectionJoinUser(document): Observable<any> {
@@ -532,11 +651,11 @@ export class AddJobComponent implements OnInit, OnDestroy {
   selectFiles(event) {
 
     const filevalidation = event.target.files;
-    if (filevalidation && filevalidation.length > 0 && filevalidation.length <= 3) {
+    if (filevalidation && filevalidation.length > 0 && filevalidation.length <= 7) {
     } else {
       this.archivos = [];
-      if (filevalidation && filevalidation.length > 3) {
-        this.toasterService.warning('Error: Supero limite de 3 archivos', 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
+      if (filevalidation && filevalidation.length > 7) {
+        this.toasterService.warning('Error: Supero limite de 7 archivos', 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
       }
     }
 

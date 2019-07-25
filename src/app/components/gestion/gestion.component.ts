@@ -14,6 +14,7 @@ export class GestionComponent implements OnInit, OnChanges, OnDestroy {
 
 public identity: any;
 public isLoadingResults: boolean;
+kpi:number = 0;
 public project: string;
 public project_id: number;
 public servicename: string;
@@ -62,6 +63,7 @@ public token: any;
                           this.servicename = String (response.datos.service_name);                     
                           this.ServicioSeleccionado.emit(this.servicename);
                           this.isLoadingResults = false;
+                          this.kpi = response.datos.kpi;
                         }else{
                         this.isLoadingResults = false;
                         }

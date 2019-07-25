@@ -34,7 +34,7 @@
     </div>
 
     <div class="row marginbotton22">
-      <div class="col-md-8">
+      <div class="col-md-8 order-first">
         <div class="form">
           <mat-form-field color="accent">
               <input matInput #input  placeholder="Num. OT" [(ngModel)]="data.order_number" name="order_number" required  >
@@ -394,7 +394,7 @@
 
       </div>
 
-      <div class="col-md-4 order-first order-md-last">
+      <div class="col-md-4  order-md-last">
         <div class="form"  *ngIf="projectservicetype && projectservicetype.length > 0">  
           <div class="full-width">
             <h2 class="jeEmY">Tipo</h2>                

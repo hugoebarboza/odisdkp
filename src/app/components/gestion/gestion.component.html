@@ -13,10 +13,12 @@
             <mat-card [ngStyle]="{'width': '100%', 'background-color': '#f2f4f7'}">
                 <mat-card-title> Indicadores </mat-card-title>
                 <mat-card-content> Estatus del Proyecto </mat-card-content>
-            </mat-card>  
+            </mat-card>
+            
+            <div class="container-fluid" *ngIf="id && id > 0 && kpi > 0">
+              <app-kpi [id]="id" *ngIf="id > 0"></app-kpi>
+            </div>
         </div>
       </div>
-    
-
 </div>
 

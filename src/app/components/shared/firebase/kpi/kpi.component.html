@@ -1,0 +1,94 @@
+
+<div class="container" *ngIf="isLoading" style="margin-top: 20px;">
+    <div class="d-flex justify-content-center" *ngIf="isLoading">
+        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+    </div>
+</div>
+
+
+<div class="animated fadeIn row "   *ngFor="let kpi of kpiyear; let i = index">
+    <mat-card class="full-width margintop">          
+        <mat-card-header>             
+            <mat-card-title>{{kpi['servicetype']}}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <br>
+            <div class="row justify-content-center align-items-center" align="center">
+                <div class="col">
+                    <ngx-charts-pie-chart
+                    [view]="[300, 300]"
+                    [scheme]="colorScheme"
+                    [results]="[ { 'name': 'Avance ' + kpi[mesactual]['porcentaje'] + '%', 'value': kpi[mesactual]['porcentaje'] }, { 'name': 'Pendiente ' + (100 - kpi[mesactual]['porcentaje']) + '%', 'value': (100 - kpi[mesactual]['porcentaje']) } ]"
+                    [explodeSlices]="true"
+                    [labels]="false"
+                    [legend]="true"
+                    [legendTitle]="['']"
+                    [legendPosition]="['right']"
+                    [doughnut]="true">
+                    </ngx-charts-pie-chart>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+<div class="animated fadeIn row " *ngIf="kpiyear && kpiyear.length > 0 && kpiTableData != null">
+        <mat-card class="full-width margintop">          
+            <mat-card-header>             
+                <mat-card-title>Regístro de los ultimos 3 meses</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <br>
+                <mat-table #table [dataSource]="kpiTableData" matSort [class.isMobile]="isMobile">
+                    <!--- Note that these columns can be defined in any order.
+                            The actual rendered columns are set as a property on the row definition" -->
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="servicetype">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de inspección </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> 
+                            <span class="mobile-label">Tipo de inspección:</span>
+                            <span>{{element.servicetype}}</span>
+                        </mat-cell>
+                    </ng-container>
+        
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="{{displayedColumns[1]}}">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[1]}} </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> 
+                            <span class="mobile-label">{{displayedColumns[1]}}:</span>
+                            <span>{{element[displayedColumns[1]]['porcentaje']}}%</span>
+                        </mat-cell>
+                    </ng-container>
+        
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="{{displayedColumns[2]}}">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[2]}} </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> 
+                            <span class="mobile-label">{{displayedColumns[2]}}:</span>
+                            <span>{{element[displayedColumns[2]]['porcentaje']}}%</span>
+                        </mat-cell>
+                    </ng-container>
+        
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="{{displayedColumns[3]}}">
+                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[3]}} </mat-header-cell>
+                        <mat-cell *matCellDef="let element"> 
+                            <span class="mobile-label">{{displayedColumns[3]}}:</span>
+                            <span>{{element[displayedColumns[3]]['porcentaje']}}%</span>
+                        </mat-cell>
+                    </ng-container>
+                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                    <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
+        
+                </mat-table>
+                <div  *ngIf="kpiyear && kpiyear.length > 0 && kpiTableData != null">
+                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                </div>
+                
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+
+
+

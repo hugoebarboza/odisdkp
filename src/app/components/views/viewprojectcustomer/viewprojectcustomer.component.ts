@@ -159,7 +159,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
 
   constructor(
-    private _userService: UserService,
+    public _userService: UserService,
     private _proyectoService: UserService,
     private _route: ActivatedRoute,
     public dialog: MatDialog,

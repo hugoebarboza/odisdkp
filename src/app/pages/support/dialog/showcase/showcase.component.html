@@ -1,6 +1,6 @@
 
-<div class="app">
 
+<div class="app">
   <mat-toolbar color="primary">
     <h3 *ngIf="(infocaso$ | async) as infocaso" >Seguimiento Solicitud N°{{ infocaso.ncase }}</h3> 
     <span class="mat-spacer"></span>
@@ -8,17 +8,14 @@
       <mat-icon class="mat-icon">close</mat-icon>       
     </button>
   </mat-toolbar>
-  <br>
+  <div class="row animated fadeIn" >
+          <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+  </div>    
+<br>
 
-
-
-
-  <div *ngIf="isLoading">
-  <app-loading *ngIf="isLoading"></app-loading>  
-  </div>
   <!--*ngIf="!isLoading"-->  
     
-  <div class="mat-dialog-content">
+  <div class="mat-dialog-content" *ngIf="!isLoading">
     <div class="animated fadeIn row" *ngIf="(infocaso$| async) as infocaso">
       <div class="col-md-8">
         <div class="example-full-width" style="text-align:right;">

@@ -7,6 +7,7 @@ export { FileUploadComponent } from '../../components/file-upload/file-upload.co
 export { FooterComponent } from './footer/footer.component';
 export { FootermainComponent } from './footermain/footermain.component';
 export { HeaderComponent } from './header/header.component';
+export { KpiComponent } from './firebase/kpi/kpi.component';
 export { LoadingComponent } from './loading/loading.component';
 export { MenuComponent } from './menu/menu.component';
 export { MynavComponent } from './mynav/mynav.component';

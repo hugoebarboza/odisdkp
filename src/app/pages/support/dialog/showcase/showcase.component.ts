@@ -29,7 +29,7 @@ export class ShowcaseComponent implements OnInit {
   array_usersInfo = [];
   proyectos: Array<Proyecto> = [];
   userinput = new Subject<string>();
-  isLoading = false;
+  isLoading = true;
   userLoading = false;
   totalRegistros = 0;
   page = 1;
@@ -86,7 +86,7 @@ export class ShowcaseComponent implements OnInit {
     public _cargaImagenes: CargaImagenesService,
     private firebaseAuth: AngularFireAuth,
     public dialogRef: MatDialogRef<ShowcaseComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any
+    @Inject(MAT_DIALOG_DATA) public data: any    
     ) {
       this.identity = this._userService.getIdentity();
       this.proyectos = this._userService.getProyectos();
@@ -375,6 +375,7 @@ export class ShowcaseComponent implements OnInit {
   }
 
   collectionJoin(document): Observable<any> {
+    this.isLoading = false;
     return this.infocaso$ = document.pipe(
       docJoin(this._afs, { create_to: 'users'},  0, '', '', 'create_to'),
       // docJoin(this._afs, { depto_id: 'countries/' + 1 + '/departments'},  0, '', '', 'depto_id'),
@@ -439,13 +440,13 @@ export class ShowcaseComponent implements OnInit {
 
         if(that.arrayEtiquetadosDefault && that.arrayEtiquetadosDefault.length > 0 && docRef){
           that.arrayEtiquetadosDefault.forEach(res => {
-            that.sendCdfUser(res, docRef, 'Comentario en ', comment);
+            that.sendCdfUser(res, docRef, 'Comentario ', comment);
           });
         }
 
         if(that.arrayResponsables && that.arrayResponsables.length > 0 && docRef){
           that.arrayResponsables.forEach(res => {
-            that.sendCdfUser(res, docRef, 'Comentario en ', comment);
+            that.sendCdfUser(res, docRef, 'Comentario ', comment);
           });
         }
 
@@ -454,7 +455,7 @@ export class ShowcaseComponent implements OnInit {
           that._afs.doc('users/' + that.datacase.create_to).get().subscribe(
             res => {
               if (res.exists) {
-                  that.sendCdfUserOrigin(res.data(), docRef, 'Comentario en ', comment);
+                  that.sendCdfUserOrigin(res.data(), docRef, 'Comentario ', comment);
                } 
             }
           );          
@@ -547,7 +548,7 @@ export class ShowcaseComponent implements OnInit {
       //console.log(element);
       // console.log(data);
       // tslint:disable-next-line:max-line-length
-      const body = 'Comentario en solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
+      const body = 'Comentario solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
       const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
   
       if (data && this.userFirebase.uid) {
@@ -555,7 +556,7 @@ export class ShowcaseComponent implements OnInit {
           const notification = {
             userId: this.userFirebase.uid,
             userIdTo: data.uid,
-            title: 'Comentario en solicitud',
+            title: 'Comentario solicitud',
             message: body,
             create_at: created,
             status: '1',
@@ -579,7 +580,7 @@ export class ShowcaseComponent implements OnInit {
             );
   
 
-            this._cdf.httpEmailCommentToSupport(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario en solicitud #' + this.datacase.ncase, created, body).subscribe(
+            this._cdf.httpEmailCommentToSupport(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario solicitud #' + this.datacase.ncase, created, body).subscribe(
               response => {
                 if (!response) {
                 return false;
@@ -608,7 +609,7 @@ export class ShowcaseComponent implements OnInit {
         // console.log(data);
         // tslint:disable-next-line:max-line-length
         const body =  'Solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', con Descripción: ' + this.datacase.description + ' y Prioridad: ' + this.datacase.important;
-        const bodycomment = 'Comentario en solicitud #' + this.datacase.ncase + ', y Comentario: ' + comment ;
+        const bodycomment = 'Comentario solicitud #' + this.datacase.ncase + ', y Comentario: ' + comment ;
         const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
     
         if (data && this.userFirebase.uid) {
@@ -616,7 +617,7 @@ export class ShowcaseComponent implements OnInit {
             const notification = {
               userId: this.userFirebase.uid,
               userIdTo: data.uid,
-              title: 'Comentario en solicitud',
+              title: 'Comentario solicitud',
               message: body,
               create_at: created,
               status: '1',
@@ -641,7 +642,7 @@ export class ShowcaseComponent implements OnInit {
     
 
 
-              this._cdf.httpEmailCommentFromOrigin(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario en solicitud #' + this.datacase.ncase, this.datacase.create_at, created, body, bodycomment).subscribe(
+              this._cdf.httpEmailCommentFromOrigin(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario solicitud #' + this.datacase.ncase, this.datacase.create_at, created, body, bodycomment).subscribe(
                 response => {
                   if (!response) {
                   return false;
