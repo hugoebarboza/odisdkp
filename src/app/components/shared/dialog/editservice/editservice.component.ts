@@ -402,15 +402,17 @@ export class EditServiceComponent implements OnInit, OnDestroy {
     if (to && body && project && project.lastInsertedId > 0){
       this._cdf.httpEmailEditService(this.token.token, to, this.userFirebase.email, 'OCA GLOBAL - Gestión de Proyecto', created, body, project ).subscribe(
         response => {
+            this.destinatarios = [];          
           if (!response) {
-          return false;
+            return false;
           }
           if (response.status === 200) {
             //console.log(response);
           }
         },
           error => {
-           //console.log(<any>error);
+            this.destinatarios = [];
+            console.log(<any>error);
           }
         );
     }
@@ -446,7 +448,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
             if(!response){
             return false;        
             }
-            if(response.status == 200){ 
+            if(response.status == 200){
               //console.log(response);
             }
           },
@@ -474,7 +476,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
               }
             },
               error => {
-              //console.log(<any>error);
+              console.log(<any>error);
               }   
             );			                    
       }

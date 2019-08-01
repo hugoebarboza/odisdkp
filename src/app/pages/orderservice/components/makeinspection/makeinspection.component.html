@@ -54,18 +54,33 @@
                                 </ng-select>
                             </div>
                             <div class="col-md-6">
-                                <h2 class="jeEmY">Fecha vencimiento</h2>
+                                
                                 <div class="row">
-                                    <div class="col-md-12">
+                                    <div class="col-md-5">
+                                        <h2 class="jeEmY">Fecha vencimiento unica</h2>
                                         <!--<input type="text" formControlName="date_end" class="form-control" placeholder="Fecha de vencimiento">-->
                                         <p-calendar placeholder="yyyy-mm-dd hh:mm" formControlName="date_end"  dateFormat="yy-mm-dd"   [minDate]="minDateValue"  showButtonBar="true" readonlyInput="true" showTime="true" hourFormat="24" [locale]="es"  [showIcon]="true">
                                             <p-footer></p-footer>
                                         </p-calendar>
                                     </div>
+                                    <div class="col-md-6">
+                                        <h2 class="jeEmY">Fecha de vencimiento multiple</h2>
+                                        <div class="row">
+                                                <div class="col-md-2">
+                                                    <mat-slide-toggle formControlName="enableiItervalo"
+                                                    (change)="slide($event)"></mat-slide-toggle>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <p-calendar *ngIf="forma.value.enableiItervalo"
+                                                    (onClose)="calendarmultiple(forma.value.multidate)"
+                                                    formControlName="multidate" [minDate]="minDateValue" selectionMode="multiple"  [readonlyInput]="true" showButtonBar="true" [locale]="es"  [showIcon]="true"></p-calendar>
+                                                </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 
                                 <h2 class="jeEmY">Cantidad de ordenes</h2>
-                                <input type="number" formControlName="cantidad" class="form-control" placeholder="Cantidad de ordenes">
+                                <input type="number" formControlName="cantidad" class="form-control" [readonly]="forma.value.enableiItervalo"  placeholder="Cantidad de ordenes">
                                 <h2 class="jeEmY">Observación</h2>
                                 <textarea rows="4" formControlName="observation" class="form-control" placeholder="Añada observación..."> </textarea>
                             </div>
@@ -76,10 +91,10 @@
                                 <button  mat-raised-button color="primary" [disabled]="forma.invalid || forma.value.cantidad <= 0 || upload"  (click)="addOrdenes(forma.value)" style="margin-right: 2px;">
                                     <mat-icon aria-label="Edit">done</mat-icon>Guardar                       
                                 </button>  
-                                <button  mat-raised-button color="accent" (click)="forma.reset()" style="margin-left: 2px;">
+                                <button  mat-raised-button color="accent" (click)="clearvalues(); forma.reset(); " style="margin-left: 2px;">
                                     <mat-icon aria-label="Close">close</mat-icon>Limpiar formulario
                                 </button>  
-                                <button  mat-raised-button color="warn" (click)="reset(); forma.reset()" style="margin-left: 4px;">
+                                <button  mat-raised-button color="warn" (click)="clearvalues(); reset(); forma.reset()" style="margin-left: 4px;">
                                     <mat-icon aria-label="Close">delete_sweep</mat-icon>Eliminar todo
                                 </button>  
                             </div>
@@ -121,7 +136,7 @@
                                 <mat-header-cell *matHeaderCellDef mat-sort-header> Asignado </mat-header-cell>
                                 <mat-cell *matCellDef="let row; let i = index"> 
                                     <span class="mobile-label">Asignado:</span>
-                                    <span *ngIf="row.assigned_to && row.assigned_to.usuario > 0">{{row.assigned_to.usuario}}</span>
+                                    <span *ngIf="row.assigned_to && row.assigned_to.usuario">{{row.assigned_to.usuario}}</span>
                                     <!--<input type="text" class="form-control"  id="{{row.assigned_to.usuario}}" [(ngModel)]="row.assigned_to.usuario" *ngIf="i == indexitem && !isLoadingDelete">-->
                                 </mat-cell>
                             </ng-container>

@@ -1146,10 +1146,40 @@ export class CdfService  {
 
     if(project.file && project.file.length > 0){
       let valuefile = project.file;
+      file =  `<div style="box-sizing:border-box;width:100%;margin-bottom:30px;background:#ffffff;border:1px solid #f0f0f0">
+      <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+        <tbody>
+          <tr>
+            <td  style="box-sizing:border-box;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding:30px" valign="top">
+            <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+              <tbody>
+                <tr>
+                  <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+                  <h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">Archivos</h2>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+                  <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+                    <tbody>
+                      <tr>
+                        <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:80%;border-bottom:1px solid #f0f0f0" valign="top" width="25%">&nbsp;</td>            
+                        <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:20%;border-bottom:1px solid #f0f0f0" valign="top" width="25%">
+                        <p style="margin:0;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;margin-bottom:10px;margin-top:10px;font-size:12px;text-transform:uppercase">Descarga</p>
+                        </td>
+                      </tr>`;
+
       for(let i=0; i<valuefile.length; i++){
-        file = file + '<div ><a title="'+valuefile[i].nombreArchivo+'" href="'+valuefile[i].url+'" target="_blank"><img src="https://odisdkp.firebaseapp.com/assets/icons/file-icon-681x681.png" width="27" height="27" border="0" style="border:none;clear:both;display:inline-block;height:27px;max-width:100%;outline:none;text-decoration:none;width:27px;margin-left: 17px;margin-top: 7px;"></a></div>';
+        file = file +  `<tr><td style="box-sizing:border-box;padding:0;font-family:Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:25%;border-bottom:1px solid #f0f0f0" valign="top" width="80%"><p style="margin:0;color:#294661;font-family:Helvetica,Arial,sans-serif;font-weight:300;margin-bottom:10px;font-size:14px;margin-top:10px"><strong>`;
+        file = file + valuefile[i].nombreArchivo;
+        file = file +  `</strong></p></td><td style="box-sizing:border-box;padding:0;font-family:Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:25%;border-bottom:1px solid #f0f0f0" valign="top" width="20%"><p style="margin:0;font-family:Helvetica,Arial,sans-serif;font-weight:300;margin-bottom:10px;font-size:14px;margin-top:10px;color:#4cb04f">`;
+        file = file + '<a title="'+valuefile[i].nombreArchivo+'" href="'+valuefile[i].url+'" target="_blank"><img src="https://odisdkp.firebaseapp.com/assets/icons/file-icon-448x300.png" width="37" height="37" border="0" style="border:none;clear:both;display:inline-block;height:27px;max-width:100%;outline:none;text-decoration:none;width:27px;margin-left: 17px;margin-top: 7px;"></a>';
+        file = file +  `</p></td></tr>`;        
+        //file = file + '<div ><a title="'+valuefile[i].nombreArchivo+'" href="'+valuefile[i].url+'" target="_blank"><img src="https://odisdkp.firebaseapp.com/assets/icons/file-icon-448x300.png" width="37" height="37" border="0" style="border:none;clear:both;display:inline-block;height:27px;max-width:100%;outline:none;text-decoration:none;width:27px;margin-left: 17px;margin-top: 7px;"></a></div>';
       }
 
+      file = file + `</tbody></table></td></tr></tbody></table></td></tr></tbody></table></div>`;
+      
 
       const msg: CdfMessage = {
         toEmail: toEmail,

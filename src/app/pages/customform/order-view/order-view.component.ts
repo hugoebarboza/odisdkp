@@ -123,6 +123,21 @@ rotateImage(direction, image) {
   document.getElementById(image).style.transform = `rotate(${this.rotationAmount}deg)`;
 }
 
+seeImage(image) {
+  let url = 'data:image/jpg;base64,'+image;
+  let newTab = window.open();  
+  newTab.document.body.innerHTML = '<img src="'+url+'">';
+  newTab.document.title = "OCA Global - ODIS Image";
+  
+  var timer = setInterval(function() { 
+    if(newTab.closed) {
+        clearInterval(timer);
+        alert('Closed');
+    }
+    }, 1000);
+}
+
+
 submit() {
 // emppty stuff
 }

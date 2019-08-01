@@ -13,6 +13,7 @@ export { MenuComponent } from './menu/menu.component';
 export { MynavComponent } from './mynav/mynav.component';
 export { NotfoundComponent } from './notfound/notfound.component';
 export { ProgressSpinnerComponent } from './progress-spinner/progress-spinner.component';
+export { ReportkpiComponent } from './firebase/reportkpi/reportkpi.component';
 export { TagUserComponent } from './taguser/taguser.component';
 export { UploaderComponent  } from './uploader/uploader.component';
 export { UploadTaskComponent } from './upload-task/upload-task.component';

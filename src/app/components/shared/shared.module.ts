@@ -31,10 +31,11 @@ import {
     MynavComponent,
     NotfoundComponent,
     ProgressSpinnerComponent,
+    ReportkpiComponent,
     TagUserComponent,
     UploaderComponent,
     UploadTaskComponent,
-    ViewOrderTimeSpentComponent,
+    ViewOrderTimeSpentComponent,    
    } from './shared.index';
 
 // Pipes
@@ -75,6 +76,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent,
+        ReportkpiComponent,
         TagUserComponent,
         UploaderComponent,
         UploadTaskComponent,
@@ -96,6 +98,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent,
+        ReportkpiComponent,
         TagUserComponent,
         UploaderComponent,
         UploadTaskComponent,

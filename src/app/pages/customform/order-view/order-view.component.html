@@ -135,25 +135,7 @@
                             </div>    
                         </div>
                     </div>
-
-                    
-                    <div class="row" style="margin-top: 14px">
-                        <div class="col-md-12 order-first" >
-                            <div class="full-width" style="text-align:left;background-color:#313131;">
-                                <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">DATOS DEL CLIENTE</h5>
-                            </div>
-                            <div class="row">
-                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['cc_number']"><strong>N. CLIENTE: </strong>{{order[0]['cc_number']}}</h2></div>
-                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['region']"><strong>REGION: </strong>{{order[0]['region']}}</h2></div>
-                                <div class="w-100"></div>
-                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['provincia']"><strong>PROVINCIA: </strong>{{order[0]['provincia']}}</h2></div>
-                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['comuna']"><strong>COMUNA: </strong>{{order[0]['comuna']}}</h2></div>
-                                <div class="w-100"></div>
-                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['client_name']"><strong>DESCRIPCIÓN: </strong>{{order[0]['client_name']}}</h2></div>
-                            </div>    
-                        </div>
-                    </div>
-            
+                                
                 </div>
                 </div>
                 </div>
@@ -203,14 +185,21 @@
                         <div class="col-md-6" *ngFor="let image of row; let j = index;" >
 
                             <div class="row" >
-                                <div class="col-6" align="left" >
+                                <div class="col-4" align="left" >
                                     <button mat-button (click)="rotateImage('left', image.id)" *ngIf="image && image.id">
                                         <i class="material-icons">
                                             keyboard_arrow_left
                                         </i>                       
                                     </button>
                                 </div>
-                                <div class="col-6" align="right">
+                                <div class="col-4" align="center" >
+                                    <button mat-button (click)="seeImage(image.archivo)" *ngIf="image && image.id">
+                                        <i class="material-icons">
+                                            zoom_in
+                                        </i>
+                                    </button>
+                                </div>
+                                <div class="col-4" align="right">
                                     <button mat-button (click)="rotateImage('right', image.id)" *ngIf="image && image.id">
                                         <i class="material-icons">
                                             keyboard_arrow_right
@@ -219,8 +208,8 @@
                                 </div>
                             </div>
 
-                            <div class="zoom">
-                                <img id="{{image.id}}" *ngIf="image?.archivo" src="data:image/jpg;base64,{{image.archivo}}" style="width: 300px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">
+                            <div class="zoom">                                    
+                                    <img id="{{image.id}}" *ngIf="image?.archivo" src="data:image/jpg;base64,{{image.archivo}}" style="width: 300px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Snow" class="responsive">
                             </div>                      
                         </div>
                     </div>
@@ -235,6 +224,7 @@
             </div>                                            
         </div>
 
+        <!----EN CASO NO VENGA INFO-->
         <div id="content" #content class="app animated fadeIn" *ngIf="!isloading && order.length == 0">
                 <div class="row" >
                     <div class="col-md-12 order-first" >
@@ -244,7 +234,7 @@
                                     <h1 style="margin-left: 2px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="titulo">ORDEN DE TRABAJO</h1>                    
                                 </div>
                                 <div class="col-md-2  order-md-last">
-                                    <img src="../../../../assets/img/logo-oca-blanco-1854x972.png" width="97" style="float: right; padding: 7px">
+                                    <img id="myImg" src="../../../../assets/img/logo-oca-blanco-1854x972.png" width="97" style="float: right; padding: 7px">
                                 </div>                            
                             </div>
                         </div>
@@ -280,4 +270,3 @@
     </div>
         
 </div>
-

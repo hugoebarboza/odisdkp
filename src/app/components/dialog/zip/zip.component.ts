@@ -89,7 +89,11 @@ export class ZipComponent {
              }
              });
      } else {
-       this.resultsprovincias = null;
+        this.data.id_region = 0;
+        this.data.id_provincia = 0;
+        this.data.id_comuna = 0;
+        this.resultsprovincias = null;
+        this.resultscomunas = null;
      }
   }
 
@@ -106,13 +110,40 @@ export class ZipComponent {
              }
              });
      } else {
-       this.resultscomunas = null;
+      this.data.id_provincia = 0;
+      this.data.id_comuna = 0;
+      this.resultscomunas = null;
      }
 
   }
 
   onSelectComuna(comunaid: number) {
   // this.states = this._dataService.getStates().filter((item)=> item.countryid == countryid);
+  }
+
+
+  stardownload(result) {
+    if (result !== undefined) {
+      console.log(result);
+
+      let link = 'http://gasco.ocachile.cl/gasco/ocaglobalzip/zip.php?tiposervicio=' +
+                  result['selectedValueservicio'] + '&createUpdate=' + result['createEdit']  + '&startdate=' +
+                  moment(result['date']).format('YYYY-MM-DD') + '&enddate=';
+
+      if (result['dateend'] !== undefined) {
+        link = link + moment(result['dateend']).format('YYYY-MM-DD');
+      } else {
+        link = link + moment(result['date']).format('YYYY-MM-DD');
+      }
+
+      if (result['selectedValuezona'] !== undefined) {
+      link = link + '&zona=' + result['selectedValuezona'];
+      }
+
+      // tslint:disable-next-line:max-line-length
+      link =  link + '&idr=' + result['id_region'] + '&idp=' + result['id_provincia'] + '&idc=' + result['id_comuna'];
+      window.open(link, '_blank');
+    }
   }
 
 }

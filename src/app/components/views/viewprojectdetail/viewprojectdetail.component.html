@@ -1,11 +1,31 @@
 
-        <mat-card >          
-          <mat-card-header >             
-          <mat-card-title *ngIf="project">Proyecto: {{project}}</mat-card-title>
-          <mat-card-title *ngIf="!project">Proyecto: S/N</mat-card-title>
-          <mat-card-subtitle *ngIf="servicename">Servicio: <b>{{servicename}} </b></mat-card-subtitle>
-          <mat-card-subtitle *ngIf="!servicename">Detalles de: <b>S/N</b></mat-card-subtitle>
-          <mat-card-subtitle *ngIf="_userService.isRole(7) && id > 0" style="width: 100%">
+        <mat-card [ngStyle]="{'padding':'0px'}">          
+          <mat-card-header [ngClass]="{'custom-card':true}">
+ 
+            <mat-card-title *ngIf="project" [ngClass]="{'custom-card':true}">
+
+            <div class="row">
+                <div class="col-md-12 order-first">
+                  Proyecto: {{project}}
+                </div>
+            </div>
+  
+          </mat-card-title>
+                                          
+          <mat-card-subtitle *ngIf="servicename">            
+            <div class="row">
+                <div class="col-md-12 order-first">
+                  Servicio: <b>{{servicename}} </b>
+                </div>
+            </div>
+          </mat-card-subtitle>
+          <!---<img src="assets/img/logoocaorden.png" width="70" height="39">-->
+          </mat-card-header>
+        
+
+        <mat-card-content>         
+        <div class="d-flex">
+            <div class="mr-auto p-2">
               <div *ngIf="_userService.isRole(7) && id > 0" class="d-flex">
                   <div class="p-2">
                       <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
@@ -21,15 +41,7 @@
                       </div>        
                   </div>
               </div>               
-          </mat-card-subtitle>
-          <span class="spacer"></span>
-          <img src="assets/img/logoocaorden.png" width="70" height="39">
-          </mat-card-header>
-          <hr>
-        <mat-card-content>
-
-        <div class="d-flex">
-            <div class="mr-auto p-2"></div>
+            </div>
             <div class="p-2"></div>
 
             <div class="p-2" *ngIf="project_type == 0">
@@ -131,7 +143,7 @@
           <app-loading *ngIf="isLoadingResults"></app-loading>  
         </div>          
 
-        <div class="row" *ngIf="!isRateLimitReached && !isLoadingResults">
+        <div class="row p-2" *ngIf="!isRateLimitReached && !isLoadingResults">
           <div class="col-6"  *ngFor="let model of models; let i = index">
             
             
@@ -452,7 +464,6 @@
 
           </div>
 
-
           <div class="w-100"></div>
           <div class="col-12"  *ngIf="!isRateLimitReached && !isLoadingResults && toggleContentMain">
               <section id="tabs" class="project-tab">
@@ -577,12 +588,12 @@
                                             </div>
                                           </div>
                                           <div class="fLcKLS">  
-                                              <span class="sc-fdcRnX jmTFIN">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
+                                              <span class="sc-fdcRnX jmTFIN" style="padding-left: 7px;">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
                                               ha realizado registro de trabajo hace
                                               <span class="sc-fdcRnX jmTFIN">{{comentarios.create_at | countTime}}</span>
                                           </div>
                                         </div>
-                                        <div class="fOqogj" style="padding-left: 30px">
+                                        <div class="fOqogj" style="padding-left: 30px;">
                                           → {{comentarios.comentario}}
                                         </div>
                                 
@@ -636,7 +647,7 @@
                                     <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
                                       <mat-icon>attachment</mat-icon>
                                       <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >
-                                      <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 3, Max. 3 </strong></span>
+                                      <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 7, Max. 7 </strong></span>
                                     </button>
                                     
                                     <div *ngIf="archivos" >
@@ -696,23 +707,24 @@
 
               </section>          
           </div>
+
           <div class="w-100"></div>
           <div class="col-12"  *ngIf="!isRateLimitReached && !isLoadingResults">
               <section id="tabs" class="project-tab">
                       <div class="row">
                           <div class="col-12">
                               <nav>
-                                  <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                                      <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home-file" role="tab" aria-controls="nav-home" aria-selected="true">Listado</a>
-                                      <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile-file" role="tab" aria-controls="nav-profile" aria-selected="false">Adjuntos</a>
-                                  </div>
+                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                  <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home-file" role="tab" aria-controls="nav-home" aria-selected="true">Listado</a>
+                                  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile-file" role="tab" aria-controls="nav-profile" aria-selected="false">Adjuntos</a>
+                                </div>
                               </nav>
                               <div class="tab-content" id="nav-tabContent">
-                                  <div class="tab-pane fade show active" id="nav-home-file" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="tab-pane fade show active" id="nav-home-file" role="tabpanel" aria-labelledby="nav-home-tab">
                                   <div class="p-3">
                                     <app-file-list [project_id]="project_id" [service_id]="service_id"></app-file-list>
                                   </div>                  
-                                  </div>
+                                </div>
                               <div class="tab-pane fade" id="nav-profile-file" role="tabpanel" aria-labelledby="nav-profile-tab">
                                 <div class="p-3">
                                   <file-upload [project_id]="project_id"  [service_id]="service_id"></file-upload>

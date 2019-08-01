@@ -705,6 +705,15 @@
   </ng-container>
 
 
+  <ng-container matColumnDef="update_at" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Editado El:</mat-header-cell>
+        <mat-cell *matCellDef="let order">
+          <span class="mobile-label">Editado El:</span>
+          {{order.update_at }}
+        </mat-cell>
+  </ng-container>
+  
+
   <ng-container matColumnDef="time" >
     <mat-header-cell *matHeaderCellDef mat-sort-header> T. Ejecución </mat-header-cell>
       <mat-cell *matCellDef="let order"> 
@@ -712,14 +721,15 @@
         <div *ngIf="order.time">{{order.time }}</div></mat-cell>
   </ng-container>
 
-
-  <ng-container matColumnDef="update_at" >
-    <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
-      <mat-cell *matCellDef="let order">
+  <ng-container matColumnDef="atentiontime" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
+        <mat-cell *matCellDef="let order">
           <span class="mobile-label">T. Atención:</span>
-        <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>
-      </mat-cell>
+          <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>
+        </mat-cell>
   </ng-container>
+  
+
 
   <ng-container matColumnDef="estatus" >
     <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
@@ -817,7 +827,7 @@
         
           <mat-menu #menuviewselectorder="matMenu" [overlapTrigger]="false">
             <button mat-menu-item (click)="publishOrder(order.order_id)" *ngIf="_userService.isRole(8)">
-              <span >Documentos de Orden</span>
+              <span >Documentos</span>
             </button>
             <button mat-menu-item (click)="addJob(order.order_id, order.order_number, order.estatus, order.servicetype_id)">
               <span >Registrar trabajo</span>

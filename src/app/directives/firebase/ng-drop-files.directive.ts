@@ -142,6 +142,10 @@ export class NgDropFilesDirective {
       if ( type === 'docx') {
         return true;
       }
+
+      if ( type === 'pdf') {
+        return true;
+      }
       
       return false;  
     }

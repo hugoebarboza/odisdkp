@@ -254,7 +254,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     { name: 'create_at', label: 'Creado El' },
     { name: 'userassigned', label: 'Responsable' },
     { name: 'time', label: 'T. Ejecución' },
-    { name: 'update_at', label: 'T. Atención' },
+    { name: 'atentiontime', label: 'T. Atención' },
     { name: 'estatus', label: 'Estatus' },
     { name: 'actions', label: 'Acciones' }
   ];  
@@ -273,7 +273,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   dataSourceEmpty: any;    
-  displayedColumns: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned','create_at', 'time', 'update_at', 'estatus', 'actions']; 
+  displayedColumns: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned', 'create_at', 'update_at', 'time','atentiontime', 'estatus', 'actions']; 
   columnsOrderToDisplay: string[] = this.columns.map(column => column.name);
   columnsOrderSettingsToDisplay: string[] = this.columns.map(column => column.name);
   //columnsOrderToDisplay: string[] = ['important', 'order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
@@ -1277,7 +1277,7 @@ private filterRegionMulti() {
 
 
   openDialog(): void {
-    const dialogRef = this.dialog.open(ZipComponent, {
+    this.dialog.open(ZipComponent, {
       width: '350px',
       disableClose: true,
       data: {
@@ -1292,31 +1292,6 @@ private filterRegionMulti() {
               tiposervicio: this.tipoServicio,
               zona: this.zona
             }
-
-    });
-    dialogRef.afterClosed().subscribe(result => {
-
-      if (result !== undefined) {
-        // console.log(result);
-
-        let link = 'http://gasco.ocachile.cl/gasco/ocaglobalzip/zip.php?tiposervicio=' +
-                    result['selectedValueservicio'] + '&createUpdate=' + result['createEdit']  + '&startdate=' +
-                    this.getDateFormar(result['date']) + '&enddate=';
-
-        if (result['dateend'] !== null) {
-          link = link + this.getDateFormar(result['dateend']);
-        } else {
-          link = link + this.getDateFormar(result['date']);
-        }
-
-        if (result['selectedValuezona'] !== null) {
-        link = link + '&zona=' + result['selectedValuezona'];
-        }
-
-        // tslint:disable-next-line:max-line-length
-        link =  link + '&idr=' + result['id_region'] + '&idp=' + result['id_provincia'] + '&idc=' + result['id_comuna'];
-        window.open(link, '_blank');
-      }
 
     });
   }

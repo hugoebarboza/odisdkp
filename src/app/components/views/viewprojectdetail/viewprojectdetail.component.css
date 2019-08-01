@@ -1,7 +1,11 @@
 .full-width {
     width: 100%;
   }
-.example-rate-limit-reached {
+  .custom-card {
+    background-color: #f2f4f7;
+    width: 100%;
+  }
+  .example-rate-limit-reached {
     color: #980000;
     background: #f2f4f7;
     max-width: 100%;

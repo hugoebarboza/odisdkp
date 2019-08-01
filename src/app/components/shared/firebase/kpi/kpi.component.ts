@@ -14,7 +14,7 @@ const moment = _moment;
   templateUrl: './kpi.component.html',
   styleUrls: ['./kpi.component.css']
 })
-export class KpiComponent implements OnInit, OnChanges {
+export class KpiComponent implements OnInit , OnChanges {
 
   @Input() id: number;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -28,9 +28,12 @@ export class KpiComponent implements OnInit, OnChanges {
   public token: any;
   public isLoading: boolean = false;
   public kpiCollection: AngularFirestoreCollection<any>;
+  public kpiCollectionlast: AngularFirestoreCollection<any>;
   public datatype: ServiceType[] = [];
   public kpiyear = [];
   public mesactual;
+  public kpimes = [];
+  public kpimesTypes = [];
 
   view: any[] = [360, 400];
   colorScheme = {
@@ -69,10 +72,10 @@ export class KpiComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    this.kpiTableData = null;
-    const mm = moment().month('month').format('MM');
 
-    this.displayedColumns[0] = 'servicetype';
+    const mm = moment().month('month').format('MM');
+    this.displayedColumns = [];
+    this.displayedColumns = ['servicetype'];
 
     let count = 1;
     for (let e = 0; e < this.months.length; e++) {
@@ -80,7 +83,6 @@ export class KpiComponent implements OnInit, OnChanges {
         if ( parseInt(mm) === this.months[e]['value']) {
           this.mesactual = this.months[e]['name'];
         }
-
         // tslint:disable-next-line:radix
         if ( e >= (parseInt(mm) - 3) && e <= (parseInt(mm) - 1)) {
           this.displayedColumns[count] = this.months[e]['name'];
@@ -88,9 +90,11 @@ export class KpiComponent implements OnInit, OnChanges {
         }
 
     }
-    //console.log("pasoooo");
+
     //console.log(this.displayedColumns);
+
     this.getProject(this.id);
+
   }
 
   getProject(id: number) {
@@ -99,7 +103,7 @@ export class KpiComponent implements OnInit, OnChanges {
                if (response.status === 'success') {
                this.project_id = response.datos['project_id'];
                   if (this.project_id > 0) {
-                    //console.log(response.datos);
+                    // console.log(response.datos);
                     this.cargar();
                   }
                }
@@ -109,8 +113,6 @@ export class KpiComponent implements OnInit, OnChanges {
    cargar() {
     this.isLoading = true;
     // console.log(this.id);
-
-    const that = this;
     this.subscription = this.dataService.getTipoServicio(this.token.token, this.id)
     .subscribe(
     response => {
@@ -123,64 +125,104 @@ export class KpiComponent implements OnInit, OnChanges {
               if (response.status === 'success') {
 
                 this.datatype = response.datos;
-                //console.log(this.datatype);
+                // console.log(this.datatype);
 
                 const startOfMonth = moment().startOf('year').format('YYYY-MM-DD hh:mm:ss');
                 const endOfMonth   = moment().endOf('year').format('YYYY-MM-DD hh:mm:ss');
 
-                //console.log(startOfMonth);
-                //console.log(endOfMonth);
+                // console.log(startOfMonth);
+                // console.log(endOfMonth);
 
                 if (this.datatype.length > 0) {
+
                   for (let i = 0; i < this.datatype.length; i++) {
                     const ruta = 'kpi/projects/' + this.project_id + '/' + this.id + '/' + this.datatype[i]['id'] + '/';
                     //console.log(ruta);
                     // tslint:disable-next-line:max-line-length
-                    this.kpiCollection = this._afs.collection(ruta, ref => ref.where('create_at', '>=', startOfMonth).where('create_at', '<=', endOfMonth).orderBy('create_at', 'asc'));
-                    this.kpiCollection.snapshotChanges()
+                    this.kpiCollectionlast = this._afs.collection(ruta, ref => ref.orderBy('create_at', 'desc').limit(1));
+                    this.kpiCollectionlast.snapshotChanges()
                       .map(actions => {
-                        //console.log('PASOOOOO');
                         return actions.map(a => {
                           const data = a.payload.doc.data();
                           const id = a.payload.doc.id;
                           data.name = this.datatype[i]['name'];
-                          //console.log({ id, ...data });
+                          // console.log({ id, ...data });
+                          return { id, ...data };
+                        });
+                      }).subscribe(res => {
+
+                        if (res && res.length > 0) {
+                          for (let r = 0; r < res.length; r++) {
+                            this.kpimes[i] = [{ name: 'Avance ' + res[r]['porcentaje'] + '%' , value: res[r]['porcentaje']},
+                                  {name: 'Pendiente ' + (100 - res[r]['porcentaje']) + '%' , value: (100 - res[r]['porcentaje'])}];
+                          }
+                        } else {
+                            this.kpimes[i] = [{ name: 'Avance 0%' , value: 0}, {name: 'Pendiente 100%' , value: 100}];
+                        }
+
+                      });
+
+                    // tslint:disable-next-line:max-line-length
+                    this.kpiCollection = this._afs.collection(ruta, ref => ref.where('create_at', '>=', startOfMonth).where('create_at', '<=', endOfMonth).orderBy('create_at', 'asc'));
+                    this.kpiCollection.snapshotChanges()
+                      .map(actions => {
+                        return actions.map(a => {
+                          const data = a.payload.doc.data();
+                          const id = a.payload.doc.id;
+                          data.name = this.datatype[i]['name'];
+                          // console.log({ id, ...data });
                           return { id, ...data };
                         });
                       }).subscribe(res => {
                         const servicetypekpi: object = {};
                         servicetypekpi['servicetype'] = this.datatype[i]['name'];
                         servicetypekpi['servicetype_id'] = this.datatype[i]['id'];
+                        this.kpimesTypes[i] = this.datatype[i]['name'];
 
                         for (let e = 0; e < this.months.length; e++) {
+
                           let validar = false;
                           for (let r = 0; r < res.length; r++) {
                             if (res[r]['mes'] === this.months[e]['value']) {
                               validar = true;
-                              let object: object = {};
-                              object = res[r];
-                              object['desc_mes'] = this.months[e]['name'];
+                              const object: Elementt = {
+                                desc_mes: this.months[e]['name'],
+                                create_at: res[r]['mes'],
+                                id: res[r]['id'],
+                                mes: res[r]['mes'],
+                                name: res[r]['name'],
+                                porcentaje: res[r]['porcentaje'],
+                                uid: res[r]['uid'],
+                              };
                               servicetypekpi[this.months[e]['name']] = object;
                             }
                           }
                           if (!validar) {
-                            const object: object = {};
-                            object['mes'] = this.months[e]['value'];
-                            object['desc_mes'] = this.months[e]['name'];
-                            object['porcentaje'] = 0;
+                            const object: Elementt = {
+                              desc_mes: this.months[e]['name'],
+                              create_at: 'S/N',
+                              id: 'S/N',
+                              mes: this.months[e]['value'],
+                              name: 'S/N',
+                              porcentaje: 0,
+                              uid: 'S/N',
+                            };
                             servicetypekpi[this.months[e]['name']] = object;
                           }
                         }
-                        //console.log('QUE FUNCIONE :)');
 
                         this.kpiyear[i] = servicetypekpi;
-                        //console.log(this.kpiyear);
-                        this.kpiTableData = new MatTableDataSource(this.kpiyear);
-                        this.kpiTableData.paginator = this.paginator;
-                        this.kpiTableData.sort = this.sort;
+                        if ( this.kpiyear.length === this.datatype.length) {
+                          // console.log(this.kpiyear);
+                          this.kpiTableData = new MatTableDataSource(this.kpiyear);
+                          this.kpiTableData.paginator = this.paginator;
+                          this.kpiTableData.sort = this.sort;
+                        }
 
                       });
+
                   }
+
                 }
 
                 this.isLoading = false;
@@ -199,3 +241,14 @@ export class KpiComponent implements OnInit, OnChanges {
 
 
 }
+
+export interface Elementt {
+  create_at: String;
+  desc_mes: String;
+  id: String;
+  mes: number;
+  name: String;
+  porcentaje: number;
+  uid: String;
+}
+

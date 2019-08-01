@@ -38,6 +38,10 @@ export class AddJobComponent implements OnInit, OnDestroy {
   comentarios$: Observable<any[]>;
   private comentariosCollection: AngularFirestoreCollection<any>;
   destinatarios = [];
+
+  kpi:number = 0;
+  serviceid:number = 0;
+  servicetype_id:number = 0;
   
   listimageorder = [];
   imageRows = [];
@@ -99,6 +103,8 @@ export class AddJobComponent implements OnInit, OnDestroy {
     this.proyectos = this._userService.getProyectos();
     this.path = this.path + this.data.project + '/' + this.data.service_id + '/' + this.data.tiposervicio + '/' + this.data.orderid + '/';
     this.source = this.source + this.data.project + '/' + this.data.service_id + '/files';
+    this.servicetype_id = this.data.tiposervicio;
+    this.serviceid = this.data.service_id;
     //console.log(this.data);
     //console.log(this.path);
     this.firebaseAuth.authState.subscribe(
@@ -152,6 +158,8 @@ export class AddJobComponent implements OnInit, OnDestroy {
                   if(response.status == 'success'){
                     //console.log(response.datos);
                     this.services = response.datos;
+                    this.kpi = response.datos.kpi;
+                    console.log(this.kpi);
                     if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_informador){                      
                       this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_informador).subscribe(
                         response => {
@@ -491,7 +499,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
 
     if (to && body && project && this.emailfiles.length > 0){
-      const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + ' ' + this.data.order_number;
+      const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + '. OT: ' + this.data.order_number;
       this._cdf.httpEmailAddCommentFile(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
         response => {
           if (!response) {
@@ -515,7 +523,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
 
     if (to && body && project && this.emailfiles.length == 0){
-      const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + ' ' + this.data.order_number;
+      const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + '. OT: ' + this.data.order_number;
       this._cdf.httpEmailAddComment(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
         response => {
           if (!response) {

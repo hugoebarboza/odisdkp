@@ -263,6 +263,23 @@ export class ProjectsService {
 						 });				
 	}
 
+    cloneService(token: any, service: Service, id:number, service_id:number): Observable <any> {
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(service);
+		let params = 'json='+json;
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id+'/clone/1', params, {headers: headers})
+						 .map( (resp: any) => {
+						 	 return resp;
+						 });				
+
+	}
+
+
 
 
 	updateProject(token: any, project:Proyecto, id:number): Observable<any>{
@@ -317,7 +334,7 @@ export class ProjectsService {
 	}
 
 
-    updateService(token: any, service: Service, id:number, service_id:number): Observable <any> {	
+    updateService(token: any, service: Service, id:number, service_id:number): Observable <any> {
 		if (!token){
 			return;
 		}

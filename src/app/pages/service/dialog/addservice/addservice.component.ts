@@ -165,8 +165,7 @@ export class AddServiceComponent implements OnInit, OnDestroy {
     }
 
     //console.log(this.data);
-    //return;
-    
+    //return;    
 
     this._project.addService(this.token.token, this.data, this.data.project_id).subscribe(
 			(data:any) => { 
@@ -282,15 +281,17 @@ export class AddServiceComponent implements OnInit, OnDestroy {
     if (to && body && project && project.lastInsertedId > 0){
       this._cdf.httpEmailAddService(this.token.token, to, this.userFirebase.email, 'OCA GLOBAL - Gestión de Proyecto', created, body, project ).subscribe(
         response => {
+            this.destinatarios = [];
           if (!response) {
-          return false;
+            return false;
           }
           if (response.status === 200) {
             //console.log(response);
           }
         },
           error => {
-           //console.log(<any>error);
+            this.destinatarios = [];
+            console.log(<any>error);
           }
         );
     }

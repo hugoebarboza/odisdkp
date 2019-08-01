@@ -294,7 +294,9 @@
             </div>
             --->
           </div>
-          
+          <div *ngIf="userFirebase && kpi > 0 && project_id && project_id > 0 && serviceid > 0 && servicetype_id > 0">
+              <app-reportkpi [project_id]="project_id" [service_id]="serviceid" [servicetype_id]="servicetype_id"></app-reportkpi>
+          </div>          
           
           <span class="smallfont" style="margin-bottom: 20px;" *ngIf="services && services.create_at">Fecha de creación {{services.create_at}}</span>
 

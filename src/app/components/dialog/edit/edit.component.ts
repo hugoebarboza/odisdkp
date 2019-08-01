@@ -40,10 +40,13 @@ import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 
 export class EditComponent implements OnInit, OnDestroy {
 
   active: boolean = true;
-  public title: string;
-  public identity;
+  title: string;
+  identity;
   created: FormControl;
   destinatario = [];
+  kpi:number = 0;
+  serviceid:number = 0;
+  servicetype_id:number = 0;
   public token;
   public services: Service[] = [];
   public project: string;    
@@ -100,6 +103,8 @@ export class EditComponent implements OnInit, OnDestroy {
     this.token = this._userService.getToken();
     this._userService.handleAuthentication(this.identity, this.token);
     this.role = this._userService.identity.role;
+    this.servicetype_id = this.data.servicetype_id;
+    this.serviceid = this.data.service_id;
 
     this.firebaseAuth.authState.subscribe(
       (auth) => {
@@ -367,6 +372,7 @@ export class EditComponent implements OnInit, OnDestroy {
               }
               if(response.status == 'success'){                  
                 this.services = response.datos;
+                this.kpi = response.datos.kpi;
                 this.service_name = this.services['service_name'];
                 this.project = this.services['project']['project_name'];
                 this.project_id = this.services['project']['id'];
