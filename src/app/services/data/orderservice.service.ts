@@ -8,7 +8,7 @@ import 'rxjs/add/operator/map';
 import swal from 'sweetalert';
 
 //MODELS
-import {  Order, ServiceType, ServiceEstatus } from 'src/app/models/types';
+import {  Order, ServiceEstatus } from 'src/app/models/types';
 
 
 //TOASTER MESSAGES
@@ -19,9 +19,6 @@ import { ToastrService } from 'ngx-toastr';
 	export class OrderserviceService {	
 
 		public url:string;
-		private order: Order[] = [];
-		private servicetype: ServiceType[];
-		//dataChange: BehaviorSubject<Order[]>;		
 		dialogData: any;
 		error: boolean;  
 		
@@ -122,8 +119,7 @@ import { ToastrService } from 'ngx-toastr';
       if (query == '')
           reject('Sin Query Consulta');
       
-      resolve(this._http.get<Order>(requestUrl, {headers: headers}));
-    
+      resolve(this._http.get<Order>(requestUrl, {headers: headers}));    
     });
 
 
@@ -133,7 +129,7 @@ import { ToastrService } from 'ngx-toastr';
 		return this.getQuery('service/'+id+'/order', token);
 	}
 
-	getShowOrderService(token: any, id: string, orderid: string): Observable<any> {								  
+	getShowOrderService(token: any, id: number, orderid: number): Observable<any> {								  
 		return this.getQuery('service/'+id+'/order/'+orderid, token);
 	}
 
@@ -142,9 +138,14 @@ import { ToastrService } from 'ngx-toastr';
 	}
 
 	
-	getListImageOrder(token: any, id: string): Observable<any> {								  
+	getListImageOrder(token: any, id: number): Observable<any> {								  
 		return this.getQuery('order/'+id+'/listimage', token);
 	}
+
+	getImageOrder(token: any, id: string): Observable<any> {								  
+		return this.getQuery('order/'+id+'/getimage', token);
+	}
+
 
 	getShowImageOrder(token: any, id: string): Observable<any> {								  
 		return this.getQuery('image/'+id, token);

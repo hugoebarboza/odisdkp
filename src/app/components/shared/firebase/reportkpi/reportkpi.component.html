@@ -1,0 +1,14 @@
+<h2 class="jeEmY">Porcentaje de avance</h2>
+<input type="text" class="form-control" [readonly]="true" [value]="porcentaje"  style="text-align: center;">
+<h2 class="jeEmY">Actualizar porcentaje
+<mat-slide-toggle (change)="slide($event)" [checked]="nuevoboo" style="margin-left: 20px;"> </mat-slide-toggle> </h2>
+<div *ngIf="nuevoboo">
+    <form *ngIf="forma" [formGroup]="forma">
+        <h2 class="jeEmY">Nuevo porcentaje de avance</h2>
+        <input type="text" class="form-control" name="newporcentaje" pattern="[0-9]*" maxlength="3" (keyup)="save($event)" placeholder="1 a 100" formControlName="newporcentaje" style="text-align: center;">
+        <div class="float-right" style="margin-top: 4px;">
+            <button mat-stroked-button color="warn" (click)="nuevoboo = !nuevoboo"><mat-icon>close</mat-icon></button>
+            <button mat-stroked-button color="primary" [disabled]="forma.invalid" (click)="confirmAdd(forma.value); nuevoboo = !nuevoboo;"><mat-icon>check</mat-icon></button>
+        </div>
+    </form>
+</div>

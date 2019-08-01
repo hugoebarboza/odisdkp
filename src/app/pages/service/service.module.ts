@@ -23,6 +23,7 @@ import { DirectiveModule } from 'src/app/directives/directive.module';
 import { AddServiceComponent } from './dialog/addservice/addservice.component';
 import { AddProjectTypeComponent } from './dialog/add-project-type/add-project-type.component';
 import { AddProjectCategorieComponent } from './dialog/add-project-categorie/add-project-categorie.component';
+import { CloneServiceComponent } from './dialog/clone-service/clone-service.component';
 import { CsvServiceComponent } from './dialog/csvservice/csvservice.component';
 import { SettingServiceComponent } from './components/settingservice/settingservice.component';
 import { DeleteServiceComponent } from './dialog/deleteservice/deleteservice.component';
@@ -88,12 +89,14 @@ import { ServiceRoutingModule } from './service.routing';
     UserComponent,
     ProjectCategorieListComponent,
     ProjectTypeListComponent,
+    CloneServiceComponent,
   ],
   entryComponents: [
     AddProjectTypeComponent,
     AddProjectCategorieComponent,
     AddServiceComponent,
     AddUserServiceComponent,
+    CloneServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent, 
     UserComponent

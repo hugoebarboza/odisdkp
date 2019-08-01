@@ -1,16 +1,15 @@
 <meta name="Description" content="Component">
 <div class="app">
-<mat-toolbar role="heading" color="primary">
-     <h3>{{title}} </h3>
+
+  <mat-toolbar role="heading" color="primary">
+     <!---<h3>{{title}} </h3>-->
      <span class="mat-spacer"></span>
      <button mat-icon-button (click)="onNoClick()" tabindex="-1">
      <mat-icon class="mat-icon">close</mat-icon>       
      </button>
 </mat-toolbar>
+<p></p>  
 
-
- <p></p>  
-  
   
   <div class="example-loading-shade" *ngIf="loading">
     <app-loading *ngIf="loading"></app-loading>  
@@ -258,7 +257,7 @@
                 <div class="row">
                   <div class="col-12">
                       <div class="zoom">
-                      <img id="{{image.id}}" *ngIf="image?.archivo" src="data:image/jpg;base64,{{image.archivo}}" style=" width: 300px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">                            
+                      <img id="{{image.id}}" *ngIf="image?.archivo" src="data:image/jpg;base64,{{image.archivo}}" style=" width: 300px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">
                       </div>
                   </div>
                 </div>                                          

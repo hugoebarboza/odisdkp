@@ -14,7 +14,7 @@ export class SettingsComponent implements OnInit {
   checked = false;
   
   
-    displayedColumns: string[] = ['important','order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned','create_at', 'time', 'update_at', 'estatus', 'actions']; 
+    displayedColumns: string[] = ['important','order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned','create_at', 'update_at', 'time', 'estatus', 'actions']; 
   //displayedColumns: string[] = ['important','order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned','create_at', 'update_at', 'estatus', 'actions']; 
   //displayedColumns: string[] = ['order_number','cc_number', 'region', 'provincia', 'comuna', 'direccion', 'servicetype', 'estatus', 'user', 'create_at', 'actions']; 
   dataColumns = new Array();

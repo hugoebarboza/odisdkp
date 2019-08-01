@@ -32,7 +32,11 @@
 .mat-toolbar-row, .mat-toolbar-single-row {
     height: 70px !important;
 }
-
+.mat-progress-bar{
+  margin-bottom: 0;
+  width: 100%;
+  margin-left: 0px;
+}
 .mat-spacer {
   flex: 1 1 auto;
 }

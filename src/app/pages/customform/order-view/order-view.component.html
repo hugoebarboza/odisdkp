@@ -1,0 +1,272 @@
+
+<div class="row" class="marginrlcero">
+
+    <div class="bKpvDg">
+    </div>
+    
+    <div class="col-md-7 offset-md-2">
+        <div class="app" *ngIf="isloading">                    
+        <div class="d-flex justify-content-center" *ngIf="isloading">
+            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isloading" ></mat-spinner>
+        </div>
+        </div>
+        <div id="content" #content class="app animated fadeIn" *ngIf="!isloading && order.length > 0">
+            <div class="row" >
+                <div class="col-md-12 order-first" >
+                    <div class="full-width" style="text-align:left;background-color:#313131;">
+                        <div class="row" >
+                            <div class="col-md-10 order-first" >
+                                <h1 style="margin-left: 2px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="titulo">ORDEN DE TRABAJO</h1>                    
+                            </div>
+                            <div class="col-md-2  order-md-last">
+                                <img src="../../../../assets/img/logo-oca-blanco-1854x972.png" width="97" style="float: right; padding: 7px">
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row">
+                <div class="col-md-10 order-first">
+                    <div class="full-width" style="text-align:right;">
+                        <span><strong>N.Documento:</strong></span>
+                    </div>                          
+                </div>
+                <div class="col-md-2 order-md-last">
+                    <div class="full-width" style="text-align:left;">
+                        <h2 class="jeEmY" *ngIf="order[0]['ndocumento']">{{order[0]['ndocumento']}}</h2>
+                        <h2 class="jeEmY" *ngIf="!order[0]['ndocumento']">No informado</h2>        
+                    </div>
+                </div>    
+            </div>
+
+            <div class="row">
+                <div class="col-md-12 order-first">
+                    <div class="full-width" style="text-align:center;">
+                        <h3>{{order[0]['service_name']}}</h3>
+                        <mat-divider></mat-divider>
+                        {{order[0]['company_footer']}}                                
+                    </div>                          
+                </div>
+            </div>
+
+            <div class="row" >
+                <div class="col-md-12 order-first" >
+                <div class="full-width background" >
+                <div class="row" >
+                <div class="col-md-12 order-first" >
+
+
+                    <div class="row" style="margin-top: 14px">
+                        <div class="col-md-12 order-first" >
+                            <div class="full-width" style="text-align:left;background-color:#313131;">
+                                <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">DATOS DE DELEGACIÓN</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['project_name']"><strong>Proyecto: </strong>{{order[0]['project_name']}}</h2></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['country_name']"><strong>País: </strong>{{order[0]['country_name']}}</h2></div>
+                                <div class="w-100"></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['company_name']"><strong>Empresa: </strong>{{order[0]['company_name']}}</h2></div>
+                                <div class="col"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="row" style="margin-top: 14px">
+                        <div class="col-md-12 order-first" >
+                            <div class="full-width" style="text-align:left;background-color:#313131;">
+                                <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">DATOS DE LA ORDEN</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['order_number']"><strong>N. ORDEN: </strong>{{order[0]['order_number']}}</h2></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['userassigned']"><strong>ASIGNADA A: </strong>{{order[0]['userassigned']}}</h2></div>
+                                <div class="w-100"></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['usercreate']"><strong>CREADA POR: </strong>{{order[0]['usercreate']}}</h2></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['create_at']"><strong>CREADA EL: </strong>{{order[0]['create_at']}}</h2></div>
+                                <div class="w-100"></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['order_date']"><strong>FECHA SOLICITUD: </strong>{{order[0]['order_date']}}</h2></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['required_date']"><strong>FECHA REQUERIDA: </strong>{{order[0]['required_date']}}</h2></div>
+                                <div class="w-100"></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['vencimiento_date']"><strong>FECHA VENCIMIENTO: </strong>{{order[0]['vencimiento_date']}}</h2></div>
+                            </div>
+                        </div>
+                    </div>
+        
+
+                    <div class="row" style="margin-top: 14px">
+                        <div class="col-md-12 order-first" >
+                            <div class="full-width" style="text-align:left;background-color:#313131;">
+                                <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">DATOS DEL SERVICIO</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['service_name']"><strong>SERVICIO: </strong>{{order[0]['service_name']}}</h2></div>
+                                <div class="col">
+                                <h2 class="jeEmYB" *ngIf="order[0]['estatus']"><strong>ESTATUS: </strong>
+                                    <span [ngClass]="'status-default'">
+                                    {{order[0]['estatus']}}
+                                    </span>
+                                </h2>
+                                </div>                            
+                                <div class="w-100"></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['servicetype']"><strong>TIPO DE SERVICIO: </strong>{{order[0]['servicetype']}}</h2></div>                            
+                            </div>
+                        </div>
+                    </div>
+        
+
+
+                    <div class="row" style="margin-top: 14px">
+                        <div class="col-md-12 order-first" >
+                            <div class="full-width" style="text-align:left;background-color:#313131;">
+                                <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">DATOS DEL CLIENTE</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['cc_number']"><strong>N. CLIENTE: </strong>{{order[0]['cc_number']}}</h2></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['region']"><strong>REGION: </strong>{{order[0]['region']}}</h2></div>
+                                <div class="w-100"></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['provincia']"><strong>PROVINCIA: </strong>{{order[0]['provincia']}}</h2></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['comuna']"><strong>COMUNA: </strong>{{order[0]['comuna']}}</h2></div>
+                                <div class="w-100"></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['client_name']"><strong>DESCRIPCIÓN: </strong>{{order[0]['client_name']}}</h2></div>
+                            </div>    
+                        </div>
+                    </div>
+                                
+                </div>
+                </div>
+                </div>
+                </div>
+            </div>
+
+            <div class="row" style="margin-top: 14px">
+                <div class="col-md-12 order-first" >
+                    <div class="full-width" style="text-align:left;background-color:#313131;">
+                        <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">DETALLES DE LA ORDEN</h5>
+                    </div>
+                    <div class="row">
+                    <div class="col-2"><h2 class="jeEmYB" style="text-align:center;"><strong>REVISADO</strong></h2></div>
+                    <div class="col-2"><h2 class="jeEmYB" style="text-align:center;"><strong>CÓDIGO</strong></h2></div>
+                    <div class="col-4"><h2 class="jeEmYB" ><strong>DESCRIPCIÓN</strong></h2></div>
+                    <div class="col-4"><h2 class="jeEmYB" ><strong>VALOR</strong></h2></div>    
+                    </div>    
+                </div>
+            </div>
+
+            <div class="row" >
+                <div class="col-md-12 order-first" *ngFor="let detailatributo of atributo">
+                    <div class="row" *ngFor="let detailorderatributo of orderatributo">
+                        <div class="col-2" *ngIf="detailorderatributo.atributo_id == detailatributo.id">
+                            <h2 class="jeEmYB" style="text-align:center;" *ngIf="detailorderatributo.valor && detailorderatributo.valor !== 'S/N' && detailorderatributo.valor !== 'null' && detailorderatributo.valor !== null">
+                                <img src="../../../../assets/icons/check.png" width="17">
+                            </h2>
+                        </div>
+                        <div class="col-2" *ngIf="detailorderatributo.atributo_id == detailatributo.id"><h2 class="jeEmYB" style="text-align:center;">{{detailatributo.id}}</h2></div>
+                        <div class="col-4" *ngIf="detailorderatributo.atributo_id == detailatributo.id"><h2 class="jeEmYB" >{{detailatributo.descripcion}}</h2></div>
+                        <div class="col-4" *ngIf="detailorderatributo.atributo_id == detailatributo.id"><h2 class="jeEmYB" >{{detailorderatributo.valor}}</h2></div>            
+                    </div>
+                </div>
+            </div>
+                
+            <div class="row" style="margin-top: 14px" *ngIf="show && imageRows.length > 0">
+                <div class="col-md-12 order-first" >
+                    <div class="full-width" style="text-align:left;background-color:#313131;">
+                        <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">IMÁGENES</h5>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row" *ngIf="show && imageRows.length > 0">
+                <div class="col-md-12 order-first" >
+                    <div class="row" *ngFor="let row of imageRows; let isEven = even;let i = index;">                            
+                        <div class="col-md-6" *ngFor="let image of row; let j = index;" >
+
+                            <div class="row" >
+                                <div class="col-4" align="left" >
+                                    <button mat-button (click)="rotateImage('left', image.id)" *ngIf="image && image.id">
+                                        <i class="material-icons">
+                                            keyboard_arrow_left
+                                        </i>                       
+                                    </button>
+                                </div>
+                                <div class="col-4" align="center" >
+                                    <button mat-button (click)="seeImage(image.archivo)" *ngIf="image && image.id">
+                                        <i class="material-icons">
+                                            zoom_in
+                                        </i>
+                                    </button>
+                                </div>
+                                <div class="col-4" align="right">
+                                    <button mat-button (click)="rotateImage('right', image.id)" *ngIf="image && image.id">
+                                        <i class="material-icons">
+                                            keyboard_arrow_right
+                                        </i>                       
+                                    </button>                    
+                                </div>
+                            </div>
+
+                            <div class="zoom">                                    
+                                    <img id="{{image.id}}" *ngIf="image?.archivo" src="data:image/jpg;base64,{{image.archivo}}" style="width: 300px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Snow" class="responsive">
+                            </div>                      
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div mat-dialog-actions *ngIf="!isloading"> 
+            <br> 
+            <button mat-button color="primary" [type]="submit" (click)="print('content')" mat-raised-button color="primary" class="btnprint">Imprimir</button>    
+            </div>                                            
+        </div>
+
+        <!----EN CASO NO VENGA INFO-->
+        <div id="content" #content class="app animated fadeIn" *ngIf="!isloading && order.length == 0">
+                <div class="row" >
+                    <div class="col-md-12 order-first" >
+                        <div class="full-width" style="text-align:left;background-color:#313131;">
+                            <div class="row" >
+                                <div class="col-md-10 order-first" >
+                                    <h1 style="margin-left: 2px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="titulo">ORDEN DE TRABAJO</h1>                    
+                                </div>
+                                <div class="col-md-2  order-md-last">
+                                    <img id="myImg" src="../../../../assets/img/logo-oca-blanco-1854x972.png" width="97" style="float: right; padding: 7px">
+                                </div>                            
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    
+                <br>
+    
+                <div class="row">
+                    <div class="col-md-10 order-first">
+                        <div class="full-width" style="text-align:right;">
+                            <span><strong>N.Documento:</strong></span>
+                        </div>                          
+                    </div>
+                    <div class="col-md-2 order-md-last">
+                        <div class="full-width" style="text-align:left;">
+                            <h2 class="jeEmY" >No informado</h2>
+                        </div>
+                    </div>    
+                </div>
+    
+                <div class="row">
+                    <div class="col-md-12 order-first">
+                        <div class="full-width" style="text-align:center;">
+                            <h3>NO INFORMADO</h3>
+                            <mat-divider></mat-divider>
+                            NO INFORMADO
+                        </div>                          
+                    </div>
+                </div>        
+        </div>
+
+    </div>
+        
+</div>

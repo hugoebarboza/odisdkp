@@ -7,7 +7,7 @@ import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, delay }
 // MOMENT
 import * as _moment from 'moment';
 import { DateDialogComponent } from 'src/app/components/date-dialog/date-dialog.component';
-import { MatDialog, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatDialog, MatTableDataSource, MatPaginator, MatSort, MatSlideToggleChange } from '@angular/material';
 const moment = _moment;
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
@@ -102,8 +102,9 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
       observation: new FormControl (''),
       status: new FormControl (null, [Validators.required, Validators.minLength(1)]),
       date_end: new FormControl (''),
-      cantidad: new FormControl (null, [Validators.required])
-    });
+      cantidad: new FormControl ( null, [Validators.required]),
+      enableiItervalo: new FormControl (false),
+      multidate: new FormControl (null) });
     this.service_id = this.id;
     this.getTipoServicio(this.service_id);
     this.getServices(this.service_id);
@@ -159,7 +160,7 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
       (res: any) => {
         res.subscribe(
           (some) => {
-            //console.log(some['datos']);
+            // console.log(some['datos']);
             this.status = some['datos'];
 
             if (some.datos && some.datos.length > 0) {
@@ -183,7 +184,7 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
   getList(term: string): Observable<any> {
 
     if (term.length > 0) {
-       console.log(term);
+       //console.log(term);
       return this._customer.getCustomer(this.token.token, term, this.project_id).map((res: any) => {
         if (!res) {
            return [];
@@ -265,26 +266,49 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
 
   addOrdenes (data: any): void {
 
-    const obj = {
-      assigned_to: data.assigned_to,
-      cantidad: data.cantidad,
-      ccnumber: data.ccnumber,
-      countupload: 0,
-      date_end: data.date_end,
-      estado: '',
-      posicion: 0,
-      observation: data.observation,
-      servicetype: data.servicetype,
-      status: data.status
-    };
+    //console.log(data);
 
-    if (obj.date_end && obj.date_end !== null) {
-      obj.date_end = moment(obj.date_end).format('YYYY-MM-DD HH:mm:ss');
+    if (data.enableiItervalo) {
+      for (let i = 0; i < data.multidate.length; i++) {
+        const obj = {
+          assigned_to: data.assigned_to,
+          cantidad: 1,
+          ccnumber: data.ccnumber,
+          countupload: 0,
+          date_end: moment(data.multidate[i]).format('YYYY-MM-DD 23:59:59'),
+          estado: '',
+          posicion: 0,
+          observation: data.observation,
+          servicetype: data.servicetype,
+          status: data.status,
+          enableintervalo: data.enableiItervalo
+        };
+        this.listOrdenes.push(obj);
+      }
+
     } else {
-      obj.date_end = '';
-    }
 
-    this.listOrdenes.push(obj);
+      const obj = {
+        assigned_to: data.assigned_to,
+        cantidad: data.cantidad,
+        ccnumber: data.ccnumber,
+        countupload: 0,
+        date_end: '',
+        estado: '',
+        posicion: 0,
+        observation: data.observation,
+        servicetype: data.servicetype,
+        status: data.status,
+        enableiItervalo: data.enableiItervalo
+      };
+
+      if (data.date_end && data.date_end !== null) {
+        obj.date_end = moment(data.date_end).format('YYYY-MM-DD HH:mm:ss');
+      } else {
+        obj.date_end = '';
+      }
+      this.listOrdenes.push(obj);
+    }
 
     let suma = 0;
     for (let i = 0; i < this.listOrdenes.length; i++) {
@@ -299,28 +323,64 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
     this.dataSource.sort = this.sort;
   }
 
+  clearvalues() {
+    this.forma.controls['multidate'].clearValidators();
+    this.forma.controls['date_end'].enable();
+    this.forma.controls['enableiItervalo'].setValue(false);
+  }
 
   edit(element: any, i: number) {
 
-    this.forma.setValue({
-      'servicetype': element.servicetype,
-      'assigned_to': element.assigned_to,
-      'ccnumber': element.ccnumber,
-      'observation': element.observation,
-      'status': element.status,
-      'date_end': element.date_end,
-      'cantidad': element.cantidad
-    });
+    if (this.listOrdenes.length > 0) {
+      this.forma.controls['multidate'].clearValidators();
+      this.forma.controls['date_end'].enable();
+      this.forma.setValue({
+        'servicetype': element.servicetype,
+        'assigned_to': element.assigned_to,
+        'ccnumber': element.ccnumber,
+        'observation': element.observation,
+        'status': element.status,
+        'date_end':  moment(element.date_end).format('YYYY-MM-DD HH:mm'),
+        'cantidad': element.cantidad,
+        'enableiItervalo': false,
+        'multidate': null
+      });
 
-    this.toasterService.success('Edición activada, Editar formulario', 'Exito',  {timeOut: 6000,});
+      this.toasterService.success('Edición activada, Editar formulario', 'Exito',  {timeOut: 6000,});
 
-    this.delete(i);
+      this.delete(i);
+    }
 
   }
 
   generatorcasenumber() {
     const random = Math.floor((Math.random() * 100) + 1);
     return moment(new Date()).format('YYYYMMDDHHmmss') + '' + random;
+  }
+
+  calendarmultiple(event: any) {
+    //console.log(event);
+    if (event !== null && event.length > 0) {
+      this.forma.controls['cantidad'].setValue(event.length);
+    } else {
+      this.forma.controls['cantidad'].setValue(null);
+    }
+  }
+
+  slide(event: MatSlideToggleChange) {
+    //console.log(event);
+
+    if (event.checked) {
+      this.forma.controls['multidate'].clearValidators();
+      this.forma.controls['date_end'].disable();
+      this.forma.controls['cantidad'].setValue('');
+      this.forma.controls['date_end'].setValue('');
+    } else {
+      this.forma.controls['multidate'].setValidators([Validators.required]);
+      this.forma.controls['date_end'].enable();
+      this.forma.controls['cantidad'].setValue('');
+      this.forma.controls['date_end'].setValue('');
+    }
   }
 
   procesarAll() {
@@ -346,10 +406,13 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
           for (let ii = 0; ii < that.listOrdenes[i]['cantidad']; ii++) {
             await delayy(that.forTime);
 
+            if (that.listOrdenes[i]['enableintervalo'] && that.listOrdenes[i]['intervalo'] !== '' && that.listOrdenes[i]['intervalo'] > 0) {
+              const dateFrom = moment(new Date (that.listOrdenes[i]['date_end']), 'YYYY-MM-DD HH:mm:ss').add('days', 3);
+                           //console.log(moment(dateFrom.format('YYYY-MM-DD HH:mm:ss')));
+            }
 
-            console.log(that.listOrdenes[i]);
-            if(that.listOrdenes[i]['assigned_to'] !== null && that.listOrdenes[i]['assigned_to']['id'] ){              
-              user_assigned = that.listOrdenes[i]['assigned_to']['id']; 
+            if (that.listOrdenes[i]['assigned_to'] !== null && that.listOrdenes[i]['assigned_to']['id'] ) {
+              user_assigned = that.listOrdenes[i]['assigned_to']['id'];
             }
             const objectJson: object = {
               'cc_id': that.listOrdenes[i]['ccnumber']['cc_id'],
@@ -365,11 +428,12 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
 
             that.listOrdenes[i]['countupload'] = ii + 1;
 
+   
             that.dataService.postOrder(objectJson, that.project_id, that.token.token).then(
               (res: any) => {
                 res.subscribe(
                   (some) => {
-                    console.log(some);
+                    //console.log(some);
                     if (that.listOrdenes[i]['estado'].length === 0 || that.listOrdenes[i]['estado'] !== 'error') {
                       that.listOrdenes[i]['estado'] = 'success';
                     }

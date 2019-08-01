@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
-
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 //DIRECTIVE
 import { DirectiveModule } from 'src/app/directives/directive.module';
@@ -25,15 +25,17 @@ import {
     FooterComponent,
     FootermainComponent,
     HeaderComponent,
+    KpiComponent,
     LoadingComponent,
     MenuComponent,
     MynavComponent,
     NotfoundComponent,
     ProgressSpinnerComponent,
+    ReportkpiComponent,
     TagUserComponent,
     UploaderComponent,
     UploadTaskComponent,
-    ViewOrderTimeSpentComponent,
+    ViewOrderTimeSpentComponent,    
    } from './shared.index';
 
 // Pipes
@@ -54,6 +56,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         ReactiveFormsModule,    
         MaterialModule,
         NgSelectModule,
+        NgxChartsModule,
         PipesModule
     ],
     declarations: [
@@ -67,11 +70,13 @@ import { PipesModule } from '../../pipes/pipes.module';
         FooterComponent,
         FootermainComponent,
         HeaderComponent,
+        KpiComponent,
         LoadingComponent,
         MenuComponent,
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent,
+        ReportkpiComponent,
         TagUserComponent,
         UploaderComponent,
         UploadTaskComponent,
@@ -87,11 +92,13 @@ import { PipesModule } from '../../pipes/pipes.module';
         FooterComponent,
         FootermainComponent,
         HeaderComponent,
+        KpiComponent,
         LoadingComponent,
         MenuComponent,
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent,
+        ReportkpiComponent,
         TagUserComponent,
         UploaderComponent,
         UploadTaskComponent,

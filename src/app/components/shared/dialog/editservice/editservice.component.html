@@ -26,22 +26,46 @@
     </div>
 
     <div class="row">
-      <div class="col-md-8">
-        <div class="form">
-          <label>
-            <h6 class="status-h2">Estatus</h6>
-            <section class="status-section">
-            <mat-slide-toggle
-            name="status" 
-            [(ngModel)]="service_data.status"
-            (change)="onChange($event, service_data.id)"
-            color="primary"
-            >
-            <div *ngIf="service_data.status == 1">Activo</div><div *ngIf="service_data.status == 0">Desactivo</div>
-            </mat-slide-toggle>
-            </section>
-          </label>
-        </div>
+      <div class="col-md-8 order-first">
+
+        <div class="container-fluid">
+            <div class="row">
+              <div class="col-sm">
+                  <div class="form">
+                      <label>
+                        <h6 class="status-h2">Estatus</h6>
+                        <section class="status-section">
+                        <mat-slide-toggle
+                        name="status" 
+                        [(ngModel)]="service_data.status"
+                        (change)="onChange($event, service_data.id)"
+                        color="primary"
+                        >
+                        <div *ngIf="service_data.status == 1">Activo</div><div *ngIf="service_data.status == 0">Desactivo</div>
+                        </mat-slide-toggle>
+                        </section>
+                      </label>
+                  </div>            
+              </div>
+              <div class="col-sm">
+                  <div class="form">
+                      <label>
+                        <h6 class="status-h2">KPI</h6>
+                        <section class="status-section">
+                        <mat-slide-toggle
+                        name="kpi" 
+                        [(ngModel)]="service_kpi"
+                        (change)="onChangeKpi($event)"
+                        color="primary"
+                        >
+                        <div *ngIf="service_kpi == 1">Activo</div><div *ngIf="service_kpi == 0">Desactivo</div>
+                        </mat-slide-toggle>
+                        </section>
+                      </label>
+                  </div>            
+              </div>
+            </div>
+        </div>        
 
         <div class="form">
           <mat-form-field color="accent">
@@ -409,7 +433,7 @@
 
       </div>
 
-      <div class="col-md-4 order-first order-md-last">
+      <div class="col-md-4 order-md-last">
 
         <div class="form" *ngIf="projectservicetype && projectservicetype.length > 0">
           <div class="full-width">

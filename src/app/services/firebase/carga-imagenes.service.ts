@@ -84,55 +84,79 @@ export class CargaImagenesService {
   }
 
 
-  cargarImagenesProjectFirebase( imagenes: FileItem[], carpeta_archivo: string, source: string, data:any, created: any , extra: any, uid: any) {
+  cargarImagenesProjectFirebase( imagenes: FileItem[], carpeta_archivo: string, source: string, data:any, created: any , extra: any, uid: any):  Promise<any> {
     const storageRef = firebase.storage().ref();
-    for ( const item of imagenes ) {
-      item.estaSubiendo = true;
-      if ( item.progreso >= 100 ) {
-        continue;
-      }
+    let files = [];
 
-      //console.log(item);
-      const uploadTask: firebase.storage.UploadTask =
-                  storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
-                            .put( item.archivo );
+    return new Promise((resolve, reject) => {
+      if (!imagenes) reject('Sin Imagenes');
+      if (carpeta_archivo == '') reject('Sin Rute');
 
-      uploadTask.on( 'state_changed',
-        (snapshot: firebase.storage.UploadTaskSnapshot) => {
-
-          const count = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-          if (count < 99) {
-            item.progreso = Math.round(count);
+        for ( const item of imagenes ) {
+          item.estaSubiendo = true;
+          if ( item.progreso >= 100 ) {
+            continue;
           }
-
-          if (count > 99 && count < 100) {
-            item.progreso = 99;
-          }
-
-          if (count === 100) {
-            item.progreso = 100;
-          }
-
-          //console.log('PROGESOO:   ' + item.progreso );
-        }, (error) => {
-          console.error('Error al subir');
-        }, () => {
-          // Handle successful uploads on complete
-          // For instance, get the download URL: https://firebasestorage.googleapis.com/...
-          uploadTask.snapshot.ref.getDownloadURL().then((downloadURL) => {
-            // console.log('File available at', downloadURL);
-            item.url = downloadURL;
-            item.estaSubiendo = false;
-            item.created = created;
-            this.guardarImagenProjectExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra, uid:uid }, carpeta_archivo, source, data );
-
-          });
+    
+          //console.log(item);
+          const uploadTask: firebase.storage.UploadTask =
+                      storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
+                                .put( item.archivo );
+    
+          uploadTask.on( 'state_changed', (snapshot: firebase.storage.UploadTaskSnapshot) => {
+              const count = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+              if (count < 99) {
+                item.progreso = Math.round(count);
+              }
+              if (count > 99 && count < 100) {
+                item.progreso = 99;
+              }
+              if (count === 100) {
+                item.progreso = 100;
+              }
+              //console.log('PROGESOO:   ' + item.progreso );
+            },(error) => {
+              console.error('Error al subir');
+              item.status = 'Error';
+              files.push(item);
+              if(files.length == imagenes.length){
+                resolve(files);
+              }        
+            }, () => {
+              // Handle successful uploads on complete
+              uploadTask.snapshot.ref.getDownloadURL()
+              .then((downloadURL) => {
+                item.url = downloadURL;
+                item.estaSubiendo = false;
+                item.created = created;
+                item.status = 'Success';
+                files.push(item);
+                this.guardarImagenProjectExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra, uid:uid }, carpeta_archivo, source, data );
+                if(files.length == imagenes.length){
+                  resolve(files);
+                }        
+              });
+            }
+          );
         }
-      );
+    });
 
-    }
+    /*
+    return new Promise((resolve, reject) => {
+      if (!imagenes)
+          reject('Sin Imagenes');
+      if (carpeta_archivo == '')
+          reject('Sin Rute');
+      
+      resolve(
+
+      );    
+    });*/
+
+
 
   }
+
 
 
   cargarImagenesProjectServiceFirebase( imagenes: FileItem[], carpeta_archivo: string, data:any, created: any , extra: any, uid: any) {

@@ -1,4 +1,5 @@
 import { Component, OnInit, Input, ViewChild } from '@angular/core';
+import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl} from '@angular/forms';
 import { HttpClient} from '@angular/common/http';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
@@ -42,12 +43,13 @@ export class FileListComponent implements OnInit {
   file: any;
   indexitem:number;
   profileUrl: Observable<any>;
+  selection = new SelectionModel<any>(true, []);
 
   public files$: Observable<any[]>;
   private filesCollection: AngularFirestoreCollection<any>;
 
 
-  columnsToDisplay: string[] = ['nombre', 'tipo', 'create_at', 'create_by', 'visualizar'];   
+  columnsToDisplay: string[] = ['select', 'nombre', 'tipo', 'create_at', 'create_by', 'visualizar'];   
   dataSource: MatTableDataSource<Item>;
 
 
@@ -120,6 +122,37 @@ export class FileListComponent implements OnInit {
   }
 
 
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {    
+    if (this.selection.isEmpty()) { 
+      return false; 
+    }
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    //console.log(this.selection.selected.length);
+    console.log(this.selection.selected);
+    return numSelected === numRows;
+  }
+
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  masterToggle() {
+    this.isAllSelected() ?
+        this.selection.clear() :
+        this.dataSource.data.forEach(row => {this.selection.select(row)});    
+        //console.log(this.selection);
+  }  
+
+  /** The label for the checkbox on the passed row */
+  checkboxLabel(row?: any): string {
+  if (!row) {
+    return `${this.isAllSelected() ? 'select' : 'deselect'} all`;
+  }
+  return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
+  }
+    
+
   gojoin(collection) {
     collection.pipe(
       leftJoin(this._afs, 'uid', 'users', 0, '', '', 'username'),
@@ -145,12 +178,16 @@ export class FileListComponent implements OnInit {
 
 
   downloadItem(item: Item, i: number){
+    this.isLoadingDownload = true;
+    this.indexitem = i;
 
     if (item.url) {
       this._http.get(item.url, {responseType: "blob"})
       .subscribe(
         blob => {
           FileSaver.saveAs(blob, item.nombre);
+          this.isLoadingDownload = false;
+          this.indexitem = -1;
         },
         (error:any) => {
           console.log(error);

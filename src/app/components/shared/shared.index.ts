@@ -7,11 +7,13 @@ export { FileUploadComponent } from '../../components/file-upload/file-upload.co
 export { FooterComponent } from './footer/footer.component';
 export { FootermainComponent } from './footermain/footermain.component';
 export { HeaderComponent } from './header/header.component';
+export { KpiComponent } from './firebase/kpi/kpi.component';
 export { LoadingComponent } from './loading/loading.component';
 export { MenuComponent } from './menu/menu.component';
 export { MynavComponent } from './mynav/mynav.component';
 export { NotfoundComponent } from './notfound/notfound.component';
 export { ProgressSpinnerComponent } from './progress-spinner/progress-spinner.component';
+export { ReportkpiComponent } from './firebase/reportkpi/reportkpi.component';
 export { TagUserComponent } from './taguser/taguser.component';
 export { UploaderComponent  } from './uploader/uploader.component';
 export { UploadTaskComponent } from './upload-task/upload-task.component';

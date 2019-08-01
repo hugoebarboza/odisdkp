@@ -170,10 +170,12 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
   ];
 
 
- formatos: Formato[] = [
+
+  formatos: Formato[] = [
     {value: '1', name: 'Datos del proyecto y órdenes'},
     {value: '2', name: 'Datos de las órdenes'}
   ];
+
 
 
  sortdate: Sorter[] = [
@@ -356,7 +358,6 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
     var arraydata = [];
     var valuearrayexcel = "";
     var orderatributovalue = [];
-    var pattern = /(\w+)\s+(\w+)/;
 
     this.isLoadingResults = true;
     this.isRateLimitReached = false;     
@@ -422,7 +423,7 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
           (some) => 
           { 
             if(some.datos){
-            console.log(some.datos);
+            //console.log(some.datos);
             this.exportDataSource = new MatTableDataSource(some.datos);
             
             if(!this.exportDataSource.data.length){
@@ -447,7 +448,6 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
             
 
               if($event == 1 && this.serviceid > 0){
-
                 this.subscription = this.dataService.getService(this.token.token, this.serviceid).subscribe(
                   response => {
                             if(!response){
@@ -579,7 +579,126 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
   
               }
 
-              if($event == 2){
+              if($event == 1 && !this.serviceid){
+                for (var i=0; i<arraydata.length; i++){//FIRSTFOR
+                  var banderatitulo: boolean = true;
+                  for (var j=0; j<this.exportDataSource.data.length; j++){//SECONDFORD
+                    if(arraydata[i] == this.exportDataSource.data[j]['servicetype_id']){ //FIRST IF    
+                      if(this.exportDataSource.data[j]['atributo_share'] && Object.keys(this.exportDataSource.data[j]['atributo_share']).length > 0 && banderatitulo == true){
+                        if(this.exportDataSource.data[j]['name_table'] == 'address'){
+                           valuearrayexcel = valuearrayexcel + "NUM. OT;DESCRIPCION;DIRECCIÓN;NUM GOM;GESTOR;CONTRATISTA;FECHA DE RECEPCIÓN;FECHA TERM. ESTIMADA;FECHA VENCIMIENTO;ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";
+                        }else{
+                           valuearrayexcel = valuearrayexcel + "NUM. OT;DESCRIPCION;DIRECCIÓN;NUM GOM;GESTOR;CONTRATISTA;FECHA DE RECEPCIÓN;FECHA TERM. ESTIMADA;FECHA VENCIMIENTO;ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;";                          
+                        }
+
+                        for(let key in this.exportDataSource.data[j]['atributo_share']){
+                          let newarray = this.exportDataSource.data[j]['atributo_share'][key];
+                          if(newarray['type']  !== 'label' && newarray['type']  !== 'layout_line'){  
+                             valuearrayexcel = valuearrayexcel+newarray['descripcion']+';';
+                          }
+                        }
+                        banderatitulo = false;
+                        valuearrayexcel = valuearrayexcel +'\n';
+
+                      }else{
+                        if(!this.exportDataSource.data[j]['atributo_share'] && banderatitulo == true && this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
+                          valuearrayexcel = valuearrayexcel + "NUM. OT;DESCRIPCION;DIRECCIÓN;NUM GOM;GESTOR;CONTRATISTA;FECHA DE RECEPCIÓN;FECHA TERM. ESTIMADA;FECHA VENCIMIENTO;ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
+                          banderatitulo = false;
+                        }else{
+                          if(!this.exportDataSource.data[j]['atributo_share'] && banderatitulo == true && this.exportDataSource.data[j]['name_table'] == 'address'){
+                          valuearrayexcel = valuearrayexcel + "NUM. OT;DESCRIPCION;DIRECCIÓN;NUM GOM;GESTOR;CONTRATISTA;FECHA DE RECEPCIÓN;FECHA TERM. ESTIMADA;FECHA VENCIMIENTO;ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;" + '\n';
+                          banderatitulo = false;
+                          }
+                        }
+                      }
+                        if(this.exportDataSource.data[j]['name_table'] == 'address'){
+                          var ubicacion = this.exportDataSource.data[j]['direccion'];
+                        }
+                        if(this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
+                          var ubicacion = this.exportDataSource.data[j]['patio']+'-'+this.exportDataSource.data[j]['espiga']+'-'+this.exportDataSource.data[j]['posicion'];
+                        }
+
+                        if(this.exportDataSource.data[j]['name_table'] == 'vehiculos'){
+                        valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['services_details_order_number'] +';'+ this.exportDataSource.data[j]['services_details_description']+';'+this.exportDataSource.data[j]['services_details_address']+';'+this.exportDataSource.data[j]['services_details_gom_number']+';'+this.exportDataSource.data[j]['services_details_gestor']
+                                              +';'+this.exportDataSource.data[j]['services_details_contratista']+';'+this.exportDataSource.data[j]['services_details_reception_date']+';'+this.exportDataSource.data[j]['services_details_required_date']+';'+this.exportDataSource.data[j]['services_details_due_date']
+                                              +';'+this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
+                                              +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']+';';
+                                              
+                                              var obs = String(this.exportDataSource.data[j]['observation']).replace(/(\r\n|\n|\r)/gm,' ');
+                                              
+                                              valuearrayexcel = valuearrayexcel+obs+';'+this.exportDataSource.data[j]['cc_number']
+                                              +';'+this.exportDataSource.data[j]['orderdetail_direccion']+';'+ubicacion
+                                              +';'+this.exportDataSource.data[j]['marca']+';'+this.exportDataSource.data[j]['modelo']+';'+this.exportDataSource.data[j]['color']+';'+this.exportDataSource.data[j]['description']+';'+this.exportDataSource.data[j]['secondcolor']
+                                              +';'+this.exportDataSource.data[j]['patio']+';'+this.exportDataSource.data[j]['espiga']+';'+this.exportDataSource.data[j]['posicion']
+                                              +';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
+                        }else{
+                          valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['services_details_order_number'] +';'+ this.exportDataSource.data[j]['services_details_description']+';'+this.exportDataSource.data[j]['services_details_address']+';'+this.exportDataSource.data[j]['services_details_gom_number']+';'+this.exportDataSource.data[j]['services_details_gestor']
+                          +';'+this.exportDataSource.data[j]['services_details_contratista']+';'+this.exportDataSource.data[j]['services_details_reception_date']+';'+this.exportDataSource.data[j]['services_details_required_date']+';'+this.exportDataSource.data[j]['services_details_due_date']                          
+                          +';'+this.exportDataSource.data[j]['order_id'] +';'+ this.exportDataSource.data[j]['order_number']+';'+this.exportDataSource.data[j]['imagen']+';'+this.exportDataSource.data[j]['user']+';'+this.exportDataSource.data[j]['userupdate']
+                          +';'+this.exportDataSource.data[j]['userassigned']+';'+this.exportDataSource.data[j]['service_name']+';'+this.exportDataSource.data[j]['servicetype']+';'+this.exportDataSource.data[j]['estatus']
+                          +';'+this.exportDataSource.data[j]['leido_por']+';';
+                          
+                          var obs = String(this.exportDataSource.data[j]['observation']).replace(/(\r\n|\n|\r)/gm,' ');
+                          
+                          valuearrayexcel = valuearrayexcel+obs+';'+this.exportDataSource.data[j]['cc_number']+';'+ubicacion                                              
+                          +';'+this.exportDataSource.data[j]['ruta']+';'+this.exportDataSource.data[j]['comuna']+';'+this.exportDataSource.data[j]['calle']+';'+this.exportDataSource.data[j]['numero']+';'+this.exportDataSource.data[j]['block']+';'+this.exportDataSource.data[j]['depto']
+                          +';'+this.exportDataSource.data[j]['transformador']+';'+this.exportDataSource.data[j]['medidor']+';'+this.exportDataSource.data[j]['tarifa']+';'+this.exportDataSource.data[j]['constante']
+                          +';'+this.exportDataSource.data[j]['giro']+';'+this.exportDataSource.data[j]['sector']+';'+this.exportDataSource.data[j]['zona']+';'+this.exportDataSource.data[j]['mercado']                          
+                          +';'+this.exportDataSource.data[j]['create_at']+';'+this.exportDataSource.data[j]['update_at'] +';';
+                        }                      
+                        
+                        //valuearrayexcel = valuearrayexcel + '\n';
+                        //console.log(this.exportDataSource.data[j]['orderatributo']);
+                        if(this.exportDataSource.data[j]['orderatributo'] && Object.keys(this.exportDataSource.data[j]['orderatributo']).length > 0){
+                          for (var keyatributovalue in this.exportDataSource.data[j]['atributo_share']) {
+                            if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue] !== null){                        
+                              orderatributovalue[keyatributovalue] = this.exportDataSource.data[j]['atributo_share'][keyatributovalue];
+                              var banderasindato = true;
+                              for(var keyorderatributovalue in this.exportDataSource.data[j]['orderatributo']){
+                               if(this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['atributo_id'] == this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['id']){
+                                   var ordervalue = this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor'];
+                                   ordervalue = ordervalue.split("\n").join(" ");
+                                   ordervalue = ordervalue.split("\t").join(" ");
+                                   ordervalue = ordervalue.split(";").join(" ");
+                                   valuearrayexcel = valuearrayexcel + ordervalue + ';';
+                                   banderasindato = false;
+                               }
+                               if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'layout_line'){
+                                  banderasindato = false;
+                               }
+                              }
+                              if(banderasindato == true){
+                                valuearrayexcel = valuearrayexcel + 'S/N ; '; 
+                              }
+  
+                            }
+                          }
+                          valuearrayexcel = valuearrayexcel + '\n';
+                          }else{
+                             valuearrayexcel = valuearrayexcel +'\n';
+                          }                        
+
+
+
+                    }//END FIRST IF                    
+                  }//END SECOND FOR                                 
+                }//END //FIRSTFOR
+
+                if(valuearrayexcel){
+                  const FILE_TYPE = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;";
+                  const FILE_EXTENSION = '.csv';
+                  const fileName = "Ordenes";
+                  var blob = new Blob([valuearrayexcel], {type: FILE_TYPE});
+                  FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + FILE_EXTENSION);
+                  this.barButtonOptions.active = false;
+                  this.barButtonOptions.text = 'Descargar';
+                  this.isLoadingResults = false;
+                  this.isRateLimitReached = false;  
+                }
+  
+              }
+
+              if($event == 2 && !this.serviceid){
                 for (var i=0; i<arraydata.length; i++){//FIRSTFOR
                   var banderatitulo: boolean = true;
                   for (var j=0; j<this.exportDataSource.data.length; j++){//SECONDFORD
@@ -693,7 +812,6 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
                 }
   
               }
-
 
 
             }

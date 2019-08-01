@@ -5,9 +5,6 @@ import { MatDialog, TooltipPosition, MatPaginator, MatSort, MatTableDataSource }
 import { Subscription } from 'rxjs/Subscription'
 import { FormControl } from '@angular/forms';
 
-// NGX TABLE
-import { Event } from 'ngx-easy-table';
-import { Columns } from 'ngx-easy-table';
 
 // MATERIAL
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
@@ -15,9 +12,10 @@ import { Portal, TemplatePortal } from '@angular/cdk/portal';
 // DIALOG
 import { AddDocComponent } from '../../../components/shared/dialog/add-doc/add-doc.component';
 import { AddServiceComponent } from '../dialog/addservice/addservice.component';
+import { CloneServiceComponent } from '../dialog/clone-service/clone-service.component';
 import { CsvServiceComponent } from '../dialog/csvservice/csvservice.component';
-import { EditServiceComponent } from '../../../components/shared/shared.index';
 import { DeleteServiceComponent } from '../dialog/deleteservice/deleteservice.component';
+import { EditServiceComponent } from '../../../components/shared/shared.index';
 import { UserComponent } from '../dialog/user/user.component';
 
 // MODELS
@@ -26,6 +24,7 @@ import { Order, Proyecto } from '../../../models/types';
 // SERVICES
 import { SettingsNgxEasyTableService } from '../../../services/settings/settings-ngx-easy-table.service';
 import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+
 
 /*
 export const columns: Columns[] = [
@@ -93,6 +92,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   public _home: Portal<any>;
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  positionheaderaction = new FormControl(this.positionOptions[2]);
   positiondatasourceaction = new FormControl(this.positionOptions[3]);
   positionleftaction = new FormControl(this.positionOptions[4]);
 
@@ -194,6 +194,8 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     });
   }
 
+  
+
 
   addNew(id: number) {
     const dialogRef = this.dialog.open(AddServiceComponent, {
@@ -218,6 +220,22 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     if (this.datasource.paginator) {
       this.datasource.paginator.firstPage();
     }
+  }
+
+  cloneService(service_id:number) {
+    const dialogRef = this.dialog.open(CloneServiceComponent, {
+      width: '1000px',
+      disableClose: true,                 
+      data: { project_id: this.id,
+              service_id: service_id
+            }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) { 
+
+      }
+    });
   }
 
   startEdit(id: number) {

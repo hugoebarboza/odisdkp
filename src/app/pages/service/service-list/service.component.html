@@ -15,19 +15,27 @@
       <div class="row animated fadeIn">
         <div class="col-12">
 
+
+            <div class="row animated fadeIn" *ngIf="loading">
+              <div class="col-sm-12">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
+            </div>
+      
+          <!--
           <div class="container" *ngIf="loading">
               <div class="row justify-content-md-center">
                 <div class="col col-lg-2">
                     <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
                 </div>
               </div>
-          </div>
+          </div>-->
 
-          <div class="portalHost" *ngIf="portal !== 1">
+          <div class="portalHost" *ngIf="portal !== 1 && !loading">
             <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
           </div>
 
-          <div class="portalHostSplit" *ngIf="portal === 1">
+          <div class="portalHostSplit" *ngIf="portal === 1 && !loading">
             <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
           </div>
 
@@ -57,7 +65,12 @@
                         
                     <!-- CONTENT -->
                     <div class="example-loading-shade" *ngIf="isLoadingRefresh">
-                      <app-loading *ngIf="isLoadingRefresh"></app-loading>  
+                      <div class="row justify-content-md-center">
+                        <div class="col col-lg-2">            
+                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" ></mat-spinner>
+                        </div>
+                      </div>
+                      <!--<app-loading *ngIf="isLoadingRefresh"></app-loading>-->
                     </div>    
 
                     <!--CONTENT SEARCH-->
@@ -187,10 +200,20 @@
                                           <button mat-icon-button color="warn" *ngIf="_userService.isRole(7)" (click)="deleteItem(element.id)">
                                             <mat-icon aria-label="Delete" >delete</mat-icon>
                                           </button>
-                                          <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="addDoc(element.id)">
-                                              <mat-icon aria-label="Publish" >publish</mat-icon>
+
+                                          <button mat-icon-button [matMenuTriggerFor]="menuviewselectorder" matTooltip="Acciones (Presiona para acceder a las acciones del proyecto)" [matTooltipPosition]="positionheaderaction.value" *ngIf="_userService.isRole(7)">
+                                            <mat-icon aria-label="launch">more_horiz</mat-icon>
+                                          </button>
+                                        
+                                          <mat-menu #menuviewselectorder="matMenu" [overlapTrigger]="false">
+                                            <button mat-menu-item (click)="addDoc(element.id)" >
+                                              <span >Documentos</span>
                                             </button>
-  
+                                            <button mat-menu-item (click)="cloneService(element.id)">
+                                              <span >Clonar</span>
+                                            </button>
+                                
+                                          </mat-menu>                                        
                                     </div>
                                 </div>
                             </mat-cell>

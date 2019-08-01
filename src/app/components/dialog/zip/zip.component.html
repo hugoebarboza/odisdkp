@@ -42,6 +42,7 @@
   
       <mat-form-field>
         <mat-select placeholder="Region" [(ngModel)]="data.id_region" name="id_region"  (selectionChange)="onSelectRegion(data.id_region)">
+          <mat-option>Seleccione</mat-option>
           <mat-option *ngFor="let regiones of region" [value]="regiones.id">
           {{regiones.region_name}}
           </mat-option>
@@ -69,7 +70,7 @@
   <div mat-dialog-actions>
     <div class="container">
        <div class="row justify-content-center">
-      <button mat-raised-button color="primary"  [mat-dialog-close]="data" [disabled]="data.date === null || data.selectedValueservicio === null" >Descargar</button>
+      <button mat-raised-button color="primary" [disabled]="data.date === null || data.selectedValueservicio === null" (click)="stardownload(data)" >Descargar</button>
       <button mat-button (click)="onNoClick()" >Cancelar</button>
       </div>
     </div>

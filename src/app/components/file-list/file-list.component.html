@@ -7,12 +7,39 @@
         <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
     </div>
     
-    <table mat-table  #table  [dataSource]="dataSource"  matSort  *ngIf="!isRateLimitReached">
+    <mat-table
+    #table  
+    [dataSource]="dataSource"  
+    matSort  
+    *ngIf="!isRateLimitReached"
+    [class.isMobile]="isMobile"
+    >
+
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>          
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [aria-label]="checkboxLabel()"
+                        >
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <span class="mobile-label">Select:</span>
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)"
+                        [aria-label]="checkboxLabel(row)"
+                        >
+          </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+                
     
     <ng-container matColumnDef="nombre"  >  
       <mat-header-cell *matHeaderCellDef  mat-sort-header> Nombre </mat-header-cell>
         <mat-cell *matCellDef="let items; let i = index" >
-  
+        <span class="mobile-label">Nombre:</span>
           {{items.nombre}}             
     
       </mat-cell>
@@ -24,9 +51,9 @@
     <ng-container matColumnDef="tipo" >
       <mat-header-cell *matHeaderCellDef > Tipo </mat-header-cell>
       <mat-cell *matCellDef="let items; let i = index" > 
-    
+        <span class="mobile-label">Tipo:</span>
 
-        <a mat-icon-button href="{{items.url}}" target="_blank" matTooltip="{{items.nombre}}" style="color: #303f9f;" *ngIf="items.type == 'image/png' || items.type == 'image/jpg' || items.type == 'image/jpeg' || items.type == 'jpg' || items.type == 'jpeg'">
+        <a mat-icon-button href="{{items.url}}" target="_blank" matTooltip="{{items.nombre}}" style="color: #303f9f;" *ngIf="items.type == 'application/mp4' || items.type == 'mp4' || items.type == 'video/mp4' || items.type == 'image/png' || items.type == 'image/jpg' || items.type == 'image/jpeg' || items.type == 'jpg' || items.type == 'jpeg'">
             <mat-icon aria-label="launch">image</mat-icon>
         </a>
 
@@ -52,12 +79,18 @@
     
     <ng-container matColumnDef="create_at" >
       <mat-header-cell *matHeaderCellDef > Creado El </mat-header-cell>
-        <mat-cell *matCellDef="let items"> {{items.created }}</mat-cell>
+        <mat-cell *matCellDef="let items">
+          <span class="mobile-label">Creado El:</span>
+          {{items.created }}
+        </mat-cell>
     </ng-container>
     
     <ng-container matColumnDef="create_by" >
       <mat-header-cell *matHeaderCellDef > Creado Por </mat-header-cell>
-        <mat-cell *matCellDef="let items" > {{items.username.name }} {{items.username.surname }}</mat-cell>
+        <mat-cell *matCellDef="let items" >
+        <span class="mobile-label">Creado Por:</span>          
+        {{items.username.name }} {{items.username.surname }}
+        </mat-cell>
     </ng-container>
 
     <ng-container matColumnDef="visualizar" >
@@ -107,7 +140,7 @@
     
     <mat-header-row *matHeaderRowDef="columnsToDisplay" color="primary"></mat-header-row>
     <mat-row *matRowDef="let items; columns: columnsToDisplay;" ></mat-row>
-    </table>
+    </mat-table>
     <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
   
     

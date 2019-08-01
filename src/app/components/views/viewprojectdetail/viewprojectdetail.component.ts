@@ -984,11 +984,11 @@ deleteCommentDatabase(item: any) {
     selectFiles(event) {
   
       const filevalidation = event.target.files;
-      if (filevalidation && filevalidation.length > 0 && filevalidation.length <= 3) {
+      if (filevalidation && filevalidation.length > 0 && filevalidation.length <= 7) {
       } else {
         this.archivos = [];
-        if (filevalidation && filevalidation.length > 3) {
-          this.toasterService.warning('Error: Supero limite de 3 archivos', 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
+        if (filevalidation && filevalidation.length > 7) {
+          this.toasterService.warning('Error: Supero limite de 7 archivos', 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
         }
       }
   

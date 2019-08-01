@@ -41,6 +41,7 @@ export class AddDocComponent implements OnInit {
       this.project = this.filter();
       this.service = this.filterService();
       this.isLoading = false;
+      //console.log(this.project);
     } 
   }
 

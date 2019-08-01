@@ -125,10 +125,15 @@
                       </div>
   
                     <div class="u-img u-img-margin" *ngIf="fotoperfil && fotoperfil.length > 0 && !isLoading">
-                        <img *ngIf="fotoperfil" src="data:image/jpg;base64,{{fotoperfil}}" class="u-img">                        
+                      <img *ngIf="fotoperfil" src="data:image/jpg;base64,{{fotoperfil}}" class="u-img">
                     </div>
                     <div class="u-img u-img-margin" *ngIf="!fotoperfil && !isLoading">
-                        <img *ngIf="!fotoperfil" src="../../../assets/img/noprofile.png" class="u-img">                        
+                        <div class="_1fH43YlMAnPCr8RI9qH98P" style="width: 30px; height: 30px;">
+                            <div id="meInitialsButton" class="M_s6agPZfWvz2OH8iRoGk" style="background-color: #DE473C; font-size: 14px;">
+                                <span>{{identity.name | slice:0:1}}{{identity.surname | slice:0:1}}</span>
+                            </div>
+                        </div>
+                      <!---<img *ngIf="!fotoperfil" src="../../../assets/img/noprofile.png" class="u-img">-->
                     </div>
                     <span>{{identity.name + ' ' + identity.surname}}</span>
                   </button>

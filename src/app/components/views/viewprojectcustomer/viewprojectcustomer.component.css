@@ -100,3 +100,7 @@ table {
   font-size: 12px;
 }
 .material-icons.md-color { color: #CFCFCF;}
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}

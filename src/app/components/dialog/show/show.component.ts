@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, OnDestroy  } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 
 //SERVICES
@@ -102,7 +102,9 @@ export class ShowComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     //console.log('La página se va a cerrar');
-    this.subscription.unsubscribe();
+    if(this.subscription){
+      this.subscription.unsubscribe();
+    }
   }
 
 
@@ -336,7 +338,10 @@ export class ShowComponent implements OnInit, OnDestroy {
 
   toggle() {
     this.show = !this.show;
-    this.getListImage();   
+    if(this.show){
+      this.getListImage();
+    }
+    
   }  
 
 

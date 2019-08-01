@@ -81,6 +81,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
   public service_detail: Service;
   public service_data: Service;
   public service_name: string;
+  service_kpi: number;
   public termino: any;
   public users: User[] = [];
   public users_ito: User[] = [];
@@ -151,7 +152,8 @@ export class EditServiceComponent implements OnInit, OnDestroy {
                     this.project = this.services['project']['project_name'];
                     this.project_id = this.services['project']['id'];
                     this.service_name = this.services['service_name'];
-                    //console.log(this.services);
+                    this.service_kpi = this.services['kpi'];
+                    //console.log(this.service_kpi);
                     if(this.services['servicedetail'][0]){
                       this.service_detail = response.datos.servicedetail;                      
                       this.service_data = response.datos.servicedetail[0];
@@ -400,15 +402,17 @@ export class EditServiceComponent implements OnInit, OnDestroy {
     if (to && body && project && project.lastInsertedId > 0){
       this._cdf.httpEmailEditService(this.token.token, to, this.userFirebase.email, 'OCA GLOBAL - Gestión de Proyecto', created, body, project ).subscribe(
         response => {
+            this.destinatarios = [];          
           if (!response) {
-          return false;
+            return false;
           }
           if (response.status === 200) {
             //console.log(response);
           }
         },
           error => {
-           //console.log(<any>error);
+            this.destinatarios = [];
+            console.log(<any>error);
           }
         );
     }
@@ -444,7 +448,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
             if(!response){
             return false;        
             }
-            if(response.status == 200){ 
+            if(response.status == 200){
               //console.log(response);
             }
           },
@@ -472,7 +476,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
               }
             },
               error => {
-              //console.log(<any>error);
+              console.log(<any>error);
               }   
             );			                    
       }
@@ -637,6 +641,24 @@ export class EditServiceComponent implements OnInit, OnDestroy {
       this.snackBar.open('Se ha desactivado el Proyecto.', '', {duration: 2000,});             
     }           
   }
+
+
+  onChangeKpi(event:any) {
+   
+    if(event.checked == true){
+      const tag = 1;
+      this._project.statusKpi(this.token.token, this.project_id, this.data.service_id, tag);
+      this.snackBar.open('Se ha activado el Kpi en Proyecto.', 'Destacada', {duration: 2000,});             
+    }
+    
+    if(event.checked == false){       
+      const tag = 0;
+      this._project.statusKpi(this.token.token, this.project_id, this.data.service_id, tag);
+      this.snackBar.open('Se ha desactivado el Kpi en Proyecto.', '', {duration: 2000,});             
+    }           
+  }
+
+
 
   taguser(data){
     if(data.length == 0){
