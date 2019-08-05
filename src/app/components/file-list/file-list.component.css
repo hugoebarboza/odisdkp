@@ -1,3 +1,4 @@
+
 .mat-icon-button {
   outline: 0;
   border: none;
@@ -34,4 +35,7 @@
 em {
   font-style: italic;
   font-weight: lighter !important;
+}
+::ng-deep .cdk-overlay-container {
+  z-index: 9999 !important;
 }

@@ -298,6 +298,23 @@ export class CloneServiceComponent implements OnInit {
       let service_type_value: ServiceTypeValue;
       service_type_value = new ServiceTypeValue (0, id, data[0].value_id, data[0].from_date, data[0].to_date, data[0].status, '', '');
       console.log(service_type_value);
+      this._project.addServiceTypeValue(this.token.token, id, service_type_value)
+      .subscribe( (resp: any) => {              
+        if(!resp){
+          this.snackBar.open('Error registrando Service Type Value!!!', '', {duration:3000, });
+          return;        
+        }
+        if(resp.status == 'success'){
+          this.snackBar.open('Solicitud de registro de Service Type Value procesada satisfactoriamente!!!', '', {duration: 3000,});
+        }else{
+        }
+      },
+        error => {
+          this.snackBar.open('Error registrando Service Type Value!!!', error.error.mensaje, {duration:3000, });
+          console.log(<any>error);
+        }       
+      );  
+
     }else{
       return;
     }

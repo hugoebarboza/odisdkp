@@ -60,8 +60,8 @@ export class ReportkpiComponent implements OnInit {
   mostarporcentaje() {
 
     this.porcentajeCollection = this._afs.collection(this.ruta, ref =>
-      ref.where('create_at', '>=', this.startOfMonth)
-      .where('create_at', '<=', this.endOfMonth).limit(1));
+      ref.orderBy('create_at', 'desc')
+      .limit(1));
     this.porcentajeCollection.snapshotChanges().pipe(
       map(actions => {
         return actions.map(a => {

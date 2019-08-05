@@ -26,6 +26,8 @@ import { AppState } from '../app.reducers';
 import { Store } from '@ngrx/store';
 import { LoginAction } from '../contador.actions';
 
+declare var swal: any;
+
 @Component({
   selector:'login',
   templateUrl: './login.component.html',
@@ -301,13 +303,43 @@ export class LoginComponent implements OnInit, OnDestroy {
             return console.log('usuario registrado en Firebase');
         }
         case 'auth/wrong-password': {
+          swal({
+            title: 'Error en credencial firebase',
+            text: 'Favor actualizar contraseña de acceso, de lo contrario algunas funcionalidades se desactivaran.',
+            icon: 'error',
+            buttons: {
+              cancelar: {
+                text: 'No validar',
+                value: 'cancel',
+                className: 'swal-button--danger'
+                } ,
+              confirmar: {
+                text: 'Validar credencial',
+                value: 'confirmar'
+              }
+              },
+            }).then( item => {
+              if (item == 'confirmar') {
+                swal({icon: 'success', title: 'Se envio correo para su verificación!', text: 'Una vez verificado cerrar y abrir sesión'});
+                this.authService.updateUser(value)
+                .then(res => {
+                return console.log(res);
+                }, err => {
+                return console.log(err);
+                });
+              }
+            });
+
+          return console.log('update password');
+
+            /*
             this.authService.updateUser(value)
             .then(res => {
               //console.log(res);
             }, err => {
               //console.log(err);
             })        
-            return console.log('update password');
+            return console.log('update password');*/
         }
         default: {
             return console.log('Login Firebase error try again later.');
