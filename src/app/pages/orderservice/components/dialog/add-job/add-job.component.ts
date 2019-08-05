@@ -159,7 +159,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
                     //console.log(response.datos);
                     this.services = response.datos;
                     this.kpi = response.datos.kpi;
-                    console.log(this.kpi);
+                    //console.log(this.kpi);
                     if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_informador){                      
                       this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_informador).subscribe(
                         response => {

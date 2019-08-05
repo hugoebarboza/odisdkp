@@ -3,10 +3,17 @@
       No se encontraron archivos.
     </div>
     
-    <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
-        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
-    </div>
     
+
+    <div class="container" *ngIf="isLoadingResults || isRateLimitReached">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
+        </div>
+      </div>
+    </div>
+
+    <button mat-stroked-button color="primary"*ngIf="selection.selected && selection.selected.length > 0" (click)="descargar()"><mat-icon>archive</mat-icon> Descargar zip</button>
     <mat-table
     #table  
     [dataSource]="dataSource"  

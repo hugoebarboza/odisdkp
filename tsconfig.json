@@ -20,6 +20,9 @@
     "paths": {
       "core-js/es7/reflect": [
         "node_modules/core-js/proposals/reflect-metadata"
+      ],
+      "jszip": [
+        "node_modules/jszip/dist/jszip.min.js"
       ]
     }
   }

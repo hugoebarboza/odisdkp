@@ -4,7 +4,7 @@ import { FormControl} from '@angular/forms';
 import { HttpClient} from '@angular/common/http';
 import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 
-import { defer, combineLatest, Observable, of, } from 'rxjs';
+import { defer, combineLatest, Observable, of } from 'rxjs';
 import { tap, switchMap, map } from 'rxjs/operators';
 
 
@@ -25,6 +25,14 @@ import { ItemFirebaseService, UserService } from '../../services/service.index';
 //MODELS
 import { Item } from '../../models/types';
 
+import * as _moment from 'moment';
+const moment = _moment;
+
+import { forkJoin } from 'rxjs';
+import { saveAs } from 'file-saver';
+import * as JSZip from 'jszip';
+import { ResponseContentType, Http } from '@angular/http';
+
 @Component({
   selector: 'app-file-list',
   templateUrl: './file-list.component.html',
@@ -33,42 +41,39 @@ import { Item } from '../../models/types';
 export class FileListComponent implements OnInit {
 
 
-  title = "Listado de documentos";
-  subtitle = "Seleccione el archivo a borrar, descargar o visualizar.";
+  title = 'Listado de documentos';
+  subtitle = 'Seleccione el archivo a borrar, descargar o visualizar.';
   items: Item[];
   CARPETA_ARCHIVOS: string;
   isLoadingResults = true;
   isLoadingDownload = false;
   isRateLimitReached = false;
   file: any;
-  indexitem:number;
+  indexitem: number;
   profileUrl: Observable<any>;
   selection = new SelectionModel<any>(true, []);
 
   public files$: Observable<any[]>;
   private filesCollection: AngularFirestoreCollection<any>;
 
-
   columnsToDisplay: string[] = ['select', 'nombre', 'tipo', 'create_at', 'create_by', 'visualizar'];   
   dataSource: MatTableDataSource<Item>;
-
-
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionheaderaction = new FormControl(this.positionOptions[2]);
   positiondatasourceaction = new FormControl(this.positionOptions[3]);
 
-
-
-  @Input() project_id : number;
-  @Input() service_id : number;
+  @Input() project_id: number;
+  @Input() service_id: number;
 
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) sort: MatSort;  
+  @ViewChild(MatSort, { static: true }) sort: MatSort;
 
-
+  getRequests = [];
+  // tslint:disable-next-line:max-line-length
   constructor(
     private _afs: AngularFirestore,
+    public http: Http,
     public _http: HttpClient,
     public _userService: UserService,
     private itemService: ItemFirebaseService,
@@ -78,7 +83,7 @@ export class FileListComponent implements OnInit {
 
   ngOnInit() {
     if (this.project_id > 0 && this.service_id > 0){
-        //this.CARPETA_ARCHIVOS = 'filesprojects/'+this.project_id+'/'+this.service_id;
+        // this.CARPETA_ARCHIVOS = 'filesprojects/'+this.project_id+'/'+this.service_id;
         this.CARPETA_ARCHIVOS = 'allfiles/projects/' + this.project_id + '/' + this.service_id + '/files';
 
         this.filesCollection = this._afs.collection(this.CARPETA_ARCHIVOS, ref => ref.orderBy('created', 'desc'));
@@ -112,37 +117,80 @@ export class FileListComponent implements OnInit {
             this.dataSource.paginator = this.paginator;
             this.dataSource.sort = this.sort;
             this.isRateLimitReached = false;
-            this.isLoadingResults = false;      
+            this.isLoadingResults = false;
             }else{
               this.isRateLimitReached = true;
-              this.isLoadingResults = false;      
+              this.isLoadingResults = false;
             }
           });    */
     }
   }
 
-
-
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {    
-    if (this.selection.isEmpty()) { 
-      return false; 
+  isAllSelected() {
+    if (this.selection.isEmpty()) {
+      return false;
     }
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
-    //console.log(this.selection.selected.length);
-    console.log(this.selection.selected);
+    // console.log(this.selection.selected.length);
+    // console.log(this.selection.selected);
     return numSelected === numRows;
   }
 
+  descargar() {
+    
+    this.isLoadingResults = true;
+    this.getRequests = [];
+    this.createGetRequets(this.selection.selected);
+
+    // tslint:disable-next-line: deprecation
+    forkJoin(...this.getRequests).subscribe(res => {
+      const zip = new JSZip();
+      let fileName: String;
+
+      // console.log(res);
+      res.forEach((f, i) => {
+        // console.log(i);
+        // console.log(this.selection.selected[i]);
+        if (this.selection.selected[i]['data']) {
+          fileName = this.selection.selected[i]['data']['order_number'] + '/' + this.selection.selected[i]['nombre'];
+        } else {
+          fileName = this.selection.selected[i]['nombre'];
+        }
+
+          // extract filename from the response
+          zip.file(`${fileName}`, f._body, { binary: true, createFolders: true });
+          // use it as name, this way we don't need the file type anymore
+
+        // console.log(zip);
+      });
+
+      const date = moment(new Date()).format('YYYY-MM-DD_hh-mm-ss');
+      zip
+        .generateAsync({ type: 'blob' })
+        .then(blob => saveAs(blob, 'Documentos_' + date + '.zip'));
+
+        this.isLoadingResults = false;
+    });
+  }
+
+  private createGetRequets(data: any) {
+    data.forEach(liststorage =>
+      this.getRequests.push(
+        // tslint:disable-next-line: deprecation
+        this.http.get(liststorage.url, { responseType: ResponseContentType.Blob })
+      )
+    );
+  }
 
   /** Selects all rows if they are not all selected; otherwise clear selection. */
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.dataSource.data.forEach(row => {this.selection.select(row)});    
-        //console.log(this.selection);
-  }  
+        this.dataSource.data.forEach(row => {this.selection.select(row)});
+        // console.log(this.selection);
+  }
 
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: any): string {
@@ -151,14 +199,13 @@ export class FileListComponent implements OnInit {
   }
   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
-    
 
   gojoin(collection) {
     collection.pipe(
       leftJoin(this._afs, 'uid', 'users', 0, '', '', 'username'),
     ).subscribe(
       data => {
-        //console.log(data);
+        // console.log(data);
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
@@ -177,12 +224,12 @@ export class FileListComponent implements OnInit {
   }
 
 
-  downloadItem(item: Item, i: number){
+  downloadItem(item: Item, i: number) {
     this.isLoadingDownload = true;
     this.indexitem = i;
 
     if (item.url) {
-      this._http.get(item.url, {responseType: "blob"})
+      this._http.get(item.url, {responseType: 'blob'})
       .subscribe(
         blob => {
           FileSaver.saveAs(blob, item.nombre);
@@ -228,6 +275,7 @@ export class FileListComponent implements OnInit {
 
     const storageRef = firebase.storage().ref();
     
+    /*
     if(item.data){      
       storageRef.child(item.ref +'/'+ item.nombre).delete();
       this._afs.doc(item.ref +'/'+ item.iddocfile).delete();
@@ -237,7 +285,7 @@ export class FileListComponent implements OnInit {
       storageRef.child(this.CARPETA_ARCHIVOS +'/'+ item.nombre).delete();
       this._afs.doc(this.CARPETA_ARCHIVOS +'/'+ item.idfile).delete();
       this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});       
-    }
+    }*/
 
     /*
     if(item){
@@ -274,7 +322,7 @@ export class FileListComponent implements OnInit {
     
 
     
-    /*
+    
     swal({
       title: '¿Esta seguro?',
       text: 'Esta seguro de borrar documento con nombre ' + item.nombre,
@@ -284,19 +332,18 @@ export class FileListComponent implements OnInit {
     })
     .then( borrar => {
       if(borrar){
-        this.isLoadingResults = true;
-        this.itemService.deleteDoc(this.CARPETA_ARCHIVOS, item).subscribe(
-        data => {      
-         this.items = data;
-         this.dataSource = new MatTableDataSource(this.items);      
-         this.isLoadingResults = false;
-         if(data.length == 0){
-           this.isRateLimitReached = true;        
-         }
-         });
-         this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});   
+        if(item.data){      
+          storageRef.child(item.ref +'/'+ item.nombre).delete();
+          this._afs.doc(item.ref +'/'+ item.iddocfile).delete();
+          this._afs.doc(this.CARPETA_ARCHIVOS +'/'+ item.idfile).delete();
+          this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});   
+        }else{
+          storageRef.child(this.CARPETA_ARCHIVOS +'/'+ item.nombre).delete();
+          this._afs.doc(this.CARPETA_ARCHIVOS +'/'+ item.idfile).delete();
+          this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});       
+        }
       }
-    });*/
+    });
 
   }
 
