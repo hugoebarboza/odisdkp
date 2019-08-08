@@ -40,6 +40,7 @@ import { FileComponent } from '../../dialog/file/file.component';
 import { CsvComponent } from '../../dialog/csv/csv.component';
 import { DeleteComponent } from '../../dialog/delete/delete.component';
 import { EditComponent } from '../../dialog/edit/edit.component';
+import { SendOrderByEmailComponent } from 'src/app/pages/orderservice/components/dialog/send-order-by-email/send-order-by-email.component';
 import { ShowComponent } from '../../dialog/show/show.component';
 import { SettingsComponent } from '../../dialog/settings/settings.component';
 import { ZipComponent } from '../../dialog/zip/zip.component';
@@ -1235,6 +1236,7 @@ private filterRegionMulti() {
   }
 
 
+
   publish(columns:string) {
     const dialogRef = this.dialog.open(FileComponent, {
       width: '777px',
@@ -1340,6 +1342,27 @@ private filterRegionMulti() {
     this.filtersregion.fieldValue = '';
     this.regionMultiCtrl.reset();
     this.step = 0;
+  }
+
+
+  SendOrderByEmail(order_id: any, order_number: any, estatus: any, servicetype_id:number) {
+    const dialogRef = this.dialog.open(SendOrderByEmailComponent, {
+      width: '1000px',
+      disableClose: true,                 
+      data: { project: this.project_id,
+              service_id: this.id,
+              tiposervicio: servicetype_id,              
+              orderid: order_id,
+              order_number: order_number,
+              estatus: estatus
+            }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) { 
+
+      }
+    });
   }
 
 

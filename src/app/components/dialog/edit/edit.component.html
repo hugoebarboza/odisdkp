@@ -76,8 +76,8 @@
                   <!--Contains mat-hint for characters count and has maxLengt set-->
                   <div class="form">
                     <mat-form-field appearance="outline" color="accent" class="full-width mat-status">
-                      <textarea matInput #inputstate class="form-control" placeholder="Observación" [(ngModel)]="data.observation" name="observation" maxlength="277"  ></textarea>        
-                      <mat-hint align="end">{{inputstate.value?.length || 0}}/277</mat-hint>
+                      <textarea matInput #inputobservacion class="form-control" placeholder="Observación" [(ngModel)]="data.observation" name="observation" maxlength="277"  ></textarea>        
+                      <mat-hint align="end">{{inputobservacion.value?.length || 0}}/277</mat-hint>
                     </mat-form-field>
                   </div>
                   

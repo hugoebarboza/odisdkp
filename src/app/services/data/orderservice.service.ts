@@ -137,8 +137,12 @@ import { ToastrService } from 'ngx-toastr';
 		return this.getQuery('order/'+id+'/firmaimage', token);
 	}
 
+	getListAudioOrder(token: any, id: number): Observable<any> {
+		return this.getQuery('order/'+id+'/audio', token);
+	}
+
 	
-	getListImageOrder(token: any, id: number): Observable<any> {								  
+	getListImageOrder(token: any, id: number): Observable<any> {
 		return this.getQuery('order/'+id+'/listimage', token);
 	}
 

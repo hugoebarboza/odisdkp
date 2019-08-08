@@ -56,6 +56,7 @@ import { MarcaListComponent } from './components/dialog/marca-list/marca-list.co
 import { MercadoListComponent } from './components/dialog/mercado-list/mercado-list.component';
 import { ModeloListComponent } from './components/dialog/modelo-list/modelo-list.component';
 import { SectorListComponent } from './components/dialog/sector-list/sector-list.component';
+import { SendOrderByEmailComponent } from './components/dialog/send-order-by-email/send-order-by-email.component';
 import { ServiceTypeListComponent } from './components/dialog/service-type-list/service-type-list.component';
 import { ServiceTypeValueListComponent } from './components/dialog/service-type-value-list/service-type-value-list.component';
 import { ServiceValueListComponent } from './components/dialog/service-value-list/service-value-list.component';
@@ -136,6 +137,7 @@ import { OrderserviceComponent } from '../../components/orderservice/orderservic
 
 // Global vars
 import { environment } from '../../../environments/environment';
+
 
 
 
@@ -226,6 +228,7 @@ registerLocaleData(localeEs);
     SettingsComponent, 
     SettingscustomerComponent,
     SectorListComponent,
+    SendOrderByEmailComponent,
     ServiceTypeValueListComponent, 
     ServiceValueListComponent, 
     ShowComponent,
@@ -246,7 +249,7 @@ registerLocaleData(localeEs);
     ViewprojectorderComponent,
     ViewprojectcustomerComponent, 
     VieworderserviceComponent, 
-    ViewOrderServiceSelectComponent,  
+    ViewOrderServiceSelectComponent,   
   ],
   exports: [
   ],
@@ -284,6 +287,7 @@ registerLocaleData(localeEs);
     ModalMapaComponent, 
     ModalImageComponent,
     ModeloListComponent,
+    SendOrderByEmailComponent,
     SnackErrorComponent,
     SnackSuccessComponent,
     ShowComponent, 

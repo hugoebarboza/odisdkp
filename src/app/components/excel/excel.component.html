@@ -20,6 +20,7 @@
                     <input matInput #inputFileName placeholder="Seleccione archivo" value="{{nombreFile}}"  (click)="fileInput.click()">
                 </mat-form-field>
                 <button mat-raised-button (click)="Upload()" [disabled]="!bandera">Validar</button>
+                <!--
                 <mat-form-field class="marginLeftX2">
                   <mat-select placeholder="Llaves de Validación" [formControl]="toppings" multiple>
                     <mat-select-trigger>
@@ -31,9 +32,9 @@
                     <mat-option value="Número CC" [disabled]="true">Número CC</mat-option>
                     <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
                   </mat-select>
-                </mat-form-field>
+                </mat-form-field>-->
 
-                <mat-form-field class="example-full-width" *ngIf="dateend !== undefined">
+                <mat-form-field class="example-full-width marginLeftX2" *ngIf="dateend !== undefined">
                     <input matInput placeholder="Fecha vencimiento" formControlName="inputDate" (readonly)="true">
                 </mat-form-field>
 

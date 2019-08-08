@@ -332,7 +332,7 @@ export class ShowcaseComponent implements OnInit {
   documentJoin(document): Observable<any> {
     //console.log(document);
     return document.pipe(
-      docJoin(this._afs, { id: 'users'},  2, '', '', 'etiquetado'),
+      docJoin(this._afs, { id: 'users'},  2, '', '', 'etiquetado', '', ''),
     );
   }
 
@@ -374,14 +374,15 @@ export class ShowcaseComponent implements OnInit {
 
   }
 
+
   collectionJoin(document): Observable<any> {
     this.isLoading = false;
     return this.infocaso$ = document.pipe(
-      docJoin(this._afs, { create_to: 'users'},  0, '', '', 'create_to'),
+      docJoin(this._afs, { create_to: 'users'},  0, '', '', 'create_to', '', ''),
       // docJoin(this._afs, { depto_id: 'countries/' + 1 + '/departments'},  0, '', '', 'depto_id'),
       // docJoin(this._afs, { type_id: 'supporttype'},  0, '', '', 'typeselect'),
       // docJoin(this._afs, { category_id: 'supportcategory'},  0, '', '', 'category_id'),
-      docJoin(this._afs, { type_id: 'supportstatus'} , 1, 'stype_id', '==', 'supportstatus'),
+      docJoin(this._afs, { type_id: 'supportstatus'} , 3, 'stype_id', '==', 'supportstatus', 'order_by', 'asc'),
     );
   }
 
@@ -438,7 +439,7 @@ export class ShowcaseComponent implements OnInit {
 
       const comment = that.formComentar.value.comentario;
 
-        if(that.arrayEtiquetadosDefault && that.arrayEtiquetadosDefault.length > 0 && docRef){
+        if (that.arrayEtiquetadosDefault && that.arrayEtiquetadosDefault.length > 0 && docRef){
           that.arrayEtiquetadosDefault.forEach(res => {
             that.sendCdfUser(res, docRef, 'Comentario ', comment);
           });
@@ -731,7 +732,9 @@ export const docJoin = (
   type: number,
   where: string,
   condition,
-  nameObject
+  nameObject,
+  order_by,
+  direction
 ) => {
   return source =>
     defer(() => {
@@ -764,6 +767,20 @@ export const docJoin = (
                 })
                 );
             }
+
+            if (type === 3) {
+              // tslint:disable-next-line:max-line-length
+              return afs.collection(`${paths[k]}`, ref => ref.where( where, condition, `${parent[k]}`).orderBy(order_by, direction)).snapshotChanges().pipe(
+                map(actions => {
+                  return actions.map(a => {
+                    const datos = a.payload.doc.data();
+                    const _iddoc = a.payload.doc.id;
+                    return { _iddoc, ...datos };
+                  });
+                })
+                );
+            }
+
 
           });
 

@@ -1345,6 +1345,209 @@ export class CdfService  {
   }  
 
 
+	httpEmailShareOrder(token=null, toEmail: string, fromTo: string, subject: string, created:any, body:string, project : { address: string, company : string, comentario: string, name: string, observacion: string, description : string, order_number: string, service_name:string, service_type_name:string, id : number, orderid : number, pila: any, file: any, image:any }): Observable<any>{
+		if(!token){
+            return;
+    }
+
+    let image = '';
+
+    if(project.image && project.image.id > 0 && project.id > 0 && project.orderid > 0){
+      image =  `<div style="margin-top:25px">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+        <tbody>
+          <tr>    
+            <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
+            <tbody>
+            <tr>
+            <td valign="top" style="padding:0 15px 0 15px;width:40px">
+            <img width="40" height="40" alt="" style="height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:5px;" src="https://ci3.googleusercontent.com/proxy/xGsxYfjTvh6KWP4Lx7W_FDfJ5hrmw5YzNi8mji33NvpeZVLJrbcGzQpCDmHxN6OjhGSNobgFjJ4rnYnBGcU1xaIo5cH_JaOEOuPmGSQJNL_HVBWOXal0C2cKf1u_LS6tFrb6JJqHLX52AuZJnnGA5AyLgYDocA5vccvWTdiXZZVM07oRqBesIqndZxnmxx7e1ToFhvl1fEliLx35oWxK2-TVk8jFBCcwAG-CjQn9nbyx5EEF=s0-d-e1-ft#https://secure.gravatar.com/avatar/f375267e4ec6266af88de6e4e70accfc?size=40&amp;default=https%3A%2F%2Fassets.zendesk.com%2Fimages%2F2016%2Fdefault-avatar-80.png&amp;r=g" >
+            </td>  
+            <td width="100%" style="padding:0;margin:0" valign="top">
+            <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:15px;line-height:18px;margin-bottom:0;margin-top:0;padding:0;color:#1b1d1e;margin-left:2px;">
+            <strong>${fromTo}</strong>
+            </p>
+            <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:2px;">Imágenes adjunta</p>
+            <div>
+            <table border="0" cellpadding="0" cellspacing="0" width="100%" align="left" style="border:none;border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%">
+            <tbody>                                                          
+                <tr>
+                  <td style="direction:ltr;text-align:left">
+                  <div  lang="x-btn" style="font-family:'Uber18-Text-Bold',Helvetica,Arial,sans-serif!important;font-size:14px;line-height:20px;text-transform:uppercase">
+                    <a href="https://odisdkp.firebaseapp.com/#/formview/orderview/${project.id}/${project.orderid}" style="background-color:#276ef1;border-color:#276ef1;border-radius:0px;border-style:solid;border-width:13px 16px;color:#ffffff;display:inline-block;letter-spacing:1px;max-width:300px;min-width:100px;text-align:center;text-decoration:none;text-transform:uppercase" target="_blank" >
+                      <span style="float:left;text-align:left">Ver imágenes</span>
+                      <span style="padding-top:2px;display:inline-block"> 
+                      <img src="https://ci3.googleusercontent.com/proxy/axtMpR0rilnyjOmpHXDbY1OX1so5KIx1c7N4ECE3jBlwH30xUmvhGOGKbU87XdBRIGH3Z15F6rihfEg9xh84z0jtpziZ3_bNXW1G25P7eB2cgmNXQDw5chmkBgxC=s0-d-e1-ft#https://s3.amazonaws.com/uber-static/emails/2017/01/uber18_arrow_right.png" width="11" height="12" style="Margin-left:10px;border:none;clear:both;display:block;margin-top:2px;max-width:100%;outline:none;text-decoration:none" >
+                    </span>
+                    </a>
+                  </div>
+                  </td>
+                </tr>
+            </tbody>
+            </table>
+            </div>  
+            </td>        
+            </tr>      
+            </tbody>
+            </table>      
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      </div> `;
+    }    
+
+
+      
+
+      const msg: CdfMessage = {
+        toEmail: toEmail,
+        fromTo: this.noreply,
+        subject: subject,
+        message: `
+        <!DOCTYPE html>
+        <html>
+        <head>
+        <style >
+        </style>
+        </head>
+        <body>
+
+        <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#F9F9F9">
+        <tbody>
+          <tr>
+          <td align="center">
+          <table width="640" cellpadding="0" cellspacing="0" >
+            <tbody>
+            <tr>
+            <td><p></p></td>
+            </tr>                        
+
+            <tr>
+              <td>
+              <table border="0" cellspacing="0" cellpadding="0" width="100%"  style="border-collapse:collapse;background:#fff;border:1px solid #ededed" bgcolor="#fff">
+              <tbody>
+                <tr>
+                <td>
+                <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+
+                  <tbody>
+        <tr>
+        <td  style="border-bottom-width:1px;padding:12px 0px 12px 24px;background-color: #0b3357;">
+        <div  style="font-size:0pt;line-height:0pt;background-color: #0b3357;" align="left">
+        <a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">                                                                                                    
+        <img src="https://odisdkp.firebaseapp.com/assets/img/logo.png" alt="logo_oca" width="138" >
+        </a>
+        </div>
+        </td>
+        </tr>                                            
+
+
+        <tr>
+                    <td align="left" style="padding:25px 30px 30px">
+                    <h2 style="font-size:16px;font-weight:400;color:#222222;margin:0">
+                    <p>Estimad@s,</p>
+                    <p>Junto con saludar, se detalla información actualizada de la Orden de Trabajo en asunto.</p>
+                    <p><b>DATOS DEL PROYECTO</b></p>
+                    <ul>
+                      <li>Nombre: ${project.service_name}</li>
+                      <li>Num. OT: ${project.order_number}</li>
+                      <li>Tipo de Servicio: ${project.service_type_name}</li>
+                      <li>${project.comentario}</li>
+                    </ul>
+                    <p></p>
+                    <p></p>
+                    <p>Para verificar el estado del proyecto y agregar comentarios adicionales, siga el enlace aquí
+                      <a href="https://odisdkp.firebaseapp.com/#/service/${project.id}" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://support.sendgrid.com/hc/requests/2306369&amp;source=gmail&amp;ust=1561827470902000&amp;usg=AFQjCNHthhPllbak25dNtf46FraBxDF9uQ">odisdkp.firebaseapp.com/#/service</a>.</p>
+                      <p>Saludos cordiales!</p>
+                      <p></p>
+                    <div style="margin-top:25px">
+                      <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+                      <tbody>
+                        <tr>    
+                        <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
+                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
+                          <tbody>
+                          <tr>
+                          <td valign="top" style="padding:0 15px 0 15px;width:40px">
+                          <img width="40" height="40" alt="" style="height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:5px;" src="https://ci3.googleusercontent.com/proxy/xGsxYfjTvh6KWP4Lx7W_FDfJ5hrmw5YzNi8mji33NvpeZVLJrbcGzQpCDmHxN6OjhGSNobgFjJ4rnYnBGcU1xaIo5cH_JaOEOuPmGSQJNL_HVBWOXal0C2cKf1u_LS6tFrb6JJqHLX52AuZJnnGA5AyLgYDocA5vccvWTdiXZZVM07oRqBesIqndZxnmxx7e1ToFhvl1fEliLx35oWxK2-TVk8jFBCcwAG-CjQn9nbyx5EEF=s0-d-e1-ft#https://secure.gravatar.com/avatar/f375267e4ec6266af88de6e4e70accfc?size=40&amp;default=https%3A%2F%2Fassets.zendesk.com%2Fimages%2F2016%2Fdefault-avatar-80.png&amp;r=g" >
+                          </td>
+                          <td width="100%" style="padding:0;margin:0" valign="top">
+                            <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:15px;line-height:18px;margin-bottom:0;margin-top:0;padding:0;color:#1b1d1e;margin-left:2px;">
+                            <strong>${fromTo}</strong>
+                            </p>
+                            <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:2px;">${created}</p>
+                            <div dir="auto" style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0">
+                            <p style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0" dir="auto">${body}</p>
+                            </div>
+
+                            <div>
+                            <table border="0" cellpadding="0" cellspacing="0" width="100%" align="left" style="border:none;border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%">
+                            <tbody>                                                          
+                                <tr>
+                                  <td style="direction:ltr;text-align:left">
+                                  <div  lang="x-btn" style="font-family:'Uber18-Text-Bold',Helvetica,Arial,sans-serif!important;font-size:14px;line-height:20px;text-transform:uppercase">
+                                    <a href="https://odisdkp.firebaseapp.com/#/formview/orderview/${project.id}/${project.orderid}" style="background-color:#276ef1;border-color:#276ef1;border-radius:0px;border-style:solid;border-width:13px 16px;color:#ffffff;display:inline-block;letter-spacing:1px;max-width:300px;min-width:100px;text-align:center;text-decoration:none;text-transform:uppercase" target="_blank" >
+                                      <span style="float:left;text-align:left">Ver detalles</span>
+                                      <span style="padding-top:2px;display:inline-block"> 
+                                      <img src="https://ci3.googleusercontent.com/proxy/axtMpR0rilnyjOmpHXDbY1OX1so5KIx1c7N4ECE3jBlwH30xUmvhGOGKbU87XdBRIGH3Z15F6rihfEg9xh84z0jtpziZ3_bNXW1G25P7eB2cgmNXQDw5chmkBgxC=s0-d-e1-ft#https://s3.amazonaws.com/uber-static/emails/2017/01/uber18_arrow_right.png" width="11" height="12" style="Margin-left:10px;border:none;clear:both;display:block;margin-top:2px;max-width:100%;outline:none;text-decoration:none" >
+                                    </span>
+                                    </a>
+                                  </div>
+                                  </td>
+                                </tr>
+                            </tbody>
+                            </table>
+                            </div>  
+                
+                          </td>        
+                          </tr>      
+                          </tbody>
+                        </table>                                                
+                        </td>  
+                        </tr>
+                      </tbody>
+                      </table>
+                    </div>                     
+                    ${image}
+                    </h2>                                              
+                    </td>
+                  </tr>
+                  </tbody>
+                </table>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+            </td>
+          </tr>           
+          </tbody>
+          </table>
+          </td>
+        </tr>
+        <tr>
+        <td><p></p></td>
+        </tr>
+        </tbody>
+        </table>            
+        </body>
+        </html>
+        `,            
+      };      
+
+      let headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
+
+      const endpoint = 'https://us-central1-odisdkp.cloudfunctions.net/httpEmail';
+  
+      return this._http.post(endpoint, msg, {headers: headers})
+        .map( (resp: any) => {
+          return resp;
+        }).catch( err => {
+          return err ;
+        });
+  }
+    
 
 }
 

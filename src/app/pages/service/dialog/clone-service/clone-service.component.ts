@@ -160,11 +160,11 @@ export class CloneServiceComponent implements OnInit {
   }
 
   confirmClone(){
-		if(this.forma.invalid){
+		if(this.forma.invalid || !this.forma.value.order_number || !this.forma.value.service_name){
 			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
     }
-
+    //console.log(this.forma.value);
     if(this.forma.valid){
       this.service_data.order_number = this.forma.value.order_number;
       this.service_data.service_name = this.forma.value.service_name;
@@ -175,7 +175,7 @@ export class CloneServiceComponent implements OnInit {
 
     this._project.cloneService(this.token.token, this.service_data, this.data.project_id, this.data.service_id).subscribe(
       (data:any) => { 
-        console.log(data);
+        //console.log(data);
         if(data.status === 'success'){
           this.lastInsertedId = data.lastInsertedId;
           if(data && this.lastInsertedId > 0){
@@ -261,10 +261,10 @@ export class CloneServiceComponent implements OnInit {
       
     if(data.service_type && data.service_type.length > 0 && id > 0){      
       data.service_type.forEach(res => {
-        console.log(res);
+        //console.log(res);
         let service_type: ServiceType;        
         service_type = new ServiceType (1, res.id, res.name, res.shortname, res.ndocumento, res.ddocumento, res.status, res.observation, res.sign, '', '');
-        console.log(service_type);
+        //console.log(service_type);
         this._project.addServiceType(this.token.token, id, service_type)
         .subscribe( (resp: any) => {
           if (!resp) {
@@ -274,7 +274,7 @@ export class CloneServiceComponent implements OnInit {
           if (resp.status === 'success') {
             if (res.id && data) {
               let lastInsertedSTId = resp.lastInsertedId;
-              console.log(lastInsertedSTId);
+              //console.log(lastInsertedSTId);
               this.filterServiceTypeValue(res.id, data.service_type_value, lastInsertedSTId)
             }    
             this.snackBar.open('Solicitud de registro de Service Type procesada satisfactoriamente!!!', '', {duration: 3000});
@@ -297,7 +297,7 @@ export class CloneServiceComponent implements OnInit {
     if(id && data){
       let service_type_value: ServiceTypeValue;
       service_type_value = new ServiceTypeValue (0, id, data[0].value_id, data[0].from_date, data[0].to_date, data[0].status, '', '');
-      console.log(service_type_value);
+      //console.log(service_type_value);
       this._project.addServiceTypeValue(this.token.token, id, service_type_value)
       .subscribe( (resp: any) => {              
         if(!resp){

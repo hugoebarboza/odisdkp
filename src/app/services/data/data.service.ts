@@ -103,6 +103,7 @@ export class DataService {
     return this.getDataBD(this.url + 'service/' + id + '/estatus' , token);
   }
 
+  /*
   getValidateExisteCLiente(id_service, cc_number, medidor, zona, b_medidor, b_zona, token) {
     if (b_medidor && b_zona) {
       // tslint:disable-next-line:max-line-length
@@ -117,6 +118,16 @@ export class DataService {
       return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number + '?zona=' + zona , token);
     }
     if (!b_medidor && !b_zona) {
+      // tslint:disable-next-line:max-line-length
+      return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number, token);
+    }  
+  }*/
+
+  getValidateExisteCLiente(id_service, cc_number, token, json) {
+    if (json) {
+      // tslint:disable-next-line:max-line-length
+      return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number + '?json=' + JSON.stringify(json) , token);
+    } else {
       // tslint:disable-next-line:max-line-length
       return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number, token);
     }

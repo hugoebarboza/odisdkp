@@ -94,9 +94,9 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   msj: string;
 
   options: string[] = [ 'Número CC' ];
-  toppings = new FormControl(this.options);
+  // toppings = new FormControl(this.options);
+  // toppingList: string[] = ['Medidor', 'Zona'];
 
-  toppingList: string[] = ['Medidor', 'Zona'];
   // tslint:disable-next-line:max-line-length
   // toppingList: string[] = ['Nombre CC', 'Ruta', 'Calle', 'Número',  'Block', 'Depto', 'Región', 'Provincia', 'Comuna', 'Medidor',  'Modelo medidor', 'Tarifa', 'Constante', 'Giro', 'Zona', 'Sector', 'Mercado'];
 
@@ -468,6 +468,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             }
 
             // Medidor validación
+
+            /**
             let checkboxMedidor = false;
             let checkboxZona = false;
 
@@ -483,14 +485,14 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                   checkboxZona = true;
                 }
               }
-            }
+            }*/
 
             if (medidor === 'undefined' || medidor.trim().length === 0) {
               medidor = '';
-              if (checkboxMedidor) {
+              /*if (checkboxMedidor) {
                 banderaJson = true;
                 concatError = concatError + 'Medidor; ';
-              }
+              }*/
             } else {
               medidor = medidor.trim();
             }
@@ -568,10 +570,11 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
             if (zona === 'undefined' || zona.trim().length === 0) {
               zona = '';
+              /*
               if (checkboxZona) {
                 banderaJson = true;
                 concatError = concatError + 'Zona; ';
-              }
+              }*/
             } else {
                 zona = zona.trim();
                 const response: number = that.validarSelect(zona, that.zona);
@@ -725,7 +728,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'id_sector': id_sector,
               'mercado': mercado,
               'id_mercado': id_mercado,
-              'bandera': checkboxMedidor,
+              'bandera': true,
               'order_number': order_number,
               'service_id': that.service_id,
               'tipo_servicio': tipo_servicio,
@@ -743,8 +746,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             };
 
             if (that.dateend !== undefined) {
-              //const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
-              //objectJson['vencimiento_date'] = newdateend + ' 23:59:59';
+              // const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
+              // objectJson['vencimiento_date'] = newdateend + ' 23:59:59';
               objectJson['vencimiento_date'] = that.dateend;
             }
 
@@ -767,11 +770,11 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               that.service_id + '?region=' + region + '&provincia=' + provincia + '&comuna=' + comuna;
 
                // tslint:disable-next-line:max-line-length
-               that.dataService.getValidateExisteCLiente(that.service_id, cc_number, medidor, id_zona, checkboxMedidor, checkboxZona, that.token.token).then(
+               that.dataService.getValidateExisteCLiente(that.service_id, cc_number, that.token.token, objectJson ).then(
                 (res: any) => {
                   res.subscribe(
                     (some) => {
-                      //console.log(some['datos']);
+                      // console.log(some['datos']);
                       if (some['datos'].length > 1) {
                         const obj: Object = {
                           'estatus' : 'Error: Cliente duplicado',

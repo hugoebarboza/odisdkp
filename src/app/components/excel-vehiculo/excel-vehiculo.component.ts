@@ -391,7 +391,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
                 await delay(that.forTime);
 
-                that.dataService.getValidateExisteCLiente(that.service_id, cc_number, '', false, '', false, that.token.token).then(
+                that.dataService.getValidateExisteCLiente(that.service_id, cc_number, that.token.token, false).then(
                   (res: any) => {
                     res.subscribe(
                       (some) => {
@@ -834,7 +834,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
                 await delay(that.forTime);
 
-                that.dataService.getValidateExisteCLiente(that.service_id, cc_number, '', false, '', false, that.token.token).then(
+                that.dataService.getValidateExisteCLiente(that.service_id, cc_number, that.token.token, false).then(
                   (res: any) => {
                     res.subscribe(
                       (some) => {
