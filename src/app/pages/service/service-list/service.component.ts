@@ -95,6 +95,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   positionheaderaction = new FormControl(this.positionOptions[2]);
   positiondatasourceaction = new FormControl(this.positionOptions[3]);
   positionleftaction = new FormControl(this.positionOptions[4]);
+  positionrightaction = new FormControl(this.positionOptions[5]);
 
   constructor(
     public _proyectoService: ProjectsService,

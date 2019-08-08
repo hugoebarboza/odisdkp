@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from "rxjs/Subscription";
-import { MatDialog } from '@angular/material';
+import { MatDialog, TooltipPosition } from '@angular/material';
+import { FormControl } from '@angular/forms';
 
 declare var swal: any;
 
@@ -55,6 +56,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   totalRegistros: number = 0;
   usuarios: any[] = [];
   verify:number;
+
+
+  positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  positionrightaction = new FormControl(this.positionOptions[5]);
 
   
   constructor(

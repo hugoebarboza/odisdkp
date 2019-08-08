@@ -20,8 +20,6 @@ import { CargaImagenesService, CdfService, OrderserviceService, UserService, Zip
 
 import * as _moment from 'moment';
 
-
-
 const moment = _moment;
 
 
@@ -62,7 +60,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
   identity: any;
   isLoading: boolean = true;
   project: any;
-  project_id: number
+  project_id: number;
   proyectos: Array<Proyecto> = [];
   services: Service;
   service: any;
@@ -255,10 +253,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
 
   addComentario(event:number) {
-
-
     //console.log(this.formJob.controls.items.controls);
-
     if(this.formJob.controls.items){
       this.formJob.controls.items['controls'].forEach(res => {
         if(res.value.name !== ''){
@@ -582,8 +577,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
   ngOnDestroy() {
     if(this.subscription){
       this.subscription.unsubscribe();
-    }
-    
+    }    
   }
 
 
@@ -657,7 +651,6 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
 
   selectFiles(event) {
-
     const filevalidation = event.target.files;
     if (filevalidation && filevalidation.length > 0 && filevalidation.length <= 7) {
     } else {
@@ -666,7 +659,6 @@ export class AddJobComponent implements OnInit, OnDestroy {
         this.toasterService.warning('Error: Supero limite de 7 archivos', 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
       }
     }
-
   }
 
 

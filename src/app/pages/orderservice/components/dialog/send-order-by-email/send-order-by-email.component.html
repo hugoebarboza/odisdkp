@@ -1,0 +1,176 @@
+<div class="app">
+
+    <mat-toolbar color="primary">
+      <h3 >Enviar por Correo Orden N°{{ data.order_number }}</h3> 
+      <span class="mat-spacer"></span>
+      <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+        <mat-icon class="mat-icon">close</mat-icon>  
+      </button>
+    </mat-toolbar>
+<br>
+<div *ngIf="isLoading">
+<app-loading *ngIf="isLoading"></app-loading>  
+</div>
+
+<div class="mat-dialog-content" *ngIf="!isLoading">
+
+    <div class="animated fadeIn row">
+      <div class="col-md-8 order-first">
+        
+          <div class="example-full-width" style="text-align:right;">
+              <!--{{infocaso.depto_id.name}} / {{infocaso.category_id.name}} / {{infocaso.typeselect.name}}-->
+                <span><strong>{{project.project_name}} / {{service.service_name}} </strong></span>
+          </div>    
+          <h3 class="titulo">{{service.service_name}}</h3>
+          <h2 class="jeEmY">Tipo de Servicio</h2>
+          <p *ngIf="service_type">{{service_type.name}}</p>
+          <mat-divider></mat-divider>
+
+          <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" class="aui">
+          <div class="row" *ngIf="userFirebase">
+            <div class="col-md-12">
+                    <h2 class="jeEmY">Usuarios</h2>
+                    <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>  
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-12" *ngIf="destinatario.length > 0">
+                <h2 class="jeEmY">Enviar correo a</h2>
+                <div  >
+                    <mat-chip-list>
+                    <mat-chip *ngFor="let user of destinatario; let i = index;" color="primary">
+                        <span *ngIf="user.name && user.surname">{{ user.name }} {{ user.surname }}</span>
+                    </mat-chip>
+                    </mat-chip-list>    
+                </div>
+            </div>
+            <div class="w-100"></div>
+            <div class="col-md-12">
+                <br>
+                <br>
+                <div class="row row-custom">                                                
+                    <button mat-raised-button color="accent"  class="margin-left" (click)="sendEmail(1)">
+                        Guardar y enviar correo
+                    </button>                            
+                </div>
+            </div>
+          </div>
+        </form>                
+
+      </div>
+
+      <div class="col-md-4 order-md-last">
+        <h2 class="jeEmY" *ngIf="data.estatus">Estatus</h2>
+        <div class="fOqogj">
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url('../../assets/icons/level-512x512.png'); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS">  
+                <span [ngClass]="data.estatus == 'Pendiente' ? 'important-bajo' : data.estatus == 'Atendido' ? 'important-medio' : data.estatus == 'Baja' ? 'important-alto': data.estatus == 'Vencido' ? 'important-urgente'  : 'important-default'">
+                    {{data.estatus}}
+                </span>
+            </div>
+        </div>
+
+        <h2 class="jeEmY animated fadeIn" *ngIf="services">Informador</h2>
+        <div class="fOqogj">
+          <div class="SZsdL">
+            <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+              <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+              </span>
+            </div>
+          </div>
+          <div class="fLcKLS" *ngIf="user_informador">
+            {{user_informador.name}} {{user_informador.surname}}
+          </div>
+          <div class="fLcKLS" *ngIf="!user_informador">
+            <span class="smallfont" style="margin-bottom: 20px;">Sin Informador</span>
+          </div>
+        </div>
+
+        <h2 class="jeEmY animated fadeIn" *ngIf="services">Responsable</h2>
+        <div class="fOqogj" >
+          <div class="SZsdL">
+            <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+              <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+              </span>
+            </div>
+          </div>
+          <div class="fLcKLS" *ngIf="user_responsable">
+            {{user_responsable.name}} {{user_responsable.surname}}
+          </div>
+          
+          <div class="fLcKLS" *ngIf="!user_responsable">
+            <span class="smallfont" style="margin-bottom: 20px;">Sin Información</span>
+          </div>
+          
+        </div>          
+
+        <h2 class="jeEmY animated fadeIn" *ngIf="services && (user_itocivil_assigned_to || user_itoelec_assigned_to || user_responsable_obra)">Otro(s) Responsable(s)</h2>
+        <div class="fOqogj" >
+          <div class="SZsdL" *ngIf="user_itocivil_assigned_to">
+            <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+              <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+              </span>
+            </div>
+          </div>
+          <div class="fLcKLS" *ngIf="user_itocivil_assigned_to">
+            Civil: {{user_itocivil_assigned_to.name}} {{user_itocivil_assigned_to.surname}}
+          </div>
+          <!---
+          <div class="fLcKLS" *ngIf="!user_itocivil_assigned_to">
+            <span class="smallfont" style="margin-bottom: 20px;">Sin Información</span>
+          </div>
+          -->
+        </div>          
+
+        <div class="fOqogj animated fadeIn" *ngIf="services">
+          <div class="SZsdL" *ngIf="user_itoelec_assigned_to">
+            <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+              <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+              </span>
+            </div>
+          </div>
+          <div class="fLcKLS" *ngIf="user_itoelec_assigned_to">
+            Eléctrico: {{user_itoelec_assigned_to.name}} {{user_itoelec_assigned_to.surname}}
+          </div>
+          <!--
+          <div class="fLcKLS" *ngIf="!user_itoelec_assigned_to">
+            <span class="smallfont" style="margin-bottom: 20px;">Sin Información</span>
+          </div>
+          -->
+        </div>          
+
+        <div class="fOqogj animated fadeIn" *ngIf="services">
+          <div class="SZsdL" *ngIf="user_responsable_obra">
+            <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+              <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+              </span>
+            </div>
+          </div>
+          <div class="fLcKLS" *ngIf="user_responsable_obra">
+            {{user_responsable_obra}}
+          </div>
+          <!--
+          <div class="fLcKLS" *ngIf="!user_responsable_obra">
+            <span class="smallfont" style="margin-bottom: 20px;">Sin Información</span>
+          </div>
+          --->
+        </div>
+        
+        <span class="smallfont" style="margin-bottom: 20px;" *ngIf="services && services.create_at">Fecha de creación {{services.create_at}}</span>
+
+      </div>
+
+
+    </div>
+</div>
+</div>

@@ -8,13 +8,16 @@
 
   <div  >
 
-        <div class="container-fluid p-2">
+        <div class="container-fluid p-2">          
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
-            <h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1>
-            <div class="btn-toolbar mb-2 mb-md-0">
-              <div class="btn-group mr-2">
-              </div>
-            </div>
+            <div class="d-flex">
+                <div class="p-2"><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1></div>
+                <div class="p-2">
+                  <a class="nav-link pointer" href="javascript:;" (click)="cargarUsuarios()" >
+                    <i class="material-icons" matTooltip="Refrescar" [matTooltipPosition]="positionrightaction.value">sync</i>
+                  </a>
+                </div>
+            </div>                            
         </div>
         <br>
 

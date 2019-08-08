@@ -11,9 +11,9 @@ import { Proyecto, User } from '../../../models/types';
 
 
 //SERVICES
-import { SettingsService, UserService } from '../../../services/service.index';
-
-
+import { SettingsService, UserService, AuthService } from '../../../services/service.index';
+import { AngularFireAuth } from 'angularfire2/auth';
+import * as firebase from 'firebase/app';
 @Component({    
   selector: 'app-changepassword',
   templateUrl: './changepassword.component.html',
@@ -35,11 +35,12 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
   token: any;
   year: number;
 
-  
 
   constructor(
   public _userService: UserService,
   public label: SettingsService,
+  private firebaseAuth: AngularFireAuth,
+  public authService: AuthService,
   ) 
   { 
     this.year = new Date().getFullYear();
@@ -88,28 +89,84 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
 	}
 
 
-  changepassword(formValue: any){
+  changepassword(formValue: any) {
 
-    if(!formValue){
+    if (!formValue) {
       return;
-     }
-    
-     this.isSave = true;
-      
+    }
+
+    this.isSave = true;
+
+    const user = this.firebaseAuth.auth.currentUser;
+
+    const credential = firebase.auth.EmailAuthProvider.credential(
+      this.identity.email,
+      formValue.currentpassword
+    );
+
     this._userService.changepassword(this.token.token, formValue).subscribe(
-     response => {
-       if(response.status != 'error' ){
-         swal('Cambio de clave exitoso.', this.identity.email, 'success' );
-         this.changeForm.reset(this.changeForm);
-       }else{
-        swal('Importante', 'Verifique: 1) Su clave actual sea correcta, 2) La nueva clave no sea la misma que la actual.', 'error');
-       }
-       this.isSave = false;
-     },
-     error => {
-      this.isSave = false;
-      swal('Importante', error, 'error');
-     });
+      response => {
+        if (response.status !== 'error' ) {
+            user.reauthenticateWithCredential(credential).then(succes => {
+              //console.log('reauthenticateWithCredential - SUCCESS');
+              //console.log(succes);
+              user.updatePassword(formValue.newpassword).then(respsucces => {
+                //console.log('updatePassword - SUCCESS');
+                //console.log(respsucces);
+                swal('Cambio de clave exitoso.', this.identity.email, 'success' );
+                this.changeForm.reset(this.changeForm);
+              }).catch(error => {
+                //console.log('updatePassword - ERROR');
+                console.log(error);
+                this.sendpasswordfirebase();
+              });
+            }).catch(error => {
+              //console.log('reauthenticateWithCredential - ERROR');
+              console.log(error);
+              this.sendpasswordfirebase();
+            });
+        } else {
+          swal('Importante', 'Verifique: 1) Su clave actual sea correcta, 2) La nueva clave no sea la misma que la actual.', 'error');
+        }
+        this.isSave = false;
+      },
+      error => {
+        this.isSave = false;
+        console.log(error);
+        swal('Importante', error.error.message, 'error');
+      }
+    );
+
+  }
+
+  sendpasswordfirebase() {
+    swal({
+      title: 'Error en actulización credencial firebase',
+      text: 'Favor actualizar contraseña de acceso, de lo contrario algunas funcionalidades se desactivaran.',
+      icon: 'warning',
+      buttons: {
+        cancelar: {
+          text: 'No validar',
+          value: 'cancel',
+          className: 'swal-button--danger'
+          } ,
+        confirmar: {
+          text: 'Validar credencial',
+          value: 'confirmar'
+        }
+        },
+      }).then( item => {
+        if (item === 'confirmar') {
+          // tslint:disable-next-line:max-line-length
+          swal({icon: 'success', title: 'Se envío correo a ' + this.identity.email + ' para su verificación!', text: 'Una vez verificado cerrar cuenta y abrir sesión'});
+          this.authService.updateUser(this.identity)
+          .then(res => {
+          //return console.log(res);
+          }, err => {
+          return console.log(err);
+          });
+        }
+      });
   }
 
 	refreshMenu(event:number){
