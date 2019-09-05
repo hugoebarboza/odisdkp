@@ -36,11 +36,16 @@
                     <button type="button" class="btn btn-primary btn-sm" [matMenuTriggerFor]="menuviewselect" >
                         <mat-icon class="material-icons md-14">settings</mat-icon>Gestiona</button>
                     <mat-menu #menuviewselect="matMenu" [overlapTrigger]="false">
+                            <button mat-menu-item (click)="projectCurrencyValue(id)">
+                                <span >Baremos de Proyecto</span>
+                            </button>
+                                 
+                            <button mat-menu-item (click)="projectCategorie(id)">
+                               <span >Categorías de Proyecto</span>
+                            </button>
+      
                             <button mat-menu-item (click)="projectType(id)">
                               <span >Tipos de Proyecto</span>
-                            </button>
-                            <button mat-menu-item (click)="projectCategorie(id)">
-                              <span >Categorías de Proyecto</span>
                             </button>
                     </mat-menu>                    
                 </div>

@@ -111,10 +111,22 @@ const appRoute: Routes = [
   	},
 	{ 	
 		path: 'users', 
-    canLoad: [LoginGuardGuard],
+    	canLoad: [LoginGuardGuard],
 		loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
 		data: { preload: true, delay: false }
   	},
+	{
+		path: 'users/:id/settings',
+		canLoad: [ LoginGuardGuard ],
+		loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
+		data: { preload: true, delay: false }
+	},
+	{
+		path: 'users/:id/work',
+		canLoad: [ LoginGuardGuard ],
+		loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
+		data: { preload: true, delay: false }
+	},
 	{
 		path: '',
 		component: PagesComponent,

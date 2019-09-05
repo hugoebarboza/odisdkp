@@ -3,10 +3,11 @@ import { Routes, RouterModule } from '@angular/router';
 
 //COMPONENT
 import { SupportComponent } from './support-list/support.component';
+import { SupportsettingsComponent } from './support-settings/supportsettings.component';
 
 //Guards
 import { AuthguardService } from '../../services/authguard.service';
-import { SupportsettingsComponent } from './support-settings/supportsettings.component';
+
 
 const routes: Routes = [
   {

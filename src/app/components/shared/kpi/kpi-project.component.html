@@ -1,0 +1,22 @@
+<meta name="Description" content="Dashboard">
+<!--CONTENT-->
+
+<div class="container-fluid" *ngIf="proyectos && identity">
+        <div *ngIf="isLoading">
+        <app-loading *ngIf="isLoading"></app-loading>  
+        </div>
+
+
+        <div class="row" *ngIf="!isLoading">
+        <div class="col-12">
+                <div *ngIf="id && id > 0 && tipoServicio && tipoServicio.length > 0 ">
+                    <app-kpi-project-detail [id]="id" [tiposervicio] = "tipoServicio" [users]="users" ></app-kpi-project-detail>
+                </div>
+                <div *ngIf="id && id > 0 && tipoServicio && tipoServicio.length == 0">
+                        <div class="row d-flex justify-content-center">
+                                Sin Información. (No tiene servicios asociados al Proyecto).
+                        </div>    
+                </div>
+        </div>
+        </div>
+</div>

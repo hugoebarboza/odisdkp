@@ -1,0 +1,238 @@
+<br>
+
+<div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+  No se encontraron registros que coincidan con su búsqueda.
+  <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+</div>
+
+
+
+<div *ngIf="identity">
+<div >        
+<div class="container-fluid p-2">
+
+    <div class="row p-2 animated fadeIn" >
+    <div class="col-12" *ngIf="user && !isLoadingResults">
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+        <div class="p-2 w-100 ">
+        <div class="d-flex">
+            <div class="p-2 "><a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="['/users/', id, 'settings']" ><i class="material-icons">keyboard_backspace</i></a></div>
+            <div class="p-2 w-100"><h1 class="h4" >{{user.name}} {{user.surname}} / Trabajó en</h1></div>
+            <div class="p-2 flex-shrink-1 "></div>
+        </div>
+        </div>          
+    </div>
+    </div>
+    </div>
+
+    <div class="row p-2 animated fadeIn">
+        <div class="col-12">
+          <div class="row animated fadeIn" *ngIf="isLoadingResults || isRateLimitReached">
+              <div class="col-sm-12">
+                <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+              </div>
+          </div>
+
+
+
+
+          <div class="row animated fadeIn"  >            
+            <div class="col-12">
+              <div class="card">
+              <div class="card-body" *ngIf="!isLoadingResults">
+                
+                    <mat-table #table  [dataSource]="dataSource" 
+                      matSort
+                      [matSortActive]="sort.active" 
+                      [matSortDirection]="sort.direction"                   
+                      matSortDisableClear
+                      (matSortChange)="handleSortChange($event)"                       
+                      [class.isMobile]="isMobile"                      
+                      >
+                  
+                    <ng-container matColumnDef="order_number"  >  
+                      <mat-header-cell *matHeaderCellDef mat-sort-header > N. Orden </mat-header-cell>
+                        <mat-cell *matCellDef="let order; let i = index" >
+                            <span class="mobile-label">N. Orden:</span>
+                            {{order.order_number}}
+                            <mat-icon class="material-icons md-13-color" *ngIf="order.imagen">image</mat-icon>        
+                            <mat-icon class="material-icons md-13-nocolor" *ngIf="!order.imagen">image</mat-icon>                
+                          </mat-cell>
+                    </ng-container>
+                  
+                  
+                      
+                    <ng-container matColumnDef="cc_number">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> N. Cliente </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> 
+                            <span class="mobile-label">N. Cliente:</span>
+                          {{order.cc_number}} 
+                        </mat-cell>
+                    </ng-container>
+                  
+                  
+                    <ng-container matColumnDef="region"  >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header  > Región </mat-header-cell>
+                        <mat-cell *matCellDef="let order" [ngClass]="{'hidden-item': true}"> 
+                            <span class="mobile-label">Región:</span>
+                          {{order.region}} 
+                        </mat-cell>
+                    </ng-container>
+                  
+                    <ng-container matColumnDef="provincia"  >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header  > Provincia </mat-header-cell>
+                        <mat-cell *matCellDef="let order" [ngClass]="{'hidden-item': true}"> 
+                            <span class="mobile-label">Provincia:</span>
+                          {{order.provincia}} 
+                        </mat-cell>
+                    </ng-container>
+                  
+                  
+                    <ng-container matColumnDef="comuna"  >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header  > Comuna </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> 
+                            <span class="mobile-label">Comuna:</span>
+                          {{order.comuna}} 
+                        </mat-cell>
+                    </ng-container>
+                  
+                  
+                  
+                    <ng-container matColumnDef="direccion">
+                      <mat-header-cell *matHeaderCellDef mat-sort-header  > Ubicación </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> 
+                            <span class="mobile-label">Ubicación:</span>
+                          {{order.direccion}} 
+                        </mat-cell>
+                    </ng-container>
+                  
+                  
+                  
+                    <ng-container matColumnDef="servicetype" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Servicio </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> 
+                            <span class="mobile-label">T. Serv.:</span>
+                          {{order.servicetype}}     
+                        </mat-cell>
+                    </ng-container>
+                  
+                  
+                  
+                    <ng-container matColumnDef="user" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Informador </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> 
+                            <span class="mobile-label">Informador:</span>
+                          {{order.user}} 
+                        </mat-cell>
+                    </ng-container>
+                  
+                    <ng-container matColumnDef="userupdate" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Editado </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> {{order.userupdate}} </mat-cell>
+                    </ng-container>
+                  
+                    <ng-container matColumnDef="userassigned" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Responsable</mat-header-cell>
+                        <mat-cell *matCellDef="let order" > 
+                          <span class="mobile-label">Responsable:</span>
+                          <span *ngIf="order && order.userassigned">
+                            <div >{{order.userassigned}}</div>
+                          </span>
+                          <em *ngIf="order && !order.userassigned" style="color:#D3D3D3">sin asignar</em>
+                        </mat-cell>
+                    </ng-container>
+                  
+                  
+                    <ng-container matColumnDef="create_at" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> 
+                            <span class="mobile-label">Creado El:</span>
+                          {{order.create_at }}
+                        </mat-cell>
+                    </ng-container>
+                  
+                  
+                    <ng-container matColumnDef="update_at" >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>Editado El:</mat-header-cell>
+                          <mat-cell *matCellDef="let order">
+                            <span class="mobile-label">Editado El:</span>
+                            {{order.update_at }}
+                          </mat-cell>
+                    </ng-container>
+                    
+                  
+                    <ng-container matColumnDef="time" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> T. Ejecución </mat-header-cell>
+                        <mat-cell *matCellDef="let order"> 
+                            <span class="mobile-label">T. Ejecución:</span>
+                          <div *ngIf="order.time">{{order.time }}</div></mat-cell>
+                    </ng-container>
+
+                    
+                    <ng-container matColumnDef="atentiontime" >
+                        <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
+                          <mat-cell *matCellDef="let order">
+                            <span class="mobile-label">T. Atención:</span>
+                            <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>
+                          </mat-cell>
+                    </ng-container>
+                  
+                  
+                  
+                    <ng-container matColumnDef="estatus" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
+                      <mat-cell *matCellDef="let order; let i = index" >
+                          <span class="mobile-label">Estatus:</span>
+                        <mat-chip-list>
+                            <mat-chip *ngIf="order.label==1" selected color="warn">
+                              {{order.estatus}}
+                            </mat-chip>
+                  
+                            <mat-chip *ngIf="order.label==2" selected color="primary">
+                              {{order.estatus}}
+                            </mat-chip>
+                  
+                            <mat-chip *ngIf="order.label==3" selected color="accent">
+                              {{order.estatus}}
+                            </mat-chip>
+                        </mat-chip-list>
+                      </mat-cell>
+                    </ng-container>
+                  
+                  
+                    <!-- actions -->
+                    <ng-container matColumnDef="actions" >
+                      <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                      <mat-cell *matCellDef="let order; let i = index" >    
+                        <button mat-icon-button color="" (click)="showOrder(order)">
+                          <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
+                          <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
+                        </button>                
+                      </mat-cell>
+                    </ng-container>
+                  
+                  
+                    <mat-header-row *matHeaderRowDef="displayedColumns" ></mat-header-row>
+                    <mat-row *matRowDef="let order; let i = index; columns: displayedColumns;" (mouseenter)="hoverIn(i)" (mouseleave)="hoverOut(i)" [class.active]="i == selectedRow"></mat-row>
+                  
+                  
+                  
+                    </mat-table>                  
+              </div>
+              <mat-paginator
+              [length]="resultsLength"
+              [pageSize]="pageSize"
+              [pageSizeOptions]="pageSizeOptions"
+              (page)="onPaginateChange($event)"
+              [showFirstLastButtons]="true"
+              >
+              </mat-paginator>    
+              </div>      
+            </div>
+          </div>
+
+        </div>
+    </div>
+</div>
+</div>
+</div>

@@ -1,5 +1,4 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 //MODELS
@@ -21,7 +20,7 @@ import {
 
 
 //SERVICES
-import { CountriesService, CustomerService, OrderserviceService, UserService } from '../../../services/service.index';
+import { CustomerService, OrderserviceService, UserService } from '../../../services/service.index';
 
 
 @Component({
@@ -33,6 +32,7 @@ import { CountriesService, CustomerService, OrderserviceService, UserService } f
 export class ShowcustomerComponent implements OnInit {
   public title: string;
   public identity: any;
+  isLoading:boolean = true;
   public token: any;  
   public termino: string;
   public results: Object = [];
@@ -62,14 +62,11 @@ export class ShowcustomerComponent implements OnInit {
   step = 0;  	
 
   constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,            
     private _userService: UserService,
     private _orderService: OrderserviceService,
-    private _regionService: CountriesService,
     private _customerService: CustomerService,
     public dialogRef: MatDialogRef<ShowcustomerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Customer
+    @Inject(MAT_DIALOG_DATA) public data: any
   	) 
   { 
     this.title = "Ver Cliente.";
@@ -139,18 +136,21 @@ export class ShowcustomerComponent implements OnInit {
                    this.data['color'] = this.customer[i]['color'];
                    this.data['patio'] = this.customer[i]['patio'];
                    this.data['espiga'] = this.customer[i]['espiga'];
-                   this.data['posicion'] = this.customer[i]['posicion'];                   
+                   this.data['posicion'] = this.customer[i]['posicion'];
+                   this.isLoading = false;                 
                    break;             
                  }               
               }
 
          }else{
-         	if(response.status == 'error'){                  
+         	if(response.status == 'error'){
+            this.isLoading = false;                  
 			//console.log(response);         		
         	}
 	     }     
       },
           error => { 
+            this.isLoading = false;
           console.log(<any>error);
           }        
       ); 

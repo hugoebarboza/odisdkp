@@ -1,0 +1,265 @@
+<div class="row" *ngIf="identity">
+    <div class="col">
+        <div class=" jfCYPT">
+            <div class=" jfCYPT">
+              <div class=" didcdr" data-test-selector="profile-worked-with">
+                <div class=" iDwfcE" >
+                    <div class=" eCdVoi">
+                        <div class=" jNlJOD">
+                            <span>
+                                Órdenes Trabajo.
+                            </span>
+                        </div>
+                    </div>    
+                    <div>
+                        <div class=" dIOqge" >
+                            <!------------------------------------------------------------- Órdenes Editadas por Servicio.------------------------------------------------------------------------->
+                            <!--
+                            <div class=" jmuLsE">
+                                    <div class=" pUmbZ">
+                                        <div class="container-fluid" >
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                  <br>
+                                                </div>
+                                            </div>
+                                        </div>        
+
+                                        <div class="container-fluid" *ngIf="isLoadingResultsKpiDate">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResultsKpiDate" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="!isLoadingResultsKpiDate">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-4" align="left">
+                                                <div class="input-group input-group-sm mb-3" *ngIf="kpidatesearchoptions && kpidateselectedoption">
+                                                    <ng-select
+                                                    [items]="kpidatesearchoptions"
+                                                    [clearable]="false"
+                                                    bindLabel="name"
+                                                    bindValue="value"
+                                                    [(ngModel)]="kpidateselectedoption"
+                                                    (change)="selectChangeKpiDate($event)"
+                                                    class="width-70percentage">
+                                                    </ng-select>
+                                                </div>
+                                                </div>
+                                                <div class="col-4">
+                                                
+                                                </div>
+                                                <div class="col-4" align="right">
+                                                    <div class=" jNlJODT" *ngIf="kpitotaldate">Total: <span>{{kpitotaldate}}</span></div> 
+                                                </div>
+                                            </div>
+                                        </div>                                                
+                                        <div class="row justify-content-center align-items-center" align="center">
+                                            <div class="col" *ngIf="kpidatadate && kpidatadate.length > 0">
+                                                <ngx-charts-pie-chart
+                                                [view]="view"
+                                                [scheme]="colorScheme"
+                                                [results]="kpidatadate"
+                                                [explodeSlices]="explodeSlices"
+                                                [labels]="showLabels"
+                                                [legend]="showLegend"
+                                                [legendTitle]="['OT Editadas del Proyecto']"
+                                                [legendPosition]="['right']"
+                                                [doughnut]="doughnut">
+                                                </ngx-charts-pie-chart>
+                                            </div>
+                                            <div class="col-sm" *ngIf="kpidatadate && kpidatadate.length == 0">
+                                                <div class="row d-flex justify-content-center">
+                                                    Sin Información
+                                                </div>                                                
+                                            </div>                    
+                                        </div>
+                                        </div>
+
+
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                            </div>
+                            --->
+                            <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+                            <!---------------------------------------------------------- Órdenes Editadas por Tipo de Servicio. ------------------------------------------------------------------->
+                            <div class="jmuLsE">
+                                <div class=" pUmbZ">
+                                    <!-------------SPACE---------------->
+                                    <div class="container-fluid" >
+                                        <div class="row">
+                                            <div class="col-sm">
+                                              <br>
+                                            </div>
+                                        </div>
+                                    </div>        
+                                    <!---------------------------------->
+                                    <div class="container-fluid" *ngIf="isLoadingResultsKpiST">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">
+                                                    <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResultsKpiST" ></mat-spinner>
+                                                </div>                        
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div *ngIf="!isLoadingResultsKpiST">
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-4" align="left">
+                                            <div class="input-group input-group-sm mb-3" *ngIf="kpidatesearchoptions && kpiselectedoptionST">
+                                                <ng-select
+                                                [items]="kpidatesearchoptions"
+                                                [clearable]="false"
+                                                bindLabel="name"
+                                                bindValue="value"
+                                                [(ngModel)]="kpiselectedoptionST"
+                                                (change)="selectChangeKpiDateST($event)"
+                                                class="width-70percentage">
+                                                </ng-select>
+                                            </div>
+                                            </div>
+                                            <div class="col-4">                                            
+                                            </div>
+                                            <div class="col-4" align="right">
+                                                <div class=" jNlJODT" >Total: <span>{{kpitotalST}}</span></div> 
+                                            </div>
+                                        </div>
+
+                                        <div class="row" *ngIf="kpiselectedoption == 0">
+                                            <div class="col-4" align="left">
+                                                <div class="input-group input-group-sm mb-3" *ngIf="serviceestatus && serviceestatus.length > 0 && kpiselectstatus && kpiselectstatus > 0">
+                                                    <ng-select
+                                                        [items]="serviceestatus"
+                                                        [clearable]="false"
+                                                        bindLabel="name"
+                                                        bindValue="id"
+                                                        [(ngModel)]="kpiselectstatus"
+                                                        (change)="selectChangeKpiStatusST($event)"
+                                                        class="width-70percentage">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">                                            
+                                            </div>                                                
+                                
+                                            <div class="col-4">
+                                            </div>
+                                        </div>    
+
+                                        <div class="row">
+                                            <div class="col-4" align="left">
+                                                <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && tiposervicio && tiposervicio.length > 0">
+                                                    <ng-select
+                                                        [items]="kpisearchoptions"
+                                                        [clearable]="false"
+                                                        bindLabel="name"
+                                                        bindValue="value"
+                                                        [(ngModel)]="kpiselectedoption"
+                                                        (change)="selectChangeKpi($event)"
+                                                        class="width-70percentage">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-4">                                            
+                                            </div>                                                
+                                
+                                            <div class="col-4" align="left" *ngIf="kpisearchoptions && kpiselectedoption > 0">
+                                                <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoption > 0 && tiposervicio && tiposervicio.length > 0 && kpiselectedoption == 1" >
+                                                    <ng-select
+                                                        [items]="tiposervicio"
+                                                        [clearable]="false"
+                                                        bindLabel="name"
+                                                        bindValue="id"
+                                                        [(ngModel)]="kpiselecttiposervicio"
+                                                        (change)="selectChangeKpiTipoServicio($event)"
+                                                        class="width-70percentage">
+                                                    </ng-select>
+                                                </div>
+
+                                                <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoption > 0 && kpiusers && kpiusers.length > 0 && kpiselectedoption == 2" >
+                                                    <ng-select
+                                                        [items]="kpiusers"
+                                                        [clearable]="false"
+                                                        bindLabel="usuario"
+                                                        bindValue="id"
+                                                        [(ngModel)]="kpiselectuser"
+                                                        (change)="selectChangeKpiUser($event)"
+                                                        class="width-70percentage">
+                                                    </ng-select>
+                                                 </div>
+                          
+                                            </div>
+                                        </div>    
+                                    </div>
+
+                                    <div class="row justify-content-center align-items-center" align="center">
+                                        <div class="col" *ngIf="kpidataST && kpidataST.length > 0 ">
+                                            <ngx-charts-pie-chart
+                                            [view]="view"
+                                            [scheme]="colorScheme"
+                                            [results]="kpidataST"
+                                            [explodeSlices]="explodeSlices"
+                                            [labels]="showLabels"
+                                            [legend]="showLegend"
+                                            [legendTitle]="['Órdenes de Trabajo']"
+                                            [legendPosition]="['right']"
+                                            [doughnut]="doughnut">
+                                            </ngx-charts-pie-chart>
+                                        </div>
+                                        <div class="col-sm" *ngIf="kpidataST && kpidataST.length == 0">
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <br>
+                                            <div class="row d-flex justify-content-center">
+                                                    Sin Información
+                                            </div>    
+                                        </div>
+
+                                    </div>                                    
+                                    </div>
+
+                                    <!-----------SPACE------------------->
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!---------------------------------->
+                                </div>
+                            </div>
+
+
+                        </div>   
+                    </div>
+                </div>
+            </div>
+            </div>            
+        </div>
+    </div>
+</div>
+
+
+<br>
+<app-kpi [id]="id" *ngIf="id > 0 && service && service.kpi > 0"></app-kpi>

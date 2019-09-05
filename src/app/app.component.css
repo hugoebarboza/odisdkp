@@ -40,6 +40,10 @@ ng-progress {
   margin-top: 56px;
 }
 
+.overflow{
+  overflow-x: hidden;
+}
+
 
 .example-container {
   display: flex;

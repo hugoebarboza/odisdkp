@@ -1,7 +1,7 @@
 <meta name="Description" content="Users">
 <!--CONTENT-->
 
-<div id="wrapper" *ngIf="proyectos && identity">
+<div  *ngIf="proyectos && identity">
 
   <div  >
 
@@ -84,7 +84,7 @@
                               </div>
 
                             
-                              <cdk-virtual-scroll-viewport itemSize="50" class="list-container list-group" *ngIf="notifications$ !== null">
+                              <cdk-virtual-scroll-viewport itemSize="50" class="list-container list-group" *ngIf="notifications$ !== null && !isLoading">
 
                                 
                                   <div *cdkVirtualFor="let element of notifications$ | async; let i = index; let conteo = count">                                    
@@ -244,7 +244,7 @@
 
                   </mat-card-content>
 
-                </mat-card>
+              </mat-card>
 
           </div>
 

@@ -1,0 +1,75 @@
+
+<div class="row animated fadeIn">
+<div class="col-12">
+<div class="fondo-negro animated fadeIn" [ngClass]="_modalManage.hide" *ngIf="_modalManage.data && id">
+<div class="modal" style="display: block;" tabindex="-1" role="dialog">
+        <div class="modal-dialog" role="document">
+        <div class="modal-content-style">
+        <div class="modal-header" style="background-color: #0B3356">
+                <h5 class="modal-title" *ngIf="!isLoading && _userService.isRole(7) && user">
+                <div class="row">
+                        <div class="col-2">
+                        <div class="_1fH43YlMAnPCr8RI9qH98P" style="width: 44px; height: 44px;" *ngIf="user">
+                                <div id="meInitialsButton" class="M_s6agPZfWvz2OH8iRoGk" style="background-color: #DE473C; font-size: 22px;">
+                                        <span *ngIf="user && user.name && user.surname">{{user.name | slice:0:1}}{{user.surname | slice:0:1}}</span>
+                                </div>
+                        </div>                                  
+                        </div>
+                        <div class="col-10">
+                                <div class="fxjN">
+                                <span class="dctR" *ngIf="user && user.name && user.surname">{{user.name}} {{user.surname}}</span>
+                                <span class="kyxP" *ngIf="user && user.title">{{user.title}}</span>
+                                </div>
+                        </div>
+                        <div class="w-100"></div>
+                        <div class="col-2"></div>
+                        <div class="col-10">
+                                <div class="fxjN">                                        
+                                <span class="huqV" *ngIf="user && user.email">{{user.email}}</span>
+                                </div>                                        
+                        </div>
+                </div>                       
+                </h5>
+                <button (click)="hideModal();" type="button" class="close"  aria-label="Close" >
+                <span aria-hidden="true" style="color: #ffffff">&times;</span>
+                </button>
+        </div>
+        <div class="modal-body">
+
+        <div class="container-fluid" *ngIf="isLoading">
+                <div class="row justify-content-md-center">
+                <div class="col col-lg-2">
+                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                </div>
+                </div>
+        </div>
+                                
+
+        <div class="container-fluid" *ngIf="!isLoading && _userService.isRole(7) && user">
+                <div class="row">
+                        <div class="col-8"></div>
+                        <div class="col-4">                                        
+                        <a mat-button [routerLink]="['/users/', id, 'settings']" class="btn btn-sm btn-outline-secondary" *ngIf="user">Ver Perfil</a>
+                        </div>
+                </div>
+        </div>
+
+        <div class="container-fluid" *ngIf="!isLoading && _userService.isRole(7) && user == null">
+                        <div class="row">
+                                <div class="col-12">
+                                        Sin información.
+                                </div>
+                        </div>
+        </div>        
+
+        </div>
+        </div>
+        </div>
+</div>
+</div>
+
+</div>
+</div>
+      
+
+

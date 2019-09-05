@@ -751,6 +751,27 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               objectJson['vencimiento_date'] = that.dateend;
             }
 
+            if (JSON.stringify(objectJson).search('#') !== -1 ) {
+              banderaJson = true;
+              concatError = concatError + ' Caracter especial [#] No permitido';
+            }
+
+            if (JSON.stringify(objectJson).search('¥') !== -1 ) {
+              banderaJson = true;
+              concatError = concatError + ' Caracter especial [¥] No permitido';
+            }
+
+            if (JSON.stringify(objectJson).search('—') !== -1 ) {
+              banderaJson = true;
+              concatError = concatError + ' Caracter especial [—] No permitido';
+            }
+
+            if (JSON.stringify(objectJson).search('&') !== -1 ) {
+              banderaJson = true;
+              concatError = concatError + ' Caracter especial [&] No permitido';
+            }
+          
+            
             if (banderaJson) {
               const success: Object = {
                 'estatus' : 'Error en registro: ' + concatError,

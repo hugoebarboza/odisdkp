@@ -152,7 +152,7 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
 
     if (data && data.admins && data.admins.length > 0) {
 
-      console.log(data);
+      //console.log(data);
       const newadmins = [];
       for (let i = 0; i < data.admins.length; i++) {
         newadmins.push(data.admins[i]['uid']);
@@ -186,7 +186,10 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
   }
 
   getListuser(term: string) {
-
+    if (term == null) {
+      this.userLoading = false;
+      return new Observable;
+    }
     // tslint:disable-next-line:max-line-length
     this.usersCollection = this._afs.collection('users', ref => ref.where('country', 'array-contains', this.identity.country).where('email', '>=', term));
     return this.usersCollection.snapshotChanges().pipe(

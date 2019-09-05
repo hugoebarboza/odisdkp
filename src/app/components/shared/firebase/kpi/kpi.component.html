@@ -1,3 +1,4 @@
+<!-----
 <div class="container-fluid" *ngIf="isLoading">
     <br>
     <div class="row justify-content-md-center">
@@ -6,7 +7,10 @@
         </div>
     </div>
 </div>
-<div *ngIf="kpimes && kpimes.length > 0 && !isLoading">
+
+
+
+<div  *ngIf="kpimes && kpimes.length > 0 && !isLoading">
     <div class="animated fadeIn row "   *ngFor="let kpi_mes of kpimes; let i = index">
         <mat-card class="full-width margintop">          
             <mat-card-header>             
@@ -37,6 +41,9 @@
     </div>
 </div>
 
+
+
+
 <div class="animated fadeIn row " *ngIf="kpiyear && kpiyear.length > 0 && displayedColumns.length > 0 && !isLoading">
         <mat-card class="full-width margintop">          
             <mat-card-header>             
@@ -45,9 +52,6 @@
             <mat-card-content>
                 <br>
                 <mat-table #table [dataSource]="kpiTableData" matSort [class.isMobile]="isMobile">
-                    <!--- Note that these columns can be defined in any order.
-                            The actual rendered columns are set as a property on the row definition" -->
-                    <!-- Name Column -->
                     <ng-container matColumnDef="servicetype">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de inspección </mat-header-cell>
                         <mat-cell *matCellDef="let element"> 
@@ -56,7 +60,7 @@
                         </mat-cell>
                     </ng-container>
 
-                    <!-- Name Column -->
+
                     <ng-container [matColumnDef]="displayedColumns[1]">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[1]}} </mat-header-cell>
                         <mat-cell *matCellDef="let element"> 
@@ -66,7 +70,7 @@
                         </mat-cell>
                     </ng-container>
         
-                    <!-- Name Column -->
+
                     <ng-container [matColumnDef]="displayedColumns[2]">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> {{ displayedColumns[2] }} </mat-header-cell>
                         <mat-cell *matCellDef="let element"> 
@@ -75,7 +79,7 @@
                         </mat-cell>
                     </ng-container>
         
-                    <!-- Name Column -->
+
                     <ng-container [matColumnDef]="displayedColumns[3]">
                         <mat-header-cell *matHeaderCellDef mat-sort-header> {{ displayedColumns[3] }} </mat-header-cell>
                         <mat-cell *matCellDef="let element"> 
@@ -93,8 +97,238 @@
                 
             </mat-card-content>
         </mat-card>
+</div>
+-->
+
+
+
+<!-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+<div class="row" >
+    <div class="col">
+        <div class="jfCYPT">
+            <div class="jfCYPT">
+                <div class="didcdr" data-test-selector="profile-worked-with">
+                    <div class="iDwfcE" >
+                        <div class="eCdVoi">
+                            <div class="jNlJOD">
+                                <span>
+                                    Porcentaje de Avance.
+                                </span>
+                            </div>
+                        </div>    
+                        <div>
+                        <div class=" dIOqge" >
+
+                            <div class="jmuLsE" *ngIf="kpimes && kpimes.length > 0 && !isLoading">
+                                <div class="animated fadeIn row d-flex justify-content-center" *ngFor="let kpi_mes of kpimes; let i = index">
+                                    <mat-card class="half-width margintop">          
+                                        <mat-card-header>             
+                                            <mat-card-title>{{kpimesTypes[i]}}</mat-card-title>
+                                        </mat-card-header>
+                                        <mat-card-content>
+                                            <br>
+                                            <div *ngIf="mesactual">
+                                                <div class="row justify-content-center align-items-center" align="center">
+                                                    <div class="col" *ngIf="view">
+                                                        <ngx-charts-pie-chart
+                                                        (window:resize)="onResize($event)"
+                                                        [view]="view"
+                                                        [scheme]="colorScheme"
+                                                        [results]="kpi_mes"
+                                                        [explodeSlices]="true"
+                                                        [labels]="false"
+                                                        [legend]="true"
+                                                        [legendTitle]="['']"
+                                                        [legendPosition]="['right']"
+                                                        [doughnut]="true">
+                                                        </ngx-charts-pie-chart>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            
+                                        </mat-card-content>
+                                    </mat-card>
+                                </div>
+                            </div> 
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+</div>
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------>
 
 
+<div class="row" >
+        <div class="col">
+            <div class="jfCYPT">
+                <div class="jfCYPT">
+                    <div class="didcdr" data-test-selector="profile-worked-with">
+                        <div class="iDwfcE" >
+                            <div class="eCdVoi">
+                                <div class="jNlJOD">
+                                    <span>
+                                        Porcentaje de Avance.
+                                    </span>
+                                </div>
+                            </div>    
+                            <div>
+                            <div class="container-fluid" *ngIf="isLoading">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="row d-flex justify-content-center">
+                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                                        </div>                        
+                                    </div>
+                                </div>
+                            </div>
+    
+                            <div class=" dIOqge" *ngIf="kpimes && kpimes.length > 0 && !isLoading">
+
+                            <div class="jmuLsE" *ngFor="let kpi_mes of kpimes; let i = index">
+                                <div class="pUmbZ" >
+                                    <!-------------SPACE---------------->
+                                    <div class="container-fluid" >
+                                        <div class="row">
+                                            <div class="col-sm">
+                                            <br>
+                                            </div>
+                                        </div>
+                                    </div>        
+                                    <!---------------------------------->
+                                    <div *ngIf="mesactual">
+                                        <div class="row justify-content-center align-items-center" align="center">
+                                            <div class="col" *ngIf="view">
+                                                <ngx-charts-pie-chart
+                                                (window:resize)="onResize($event)"
+                                                [view]="view"
+                                                [scheme]="colorScheme"
+                                                [results]="kpi_mes"
+                                                [explodeSlices]="true"
+                                                [labels]="false"
+                                                [legend]="true"
+                                                [legendTitle]="kpimesTypes[i]"
+                                                [legendPosition]="['right']"
+                                                [doughnut]="true">
+                                                </ngx-charts-pie-chart>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-----------SPACE------------------->
+                                    <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <br>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!---------------------------------->
+                                </div>
+                            </div>
+
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    
+
+
+<br>
+
+<div class="row" >
+    <div class="col">
+        <div class="jfCYPT">
+            <div class="jfCYPT">
+                <div class="didcdr" data-test-selector="profile-worked-with">
+                    <div class="iDwfcE" >
+                        <div class="eCdVoi">
+                            <div class="jNlJOD">
+                                <span>
+                                    Porcentaje de Avance (Regístro de los últimos 3 meses).
+                                </span>
+                            </div>
+                        </div>    
+                        <div>
+                        <div class="container-fluid" *ngIf="isLoading">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="row d-flex justify-content-center">
+                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                                    </div>                        
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class=" dIOqge" *ngIf="!isLoading">
+    
+                            <div class="jmuLsE" >
+                                <div class="row d-flex justify-content-center p-2" >
+                                    <mat-card class="container-fluid">
+                                            <mat-card-content>
+                                                <br>
+                                                <mat-table #table [dataSource]="kpiTableData" matSort [class.isMobile]="isMobile">
+                                                    <ng-container matColumnDef="servicetype">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de inspección </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> 
+                                                            <span class="mobile-label">Tipo de inspección:</span>
+                                                            <span *ngIf="element && element.servicetype">{{element.servicetype}}</span>
+                                                        </mat-cell>
+                                                    </ng-container>
+                                
+                                
+                                                    <ng-container [matColumnDef]="displayedColumns[1]">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[1]}} </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> 
+                                                            <span class="mobile-label">{{ displayedColumns[1] }}:</span>
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[1]}} </mat-header-cell>
+                                                            <span *ngIf="element && element[displayedColumns[1]].porcentaje || element && element[displayedColumns[1]].porcentaje == 0">{{ element[displayedColumns[1]].porcentaje}}%</span>
+                                                        </mat-cell>
+                                                    </ng-container>
+                                        
+                                
+                                                    <ng-container [matColumnDef]="displayedColumns[2]">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ displayedColumns[2] }} </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> 
+                                                            <span class="mobile-label">{{ displayedColumns[2] }}:</span>
+                                                            <span *ngIf="element && element[displayedColumns[2]].porcentaje || element && element[displayedColumns[2]].porcentaje == 0">{{ element[displayedColumns[2]].porcentaje}}%</span>
+                                                        </mat-cell>
+                                                    </ng-container>
+                                        
+                                
+                                                    <ng-container [matColumnDef]="displayedColumns[3]">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ displayedColumns[3] }} </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> 
+                                                            <span class="mobile-label">{{ displayedColumns[3] }}:</span>
+                                                            <span *ngIf="element && element[displayedColumns[3]].porcentaje || element && element[displayedColumns[3]].porcentaje == 0">{{ element[displayedColumns[3]].porcentaje}}%</span>
+                                                        </mat-cell>
+                                                    </ng-container>
+                                                    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                                    <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
+                                        
+                                                </mat-table>
+                                                <div  *ngIf="kpiyear && kpiyear.length > 0 && kpiTableData != null">
+                                                    <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                                                </div>
+                                                
+                                            </mat-card-content>
+                                    </mat-card>
+                                </div>
+                            </div> 
+                            
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 
 

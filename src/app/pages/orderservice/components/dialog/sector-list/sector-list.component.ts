@@ -60,7 +60,7 @@ export class SectorListComponent implements OnInit, OnDestroy {
     if(this.id > 0){
       
       this.forma = new FormGroup({
-        descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+        descripcion: new FormControl(null, [Validators.required, Validators.minLength(1)]),
         order_by: new FormControl(0, [Validators.required]),
         status: new FormControl(1, [Validators.required]),        
       });

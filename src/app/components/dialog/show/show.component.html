@@ -118,10 +118,10 @@
             <td>COMUNA:</td>
           </tr>
           <tr>
-            <td>{{data.cc_number}}</td>
-            <td>{{data.region}}</td>
-            <td>{{data.provincia}}</td>
-            <td>{{data.comuna}}</td>
+            <td><span *ngIf="order">{{order[0]['cc_number']}}</span></td>
+            <td><span *ngIf="order">{{order[0]['region']}}</span></td>
+            <td><span *ngIf="order">{{order[0]['provincia']}}</span></td>
+            <td><span *ngIf="order">{{order[0]['comuna']}}</span></td>
           </tr>
         </table>
         <table id="t04" width="100%">
@@ -133,7 +133,7 @@
         <table id="t05" width="100%">
           <tr>
             <th width="20%"><p class="big"><strong>Ubicación:</strong></p></th>    
-            <th width="80%"><mat-icon  class="material-icons md-dark md-18">place</mat-icon> {{data.direccion}}</th>
+            <th width="80%"><mat-icon  class="material-icons md-dark md-18">place</mat-icon><span *ngIf="order">{{order[0]['direccion']}}</span></th>
           </tr>
         </table>
         </div>
@@ -173,9 +173,10 @@
 
         <table id="t06" width="100%" *ngIf="orderatributo.length > 0">
           <tr >
+            <td width="15%"></td>
             <td width="20%">CÓDIGO</td>
             <td width="20%">DESCRIPCIÓN</td>
-            <td width="60%">VALOR</td>
+            <td width="45%">VALOR</td>
           </tr>
         </table>
 
@@ -183,6 +184,13 @@
 
         <table id="t04" width="100%" *ngFor="let detailatributo of atributo" cellpadding="0">
           <tr *ngFor="let detailorderatributo of orderatributo">
+
+            <td width="15%" *ngIf="detailorderatributo.atributo_id == detailatributo.id">
+              <h2 style="text-align:center;" *ngIf="detailorderatributo.valor && detailorderatributo.valor !== 'S/N' && detailorderatributo.valor !== 'null' && detailorderatributo.valor !== null">
+                  <img src="../../../../assets/icons/check.png" width="17">
+              </h2>
+            </td>
+
             <td width="20%" *ngIf="detailorderatributo.atributo_id == detailatributo.id" >    
                 <div style="min-height: 2px;">
                 <p class="codigo">{{detailatributo.id}}</p>
@@ -194,7 +202,7 @@
               <p class="descripcion">{{detailatributo.descripcion}}: </p>
                 </div>
             </td>
-            <td  width="60%" *ngIf="detailorderatributo.atributo_id == detailatributo.id" >             
+            <td  width="45%" *ngIf="detailorderatributo.atributo_id == detailatributo.id" >             
                <div style="min-height: 2px;">
                 <p class="valor">{{detailorderatributo.valor}}</p>
               </div>

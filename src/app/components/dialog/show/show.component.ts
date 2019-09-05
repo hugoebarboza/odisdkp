@@ -33,7 +33,7 @@ export class ShowComponent implements OnInit, OnDestroy {
 
 	public title: string;
   public identity: any;
-  public order: Order[] = [];
+  public order: any;
   public token: any;
 
   audioRows = [];
@@ -120,6 +120,7 @@ export class ShowComponent implements OnInit, OnDestroy {
         return;
          }       
           this.order = response.datos;
+          //console.log(this.order);
         if(this.order.length > 0){
               this.atributo = response.atributo;
               this.orderatributo = response.orderatributo;

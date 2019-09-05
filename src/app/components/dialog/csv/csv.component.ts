@@ -454,7 +454,7 @@ export class CsvComponent implements OnInit, OnDestroy {
           (some) => 
           { 
             if(some.datos){
-            console.log(some.datos);
+            //console.log(some.datos);
             this.exportDataSource = new MatTableDataSource(some.datos);
             
             if(!this.exportDataSource.data.length){

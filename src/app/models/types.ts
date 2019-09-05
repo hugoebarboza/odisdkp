@@ -129,6 +129,21 @@ export class Countries  {
 	){}
 }
 
+export class Currency  {
+	
+	constructor(	
+	public id:number,
+	public name:string,
+	public code:string,
+	public symbol:string,
+	public status:number,
+	public create_by:number,
+	public create_at:any,
+	public update_by:number,
+	public update_at:any
+	){}
+}
+
 
 export class CurrencyValue  {
 	

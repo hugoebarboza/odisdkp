@@ -37,7 +37,6 @@ export class AddProjectTypeComponent implements OnInit {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
-
    }
 
   ngOnInit() {

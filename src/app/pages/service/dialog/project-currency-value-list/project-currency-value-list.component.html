@@ -1,0 +1,167 @@
+<div class="container-fluid p-2">
+
+        <div class="row animated fadeIn" *ngIf="isLoading">
+            <div class="col-sm-12">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+          </div>
+        
+      
+            
+        
+        
+          <div class="row animated fadeIn" *ngIf="!isLoading">
+            <div class="col-12">    
+                  <div class="animated fadeIn" *ngIf="isLoading">
+                      <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                  </div>
+      
+                 <div class="alert alert-danger" *ngIf="datatype.length == 0">
+                            No se encontraron registros.
+                 </div>
+              
+        
+                <div *ngIf="datatype.length > 0">
+      
+                    <mat-form-field class="full-width">
+                        <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+                    </mat-form-field>
+      
+                    <div>
+                        <table mat-table [dataSource]="dataSource" matSort >
+      
+                            <!-- ID Column -->
+                            <ng-container matColumnDef="currency_id">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> Moneda </th>
+                              <td mat-cell *matCellDef="let row; let i = index"> 
+                                <div *ngIf="i !== indexitem || isLoadingDelete">
+    
+                                        <mat-form-field *ngIf="currency && i !== indexitem || isLoadingDelete">
+                                                <select [(ngModel)]="row.currency_id" name="value" matNativeControl required [disabled]="true">
+                                                <option *ngFor="let c of currency" [value]="c.id">
+                                                      {{c.code}}
+                                                </option>
+                                                </select>
+                                        </mat-form-field>                                
+                                </div>                            
+                                <mat-form-field *ngIf="currency && i == indexitem && !isLoadingDelete">
+                                        <mat-label>Moneda</mat-label>
+                                        <select [(ngModel)]="row.currency_id" name="value" matNativeControl required>
+                                        <option *ngFor="let c of currency" [value]="c.id">
+                                              {{c.code}}
+                                        </option>
+                                        </select>
+                                </mat-form-field>                            
+    
+                              </td>
+                            </ng-container>
+                        
+                            <!-- Progress Column -->
+                            <ng-container matColumnDef="value">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> Valor </th>
+                              <td mat-cell *matCellDef="let row; let i = index"> 
+                                <div *ngIf="i !== indexitem || isLoadingDelete">{{row.value}}</div>
+                                <input type="text" class="form-control"  [(ngModel)]="row.value" *ngIf="i == indexitem && !isLoadingDelete"  required>
+                              </td>
+                            </ng-container>
+                        
+    
+     
+    
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="status">
+                              <th mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </th>
+                              <td mat-cell *matCellDef="let row; let i = index">
+                                <div *ngIf="i !== indexitem || isLoadingDelete">
+                                    <div class="circle" [style.color]="row.status? 'green' : 'red'"></div>                            
+                                </div>
+                                <input type="number" class="form-control" id="{{row.status}}" [(ngModel)]="row.status" *ngIf="i == indexitem && !isLoadingDelete">
+                                
+                              </td>
+                            </ng-container>
+                        
+                            <!-- Color Column -->
+                            <ng-container matColumnDef="actions">
+                              <th mat-header-cell *matHeaderCellDef >  </th>
+                              <td mat-cell *matCellDef="let row; let i = index"> 
+                                  <button mat-icon-button color="primary" *ngIf="row.currency_id > 0 && i != indexitem" (click)="edit(i)">
+                                      <mat-icon aria-label="Edit" >edit</mat-icon>
+                                      </button>            
+                
+          
+                                      <button mat-icon-button color="primary" *ngIf="row.currency_id > 0 && i == indexitem && editando && !isLoadingDelete" (click)="save(i, row)" >
+                                      <mat-icon aria-label="Edit"  >done</mat-icon>                            
+                                      </button>
+          
+                                      <button mat-icon-button color="primary" *ngIf="row.currency_id > 0 && i == indexitem && editando && !isLoadingDelete" (click)="close()" >
+                                          <mat-icon aria-label="Edit"  >close</mat-icon>                            
+                                      </button>
+              
+          
+                                      <button mat-icon-button color="primary" *ngIf="isLoadingSave && i == indexitem && !editando">
+                                       <app-progress-spinner ></app-progress-spinner>
+                                      </button>
+          
+          
+                                      <button mat-icon-button color="warn" (click)="delete(i, row)" *ngIf="i != indexitem">
+                                          <mat-icon aria-label="Edit" >delete</mat-icon>                             
+                                      </button>
+          
+                                      <button mat-icon-button color="primary" *ngIf="isLoadingDelete && i == indexitem && !editando">
+                                      <app-progress-spinner ></app-progress-spinner>
+                                      </button>
+                              </td>
+                            </ng-container>
+                        
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;">                    
+                            </tr>
+                          </table>
+          
+                    </div>  
+      
+                </div>
+      
+                
+                <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="form p-t-20" >
+                    <table class="table table-hover" *ngIf="_userService.isRole(7)">                    
+                        <tbody>
+                            <tr >
+                              <td class="w10">
+                                  <button mat-icon-button (click)="toggle()" >
+                                      <mat-icon class="material-icons md-20-color" >add</mat-icon> <span *ngIf="!show">Agregar</span>
+                                  </button>                            
+                              </td>
+                              <td>
+    
+                                <mat-form-field *ngIf="currency && show">
+                                        <mat-label>Moneda</mat-label>
+                                        <select formControlName="currency_id" name="value" matNativeControl required>
+                                        <option *ngFor="let c of currency" [value]="c.id">
+                                              {{c.code}}
+                                        </option>
+                                        </select>
+                                </mat-form-field>                            
+    
+                              </td>
+                              <td>
+                                  <input type="text" name="value" class="form-control"  placeholder="Valor" formControlName="value" *ngIf="show" >
+                              </td>
+    
+                              <td>
+                                <input type="number" name="status" class="form-control"  placeholder="Estatus" formControlName="status" *ngIf="show">
+                              </td>
+      
+                              <td >
+                                  <button  mat-icon-button color="primary" [disabled]="forma.invalid" *ngIf="show && !isLoadingSave && !isLoadingDelete && !forma.invalid" (click)="onSubmit()" >
+                                      <mat-icon aria-label="Edit"  >done</mat-icon>                            
+                                  </button>      
+                              </td>
+                            </tr>
+                        </tbody>                    
+                    </table>
+                  </form>
+                
+            </div>
+          </div>
+        </div>

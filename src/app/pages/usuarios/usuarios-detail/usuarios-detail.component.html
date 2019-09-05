@@ -1,0 +1,629 @@
+
+<div class="row p-2 animated fadeIn">
+<div class="col-12">
+    
+
+<div class="container-fluid" *ngIf="isLoading">
+<div class="row d-flex justify-content-center">
+    <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+</div>
+</div>
+
+
+<div class="fxODHD" *ngIf="!isLoading && _userService.isRole(7) && id > 0 && user">
+<aside class="hKFakA">
+        <div class="CnaZt">
+            <div >
+                <div class="hftCyG">
+                    <div class="kccNpY" data-test-selector="profile-avatar">
+                        <div style="display: inline-block; position: relative; outline: 0px; height: 132px; width: 132px;">
+                            <span class="ixhqwo">
+                                <div class="_1fH43YlMAnPCr8RI9qH98P" style="border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;" >
+                                        <div id="meInitialsButton" class="M_s6agPZfWvz2OH8iRoGk" style="background-color: #DE473C; font-size: 65px; font-weight: bold;">
+                                                <span>{{user.name | slice:0:1}}{{user.surname | slice:0:1}}</span>
+                                        </div>
+                                </div>                                
+                                <!---
+                                <span role="img" style="background-color: transparent; background-image: url(&quot;https://secure.gravatar.com/avatar/f375267e4ec6266af88de6e4e70accfc?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FHB-3.png&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;">
+                                </span>--->
+                            </span>
+                        </div>
+                        <!---
+                        <div class="nQeoD" data-test-selector="profile-hover-info">
+                            <button class="bjFiXD" spacing="none" type="button">
+                                <span style="align-self: center; display: inline-flex; flex-wrap: nowrap; max-width: 100%; position: relative;">
+                                    <span style="align-items: center; align-self: center; flex: 1 1 auto; margin: 0px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: opacity 0.3s ease 0s; opacity: 1;">
+                                        <div class="cWxxlJ">
+                                            <span class="fJnFJy" aria-label="">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                                    <g fill="currentColor" fill-rule="evenodd">
+                                                        <path d="M2 6.994C2 5.893 2.898 5 3.99 5h16.02C21.108 5 22 5.895 22 6.994v12.012A1.997 1.997 0 0 1 20.01 21H3.99A1.994 1.994 0 0 1 2 19.006V6.994zM12 17a4 4 0 1 0 0-8 4 4 0 0 0 0 8zm5-8c0 .556.448 1 1 1 .556 0 1-.448 1-1 0-.556-.448-1-1-1-.556 0-1 .448-1 1zM8 4c0-.552.453-1 .997-1h6.006c.55 0 .997.444.997 1v1H8V4z">
+
+                                                        </path>
+                                                        <circle cx="12" cy="13" r="2">
+
+                                                        </circle>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                    </span>
+                                </span>
+                            </button>
+                        </div>
+                        --->
+
+                    </div>
+                </div>
+                <div class="eFqRBf" data-test-selector="profile-details">
+                    <span class="hgbeTC">
+                        {{user.name}} {{user.surname}}
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="CnaZt">
+            <div>
+                <a class="dseaOG" spacing="default" href="javascript:;" (click)="startEdit(user)">
+                    <span style="align-self: center; display: inline-flex; flex-wrap: nowrap; max-width: 100%; position: relative; width: 100%; justify-content: center;">
+                        <span style="align-items: center; align-self: center; flex: 1 1 auto; margin: 0px 4px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: opacity 0.3s ease 0s; opacity: 1;">
+                            <span>
+                                Gestiona cuenta
+                            </span>
+                        </span>
+                    </span>
+                </a>
+            </div>
+        </div>
+        <div class="CnaZt">
+            <div class="gLOvjB">
+                <p class="jMfZdr">
+                    <span>
+                        Acerca de
+                    </span>
+                </p>
+                <div class="gzaAvU">
+                    <div class="cEvcje">
+                        <div class="jPMYyF">
+                            <span class="bksXrt">
+                                <span class="bcqBjl" aria-label="">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                        <path fill="currentColor" fill-rule="evenodd" d="M17 14h2V9H5v5h2v-1a1 1 0 0 1 2 0v1h6v-1a1 1 0 0 1 2 0v1zm0 2v1a1 1 0 0 1-2 0v-1H9v1a1 1 0 0 1-2 0v-1H5v3h14v-3h-2zM9 7h6V6H9v1zM7 7V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v2h2a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V9a2 2 0 0 1 2-2h2z">
+
+                                        </path>
+                                    </svg>
+                                </span>
+                            </span>
+                            <div class="fWYUkn">
+                                <div>
+                                    <div>
+                                        <div class="fsVJT">
+                                            <div style="position: absolute;">
+                                                <label class="keOXhT">
+                                                    <div class="jbyPaz">
+                                                        <span>
+
+                                                        </span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="fPLsyX">
+                                                <div class="cspqsP">
+                                                    <div class="feWTNh">
+                                                        <div class="ilJUcG">
+                                                            <div class="llCsQv">
+                                                                <div class="kLiHRY">
+                                                                    <div class="bWvfmD">
+                                                                        {{user.title}}
+                                                                    </div>
+                                                                    <button class="doKTJP" aria-label="Edit" type="button">
+
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="jPMYyF">
+                            <span class="bksXrt">
+                                <span class="bcqBjl" aria-label="">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                        <path fill="currentColor" d="M11 5v2h2V5h-2zm0 6V9h-1a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-1v2h5a1 1 0 0 1 1 1v3h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1h-4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1v-2H7v2h1a1 1 0 0 1 1 1v4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1v-4a1 1 0 0 1 1-1h1v-3a1 1 0 0 1 1-1h5zm-6 6v2h2v-2H5zm12 0v2h2v-2h-2z">
+
+                                        </path>
+                                    </svg>
+                                </span>
+                            </span>
+                            <div class="fWYUkn">
+                                <div>
+                                    <div>
+                                        <div class="fsVJT">
+                                            <div style="position: absolute;">
+                                                <label class="keOXhT">
+                                                    <div class="jbyPaz">
+                                                        <span>
+
+                                                        </span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="fPLsyX">
+                                                <div class="cspqsP">
+                                                    <div class="feWTNh">
+                                                        <div class="ilJUcG">
+                                                            <div class="llCsQv">
+                                                                <div class="kLiHRY">
+                                                                    <div class="pOdyP">
+                                                                        Departamento
+                                                                    </div>
+                                                                    <button class="doKTJP" aria-label="Edit" type="button">
+
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="jPMYyF">
+                            <span class="bksXrt">
+                                <span class="bcqBjl" aria-label="">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                        <g fill="currentColor" fill-rule="evenodd">
+                                            <path d="M8 6H5.009C3.902 6 3 6.962 3 8.15v10.7C3 20.04 3.9 21 5.009 21h5.487H8v-2.145c-1.616-.001-3-.003-3-.004 0 0 .005-10.708.009-10.708L8 8.144V6z" fill-rule="nonzero">
+
+                                            </path>
+                                            <path d="M12 7h2v2h-2zm-6 3h2v2H6zm0 3h2v2H6zm6-3h2v2h-2zm0 3h2v2h-2zm2 3h2v3h-2zm2-9h2v2h-2zm0 3h2v2h-2zm0 3h2v2h-2z">
+
+                                            </path>
+                                            <path d="M18.991 19C18.998 19 19 4.995 19 4.995c0 .006-7.991.005-7.991.005C11.002 5 11 19 11 19h7.991zM9 4.995C9 3.893 9.902 3 11.009 3h7.982C20.101 3 21 3.893 21 4.995v14.01A2.004 2.004 0 0 1 18.991 21H9V4.995z" fill-rule="nonzero">
+
+                                            </path>
+                                        </g>
+                                    </svg>
+                                </span>
+                            </span>
+                            <div class="fWYUkn">
+                                <div>
+                                    <div>
+                                        <div class="fsVJT">
+                                            <div style="position: absolute;">
+                                                <label class="keOXhT">
+                                                    <div class="jbyPaz">
+                                                        <span>
+
+                                                        </span>
+                                                    </div>
+                                                </label>
+                                            </div>
+                                            <div class="fPLsyX">
+                                                <div class="cspqsP">
+                                                    <div class="feWTNh">
+                                                        <div class="ilJUcG">
+                                                            <div class="llCsQv">
+                                                                <div class="kLiHRY">
+                                                                    <div class="pOdyP">
+                                                                        Organización
+                                                                    </div>
+                                                                    <button class="EditButton-sc-1v6bv8a-0 doKTJP" aria-label="Edit" type="button">
+
+                                                                    </button>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="jPMYyF">
+                            <span class="bksXrt">
+                                <span class="bcqBjl" aria-label=""><svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                    <path d="M12 21c-2.28 0-6-8.686-6-12a6 6 0 1 1 12 0c0 3.314-3.72 12-6 12zm0-9a2.912 2.912 0 1 0 0-5.824A2.912 2.912 0 0 0 12 12z" fill="currentColor" fill-rule="evenodd">
+
+                                    </path>
+                                </svg>
+                            </span>
+                        </span>
+                        <div class="fWYUkn">
+                            <div>
+                                <div>
+                                    <div class="fsVJT">
+                                        <div style="position: absolute;">
+                                            <label class="keOXhT">
+                                                <div class="jbyPaz">
+                                                    <span>
+
+                                                    </span>
+                                                </div>
+                                            </label>
+                                        </div>
+                                        <div class="fPLsyX">
+                                            <div class="cspqsP">
+                                                <div class="feWTNh">
+                                                    <div class="ilJUcG">
+                                                        <div class="llCsQv">
+                                                            <div class="kLiHRY">
+                                                                <div class="pOdyP">
+                                                                    Ubicación
+                                                                </div>
+                                                                <button class="doKTJP" aria-label="Edit" type="button">
+
+                                                                </button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <p class="kneBcK">
+                    <span>
+                        Contacto
+                    </span>
+                </p>
+                <div class="cEvcje">
+                    <div>
+                        <div>
+                            <div>
+                                <span class="eWTlBS" data-test-selector="interaction-wrapper">
+                                    <div class="jPMYyF">
+                                        <span class="bksXrt">
+                                            <span class="bcqBjl" aria-label="">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                                    <g fill="currentColor" fill-rule="evenodd">
+                                                        <path d="M5 7v10h14V7H5zm14-2c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H5c-1.1 0-2-.9-2-2V7c0-1.1.9-2 2-2h14z" fill-rule="nonzero">
+
+                                                        </path>
+                                                        <path d="M5.498 6.5H3.124c.149.44.399.854.75 1.205l5.882 5.881a3.117 3.117 0 0 0 4.41 0l5.882-5.881c.35-.351.6-.765.749-1.205h-2.373l-5.672 5.672a1.119 1.119 0 0 1-1.583 0L5.498 6.5z">
+
+                                                        </path>
+                                                    </g>
+                                                </svg>
+                                            </span>
+                                        </span>
+                                        <div class="fWYUkn">
+                                            <div>
+                                                <div class="fsVJT">
+                                                    <div style="position: absolute;">
+                                                        <label class="keOXhT">
+                                                            <div class="jbyPaz">
+                                                                <span>
+
+                                                                </span>
+                                                            </div>
+                                                        </label>
+                                                    </div>
+                                                    <div class="fPLsyX">
+                                                        <div class="cspqsP">
+                                                            <div class="feWTNh">
+                                                                <div class="ilJUcG">
+                                                                    <div class="dcQwpB" readonly="">
+                                                                        <div class="kLiHRY">
+                                                                            <div class="bWvfmD">
+                                                                                {{user.email}}
+                                                                            </div>
+                                                                            <button class="doKTJP" aria-label="Edit" type="button">
+
+                                                                            </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="cXwmnx">
+                            <div style="height: 100%; width: 100%;">
+                            </div>
+                        </div>
+                        <div class="caSnlw">
+                            <div style="top: 0px; left: 0px; position: absolute; z-index: 400; transform: translate3d(1060px, 636px, 0px);">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="gbzxgq">
+                <p class="cRgqgM">
+                    <span>
+                        Equipos
+                    </span>
+                </p>
+                <div class="jxPKzw">
+                    <div>
+                        <div class="hrThaw">
+                            <div class="fiBzsO">
+                                <img class="knkYsf" src="data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIHdpZHRoPSIxMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48Y2lyY2xlIGN4PSI2NCIgY3k9IjY0IiBmaWxsPSIjQzFDN0QwIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHI9IjY0Ii8+PHBhdGggZD0ibTgwIDY0Yy02LjYyNzQxNyAwLTEyLTUuMzcyNTgzLTEyLTEyczUuMzcyNTgzLTEyIDEyLTEyIDEyIDUuMzcyNTgzIDEyIDEyLTUuMzcyNTgzIDEyLTEyIDEyem0tMzItMTJjLTYuNjI3NDE3IDAtMTItNS4zNzI1ODMtMTItMTJzNS4zNzI1ODMtMTIgMTItMTIgMTIgNS4zNzI1ODMgMTIgMTItNS4zNzI1ODMgMTItMTIgMTJ6bTEyIDI0YzAtNC40MiAzLjU0OC04IDgtOGgyNGM0LjQyIDAgOCAzLjU0IDggOHYxNC45MmMwIDEyLjEwOC00MCAxMi4xMDgtNDAgMHptOC0xMmgtLjAxMmMtMy4xODQzNTM3LjAwNDI0LTYuMjM2NTQxIDEuMjczNTYxNS04LjQ4NDg0MjcgMy41Mjg2MTQ5LTIuMjQ4MzAxOCAyLjI1NTA1MzQtMy41MDg0NjU2IDUuMzExMDMzLTMuNTAzMTU3MyA4LjQ5NTM4NTF2MTEuMjI4Yy0xMS43ODQgMi4xMzYtMjgtLjI1Mi0yOC03LjkzNnYtMTUuMzA0YzAtNC40MjQgMy41NDgtOC4wMTIgOC04LjAxMmgyNGMyLjEyMjcwODYtLjAwMzE5MTIgNC4xNTkzOTQ2LjgzODYzODYgNS42NjAzNzggMi4zMzk2MjJzMi4zNDI4MTMyIDMuNTM3NjY5NCAyLjMzOTYyMiA1LjY2MDM3OHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjk1Ii8+PC9nPjwvc3ZnPgo=">
+                            </div>
+                            <div class="dyyOZk">
+                                <div class="hfesjN">
+                                    <span>
+                                        Comenzar un equipo…
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="cflzea">
+                <a class="YvZbL" rel="noopener noreferrer" href="javascript:;">
+                    <span>
+                        Ver la política de privacidad
+                    </span>
+                </a>
+            </div>
+        </div>
+    </div>
+</aside>
+
+
+<main class="ljhYu">
+    <div class="jfCYPT">
+        <div class="hEEDMy" data-test-selector="profile-work-list">
+            <div class="dQWNoB">
+                <div class="gtZlhk">
+                    Trabajó en
+                </div>
+                <div class="eZsjqh">
+                    <a class="hMxLTh" appearance="default" href="javascript:;" [routerLink]="['/users/', id, 'work']">
+                        <span>
+                            Ver todo
+                        </span>
+                    </a>
+                </div>
+            </div>
+            <div class="EacRc">
+                <span>
+                    Los demás solo verán aquello a lo que tienen acceso.
+                </span>
+            </div>
+            <div class="hGgeKi">
+                <div class="container-fluid" *ngIf="isLoadingResults">
+                    <div class="row d-flex justify-content-center">
+                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
+                    </div>
+                </div>
+                                            
+                <div *ngIf="!isLoadingResults && userordenes.length > 0">
+                <a class="cBscCE" rel="noopener noreferrer" href="javascript:;" *ngFor="let k of userordenes;" (click)="showOrder(k)">
+                    <div class="hwwpxW">
+                        <img class="gXBZbl" src="https://odissoftware.atlassian.net/secure/viewavatar?size=medium&amp;avatarId=10307&amp;avatarType=issuetype">
+                        <div class="jvqdwP">
+                            <div class="idArDp">
+                                {{k.project_name}} - #{{k.order_number}}. {{k.service_name}} - {{k.servicetype}}. {{k.estatus}}
+                            </div>
+                            <p class="ceoxKg">
+                                <span class="bxeoDn">
+                                    OCA
+                                </span>
+                                <span class="gMucQl">
+                                    <span>
+                                        Actualizado el 
+                                        <span>
+                                            {{k.update_at}}
+                                        </span>
+                                    </span>
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </a>
+
+                <div class=" cpbwyT">
+                    <div *ngIf="pageSize && pageSize == 5">
+                        <a class="eZjtvf" rel="noopener noreferrer" href="javascript:;" (click)="loaduserordenesmore(id, 10)" *ngIf="id > 0">
+                            Mostrar más
+                        </a>            
+                    </div>
+            
+                    <div *ngIf="pageSize && pageSize > 5">
+                        <a class="eZjtvf" rel="noopener noreferrer" href="javascript:;" (click)="loaduserordenesmore(id, 5)" *ngIf="id > 0">
+                            Mostrar menos
+                        </a>            
+                    </div>
+                </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <div class=" jfCYPT">
+    </div>
+ 
+ 
+ 
+    <div class=" jfCYPT">
+            <div class=" jfCYPT">
+                    <div class=" didcdr" data-test-selector="profile-worked-with">
+                        <div class=" eCdVoi">
+                            <div class=" jNlJOD">
+                                <span>
+                                    Indicadores (Órdenes Editadas)
+                                </span>
+                            </div>
+                        </div>
+                        <div class=" iDwfcE" >
+                            <div>
+                                <div class="container-fluid" *ngIf="isLoadingResultsKpi">
+                                    <div class="row d-flex justify-content-center">
+                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResultsKpi" ></mat-spinner>
+                                    </div>
+                                </div>
+                        
+                                <div class=" dIOqge" *ngIf="!isLoadingResultsKpi && kpidata && kpidata.length > 0">
+                                    <div class=" jmuLsE">
+                                            <div class=" pUmbZ">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-sm">
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>        
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-sm" align="left">
+                                                        <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoption">
+                                                            <ng-select
+                                                                [items]="kpisearchoptions"
+                                                                [clearable]="false"
+                                                                bindLabel="name"
+                                                                bindValue="value"
+                                                                [(ngModel)]="kpiselectedoption"
+                                                                (change)="selectChangeKpi($event)"
+                                                                class="width-40percentage">
+                                                            </ng-select>
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-sm">
+                                                        
+                                                        </div>
+                                                        <div class="col-sm" align="right">
+                                                            <div class=" jNlJODT" *ngIf="kpitotal">Total: <span>{{kpitotal}}</span></div> 
+                                                        </div>
+                                                    </div>
+                                                </div>                                                
+                                                <div class="row justify-content-center align-items-center" align="center">
+                                                    <div class="col" >
+                                                        <ngx-charts-pie-chart
+                                                        [view]="view"
+                                                        [scheme]="colorScheme"
+                                                        [results]="kpidata"
+                                                        [explodeSlices]="explodeSlices"
+                                                        [labels]="showLabels"
+                                                        [legend]="showLegend"
+                                                        [legendTitle]="['Leyenda']"
+                                                        [legendPosition]="['right']"
+                                                        [doughnut]="doughnut">
+                                                        </ngx-charts-pie-chart>
+                                                    </div>
+                                                </div>
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-sm">
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>            
+                                            </div>
+                                    </div>                      
+                                </div>
+                                <div class=" dIOqge" *ngIf="!isLoadingResultsKpi && kpidata && kpidata.length == 0">
+                                    Sin Información
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>            
+    </div>
+     
+    <div class=" jfCYPT">
+        <div class=" didcdr" data-test-selector="profile-worked-with">
+            <div class=" eCdVoi">
+                <div class=" jNlJOD">
+                    <span>
+                        Trabaja con
+                    </span>
+                </div>
+            </div>
+            <div class=" iDwfcE">
+                <div>
+                    <div class=" dIOqge">
+                        <div class=" jmuLsE">
+                            <div class=" pUmbZ">
+                                <a class=" jsnJlL" href="/people/5c51a06469dc034ed80b8640">
+                                    <div class=" lmDRto">
+                                        <div class=" joNZWT">
+                                            <div class=" NlKEe">
+                                                <div style="display: inline-block; position: relative; outline: 0px; height: 36px; width: 36px;">
+                                                    <div class=" kZAJWF">
+                                                        <span role="img" style="background-color: transparent; background-image: url(&quot;https://secure.gravatar.com/avatar/1445a1c45a2bc03db6c5df1d073cc5bd?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FE-4.png&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class=" kDBTTg" title="erick.caceres@ocaglobal.com">
+                                                erick.caceres@ocaglobal.com
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                        <div class=" jmuLsE">
+                            <div class=" pUmbZ">
+                                <a class=" jsnJlL" href="/people/5c18e3e3ab1c1d35825bc537">
+                                    <div class=" lmDRto">
+                                        <div class=" joNZWT">
+                                            <div class=" NlKEe">
+                                                <div style="display: inline-block; position: relative; outline: 0px; height: 36px; width: 36px;">
+                                                    <div class=" kZAJWF">
+                                                        <span role="img" style="background-color: transparent; background-image: url(&quot;https://secure.gravatar.com/avatar/64dc6928b9d27242b695fc9f0cdb9a3d?d=https%3A%2F%2Favatar-management--avatars.us-west-2.prod.public.atl-paas.net%2Finitials%2FEC-4.png&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;">
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class=" kDBTTg" title="Erick Cáceres">
+                                                Erick Cáceres
+                                            </div>
+                                            <div class=" bumNuz  kDBTTg" title="Erick Nicolas">
+                                                Erick Nicolas
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class=" jfCYPT">
+        <span>
+            Háblanos de tu experiencia con los perfiles y las búsquedas en este directorio.
+        </span>
+        <button class=" iRCyRx" spacing="default" type="button">
+            <span style="align-self: center; display: inline-flex; flex-wrap: nowrap; max-width: 100%; position: relative;">
+                <span style="align-items: center; align-self: center; flex: 1 1 auto; margin: 0px 4px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: opacity 0.3s ease 0s; opacity: 1;">
+                    <span>
+                        Enviar comentarios
+                    </span>
+                </span>
+            </span>
+        </button>
+    </div>
+</main>
+</div>
+
+
+</div>
+</div>

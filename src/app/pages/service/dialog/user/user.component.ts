@@ -41,7 +41,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   constructor(
     public _userService: UserService,
-    public dialogRef: MatDialogRef<UserComponent>,   
+    public dialogRef: MatDialogRef<UserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Service,    
   ) { 
     //this.loading = true;

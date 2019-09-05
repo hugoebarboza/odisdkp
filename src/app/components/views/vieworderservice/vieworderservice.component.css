@@ -242,3 +242,15 @@ em {
   font-style: italic;
   font-weight: lighter !important;
 }
+a {
+  color: #0052cc;
+  text-decoration: none;
+}
+.button {
+  outline: 0;
+  border: none;
+}
+.span {
+  outline: 0;
+  border: none;
+}

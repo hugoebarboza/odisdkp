@@ -26,12 +26,15 @@ import {
     FootermainComponent,
     HeaderComponent,
     KpiComponent,
+    KpiProjectComponent,
+    KpiProjectDetailComponent,
     LoadingComponent,
     MenuComponent,
     MynavComponent,
     NotfoundComponent,
     ProgressSpinnerComponent,
     ReportkpiComponent,
+    ShowComponent,
     TagUserComponent,
     UploaderComponent,
     UploadTaskComponent,
@@ -40,6 +43,7 @@ import {
 
 // Pipes
 import { PipesModule } from '../../pipes/pipes.module';
+
 
 
 
@@ -71,16 +75,19 @@ import { PipesModule } from '../../pipes/pipes.module';
         FootermainComponent,
         HeaderComponent,
         KpiComponent,
+        KpiProjectComponent,
+        KpiProjectDetailComponent,
         LoadingComponent,
         MenuComponent,
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent,
         ReportkpiComponent,
+        ShowComponent,
         TagUserComponent,
         UploaderComponent,
         UploadTaskComponent,
-        ViewOrderTimeSpentComponent,
+        ViewOrderTimeSpentComponent,        
     ],
     exports: [
         AddDocComponent,
@@ -93,12 +100,15 @@ import { PipesModule } from '../../pipes/pipes.module';
         FootermainComponent,
         HeaderComponent,
         KpiComponent,
+        KpiProjectComponent,
+        KpiProjectDetailComponent,
         LoadingComponent,
         MenuComponent,
         MynavComponent,
         NotfoundComponent,
         ProgressSpinnerComponent,
         ReportkpiComponent,
+        ShowComponent,
         TagUserComponent,
         UploaderComponent,
         UploadTaskComponent,
@@ -108,6 +118,7 @@ import { PipesModule } from '../../pipes/pipes.module';
     entryComponents: [
         AddDocComponent,
         EditServiceComponent,
+        ShowComponent,
       ],
     
 })

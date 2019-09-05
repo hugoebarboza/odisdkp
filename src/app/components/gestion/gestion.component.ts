@@ -12,19 +12,21 @@ import { OrderserviceService, UserService } from '../../services/service.index';
 })
 export class GestionComponent implements OnInit, OnChanges, OnDestroy {
 
-public identity: any;
-public isLoadingResults: boolean;
+identity: any;
+isLoadingResults: boolean;
 kpi:number = 0;
-public project: string;
-public project_id: number;
-public servicename: string;
-public token: any;
+project: string;
+project_id: number;
+servicename: string;
+tipoServicio = [];
+token: any;
+users = []
 
 
 
 
   @Input() id : number;
-  @Output() ServicioSeleccionado: EventEmitter<string>;
+  //@Output() ServicioSeleccionado: EventEmitter<string>;
 
 
   constructor(    
@@ -32,16 +34,17 @@ public token: any;
     private _userService: UserService,
   ) { 
     this.identity = this._userService.getIdentity();
-    this.ServicioSeleccionado = new EventEmitter();
+    //this.ServicioSeleccionado = new EventEmitter();
     this.token = this._userService.getToken();
   }
 
   ngOnInit() {
     //this.breakpoint = (window.innerWidth <= 400) ? 3 : 3;
-
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    this.tipoServicio = [];
+    this.users = [];
     this.loadInfo();
   }
   
@@ -61,7 +64,7 @@ public token: any;
                       {
                         if(response.status == 'success'){
                           this.servicename = String (response.datos.service_name);                     
-                          this.ServicioSeleccionado.emit(this.servicename);
+                          //this.ServicioSeleccionado.emit(this.servicename);
                           this.isLoadingResults = false;
                           this.kpi = response.datos.kpi;
                         }else{
@@ -79,7 +82,17 @@ public token: any;
                     }  
                     );    
 
-  }  
+  }
+
+  getTipoServicio($event){
+    //console.log($event);
+    this.tipoServicio = $event;
+  }
+
+  getUsers($event){
+    this.users = $event;
+    //console.log(this.users);
+  }
 
 
 

@@ -527,6 +527,14 @@ export class UserService  {
 	}
 
 
+	getUserShowInfo(token:any, id:number): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('usersshowinfo/'+id, token);		
+	}
+
+
 	forgotpassword(user): Observable<any>{
 		let json = JSON.stringify(user);
 		let params = 'json='+json;

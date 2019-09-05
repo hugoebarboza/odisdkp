@@ -3,17 +3,21 @@
 
   <div class="relative">
 
-    <div class="topleft">
-    	<a href="javascript:void(0)" (click)="openwindows()" >                  
-        <i class="material-icons md-18">zoom_out_map</i> 
-        </a>	    	
-    </div>                    
-
-    <div class="topright">
-    	<a href="javascript:void(0)" (click)="handledrawer()" >                  
-        <i class="material-icons md-18" *ngIf="!showdrawer">play_arrow</i> 
-        <i class="material-icons md-18" *ngIf="showdrawer">navigate_before</i> 
-        </a>	    	
+    <div class="row topleft">
+		<div class="col-md-1">
+			<a href="javascript:void(0)" (click)="openwindows()">                  
+				<i class="material-icons md-18">zoom_out_map</i> 
+			</a>
+		</div>
+		<div class="col-md-10">
+			<input type="text" class="form-control full-width" #search placeholder="Ingrese dirección y seleccione desde la lista desplegable" autocorrect="off" autocapitalize="off" spellcheck="off">
+		</div>
+		<div class="col-md-1" align="right">
+			<a href="javascript:void(0)" (click)="handledrawer()">                   
+				<i class="material-icons md-18" *ngIf="!showdrawer">play_arrow</i> 
+				<i class="material-icons md-18" *ngIf="showdrawer">navigate_before</i> 
+			</a>
+		</div>  	
     </div>                    
 
 
@@ -22,7 +26,7 @@
 	  </div>
 
 	  	<ng-container *ngIf="renderMap">
-		<agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="15" >
+		<agm-map [latitude]="latitude" [longitude]="longitude" [zoom]="zoom"  >
 
 		  <agm-marker *ngFor="let market of homemarcador"
 		  [markerClickable]="true"
@@ -142,6 +146,20 @@
 			[renderOptions]="renderOptions"
 			[optimizeWaypoints]="optimizeWaypoints"
 			></agm-direction>
+
+			<agm-marker 
+			[markerClickable]="true"
+			[latitude]="mylatitude" 
+			[longitude]="mylongitude"
+			[markerDraggable]="true"
+			(dragEnd)="markerDragEnd($event)">
+			  <agm-info-window>      
+			  	<strong>Dirección:</strong>
+			  	<p>
+				{{ myaddress }}
+			  	</p>
+		       </agm-info-window>	  	
+		  </agm-marker>
 
 		</agm-map>
 		</ng-container>

@@ -5,10 +5,13 @@ import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription'
 import { OnDestroy } from "@angular/core";
 
-
+import { MatIconRegistry } from "@angular/material/icon";
+import { DomSanitizer } from "@angular/platform-browser";
 
 //SERVICES
-import { DashboardService, OrderserviceService, ProjectsService, SettingsService, UserService } from '../../services/service.index';
+import { DashboardService, SettingsService, UserService } from '../../services/service.index';
+
+
 
 //MODELS
 import { 
@@ -56,9 +59,10 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   otherTheme: boolean = true;
   order: Order[] = [];
   options: FormGroup;
-  proyectos: Array<Proyecto>;  
+  proyectos = [];  
   project_name: string;
   project: string;
+  project_type: number;
   region: Region;
   sectores: Sector;
   selected = new FormControl(0);
@@ -100,15 +104,18 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
 
   constructor(	
   private _route: ActivatedRoute,
-  private _orderService: OrderserviceService,
   public _ajustes: SettingsService,
 	public _userService: UserService,  
   private _proyectoService: DashboardService,
-  public fb: FormBuilder
-
+  public fb: FormBuilder,
+  private matIconRegistry: MatIconRegistry,
+  private domSanitizer: DomSanitizer
   ) 
-  { 
-
+  {
+  this.matIconRegistry.addSvgIcon(
+    "icongestion",
+    this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/icons/iconprojectblanco.svg")
+  );
 	this.identity = this._userService.getIdentity();
 	this.token = this._userService.getToken();
 	this.proyectos = this._userService.getProyectos();
@@ -124,23 +131,81 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   
   if (this.id > 0 && this.token && this.token.token != null){
 
+      //this.getTipoServicio(this.id);
+
+      let paramp = this.filterProject();
+      if(paramp){
+        this.project_name = paramp.project_name;
+        if(paramp.project_type == 0){
+          this.table = 'address';
+        }
+        if(paramp.project_type == 1){
+          this.table = 'vehiculos';
+        }  
+      }
+
+
+      let params = this.filterService();
+      if(params){
+        this.service = params.service_name;
+      }      
       //GET PROJECT FROM SERVICEORDER
+      /*
       this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
                     response => {
+                      //console.log(response);
                       if (response.status == 'success'){
                         this.project_name = response.datos.project['project_name'];
-                        this.services = response.datos;                
-                        this.category_id = this.services['projects_categories_customers']['id'];
-                        if(this.table){
-                          this.table = null;
+                        this.services = response.datos;
+                        //console.log(this.services);
+                        if(this.services['projects_categories_customers'] && this.services['projects_categories_customers']['id'] > 0){
+                          this.category_id = this.services['projects_categories_customers']['id'];
+                          this.table = this.services['projects_categories_customers']['name_table'];
+                          //console.log(this.table);
                         }
-                        this.table = this.services['projects_categories_customers']['name_table'];
                       }
-                    });   
+                    });*/
       }
     });     
 
   }
+
+  filterProject(){
+    if(this.proyectos && this.id){
+      for(var i = 0; i < this.proyectos.length; i += 1){
+        var result = this.proyectos[i];
+        //console.log(result[i]);
+        if(result.service){
+          for(var j = 0; j < result.service.length; j += 1){
+            var data = result.service[j];
+            //console.log(data);
+            if(data.id === this.id){
+              return result;
+            }
+          }          
+        }
+      }
+    }    
+  }  
+
+  filterService(){
+    if(this.proyectos && this.id){
+      for(var i = 0; i < this.proyectos.length; i += 1){
+        var result = this.proyectos[i];
+        //console.log(result[i]);
+        if(result.service){
+          for(var j = 0; j < result.service.length; j += 1){
+            var data = result.service[j];
+            //console.log(data);
+            if(data.id === this.id){
+              return data;
+            }
+          }          
+        }
+      }
+    }    
+  }  
+
 
   ngOnInit() {
     if ( localStorage.getItem('ajustes') ) {
@@ -168,10 +233,10 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   //console.log('index => ', tabChangeEvent.index);
   }
   
-  loadDataServicio(servicetname:string){
+  loadDataServicio(servicename:string){
       //console.log('viene');
       //console.log(servicetname);
-      this.service = servicetname;    
+      //this.service = servicename;
    }
 
 

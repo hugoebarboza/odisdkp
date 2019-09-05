@@ -1,0 +1,114 @@
+<meta name="Description" content="Component">
+
+<div class="app" *ngIf="identity">
+<div class="mat-dialog-content" novalidate="novalidate">
+    <h1 mat-dialog-title>{{title}}</h1>
+    <div class="mat-app-background " >
+            <div class="row" *ngIf="identity">
+                <div class="col">
+                    <div class=" jfCYPT">
+                        <div class=" jfCYPT">
+                            <div class=" didcdr" data-test-selector="profile-worked-with">
+                            <div class=" iDwfcE" >
+                                <div>
+                                    <div class=" dIOqge" >
+                                        <div class=" jmuLsE">
+                                                <div class=" pUmbZ">
+                                                    <div class="container-fluid" >
+                                                        <div class="row">
+                                                            <div class="col-sm">
+                                                                <br>
+                                                            </div>
+                                                        </div>
+                                                    </div>        
+            
+                                                    <div class="container-fluid" *ngIf="isLoadingResultsKpiDate">
+                                                        <div class="row">
+                                                            <div class="col-sm">
+                                                                <div class="row d-flex justify-content-center">
+                                                                    <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResultsKpiDate" ></mat-spinner>
+                                                                </div>                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+            
+                                                    <div *ngIf="!isLoadingResultsKpiDate">
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-4" align="left">
+                                                            <div class="input-group input-group-sm mb-3" *ngIf="kpidatesearchoptions && kpidateselectedoption">
+                                                                <ng-select
+                                                                [items]="kpidatesearchoptions"
+                                                                [clearable]="false"
+                                                                bindLabel="name"
+                                                                bindValue="value"
+                                                                [(ngModel)]="kpidateselectedoption"
+                                                                (change)="selectChangeKpiDate($event)"
+                                                                class="width-70percentage">
+                                                                </ng-select>
+                                                            </div>
+                                                            </div>
+                                                            <div class="col-4">
+                                                            
+                                                            </div>
+                                                            <div class="col-4" align="right">
+                                                                <div class=" jNlJODT" *ngIf="kpitotaldate">Total: <span>{{kpitotaldate}}</span></div> 
+                                                            </div>
+                                                        </div>
+                                                    </div>                                                
+                                                    <div class="row justify-content-center align-items-center" align="center">
+                                                        <div class="col" *ngIf="kpidatadate && kpidatadate.length > 0 && view">
+
+                                                            <ngx-charts-pie-chart                                                            
+                                                            [view]="view"
+                                                            [scheme]="colorScheme"
+                                                            [results]="kpidatadate"
+                                                            [explodeSlices]="explodeSlices"
+                                                            [labels]="showLabels"
+                                                            [legend]="showLegend"
+                                                            [legendTitle]="['Órdenes de Trabajo Editadas']"
+                                                            [legendPosition]="['right']"
+                                                            [doughnut]="doughnut">
+                                                            </ngx-charts-pie-chart>
+
+                                                        </div>
+                                                        <div class="col-sm" *ngIf="kpidatadate && kpidatadate.length == 0">
+                                                            <div class="row d-flex justify-content-center">
+                                                                Sin Información
+                                                            </div>                                                
+                                                        </div>                    
+                                                    </div>
+                                                    </div>
+            
+            
+                                                    <div class="container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-sm">
+                                                                <br>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                        </div>
+                                    </div>   
+                                </div>
+                            </div>
+                            </div>
+                        </div>            
+                    </div>
+                </div>
+            </div>
+
+    </div>
+</div>
+</div>
+<div mat-dialog-actions>
+    <div class="container">      
+        <div class="row justify-content-center">
+          <div class="footer-button-row">      
+          <button mat-button (click)="onNoClick()" >Cancelar</button>
+          </div>    
+        </div>
+    </div>
+</div>
+    

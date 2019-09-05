@@ -54,16 +54,16 @@
           >
             <mat-tab label="Ordenes">
               <ng-template mat-tab-label *ngIf="selected.value==0">
-                <mat-icon  class="material-icons md-24">move_to_inbox</mat-icon> Ordenes 
+                <mat-icon  class="material-icons md-24">move_to_inbox</mat-icon> Órdenes 
               </ng-template>
               
               <ng-template mat-tab-label *ngIf="selected.value!=0">
-                <mat-icon *ngIf="selected.value!=0" class="material-icons md-dark md-inactive">inbox</mat-icon> Ordenes
+                <mat-icon *ngIf="selected.value!=0" class="material-icons md-dark md-inactive">inbox</mat-icon> Órdenes
               </ng-template>
   
               <!-- /#page-content -->
               <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >
-                <app-vieworderservice (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-vieworderservice>  
+                <app-vieworderservice  [id]="id"></app-vieworderservice>  
               </div>            
               <!-- /#end page-content -->
             </mat-tab>
@@ -77,18 +77,19 @@
               <ng-template mat-tab-label *ngIf="selected.value == 1">
                 <mat-icon>archive</mat-icon> Registro 
               </ng-template>
+
   
               <!-- /#page-content -->
               <div  style="width: 100%;" *ngIf="selected.value==1 && table != null">
-                  <mat-tab-group mat-align-tabs="center">
-                      <mat-tab label="Carga Masiva"> 
-                        <app-excel (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'address' "></app-excel>
-                        <app-excel-vehiculo (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id" [table]="table" *ngIf="table == 'vehiculos'"></app-excel-vehiculo> 
-                      </mat-tab>
-                      <mat-tab label="Carga de Inspecciones"> 
-                        <app-makeinspection (ServicioSeleccionado) = "loadDataServicio($event)" [id]="id"></app-makeinspection> 
-                      </mat-tab>
-                    </mat-tab-group>  
+                <mat-tab-group mat-align-tabs="center">
+                  <mat-tab label="Carga Masiva"> 
+                    <app-excel  [id]="id" [table]="table" *ngIf="table == 'address' "></app-excel>
+                    <app-excel-vehiculo  [id]="id" [table]="table" *ngIf="table == 'vehiculos'"></app-excel-vehiculo> 
+                  </mat-tab>
+                  <mat-tab label="Carga de Inspecciones"> 
+                    <app-makeinspection  [id]="id"></app-makeinspection> 
+                  </mat-tab>
+                </mat-tab-group>  
               </div>
   
               <!-- /#end page-content -->
@@ -105,7 +106,7 @@
   
               <!-- /#page-content -->
               <div class="p-2" style="width: 100%;" *ngIf="selected.value==2">
-                <app-viewprojectcustomer (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-viewprojectcustomer>  
+                <app-viewprojectcustomer  [id]="id"></app-viewprojectcustomer>  
               </div>
   
               <!-- /#end page-content -->
@@ -123,7 +124,7 @@
               </ng-template>
   
               <div class="p-2" style="width: 100%;" *ngIf="selected.value==3">
-              <app-mapa (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"></app-mapa>
+              <app-mapa  [id]="id"></app-mapa>
               </div>
               <!-- /#end page-content -->
             </mat-tab>
@@ -131,19 +132,33 @@
   
             <mat-tab>
               <ng-template mat-tab-label *ngIf="selected.value!=4">
-                <mat-icon>insert_chart_outlined</mat-icon> Gestión
+                <mat-icon svgIcon="icongestion"></mat-icon> Gestión
               </ng-template>
               <ng-template mat-tab-label *ngIf="selected.value==4">
-                  <mat-icon>insert_chart</mat-icon> Gestión
+                <mat-icon svgIcon="icongestion"></mat-icon> Gestión
               </ng-template>
   
               <!-- /#page-content -->
               <div class="p-2" style="width: 100%;" *ngIf="selected.value==4">
-              <app-gestion (ServicioSeleccionado) = "loadDataServicio( $event )" [id]="id"> </app-gestion>
+              <app-gestion  [id]="id"> </app-gestion>
               </div>
               <!-- /#end page-content -->
             </mat-tab>
   
+            <mat-tab>
+              <ng-template mat-tab-label *ngIf="selected.value!=5">
+                <mat-icon>insert_chart_outlined</mat-icon> Indicadores
+              </ng-template>
+              <ng-template mat-tab-label *ngIf="selected.value==5">
+                  <mat-icon>insert_chart</mat-icon> Indicadores
+              </ng-template>
+  
+              <!-- /#page-content -->
+              <div class="p-2" style="width: 100%;" *ngIf="selected.value==5">
+              <app-kpi-project [id]="id"></app-kpi-project>
+              </div>
+              <!-- /#end page-content -->
+            </mat-tab>
   
   
   
@@ -167,7 +182,4 @@
         </div>
             
     </div>
-
-
-
 </div>
