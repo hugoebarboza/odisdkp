@@ -14,11 +14,12 @@ export class KpiProjectComponent implements OnInit, OnChanges {
 
     identity: any;
     isLoading: boolean;
+    isLoadingResult: boolean = true;
     proyectos: any;
     project: any;
     subscription: Subscription;
     role: number = 6;
-    tipoServicio = [];
+    tipoServicio: any;
     title: string = 'Indicadores'
     token: any;
     users = [];
@@ -54,14 +55,16 @@ export class KpiProjectComponent implements OnInit, OnChanges {
     }
 
     getTipoServicio(id:number) {
-      this.tipoServicio = [];
+      this.tipoServicio = null;
       this.zipService.getTipoServicio(id, this.token.token).then(
         (res: any) => {
           res.subscribe(
             (some: any) => {
               this.tipoServicio = some['datos'];
+              this.isLoadingResult = false;
             },
-            (error: any) => {              
+            (error: any) => {
+              this.isLoadingResult = false;
               console.log(<any>error);
             }
           );

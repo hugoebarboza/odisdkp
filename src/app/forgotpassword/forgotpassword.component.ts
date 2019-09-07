@@ -46,7 +46,7 @@ export class ForgotpasswordComponent implements OnInit {
   ngOnInit() {
 		this.forma = new FormGroup({
 			email: new FormControl(null, [Validators.required, Validators.email]),
-			recaptchaReactive: new FormControl(null, Validators.required)
+			//recaptchaReactive: new FormControl(null, Validators.required)
 		});
 
     //console.log('forgot.component cargado correctamente');

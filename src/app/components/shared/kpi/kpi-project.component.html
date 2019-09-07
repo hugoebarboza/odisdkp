@@ -9,10 +9,10 @@
 
         <div class="row" *ngIf="!isLoading">
         <div class="col-12">
-                <div *ngIf="id && id > 0 && tipoServicio && tipoServicio.length > 0 ">
+                <div *ngIf="id && id > 0 && tipoServicio && tipoServicio.length > 0 && !isLoadingResult">
                     <app-kpi-project-detail [id]="id" [tiposervicio] = "tipoServicio" [users]="users" ></app-kpi-project-detail>
                 </div>
-                <div *ngIf="id && id > 0 && tipoServicio && tipoServicio.length == 0">
+                <div *ngIf="id && id > 0 && tipoServicio && tipoServicio.length == 0 && !isLoadingResult">
                         <div class="row d-flex justify-content-center">
                                 Sin Información. (No tiene servicios asociados al Proyecto).
                         </div>    

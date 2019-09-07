@@ -23,11 +23,15 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
   subscription: Subscription;
   token: any;
 
+  kpidateallselectedoption: number = 0;
   kpiselectedoption: number = 0;
   kpiselecttiposervicio: any;
+  kpidateselecttiposervicio: any;
   kpiselectuser: any;
   kpiselectstatus: any;
+  kpiselectstatusdate: any;
   kpiusers = [];
+
   kpisearchoptions = [
     {value: 0, name: 'Todo'},
     {value: 1, name: 'Tipo de Servicio'},
@@ -38,7 +42,23 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
     {value: 'week', name: 'Semana'},
     {value: 'month', name: 'Mes Actual'},
   ];
+
+  kpidatelinesearchoptions = [
+    {value: 'day', name: 'Día'},
+    {value: 'week', name: 'Semana'},
+    {value: 'month', name: 'Mes Actual'},
+    {value: 'year', name: 'Año Actual'},
+  ];
+
+  kpidatelineallsearchoptions = [
+    {value: 0, name: 'Todo'},
+    {value: 1, name: 'Tipo de Servicio'},
+  ];
+
+
+  
   kpidateselectedoption = '';
+  kpidatelineselectedoption = '';
   kpiselectedoptionST = '';
   kpidatadate = [];
   kpidataST = [];
@@ -55,6 +75,25 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
     domain: ['#C7B42C', '#5AA454', '#A10A28', '#AAAAAA', '#51a351', '#de473c']
   };
 
+  //LINE OPTIONS
+  viewline: any[] = [700, 400];
+  showXAxis = true;
+  showYAxis = true;
+  gradient = false;
+  showXAxisLabel = true;
+  showLegendLine = false;
+  xAxisLabel = '(Fecha / Hora)';
+  showYAxisLabel = true;
+  yAxisLabel = 'N. Órdenes';
+  autoScale = true;
+
+  multi = [
+    {
+      name: "N. Órdenes",
+      series: [      
+      ]
+    },  
+  ];  
 
 
   @Input() id : number;
@@ -74,21 +113,36 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
   }
 
   onResize(event) {
-    //this.view = [event.target.innerWidth / 1.35, 400];
+    //console.log(event.target.innerWidth);
+    if(event.target.innerWidth > 1080){
+      this.viewline = [700, 400];
+      return;
+    }
+    let param = event.target.innerWidth / 7;    
+    if(param < 400){
+      param = 400;
+    }
+    this.viewline = [param, 400];
+    //console.log(this.viewline);
   }
 
   ngOnInit() {
   }
 
   ngOnChanges(changes: SimpleChanges) {
+    //console.log(this.multi);
+    //console.log(this.multi[0].series);
     this.kpiusers = [];
     this.service = [];
     if(this.id > 0 && this.tiposervicio.length > 0){
       this.filterUsers();
       this.kpiselectedoption = 0;
+      this.kpidateallselectedoption = 0;
       this.kpidateselectedoption = 'day';
-      this.kpiselectedoptionST = 'day';  
+      this.kpiselectedoptionST = 'day';
+      this.kpidatelineselectedoption = 'day';
       this.kpiselecttiposervicio = this.tiposervicio[0]['id'];
+      this.kpidateselecttiposervicio = this.tiposervicio[0]['id'];
       this.project = this.filterProjectByService();
       this.getServiceEstatus(this.id);
       //console.log(this.id);
@@ -100,7 +154,6 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
       if(this.project && this.project.id){
         //console.log(this.project);
         this.service = this.filterService();
-        this.getProjectKpiDate(this.project.id, this.kpidateselectedoption);
       }
 
     }    
@@ -147,26 +200,40 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
   }
 
 
-  public getProjectKpiDate(id:number, termino:string){
+  public getProjectKpiDate(id:number, termino:string, status:number, service:number){
     this.isLoadingResultsKpiDate = true;
     if(id > 0 ){ 
-      this.kpitotaldate = 0;
-        this.kpidatadate = [];            
-        this._kpiService.getProjectKpi(this.token.token, id, termino).then(
+        this.kpitotaldate = 0;
+        this.kpidatadate = [];
+        this.multi[0].series.length = 0;
+        this._kpiService.getProjectKpiServiceByDate(this.token.token, id, termino, status, service).then(
           (res: any) => 
           {
             res.subscribe(
               (some:any) => 
               {
-                if(some.datos){
+                if(some && some.datos.length > 0){
                   //console.log(some.datos);
+                  //console.log(some.datos.length);
                   if(some.datos.length > 0){
-                    for (let i = 0; i < some.datos.length; i++) {                        
-                      if(some.datos[i]['servicetype']){
-                        this.kpidatadate[i] = { name: some.datos[i]['servicetypename'] + ': ' + some.datos[i]['user_count'], value: some.datos[i]['user_count']};
+                    for (let i = 0; i < some.datos.length; i++) {
+                      if(some.datos[i]['hora']){
+                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                        this.multi[0].series.push({ name: some.datos[i]['hora'] + ':00:00', value: some.datos[i]['user_count']});
                         this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
-                        //console.log(this.kpitotal);
                       }
+                      if(some.datos[i]['fecha']){
+                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                        this.multi[0].series.push({ name: some.datos[i]['fecha'], value: some.datos[i]['user_count']});
+                        this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
+                      }
+
+                      if(some.datos[i]['month']){
+                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                        this.multi[0].series.push({ name: some.datos[i]['month'], value: some.datos[i]['user_count']});
+                        this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
+                      }
+
                     }
                   }
                   //console.log(this.kpidata);
@@ -176,7 +243,60 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
                 }
               },
               (error:any) => { 
-              this.kpidatadate = [];
+              this.multi[0].series.length = 0;
+              this.isLoadingResultsKpiDate = false;
+              console.log(<any>error);
+              }  
+              )
+          })      
+    }    
+  }
+
+
+  public getProjectKpiAllDate(id:number, termino:string, status:number, service:number, servicetype:number){
+    this.isLoadingResultsKpiDate = true;
+    if(id > 0 ){ 
+        this.kpitotaldate = 0;
+        this.kpidatadate = [];
+        this.multi[0].series.length = 0;
+        this._kpiService.getProjectKpiServiceTypeByDate(this.token.token, id, termino, status, service, servicetype).then(
+          (res: any) => 
+          {
+            res.subscribe(
+              (some:any) => 
+              {
+                if(some && some.datos.length > 0){
+                  //console.log(some.datos);
+                  //console.log(some.datos.length);
+                  if(some.datos.length > 0){
+                    for (let i = 0; i < some.datos.length; i++) {
+                      if(some.datos[i]['hora']){
+                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                        this.multi[0].series.push({ name: some.datos[i]['hora'] + ':00:00', value: some.datos[i]['user_count']});
+                        this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
+                      }
+                      if(some.datos[i]['fecha']){
+                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                        this.multi[0].series.push({ name: some.datos[i]['fecha'], value: some.datos[i]['user_count']});
+                        this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
+                      }
+
+                      if(some.datos[i]['month']){
+                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                        this.multi[0].series.push({ name: some.datos[i]['month'], value: some.datos[i]['user_count']});
+                        this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
+                      }
+
+                    }
+                  }
+                  //console.log(this.kpidata);
+                  this.isLoadingResultsKpiDate = false;
+                }else{
+                  this.isLoadingResultsKpiDate = false;
+                }
+              },
+              (error:any) => { 
+                this.multi[0].series.length = 0;
               this.isLoadingResultsKpiDate = false;
               console.log(<any>error);
               }  
@@ -197,7 +317,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
             res.subscribe(
               (some:any) => 
               {
-                if(some.datos){
+                if(some && some.datos.length > 0){
                   //console.log(some.datos);
                   this.isLoadingResultsKpiST = false;
                   if(some.datos.length > 0){
@@ -235,7 +355,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
             res.subscribe(
               (some:any) => 
               {
-                if(some.datos){
+                if(some && some.datos.length > 0){
                   //console.log(some.datos);
                   this.isLoadingResultsKpiST = false;
                   this.isLoadingResultsKpiST = false;
@@ -281,7 +401,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
             res.subscribe(
               (some:any) => 
               {
-                if(some.datos){
+                if(some && some.datos.length > 0){
                   //console.log(some.datos);
                   this.isLoadingResultsKpiST = false;
                   this.isLoadingResultsKpiST = false;
@@ -327,10 +447,12 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
                     if(this.serviceestatus.length > 0){
                       //console.log(this.serviceestatus);
                       this.kpiselectstatus = this.serviceestatus[0]['id'];
+                      this.kpiselectstatusdate = this.serviceestatus[0]['id'];
                       //console.log(this.kpiselectstatus);
                       if(this.project.id > 0 && this.kpiselectedoptionST && this.kpiselectstatus > 0 && this.id > 0 && this.kpiselecttiposervicio > 0){
                         //this.getProjectKpiServiceType(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id, this.kpiselecttiposervicio);
                         this.getProjectKpiService(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id);
+                        this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id);
                       }
                       
                     }              
@@ -341,10 +463,6 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
 
 
 
-  selectChangeKpiDate(event:any){
-    this.getProjectKpiDate(this.project.id, event.value);
-    //console.log(event.value);
-  }
 
   selectChangeKpiDateST(event:any){
     //console.log(event.value);
@@ -397,7 +515,47 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
     this.getProjectKpiServiceByUser(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id, event.id);
   }
 
+  selectChangeKpiDate(event:any){
+    if(this.kpidateallselectedoption == 0){
+      this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id);
+      return;
+    }
 
+    if(this.kpidateallselectedoption == 1){
+      this.getProjectKpiAllDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id, this.kpidateselecttiposervicio);
+      return;
+    }
+  }
+
+  selectChangeKpiStatusDate(event:any){
+    if(this.kpidateallselectedoption == 0){
+      this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id);
+      return;
+    }
+    
+
+    if(this.kpidateallselectedoption == 1){
+      this.getProjectKpiAllDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id, this.kpidateselecttiposervicio);
+      return;
+    }
+  }
+
+  selectChangeKpiAllDate(event:any){
+    //console.log(event);
+    if(event.value == 0){
+      this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatus, this.id);      
+      return;
+    }
+    if(event.value == 1){
+      this.getProjectKpiAllDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id, this.kpidateselecttiposervicio);
+      return;
+    }
+  }
+
+  selectChangeKpiTipoServicioByDate(event:any){
+    //console.log(event);
+    this.getProjectKpiAllDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id, this.kpidateselecttiposervicio);
+  }
 
 
 }

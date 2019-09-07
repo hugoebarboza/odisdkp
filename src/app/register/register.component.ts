@@ -48,8 +48,8 @@ export class RegisterComponent implements OnInit {
 			password2: new FormControl(null, [Validators.required, Validators.minLength(6)]),
 			telefono: new FormControl(null),
 			telefono2: new FormControl(null),
-			condiciones: new FormControl(false),
-			recaptchaReactive: new FormControl(null, Validators.required)
+			condiciones: new FormControl(false)
+			//recaptchaReactive: new FormControl(null, Validators.required)
 		}, {
 			validators: [this.verifyEqual('password','password2'), MustMatch('email','email2')]
 		   }

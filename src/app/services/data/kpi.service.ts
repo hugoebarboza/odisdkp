@@ -46,6 +46,13 @@ export class KpiService {
       return this.getQueryPromise('project/'+id+'/kpi/'+termino, token);
     }
 
+    getProjectKpiByDate(token:any, id:number, termino:string) {
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('projectbydate/'+id+'/kpi/'+termino, token);
+    }
+
 
     getProjectKpiService(token:any, id:number, termino:string, status:number, service:number) {
       if(!token){
@@ -54,23 +61,34 @@ export class KpiService {
       return this.getQueryPromise('project/'+id+'/kpi/'+termino+'/status/'+status+'/service/'+service, token);
     }
 
-
-    getProjectKpiServiceType(token:any, id:number, termino:string, status:number, service:number, servicetype:number) {
+    getProjectKpiServiceByDate(token:any, id:number, termino:string, status:number, service:number) {
       if(!token){
         return;
-      }
-      return this.getQueryPromise('project/'+id+'/kpi/'+termino+'/status/'+status+'/service/'+service+'/servicetypebystatus/'+servicetype, token);
-      //return this.getQueryPromise('project/'+id+'/kpi/'+termino+'/status/'+status+'/service/'+service+'/servicetype/'+servicetype, token);
+      }                           
+      return this.getQueryPromise('project/'+id+'/kpi/'+termino+'/status/'+status+'/servicebydate/'+service, token);
     }
-
 
     getProjectKpiServiceByUser(token:any, id:number, termino:string, status:number, service:number, userid:number) {
       if(!token){
         return;
       }
       return this.getQueryPromise('project/'+id+'/user/'+userid+'/kpi/'+termino+'/status/'+status+'/servicebyuser/'+service, token);
-      //return this.getQueryPromise('project/'+id+'/kpi/'+termino+'/status/'+status+'/service/'+service+'/servicetype/'+servicetype, token);
     }
+
+    getProjectKpiServiceType(token:any, id:number, termino:string, status:number, service:number, servicetype:number) {
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('project/'+id+'/kpi/'+termino+'/status/'+status+'/service/'+service+'/servicetypebystatus/'+servicetype, token);
+    }
+
+    getProjectKpiServiceTypeByDate(token:any, id:number, termino:string, status:number, service:number, servicetype:number) {
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('project/'+id+'/kpi/'+termino+'/status/'+status+'/service/'+service+'/servicetypebydate/'+servicetype, token);
+    }
+
 
 
 }

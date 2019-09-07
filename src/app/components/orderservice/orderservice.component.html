@@ -130,7 +130,7 @@
             </mat-tab>
   
   
-            <mat-tab>
+            <mat-tab *ngIf="identity.role > 4">
               <ng-template mat-tab-label *ngIf="selected.value!=4">
                 <mat-icon svgIcon="icongestion"></mat-icon> Gestión
               </ng-template>

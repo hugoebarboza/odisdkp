@@ -44,10 +44,8 @@ import { AuthService } from './services/firebase/auth.service';
 import { RouterModule } from '@angular/router';
 
 //UTILITYS
-//import { AngularSplitModule } from 'angular-split';
-//import { LoadingBarModule } from '@ngx-loading-bar/core';
-import { RECAPTCHA_SETTINGS, RecaptchaModule,  RecaptchaSettings } from 'ng-recaptcha';
-import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
+//import { RECAPTCHA_SETTINGS, RecaptchaModule,  RecaptchaSettings } from 'ng-recaptcha';
+//import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 
 
 //ANGULAR UTILITY
@@ -120,8 +118,8 @@ registerLocaleData(localeEs);
     MatProgressButtonsModule,
     PipesModule,
     ReactiveFormsModule,    
-    RecaptchaFormsModule,  
-    RecaptchaModule,
+    //RecaptchaFormsModule,  
+    //RecaptchaModule,
     RouterModule,
     SharedModule, 
     ServiceModule,
@@ -148,11 +146,12 @@ registerLocaleData(localeEs);
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    /*
     {provide: RECAPTCHA_SETTINGS,
       useValue: {
         siteKey: '6LdY_pwUAAAAANNCwxFDBNTGRDg2hrDvZSLTfxLl',
       } as RecaptchaSettings,
-    },
+    },*/
     { provide: ErrorHandler, useClass: ErrorsHandler },
     { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
     

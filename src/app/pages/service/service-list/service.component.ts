@@ -370,7 +370,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
 
   openDialogKpi(): void {
     const dialogRef = this.dialog.open(ProjectKpiListComponent, {
-      width: '777px',
+      width: '1920px',
       disableClose: true,
       data: { project_id: this.id,
               token: this.token.token,

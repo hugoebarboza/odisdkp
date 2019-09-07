@@ -505,7 +505,7 @@
   </button>  
 </td>
 
-<td width="1%" >
+<td width="1%" *ngIf="identity.role > 4">
   <button mat-icon-button [matMenuTriggerFor]="menuviewselect" *ngIf="!show"
   matTooltip="Seleccione la operación que requiere."
   [matTooltipPosition]="positionleftaction.value"
@@ -938,7 +938,7 @@
 
 <ng-template cdkPortal #myTemplate4="cdkPortal" >
   <div style="height: 100%">
-    <app-vieworderserviceselect [id]="id" (portalevent) = "toggleTemplate( $event )" [view]="portal"></app-vieworderserviceselect>
+    <app-vieworderserviceselect [id]="id" (portalevent) = "toggleTemplate( $event )" [view]="portal" *ngIf="identity.role > 4"></app-vieworderserviceselect>
   </div>
 </ng-template>
 

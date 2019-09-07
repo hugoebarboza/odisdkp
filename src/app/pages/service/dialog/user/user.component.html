@@ -5,7 +5,7 @@
 <div class="app" >
 <form class="mat-dialog-content" novalidate="novalidate">
   
-  <h1 mat-dialog-title>{{title}} {{project_name}}</h1>
+  <h1 mat-dialog-title>{{title}} <span *ngIf="project">{{project.project_name}}</span></h1>
   <div class="mat-app-background" >
     <div class="card-body">
         <p class="card-text"><mat-icon mat-list-icon>people</mat-icon> {{subtitle}}</p>        
