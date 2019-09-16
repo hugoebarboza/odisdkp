@@ -195,14 +195,7 @@ import { ToastrService } from 'ngx-toastr';
 	    return this.getProjectOrderData('user/'+id+'/order'+paginate, token);
 	}
 
-	gettUserOrdenesKpi(token:any, id:number, termino: string) {
-		if(!token){
-			return;
-		}
-		  
-		const paginate = `?termino=${termino}`;
-	    return this.getProjectOrderData('user/'+id+'/orderkpi'+paginate, token);
-	}
+
 
 
     getProjectOrderData(query:string, token:any) {

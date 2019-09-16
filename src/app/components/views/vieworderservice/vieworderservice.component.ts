@@ -416,7 +416,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
   
   showModal(id: number){
-    console.log(id);
+    //console.log(id);
     if(id > 0){
       this._modalManage.showModal(id);
       this.assigned_to = id;  
@@ -788,7 +788,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   onPaginateChange(event){
-   console.log(this.paginator.pageIndex);
+   //console.log(this.paginator.pageIndex);
    this.isLoadingResults = true;
    this.pageSize = event.pageSize;    
    this.getParams();

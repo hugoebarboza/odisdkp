@@ -64,6 +64,24 @@
                       </label>
                   </div>            
               </div>
+              <div class="col-sm">
+                <div class="form">
+                    <label>
+                      <h6 class="status-h2">Lectura</h6>
+                      <section class="status-section">
+                      <mat-slide-toggle
+                      name="lectura_modulo" 
+                      [(ngModel)]="lectura_modulo"
+                      (change)="onChangeLectura($event)"
+                      color="primary"
+                      >
+                      <div *ngIf="lectura_modulo == 1">Activo</div><div *ngIf="lectura_modulo == 0">Desactivo</div>
+                      </mat-slide-toggle>
+                      </section>
+                    </label>
+                </div>            
+            </div>
+
             </div>
         </div>        
 

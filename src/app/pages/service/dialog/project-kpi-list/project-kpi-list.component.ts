@@ -322,15 +322,18 @@ export class ProjectKpiListComponent implements OnInit {
                     if(some.datos[i]['hora']){
                       this.multi[0].series.push({ name: some.datos[i]['hora'] + ':00:00', value: some.datos[i]['user_count']});
                       this.kpitotal = this.kpitotal + some.datos[i]['user_count'];
+                      this.multi[0].name = "N. Órdenes: " + this.kpitotal;
                     }
                     if(some.datos[i]['fecha']){
                       this.multi[0].series.push({ name: some.datos[i]['fecha'], value: some.datos[i]['user_count']});
                       this.kpitotal = this.kpitotal + some.datos[i]['user_count'];
+                      this.multi[0].name = "N. Órdenes: " + this.kpitotal;
                     }
 
                     if(some.datos[i]['month']){
                       this.multi[0].series.push({ name: some.datos[i]['month'], value: some.datos[i]['user_count']});
                       this.kpitotal = this.kpitotal + some.datos[i]['user_count'];
+                      this.multi[0].name = "N. Órdenes: " + this.kpitotal;
                     }
 
                   }

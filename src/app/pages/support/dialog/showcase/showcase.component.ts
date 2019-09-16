@@ -86,12 +86,12 @@ export class ShowcaseComponent implements OnInit {
     public _cargaImagenes: CargaImagenesService,
     private firebaseAuth: AngularFireAuth,
     public dialogRef: MatDialogRef<ShowcaseComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any    
+    @Inject(MAT_DIALOG_DATA) public data: any,
     ) {
       this.identity = this._userService.getIdentity();
       this.proyectos = this._userService.getProyectos();
       this.token = this._userService.getToken();
-      this.supportcase = this.supportcase + '/' + this.identity.country + '/cases';
+      this.supportcase = this.supportcase + '/' + this.data.pais + '/cases';
       this.page = 1;
       this.pageSize = 2;
 
@@ -131,9 +131,9 @@ export class ShowcaseComponent implements OnInit {
           this.arrayEtiquetadosDefault = [];
           this.datacase = res.data();
           const docData = res.data();
-          //console.log(docData.etiquetados);
-          //console.log(this.datacase);
-          docData.etiquetados = this.getUserInfo(docData.etiquetados);
+          // console.log(docData.etiquetados);
+          // console.log(this.datacase);
+          // docData.etiquetados = this.getUserInfo(docData.etiquetados);
           this.collectionJoin(Observable.of(docData));
           // Do something with doc data
          } else {
@@ -143,14 +143,14 @@ export class ShowcaseComponent implements OnInit {
       }
     );
 
-    this._afs.doc('countries/' + this.identity.country + '/departments/' + this.data.depto_id).get()
+    this._afs.doc('countries/' + this.data.pais + '/departments/' + this.data.depto_id).get()
       .subscribe(res => {
         if (res.exists) {
           this.arrayResponsables = [];
           // res.data();
           // console.log(res.data());
           if (res.data().admins && res.data().admins.length > 0) {
-            //console.log(res.data().admins);
+            // console.log(res.data().admins);
             this.arrayResponsables = this.getUserResponsables(res.data().admins);
           }
          } else {
@@ -217,7 +217,6 @@ export class ShowcaseComponent implements OnInit {
 
   }
 
-
   onChangeToggle(ob: MatSlideToggleChange) {
     // console.log(ob.checked);
     this.checkedToggle = ob.checked;
@@ -249,7 +248,6 @@ export class ShowcaseComponent implements OnInit {
         )
       );
     }
-
 
     this.arrayEtiquetadosDefault = this.arrayEtiquetados;
     this.checkedToggle = false;
@@ -304,14 +302,13 @@ export class ShowcaseComponent implements OnInit {
       this._afs.doc('users/' + to[ii]).get()
       .subscribe(res => {
         if (res.exists) {
-          //console.log(res.data());
+          // console.log(res.data());
           arr.push(res.data());
          }
       });
     }
     return arr;
   }
-
 
   getUserInfo(to): Array<any> {
 
@@ -330,7 +327,7 @@ export class ShowcaseComponent implements OnInit {
   }
 
   documentJoin(document): Observable<any> {
-    //console.log(document);
+    //  console.log(document);
     return document.pipe(
       docJoin(this._afs, { id: 'users'},  2, '', '', 'etiquetado', '', ''),
     );
@@ -373,7 +370,6 @@ export class ShowcaseComponent implements OnInit {
     );
 
   }
-
 
   collectionJoin(document): Observable<any> {
     this.isLoading = false;
@@ -418,7 +414,6 @@ export class ShowcaseComponent implements OnInit {
 
   addComentario() {
 
-
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     this.CARPETA_ARCHIVOS = this.supportcase + '/';
@@ -439,27 +434,27 @@ export class ShowcaseComponent implements OnInit {
 
       const comment = that.formComentar.value.comentario;
 
-        if (that.arrayEtiquetadosDefault && that.arrayEtiquetadosDefault.length > 0 && docRef){
+        if (that.arrayEtiquetadosDefault && that.arrayEtiquetadosDefault.length > 0 && docRef) {
           that.arrayEtiquetadosDefault.forEach(res => {
             that.sendCdfUser(res, docRef, 'Comentario ', comment);
           });
         }
 
-        if(that.arrayResponsables && that.arrayResponsables.length > 0 && docRef){
+        if (that.arrayResponsables && that.arrayResponsables.length > 0 && docRef) {
           that.arrayResponsables.forEach(res => {
             that.sendCdfUser(res, docRef, 'Comentario ', comment);
           });
         }
 
-        if(that.datacase){
+        if (that.datacase) {
 
           that._afs.doc('users/' + that.datacase.create_to).get().subscribe(
             res => {
               if (res.exists) {
                   that.sendCdfUserOrigin(res.data(), docRef, 'Comentario ', comment);
-               } 
+               }
             }
-          );          
+          );
 
         }
 
@@ -546,14 +541,14 @@ export class ShowcaseComponent implements OnInit {
         return;
       }
 
-      //console.log(element);
+      // console.log(element);
       // console.log(data);
       // tslint:disable-next-line:max-line-length
       const body = 'Comentario solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
       const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-  
+
       if (data && this.userFirebase.uid) {
-  
+
           const notification = {
             userId: this.userFirebase.uid,
             userIdTo: data.uid,
@@ -565,7 +560,7 @@ export class ShowcaseComponent implements OnInit {
             descriptionidUx: 'cases',
             routeidUx: `${this.supportcase}`
           };
-  
+
           this._cdf.fcmsend(this.token.token, notification).subscribe(
             response => {
               if (!response) {
@@ -579,7 +574,7 @@ export class ShowcaseComponent implements OnInit {
               console.log(<any>error);
               }
             );
-  
+
 
             this._cdf.httpEmailCommentToSupport(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario solicitud #' + this.datacase.ncase, created, body).subscribe(
               response => {
@@ -596,26 +591,23 @@ export class ShowcaseComponent implements OnInit {
               );
 
         }
-  
-      }    
 
-
+      }
 
       sendCdfUserOrigin(data, element, content, comment) {
         if (!data) {
           return;
         }
-  
-        //console.log(element);
+        // console.log(element);
         // console.log(data);
         // tslint:disable-next-line:max-line-length
         const body =  'Solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', con Descripción: ' + this.datacase.description + ' y Prioridad: ' + this.datacase.important;
         const bodycomment = 'Comentario solicitud #' + this.datacase.ncase + ', y Comentario: ' + comment ;
         const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-    
+
         if (data && this.userFirebase.uid) {
-    
-            const notification = {
+
+          const notification = {
               userId: this.userFirebase.uid,
               userIdTo: data.uid,
               title: 'Comentario solicitud',
@@ -626,7 +618,7 @@ export class ShowcaseComponent implements OnInit {
               descriptionidUx: 'cases',
               routeidUx: `${this.supportcase}`
             };
-    
+
             this._cdf.fcmsend(this.token.token, notification).subscribe(
               response => {
                 if (!response) {
@@ -640,8 +632,6 @@ export class ShowcaseComponent implements OnInit {
                 console.log(<any>error);
                 }
               );
-    
-
 
               this._cdf.httpEmailCommentFromOrigin(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario solicitud #' + this.datacase.ncase, this.datacase.create_at, created, body, bodycomment).subscribe(
                 response => {
@@ -656,11 +646,9 @@ export class ShowcaseComponent implements OnInit {
                   // console.log(<any>error);
                   }
                 );
-
-
           }
-    
-        }          
+
+        }
 
 }
 

@@ -33,31 +33,27 @@ export class ShowComponent implements OnInit, OnDestroy {
 
 	public title: string;
   public identity: any;
-  public order: any;
+  public order: Order[] = [];
+  public show:boolean = false;
+  public sign:boolean = false;
   public token: any;
 
-  audioRows = [];
   atributo= new Array();  
   atributofirma: AtributoFirma[] = [];
-  counter:number = 0;
+  counter;
   count = 0;
   dataColumns = new Array();
   displayedColumns: string[] = ['id', 'valor'];
   imageToShow = new Array();
   imageRows = new Array();
   isImageLoading: boolean = false;
-  isAudioLoading: boolean = false;
   loading: boolean;
-  listaudio = [];
   listimageorder = new Array();
   listfirmaimageorder = new Array();
   listfirmauser = new Array();
   orderatributo= new Array();
   orderatributofirma: OrderAtributoFirma[] = [];
   rotationAmount:number = 0;
-  show:boolean = false;
-  sign:boolean = false;
-  showaudio:boolean = false;
   usercreate:User[];
   userupdate:User[];
   
@@ -88,15 +84,20 @@ export class ShowComponent implements OnInit, OnDestroy {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this._userService.handleAuthentication(this.identity, this.token);
+
+
+    if(this.token.token != null){
+      //console.log(this.data);
+      //console.log(this.data['order_id']);
+      //console.log(this.data['service_id']);
+       this.loadData();    
+       //this.getListImage();
+    }    
   }
 
 
   ngOnInit() {
     //console.log(this.data);
-    if(this.data.order_id > 0){
-      this.loadData();
-    }
-    
   }
 
   ngOnDestroy() {
@@ -109,9 +110,6 @@ export class ShowComponent implements OnInit, OnDestroy {
 
 
   public loadData(){
-      if(!this.token.token){
-        return;
-      }
       this.loading = true;
       this.order = null; 
       this.subscription = this._orderService.getShowOrderService(this.token.token, this.data['service_id'], this.data['order_id']).subscribe(
@@ -120,7 +118,6 @@ export class ShowComponent implements OnInit, OnDestroy {
         return;
          }       
           this.order = response.datos;
-          //console.log(this.order);
         if(this.order.length > 0){
               this.atributo = response.atributo;
               this.orderatributo = response.orderatributo;
@@ -183,8 +180,9 @@ export class ShowComponent implements OnInit, OnDestroy {
           error => {
           console.log(<any>error);
           }   
-      );      
-  }
+      );
+      
+}
 
 
   public getFirmaImage(datafirma: any){
@@ -205,45 +203,10 @@ export class ShowComponent implements OnInit, OnDestroy {
           console.log(<any>error);
           }   
       );
-  }
-
-  public getListAudio(){
-
-    if(!this.data.order_id || this.data.order_id <= 0){
-      return;
-    }
-
-    this.isAudioLoading = true;
-    this.subscription = this._orderService.getListAudioOrder(this.token.token, this.data.order_id).subscribe(
-    response => {
-        if(!response){
-          this.isAudioLoading = false;
-          return;        
-        }
-        if(response.status == 'success'){ 
-          //console.log(response);
-          this.listaudio = response.datos;
-          if(this.listaudio.length > 0){
-            this.audioRows = this.getSplitArray(this.listaudio, 2);
-            //console.log(this.audioRows);
-          }
-          this.isAudioLoading = false;
-        }
-    },
-        error => {
-        this.isAudioLoading = false;
-        console.log(<any>error);
-        }
-    );
-  }
-
+}
 
 
   public getListImage(){     
-      if(!this.data.order_id || this.data.order_id <= 0){
-        return;
-      }
-
       this.isImageLoading = true;
       this.subscription = this._orderService.getListImageOrder(this.token.token, this.data['order_id']).subscribe(
       response => {        
@@ -254,7 +217,7 @@ export class ShowComponent implements OnInit, OnDestroy {
           if(response.status == 'success'){ 
             this.listimageorder = response.datos;
             if(this.listimageorder.length>0){
-              this.imageRows = this.getSplitArray(this.listimageorder, 2);
+              this.getSplitArray(this.listimageorder, 2);
             }
             this.counter = this.listimageorder.length;
           }
@@ -265,6 +228,7 @@ export class ShowComponent implements OnInit, OnDestroy {
           console.log(<any>error);
           }   
       );
+
   }
 
 
@@ -291,8 +255,7 @@ export class ShowComponent implements OnInit, OnDestroy {
             }
             rowsArray[i] = columnsArray;
         }
-        return rowsArray;
-        //this.imageRows = rowsArray
+        this.imageRows = rowsArray
         
         //return rowsArray;
         //console.log(this.imageRows)
@@ -377,14 +340,8 @@ export class ShowComponent implements OnInit, OnDestroy {
     this.show = !this.show;
     if(this.show){
       this.getListImage();
-    }    
-  }  
-
-  toggleaudio() {
-    this.showaudio = !this.showaudio;
-    if(this.showaudio){
-      this.getListAudio();
-    }    
+    }
+    
   }  
 
 

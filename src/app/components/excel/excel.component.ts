@@ -169,6 +169,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     this.getInspectores();
     */
 
+
+
   }
 
 
@@ -376,6 +378,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             let assigned_to: Number = 0;
             let required_date: String = '' + that.arrayCarga[ii]['required_date'];
             let observation: String = '' + that.arrayCarga[ii]['observation'];
+            let lectura: string = '' + that.arrayCarga[ii]['lectura'];
 
             // Validar campos
 
@@ -507,6 +510,26 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               transformador = '';
             } else {
               transformador =  transformador.trim();
+            }
+
+            if (lectura === 'undefined' || lectura.trim().length === 0) {
+              lectura = '0';
+            } else {
+              // tslint:disable-next-line:radix
+              if (isNaN(parseInt(lectura))) {
+                banderaJson = true;
+                concatError = concatError + 'Lectura invalida; ';
+              } else {
+                    // tslint:disable-next-line:radix
+                    if (parseInt(lectura) % 1 === 0) {
+                      // tslint:disable-next-line:radix
+                      lectura = '' + parseInt(lectura);
+                    } else {
+                      console.log('Es un numero decimal');
+                      banderaJson = true;
+                      concatError = concatError + 'Lectura invalida; ';
+                    }
+              }
             }
 
             if (leido_por === 'undefined' || leido_por.trim().length === 0) {
@@ -708,6 +731,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'medidor': medidor,
               'modelo_medidor': modelo_medidor,
               'transformador': transformador,
+              'lectura': lectura,
               'leido_por': leido_por,
               'observacion': observacion,
               'region': region,

@@ -8,7 +8,7 @@ import { EditUserComponent } from '../dialog/edituser/edituser.component';
 
 
 //SERVICES
-import { OrderserviceService, UserService } from 'src/app/services/service.index';
+import { KpiService, OrderserviceService, UserService } from 'src/app/services/service.index';
 import { ShowComponent } from 'src/app/components/dialog/show/show.component';
 
 
@@ -23,6 +23,7 @@ export class UsuariosDetailComponent implements OnInit,  OnDestroy {
   isLoading:boolean = true;
   isLoadingResults:boolean = true;
   isLoadingResultsKpi: boolean = true;
+  isLoadingResultsKpiGauge: boolean = true;
   pageSize: number = 5;
   sub: any;
   subscription: Subscription;
@@ -32,25 +33,52 @@ export class UsuariosDetailComponent implements OnInit,  OnDestroy {
 
   // options pie chart
   kpidata = [];
+  kpidatagauge =  [
+    {
+      name: "",
+      value: 0
+    },
+    {
+      name: "",
+      value: 0
+    }      
+  ];
+
+
   kpitotal: number = 0;
+  kpitotalgauge: number = 0;
+  kpitotalgaugenoupdate:number = 0;
   kpisearchoptions = [
     {value: 'day', name: 'Día'},
     {value: 'week', name: 'Semana'},
     {value: 'month', name: 'Mes Actual'},
     {value: 'year', name: 'Año Actual'},
   ];
-  kpiselectedoption = '';
+  kpisearchoptionsgauge = [
+    {value: 'daygauge', name: 'Día'},
+    {value: 'weekgauge', name: 'Semana'},
+    {value: 'monthgauge', name: 'Mes Actual'},
+    {value: 'yeargauge', name: 'Año Actual'},
+  ];
+  kpiselectedoption:string = '';
+  kpiselectedoptiongauge:string = '';
   showLegend = true;
   showLabels = false;
   explodeSlices = false;
   doughnut = false;
   view: any[] = [400, 350];
+  viewgauge: any[] = [400, 350];
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA', '#51a351', '#de473c']
   };
 
+  colorSchemeGauge = {
+    domain: ['#5AA454', '#A10A28', '#C7B42C']
+  };
+
 
   constructor(
+    private _kpiService: KpiService,
     private _route: ActivatedRoute,
     private _orderService: OrderserviceService,
     public _userService: UserService,
@@ -67,6 +95,7 @@ export class UsuariosDetailComponent implements OnInit,  OnDestroy {
   ngOnInit() {
     if(this.id && this.id > 0){
       this.kpiselectedoption = 'day';
+      this.kpiselectedoptiongauge = 'daygauge';
       this.isLoading = true;
       this.subscription = this._userService.getUserShowInfo(this.token.token, this.id).subscribe(
         response => {
@@ -79,6 +108,7 @@ export class UsuariosDetailComponent implements OnInit,  OnDestroy {
             this.user = response.data[0];
             this.loaduserordenes(this.id);
             this.loaduserordeneskpi(this.id);
+            this.loaduserordeneskpigauge(this.id, this.kpiselectedoptiongauge);
             //console.log(this.user);
           }
         },
@@ -130,7 +160,7 @@ export class UsuariosDetailComponent implements OnInit,  OnDestroy {
       this.isLoadingResultsKpi = true;
       if(userid > 0 ){ 
           this.kpidata = [];            
-          this._orderService.gettUserOrdenesKpi(this.token.token, userid, this.kpiselectedoption).then(
+          this._kpiService.getUserOrdenesKpi(this.token.token, userid, this.kpiselectedoption).then(
             (res: any) => 
             {
               res.subscribe(
@@ -164,6 +194,63 @@ export class UsuariosDetailComponent implements OnInit,  OnDestroy {
             })      
           }
       }
+  
+
+
+      public loaduserordeneskpigauge(userid:number, termino:string){
+        this.isLoadingResultsKpiGauge = true;
+        if(userid > 0 ){ 
+            this.kpidatagauge[0].value = 0;
+            this.kpidatagauge[1].value = 0;
+            this.kpitotalgaugenoupdate = 0;
+            this.kpitotalgauge = 0;
+            //console.log(this.kpiselectedoptiongauge);
+            this._kpiService.getUserOrdenesKpi(this.token.token, userid, termino).then(
+              (res: any) => 
+              {
+                res.subscribe(
+                  (some:any) => 
+                  {
+                    if(some && some.datos && some.datos.length > 0){
+                        for (let i = 0; i < some.datos.length; i++) {              
+                          if(some.datos[i]['servicetype']){
+                            //this.kpidatagauge[0].series.push({ name: some.datos[i]['servicetype'], value: some.datos[i]['user_count']});
+                            this.kpitotalgauge = this.kpitotalgauge + some.datos[i]['user_count'];
+                            this.kpidatagauge[0].value = this.kpitotalgauge;
+                            this.kpidatagauge[0].name = "OT Asignadas: " + this.kpitotalgauge;
+                          }
+                        }
+                      this.isLoadingResultsKpiGauge = false;
+                    }else{
+                      this.isLoadingResultsKpiGauge = false;
+                    }
+
+                    if(some && some.datosnoupdate && some.datosnoupdate.length > 0){
+                      for (let i = 0; i < some.datosnoupdate.length; i++) {
+                        //this.kpidatagauge[1].series.push({ name: some.datosnoupdate[i]['servicetype'], value: some.datosnoupdate[i]['user_count']});
+                        this.kpitotalgaugenoupdate = this.kpitotalgaugenoupdate + some.datosnoupdate[i]['user_count'];
+                        this.kpidatagauge[1].value = this.kpitotalgaugenoupdate;
+                        this.kpidatagauge[1].name = "Editadas: " + this.kpitotalgaugenoupdate;
+                      }
+                    }else{
+                      this.kpidatagauge[1].name = "Editadas: " + this.kpitotalgaugenoupdate;
+                      this.isLoadingResultsKpiGauge = false;
+                    }
+                    
+                    if(this.kpidatagauge[0].value > 0){
+                      //console.log(this.kpidatagauge);
+                    }
+                  },
+                  (error:any) => { 
+                  this.kpidatagauge[0].value = 0;
+                  this.kpidatagauge[1].value = 0;        
+                  this.isLoadingResultsKpiGauge = false;
+                  console.log(<any>error);
+                  }  
+                  )
+              })      
+            }
+        }
   
 
     public loaduserordenesmore(userid:number, limit:number){
@@ -202,7 +289,7 @@ export class UsuariosDetailComponent implements OnInit,  OnDestroy {
       if(this.id > 0 ){ 
           this.kpitotal = 0;
           this.kpidata = [];            
-          this._orderService.gettUserOrdenesKpi(this.token.token, this.id, event.value).then(
+          this._kpiService.getUserOrdenesKpi(this.token.token, this.id, event.value).then(
             (res: any) => 
             {
               res.subscribe(
@@ -235,6 +322,10 @@ export class UsuariosDetailComponent implements OnInit,  OnDestroy {
                 )
             })      
           }
+    }
+
+    selectChangeKpiGauge(event:any){
+      this.loaduserordeneskpigauge(this.id, this.kpiselectedoptiongauge);
     }
 
     showOrder(order:any) {

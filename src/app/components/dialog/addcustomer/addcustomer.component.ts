@@ -86,7 +86,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
     this.title = "Agregar Cliente.";
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.customer = new Customer('','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');        
+    this.customer = new Customer('','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');        
     this.id = this.data['service_id'];    
   }
 

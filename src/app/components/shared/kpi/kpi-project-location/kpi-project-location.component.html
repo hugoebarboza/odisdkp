@@ -1,0 +1,260 @@
+<div class="row" *ngIf="identity">
+    <div class="col">
+        <div class=" jfCYPT">
+            <div class=" jfCYPT">
+                <div class=" didcdr" data-test-selector="profile-worked-with">
+                    <div class=" iDwfcE" >
+                        <div>
+                            <div class=" dIOqge" >
+                                    <!------------------------------------------------------------- Órdenes por Ubicación. --------------------------------------------------->
+                                    <div class=" jmuLsE" *ngIf="project && project.project_type == 0">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Órdenes de Trabajo vs Ubicación (Por Fecha de Edición).
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+            
+                                        <div class=" pUmbZ">
+
+                                            <!-------------SPACE---------------->
+                                            <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <!---------------------------------->
+                                            <div class="container-fluid" *ngIf="isLoading">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="!isLoading">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-4" align="left">
+                                                        <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoption">
+                                                            <ng-select
+                                                            [items]="kpisearchoptions"
+                                                            [clearable]="false"
+                                                            bindLabel="name"
+                                                            bindValue="value"
+                                                            [(ngModel)]="kpiselectedoption"
+                                                            (change)="selectChangeKpi($event)"
+                                                            class="width-70percentage">
+                                                            </ng-select>
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-4">                                            
+                                                        </div>
+                                                        <div class="col-4" align="right">
+                                                        <div class=" jNlJODT" >Total: <span>{{kpitotal | number}}</span>
+                                                        </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="container-fluid" *ngIf="serviceestatus && serviceestatus.length > 0 && kpiselectstatus && kpiselectstatus > 0 ">
+                                                    <div class="row" >
+                                                        <div class="col-4" align="left">
+                                                            <div class="input-group input-group-sm mb-3" >
+                                                                <ng-select
+                                                                    [items]="serviceestatus"
+                                                                    [clearable]="false"
+                                                                    bindLabel="name"
+                                                                    bindValue="id"
+                                                                    [(ngModel)]="kpiselectstatus"
+                                                                    (change)="selectChangeKpiStatus($event)"
+                                                                    class="width-70percentage">
+                                                                </ng-select>
+                                                            </div>
+                                                        </div>
+        
+                                                        <div class="col-4">                                            
+                                                        </div>                                                
+                                            
+                                                        <div class="col-4">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row justify-content-center align-items-center" align="center">
+                                                    <div class="col" *ngIf="kpidata && kpidata.length > 0 ">
+                                                        <div class="p-2">
+                                                        <div class="table-responsive">
+                                                                <table class="table">
+                                                                    <thead class="thead-light">
+                                                                        <tr>
+                                                                        <th scope="col">Región/Comuna</th>
+                                                                        <th scope="col"># OT</th>
+                                                                        <th scope="col">% Total</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let k of kpidata | keys;">
+                                                                        <th scope="row">{{ kpidata[k].region }} / {{ kpidata[k].comuna }}</th>
+                                                                        <td>{{ kpidata[k].produccion | number}} </td>
+                                                                        <td>{{ kpidata[k].porcentaje | number}} %</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>                                                            
+                                                        </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-sm" *ngIf="kpidata && kpidata.length == 0">
+                                                        <div class="row d-flex justify-content-center">
+                                                            Sin Información
+                                                        </div>    
+                                                    </div>                
+                                                </div>                                                
+            
+                                            </div>                                        
+    
+
+                                        </div>
+                                    </div>
+                                    <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+
+
+                                    <!------------------------------------------------------------- Órdenes por Inspector. --------------------------------------------------->
+                                    <div class=" jmuLsE">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Órdenes de Trabajo vs Usuario (Por Fecha de Edición).
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                        <div class=" pUmbZ">
+
+                                            <!-------------SPACE---------------->
+                                            <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <!---------------------------------->
+                                            <div class="container-fluid" *ngIf="isLoadingKpiUser">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiUser" ></mat-spinner>
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="!isLoadingKpiUser">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-4" align="left">
+                                                        <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptionsuser && kpiselectedoptionuser">
+                                                            <ng-select
+                                                            [items]="kpisearchoptionsuser"
+                                                            [clearable]="false"
+                                                            bindLabel="name"
+                                                            bindValue="value"
+                                                            [(ngModel)]="kpiselectedoptionuser"
+                                                            (change)="selectChangeKpiUser($event)"
+                                                            class="width-70percentage">
+                                                            </ng-select>
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-4">                                            
+                                                        </div>
+                                                        <div class="col-4" align="right">
+                                                        <div class=" jNlJODT" >Total: <span>{{kpitotaluser | number}}</span>
+                                                        </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="container-fluid" *ngIf="serviceestatus && serviceestatus.length > 0 && kpiselectstatususer && kpiselectstatususer > 0 ">
+                                                    <div class="row" >
+                                                        <div class="col-4" align="left">
+                                                            <div class="input-group input-group-sm mb-3" >
+                                                                <ng-select
+                                                                    [items]="serviceestatus"
+                                                                    [clearable]="false"
+                                                                    bindLabel="name"
+                                                                    bindValue="id"
+                                                                    [(ngModel)]="kpiselectstatususer"
+                                                                    (change)="selectChangeKpiStatusUser($event)"
+                                                                    class="width-70percentage">
+                                                                </ng-select>
+                                                            </div>
+                                                        </div>
+        
+                                                        <div class="col-4">                                            
+                                                        </div>                                                
+                                            
+                                                        <div class="col-4">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row justify-content-center align-items-center" align="center">
+                                                    <div class="col" *ngIf="kpidatauser && kpidatauser.length > 0 ">
+                                                        <div class="p-2">
+                                                        <div class="table-responsive">
+                                                                <table class="table">
+                                                                    <thead class="thead-light">
+                                                                        <tr>
+                                                                        <th scope="col">Usuario</th>
+                                                                        <th scope="col"># OT</th>
+                                                                        <th scope="col">% Total</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let k of kpidatauser | keys;">
+                                                                        <th scope="row">{{ kpidatauser[k].name }} {{ kpidatauser[k].surname }}</th>
+                                                                        <td>{{ kpidatauser[k].produccion | number}} </td>
+                                                                        <td>{{ kpidatauser[k].porcentaje | number}} %</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>                                                            
+                                                        </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-sm" *ngIf="kpidatauser && kpidatauser.length == 0">
+                                                        <div class="row d-flex justify-content-center">
+                                                            Sin Información
+                                                        </div>    
+                                                    </div>                
+                                                </div>                                                
+            
+                                            </div>                                                
+                                        </div>
+    
+
+
+                                        
+                                    </div>
+                                    <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------->    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+        

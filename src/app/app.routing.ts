@@ -78,7 +78,13 @@ const appRoute: Routes = [
 		canLoad: [ LoginGuardGuard ],
 		loadChildren: './pages/notification/notification.module#NotificationModule',
 		data: { preload: true, delay: false }
-  	},
+	},
+	{
+		path: 'payments',
+		canLoad: [ LoginGuardGuard ],
+		loadChildren: './pages/payments/payments.module#PaymentsModule',
+		data: { preload: true, delay: false }
+	},	  
 	{
 		path: 'profile',
 		canLoad: [ LoginGuardGuard ],

@@ -14,7 +14,7 @@ const moment = _moment;
   templateUrl: './kpi.component.html',
   styleUrls: ['./kpi.component.css']
 })
-export class KpiComponent implements OnInit , OnChanges {
+export class KpiComponent implements OnInit, OnChanges {
 
   @Input() id: number;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -232,7 +232,7 @@ export class KpiComponent implements OnInit , OnChanges {
 
                         this.kpiyear[i] = servicetypekpi;
                         if ( this.kpiyear.length === this.datatype.length) {
-                          // console.log(this.kpiyear);
+                           //console.log(this.kpiyear);
                           this.kpiTableData = new MatTableDataSource(this.kpiyear);
                           this.kpiTableData.paginator = this.paginator;
                           this.kpiTableData.sort = this.sort;

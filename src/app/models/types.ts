@@ -78,7 +78,8 @@ export class Customer  {
 	public id_comuna:any,
 
 	public medidor:string,
-	public modelo_medidor:string,	
+	public modelo_medidor:string,
+	public lectura:string,
 	public id_tarifa:any,
 	public id_constante:any,
 	public id_giro:any,
@@ -261,6 +262,10 @@ export class Modelo  {
 	){}
 }
 
+export interface Month {
+	value: number;
+	name: string;
+}
 
 
 export class Order  {

@@ -128,6 +128,7 @@ export class EditcustomerComponent implements OnInit {
                    this.data['longitud'] = this.customer[i]['longitud'];
                    this.data['medidor'] = this.customer[i]['medidor'];
                    this.data['modelo_medidor'] = this.customer[i]['modelo_medidor'];
+                   this.data['lectura'] = this.customer[i]['lectura'];
                    this.data['id_tarifa'] = this.customer[i]['id_tarifa'];
                    this.data['id_constante'] = this.customer[i]['id_constante'];
                    this.data['id_giro'] = this.customer[i]['id_giro'];

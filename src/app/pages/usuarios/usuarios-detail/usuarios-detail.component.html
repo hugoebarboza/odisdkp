@@ -466,7 +466,7 @@
                         <div class=" eCdVoi">
                             <div class=" jNlJOD">
                                 <span>
-                                    Indicadores (Órdenes Editadas)
+                                    Órdenes de Trabajo Editadas (Por Fecha de Edición).
                                 </span>
                             </div>
                         </div>
@@ -478,7 +478,7 @@
                                     </div>
                                 </div>
                         
-                                <div class=" dIOqge" *ngIf="!isLoadingResultsKpi && kpidata && kpidata.length > 0">
+                                <div class=" dIOqge" *ngIf="!isLoadingResultsKpi && kpidata">
                                     <div class=" jmuLsE">
                                             <div class=" pUmbZ">
                                                 <div class="container-fluid">
@@ -507,11 +507,11 @@
                                                         
                                                         </div>
                                                         <div class="col-sm" align="right">
-                                                            <div class=" jNlJODT" *ngIf="kpitotal">Total: <span>{{kpitotal}}</span></div> 
+                                                            <div class=" jNlJODT" *ngIf="kpitotal">Total: <span>{{kpitotal | number}}</span></div> 
                                                         </div>
                                                     </div>
                                                 </div>                                                
-                                                <div class="row justify-content-center align-items-center" align="center">
+                                                <div class="row justify-content-center align-items-center" align="center" *ngIf="!isLoadingResultsKpi && kpidata && kpidata.length > 0">
                                                     <div class="col" >
                                                         <ngx-charts-pie-chart
                                                         [view]="view"
@@ -526,6 +526,11 @@
                                                         </ngx-charts-pie-chart>
                                                     </div>
                                                 </div>
+                                                <div class="row justify-content-center align-items-center" align="center" *ngIf="!isLoadingResultsKpi && kpidata && kpidata.length == 0">
+                                                        <div class="col" >
+                                                            Sin Información
+                                                        </div>
+                                                </div>
                                                 <div class="container-fluid">
                                                     <div class="row">
                                                         <div class="col-sm">
@@ -537,13 +542,105 @@
                                     </div>                      
                                 </div>
                                 <div class=" dIOqge" *ngIf="!isLoadingResultsKpi && kpidata && kpidata.length == 0">
-                                    Sin Información
+                                    
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>            
     </div>
+
+    <div class=" jfCYPT">
+        <div class=" jfCYPT">
+                <div class=" didcdr" data-test-selector="profile-worked-with">
+                    <div class=" eCdVoi">
+                        <div class=" jNlJOD">
+                            <span>
+                                Órdenes de Trabajo Asignadas vs Editadas (Por Fecha de Creación).
+                            </span>
+                        </div>
+                    </div>
+                    <div class=" iDwfcE" >
+                        <div>
+                            <div class="container-fluid" *ngIf="isLoadingResultsKpiGauge">
+                                <div class="row d-flex justify-content-center">
+                                    <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResultsKpiGauge" ></mat-spinner>
+                                </div>
+                            </div>
+                    
+                            <div class=" dIOqge" *ngIf="!isLoadingResultsKpiGauge && kpidatagauge">
+                                <div class=" jmuLsE">
+                                        <div class=" pUmbZ">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm" align="left">
+                                                    <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptionsgauge && kpiselectedoptiongauge">
+                                                        <ng-select
+                                                            [items]="kpisearchoptionsgauge"
+                                                            [clearable]="false"
+                                                            bindLabel="name"
+                                                            bindValue="value"
+                                                            [(ngModel)]="kpiselectedoptiongauge"
+                                                            (change)="selectChangeKpiGauge($event)"
+                                                            class="width-40percentage">
+                                                        </ng-select>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-sm">
+                                                    
+                                                    </div>
+                                                    <div class="col-sm" align="right">
+                                                        <div class=" jNlJODT" >Total: <span>{{kpitotalgauge + kpitotalgaugenoupdate | number}}</span></div> 
+                                                    </div>
+                                                </div>
+                                            </div>                                                
+                                            <div class="row justify-content-center align-items-center" align="center" *ngIf="kpidatagauge && kpidatagauge[0].value > 0 && kpitotalgauge && kpitotalgauge > 0">
+                                                <div class="col" >
+                                                    <ngx-charts-gauge
+                                                    [view]="viewgauge"
+                                                    [scheme]="colorSchemeGauge"
+                                                    [results]="kpidatagauge"
+                                                    [min]="0"
+                                                    [max]="kpitotalgauge"
+                                                    [angleSpan]="240"
+                                                    [startAngle]="-120"
+                                                    [legend]="showLegend"
+                                                    [legendTitle]="['Leyenda']"
+                                                    [legendPosition]="['right']"
+                                                    [units]="'Órdenes'"
+                                                    [bigSegments]="10"
+                                                    [smallSegments]="5">
+                                                    </ngx-charts-gauge>
+                                                </div>
+                                            </div>
+                                            <div class="row justify-content-center align-items-center" align="center" *ngIf="kpidatagauge && kpidatagauge[0].value == 0">
+                                                    Sin Información
+                                            </div>
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>            
+                                        </div>
+                                </div>                      
+                            </div>
+                            <div class=" dIOqge" *ngIf="!isLoadingResultsKpiGauge && kpidatagauge && kpidatagauge[0].value == 0 ">
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>            
+    </div>    
      
     <div class=" jfCYPT">
         <div class=" didcdr" data-test-selector="profile-worked-with">

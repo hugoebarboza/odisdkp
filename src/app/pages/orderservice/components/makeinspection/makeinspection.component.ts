@@ -183,7 +183,7 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
 
   getList(term: string): Observable<any> {
 
-    if (term.length > 0) {
+    if (term && term.length > 0) {
        //console.log(term);
       return this._customer.getCustomer(this.token.token, term, this.project_id).map((res: any) => {
         if (!res) {

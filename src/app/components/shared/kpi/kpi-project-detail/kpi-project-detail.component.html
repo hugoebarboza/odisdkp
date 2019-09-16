@@ -4,13 +4,16 @@
             <div class=" jfCYPT">
               <div class=" didcdr" data-test-selector="profile-worked-with">
                 <div class=" iDwfcE" >
+
+                    <!----
                     <div class=" eCdVoi">
                         <div class=" jNlJOD">
                             <span>
-                                Órdenes Trabajo.
+                                Órdenes de Trabajo.
                             </span>
                         </div>
-                    </div>    
+                    </div>
+                    -->    
                     <div>
                         <div class=" dIOqge" >
                             <!------------------------------------------------------------- Órdenes Editadas por Servicio.------------------------------------------------------------------------->
@@ -98,6 +101,16 @@
 
                             <!---------------------------------------------------------- Órdenes Editadas por Tipo de Servicio (PIE). ------------------------------------------------------------->
                             <div class="jmuLsE">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="row d-flex justify-content-center">        
+                                        <span>
+                                            Órdenes de Trabajo (Por Fecha de Edición).
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+    
                                 <div class=" pUmbZ">
                                     <!-------------SPACE---------------->
                                     <div class="container-fluid" >
@@ -209,6 +222,32 @@
                                             </div>
                                         </div>    
                                     </div>
+                                    <div class="container-fluid" >
+                                        <div class="row">
+                                            <div class="col-4">
+                                            <br>
+                                            </div>
+                                            <div class="col-4">
+
+                                            </div>    
+                                            <div class="col-4">
+
+                                            </div>        
+                                        </div>
+                                    </div>
+                                    <div class="container-fluid" >
+                                        <div class="row">
+                                            <div class="col-4">
+                                            <br>
+                                            </div>
+                                            <div class="col-4">
+
+                                            </div>    
+                                            <div class="col-4">
+
+                                            </div>        
+                                        </div>
+                                    </div>                                    
 
                                     <div class="row justify-content-center align-items-center" align="center">
                                         <div class="col" *ngIf="kpidataST && kpidataST.length > 0 ">
@@ -219,17 +258,12 @@
                                             [explodeSlices]="explodeSlices"
                                             [labels]="showLabels"
                                             [legend]="showLegend"
-                                            [legendTitle]="['Órdenes de Trabajo']"
+                                            [legendTitle]="['Leyenda']"
                                             [legendPosition]="['right']"
                                             [doughnut]="doughnut">
                                             </ngx-charts-pie-chart>
                                         </div>
                                         <div class="col-sm" *ngIf="kpidataST && kpidataST.length == 0">
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
-                                            <br>
                                             <div class="row d-flex justify-content-center">
                                                     Sin Información
                                             </div>    
@@ -254,6 +288,18 @@
 
                             <!---------------------------------------------------------- Órdenes Editadas por Tipo de Servicio (LINE). ------------------------------------------------------------->
                             <div class=" jmuLsE">
+
+
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                                Órdenes de Trabajo (Por Fecha de Edición).
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class=" pUmbZ">
                                         <div class="container-fluid" >
                                             <div class="row">
@@ -391,6 +437,8 @@
                                                 [xAxis]="showXAxis"
                                                 [yAxis]="showYAxis"
                                                 [legend]="showLegendLine"
+                                                [legendTitle]="['Leyenda']"
+                                                [legendPosition]="['right']"    
                                                 [showXAxisLabel]="showXAxisLabel"
                                                 [showYAxisLabel]="showYAxisLabel"
                                                 [xAxisLabel]="xAxisLabel"
@@ -444,6 +492,280 @@
     </div>
 </div>
 
-
+<div class="row" *ngIf="identity">
+<div class="col">
 <br>
+</div>
+</div>
+
+<!------------------------------------------------------------- Órdenes Asignadas vs Órdenes Atendidas por Servicio. --------------------------------------------------->
+<div class="row" *ngIf="identity">
+<div class="col">
+    <div class=" jfCYPT">
+        <div class=" jfCYPT">
+            <div class=" didcdr" data-test-selector="profile-worked-with">
+                <div class=" iDwfcE" >
+                    <div>
+                        <div class=" dIOqge" >
+                                <!------------------------------------------------------------- Órdenes Asignadas vs Órdenes Atendidas por Servicio GAUGE. --------------------------------------------------->
+                                <div class=" jmuLsE">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                            Órdenes de Trabajo Registradas vs Editadas (Por Fecha de Creación).
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>            
+        
+                                    <div class=" pUmbZ">
+                                        
+                                        <!-------------SPACE---------------->
+                                        <div class="container-fluid" >
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>        
+                                        <!---------------------------------->
+                                        <div class="container-fluid" *ngIf="isLoadingResultsKpiGauge">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResultsKpiGauge" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+    
+                                        <div *ngIf="!isLoadingResultsKpiGauge">
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-4" align="left">
+                                                <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptionsgauge && kpiselectedoptiongauge">
+                                                    <ng-select
+                                                    [items]="kpisearchoptionsgauge"
+                                                    [clearable]="false"
+                                                    bindLabel="name"
+                                                    bindValue="value"
+                                                    [(ngModel)]="kpiselectedoptiongauge"
+                                                    (change)="selectChangeKpiGauge($event)"
+                                                    class="width-70percentage">
+                                                    </ng-select>
+                                                </div>
+                                                </div>
+                                                <div class="col-4">                                            
+                                                </div>
+                                                <div class="col-4" align="right">
+                                                    <div class=" jNlJODT" >Total: <span>{{kpitotalgauge + kpitotalgaugeupdate | number}}</span></div> 
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row justify-content-center align-items-center" align="center">
+                                            <div class="col" *ngIf="kpidatagauge && kpidatagauge[0].value > 0 && kpitotalgauge && kpitotalgauge > 0">
+                                                <ngx-charts-gauge
+                                                [view]="viewgauge"
+                                                [scheme]="colorSchemeGauge"
+                                                [results]="kpidatagauge"
+                                                [min]="0"
+                                                [max]="kpitotalgauge"
+                                                [angleSpan]="240"
+                                                [startAngle]="-120"
+                                                [legend]="showLegend"
+                                                [legendTitle]="['Leyenda']"
+                                                [legendPosition]="['right']"
+                                                [units]="'Órdenes'"
+                                                [bigSegments]="10"
+                                                [smallSegments]="5">
+                                                </ngx-charts-gauge>
+                                            </div>
+                                            <div class="col-sm" *ngIf="kpidatagauge && kpidatagauge[0].value == 0">
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <br>
+                                                <div class="row d-flex justify-content-center">
+                                                        Sin Información
+                                                </div>    
+                                            </div>        
+                                        </div>                                     
+                                        </div>
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                                                                
+                                    </div>
+                                </div>
+                                <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+                                <!------------------------------------------------------------- Órdenes Asignadas vs Órdenes Atendidas por Servicio LINE. --------------------------------------------------->
+                                <div class=" jmuLsE">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                                Órdenes de Trabajo Registradas vs Editadas (Por Fecha de Creación).
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>            
+                                    <div class=" pUmbZ">
+                                        <!-------------SPACE---------------->
+                                        <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                        </div>        
+                                        <!---------------------------------->
+                                        <div class="container-fluid" *ngIf="isLoadingResultsKpiLine">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResultsKpiLine" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="!isLoadingResultsKpiLine">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-4" align="left">
+                                                    <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptionsline && kpiselectedoptionline">
+                                                        <ng-select
+                                                        [items]="kpisearchoptionsline"
+                                                        [clearable]="false"
+                                                        bindLabel="name"
+                                                        bindValue="value"
+                                                        [(ngModel)]="kpiselectedoptionline"
+                                                        (change)="selectChangeKpiLine($event)"
+                                                        class="width-70percentage">
+                                                        </ng-select>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-4">                                            
+                                                    </div>
+                                                    <div class="col-4" align="right">
+                                                        <div class=" jNlJODT" >Total: <span>{{kpitotalline | number}}</span></div> 
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+    
+                                            <div class="row justify-content-center align-items-center" align="center">
+                                                <div class="col" *ngIf="allmulti && allmulti[0].series.length > 0 && (kpiselectedoptionline == 'weekline' || kpiselectedoptionline == 'yearline')">
+                                                    <ngx-charts-line-chart
+                                                    (window:resize)="onResize($event)"
+                                                    [view]="viewline"
+                                                    [scheme]="colorSchemeGauge"
+                                                    [results]="allmulti"
+                                                    [gradient]="gradient"
+                                                    [xAxis]="showXAxis"
+                                                    [yAxis]="showYAxis"
+                                                    [legend]="true"
+                                                    [legendTitle]="['Leyenda']"
+                                                    [legendPosition]="['right']"
+                                                    [showXAxisLabel]="showXAxisLabel"
+                                                    [showYAxisLabel]="showYAxisLabel"
+                                                    [xAxisLabel]="xAxisLabel"
+                                                    [yAxisLabel]="yAxisLabel"
+                                                    [autoScale]="autoScale"
+                                                    >
+                                                    </ngx-charts-line-chart>
+                                                </div>
+
+                                                <div class="col" *ngIf="allmulti && allmulti[0].series.length > 0 && (kpiselectedoptionline == 'dayline' || kpiselectedoptionline == 'monthline')">
+                                                    <ngx-charts-bar-vertical
+                                                    (window:resize)="onResize($event)"                                                    
+                                                    [view]="viewline"
+                                                    [scheme]="colorSchemeGauge"
+                                                    [results]="single"
+                                                    [gradient]="gradient"
+                                                    [xAxis]="showXAxis"
+                                                    [yAxis]="showYAxis"
+                                                    [legend]="true"
+                                                    [legendTitle]="['Leyenda']"
+                                                    [legendPosition]="['right']"
+                                                    [showXAxisLabel]="showXAxisLabel"
+                                                    [showYAxisLabel]="showYAxisLabel"
+                                                    [xAxisLabel]="xAxisLabelVertical"
+                                                    [yAxisLabel]="yAxisLabel"
+                                                    >
+                                                    </ngx-charts-bar-vertical>
+                                                </div>
+
+                                                <div class="col-sm" *ngIf="allmulti && allmulti[0].series.length == 0">
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <br>
+                                                    <div class="row d-flex justify-content-center">
+                                                            Sin Información
+                                                    </div>    
+                                                </div>        
+                                            </div>                                                 
+                                        </div>
+
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<!---------------------------------------------------------------------------------------------------------------------------------------------------------------------->
+
+<div class="row" *ngIf="identity">
+<div class="col">
+<br>
+</div>
+</div>
+
+<app-kpi-project-forecast [id]="id" *ngIf="id > 0"></app-kpi-project-forecast>
+
+<div class="row" *ngIf="identity">
+<div class="col">
+<br>
+</div>
+</div>
+
 <app-kpi [id]="id" *ngIf="id > 0 && service && service.kpi > 0"></app-kpi>
+
+<div class="row" *ngIf="identity && service && service.kpi > 0">
+<div class="col">
+<br>
+</div>
+</div>
+        
+<div class="row" *ngIf="identity && !isLoadingResultsKpiST && id > 0">
+    <div class="col">
+        <span>Más Indicadores: </span><input type="checkbox" id="myCheck" (change)="toggle($event)">
+        <div *ngIf="isShow">
+            <app-kpi-project-location [id]="id" *ngIf="id > 0"></app-kpi-project-location>
+        </div>
+    </div>
+</div>

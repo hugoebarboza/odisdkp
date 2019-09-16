@@ -4,7 +4,7 @@
     <div class="bKpvDg">
     </div>
 
-    <div class="col-md-7 offset-md-2">
+    <div class="col-md-8 offset-md-2">
         
         <div class="app">
 
@@ -75,7 +75,17 @@
                 
                     </div>
                     <div class="col-md-4 order-md-last">
-        
+                        <div *ngIf="tagPais$">
+                            <h2 class="jeEmY">País</h2>
+                            <ng-select  [items]="tagPais$ | async"
+                                        [clearable]="false" 
+                                        bindLabel="name"
+                                        bindValue="id"
+                                        (change)="changepais($event.id)"
+                                        class="example-full-width"
+                                        name="tagPais" formControlName="tagPais">
+                            </ng-select>
+                        </div>
                         <div *ngIf="tagImportant$">
                             <h2 class="jeEmY">Nivel de Urgencia</h2>
                             <ng-select  [items]="tagImportant$ | async"
