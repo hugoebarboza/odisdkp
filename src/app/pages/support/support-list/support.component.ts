@@ -70,13 +70,16 @@ export class SupportComponent implements OnInit, OnDestroy  {
 
   myFormRadio: FormGroup;
 
-  supportcase = 'supportcase';
+  supportcase = '';
 
   public casosCollection: AngularFirestoreCollection<any>;
   public casosCollectionPagination: AngularFirestoreCollection<any>;
 
+  public tagPais$: Observable<any[]>;
+  private tagPaisCollection: AngularFirestoreCollection<any>;
+  idPais = null;
   // tslint:disable-next-line:max-line-length
-  //displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'supportstatus', 'important', 'accions'];
+  // displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'supportstatus', 'important', 'accions'];
   displayedColumns: string[] = ['ncase', 'asunto', 'departments', 'supporttype', 'supportcategory', 'users', 'create_at', 'countTime', 'update_at', 'supportstatus', 'important', 'accions'];
 
   constructor(
@@ -88,10 +91,9 @@ export class SupportComponent implements OnInit, OnDestroy  {
     public snackBar: MatSnackBar
   ) {
     this.identity = this._userService.getIdentity();
-    this.supportcase = this.supportcase + '/' + this.identity.country + '/cases';
-		this.label.getDataRoute().subscribe(data => {
-			this.title = data.subtitle;
-		});					
+    this.label.getDataRoute().subscribe(data => {
+      this.title = data.subtitle;
+    });
 
   }
 
@@ -106,67 +108,98 @@ export class SupportComponent implements OnInit, OnDestroy  {
       if (auth) {
         this.userFirebase = auth;
 
-        // tslint:disable-next-line:max-line-length
-        this.deptosAll = this._afs.collection('countries/' + this.identity.country + '/departments').
-        get().subscribe((data: any) => { if (data.size > 0) {
-            let count = 1;
-            data.forEach((doc) => {
-                  const depto = doc.data();
-                  depto.id = doc.id;
-
-                  this.allDepartamentos.push(depto);
-                  if (this.identity.role === 8) {
-                    this.departamentos.push(depto);
-                  }
-                  if (count === 1) {
-                    if (this.identity.role === 8) {
-                      this.selectedDepto = '0';
-                    }
-                    this.selectedDeptoAll = '0';
-                  } count = count + 1;
-                }
-              );
-            }
-          }
-        );
-
-        if (this.identity.role === 8) {
-          // tslint:disable-next-line:max-line-length
-          this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}, {value: 3, descripcion: 'Departamento'}];
-          this.radioselect = 1;
-          this.changeRadio(1);
-        } else {
-          // tslint:disable-next-line:max-line-length
-          this.depto = this._afs.collection('countries/' + this.identity.country + '/departments', ref => ref.where('admins', 'array-contains', this.userFirebase.uid)).
-          get().subscribe((data: any) => { if (data.size > 0) {
-              // tslint:disable-next-line:max-line-length
-              this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}, {value: 3, descripcion: 'Departamento'}];
-              this.radioselect = 1;
-              this.changeRadio(1);
-              let count = 1;
-              this.departamentos = [];
-              data.forEach((doc) => {
-                    const depto = doc.data();
-                    depto.id = doc.id;                    
-                    if (count === 1) {
-                      this.selectedDepto = depto.id;
-                    }
-                    count = count + 1;
-                    this.departamentos.push(depto);
-                  }
-                );
-              } else {
-                this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}];
-                this.radioselect = 1;
-                this.changeRadio(1);
-              }
-            }
+        if (this.identity.role >= 8) {
+          this.tagPaisCollection = this._afs.collection('countries');
+          this.tagPais$ = this.tagPaisCollection.snapshotChanges().pipe(
+            map(actions => {
+              return actions.map(a => {
+                const data = a.payload.doc.data();
+                const id = a.payload.doc.id;
+                return { id, ...data };
+              });
+            })
           );
         }
+
+        this.idPais = this.identity.country;
+        this.supportcase = 'supportcase/' + this.idPais + '/cases';
+        this.startData();
       }
 
     });
 
+  }
+
+  startData() {
+
+    this.departamentos = [this.todo];
+    this.allDepartamentos = [this.todo];
+     // tslint:disable-next-line:max-line-length
+     this.deptosAll = this._afs.collection('countries/' + this.idPais + '/departments').
+     get().subscribe((data: any) => { if (data.size > 0) {
+         let count = 1;
+         data.forEach((doc) => {
+               const depto = doc.data();
+               depto.id = doc.id;
+
+               this.allDepartamentos.push(depto);
+               if (this.identity.role === 8) {
+                 this.departamentos.push(depto);
+               }
+               if (count === 1) {
+                 if (this.identity.role === 8) {
+                   this.selectedDepto = '0';
+                 }
+                 this.selectedDeptoAll = '0';
+               } count = count + 1;
+             }
+           );
+         }
+       }
+     );
+
+     if (this.identity.role === 8 && this.identity.country === this.idPais) {
+       // tslint:disable-next-line:max-line-length
+       this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}, {value: 3, descripcion: 'Departamento'}];
+       this.radioselect = 1;
+       this.changeRadio(1);
+     } else {
+       // tslint:disable-next-line:max-line-length
+       this.depto = this._afs.collection('countries/' + this.idPais + '/departments', ref => ref.where('admins', 'array-contains', this.userFirebase.uid)).
+       get().subscribe((data: any) => { if (data.size > 0) {
+           // tslint:disable-next-line:max-line-length
+           this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}, {value: 3, descripcion: 'Departamento'}];
+           this.radioselect = 1;
+           this.changeRadio(1);
+           let count = 1;
+           this.departamentos = [];
+           data.forEach((doc) => {
+                 const depto = doc.data();
+                 depto.id = doc.id;
+                 if (count === 1) {
+                   this.selectedDepto = depto.id;
+                 }
+                 count = count + 1;
+                 this.departamentos.push(depto);
+               }
+             );
+           } else {
+             this.radioOpciones = [{value: 1, descripcion: 'Mís Solicitudes'}, {value: 2,  descripcion: 'Etiquetado'}];
+             this.radioselect = 1;
+             this.changeRadio(1);
+           }
+         }
+       );
+     }
+  }
+
+
+  changepais(id) {
+    if (id) {
+      this.idPais = id;
+      this.supportcase = 'supportcase/' + this.idPais + '/cases';
+      this.startData();
+    }
   }
 
   selectChangeMes (value) {
@@ -529,7 +562,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
     const dialogRef = this.dialog.open(ShowcaseComponent, {
       width: '1000px',
       disableClose: true,
-      data: { id: data.id, depto_id: data.depto_id }
+      data: { id: data.id, depto_id: data.depto_id , pais: this.idPais}
       });
 
       dialogRef.afterClosed().subscribe(

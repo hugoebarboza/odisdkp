@@ -23,10 +23,14 @@ import { DirectiveModule } from 'src/app/directives/directive.module';
 import { AddServiceComponent } from './dialog/addservice/addservice.component';
 import { AddProjectTypeComponent } from './dialog/add-project-type/add-project-type.component';
 import { AddProjectCategorieComponent } from './dialog/add-project-categorie/add-project-categorie.component';
+import { AddProjectCurrencyValueComponent } from './dialog/add-project-currency-value/add-project-currency-value.component';
 import { CloneServiceComponent } from './dialog/clone-service/clone-service.component';
 import { CsvServiceComponent } from './dialog/csvservice/csvservice.component';
 import { SettingServiceComponent } from './components/settingservice/settingservice.component';
 import { DeleteServiceComponent } from './dialog/deleteservice/deleteservice.component';
+import { InviteUserComponent } from './components/invite-user/invite-user.component';
+import { ProjectCurrencyValueListComponent } from './dialog/project-currency-value-list/project-currency-value-list.component';
+import { ProjectKpiListComponent } from './dialog/project-kpi-list/project-kpi-list.component';
 import { UserComponent } from './dialog/user/user.component';
 
 //MODULES
@@ -36,6 +40,7 @@ import { MaterialModule } from '../../material-module';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
@@ -53,6 +58,9 @@ import { ServiceRoutingModule } from './service.routing';
 
 
 
+
+
+
 @NgModule({
   imports: [
     AngularSplitModule.forRoot(),
@@ -65,6 +73,7 @@ import { ServiceRoutingModule } from './service.routing';
     MatProgressButtonsModule,
     NgSelectModule,
     NgxMatSelectSearchModule,
+    NgxChartsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     PipesModule,
@@ -79,26 +88,32 @@ import { ServiceRoutingModule } from './service.routing';
   [
     AddProjectTypeComponent,
     AddProjectCategorieComponent,
+    AddProjectCurrencyValueComponent,
     AddServiceComponent,
     AddUserServiceComponent,
+    CloneServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent,
+    InviteUserComponent,
     RemoveUserComponent,    
     ServiceComponent,
     SettingServiceComponent,
     UserComponent,
     ProjectCategorieListComponent,
     ProjectTypeListComponent,
-    CloneServiceComponent,
+    ProjectCurrencyValueListComponent,
+    ProjectKpiListComponent,        
   ],
   entryComponents: [
     AddProjectTypeComponent,
     AddProjectCategorieComponent,
+    AddProjectCurrencyValueComponent,
     AddServiceComponent,
     AddUserServiceComponent,
     CloneServiceComponent,
     CsvServiceComponent,
-    DeleteServiceComponent, 
+    DeleteServiceComponent,
+    ProjectKpiListComponent,
     UserComponent
   ],
   providers: [

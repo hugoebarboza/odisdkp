@@ -74,7 +74,8 @@ import { ToastrService } from 'ngx-toastr';
     
     const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
     //console.log(paginate);
-    //const paginate = `?page=${page + 1}`;
+	//const paginate = `?page=${page + 1}`;
+	//console.log(id);
     return this.getOrderData('service/'+id+'/order'+paginate, token);
   }
 
@@ -177,8 +178,47 @@ import { ToastrService } from 'ngx-toastr';
 		return this.getQuery('search/'+termino+'/'+id, token);		
 	}
 
+	gettUserOrdenes(token:any, id:number, sort: string, order: string, pageSize: number, page: number,) {
+		if(!token){
+			return;
+		}
 
-  add(token: any, order: Order, id:number): void {
+		if(!order){
+			order = 'desc';
+		  }
+		  if(!sort){
+			sort = 'create_at';
+		  }
+		  
+	    const paginate = `?sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
+		//console.log(paginate);
+	    return this.getProjectOrderData('user/'+id+'/order'+paginate, token);
+	}
+
+
+
+
+    getProjectOrderData(query:string, token:any) {
+		if(!token){
+			return;
+		}
+	    const url = this.url;
+	    const href = url+query;
+	    const requestUrl = href;
+	    //console.log(requestUrl);
+	    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+	    return new Promise((resolve, reject) => {
+	      if (token == '')
+	          reject();
+	      if (query == '')
+	          reject();
+	      resolve(this._http.get<Order>(requestUrl, {headers: headers}));
+	      })
+    }	
+
+
+  	add(token: any, order: Order, id:number): void {
 		if (!token){
 			return;
 		}
@@ -287,6 +327,24 @@ import { ToastrService } from 'ngx-toastr';
 						 });				
 	}
 
+
+	deleteMass(token: any, data:any, id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		let Url = this.url+'service/'+id+'/deletemass';
+	
+
+		return this._http.post(Url, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
 
 
 	deleteEstatus(token: any, id:number): Observable<any>{

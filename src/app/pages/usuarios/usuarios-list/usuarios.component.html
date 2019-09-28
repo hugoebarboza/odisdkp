@@ -4,12 +4,16 @@
 <app-loading></app-loading>  
 </div>
 
-<div id="wrapper" *ngIf="proyectos && identity">
+<div *ngIf="proyectos && identity">
 
   <div  >
 
-        <div class="container-fluid p-2">          
+        <div class="container-fluid p-2">
+          
+        <div class="row p-2 animated fadeIn">
+        <div class="col-12">            
         <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+            <div class="p-2 w-100 ">
             <div class="d-flex">
                 <div class="p-2"><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1></div>
                 <div class="p-2">
@@ -17,183 +21,193 @@
                     <i class="material-icons" matTooltip="Refrescar" [matTooltipPosition]="positionrightaction.value">sync</i>
                   </a>
                 </div>
-            </div>                            
-        </div>
-        <br>
-
-        <div class="row animated fadeIn">
-          <div class="col-12">
-              <div class="card custom-card">
-                  <div class="card-body">
-
-                      <input #input [(ngModel)]="termino" (keyup)="buscarUsuario(termino)" type="text" class="form-control" placeholder="Buscar usuario por Nombre...">
-
-                  </div>
-              </div>
-          </div>
-        </div>
-
-        <div class="row animated fadeIn" *ngIf="isLoading">
-          <div class="col-sm-12">
-            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
-          </div>
-        </div>
-
-        <div class="row animated fadeIn" *ngIf="!isLoading && status == 'error'">
-            <div class="col-sm-12">
-                <div class="alert alert-danger" *ngIf="status == 'error'">
-                    No se encontraron registros que coincidan con su búsqueda. 
-                    <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
-                </div>
             </div>
+            </div>          
         </div>
-          
+        </div>
+        </div>
 
-        <div class="row animated fadeIn" *ngIf="!isLoading && status == 'success'">
+        <div class="row p-2 animated fadeIn">
           <div class="col-12">
-              <div class="card">
-                  <div class="card-body">
-                      
-                    <div class="d-flex bd-highlight">
-                          <div class="p-2 flex-grow-1 bd-highlight"><h3 class="card-title"><mat-icon>account_circle</mat-icon> Usuarios registrados ({{totalRegistros}})</h3></div>
-                          <div class="p-2 bd-highlight"><button type="button" class="btn btn-primary btn-sm" (click)="addNew(id, departamento_id)" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">people</mat-icon>Crear Usuario</button></div>
-                    </div>                      
-              
-
-                      <table class="table table-hover">
-                          <thead>
-                              <tr>
-                                  <th></th>
-                                  <th *ngIf="_userService.isRole(7)">QR</th>
-                                  <th>Nombre</th>
-                                  <th>Correo</th>                                  
-                                  <th>Rut</th>                                  
-                                  <th>Rol</th>
-                                  <th>Estatus</th>
-                                  <th *ngIf="_userService.isRole(8)">Verificado</th>                          
-                                  <th>Acceso</th>
-                                  <th>Creado El</th>
-                                  <th>Creado Por</th>
-                                  <th *ngIf="_userService.isRole(7)"></th>
-                              </tr>
-                          </thead>
-
-                          <tbody>
-                              <tr *ngFor="let usuario of usuarios; let i = index">
-                                <td class="w10">
-                                    <div class="circle" [style.color]="usuario.status? 'green' : 'red'"></div>
-                                </td>
-                                <td *ngIf="_userService.isRole(7)">                                  
-                                    <a href="https://barcode.tec-it.com/es/QRCode?data={{usuario.id}}" target="_blank" aria-current="page" class="filter-item selected">
-                                      {{ usuario.id}}
-                                    </a>                                  
-                                    
-                                </td>
-
-
-                                  <td>{{ usuario.name | titlecase}} {{ usuario.surname | titlecase}}
-                                      <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="usuario.status_foto">
-                                          <mat-icon class="material-icons md-13-color" >image</mat-icon>        
-                                      </button>
-                                          
-                                      <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="!usuario.status_foto">
-                                          <mat-icon class="material-icons md-13-nocolor" >image</mat-icon>
-                                      </button>        
-                                  </td>
-                                  <td>{{ usuario.email | lowercase}}</td>
-                                  <td>
-                                      <div class="form-group row" >
-                                          <div *ngIf="usuario.dni >=0">{{usuario.dni}}-{{usuario.dv}}</div>
-                                      </div>
-                                  </td>
-
-                                  <td >
-                                    <select [(ngModel)]="usuario.role_id" name="role" class="form-control" *ngIf="roles">
-                                            <option *ngFor="let rol of roles" [value]="rol.id">
-                                                  {{rol.title}}
-                                            <option>
-                                    </select>                            
-
-                                  </td>
-
-                                  <td>
-                                    <select [(ngModel)]="usuario.status" name="stattus" class="form-control">
-                                            <option value="1">Activo</option>
-                                            <option value="0">Inactivo</option>
-                                    </select>                            
-                                  </td>
-
-                                  <td align="center" *ngIf="_userService.isRole(8)">
-
-                                    <button mat-icon-button  (click)="usuario.verified=!usuario.verified; onChangeIcon(usuario.id, usuario.verified) " *ngIf="usuario.id !== identity.sub">
-                                    <mat-icon class="material-icons md-20-color-green" *ngIf="usuario.verified == 1">verified_user</mat-icon>
-                                    <mat-icon class="material-icons md-20-color-red" *ngIf="usuario.verified == 0">verified_user</mat-icon>
-                                    </button>
-                                  </td>
-
-                                  <td>
-                                    {{ usuario.last_login }} <span *ngIf="usuario.platform == 1"> | DKP</span><span *ngIf="usuario.platform == 2"> | APP</span>
-                                  </td>
-
-                                  <td>
-                                    {{ usuario.create_at }}
-                                  </td>
-
-                                  <td>
-                                    {{ usuario.name_create_by }} {{ usuario.surname_create_by }}
-                                  </td>
-
-                                  <td *ngIf="_userService.isRole(7)">
-
-
-
-                                    <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="guardarUsuario(usuario, i)" >
-                                    <mat-icon aria-label="Edit" *ngIf="i != indexitem" >done</mat-icon>      
-                                    <app-progress-spinner *ngIf="isLoadingDownload && i == indexitem"></app-progress-spinner>
-                                    </button>
-
-
-                                    <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="openDialogProfileSecurity(usuario)" >
-                                      <mat-icon aria-label="Edit"  class="material-icons md-color">lock</mat-icon>                              
-                                    </button>
-
-                                    <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="startEdit(usuario)">
-                                        <mat-icon aria-label="Edit" >edit</mat-icon>          
-                                    </button>            
-                        
-
-                                    <button mat-icon-button color="warn" *ngIf="_userService.isRole(7) && usuario.id !== identity.sub" (click)="borrarUsuario(usuario, i)">
-                                    <mat-icon aria-label="Edit" *ngIf="i != indexitemdelete" >delete</mat-icon>                             
-                                    <app-progress-spinner *ngIf="isLoadingDelete && i == indexitemdelete"></app-progress-spinner>
-                                    </button>
-
-
-
-                                  </td>
-                              </tr>
-
-                          </tbody>
-
-                      </table>
-                      <div class="button-row">
-
-                      <button (click)="paginate(-10, -1)" class="btn btn-secondary">
-                        Anterior
-                      </button>
-
-                      <button (click)="paginate(10, 1)" class="btn btn-secondary">
-                          Siguiente
-                      </button>
-                      </div>
-
-
-
+              <div class="row animated fadeIn" *ngIf="isLoading">
+                  <div class="col-sm-12">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                   </div>
               </div>
+        
+              <div class="row animated fadeIn">
+                <div class="col-12">
+                    <div class="card custom-card">
+                        <div class="card-body">
+      
+                            <input #input [(ngModel)]="termino" (keyup)="buscarUsuario(termino)" type="text" class="form-control" placeholder="Buscar usuario por Nombre...">
+      
+                        </div>
+                    </div>
+                </div>
+              </div>
+      
+      
+              <div class="row animated fadeIn" *ngIf="!isLoading && status == 'error'">
+                  <div class="col-sm-12">
+                      <div class="alert alert-danger" *ngIf="status == 'error'">
+                          No se encontraron registros que coincidan con su búsqueda. 
+                          <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                      </div>
+                  </div>
+              </div>
+                
+      
+              <div class="row animated fadeIn" *ngIf="!isLoading && status == 'success'">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            
+                          <div class="d-flex bd-highlight">
+                                <div class="p-2 flex-grow-1 bd-highlight"><h3 class="card-title"><mat-icon>account_circle</mat-icon> Usuarios registrados ({{totalRegistros}})</h3></div>
+                                <div class="p-2 bd-highlight"><button type="button" class="btn btn-primary btn-sm" (click)="addNew(id, departamento_id)" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">people</mat-icon>Crear Usuario</button></div>
+                          </div>                      
+                    
+                          <div style="overflow-x:auto;">
+                            <table class="table table-hover">
+                              <thead>
+                                  <tr>
+                                      <th></th>
+                                      <th *ngIf="_userService.isRole(7)">QR</th>
+                                      <th>Nombre</th>
+                                      <th>Correo</th>                                  
+                                      <th>Rut</th>                                  
+                                      <th>Rol</th>
+                                      <th>Estatus</th>
+                                      <th *ngIf="_userService.isRole(8)">Verificado</th>                          
+                                      <th>Acceso</th>
+                                      <th>Creado El</th>
+                                      <th>Creado Por</th>
+                                      <th *ngIf="_userService.isRole(7)"></th>
+                                  </tr>
+                              </thead>
+      
+                              <tbody>
+                                  <tr *ngFor="let usuario of usuarios; let i = index">
+                                    <td class="w10">
+                                        <div class="circle" [style.color]="usuario.status? 'green' : 'red'"></div>
+                                    </td>
+                                    <td *ngIf="_userService.isRole(7)">                                  
+                                        <a href="https://barcode.tec-it.com/es/QRCode?data={{usuario.id}}" target="_blank" aria-current="page" class="filter-item selected">
+                                          {{ usuario.id}}
+                                        </a>                                  
+                                        
+                                    </td>
+      
+      
+                                      <td>{{ usuario.name | titlecase}} {{ usuario.surname | titlecase}}
+                                          <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="usuario.status_foto">
+                                              <mat-icon class="material-icons md-13-color" >image</mat-icon>        
+                                          </button>
+                                              
+                                          <button mat-icon-button (click)="openDialogProfileImage(usuario)" *ngIf="!usuario.status_foto">
+                                              <mat-icon class="material-icons md-13-nocolor" >image</mat-icon>
+                                          </button>        
+                                      </td>
+                                      <td>{{ usuario.email | lowercase}}</td>
+                                      <td>
+                                          <div class="form-group row" >
+                                              <div *ngIf="usuario.dni >=0">{{usuario.dni}}-{{usuario.dv}}</div>
+                                          </div>
+                                      </td>
+      
+                                      <td >
+                                        <select [(ngModel)]="usuario.role_id" name="role" class="form-control" *ngIf="roles">
+                                                <option *ngFor="let rol of roles" [value]="rol.id">
+                                                      {{rol.title}}
+                                                <option>
+                                        </select>                            
+      
+                                      </td>
+      
+                                      <td>
+                                        <select [(ngModel)]="usuario.status" name="stattus" class="form-control">
+                                                <option value="1">Activo</option>
+                                                <option value="0">Inactivo</option>
+                                        </select>                            
+                                      </td>
+      
+                                      <td align="center" *ngIf="_userService.isRole(8)">
+      
+                                        <button mat-icon-button  (click)="usuario.verified=!usuario.verified; onChangeIcon(usuario.id, usuario.verified) " *ngIf="usuario.id !== identity.sub">
+                                        <mat-icon class="material-icons md-20-color-green" *ngIf="usuario.verified == 1">verified_user</mat-icon>
+                                        <mat-icon class="material-icons md-20-color-red" *ngIf="usuario.verified == 0">verified_user</mat-icon>
+                                        </button>
+                                      </td>
+      
+                                      <td>
+                                        {{ usuario.last_login }} <span *ngIf="usuario.platform == 1"> | DKP</span><span *ngIf="usuario.platform == 2"> | APP</span>
+                                      </td>
+      
+                                      <td>
+                                        {{ usuario.create_at }}
+                                      </td>
+      
+                                      <td>
+                                        {{ usuario.name_create_by }} {{ usuario.surname_create_by }}
+                                      </td>
+      
+                                      <td *ngIf="_userService.isRole(7)">
+      
+      
+      
+                                        <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="guardarUsuario(usuario, i)" >
+                                        <mat-icon aria-label="Edit" *ngIf="i != indexitem" >done</mat-icon>      
+                                        <app-progress-spinner *ngIf="isLoadingDownload && i == indexitem"></app-progress-spinner>
+                                        </button>
+      
+      
+                                        <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="openDialogProfileSecurity(usuario)" >
+                                          <mat-icon aria-label="Edit"  class="material-icons md-color">lock</mat-icon>                              
+                                        </button>
+      
+                                        <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="startEdit(usuario)">
+                                            <mat-icon aria-label="Edit" >edit</mat-icon>          
+                                        </button>            
+                            
+      
+                                        <button mat-icon-button color="warn" *ngIf="_userService.isRole(7) && usuario.id !== identity.sub" (click)="borrarUsuario(usuario, i)">
+                                        <mat-icon aria-label="Edit" *ngIf="i != indexitemdelete" >delete</mat-icon>                             
+                                        <app-progress-spinner *ngIf="isLoadingDelete && i == indexitemdelete"></app-progress-spinner>
+                                        </button>
+      
+      
+      
+                                      </td>
+                                  </tr>
+      
+                              </tbody>
+      
+                          </table>
+      
+                          </div>
+      
+                          <div class="button-row">
+                          <button (click)="paginate(-10, -1)" class="btn btn-secondary">
+                            Anterior
+                          </button>
+                          <button (click)="paginate(10, 1)" class="btn btn-secondary">
+                              Siguiente
+                          </button>
+                          </div>
+      
+      
+      
+                        </div>
+                    </div>
+                </div>
+              </div>
+                  
           </div>
         </div>
+
         </div>
 
 </div>
-<!-- /#page-content-wrapper -->
+<!-- /#page-content -->
 </div>

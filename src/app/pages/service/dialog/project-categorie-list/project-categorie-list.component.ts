@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MatSnackBar } from '@angular/material';
 
-import swal from 'sweetalert';
+declare var swal: any;
 
 //MODELS
 import { ProjectServiceCategorie } from 'src/app/models/types';
@@ -185,38 +185,51 @@ export class ProjectCategorieListComponent implements OnInit, OnDestroy {
 
 
   delete(i, element){
-    this.indexitem = i;
-    this.isLoadingDelete = true;
-    
-    this.dataService.deleteProjectServiceCategorie(this.token.token, this.id, element.id)
-            .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
-                this.isLoadingDelete = false;
-                this.indexitem = -1;
-                return;        
-              }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
-                this.isLoadingDelete = false;
-                this.indexitem = -1;
-                setTimeout( () => {
-                  this.cargar();
-                }, 2000);
-                
-              }else{
-                this.isLoadingDelete = false;
-                this.indexitem = -1;
-              }
-            },
-              error => {
-                //console.log(<any>error.error);
-                //this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
-                this.snackBar.open(error.error.message, '', {duration:3000, });
-                this.isLoadingDelete = false;
-                this.indexitem = -1;
-              }       
-            );
+    swal({
+      title: '¿Esta seguro?',
+      text: 'Esta seguro de borrar información ',
+      icon: 'warning',
+      buttons: true,
+      dangerMode: true,
+    })
+    .then( borrar => {
+      if(borrar){
+        this.indexitem = i;
+        this.isLoadingDelete = true;
+        
+        this.dataService.deleteProjectServiceCategorie(this.token.token, this.id, element.id)
+                .subscribe( (resp: any) => {
+                  if(!resp){
+                    this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                    this.isLoadingDelete = false;
+                    this.indexitem = -1;
+                    return;        
+                  }
+                  if(resp.status == 'success'){
+                    this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+                    this.isLoadingDelete = false;
+                    this.indexitem = -1;
+                    setTimeout( () => {
+                      this.cargar();
+                    }, 2000);
+                    
+                  }else{
+                    this.isLoadingDelete = false;
+                    this.indexitem = -1;
+                  }
+                },
+                  error => {
+                    //console.log(<any>error.error);
+                    //this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                    this.snackBar.open(error.error.message, '', {duration:3000, });
+                    this.isLoadingDelete = false;
+                    this.indexitem = -1;
+                  }       
+                );
+      }
+    });
+
+
   }    
 
 

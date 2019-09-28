@@ -17,6 +17,12 @@ const moment = _moment;
 import { OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 import { ServiceType } from '../../../../models/types';
 
+//REDUX
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/app.reducers';
+import { LoginAction } from 'src/app/contador.actions';
+
+
 
 
 @Component({
@@ -46,6 +52,7 @@ export class CloneServiceComponent implements OnInit {
     public _userService: UserService,
     public dialogRef: MatDialogRef<CloneServiceComponent>,
     public snackBar: MatSnackBar,
+    private store: Store<AppState>,
     @Inject(MAT_DIALOG_DATA) public data: any,
   ) {
     this.identity = this._userService.getIdentity();
@@ -185,6 +192,7 @@ export class CloneServiceComponent implements OnInit {
           }
           this.onNoClick();
           swal('Proyecto clonado exitosamente ', '', 'success' );
+          this.refresh();
         }else{
           this.onNoClick();
           swal('No fue posible procesar su solicitud', '', 'error');
@@ -198,6 +206,29 @@ export class CloneServiceComponent implements OnInit {
 
   }
 
+  private afterRefresch(p:any, i:any): void {
+    const obj: any = {project: p, identificacion: i};
+    const accion = new LoginAction(obj);
+    this.store.dispatch( accion );
+    //console.log('redux dispacth action refresch menu')
+  }
+
+
+  refresh(){    
+    //this.RefreshMenu.emit(1);
+    this.subscription = this._project.getProyectos(this.token.token, this.identity.dpto).subscribe(
+      response => {
+          if (response.status == 'success'){
+            this.proyectos = response.datos;
+            let key = 'proyectos';
+            this._userService.saveStorage(key, this.proyectos);
+            this.afterRefresch(this.proyectos, this.identity);
+          }
+        }
+      );
+  }  
+
+  
   afterCloneAddServiceValue(data: any, id:number){
     //return;
     if(data.service_value && data.service_value.length > 0 && id > 0){

@@ -9,7 +9,6 @@ import { DateDialogComponent } from '../../components/date-dialog/date-dialog.co
 import { ExcelComponent, DialogOverviewDialog } from '../../components/excel/excel.component';
 import { ExcelVehiculoComponent } from '../../components/excel-vehiculo/excel-vehiculo.component';
 import { FileComponent } from '../../components/dialog/file/file.component';
-//import { FilelistComponent } from '../../components/dialog/filelist/filelist.component';
 import { GestionComponent } from '../../components/gestion/gestion.component';
 import { MakeinspectionComponent } from './components/makeinspection/makeinspection.component';
 import { MapaComponent } from '../../components/mapa/mapa/mapa.component';
@@ -17,7 +16,6 @@ import { MapaFullWidthComponent } from '../../components/mapa/mapafullwidth/mapa
 import { TableroComponent } from '../../components/tablero/tablero.component';
 import { UsertableComponent } from '../../components/usertable/usertable.component';
 import { ViewOrderDetailComponent } from '../../components/views/vieworderdetail/vieworderdetail.component';
-//import { ViewOrderTimeSpentComponent } from '../../components/views/viewordertimespent/viewordertimespent.component';
 import { VieworderserviceComponent } from '../../components/views/vieworderservice/vieworderservice.component';
 import { ViewOrderServiceSelectComponent } from './components/vieworderserviceselect/vieworderserviceselect.component';
 import { ViewprojectcustomerComponent } from '../../components/views/viewprojectcustomer/viewprojectcustomer.component';
@@ -60,7 +58,7 @@ import { SendOrderByEmailComponent } from './components/dialog/send-order-by-ema
 import { ServiceTypeListComponent } from './components/dialog/service-type-list/service-type-list.component';
 import { ServiceTypeValueListComponent } from './components/dialog/service-type-value-list/service-type-value-list.component';
 import { ServiceValueListComponent } from './components/dialog/service-value-list/service-value-list.component';
-import { ShowComponent } from '../../components/dialog/show/show.component';
+//import { ShowComponent } from '../../components/dialog/show/show.component';
 import { ShowcustomerComponent } from '../../components/dialog/showcustomer/showcustomer.component';
 import { ShowProfileComponent } from '../../components/dialog/showprofile/showprofile.component';
 import { SettingsComponent } from '../../components/dialog/settings/settings.component';
@@ -69,6 +67,7 @@ import { StatusComponent } from './components/dialog/status/status.component';
 import { StatusListComponent, SnackErrorComponent, SnackSuccessComponent } from './components/dialog/status-list/status-list.component';
 import { StatusCrudComponent } from './components/dialog/status-crud/status-crud.component';
 import { TarifaListComponent } from './components/dialog/tarifa-list/tarifa-list.component';
+import { UserJobProfileComponent } from './components/dialog/user-job-profile/user-job-profile.component';
 import { VehiculoOverviewDialog } from '../../components/excel-vehiculo/excel-vehiculo.component';
 import { ZipComponent } from '../../components/dialog/zip/zip.component';
 import { ZonaListComponent } from './components/dialog/zona-list/zona-list.component';
@@ -132,15 +131,11 @@ import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
 //PAGES
-import { OrderserviceComponent } from '../../components/orderservice/orderservice.component';
+import { OrderserviceComponent } from './components/orderservice/orderservice.component';
 
 
 // Global vars
 import { environment } from '../../../environments/environment';
-
-
-
-
 
 registerLocaleData(localeEs);
 
@@ -149,7 +144,8 @@ registerLocaleData(localeEs);
     AgmDirectionModule,
     AngularSplitModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: environment.global.agmapikey
+      apiKey: environment.global.agmapikey,
+      libraries: ['places']
     }),
     CalendarModule,
     CommonModule,
@@ -212,7 +208,6 @@ registerLocaleData(localeEs);
     ExcelComponent,
     ExcelVehiculoComponent,
     FileComponent,
-    //FilelistComponent,
     GestionComponent,
     GiroListComponent,
     MapaComponent,
@@ -231,7 +226,6 @@ registerLocaleData(localeEs);
     SendOrderByEmailComponent,
     ServiceTypeValueListComponent, 
     ServiceValueListComponent, 
-    ShowComponent,
     ShowcustomerComponent,
     ShowProfileComponent,
     StatusComponent,
@@ -241,6 +235,7 @@ registerLocaleData(localeEs);
     StatusCrudComponent,
     TableroComponent,
     TarifaListComponent,
+    UserJobProfileComponent,
     UsertableComponent,
     ZonaListComponent,
     ZipComponent,
@@ -249,7 +244,7 @@ registerLocaleData(localeEs);
     ViewprojectorderComponent,
     ViewprojectcustomerComponent, 
     VieworderserviceComponent, 
-    ViewOrderServiceSelectComponent,   
+    ViewOrderServiceSelectComponent, 
   ],
   exports: [
   ],
@@ -290,7 +285,6 @@ registerLocaleData(localeEs);
     SendOrderByEmailComponent,
     SnackErrorComponent,
     SnackSuccessComponent,
-    ShowComponent, 
     ShowcustomerComponent,
     ShowProfileComponent,
     SettingsComponent, 

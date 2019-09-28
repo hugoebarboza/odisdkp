@@ -41,7 +41,7 @@ export class UserComponent implements OnInit, OnDestroy {
 
   constructor(
     public _userService: UserService,
-    public dialogRef: MatDialogRef<UserComponent>,   
+    public dialogRef: MatDialogRef<UserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Service,    
   ) { 
     //this.loading = true;
@@ -67,7 +67,6 @@ export class UserComponent implements OnInit, OnDestroy {
     if(this.subscription){
       this.subscription.unsubscribe();
     }
-
   }
 
 
@@ -89,7 +88,7 @@ export class UserComponent implements OnInit, OnDestroy {
           this.dialogRef.close();
           swal('Solicitud procesada ', 'exitosamente.', 'success' );  
          }else{
-          console.log(response);
+          //console.log(response);
           this.dialogRef.close();
           swal('No fue posible procesar su solicitud', '', 'error');  
         }
@@ -97,7 +96,7 @@ export class UserComponent implements OnInit, OnDestroy {
         error => {
           this.dialogRef.close();
           //swal('No fue posible procesar su solicitud', error.error.message, 'error');
-          swal('No fue posible procesar su solicitud', error, 'error');
+          swal('No fue posible procesar su solicitud', error.error.message, 'error');
         }
       );
     }

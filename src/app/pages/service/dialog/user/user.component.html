@@ -5,7 +5,7 @@
 <div class="app" >
 <form class="mat-dialog-content" novalidate="novalidate">
   
-  <h1 mat-dialog-title>{{title}} {{project_name}}</h1>
+  <h1 mat-dialog-title>{{title}} <span *ngIf="project">{{project.project_name}}</span></h1>
   <div class="mat-app-background" >
     <div class="card-body">
         <p class="card-text"><mat-icon mat-list-icon>people</mat-icon> {{subtitle}}</p>        
@@ -28,7 +28,7 @@
                   </ng-template>
                   <ng-template matTabContent>
                   <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >
-                      <app-adduserservice (removerUsuario) = "remover( $event )" (totalUsuarios) = "loadDataUser( $event )" [id]="id"></app-adduserservice>
+                      <app-adduserservice (removerUsuario) = "remover( $event )" (totalUsuarios) = "loadDataUser( $event )" [id]="id" *ngIf="id > 0"></app-adduserservice>
                   </div>
                   </ng-template>
                 </mat-tab>
@@ -39,11 +39,24 @@
                   </ng-template>                  
                   <ng-template matTabContent>
                   <div class="p-2" style="width: 100%;" *ngIf="selected.value==1">
-                      <app-removeuser (addUsuario) = "adduser( $event )" (totalUsuariosNoActive) = "loadDataUserNoActive( $event )" [customerid]="customerid" [id]="id"></app-removeuser>
+                      <app-removeuser (addUsuario) = "adduser( $event )" (totalUsuariosNoActive) = "loadDataUserNoActive( $event )" [customerid]="customerid" [id]="id" *ngIf="id > 0"></app-removeuser>
                   </div>
                   </ng-template>
                 </mat-tab>
-            
+
+                <mat-tab >
+                  <ng-template mat-tab-label>
+                      <h6>Invitar </h6> 
+                  </ng-template>                  
+                  <ng-template matTabContent>
+                  <div class="p-2" style="width: 100%;" *ngIf="selected.value==2">
+                      <app-invite-user (addUsuario) = "adduser( $event )" [id]="id" *ngIf="id > 0"></app-invite-user>
+                  </div>
+                  </ng-template>
+                </mat-tab>
+                
+
+
               </mat-tab-group>      
             </div>
         </main>

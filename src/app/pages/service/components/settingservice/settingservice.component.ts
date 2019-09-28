@@ -9,7 +9,7 @@ declare var swal: any;
 //DIALOG
 import { AddProjectTypeComponent } from '../../dialog/add-project-type/add-project-type.component';
 import { AddProjectCategorieComponent } from '../../dialog/add-project-categorie/add-project-categorie.component';
-
+import { AddProjectCurrencyValueComponent } from '../../dialog/add-project-currency-value/add-project-currency-value.component';
 
 
 //MODELS
@@ -352,6 +352,27 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
 
   projectCategorie(id: number) {
     const dialogRef = this.dialog.open(AddProjectCategorieComponent, {
+      width: '777px',
+      disableClose: true,  
+      data: {
+        project_id: this.id,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+        // When using an edit things are little different, firstly we find record inside DataService by id
+        //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+        // Then you update that record using data from dialogData (values you enetered)
+      // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+        // And lastly refresh table
+      }
+    });
+  }
+
+
+  projectCurrencyValue(id: number) {
+    const dialogRef = this.dialog.open(AddProjectCurrencyValueComponent, {
       width: '777px',
       disableClose: true,  
       data: {

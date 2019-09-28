@@ -1,24 +1,23 @@
-<div class="p-2">
+<div class="p-2" *ngIf="identity.role > 4">
     <div class="container-fluid">
       <div class="example-loading-shade" *ngIf="isLoadingResults">
          <app-loading *ngIf="isLoadingResults"></app-loading>  
       </div>
     </div>      
     
-      <div class="row" *ngIf="!isLoadingResults">        
-        <div class="col-8">
-            <app-viewprojectdetail [id]="id" *ngIf="id > 0"></app-viewprojectdetail>  
+      <div class="row" *ngIf="!isLoadingResults">
+        <div class="col-12">
+            <app-viewprojectdetail (TiposServicio) = "getTipoServicio($event)" (Users) = "getUsers($event)" [id]="id" *ngIf="id > 0"></app-viewprojectdetail>  
         </div>
+        <!---
         <div class="col-4">
-            <mat-card [ngStyle]="{'width': '100%', 'background-color': '#f2f4f7'}">
-                <mat-card-title> Indicadores </mat-card-title>
-                <mat-card-content> Estatus del Proyecto </mat-card-content>
-            </mat-card>
-            
+            <div class="container-fluid" *ngIf="id && id > 0 ">
+                <app-kpi-project-detail [id]="id" [tiposervicio] = "tipoServicio" [users]="users" *ngIf="id > 0 && tipoServicio && tipoServicio.length > 0 && users && users.length > 0" ></app-kpi-project-detail>
+            </div>          
             <div class="container-fluid" *ngIf="id && id > 0 && kpi > 0">
               <app-kpi [id]="id" *ngIf="id > 0"></app-kpi>
             </div>
-        </div>
+        </div>-->
       </div>
 </div>
 

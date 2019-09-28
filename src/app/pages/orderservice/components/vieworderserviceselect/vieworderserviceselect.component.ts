@@ -253,6 +253,10 @@ selectedColumnnEstatus = {
 
   commit(){
 
+    if(!this.form4.value || this.form4.value <= 0){
+      return;
+    }
+
     if(!this.selection.selected){
       swal('Solicitud no procesada', 'No existen órdenes seleccionadas', 'error');
       return;
@@ -261,7 +265,7 @@ selectedColumnnEstatus = {
     
     swal({
       title: '¿Esta seguro?',
-      text: 'Esta a punto de editar las órdenes seleccionadas ',
+      text: 'Esta a punto de cambiar las órdenes seleccionadas ',
       icon: 'warning',
       buttons: true,
       dangerMode: true,
@@ -285,14 +289,14 @@ selectedColumnnEstatus = {
               this.paramset = 'vencimiento_date';
               this.paramvalue = this.form5.value.vencimiento;          
             }
-
           }
 
 
                     
-          if(this.selection.selected && this.id && this.paramset && this.paramvalue){
+          if(this.selection.selected && this.id && this.paramset && this.paramvalue && this.form4.value.action4 == 1){
+
             this.isLoadingResults = true;
-            this.dataService.updateMass(this.token.token, this.selection.selected, this.id, this.paramset, this.paramvalue)
+            this.subscription = this.dataService.updateMass(this.token.token, this.selection.selected, this.id, this.paramset, this.paramvalue)
             .subscribe( response => {
               if(!response){
                 this.isLoadingResults = false;
@@ -312,9 +316,34 @@ selectedColumnnEstatus = {
                 swal('Importante', error, 'error');
               }                               
             );
-          }else{            
+          }/*else{
             swal('Solicitud no procesada', 'Los valores seleccionados no coinciden', 'error');
             return;
+          }*/
+          
+
+          if(this.selection.selected && this.id && this.form4.value.action4 == 2){
+            this.isLoadingResults = true;
+            this.subscription = this.dataService.deleteMass(this.token.token, this.selection.selected, this.id)
+            .subscribe( response => {
+              if(!response){
+                this.isLoadingResults = false;
+                return;        
+              }
+              if(response.status == 'success'){ 
+                this.isLoadingResults = false;
+                swal('Órdenes eliminadas', 'exitosamente', 'success' );
+              }else{
+                this.isLoadingResults = false;
+                swal('Importante', response.message, 'error');
+              }
+            },
+              error => {
+                this.isLoadingResults = false;                
+                //swal('Importante', error.error.message, 'error');
+                swal('Importante', error, 'error');
+              }                               
+            );
           }
             
 

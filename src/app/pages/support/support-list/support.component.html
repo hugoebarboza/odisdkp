@@ -4,7 +4,7 @@
     <app-loading></app-loading>  
 </div>
         
-<div id="wrapper" *ngIf="identity">
+<div *ngIf="identity">
 
     <div id="page-content-wrapper" >
         
@@ -58,7 +58,24 @@
     
                             <div class="row">
 
-                                <div class="col-md-4">
+                                <div class="col-md-3" *ngIf="tagPais$">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">País</span>
+                                        </div>
+                                        <ng-select  [items]="tagPais$ | async"
+                                                    [clearable]="false" 
+                                                    bindLabel="name"
+                                                    bindValue="id"
+                                                    (change)="changepais($event.id)"
+                                                    class="example-full-width"
+                                                    name="idPais" [(ngModel)]="idPais"
+                                                    class="width-40percentage">
+                                        </ng-select>
+                                    </div>            
+                                </div>
+
+                                <div class="col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Mes</span>
@@ -74,8 +91,8 @@
                                         </ng-select>
                                     </div>            
                                 </div>
-    
-                                <div class="col-md-4"  *ngIf="departamentos && departamentos.length > 0  && radioselect === 3">
+
+                                <div class="col-md-3"  *ngIf="departamentos && departamentos.length > 0  && radioselect === 3">
                                     <div class="input-group input-group-sm mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Departamento</span>
@@ -92,7 +109,7 @@
                                     </div>            
                                 </div>
 
-                                <div class="col-md-4"  *ngIf="allDepartamentos.length > 1 && radioselect !== 3">
+                                <div class="col-md-3"  *ngIf="allDepartamentos.length > 1 && radioselect !== 3">
                                     <div class="input-group input-group-sm mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Departamento</span>
@@ -108,9 +125,8 @@
                                         </ng-select>
                                     </div>            
                                 </div>
-    
 
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <div class="input-group input-group-sm mb-3">
                                         <div class="input-group-prepend">
                                             <span class="input-group-text">Busqueda</span>

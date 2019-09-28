@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 
 //MODELS
-import { Color, Constante, Giro, Mercado, Order, Proyecto, ProjectServiceType, Sector, Service, ServiceValue, ServiceType, ServiceTypeValue, Tarifa,  Zona } from '../../models/types';
+import { Color, Constante, CurrencyValue, Giro, Mercado, Order, Proyecto, ProjectServiceType, Sector, Service, ServiceValue, ServiceType, ServiceTypeValue, Tarifa,  Zona } from '../../models/types';
 
 //TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
@@ -44,7 +44,24 @@ export class ProjectsService {
 							console.log(resp);
 							return resp;
 						});				
-	}  
+	}
+
+	addCurrencyValue(token: any, data:CurrencyValue): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'currencyvalue', params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
+
 
 	addService(token: any, service: Service, id:number): Observable<any> {	
 		if (!token){
@@ -279,7 +296,38 @@ export class ProjectsService {
 
 	}
 
+	lectura(token: any, id:number, serviceid:number, label:number): void {
+        if(!token){
+            return;
+        }
+        let json = JSON.stringify(label);
+        let params = 'json='+json;
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
+        this._http.post(this.url+'project'+'/'+id+'/'+'service'+'/'+serviceid+'/'+'lectura'+'/'+label, params, {headers: headers}).subscribe(
+                data => { 
+                        },
+                        (err: HttpErrorResponse) => {   
+                        this.error = err.error.message;
+                    });
+    }	
+
+
+	updateCurrencyValue(token: any, id:number, data:CurrencyValue): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let json = JSON.stringify(data);
+		let params = 'json='+json;
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+		return this._http.post(this.url+'currencyvalue/'+id, params, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}
 
 
 	updateProject(token: any, project:Proyecto, id:number): Observable<any>{
@@ -538,6 +586,19 @@ export class ProjectsService {
 	}
 
 
+	deleteCurrencyValue(token: any, id:number): Observable<any>{
+		if (!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url+'currencyvalue/'+id, {headers: headers})
+						 .map( (resp: any) => {
+							 return resp;
+						 });				
+	}	
+
+
     deleteService(token: any, id:number, service_id:number): void {	
 		if (!token){
 			return;
@@ -743,6 +804,14 @@ export class ProjectsService {
 		}
 		return this.getQuery('service/'+id+'/constante', token);							  		
 	}
+
+	getCurrency(token:any): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('currency', token);
+	}
+
 
 	getCurrencyValue(token:any): Observable<any>{
 		if(!token){

@@ -195,7 +195,13 @@
                 </div>
             </td>
             <td  width="60%" *ngIf="detailorderatributo.atributo_id == detailatributo.id" >             
-               <div style="min-height: 2px;">
+              <div style="min-height: 2px;" *ngIf="detailatributo.type == 'chip' ">
+                <div *ngFor="let itemschip of detailorderatributo.valor | split" style="display: flex;">
+                  <mat-icon *ngIf="itemschip.value"  class="material-icons md-18" style="margin-right: 4px;">done</mat-icon>
+                  <p class="valor" *ngIf="itemschip.value">{{itemschip.descripcion}}</p>
+                </div>
+              </div>
+              <div style="min-height: 2px;" *ngIf="detailatributo.type != 'chip' ">
                 <p class="valor">{{detailorderatributo.valor}}</p>
               </div>
             </td>            
@@ -203,59 +209,10 @@
         </table>
         </div>
 
-        <div >
-          <table id="t03" width="100%">
-            <tr>
-              <th>AUDIO</th>
-            </tr>
-          </table>
-          <table id="t04" width="100%">
-              <tr>
-                <td>
-                  <mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggleaudio()" id="bt"  *ngIf="!showaudio">
-                    <mat-button-toggle value="bold">Play<i class="material-icons">arrow_right</i></mat-button-toggle>
-                  </mat-button-toggle-group>
-    
-                  <mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggleaudio()" id="bt"  *ngIf="showaudio">
-                    <mat-button-toggle value="bold">Play<i class="material-icons" style="color:blue">arrow_drop_down</i></mat-button-toggle>
-                  </mat-button-toggle-group>              
-                </td>
-              </tr>
-          </table>               
 
-          <div class="example-loading-shade" *ngIf="isAudioLoading && showaudio">
-              <app-loading *ngIf="isAudioLoading"></app-loading>  
-          </div>
-
-          <div class="animated fadeIn" style="visibility: visible; position: sticky; z-index: 1;" *ngIf="showaudio && audioRows.length > 0">
-              <table id="t09" width="100%"  >
-                <tr *ngFor="let row of audioRows; let isEven = even;let i = index;">
-                  <td width="50%" align="center" *ngFor="let audio of row; let j = index;" >
-                    <div>
-                      <div class="row">
-                        <div class="col-12">
-                            <audio controls id="{{audio.id}}" *ngIf="audio?.archivo" src="data:audio/ogg;base64,{{audio.archivo}}" style="outline: 0;border: none;"></audio>                            
-                        </div>
-                      </div>                                          
-                    </div>
-                  </td>
-                </tr>
-              </table>
-          </div>          
-
-        </div>
-
-        <div class="animated fadeIn" style="visibility: visible; position: sticky; z-index: 1;" *ngIf="showaudio && !audioRows.length">
-          <table id="t09" width="100%"  >
-            <tr >
-              <td width="50%" align="center"  >
-                      <p align="center" >Sin Audio</p>
-              </td>
-            </tr>
-          </table>
-        </div>
 
         <div>
+
         <table id="t03" width="100%">
           <tr>
             <th>IMÁGENES</th>

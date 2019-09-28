@@ -454,7 +454,7 @@ export class CsvComponent implements OnInit, OnDestroy {
           (some) => 
           { 
             if(some.datos){
-            console.log(some.datos);
+            //console.log(some.datos);
             this.exportDataSource = new MatTableDataSource(some.datos);
             
             if(!this.exportDataSource.data.length){
@@ -550,12 +550,30 @@ export class CsvComponent implements OnInit, OnDestroy {
                             var banderasindato = true;
                             for(var keyorderatributovalue in this.exportDataSource.data[j]['orderatributo']){
                              if(this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['atributo_id'] == this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['id']){
-                                 var ordervalue = this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor'];
-                                 ordervalue = ordervalue.split("\n").join(" ");
-                                 ordervalue = ordervalue.split("\t").join(" ");
-                                 ordervalue = ordervalue.split(";").join(" ");
-                                 valuearrayexcel = valuearrayexcel + ordervalue + ';';
-                                 banderasindato = false;
+
+                                 if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == "chip"){
+                                  const orderarray: Array<any> = JSON.parse(this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor']);
+                                  let chipconcat = '';
+                                  orderarray.forEach(elemento => {
+                                      if (elemento.value) {
+                                        chipconcat = chipconcat  + elemento.descripcion + ' | ';
+                                      }
+                                  });
+                                  chipconcat = chipconcat.substring(0, chipconcat.length - 2);
+                                  ordervalue = chipconcat;
+                                  ordervalue = ordervalue.split("\n").join(" ");
+                                  ordervalue = ordervalue.split("\t").join(" ");
+                                  ordervalue = ordervalue.split(";").join(" ");
+                                  valuearrayexcel = valuearrayexcel + ordervalue + ';';
+                                  banderasindato = false;
+                                } else {
+                                  var ordervalue = this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor'];
+                                    ordervalue = ordervalue.split("\n").join(" ");
+                                    ordervalue = ordervalue.split("\t").join(" ");
+                                    ordervalue = ordervalue.split(";").join(" ");
+                                    valuearrayexcel = valuearrayexcel + ordervalue + ';';
+                                    banderasindato = false;
+                                }
                              }
                              if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'layout_line'){
                                 banderasindato = false;
@@ -618,12 +636,30 @@ export class CsvComponent implements OnInit, OnDestroy {
                             var banderasindato = true;
                             for(var keyorderatributovalue in this.exportDataSource.data[j]['orderatributo']){
                              if(this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['atributo_id'] == this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['id']){
-                                 var ordervalue = this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor'];
-                                 ordervalue = ordervalue.split("\n").join(" ");
-                                 ordervalue = ordervalue.split("\t").join(" ");
-                                 ordervalue = ordervalue.split(";").join(" ");
-                                 valuearrayexcel = valuearrayexcel + ordervalue + ';';
-                                 banderasindato = false;
+                              
+                              if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == "chip"){
+                                  const orderarray: Array<any> = JSON.parse(this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor']);
+                                  let chipconcat = '';
+                                  orderarray.forEach(elemento => {
+                                      if (elemento.value) {
+                                        chipconcat = chipconcat  + elemento.descripcion + ' | ';
+                                      }
+                                  });
+                                  chipconcat = chipconcat.substring(0, chipconcat.length - 2);
+                                  ordervalue = chipconcat;
+                                  ordervalue = ordervalue.split("\n").join(" ");
+                                  ordervalue = ordervalue.split("\t").join(" ");
+                                  ordervalue = ordervalue.split(";").join(" ");
+                                  valuearrayexcel = valuearrayexcel + ordervalue + ';';
+                                  banderasindato = false;
+                                } else {
+                                var ordervalue = this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor'];
+                                  ordervalue = ordervalue.split("\n").join(" ");
+                                  ordervalue = ordervalue.split("\t").join(" ");
+                                  ordervalue = ordervalue.split(";").join(" ");
+                                  valuearrayexcel = valuearrayexcel + ordervalue + ';';
+                                  banderasindato = false;
+                              }
                              }
                              if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'layout_line'){
                                 banderasindato = false;

@@ -1,5 +1,7 @@
 
-        <mat-card [ngStyle]="{'padding':'0px'}">          
+        <mat-card [ngStyle]="{'padding':'0px'}">
+          
+          <!----
           <mat-card-header [ngClass]="{'custom-card':true}">
  
             <mat-card-title *ngIf="project" [ngClass]="{'custom-card':true}">
@@ -19,9 +21,9 @@
                 </div>
             </div>
           </mat-card-subtitle>
-          <!---<img src="assets/img/logoocaorden.png" width="70" height="39">-->
+          <img src="assets/img/logoocaorden.png" width="70" height="39">
           </mat-card-header>
-        
+          -->
 
         <mat-card-content>         
         <div class="d-flex">
@@ -625,7 +627,10 @@
                                     <!--</div>-->
                                     </cdk-virtual-scroll-viewport>
 
-
+                                    <div class="example-rate-limit-reached" *ngIf="!comentarios$">
+                                        No se encontraron registros de trabajo.
+                                    </div>
+                                  
                                   </div>
 
                               <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
@@ -722,7 +727,7 @@
                               <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-home-file" role="tabpanel" aria-labelledby="nav-home-tab">
                                   <div class="p-3">
-                                    <app-file-list [project_id]="project_id" [service_id]="service_id"></app-file-list>
+                                  <app-file-list [project_id]="project_id" [service_id]="service_id"></app-file-list>
                                   </div>                  
                                 </div>
                               <div class="tab-pane fade" id="nav-profile-file" role="tabpanel" aria-labelledby="nav-profile-tab">

@@ -43,6 +43,7 @@
                       <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || form5.value.estatus == 0" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 1">Procesar</button>
                       <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || form5.value.asignado == 0" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 2">Procesar</button>
                       <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || !form5.value.vencimiento" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 3">Procesar</button>
+                      <button type="submit" (click)="commit()" class="btn btn-primary btn-sm" [disabled]="!form5.value.action5 || !form5.value.vencimiento" *ngIf="form3.value.action3 == 3 && form5.value.action5 == 4">Procesar</button>
                       <div class="btn-grid">
                       <button type="submit" (click)="cancel()" class="btn btn-secondary btn-sm" [disabled]="selection.isEmpty()" *ngIf="form3.value.action3 == 3">Cancelar</button>
                       </div>
@@ -569,22 +570,31 @@
                                               <th scope="col">Descripción</th>
                                             </tr>
                                           </thead>                                  
-                                        <tbody>
-                                            
-                                                <tr >                                                                                                
-                                                        <td class="cell-type-collapsed">
-                                                            <input type="radio" formControlName="action4" value="1" >
-                                                        </td>
-                                                        <td>
-                                                            <label for="bulk.edit.operation.name_id">Editar Órdenes</label>
-                                                        </td>
-                                                        <td>
-                                                            <label for="bulk.edit.operation.name_id">Editar valores de campo de órdenes</label>
-                                                        </td>
-                                                    
-                                                    
-                                                </tr>
-                                                </tbody>
+                                        <tbody>                                            
+                                          <tr >                                                                                                
+                                            <td class="cell-type-collapsed">
+                                                <input type="radio" formControlName="action4" value="1" >
+                                            </td>
+                                            <td>
+                                                <label for="bulk.edit.operation.name_id">Editar Órdenes</label>
+                                            </td>
+                                            <td>
+                                                <label for="bulk.edit.operation.name_id">Editar valores de campo de órdenes</label>
+                                            </td>                                                                                                        
+                                          </tr>
+                                          <tr >                                                                                                
+                                            <td class="cell-type-collapsed">
+                                                <input type="radio" formControlName="action4" value="2" >
+                                            </td>
+                                            <td>
+                                                <label for="bulk.edit.operation.name_id">Eliminar Órdenes</label>
+                                            </td>
+                                            <td>
+                                                <label for="bulk.edit.operation.name_id">Eliminar Órdenes de Trabajo</label>
+                                            </td>                                                                                                        
+                                          </tr>
+
+                                        </tbody>
                                     </table>
                                 </div>    
                             </form>
@@ -598,8 +608,7 @@
 
 
 
-
-    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" *ngIf="form3.value.action3 == 3 ">      
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" *ngIf="form3.value.action3 == 3 && form4.value.action4 == 1">      
         <div >
             <mat-card [ngStyle]="{'padding':'0px'}">
                 <mat-card-header [ngClass]="{'custom-card':true}">
@@ -742,6 +751,92 @@
         </div>
     </main>
 
+
+    <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4" *ngIf="form3.value.action3 == 3 && form4.value.action4 == 2">      
+      <div >
+          <mat-card [ngStyle]="{'padding':'0px'}">
+              <mat-card-header [ngClass]="{'custom-card':true}">
+                  <div class="mat-card-header-text">
+                      <mat-card-title>
+                        <div class="row">
+                          <div class="col-8">
+                              <div class="float-left">
+                              Paso 3 de 3: Procesar Operación
+                              </div>
+                          </div>
+                          <div class="col-4">
+                              <div class="float-right">
+                                  <button mat-icon-button [matMenuTriggerFor]="menuview">
+                                    <mat-icon>view_headline</mat-icon>
+                                  </button>
+                                  
+                                  <mat-menu #menuview="matMenu" [overlapTrigger]="false">
+                                    <button mat-menu-item (click)="toggleTemplate(0)">
+                                    <mat-icon class="material-icons md-20" >view_list</mat-icon>      
+                                    <span >Vista de Lista </span>
+                                    </button>
+                                    <button mat-menu-item (click)="toggleTemplate(1)">
+                                    <mat-icon class="material-icons md-20" >view_quilt</mat-icon>
+                                    <span >Vista de Detalle</span>
+                                    </button>
+                                    <button mat-menu-item (click)="toggleTemplate(2)">
+                                    <mat-icon class="material-icons md-20" >view_week</mat-icon>
+                                    <span >Vista de Tablero</span>
+                                    </button>
+                                  
+                                  </mat-menu>
+                              </div>
+                          </div>
+              
+                        </div>
+                      </mat-card-title>
+                      <mat-card-subtitle>Elige la(s) acción(es) masiva(s) que quieres realizar con las órdenes seleccionadas.</mat-card-subtitle>
+                    </div>
+                  </mat-card-header>
+  
+                      <mat-card-content >
+                          <div class="container-fluid">
+                          <div class="container" *ngIf="isLoadingResults">
+                              <div class="row justify-content-md-center">
+                                <div class="col col-lg-2">
+                                    <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
+                                </div>
+                              </div>
+                          </div>
+                              
+                                      
+                          <form [formGroup]="form5" *ngIf="form5 && !isLoadingResults">
+                              <div class="example-table-container">
+                                  <table class="table">
+                                      <thead>
+                                          <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col">Acción</th>
+                                            <th scope="col">Descripción</th>
+                                            <th scope="col" *ngIf="form5.value.action5"></th>
+                                          </tr>
+                                        </thead>                                  
+                                      <tbody>                                          
+                                      <tr >                                                                                                
+                                        <td class="cell-type-collapsed">
+                                            <input type="radio" formControlName="action5" value="4" >
+                                        </td>
+                                        <td>
+                                            <label for="bulk.edit.operation.name_id">Eliminar</label>
+                                        </td>
+                                        <td>
+                                          <label for="bulk.edit.operation.name_id">Eliminar órdenes seleccionadas</label>
+                                        </td>
+                                      </tr>
+                                      </tbody>
+                                  </table>
+                              </div>    
+                          </form>
+                        </div>
+                      </mat-card-content>
+          </mat-card>
+      </div>
+  </main>
 
 
   </div>

@@ -16,6 +16,7 @@ import { CloneServiceComponent } from '../dialog/clone-service/clone-service.com
 import { CsvServiceComponent } from '../dialog/csvservice/csvservice.component';
 import { DeleteServiceComponent } from '../dialog/deleteservice/deleteservice.component';
 import { EditServiceComponent } from '../../../components/shared/shared.index';
+import { ProjectKpiListComponent } from '../dialog/project-kpi-list/project-kpi-list.component';
 import { UserComponent } from '../dialog/user/user.component';
 
 // MODELS
@@ -107,7 +108,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   ) {
 
     this._userService.handleAuthentication(this.identity, this.token);
-    //  this.columns = columns;
+    //this.columns = columns;
     this.configuration = SettingsNgxEasyTableService.config;
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();
@@ -365,6 +366,23 @@ export class ServiceComponent  implements OnInit, OnDestroy {
       }
     });
   }
+
+
+  openDialogKpi(): void {
+    const dialogRef = this.dialog.open(ProjectKpiListComponent, {
+      width: '1920px',
+      disableClose: true,
+      data: { project_id: this.id,
+              token: this.token.token,
+            }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+
+      }
+    });
+  }
+
 
   openDialogUser(id: number) {
     const dialogRef = this.dialog.open(UserComponent, {

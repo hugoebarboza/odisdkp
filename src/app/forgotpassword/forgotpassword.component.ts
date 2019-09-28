@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit,  ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -13,6 +13,7 @@ import swal from 'sweetalert';
 
 
 @Component({
+  changeDetection: ChangeDetectionStrategy.OnPush,
   selector: 'app-forgotpassword',
   templateUrl: './forgotpassword.component.html',
   styleUrls: ['./forgotpassword.component.css']
@@ -30,12 +31,22 @@ export class ForgotpasswordComponent implements OnInit {
   username : string;    
   year: number;
 
+  //CAPTCHA UTILITY
+  captchaIsLoaded = false;
+  captchaSuccess = false;
+  captchaIsExpired = false;
+  captchaResponse?: string;  
+  lang: string = 'es';  
+  siteKey: string = "6LdY_pwUAAAAANNCwxFDBNTGRDg2hrDvZSLTfxLl";
+  theme: 'light' | 'dark' = 'light';
+  size: 'compact' | 'normal' = 'normal';
+  type: 'image' | 'audio' = 'image';
+
 
   constructor(
 	private _router: Router,
-  private _userService: UserService
-
-
+  private _userService: UserService,
+  private cdr: ChangeDetectorRef
   	) 
   { 
     this.user = new User('','','','','','','',1,'','',1,'','',1,1,1);  
@@ -46,7 +57,7 @@ export class ForgotpasswordComponent implements OnInit {
   ngOnInit() {
 		this.forma = new FormGroup({
 			email: new FormControl(null, [Validators.required, Validators.email]),
-			recaptchaReactive: new FormControl(null, Validators.required)
+			recaptcha: new FormControl(null, Validators.required)
 		});
 
     //console.log('forgot.component cargado correctamente');
@@ -68,7 +79,7 @@ export class ForgotpasswordComponent implements OnInit {
        if(response.status != 'error' ){
          this.status = 'success';
          this.user.email = "";
-         swal('Se procesó exitosamente el reinicio de su clave con email:', this.user.email, 'success' );
+         swal('Se procesó exitosamente el reinicio de su clave. Recibirá un email con las instrucciones para restablecerla:', this.user.email, 'success' );
          //console.log('forgotpassword exitoso');
        }else{
          this.status = 'error';
@@ -93,6 +104,32 @@ export class ForgotpasswordComponent implements OnInit {
     }else {
       alert("Invalid credentials");
     }
+  }
+
+  handleReset(): void {
+    this.captchaSuccess = false;
+    this.captchaResponse = undefined;
+    this.captchaIsExpired = false;
+    this.cdr.detectChanges();
+  }
+
+  handleExpire(): void {
+    this.captchaSuccess = false;
+    this.captchaIsExpired = true;
+    this.cdr.detectChanges();
+  }
+
+  handleLoad(): void {
+    this.captchaIsLoaded = true;
+    this.captchaIsExpired = false;
+    this.cdr.detectChanges();
+  }
+
+  handleSuccess(captchaResponse: string): void {
+    this.captchaSuccess = true;
+    this.captchaResponse = captchaResponse;
+    this.captchaIsExpired = false;
+    this.cdr.detectChanges();
   }
 
 

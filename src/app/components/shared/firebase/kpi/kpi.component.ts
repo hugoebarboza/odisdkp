@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 import { OrderserviceService, UserService, ProjectsService } from 'src/app/services/service.index';
-import { AngularFireAuth } from 'angularfire2/auth';
+//import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { ServiceType } from 'src/app/models/types';
 import * as _moment from 'moment';
@@ -14,7 +14,7 @@ const moment = _moment;
   templateUrl: './kpi.component.html',
   styleUrls: ['./kpi.component.css']
 })
-export class KpiComponent implements OnInit , OnChanges {
+export class KpiComponent implements OnInit, OnChanges {
 
   @Input() id: number;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -31,11 +31,13 @@ export class KpiComponent implements OnInit , OnChanges {
   public kpiCollectionlast: AngularFirestoreCollection<any>;
   public datatype: ServiceType[] = [];
   public kpiyear = [];
-  public mesactual;
+  public mesactual: any;
   public kpimes = [];
+  
   public kpimesTypes = [];
 
-  view: any[] = [360, 400];
+  //view: any[] = [360, 400];
+  view: any[];
   colorScheme = {
     domain: ['#51a351', '#de473c']
   };
@@ -59,13 +61,15 @@ export class KpiComponent implements OnInit , OnChanges {
 
   constructor(
     private _orderService: OrderserviceService,
-    private firebaseAuth: AngularFireAuth,
+    //private firebaseAuth: AngularFireAuth,
     private _afs: AngularFirestore,
     private _userService: UserService,
     public dataService: ProjectsService,
   ) {
     this.identity = this._userService.getIdentity();
-    this.token = this._userService.getToken();
+    this.token = this._userService.getToken();    
+    this.view = [innerWidth / 7, 300];
+    //console.log(this.view);
    }
 
   ngOnInit() {
@@ -95,6 +99,18 @@ export class KpiComponent implements OnInit , OnChanges {
 
     this.getProject(this.id);
 
+  }
+
+  onResize(event) {
+    //console.log(event);
+    //console.log(event.target.innerWidth);
+    let param = event.target.innerWidth / 7;
+    //console.log(param);
+    if(param < 300){
+      param = 300;
+    }
+    this.view = [param, 300];
+    //console.log(this.view);
   }
 
   getProject(id: number) {
@@ -153,8 +169,11 @@ export class KpiComponent implements OnInit , OnChanges {
 
                         if (res && res.length > 0) {
                           for (let r = 0; r < res.length; r++) {
-                            this.kpimes[i] = [{ name: 'Avance ' + res[r]['porcentaje'] + '%' , value: res[r]['porcentaje']},
-                                  {name: 'Pendiente ' + (100 - res[r]['porcentaje']) + '%' , value: (100 - res[r]['porcentaje'])}];
+                            this.kpimes[i] = [
+                                              { name: 'Avance ' + res[r]['porcentaje'] + '%' , value: res[r]['porcentaje']},
+                                              {name: 'Pendiente ' + (100 - res[r]['porcentaje']) + '%' , value: (100 - res[r]['porcentaje'])}
+                                             ];
+
                           }
                         } else {
                             this.kpimes[i] = [{ name: 'Avance 0%' , value: 0}, {name: 'Pendiente 100%' , value: 100}];
@@ -213,7 +232,7 @@ export class KpiComponent implements OnInit , OnChanges {
 
                         this.kpiyear[i] = servicetypekpi;
                         if ( this.kpiyear.length === this.datatype.length) {
-                          // console.log(this.kpiyear);
+                           //console.log(this.kpiyear);
                           this.kpiTableData = new MatTableDataSource(this.kpiyear);
                           this.kpiTableData.paginator = this.paginator;
                           this.kpiTableData.sort = this.sort;

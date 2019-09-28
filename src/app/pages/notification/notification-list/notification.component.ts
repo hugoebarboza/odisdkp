@@ -35,7 +35,7 @@ import { SettingsService, UserService } from 'src/app/services/service.index';
 export class NotificationComponent implements OnInit, OnDestroy {
 
   identity: any;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   isSave: boolean = false;
   proyectos: Array<Proyecto>;
   resultCount: number;
@@ -91,7 +91,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
     this.isLoading = true;
 
     this.afAuth.authState.take(1).subscribe(user => {
-      this.isLoading = false;
+      //this.isLoading = false;
       if (!user) return;
       this.userid = user.uid;
       this.userDoc = this.afs.doc<User>(`/users/${user.uid}`);
@@ -101,11 +101,11 @@ export class NotificationComponent implements OnInit, OnDestroy {
       this.subscription = this.notificationsRef.snapshotChanges()
       .pipe(
         map(actions => {
-          this.isLoading = false;
           this.resultCount = actions.length;
           if (this.resultCount == 0){
            // console.log(this.resultCount);
             this.notifications$ = null;
+            this.isLoading = false;
             //return;
           }
           return actions.map(a => {
@@ -118,6 +118,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
         const count = Object.keys(collection).length;
         if (count === 0) {
           this.notifications$ = null;
+          this.isLoading = false;
         } else {
           this.gojoin(Observable.of(collection));
         }
@@ -149,6 +150,7 @@ export class NotificationComponent implements OnInit, OnDestroy {
   }
 
   gojoin(collection): Observable<any> {
+    this.isLoading = false;
     return this.notifications$ = collection.pipe(
       leftJoin(this.afs, 'create_by', 'users')
     );

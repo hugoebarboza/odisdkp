@@ -10,9 +10,6 @@ import { PageEvent } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import { MatSelect } from '@angular/material';
 import { debounceTime } from 'rxjs/operators/debounceTime';
-import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
-import {Observable} from 'rxjs/Observable';
-import {map} from 'rxjs/operators';
 
 //CDK
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
@@ -23,11 +20,11 @@ import * as FileSaver from 'file-saver';
 import { GLOBAL } from '../../../services/global';
 
 //SERVICES
-import { CountriesService, ExcelService, OrderserviceService, ProjectsService, UserService, ZipService } from '../../../services/service.index';
+import { CountriesService, ExcelService, ModalManageService, OrderserviceService, ProjectsService, UserService, ZipService } from '../../../services/service.index';
 
 
 //MODELS
-import { Order, ServiceType, ServiceEstatus } from '../../../models/types';
+import { Order, ServiceType, ServiceEstatus, User } from '../../../models/types';
 
 
 //COMPONENTS
@@ -88,7 +85,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   
   
   //date = new FormControl(moment([2019, 3, 2]).format('YYYY[-]MM[-]DD'));  
+  assigned_to:number = 0;
   date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
+  isMobile: string = '';
   subtitle = "Listado de órdenes de trabajo. Agregue, edite, elimine y ordene los datos de acuerdo a su preferencia.";
   columnselect: string[] = new Array();
   datedesde: FormControl;
@@ -313,13 +312,14 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   subscription: Subscription;
 
-  constructor(  
-    public _userService: UserService,
+  constructor(
+    public _modalManage: ModalManageService,
+    private _regionService: CountriesService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
+    public _userService: UserService,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
-    private _regionService: CountriesService,
+    public snackBar: MatSnackBar,    
     private excelService:ExcelService,
     private toasterService: ToastrService,
     public zipService: ZipService,
@@ -335,10 +335,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.dataSource = new MatTableDataSource();
     this.error = '';
     this.role = 5; //USUARIOS INSPECTORES
-    this.open = false;
-
-    
-  
+    this.open = false;    
   }
 
   hoverIn(index:number){
@@ -417,6 +414,17 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedRow = index;
     this.order_id = orderid;
   }
+  
+  showModal(id: number){
+    //console.log(id);
+    if(id > 0){
+      this._modalManage.showModal(id);
+      this.assigned_to = id;  
+    }else{
+      return;
+    }
+    //console.log(this.assigned_to);
+  }
 
   ngOnInit() {
     //VALORES POR DEFECTO DE FILTRO AVANZADO
@@ -439,9 +447,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   ngOnChanges(changes: SimpleChanges) {
+    //console.log('paso');    
     this.portal = 0;
     this.selectedRow = -1;
     this.order_id = 0;
+    this.dataSource = new MatTableDataSource();
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.matSort;
     this._portal = this.myTemplate;
@@ -450,7 +460,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.isactiveSearch = false;
     this.datasourceLength = 0;
     this.filterValue = '';
-    this.termino = '';
+    this.termino = '';    
     this.loadInfo();
     this.getZona(this.id);
     this.getProject(this.id);
@@ -601,26 +611,29 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         response.subscribe(
           (some: any) => 
           {
-            if(some.datos.data){
-            //console.log(some.datos.data);
-            this.resultsLength = some.datos.total;
-            this.servicename = some.datos.data[0]['service_name'];
-            this.category_id =  some.datos.data[0]['category_id'];
-            this.project_id = some.datos.data[0]['project_id'];
-            this.isRateLimitReached = false;
-            }else{
-            this.resultsLength = 0;
-            this.servicename = some.datos['service_name'];
-            this.category_id =  some.datos['projects_categories_customers']['id'];
-            this.project_id = some.datos['project']['id'];
-            this.isRateLimitReached = true;          
-            }
-            this.ServicioSeleccionado.emit(this.servicename);
-            this.dataSource = new MatTableDataSource(some.datos.data);            
-            if(this.dataSource && this.dataSource.data.length > this.datasourceLength){
-              this.datasourceLength = this.dataSource.data.length;
-              this.isactiveSearch = true;
-              
+            //console.log(some);
+            if(some.status == 'success'){
+              if(some.datos && some.datos.data){
+                //console.log(some.datos.data);
+                this.resultsLength = some.datos.total;
+                this.servicename = some.datos.data[0]['service_name'];
+                this.category_id =  some.datos.data[0]['category_id'];
+                this.project_id = some.datos.data[0]['project_id'];
+                this.isRateLimitReached = false;
+                }else{
+                this.resultsLength = 0;
+                this.servicename = some.datos['service_name'];
+                this.category_id =  some.datos['projects_categories_customers']['id'];
+                this.project_id = some.datos['project']['id'];
+                this.isRateLimitReached = true;          
+                }
+                this.ServicioSeleccionado.emit(this.servicename);
+                this.dataSource = new MatTableDataSource(some.datos.data);          
+                if(this.dataSource && this.dataSource.data.length > this.datasourceLength){
+                  this.datasourceLength = this.dataSource.data.length;
+                  this.isactiveSearch = true;
+                  
+                }
             }
             //console.log(this.dataSource.data.length);
             //this.dataSource.paginator = this.paginator;
@@ -641,7 +654,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   public refreshTable() { 
-    //console.log('paso refresch');   
+    //console.log('paso refresch');
     //this.sort.sortChange.subscribe(() => this.paginator.pageIndex = 0);
     this.termino = '';
     this.selectedRow = -1;
@@ -676,7 +689,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
-      .then(response => {this.getData(response)})
+      .then(response => {
+        //console.log(response);
+        this.getData(response)
+      }
+      )
       .catch(error => {                      
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
@@ -766,8 +783,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
        //console.log('paso555')
-    }  
-
+    }
   }
 
 
@@ -1289,6 +1305,7 @@ private filterRegionMulti() {
               id_region: 0,
               id_provincia: 0,
               id_comuna: 0,
+              project_id: this.project_id,
               selectedValueservicio: null,
               selectedValuezona: null,
               tiposervicio: this.tipoServicio,

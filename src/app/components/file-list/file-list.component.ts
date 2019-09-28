@@ -47,7 +47,7 @@ export class FileListComponent implements OnInit {
   CARPETA_ARCHIVOS: string;
   isLoadingResults = true;
   isLoadingDownload = false;
-  isRateLimitReached = false;
+  isRateLimitReached: boolean = true;
   file: any;
   indexitem: number;
   profileUrl: Observable<any>;
@@ -85,7 +85,6 @@ export class FileListComponent implements OnInit {
     if (this.project_id > 0 && this.service_id > 0){
         // this.CARPETA_ARCHIVOS = 'filesprojects/'+this.project_id+'/'+this.service_id;
         this.CARPETA_ARCHIVOS = 'allfiles/projects/' + this.project_id + '/' + this.service_id + '/files';
-
         this.filesCollection = this._afs.collection(this.CARPETA_ARCHIVOS, ref => ref.orderBy('created', 'desc'));
         this.filesCollection.snapshotChanges().pipe(
           map(actions => {
@@ -97,9 +96,8 @@ export class FileListComponent implements OnInit {
           })
         ).subscribe( (collection: any[]) => {
             const count = Object.keys(collection).length;
-            this.isRateLimitReached = false;
-            this.isLoadingResults = false;
             if (count === 0) {
+              this.isLoadingResults = false;
               this.dataSource = null;
             } else {
               this.gojoin(Observable.of(collection));
@@ -209,6 +207,8 @@ export class FileListComponent implements OnInit {
         this.dataSource = new MatTableDataSource(data);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.isRateLimitReached = false;
+        this.isLoadingResults = false;
       }
     );
   }

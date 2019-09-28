@@ -37,6 +37,7 @@ export class ZipComponent {
   public region: Region;
   public provincia: Provincia;
   public comuna: Comuna;
+  public project_id: any;
 
   selectedColumnnDate = {
     fieldValue: '',
@@ -56,6 +57,7 @@ export class ZipComponent {
       this.zona = data['zona'];
       this.data.date = this.date.value;
       this.data.dateend = this.date.value;
+      this.project_id = data['project_id'];
       this.loadRegion();
     }
 
@@ -126,7 +128,7 @@ export class ZipComponent {
     if (result !== undefined) {
       console.log(result);
 
-      let link = 'http://gasco.ocachile.cl/gasco/ocaglobalzip/zip.php?tiposervicio=' +
+      let link = 'http://gasco.ocachile.cl/gasco/ocaglobalzip/zip.php?project_id=' + this.project_id + '&tiposervicio=' +
                   result['selectedValueservicio'] + '&createUpdate=' + result['createEdit']  + '&startdate=' +
                   moment(result['date']).format('YYYY-MM-DD') + '&enddate=';
 

@@ -1,0 +1,135 @@
+<meta name="Description" content="payments">
+<div class="container-fluid p-2">
+    <div class="row p-2 animated fadeIn">
+        <div class="col-12">        
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom ">
+                <div class="p-2 w-100 ">
+                    <div class="d-flex">
+                        <div class="p-2"><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1></div>
+                        <div class="p-2">
+                        </div>
+                    </div>                  
+                </div>
+                <div class="p-2 flex-shrink-1 ">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row animated fadeIn">
+        <div class="col-12">
+            <div class="row animated fadeIn" *ngIf="loading">
+                <div class="col-sm-12">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div>
+            </div>
+            <div class="p-2 animated fadeIn">
+                <mat-card  [ngStyle]="{'padding':'0px'}">
+                    <mat-card-header [ngClass]="{'custom-card':true, 'padding':'0px'}">   
+                        <div class="mat-card-header-text">
+                            <mat-card-title >
+                                <div class="d-flex justify-content-end" >
+                                </div>
+                            </mat-card-title>
+                        </div>
+                    <mat-card-subtitle>
+                    </mat-card-subtitle>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <br>
+                        <div class="container-fluid p-2">
+                            <div class="row">                                
+                                <div class="col-md-9">
+
+                                    
+                                    <!----CONTAINER -->
+
+
+                                </div>
+                                <div class="col-md-3 order-first order-md-last">                                    
+                                    <div class="gLOvjB">
+                                        <p class="jMfZdr">
+                                            <span>Filtro</span>
+                                        </p>
+                                        <form ngNativeValidate [formGroup]="formulario">
+                                            <div *ngIf="datesearchoptions">
+                                                <h2 class="jeEmY">Fecha</h2>
+                                                <div class="input-group input-group-sm mb-3" >
+                                                    <ng-select
+                                                    [items]="datesearchoptions"
+                                                    [clearable]="false"
+                                                    bindLabel="name"
+                                                    bindValue="value"
+                                                    class="width-100percentage" name="dateoptions" formControlName="dateoptions">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="formulario.value.dateoptions == 'custom'">
+                                                <h2 class="jeEmY">Rango de fecha</h2>
+                                                <p-calendar placeholder="yyyy-mm-dd" dateFormat="yy-mm-dd"   showButtonBar="true" readonlyInput="true" hourFormat="24"  [locale]="es"  selectionMode="range" [showIcon]="true" name="date_rango" formControlName="date_rango">
+                                                    <p-footer></p-footer>
+                                                </p-calendar>
+                                            </div>
+                                            <div *ngIf="services && services.length > 0">
+                                                <h2 class="jeEmY">Servicio</h2>
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <ng-select
+                                                        [items]="services"
+                                                        [clearable]="false"
+                                                        bindLabel="service_name"
+                                                        bindValue="id"
+                                                        (change)="selectChangeServicio($event)"
+                                                        class="width-100percentage" name="service" formControlName="service">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="servicetype && servicetype.length > 0">
+                                                <h2 class="jeEmY">Tipo de servicio</h2>
+                                                <div class="input-group input-group-sm mb-3">
+                                                    <ng-select
+                                                        [items]="servicetype"
+                                                        [clearable]="true"
+                                                        bindLabel="name"
+                                                        bindValue="id"
+                                                        class="width-100percentage" name="servicetype" formControlName="servicetype">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div *ngIf="serviceestatus && serviceestatus.length > 0">
+                                                <h2 class="jeEmY">Estatus</h2>
+                                                <div class="animated fadeIn input-group input-group-sm mb-3">
+                                                    <ng-select
+                                                        [items]="serviceestatus"
+                                                        [clearable]="true"
+                                                        bindLabel="name"
+                                                        bindValue="id"
+                                                        class="width-100percentage" name="status" formControlName="status">
+                                                    </ng-select>
+                                                </div>
+                                            </div>
+                                            <div class="row" style="margin-top: 14px;">
+                                                <div class="col-md-12">
+                                                    <div class="text-center">
+                                                        <button  mat-raised-button color="primary" (click)="procesarAll(formulario)" style="margin-right: 8px;"  [disabled]="formulario.invalid" >
+                                                            <mat-icon aria-label="Edit">done</mat-icon>Aceptar                  
+                                                        </button>
+                                                        <button  mat-raised-button color="warn" (click)="formulario.reset(); servicetype = null; serviceestatus = null;" style="margin-left: 4px;">
+                                                            <mat-icon aria-label="Close">delete_sweep</mat-icon>Limpiar
+                                                        </button>  
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                    <mat-card-actions>
+                    </mat-card-actions>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

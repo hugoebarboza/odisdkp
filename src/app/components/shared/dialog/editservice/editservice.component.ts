@@ -82,6 +82,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
   public service_data: Service;
   public service_name: string;
   service_kpi: number;
+  lectura_modulo: number;
   public termino: any;
   public users: User[] = [];
   public users_ito: User[] = [];
@@ -147,12 +148,15 @@ export class EditServiceComponent implements OnInit, OnDestroy {
                     this.loading = false;
                     return;
                   }
+
+                  console.log(response);
                   if(response.status == 'success'){
                     this.services = response.datos;
                     this.project = this.services['project']['project_name'];
                     this.project_id = this.services['project']['id'];
                     this.service_name = this.services['service_name'];
                     this.service_kpi = this.services['kpi'];
+                    this.lectura_modulo = this.services['lectura'];
                     //console.log(this.service_kpi);
                     if(this.services['servicedetail'][0]){
                       this.service_detail = response.datos.servicedetail;                      
@@ -656,6 +660,22 @@ export class EditServiceComponent implements OnInit, OnDestroy {
       this._project.statusKpi(this.token.token, this.project_id, this.data.service_id, tag);
       this.snackBar.open('Se ha desactivado el Kpi en Proyecto.', '', {duration: 2000,});             
     }           
+  }
+
+  onChangeLectura(event: any) {
+
+    if (event.checked === true) {
+      const tag = 1;
+      this._project.lectura(this.token.token, this.project_id, this.data.service_id, tag);
+      this.snackBar.open('Se ha activado el Modulo de lectura en Proyecto.', 'Destacada', {duration: 2000,});
+    }
+
+    if (event.checked === false) {
+      const tag = 0;
+      this._project.lectura(this.token.token, this.project_id, this.data.service_id, tag);
+      this.snackBar.open('Se ha desactivado el Modulo de lectura en Proyecto.', '', {duration: 2000,});
+    }
+
   }
 
 

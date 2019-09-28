@@ -7,7 +7,9 @@ import { take, takeUntil } from 'rxjs/operators';
 import {NgbModal, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 //AGM
-import { InfoWindow } from '@agm/core/services/google-maps-types'
+import { InfoWindow } from '@agm/core/services/google-maps-types';
+import { ElementRef, NgZone} from '@angular/core';
+import { MapsAPILoader, MouseEvent} from '@agm/core';
 
 //MODELS
 import { 
@@ -196,7 +198,14 @@ export class MapaFullWidthComponent implements OnInit {
   private _onDestroy = new Subject<void>();
 
   @ViewChild('drawer', { static: true }) drawer;
-  @Input() id : number;
+  @Input() id: number;
+
+  @ViewChild('search', { static: true }) search;
+  private geoCoder;
+  mylatitude: number;
+  mylongitude: number;
+  myaddress: number;
+  zoom = 15;
 
   constructor(
     private _dataService: OrderserviceService,    
@@ -207,7 +216,10 @@ export class MapaFullWidthComponent implements OnInit {
     private _regionService: CountriesService,
     private _userService: UserService,
     private modalService: NgbModal,
-    public activeModal: NgbActiveModal
+    public activeModal: NgbActiveModal,
+
+    private mapsAPILoader: MapsAPILoader,
+    private ngZone: NgZone
     
   	) {
     this.identity = this._userService.getIdentity();
@@ -251,7 +263,69 @@ export class MapaFullWidthComponent implements OnInit {
       });    
 
 
+    this.mapsAPILoader.load().then(() => {
+      this.setCurrentLocation();
+      this.geoCoder = new google.maps.Geocoder;
+      const autocomplete = new google.maps.places.Autocomplete(this.search.nativeElement, {
+        types: ['address']
+      });
+      autocomplete.addListener('place_changed', () => {
+        this.ngZone.run(() => {
+          // get the place result
+          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+          // verify result
+          if (place.geometry === undefined || place.geometry === null) {
+            return;
+          }
+          // set latitude, longitude and zoom
+          this.mylatitude = place.geometry.location.lat();
+          this.mylongitude = place.geometry.location.lng();
+          this.getAddress(this.mylatitude, this.mylongitude);
+        });
+      });
+    });
+  
+  
   }
+  
+    private setCurrentLocation() {
+      if ('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition((position) => {
+          this.mylatitude = position.coords.latitude;
+          this.mylongitude = position.coords.longitude;
+          // this.zoom = 15;
+          this.getAddress(this.mylatitude, this.mylongitude);
+        });
+      }
+    }
+  
+  
+    markerDragEnd($event: MouseEvent) {
+      console.log($event);
+      this.mylatitude = $event.coords.lat;
+      this.mylongitude = $event.coords.lng;
+      this.getAddress(this.mylatitude, this.mylongitude);
+    }
+  
+    getAddress(latitude, longitude) {
+      this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
+        //console.log(results);
+        //console.log(status);
+        if (status === 'OK') {
+          if (results[0]) {
+            this.myaddress = results[0].formatted_address;
+            this.latitude = latitude;
+            this.longitude = longitude;
+            this.zoom = 17;
+          } else {
+            window.alert('No results found');
+          }
+        } else {
+          window.alert('Geocoder failed due to: ' + status);
+        }
+  
+      });
+    } 
 
 
 

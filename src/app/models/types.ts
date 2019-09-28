@@ -78,7 +78,8 @@ export class Customer  {
 	public id_comuna:any,
 
 	public medidor:string,
-	public modelo_medidor:string,	
+	public modelo_medidor:string,
+	public lectura:string,
 	public id_tarifa:any,
 	public id_constante:any,
 	public id_giro:any,
@@ -121,6 +122,21 @@ export class Countries  {
 	constructor(	
 	public id:number,
 	public country_name:string,
+	public status:number,
+	public create_by:number,
+	public create_at:any,
+	public update_by:number,
+	public update_at:any
+	){}
+}
+
+export class Currency  {
+	
+	constructor(	
+	public id:number,
+	public name:string,
+	public code:string,
+	public symbol:string,
 	public status:number,
 	public create_by:number,
 	public create_at:any,
@@ -246,6 +262,10 @@ export class Modelo  {
 	){}
 }
 
+export interface Month {
+	value: number;
+	name: string;
+}
 
 
 export class Order  {

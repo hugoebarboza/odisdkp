@@ -1,4 +1,4 @@
-   
+
     <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
       No se encontraron archivos.
     </div>
@@ -18,7 +18,7 @@
     #table  
     [dataSource]="dataSource"  
     matSort  
-    *ngIf="!isRateLimitReached"
+    *ngIf="!isRateLimitReached && dataSource"
     [class.isMobile]="isMobile"
     >
 

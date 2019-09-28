@@ -107,4 +107,12 @@ justify-content: center;
     width: 50%;
     padding: 4px;
 }
+.mat-icon-button {
+    outline: 0;
+    border: none;
+}
+.mat-menu-item{
+    outline: 0;
+    border: none;
+}
   

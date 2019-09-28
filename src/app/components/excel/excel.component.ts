@@ -55,10 +55,10 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   checkValidationPost = false;
   checkboxAuto = false;
   checkOrdenes = false;
+  checkboxDupOt = false;
 
   project_id: number;
   servicename: string;
-
 
   arrayBuffer: any;
   file: File;
@@ -168,6 +168,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     this.getTipoServicio(this.service_id);
     this.getInspectores();
     */
+
+
 
   }
 
@@ -376,6 +378,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             let assigned_to: Number = 0;
             let required_date: String = '' + that.arrayCarga[ii]['required_date'];
             let observation: String = '' + that.arrayCarga[ii]['observation'];
+            let lectura: string = '' + that.arrayCarga[ii]['lectura'];
 
             // Validar campos
 
@@ -507,6 +510,26 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               transformador = '';
             } else {
               transformador =  transformador.trim();
+            }
+
+            if (lectura === 'undefined' || lectura.trim().length === 0) {
+              lectura = '0';
+            } else {
+              // tslint:disable-next-line:radix
+              if (isNaN(parseInt(lectura))) {
+                banderaJson = true;
+                concatError = concatError + 'Lectura invalida; ';
+              } else {
+                    // tslint:disable-next-line:radix
+                    if (parseInt(lectura) % 1 === 0) {
+                      // tslint:disable-next-line:radix
+                      lectura = '' + parseInt(lectura);
+                    } else {
+                      console.log('Es un numero decimal');
+                      banderaJson = true;
+                      concatError = concatError + 'Lectura invalida; ';
+                    }
+              }
             }
 
             if (leido_por === 'undefined' || leido_por.trim().length === 0) {
@@ -708,6 +731,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'medidor': medidor,
               'modelo_medidor': modelo_medidor,
               'transformador': transformador,
+              'lectura': lectura,
               'leido_por': leido_por,
               'observacion': observacion,
               'region': region,
@@ -742,7 +766,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'cc_id': '',
               'orden_id': '',
               'parametro': 0,
-              'estatus': ''
+              'estatus': '',
+              'duplicar_ot': that.checkboxDupOt
             };
 
             if (that.dateend !== undefined) {
@@ -751,6 +776,27 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               objectJson['vencimiento_date'] = that.dateend;
             }
 
+            if (JSON.stringify(objectJson).search('#') !== -1 ) {
+              banderaJson = true;
+              concatError = concatError + ' Caracter especial [#] No permitido';
+            }
+
+            if (JSON.stringify(objectJson).search('¥') !== -1 ) {
+              banderaJson = true;
+              concatError = concatError + ' Caracter especial [¥] No permitido';
+            }
+
+            if (JSON.stringify(objectJson).search('—') !== -1 ) {
+              banderaJson = true;
+              concatError = concatError + ' Caracter especial [—] No permitido';
+            }
+
+            if (JSON.stringify(objectJson).search('&') !== -1 ) {
+              banderaJson = true;
+              concatError = concatError + ' Caracter especial [&] No permitido';
+            }
+          
+            
             if (banderaJson) {
               const success: Object = {
                 'estatus' : 'Error en registro: ' + concatError,
@@ -866,6 +912,14 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       this.checkboxAuto = false;
     } else {
       this.checkboxAuto = true;
+    }
+  }
+
+  checkduplicatOt(event) {
+    if (!event.checked) {
+      this.checkboxDupOt = false;
+    } else {
+      this.checkboxDupOt = true;
     }
   }
 

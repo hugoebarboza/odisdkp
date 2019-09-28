@@ -65,7 +65,8 @@ registerLocaleData(localeEs);
     AgmDirectionModule,
     AngularSplitModule.forRoot(),
     AgmCoreModule.forRoot({
-      apiKey: environment.global.agmapikey
+      apiKey: environment.global.agmapikey,
+      libraries: ['places']
     }),
     CalendarModule,
     CommonModule,

@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import swal from 'sweetalert';
@@ -14,23 +14,36 @@ import { SettingsService, UserService } from '../services/service.index';
 
 
 @Component({
+	changeDetection: ChangeDetectionStrategy.OnPush,
 	selector:'register',
 	templateUrl: './register.component.html',
 	providers: [UserService]
 })
 export class RegisterComponent implements OnInit {
 	
-	public forma: FormGroup;
-	public status: string
-	public title: string;
-	public user: User;
-	public captchaResponse: boolean = true;
+  public forma: FormGroup;
+  public status: string
+  public title: string;
+  public user: User;
+	//public captchaResponse: boolean = true;
+
+  //CAPTCHA UTILITY
+  captchaIsLoaded = false;
+  captchaSuccess = false;
+  captchaIsExpired = false;
+  captchaResponse?: string;  
+  lang: string = 'es';  
+  siteKey: string = "6LdY_pwUAAAAANNCwxFDBNTGRDg2hrDvZSLTfxLl";
+  theme: 'light' | 'dark' = 'light';
+  size: 'compact' | 'normal' = 'normal';
+  type: 'image' | 'audio' = 'image';
+
 	
 
 	constructor(
 		private _userService: UserService,
+		private cdr: ChangeDetectorRef,
 		public label: SettingsService,
-
 	){
 		this.label.getDataRoute().subscribe(data => {
 			this.title = data.subtitle;
@@ -48,8 +61,8 @@ export class RegisterComponent implements OnInit {
 			password2: new FormControl(null, [Validators.required, Validators.minLength(6)]),
 			telefono: new FormControl(null),
 			telefono2: new FormControl(null),
-			condiciones: new FormControl(false),
-			recaptchaReactive: new FormControl(null, Validators.required)
+			condiciones: new FormControl(false, Validators.required),
+			recaptcha: new FormControl(null, Validators.required)
 		}, {
 			validators: [this.verifyEqual('password','password2'), MustMatch('email','email2')]
 		   }
@@ -95,13 +108,14 @@ export class RegisterComponent implements OnInit {
 	}
 
 
+	/*
 	public resolved(captchaResponse: string) {
 		if(captchaResponse){
 			//console.log(`Resolved captcha with response ${captchaResponse}:`);
 			this.captchaResponse = true;
 		}
 		
-	}
+	}*/
 
 	onSubmit(){
 	
@@ -135,5 +149,31 @@ export class RegisterComponent implements OnInit {
 	 		}
 	 	);
 	}
+
+	handleReset(): void {
+	this.captchaSuccess = false;
+	this.captchaResponse = undefined;
+	this.captchaIsExpired = false;
+	this.cdr.detectChanges();
+	}
+	
+	handleExpire(): void {
+	this.captchaSuccess = false;
+	this.captchaIsExpired = true;
+	this.cdr.detectChanges();
+	}
+
+	handleLoad(): void {
+	this.captchaIsLoaded = true;
+	this.captchaIsExpired = false;
+	this.cdr.detectChanges();
+	}
+
+	handleSuccess(captchaResponse: string): void {
+	this.captchaSuccess = true;
+	this.captchaResponse = captchaResponse;
+	this.captchaIsExpired = false;
+	this.cdr.detectChanges();
+	}	
 	
 }

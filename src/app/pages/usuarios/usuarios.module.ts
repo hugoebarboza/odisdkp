@@ -9,16 +9,21 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 //MODULES
 import { MaterialModule } from '../../material-module';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 //COMPONENTS
 import { UsuariosComponent } from './usuarios-list/usuarios.component';
+import { UsuariosDetailComponent } from './usuarios-detail/usuarios-detail.component';
+import { UsuarioWorkComponent } from './usuario-work/usuario-work.component';
 
 //DIALOG
 import { AddUserComponent } from './dialog/adduser/adduser.component';
 import { EditUserComponent } from './dialog/edituser/edituser.component';
 import { ModalUploadImageComponent } from './dialog/modaluploadimage/modaluploadimage.component';
+//import { ShowComponent } from 'src/app/components/dialog/show/show.component';
 import { ShowProfileSecurityComponent } from './dialog/showprofilesecurity/showprofilesecurity.component';
 
 //ROUTING
@@ -36,6 +41,8 @@ import { ServiceModule } from 'src/app/services/service.module';
     FormsModule,
     HttpClientModule,
     MaterialModule,
+    NgxChartsModule,
+    NgSelectModule,
     ReactiveFormsModule,
     PipesModule,
     ServiceModule,
@@ -47,7 +54,9 @@ import { ServiceModule } from 'src/app/services/service.module';
     EditUserComponent,
     ModalUploadImageComponent,
     ShowProfileSecurityComponent,
-    UsuariosComponent
+    UsuariosComponent,
+    UsuariosDetailComponent,
+    UsuarioWorkComponent
   ],
   entryComponents: [
     AddUserComponent,

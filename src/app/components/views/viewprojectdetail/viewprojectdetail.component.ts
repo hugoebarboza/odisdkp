@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, SimpleChanges, OnChanges, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, EventEmitter, SimpleChanges, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators  } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { defer, combineLatest, Observable, of, Subscription } from 'rxjs';
@@ -74,6 +74,9 @@ export interface Users {
 })
 export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges {
 
+  @Output() TiposServicio: EventEmitter<any>;
+  @Output() Users: EventEmitter<any>;
+
   @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
   
   archivos: FileItem[] = [];
@@ -107,13 +110,14 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public regiones: Region[] = [];  
   public row: any = {expand: false};
   public route: string = '';
+  role:number = 0;
   public service_id: number;
   public services: Service;
   public service_detail: Service;
   public service_data: Service;
   public servicename: string;
   public subscription: Subscription;
-  tipoServicio: any;
+  tipoServicio = [];
   private token: any;
   public toggleContent: boolean = false;
   public toggleContentMain: boolean = false;
@@ -178,6 +182,9 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+    this.TiposServicio = new EventEmitter();
+    this.Users = new EventEmitter();
+    this.role = 5; //USUARIOS INSPECTORES
     
 
     this.firebaseAuth.authState.subscribe(
@@ -248,11 +255,15 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
 }
 
 getTipoServicio(id:number) {
+  this.tipoServicio = [];
   this.zipService.getTipoServicio(id, this.token.token).then(
     (res: any) => {
       res.subscribe(
         (some: any) => {
           this.tipoServicio = some['datos'];
+          if(this.tipoServicio.length > 0){
+            this.TiposServicio.emit(this.tipoServicio);
+          }
           //console.log(this.tipoServicio);
           //console.log(this.tipoServicio.length);
         },
@@ -299,7 +310,6 @@ addComment(value:any) {
 }*/
 
 loadcomentario(path:string){
-
     //SELECT DE COMMENTS FIREBASE
     this.comentariosCollection = this._afs.collection(path + 'comments', ref => ref.orderBy('create_at', 'desc'));
     this.comentariosCollection.snapshotChanges().pipe(
@@ -311,11 +321,11 @@ loadcomentario(path:string){
         });
       })
     ).subscribe( (collection: any[]) => {
-        const count = Object.keys(collection).length;
+        const count = Object.keys(collection).length;        
         if (count === 0) {
           this.comentarios$ = null;
         } else {
-          this.collectionJoinUser(Observable.of(collection), path);
+            this.collectionJoinUser(Observable.of(collection), path);          
         }
       }
     );
@@ -469,6 +479,7 @@ deleteCommentDatabase(item: any) {
                           if(this.project_id >0){
                             this.getRouteFirebase(this.project_id);
                             this.newpath = this.newpath + this.project_id + '/' + this.id + '/';
+                            //console.log(this.newpath);
                             this.loadcomentario(this.newpath);
                           }
                           
@@ -557,6 +568,10 @@ deleteCommentDatabase(item: any) {
                 }
                 if(response.status == 'success'){    
                   this.users = response.datos;
+                  if(this.users.length > 0){
+                    this.Users.emit(this.users);
+                  }
+                  //console.log(this.users);
                 }
                 });        
   
@@ -568,9 +583,8 @@ deleteCommentDatabase(item: any) {
                 if(response.status == 'success'){    
                   this.users_ito = response.datos;
                 }
-                });        
-  
-     }
+                });
+      }
   
   
     loadRegion(){
