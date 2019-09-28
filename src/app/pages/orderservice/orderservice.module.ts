@@ -26,7 +26,6 @@ import { ViewModule } from '../../components/views/view.module';
 import { AddComponent } from '../../components/dialog/add/add.component';
 import { AddcustomerComponent } from '../../components/dialog/addcustomer/addcustomer.component';
 import { AddJobComponent } from './components/dialog/add-job/add-job.component';
-import { AddSupportComponent } from '../../components/dialog/widget/addsupport/addsupport.component';
 import { AddConstanteComponent } from './components/dialog/add-constante/add-constante.component';
 import { AddColorComponent } from './components/dialog/add-color/add-color.component';
 import { AddGiroComponent } from './components/dialog/add-giro/add-giro.component';
@@ -186,7 +185,6 @@ registerLocaleData(localeEs);
     AddMarcaComponent,
     AddMercadoComponent,
     AddModeloComponent,
-    AddSupportComponent,
     AddServiceTypeComponent,
     AddServiceTypeValueComponent,
     AddServiceValueComponent,     
@@ -259,7 +257,6 @@ registerLocaleData(localeEs);
     AddMercadoComponent,
     AddModeloComponent,
     AddSectorComponent,
-    AddSupportComponent,
     AddServiceTypeComponent,
     AddServiceTypeValueComponent,
     AddServiceValueComponent,

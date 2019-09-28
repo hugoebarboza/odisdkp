@@ -254,7 +254,7 @@ export class UserService  {
 		let params = 'json='+json;
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.post(this.url+'logindkp', params, {headers: headers})
+		return this._http.post(this.url+'logindkptrue', params, {headers: headers})
 			.map( (resp: any) => {
 				this.identity = resp;
 				let key = 'identity';
@@ -442,7 +442,7 @@ export class UserService  {
 		return this._http.get<User[]>(Url, {headers: headers});
 	}
 	
-	public handleAuthentication(identity, token):void {			
+	public handleAuthentication(identity, token):void {		
 		if(identity && token){
 			this.identity = identity;
 			this.setSession(identity);
@@ -450,7 +450,10 @@ export class UserService  {
 	}
 
 	private setSession(identity): void{
-		const expiresAt = JSON.stringify((identity.exp) + new Date().getTime());		
+		if(!identity && !identity.exp){
+			return;
+		}
+		const expiresAt = JSON.stringify((identity.exp) + new Date().getTime());
 		localStorage.setItem('expires_at', expiresAt);		
 	}
 

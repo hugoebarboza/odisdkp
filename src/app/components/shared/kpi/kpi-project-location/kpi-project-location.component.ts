@@ -245,12 +245,14 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
       return;
     }
 
+
     this.isLoading = true;
     this.kpitotal = 0;
     this.kpidata = [];
     this.count = 0 ;
 
-    this._kpiService.getProjectKpiServiceByLocation(this.token.token, id, country, termino, status, service).then(
+    this._kpiService.getProjectKpiServiceByLocation(this.token.token, id, country, termino, status, service)
+    .then(
       (res: any) => 
       {
         res.subscribe(
@@ -292,7 +294,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
           console.log(<any>error);
           }  
           )
-      })      
+      })
+      .catch((err) => {console.log(err);})   
   }
 
 
@@ -308,7 +311,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     this.kpidatauser = [];
     this.countuser = 0 ;
 
-    this._kpiService.getProjectKpiServiceByUsers(this.token.token, id, termino, status, service).then(
+    this._kpiService.getProjectKpiServiceByUsers(this.token.token, id, termino, status, service)
+    .then(
       (res: any) => 
       {
         res.subscribe(
@@ -350,7 +354,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
           console.log(<any>error);
           }  
           )
-      })      
+      })
+    .catch((err) => {console.log(err);})    
   }
 
   public getDataTimeAvg(id:number, termino:string, service:number){
@@ -363,7 +368,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     this.isLoadingKpiTime = true;
     this.kpidatatimeavg = [];
 
-    this._kpiService.getProjectKpiServiceByTimeAvg(this.token.token, id, termino, service).then(
+    this._kpiService.getProjectKpiServiceByTimeAvg(this.token.token, id, termino, service)
+    .then(
       (res: any) => 
       {
         res.subscribe(
@@ -416,7 +422,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
           console.log(<any>error);
           }  
           )
-      })      
+      })
+    .catch((err) => {console.log(err);})      
   }
 
   public getDataGroupedYear(id:number, service:number){
@@ -428,7 +435,10 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     this.kpidatayear[0].series.length = 0;
     this.kpidatayear[0].name = "";
 
-    this._kpiService.getProjectKpiServiceByGroupedYear(this.token.token, id, service).then(
+
+
+    this._kpiService.getProjectKpiServiceByGroupedYear(this.token.token, id, service)
+    .then(
       (res: any) => 
       {
         res.subscribe(
@@ -455,7 +465,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
           console.log(<any>error);
           }  
           )
-      })  
+      })
+    .catch((err) => {console.log(err);})  
   }
 
   public getDataGroupedYearAssigned(id:number, service:number){
@@ -467,7 +478,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     this.kpidatayearassigned[0].series.length = 0;
     this.kpidatayearassigned[0].name = "";
 
-    this._kpiService.getProjectKpiServiceByGroupedYearAssigned(this.token.token, id, service).then(
+    this._kpiService.getProjectKpiServiceByGroupedYearAssigned(this.token.token, id, service)
+    .then(
       (res: any) => 
       {
         res.subscribe(
@@ -494,7 +506,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
           console.log(<any>error);
           }  
           )
-      })  
+      })
+    .catch((err) => {console.log(err);})  
   }
 
 
@@ -516,7 +529,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     let countassigned: number = 0;
     let countupdate: number = 0;
 
-    this._kpiService.getProjectKpiGroupedByLocation(this.token.token, id, termino, service).then(
+    this._kpiService.getProjectKpiGroupedByLocation(this.token.token, id, termino, service)
+    .then(
       (res: any) => 
       {
         res.subscribe(
@@ -648,7 +662,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
           console.log(<any>error);
           }  
           )
-      })      
+      })
+      .catch((err) => {console.log(err);})      
   }
 
 
@@ -802,7 +817,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
           console.log(<any>error);
           }  
           )
-      })      
+      })
+      .catch((err) => {console.log(err);})     
   }
 
 
@@ -843,7 +859,8 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
           console.log(<any>error);
           }  
           )
-      })        
+      })
+      .catch((err) => {console.log(err);})       
 
   }
 

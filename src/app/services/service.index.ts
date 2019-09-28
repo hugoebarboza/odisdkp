@@ -13,6 +13,7 @@ export { MessagingService } from 'src/app/services/firebase/messaging.service';
 export { ModalManageService } from 'src/app/pages/orderservice/components/dialog/user-job-profile/modal-manage.service';
 export { OrderserviceService } from './data/orderservice.service';
 export { ProjectsService } from './data/projects.service';
+export { RequestCacheService } from './utility/request-cache.service';
 export { SettingsService } from './settings/settings.service';
 export { SidenavService } from './shared/sidenav.service';
 export { UserService } from './usuario/user.service';

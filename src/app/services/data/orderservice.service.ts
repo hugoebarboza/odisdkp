@@ -107,24 +107,33 @@ import { ToastrService } from 'ngx-toastr';
   }
 
 
-   getOrderData(query:string, token: any): Promise<any> {
-    const url = this.url;
-    const href = url+query;
-    const requestUrl = href;
-    //console.log(requestUrl);
-    const headers = new HttpHeaders({'Content-Type': 'application/json'});
-    //console.log(headers);
-    return new Promise((resolve, reject) => {
-      if (token == '')
-          reject('Sin Token');
-      if (query == '')
-          reject('Sin Query Consulta');
-      
-      resolve(this._http.get<Order>(requestUrl, {headers: headers}));    
-    });
+  	async getOrderData(query:string, token: any) {
+		if(!token){
+        	return;
+      	}
+      	try {
+			const url = this.url;
+			const href = url+query;
+			const requestUrl = href;
+			const headers = new HttpHeaders({'Content-Type': 'application/json'});
+			
+			if(!requestUrl){
+				return;
+			}
+			
+			return await new Promise((resolve, reject) => {
+			if (token == '')
+				reject('Sin Token');
+			if (query == '')
+				reject('Sin Query Consulta');
+			
+			resolve(this._http.get<Order>(requestUrl, {headers: headers}));    
+			});
 
-
-    }
+		} catch (err) {
+			console.log(err)
+		}
+	}
 
 	getOrderService(token: any, id: string): Observable<any> {								  
 		return this.getQuery('service/'+id+'/order', token);
