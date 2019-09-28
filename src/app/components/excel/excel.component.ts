@@ -55,10 +55,10 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   checkValidationPost = false;
   checkboxAuto = false;
   checkOrdenes = false;
+  checkboxDupOt = false;
 
   project_id: number;
   servicename: string;
-
 
   arrayBuffer: any;
   file: File;
@@ -766,7 +766,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'cc_id': '',
               'orden_id': '',
               'parametro': 0,
-              'estatus': ''
+              'estatus': '',
+              'duplicar_ot': that.checkboxDupOt
             };
 
             if (that.dateend !== undefined) {
@@ -911,6 +912,14 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       this.checkboxAuto = false;
     } else {
       this.checkboxAuto = true;
+    }
+  }
+
+  checkduplicatOt(event) {
+    if (!event.checked) {
+      this.checkboxDupOt = false;
+    } else {
+      this.checkboxDupOt = true;
     }
   }
 

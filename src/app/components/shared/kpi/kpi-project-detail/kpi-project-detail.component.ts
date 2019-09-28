@@ -1,5 +1,7 @@
-import { Component, Input, OnInit,  OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit,  OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
+import { FormControl} from '@angular/forms';
+import { TooltipPosition } from '@angular/material';
 
 
 //SERVICES
@@ -10,13 +12,20 @@ import { KpiService, OrderserviceService, UserService } from 'src/app/services/s
   templateUrl: './kpi-project-detail.component.html',
   styleUrls: ['./kpi-project-detail.component.css']
 })
-export class KpiProjectDetailComponent implements OnInit, OnChanges {
+export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
 
+  @Input() id : number;
+  @Input() tiposervicio = [];
+  @Input() users = [];
+
+  
+  avancegauge: number = 0;
   identity: any;
   isLoadingResultsKpiDate: boolean = true;
   isLoadingResultsKpiST: boolean = true;
   isLoadingResultsKpiGauge: boolean = true;
   isLoadingResultsKpiLine: boolean = true;
+  ngxcharttype: number = 1;
   proyectos: any;
   project: any;
   role: number = 6; // ROLE DE USUARIOS ADMINISTRADORES
@@ -150,7 +159,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
 
   single = [
     {
-      name: "OT Creadas",
+      name: "Creadas",
       value: 0
     },    
     {
@@ -165,9 +174,13 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
 
 
 
-  @Input() id : number;
-  @Input() tiposervicio = [];
-  @Input() users = [];
+
+  positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  positionheaderaction = new FormControl(this.positionOptions[2]);
+  positiondatasourceaction = new FormControl(this.positionOptions[3]);
+  positionleftaction = new FormControl(this.positionOptions[4]);  
+  positionrightaction = new FormControl(this.positionOptions[5]);  
+
 
   constructor(
     //private _dataService: OrderserviceService,
@@ -303,13 +316,14 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
                     }
                     this.kpitotalline = this.kpitotalline + some.datos[i]['user_count'];
                     this.kpitotalcreated = this.kpitotalcreated + some.datos[i]['user_count'];
-                    this.allmulti[0].name = "OT Cradas: " + this.kpitotalcreated;
-                    this.single[0].name = "OT Cradas: " + this.kpitotalcreated;
+                    this.allmulti[0].name = "Cradas: " + this.kpitotalcreated;
+                    this.single[0].name = "Cradas: " + this.kpitotalcreated;
                     this.single[0].value = this.kpitotalcreated;
                   }
                 this.isLoadingResultsKpiLine = false;
               }else{
-                    this.allmulti[0].name = "OT Cradas: " + this.kpitotalupdate;
+                    this.allmulti[0].name = "Cradas: " + this.kpitotalupdate;
+                    this.single[0].name = "Cradas: " + this.kpitotalupdate;
               }
 
               if(some && some.datosupdate && some.datosupdate.length > 0){
@@ -334,10 +348,12 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
                 this.isLoadingResultsKpiLine = false;
               }else{
                   this.allmulti[1].name = "Editadas: " + this.kpitotalupdate;
+                  this.single[1].name = "Editadas: " + this.kpitotalupdate;
               }
 
               if(this.single.length > 0){
                 //console.log(this.single);
+                //console.log(this.allmulti);
               }
 
 
@@ -373,7 +389,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
                     for (let i = 0; i < some.datos.length; i++) {              
                         this.kpitotalgauge = this.kpitotalgauge + some.datos[i]['user_count'];
                         this.kpidatagauge[0].value = this.kpitotalgauge;
-                        this.kpidatagauge[0].name = "OT Creadas: " + this.kpitotalgauge;
+                        this.kpidatagauge[0].name = "Creadas: " + this.kpitotalgauge;
                     }
                   this.isLoadingResultsKpiGauge = false;
                 }else{
@@ -392,6 +408,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
                 }
                 
                 if(this.kpidatagauge[0].value > 0){
+                  this.avancegauge = Math.round((this.kpitotalgaugeupdate*100)/this.kpitotalgauge);
                   //console.log(this.kpidatagauge);
                 }
               },
@@ -666,6 +683,10 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
   }  
 
 
+  valueFormatting(value: number): string {
+    return;
+      //return `${Math.round((this.kpitotalgaugeupdate*100)/this.kpitotalgauge).toLocaleString()} %`;    
+  }
 
 
   selectChangeKpiDateST(event:any){
@@ -768,6 +789,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
 
   selectChangeKpiLine(event:any){
     this.loaduserordeneskpiline(this.project.id, this.kpiselectedoptionline, this.id );
+    this.ngxcharttype = 1;
   }
 
   toggle(event:any){    
@@ -776,6 +798,13 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges {
     }else{
       this.isShow = false;  
     }
+  }
+
+  togglengxcharttype(event:number){
+    if(!event){
+      return;
+    }
+    this.ngxcharttype = event;
   }
 
 

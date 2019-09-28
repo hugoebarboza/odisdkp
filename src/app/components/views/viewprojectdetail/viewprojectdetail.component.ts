@@ -310,7 +310,6 @@ addComment(value:any) {
 }*/
 
 loadcomentario(path:string){
-
     //SELECT DE COMMENTS FIREBASE
     this.comentariosCollection = this._afs.collection(path + 'comments', ref => ref.orderBy('create_at', 'desc'));
     this.comentariosCollection.snapshotChanges().pipe(
@@ -322,11 +321,11 @@ loadcomentario(path:string){
         });
       })
     ).subscribe( (collection: any[]) => {
-        const count = Object.keys(collection).length;
+        const count = Object.keys(collection).length;        
         if (count === 0) {
           this.comentarios$ = null;
         } else {
-          this.collectionJoinUser(Observable.of(collection), path);
+            this.collectionJoinUser(Observable.of(collection), path);          
         }
       }
     );
@@ -480,6 +479,7 @@ deleteCommentDatabase(item: any) {
                           if(this.project_id >0){
                             this.getRouteFirebase(this.project_id);
                             this.newpath = this.newpath + this.project_id + '/' + this.id + '/';
+                            //console.log(this.newpath);
                             this.loadcomentario(this.newpath);
                           }
                           

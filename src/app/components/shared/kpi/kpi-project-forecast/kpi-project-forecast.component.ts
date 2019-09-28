@@ -183,7 +183,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges {
                         forecast.forEach(res => {
                           prevision = prevision + res;
                         })
-                        prevision = prevision / 3;
+                        prevision = Math.round(prevision / 3);
                         const object: Element = {
                           desc_mes: this.displayedColumns[4],
                           produccion: prevision,
@@ -212,7 +212,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges {
                         forecast.forEach(res => {
                           prevision = prevision + res;           
                         })               
-                        prevision = prevision / 3;
+                        prevision = Math.round(prevision / 3);                        
                         const object: Element = {
                           desc_mes: this.displayedColumns[4],
                           produccion: prevision,

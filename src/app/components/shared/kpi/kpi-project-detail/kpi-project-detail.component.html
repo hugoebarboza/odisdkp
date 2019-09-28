@@ -4,7 +4,6 @@
             <div class=" jfCYPT">
               <div class=" didcdr" data-test-selector="profile-worked-with">
                 <div class=" iDwfcE" >
-
                     <!----
                     <div class=" eCdVoi">
                         <div class=" jNlJOD">
@@ -16,96 +15,20 @@
                     -->    
                     <div>
                         <div class=" dIOqge" >
-                            <!------------------------------------------------------------- Órdenes Editadas por Servicio.------------------------------------------------------------------------->
-                            <!--
-                            <div class=" jmuLsE">
-                                    <div class=" pUmbZ">
-                                        <div class="container-fluid" >
-                                            <div class="row">
-                                                <div class="col-sm">
-                                                  <br>
-                                                </div>
-                                            </div>
-                                        </div>        
-
-                                        <div class="container-fluid" *ngIf="isLoadingResultsKpiDate">
-                                            <div class="row">
-                                                <div class="col-sm">
-                                                    <div class="row d-flex justify-content-center">
-                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResultsKpiDate" ></mat-spinner>
-                                                    </div>                        
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div *ngIf="!isLoadingResultsKpiDate">
-                                        <div class="container-fluid">
-                                            <div class="row">
-                                                <div class="col-4" align="left">
-                                                <div class="input-group input-group-sm mb-3" *ngIf="kpidatesearchoptions && kpidateselectedoption">
-                                                    <ng-select
-                                                    [items]="kpidatesearchoptions"
-                                                    [clearable]="false"
-                                                    bindLabel="name"
-                                                    bindValue="value"
-                                                    [(ngModel)]="kpidateselectedoption"
-                                                    (change)="selectChangeKpiDate($event)"
-                                                    class="width-70percentage">
-                                                    </ng-select>
-                                                </div>
-                                                </div>
-                                                <div class="col-4">
-                                                
-                                                </div>
-                                                <div class="col-4" align="right">
-                                                    <div class=" jNlJODT" *ngIf="kpitotaldate">Total: <span>{{kpitotaldate}}</span></div> 
-                                                </div>
-                                            </div>
-                                        </div>                                                
-                                        <div class="row justify-content-center align-items-center" align="center">
-                                            <div class="col" *ngIf="kpidatadate && kpidatadate.length > 0">
-                                                <ngx-charts-pie-chart
-                                                [view]="view"
-                                                [scheme]="colorScheme"
-                                                [results]="kpidatadate"
-                                                [explodeSlices]="explodeSlices"
-                                                [labels]="showLabels"
-                                                [legend]="showLegend"
-                                                [legendTitle]="['OT Editadas del Proyecto']"
-                                                [legendPosition]="['right']"
-                                                [doughnut]="doughnut">
-                                                </ngx-charts-pie-chart>
-                                            </div>
-                                            <div class="col-sm" *ngIf="kpidatadate && kpidatadate.length == 0">
-                                                <div class="row d-flex justify-content-center">
-                                                    Sin Información
-                                                </div>                                                
-                                            </div>                    
-                                        </div>
-                                        </div>
-
-
-                                        <div class="container-fluid">
-                                            <div class="row">
-                                                <div class="col-sm">
-                                                    <br>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                            </div>
-                            --->
-                            <!--------------------------------------------------------------------------------------------------------------------------------------------------------------------->
-
-
-
                             <!---------------------------------------------------------- Órdenes Editadas por Tipo de Servicio (PIE). ------------------------------------------------------------->
                             <div class="jmuLsE">
                                 <div class="row">
                                     <div class="col-sm">
                                         <div class="row d-flex justify-content-center">        
                                         <span>
-                                            Órdenes de Trabajo (Por Fecha de Edición).
+                                        Órdenes de Trabajo.
+                                        <button mat-icon-button 
+                                        matTooltip="Indicador por Fecha de Edición"
+                                        [matTooltipPosition]="positionrightaction.value"
+                                        (event)="$event.stopinmediatePropagation()"
+                                        >
+                                        <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                        </button>
                                         </span>
                                         </div>
                                     </div>
@@ -150,7 +73,7 @@
                                             <div class="col-4">                                            
                                             </div>
                                             <div class="col-4" align="right">
-                                                <div class=" jNlJODT" >Total: <span>{{kpitotalST | number}}</span></div> 
+                                                <div class=" jNlJODT" *ngIf="kpidataST && kpidataST.length > 0">Total: <span>{{kpitotalST | number}}</span></div> 
                                             </div>
                                         </div>
 
@@ -265,7 +188,12 @@
                                         </div>
                                         <div class="col-sm" *ngIf="kpidataST && kpidataST.length == 0">
                                             <div class="row d-flex justify-content-center">
-                                                    Sin Información
+                                                <div class="dGHjBt">
+                                                <p class="hAzwqT">
+                                                Sin Información.
+                                                </p>
+                                                <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                </div>
                                             </div>    
                                         </div>
 
@@ -294,7 +222,14 @@
                                         <div class="col-sm">
                                             <div class="row d-flex justify-content-center">        
                                             <span>
-                                                Órdenes de Trabajo (Por Fecha de Edición).
+                                                Órdenes de Trabajo.
+                                                <button mat-icon-button 
+                                                matTooltip="Indicador por Fecha de Edición"
+                                                [matTooltipPosition]="positionrightaction.value"
+                                                (event)="$event.stopinmediatePropagation()"
+                                                >
+                                                <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                                </button>        
                                             </span>
                                             </div>
                                         </div>
@@ -339,7 +274,7 @@
                                                 
                                                 </div>
                                                 <div class="col-4" align="right">
-                                                    <div class=" jNlJODT" >Total: <span>{{kpitotaldate | number}}</span></div> 
+                                                    <div class=" jNlJODT" *ngIf="multi && multi[0].series.length > 0">Total: <span>{{kpitotaldate | number}}</span></div> 
                                                 </div>
                                             </div>
                                         </div>
@@ -465,7 +400,12 @@
                                             </div>
                                             <div class="col-sm" *ngIf="multi && multi[0].series.length == 0">
                                                 <div class="row d-flex justify-content-center">
-                                                    Sin Información
+                                                    <div class="dGHjBt">
+                                                        <p class="hAzwqT">
+                                                        Sin Información.
+                                                        </p>
+                                                        <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                    </div>                
                                                 </div>                                                
                                             </div>                    
                                         </div>
@@ -513,7 +453,14 @@
                                         <div class="col-sm">
                                             <div class="row d-flex justify-content-center">        
                                             <span>
-                                            Órdenes de Trabajo Registradas vs Editadas (Por Fecha de Creación).
+                                            Órdenes de Trabajo Asignadas vs Editadas.
+                                            <button mat-icon-button 
+                                            matTooltip="Indicador por Fecha de Creación"
+                                            [matTooltipPosition]="positionrightaction.value"
+                                            (event)="$event.stopinmediatePropagation()"
+                                            >
+                                            <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                            </button>
                                             </span>
                                             </div>
                                         </div>
@@ -559,7 +506,7 @@
                                                 <div class="col-4">                                            
                                                 </div>
                                                 <div class="col-4" align="right">
-                                                    <div class=" jNlJODT" >Total: <span>{{kpitotalgauge + kpitotalgaugeupdate | number}}</span></div> 
+                                                    <div class=" jNlJODT" *ngIf="kpidatagauge && kpidatagauge[0].value > 0 && kpitotalgauge > 0">Avance: <span>{{ avancegauge }}%</span></div> 
                                                 </div>
                                             </div>
                                         </div>
@@ -578,7 +525,8 @@
                                                 [legend]="showLegend"
                                                 [legendTitle]="['Leyenda']"
                                                 [legendPosition]="['right']"
-                                                [units]="'Órdenes'"
+                                                [units]="'Avance'"
+                                                [valueFormatting]="valueFormatting"
                                                 [bigSegments]="10"
                                                 [smallSegments]="5">
                                                 </ngx-charts-gauge>
@@ -590,7 +538,12 @@
                                                 <br>
                                                 <br>
                                                 <div class="row d-flex justify-content-center">
-                                                        Sin Información
+                                                    <div class="dGHjBt">
+                                                        <p class="hAzwqT">
+                                                        Sin Información.
+                                                        </p>
+                                                        <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                    </div>                
                                                 </div>    
                                             </div>        
                                         </div>                                     
@@ -613,7 +566,13 @@
                                         <div class="col-sm">
                                             <div class="row d-flex justify-content-center">        
                                             <span>
-                                                Órdenes de Trabajo Registradas vs Editadas (Por Fecha de Creación).
+                                                Órdenes de Trabajo Asignadas vs Editadas.
+                                                <button mat-icon-button 
+                                                matTooltip="Indicador por Fecha de Creación"
+                                                [matTooltipPosition]="positionrightaction.value"
+                                                (event)="$event.stopinmediatePropagation()"
+                                                ><mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                                </button>        
                                             </span>
                                             </div>
                                         </div>
@@ -654,10 +613,26 @@
                                                         </ng-select>
                                                     </div>
                                                     </div>
-                                                    <div class="col-4">                                            
+                                                    <div class="col-4">
+                                                        <div class="row d-flex justify-content-center" >
+                                                            <button mat-icon-button  *ngIf="ngxcharttype == 1"
+                                                            (click)="togglengxcharttype(2)"
+                                                            (event)="$event.stopinmediatePropagation()"
+                                                            >
+                                                                <mat-icon>bar_chart</mat-icon>
+                                                            </button>
+
+                                                            <button mat-icon-button  *ngIf="ngxcharttype == 2"
+                                                            (click)="togglengxcharttype(1)"
+                                                            (event)="$event.stopinmediatePropagation()"
+                                                            >
+                                                                <mat-icon>show_chart</mat-icon>
+                                                            </button>
+
+                                                        </div>                                          
                                                     </div>
                                                     <div class="col-4" align="right">
-                                                        <div class=" jNlJODT" >Total: <span>{{kpitotalline | number}}</span></div> 
+                                                        <div class=" jNlJODT" *ngIf="allmulti && allmulti[0].series.length > 0">Total: <span>{{kpitotalline | number}}</span></div> 
                                                     </div>
                                                 </div>
                                             </div>
@@ -665,6 +640,7 @@
     
                                             <div class="row justify-content-center align-items-center" align="center">
                                                 <div class="col" *ngIf="allmulti && allmulti[0].series.length > 0 && (kpiselectedoptionline == 'weekline' || kpiselectedoptionline == 'yearline')">
+                                                    <div *ngIf="ngxcharttype && ngxcharttype == 1">
                                                     <ngx-charts-line-chart
                                                     (window:resize)="onResize($event)"
                                                     [view]="viewline"
@@ -683,11 +659,54 @@
                                                     [autoScale]="autoScale"
                                                     >
                                                     </ngx-charts-line-chart>
+                                                    </div>
+
+                                                    <div *ngIf="ngxcharttype && ngxcharttype == 2">
+                                                    <ngx-charts-bar-vertical
+                                                    (window:resize)="onResize($event)"
+                                                    [view]="viewline"
+                                                    [scheme]="colorSchemeGauge"
+                                                    [results]="single"
+                                                    [gradient]="gradient"
+                                                    [xAxis]="showXAxis"
+                                                    [yAxis]="showYAxis"
+                                                    [legend]="true"
+                                                    [legendTitle]="['Leyenda']"
+                                                    [legendPosition]="['right']"
+                                                    [showXAxisLabel]="showXAxisLabel"
+                                                    [showYAxisLabel]="showYAxisLabel"
+                                                    [xAxisLabel]="xAxisLabelVertical"
+                                                    [yAxisLabel]="yAxisLabel"
+                                                    >
+                                                    </ngx-charts-bar-vertical>        
+                                                    </div>
                                                 </div>
 
                                                 <div class="col" *ngIf="allmulti && allmulti[0].series.length > 0 && (kpiselectedoptionline == 'dayline' || kpiselectedoptionline == 'monthline')">
+                                                    <div *ngIf="ngxcharttype && ngxcharttype == 1">
+                                                    <ngx-charts-line-chart
+                                                    (window:resize)="onResize($event)"
+                                                    [view]="viewline"
+                                                    [scheme]="colorSchemeGauge"
+                                                    [results]="allmulti"
+                                                    [gradient]="gradient"
+                                                    [xAxis]="showXAxis"
+                                                    [yAxis]="showYAxis"
+                                                    [legend]="true"
+                                                    [legendTitle]="['Leyenda']"
+                                                    [legendPosition]="['right']"
+                                                    [showXAxisLabel]="showXAxisLabel"
+                                                    [showYAxisLabel]="showYAxisLabel"
+                                                    [xAxisLabel]="xAxisLabel"
+                                                    [yAxisLabel]="yAxisLabel"
+                                                    [autoScale]="autoScale"
+                                                    >
+                                                    </ngx-charts-line-chart>
+                                                    </div>            
+                                                    
+                                                    <div *ngIf="ngxcharttype && ngxcharttype == 2">
                                                     <ngx-charts-bar-vertical
-                                                    (window:resize)="onResize($event)"                                                    
+                                                    (window:resize)="onResize($event)"
                                                     [view]="viewline"
                                                     [scheme]="colorSchemeGauge"
                                                     [results]="single"
@@ -703,6 +722,7 @@
                                                     [yAxisLabel]="yAxisLabel"
                                                     >
                                                     </ngx-charts-bar-vertical>
+                                                    </div>
                                                 </div>
 
                                                 <div class="col-sm" *ngIf="allmulti && allmulti[0].series.length == 0">
@@ -711,8 +731,13 @@
                                                     <br>
                                                     <br>
                                                     <br>
-                                                    <div class="row d-flex justify-content-center">
-                                                            Sin Información
+                                                    <div class="row d-flex justify-content-center ">
+                                                        <div class="dGHjBt">
+                                                            <p class="hAzwqT">
+                                                            Sin Información.
+                                                            </p>
+                                                            <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                        </div>                    
                                                     </div>    
                                                 </div>        
                                             </div>                                                 
@@ -763,7 +788,7 @@
         
 <div class="row" *ngIf="identity && !isLoadingResultsKpiST && id > 0">
     <div class="col">
-        <span>Más Indicadores: </span><input type="checkbox" id="myCheck" (change)="toggle($event)">
+        <input type="checkbox" id="myCheck" (change)="toggle($event)"><span class="hAzwqTS"> Más Indicadores</span>
         <div *ngIf="isShow">
             <app-kpi-project-location [id]="id" *ngIf="id > 0"></app-kpi-project-location>
         </div>

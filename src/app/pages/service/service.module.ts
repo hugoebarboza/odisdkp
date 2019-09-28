@@ -28,6 +28,7 @@ import { CloneServiceComponent } from './dialog/clone-service/clone-service.comp
 import { CsvServiceComponent } from './dialog/csvservice/csvservice.component';
 import { SettingServiceComponent } from './components/settingservice/settingservice.component';
 import { DeleteServiceComponent } from './dialog/deleteservice/deleteservice.component';
+import { InviteUserComponent } from './components/invite-user/invite-user.component';
 import { ProjectCurrencyValueListComponent } from './dialog/project-currency-value-list/project-currency-value-list.component';
 import { ProjectKpiListComponent } from './dialog/project-kpi-list/project-kpi-list.component';
 import { UserComponent } from './dialog/user/user.component';
@@ -93,6 +94,7 @@ import { ServiceRoutingModule } from './service.routing';
     CloneServiceComponent,
     CsvServiceComponent,
     DeleteServiceComponent,
+    InviteUserComponent,
     RemoveUserComponent,    
     ServiceComponent,
     SettingServiceComponent,
@@ -100,7 +102,7 @@ import { ServiceRoutingModule } from './service.routing';
     ProjectCategorieListComponent,
     ProjectTypeListComponent,
     ProjectCurrencyValueListComponent,
-    ProjectKpiListComponent,    
+    ProjectKpiListComponent,        
   ],
   entryComponents: [
     AddProjectTypeComponent,

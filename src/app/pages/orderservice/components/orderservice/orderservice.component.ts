@@ -9,27 +9,28 @@ import { MatIconRegistry } from "@angular/material/icon";
 import { DomSanitizer } from "@angular/platform-browser";
 
 //SERVICES
-import { DashboardService, SettingsService, UserService } from '../../services/service.index';
-
+import { DashboardService, SettingsService, UserService } from 'src/app/services/service.index';
 
 
 //MODELS
 import { 
   Constante, 
   Giro, 
-  Mercado, 
-  Order, 
-  Proyecto, 
+  Mercado,
+  Order,
   Region, 
   Sector, 
   Service, 
   Tarifa, 
-  Zona } from '../../models/types';
+  Zona } from 'src/app/models/types';
+
+// MOMENT
+import * as _moment from 'moment';
+const moment = _moment;
 
 
 
-
-@Component({
+@Component({  
   selector: 'app-orderservice',
   templateUrl: './orderservice.component.html',
   styleUrls: ['./orderservice.component.css']
@@ -46,7 +47,9 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   calendarID: string;
   color: number;
   constantes: Constante;
-  dataSource;  
+  country: string = '';
+  since: any;
+  dataSource: any;  
   element: HTMLElement;
   giros: Giro;
   id: number;
@@ -112,6 +115,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   private domSanitizer: DomSanitizer
   ) 
   {
+
   this.matIconRegistry.addSvgIcon(
     "icongestion",
     this.domSanitizer.bypassSecurityTrustResourceUrl("../assets/icons/iconprojectblanco.svg")
@@ -136,12 +140,16 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
       let paramp = this.filterProject();
       if(paramp){
         this.project_name = paramp.project_name;
+        this.country = paramp.country_name;
         if(paramp.project_type == 0){
           this.table = 'address';
         }
         if(paramp.project_type == 1){
           this.table = 'vehiculos';
-        }  
+        }
+        if(paramp.create_at){
+          this.since = moment(paramp.create_at).locale('ES').format('LL');
+        }
       }
 
 

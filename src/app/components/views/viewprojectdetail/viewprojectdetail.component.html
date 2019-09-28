@@ -627,7 +627,10 @@
                                     <!--</div>-->
                                     </cdk-virtual-scroll-viewport>
 
-
+                                    <div class="example-rate-limit-reached" *ngIf="!comentarios$">
+                                        No se encontraron registros de trabajo.
+                                    </div>
+                                  
                                   </div>
 
                               <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
@@ -724,7 +727,7 @@
                               <div class="tab-content" id="nav-tabContent">
                                 <div class="tab-pane fade show active" id="nav-home-file" role="tabpanel" aria-labelledby="nav-home-tab">
                                   <div class="p-3">
-                                    <app-file-list [project_id]="project_id" [service_id]="service_id"></app-file-list>
+                                  <app-file-list [project_id]="project_id" [service_id]="service_id"></app-file-list>
                                   </div>                  
                                 </div>
                               <div class="tab-pane fade" id="nav-profile-file" role="tabpanel" aria-labelledby="nav-profile-tab">

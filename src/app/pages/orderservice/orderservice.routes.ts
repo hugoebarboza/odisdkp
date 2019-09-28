@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-import { OrderserviceComponent } from '../../components/orderservice/orderservice.component';
+//COMPONENTS
+import { OrderserviceComponent } from './components/orderservice/orderservice.component';
 
 // Guards
 import { AuthguardService } from '../../services/authguard.service';

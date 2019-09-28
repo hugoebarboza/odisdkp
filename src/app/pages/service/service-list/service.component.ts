@@ -108,7 +108,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   ) {
 
     this._userService.handleAuthentication(this.identity, this.token);
-    //  this.columns = columns;
+    //this.columns = columns;
     this.configuration = SettingsNgxEasyTableService.config;
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();

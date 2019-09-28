@@ -44,6 +44,8 @@ import { AuthService } from './services/firebase/auth.service';
 import { RouterModule } from '@angular/router';
 
 //UTILITYS
+import { NgxCaptchaModule } from 'ngx-captcha';
+//import { RECAPTCHA_SETTINGS, RecaptchaSettings } from 'ng-recaptcha';
 //import { RECAPTCHA_SETTINGS, RecaptchaModule,  RecaptchaSettings } from 'ng-recaptcha';
 //import { RecaptchaFormsModule } from 'ng-recaptcha/forms';
 
@@ -116,6 +118,7 @@ registerLocaleData(localeEs);
     //LoadingBarModule,
     MaterialModule,
     MatProgressButtonsModule,
+    NgxCaptchaModule,
     PipesModule,
     ReactiveFormsModule,    
     //RecaptchaFormsModule,  

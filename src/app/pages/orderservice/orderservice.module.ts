@@ -131,7 +131,7 @@ import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
 //PAGES
-import { OrderserviceComponent } from '../../components/orderservice/orderservice.component';
+import { OrderserviceComponent } from './components/orderservice/orderservice.component';
 
 
 // Global vars

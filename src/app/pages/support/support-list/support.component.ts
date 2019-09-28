@@ -121,7 +121,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
           );
         }
 
-        this.idPais = this.identity.country + '';
+        this.idPais = this.identity.country;
         this.supportcase = 'supportcase/' + this.idPais + '/cases';
         this.startData();
       }

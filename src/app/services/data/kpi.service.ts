@@ -54,6 +54,20 @@ export class KpiService {
     }
 
 
+    getProjectKpiGroupedByLocation(token:any, id:number, termino:string, service:number){
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('projectbygroupedlocation/'+id+'/kpi/'+termino+'/service/'+service, token);
+    }
+
+    getProjectKpiGroupedByUser(token:any, id:number, termino:string, service:number){
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('projectbygroupeduser/'+id+'/kpi/'+termino+'/service/'+service, token);
+    }
+
     getProjectKpiService(token:any, id:number, termino:string, status:number, service:number) {
       if(!token){
         return;
@@ -69,6 +83,30 @@ export class KpiService {
       return this.getQueryPromise('project/'+id+'/kpi/'+termino+'/status/'+status+'/servicebydate/'+service, token);
     }
 
+
+    getProjectKpiServiceByGroupedYear(token:any, id:number, service:number){
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('projectbygroupedyear/'+id+'/kpi/1/service/'+service, token);
+    }
+
+
+    getProjectKpiServiceByGroupedYearAssigned(token:any, id:number, service:number){
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('projectbygroupedyearassigned/'+id+'/kpi/1/service/'+service, token);
+    }
+
+
+    getProjectKpiServiceByOrderCreated(token:any, id:number, termino:string, service:number){
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('projectbyordercreated/'+id+'/kpi/'+termino+'/service/'+service, token);
+
+    }
 
     getProjectKpiServiceByStatusAndDate(token:any, id:number, termino:string, year:any, status:number, service:number) {
       if(!token){
@@ -99,6 +137,14 @@ export class KpiService {
         return;
       }
       return this.getQueryPromise('projectbyuser/'+id+'/kpi/'+termino+'/status/'+status+'/service/'+service, token);
+    }
+
+
+    getProjectKpiServiceByTimeAvg(token:any, id:number, termino:string, service:number) {
+      if(!token){
+        return;
+      }
+      return this.getQueryPromise('projectbytimeavg/'+id+'/kpi/'+termino+'/service/'+service, token);
     }
 
 

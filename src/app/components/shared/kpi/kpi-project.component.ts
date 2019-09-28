@@ -1,4 +1,4 @@
-import { Component, Input, OnInit,  OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit,  OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 
@@ -10,7 +10,7 @@ import { ProjectsService, UserService, ZipService } from 'src/app/services/servi
   templateUrl: './kpi-project.component.html',
   styleUrls: ['./kpi-project.component.css']
 })
-export class KpiProjectComponent implements OnInit, OnChanges {
+export class KpiProjectComponent implements OnInit, OnChanges, OnDestroy {
 
     identity: any;
     isLoading: boolean;
@@ -39,6 +39,14 @@ export class KpiProjectComponent implements OnInit, OnChanges {
     ngOnInit() {
 
     }
+
+    ngOnDestroy() {
+      //console.log('La página se va a cerrar');
+      if(this.subscription){
+        this.subscription.unsubscribe();
+      }
+    }
+  
   
     ngOnChanges(changes: SimpleChanges) {
       this.isLoading = true;

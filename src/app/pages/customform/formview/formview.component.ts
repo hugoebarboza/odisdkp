@@ -432,6 +432,7 @@ export class FormviewComponent implements OnInit {
       return;
     }
 
+    /*
     const array_users: [] = this.forma.value.etiquetado;
     const array_usersNew: Array<Object> = [];
     const array_usersInfo = [];
@@ -440,7 +441,7 @@ export class FormviewComponent implements OnInit {
       // const obj: Object = {id: array_users[ii]['id']}; // , email: array_users[ii]['email']
       array_usersNew.push(array_users[ii]['id']);
       array_usersInfo.push(array_users[ii]);
-    }
+    }*/
 
 
     let important = '';
@@ -474,7 +475,7 @@ export class FormviewComponent implements OnInit {
       category_desc: this.forma.value.categoria.name,
       important: important,
       important_id: important_id,
-      etiquetados: array_usersNew,
+      //etiquetados: array_usersNew,
       asuntoIndex: indexasunto.split(' ')
     })
     .then(function(docRef) {
@@ -492,11 +493,12 @@ export class FormviewComponent implements OnInit {
 
         swal('Solicitud registrada', '', 'success');
 
+        /*
         if (array_usersInfo && array_usersInfo.length > 0 && docRef) {
           array_usersInfo.forEach(res => {
             that.sendCdfTag(res, docRef, 'Etiquetado(a) en');
           });
-        }
+        }*/
 
         if(that.arrayResponsables && that.arrayResponsables.length > 0 && docRef){
           that.arrayResponsables.forEach(res => {

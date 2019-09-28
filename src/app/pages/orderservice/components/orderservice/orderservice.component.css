@@ -26,6 +26,41 @@ main {
   outline: 0;
   border: none;
 }
+.limgtX {
+  min-width: 240px;
+  margin-top: 0px;
+  padding: 0px 0px;
+  flex: 0 1 640px;
+}
+.jBwVQr {
+  display: flex;
+  flex-direction: row;
+}
+.eANzas {
+  font-size: 1.14286em;
+  font-style: inherit;
+  line-height: 1.25;
+  color:#FFFFFF;
+  letter-spacing: -0.006em;
+  margin-top: 0px;
+}
+.fFIwAW {
+  display: flex;
+  -webkit-box-align: center;
+  align-items: center;
+  width: 100%;
+  margin-top: 0px;
+  color:#D7D7D7;
+  font-size: 11px;
+  line-height: 0.06677;
+}
+.bcqBjl {
+  color: currentcolor;
+  display: inline-block;
+  fill: rgb(255, 255, 255);
+  flex-shrink: 0;
+  line-height: 1;
+}
 .material-icons.md-15 { font-size: 15px; }
 .material-icons.md-15-colorblue { font-size: 15px; color: #1A237E; }
 .material-icons.md-15-colorgreen { font-size: 15px; color: #00796B; }

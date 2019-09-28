@@ -403,6 +403,9 @@ export class UserService  {
 	}
 
 	searchUser(token:string, id: number, page: number = 0, termino: string){
+		if(!token){
+			return;
+		}
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		
@@ -410,24 +413,34 @@ export class UserService  {
 
 		let Url = this.url+'searchuser/'+id+'/termino/'+termino+paginate;
 		
-		return this._http.get<User[]>(Url, {headers: headers});		
-
+		return this._http.get<User[]>(Url, {headers: headers});
 	}
 
 	searchaddUser(token:string, id: number, page: number = 0, termino: string, customerid:number){
+		if(!token){
+			return;
+		}
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		
 		let paginate = `?page=${page}&customerid=${customerid}`;
 
 		let Url = this.url+'searchadduser/'+id+'/termino/'+termino+paginate;
-
-		//console.log(Url);
 		
 		return this._http.get<User[]>(Url, {headers: headers});		
-
 	}
 
+	searchInviteUser(token:string, id: number, termino: string){
+		if(!token){
+			return;
+		}
+
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		
+		let Url = this.url+'searchinviteuser/'+id+'/termino/'+termino;
+		
+		return this._http.get<User[]>(Url, {headers: headers});
+	}
 	
 	public handleAuthentication(identity, token):void {			
 		if(identity && token){

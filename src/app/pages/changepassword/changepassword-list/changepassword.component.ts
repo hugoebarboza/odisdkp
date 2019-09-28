@@ -106,11 +106,13 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
 
     this._userService.changepassword(this.token.token, formValue).subscribe(
       response => {
-        if (response.status !== 'error' ) {
-            user.reauthenticateWithCredential(credential).then(succes => {
+        if (response.status !== 'error' && user) {
+            user.reauthenticateWithCredential(credential)
+            .then(succes => {
               //console.log('reauthenticateWithCredential - SUCCESS');
               //console.log(succes);
-              user.updatePassword(formValue.newpassword).then(respsucces => {
+              user.updatePassword(formValue.newpassword)
+              .then(respsucces => {
                 //console.log('updatePassword - SUCCESS');
                 //console.log(respsucces);
                 swal('Cambio de clave exitoso.', this.identity.email, 'success' );

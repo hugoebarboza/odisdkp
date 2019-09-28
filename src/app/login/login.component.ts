@@ -218,7 +218,7 @@ export class LoginComponent implements OnInit, OnDestroy {
                     this._userService.saveStorage(key, this.proyectos);
                     this.spinnerButtonOptions.active = false;                      
                     this.spinnerButtonOptions.text = 'Iniciar sesión'
-                    this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,});
+                    this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,closeButton: true,});
                     this.afterSignIn();
                   }else{
                     console.log(response);

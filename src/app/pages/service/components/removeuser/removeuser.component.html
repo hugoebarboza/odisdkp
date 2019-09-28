@@ -1,4 +1,4 @@
-<div class="container-fluid p-2">
+<div class="container-fluid p-2" *ngIf="identity">
 
     <div class="row animated fadeIn">
         <div class="col-12">
@@ -14,7 +14,7 @@
         </div>
     </div>
 
-  <div class="row animated fadeIn" *ngIf="isLoading">
+    <div class="row animated fadeIn" *ngIf="isLoading">
       <div class="col-sm-12">
         <mat-progress-bar mode="indeterminate"></mat-progress-bar>
       </div>

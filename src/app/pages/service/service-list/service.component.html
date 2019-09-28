@@ -133,7 +133,7 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header> N° OT </mat-header-cell>
                             <mat-cell *matCellDef="let element"> 
                                 <span class="mobile-label">N° OT:</span>
-                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].order_number">{{element.servicedetail[0].order_number}}</span>
+                                <span *ngIf="element.servicedetail[0] && element.order_number">{{element.order_number}}</span>
                             </mat-cell>
                         </ng-container>
 
@@ -142,7 +142,7 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header> GOM </mat-header-cell>
                             <mat-cell *matCellDef="let element"> 
                                 <span class="mobile-label">GOM:</span>
-                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].gom_number">{{element.servicedetail[0].gom_number}}</span>
+                                <span *ngIf="element.servicedetail[0] && element.gom_number">{{element.gom_number}}</span>
                             </mat-cell>
                         </ng-container>
 
@@ -160,7 +160,7 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Dirección </mat-header-cell>
                             <mat-cell *matCellDef="let element"> 
                                 <span class="mobile-label">Dirección:</span>
-                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].address">{{element.servicedetail[0].address}}</span>
+                                <span *ngIf="element.servicedetail[0] && element.address">{{element.address}}</span>
                             </mat-cell>
                         </ng-container>
 
@@ -169,7 +169,7 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Gestor </mat-header-cell>
                             <mat-cell *matCellDef="let element"> 
                                 <span class="mobile-label">Gestor:</span>
-                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].gestor">{{element.servicedetail[0].gestor}}</span>
+                                <span *ngIf="element.servicedetail[0] && element.gestor">{{element.gestor}}</span>
                             </mat-cell>
                         </ng-container>
 
@@ -178,7 +178,7 @@
                             <mat-header-cell *matHeaderCellDef mat-sort-header> Contratista </mat-header-cell>
                             <mat-cell *matCellDef="let element"> 
                                 <span class="mobile-label">Contratista:</span>
-                                <span *ngIf="element.servicedetail[0] && element.servicedetail[0].contratista">{{element.servicedetail[0].contratista}}</span>
+                                <span *ngIf="element.servicedetail[0] && element.contratista">{{element.contratista}}</span>
                             </mat-cell>
                         </ng-container>
 

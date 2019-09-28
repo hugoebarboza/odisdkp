@@ -23,15 +23,36 @@ width: 100%;
 .CnaZt:not(:last-child) {
     margin-bottom: 24px;
 }
-.hftCyG {
-    position: relative;
-    display: inline-block;
-    height: 134px;
-    width: 134px;
-    margin-bottom: 17px;
-    padding: 1px;
-    border-radius: 50%;
-    background: rgb(255, 255, 255);
+.hAzwqT {
+    font-size: 1.42857em;
+    font-style: inherit;
+    line-height: 1.2;
+    color: rgb(23, 43, 77);
+    font-weight: 500;
+    letter-spacing: -0.008em;
+    margin-bottom: 16px;
+}
+.hAzwqTS {
+    font-size: 1.14286em;
+    font-style: inherit;
+    line-height: 1.25;
+    color: rgb(23, 43, 77);
+    font-weight: 600;
+    letter-spacing: -0.006em;
+    margin-top: 0px;
+    margin-bottom: 7px;
+    word-break: break-all;
+}
+
+.hkvxBP{
+    font-size: 12px;
+    font-style: inherit;
+    line-height: 1.25;
+    color: rgb(23, 43, 77);
+    letter-spacing: -0.006em;
+    margin-top: 0px;
+    margin-bottom: 7px;
+    word-break: break-all;
 }
 .kccNpY {
     position: relative;
@@ -687,7 +708,7 @@ a.dseaOG {
 .width-40percentage{
     width: 70%;
 }
-
+.material-icons.md-14-color { font-size: 14px; color: rgba(0, 0, 0, 0.54)}
 
 
 

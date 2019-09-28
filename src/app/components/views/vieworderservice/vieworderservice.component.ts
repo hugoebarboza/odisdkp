@@ -1305,6 +1305,7 @@ private filterRegionMulti() {
               id_region: 0,
               id_provincia: 0,
               id_comuna: 0,
+              project_id: this.project_id,
               selectedValueservicio: null,
               selectedValuezona: null,
               tiposervicio: this.tipoServicio,
