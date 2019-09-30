@@ -19,23 +19,34 @@ export class KpiService {
     this.error = false;
     }
 
-    getQueryPromise(query:string, token:any) {
-		if(!token){
-			return;
-		}
-	    const url = this.url;
-	    const href = url+query;
-	    const requestUrl = href;
-	    //console.log(requestUrl);
-	    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    async getQueryPromise(query:string, token:any) {
+      if(!token){
+        return;
+      }
 
-	    return new Promise((resolve, reject) => {
-	      if (token == '')
-	          reject();
-	      if (query == '')
-	          reject();
-	      resolve(this._http.get<any>(requestUrl, {headers: headers}));
-	      })
+      try {
+        const url = this.url;
+        const href = url+query;
+        const requestUrl = href;
+        const headers = new HttpHeaders({'Content-Type': 'application/json'});        
+        //return await this._http.get<any>(requestUrl, {headers: headers});
+
+        if(!requestUrl){
+          return;
+        }  
+        
+        return await new Promise((resolve, reject) => {
+          if (token == '') reject();
+          if (query == '') reject();
+          resolve(this._http.get<any>(requestUrl, {headers: headers}));
+          })
+          .catch((err) => {console.log(err);})
+  
+      } catch (err) {
+          console.log(err)
+      }
+
+
     }
 
 

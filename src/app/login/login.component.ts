@@ -198,7 +198,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
    this.subscription = this._userService.signup(this.usuario).subscribe(
-     (response:any) => {   
+     (response:any) => {
        if(response.status != 'error' ){
          this.status = 'success';         
          this.token = response;
@@ -208,7 +208,7 @@ export class LoginComponent implements OnInit, OnDestroy {
             this.identity = response;
             if(this.identity){
               this.getPerfilUser(this.identity.sub);
-            }        
+            }
             this._userService.handleAuthentication(this.identity, this.token);          
             this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
               (response:any) => {
@@ -255,7 +255,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   private afterSignIn(): void {
-    //console.log('do after loggin');
+    console.log('do after loggin');
     this._router.navigate(['dashboard']);
     this.loginAction(this.proyectos, this.identity);
     this.loginFirebase(this.token, this.usuario);
