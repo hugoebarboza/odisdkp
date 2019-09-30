@@ -4,6 +4,8 @@
     "outDir": "../out-tsc/app-server"
   },
   "angularCompilerOptions": {
-    "entryModule": "./app/app.server.module#AppServerModule"
+    "entryModule": "./app/app.server.module#AppServerModule",
+    "enableIvy": true,
+    "allowEmptyCodegenFiles": true
   }
 }
