@@ -33,8 +33,8 @@ const appRoute: Routes = [
 	{ path:'register', component: RegisterComponent, data: { titulo: 'OCA Global - ODIS Registro', subtitle: 'Registro', descripcion: 'OCA Global - ODIS User Register' }},
 	{ 
 		path:'calendar', 
-    canLoad: [ LoginGuardGuard ],
-    loadChildren: './pages/calendar/calendario.module#CalendarioModule',        
+    	canLoad: [ LoginGuardGuard ],
+    	loadChildren: './pages/calendar/calendario.module#CalendarioModule',        
 		data: { preload: true, delay: false }
 	},    
 	{ 
