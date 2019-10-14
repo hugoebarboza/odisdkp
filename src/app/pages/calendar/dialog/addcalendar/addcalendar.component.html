@@ -1,0 +1,70 @@
+<meta name="Description" content="Component">
+<div class="app">
+<mat-toolbar role="heading" color="primary">
+     <h3 *ngIf="data.formcalendar == null">{{title}} </h3>
+     <h3 *ngIf="data.formcalendar">Editar Evento </h3>
+     <span class="mat-spacer"></span>
+     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+     <mat-icon class="mat-icon">close</mat-icon>       
+     </button>
+</mat-toolbar>
+<p></p>
+
+  <form  #formControl="ngForm" novalidate="novalidate">
+      <div class="form-group">          
+        <label class="form-control-label" style="margin-bottom: 0;">Fecha Inicio</label>
+        <br>        
+        <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.date" [maxDate]="data.due_date"  name="date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true" *ngIf="data.formcalendar == null">        </p-calendar>
+        <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.date"  name="date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true"  *ngIf="data.formcalendar">
+          </p-calendar>
+  
+        <small id="emailHelp" class="form-text text-muted">Seleccione fecha y hora iniciial del evento.</small>
+    </div>
+    
+
+    <div class="form-group">
+        <label class="form-control-label" style="margin-bottom: 0;">Fecha Fin</label>
+        <br>
+        <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.due_date" [minDate]="data.date"  name="due_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true" *ngIf="data.formcalendar == null">
+        </p-calendar>   
+
+        <p-calendar placeholder="yyyy-mm-dd hh:mm" [(ngModel)]="data.due_date" name="due_date" dateFormat="yy-mm-dd" showTime="true" hourFormat="24" [locale]="en"  [showIcon]="true" *ngIf="data.formcalendar">
+          </p-calendar>   
+  
+
+        <small id="emailHelp" class="form-text text-muted">Seleccione fecha y hora final del evento.</small>
+    </div>
+
+
+    <div class="form-group">
+        <mat-form-field class="full-width">
+          <input matInput #input  placeholder="Titulo" [(ngModel)]="data.titulo" name="titulo" required  >
+          <button mat-button *ngIf="data.titulo" matSuffix mat-icon-button aria-label="Clear" (click)="data.titulo=''">
+              <mat-icon>close</mat-icon>
+            </button>
+          <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          <mat-icon matSuffix>mode_edit</mat-icon>
+        </mat-form-field>  
+    </div>
+
+    <div class="form-group">
+        <mat-form-field class="full-width">
+            <textarea matInput #inputstate  placeholder="Descripción" [(ngModel)]="data.descripcion" name="descripcion" maxlength="177"  ></textarea>
+            <button mat-button *ngIf="data.descripcion" matSuffix mat-icon-button aria-label="Clear" (click)="data.descripcion=''">
+                <mat-icon>close</mat-icon>
+              </button>
+            
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            <mat-hint align="end">{{inputstate.value?.length || 0}}/177</mat-hint>
+            <mat-icon matSuffix>mode_edit</mat-icon>
+          </mat-form-field>      
+    </div>
+
+  </form>
+
+</div>
+
+<div mat-dialog-actions>
+  <button mat-button color="primary" [disabled]="!formControl.valid" [mat-dialog-close]="1" (click)="confirmAdd(formControl)" mat-raised-button color="primary" class="btnsave">Guardar</button>
+  <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+</div>

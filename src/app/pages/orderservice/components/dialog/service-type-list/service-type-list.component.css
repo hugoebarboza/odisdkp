@@ -1,0 +1,27 @@
+.circle:before {
+    content: ' \25CF';
+    font-size: 20px;
+}
+.full-width{
+    width: 100%;
+}
+table {
+    width: 100%;
+}
+
+.jeEmY {
+    text-overflow: ellipsis;
+    font-size: 0.857143em;
+    font-style: inherit;
+    color: rgb(94, 108, 132);
+    font-weight: 600;
+    margin-top: 20px;
+    text-transform: uppercase;
+    line-height: 12px;
+    overflow: hidden;
+  }
+
+  ::ng-deep .ng-dropdown-panel .scroll-host{
+    max-height: 110px !important;
+  }
+  

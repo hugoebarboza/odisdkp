@@ -1,0 +1,92 @@
+.mapa-card {
+	width: 100%;
+}
+
+agm-map {
+  height: 557px;  
+}
+
+.drawer-container {
+  width: 100%;
+  height: auto;
+  border: 1px solid rgb(202, 197, 199);
+  top: 0;
+}
+
+.drawer-sidenav-content {
+  display: flex;
+  height: 100%;
+  align-items: center;
+  justify-content: center;
+}
+
+.drawer-sidenav {
+  top: 8px;
+  padding: 17px;
+  height: 100%;    
+}
+
+.margin {
+margin: 1px;
+}
+
+.geo-select-width {
+  max-width: 127px;
+
+}
+
+.material-icons.md-15 { font-size: 15px;}
+.material-icons.md-16 { font-size: 16px;}
+.material-icons.md-18 { font-size: 18px;}
+
+.relative {
+    position: relative;
+    width: 100%;
+    height: 100%;  
+    border: 0px solid #F6F6F6;
+}
+.topright {
+    position: absolute;
+    top: 8px;
+    right: 16px;
+    font-size: 18px;
+    z-index: 1;
+}
+.topleft {
+    position: absolute;
+    top: 8px;
+    left: 16px;
+    right: 16px;
+    font-size: 18px;
+    z-index: 1;
+    width: 100%;
+}
+
+.full-width {
+  width: 100%;
+}
+
+::ng-deep .modal-backdrop {
+  z-index: 998 !important;
+}
+::ng-deep .modal {
+  z-index: 999 !important;
+}
+
+
+table {
+    font-family: arial, sans-serif;
+    font-size: 12px;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 0px solid #dddddd;
+    text-align: left;
+    padding: 2px;
+}
+
+tr:nth-child(even) {
+    background-color: #FFFFFF;
+}

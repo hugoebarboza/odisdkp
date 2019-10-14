@@ -1,0 +1,157 @@
+  <mat-toolbar color="primary">
+    <h3 *ngIf="!isLoading">{{title}}</h3> 
+    <span class="mat-spacer"></span>
+    <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+    <mat-icon class="mat-icon">close</mat-icon>       
+    </button>
+  </mat-toolbar>
+  <p></p>
+  
+  <div *ngIf="isLoading">
+    <app-loading *ngIf="isLoading"></app-loading>  
+  </div>
+  
+<div class="app animated fadeIn" *ngIf="!isLoading && forma">
+      <form class="mat-dialog-content" ngNativeValidate *ngIf="forma" [formGroup]="forma"  >
+
+          <div >
+              <div class="row">
+              <div class="row justify-content-md-center">
+
+              </div>
+            </div>
+    
+              <div class="row">
+                  <div class="col-sm-6">
+                      <label for="nombre">Primer Nombre</label>
+                      <input type="text" name="name" formControlName="name"   class="form-control" required>
+                  </div>
+                  <div class="col-sm-6">
+                      <label for="apellido">Primer Apellido</label>
+                      <input type="text" name="surname" class="form-control" formControlName="surname" required>        
+                  </div>                
+              </div>
+              <br>
+              <div class="row">
+                  <div class="col-sm-6">
+                      <label for="dni">DNI</label>
+                      <input type="text" name="dni" formControlName="dni" class="form-control" >                              
+                  </div>
+                  <div class="col-sm-6">
+                      <label for="dv">DV</label>
+                      <input type="text" name="dv" class="form-control" formControlName="dv" >        
+                  </div>                
+              </div>
+              <br>
+
+              <div class="row">
+                  <div class="col-sm-6">
+                      <label for="inputEmail4">Email Primario</label>      
+                      <input type="email" name="email" class="form-control" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>        
+                  </div>
+
+                  <div class="col-sm-6">
+                      <label for="inputEmail4">Confirmar Email</label>      
+                      <input type="email" name="email2" class="form-control" formControlName="email2" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>        
+                  </div>  
+              </div>
+              <div class="form-group" *ngIf="forma && forma.errors?.equal && !forma.pristine">
+                  <p class="text-danger">
+                    Los email deben ser iguales.
+                  </p>
+              </div>    
+
+              <br>
+              <div class="row">
+                  <div class="col-sm-6">
+                      <label for="inputPassword4">Contraseña</label>
+                      <input type="password" id="inputPassword" aria-describedby="passwordHelpBlock" name="password"  class="form-control" formControlName="password" required>
+                      <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>      
+                  </div>
+
+                  <div class="col-sm-6">
+                      <label for="inputPassword4">Confirmar Contraseña</label>
+                      <input type="password" id="inputPassword2" aria-describedby="passwordHelpBlock" name="password2" class="form-control" formControlName="password2" required>
+                      <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>      
+                  </div>  
+              </div>           
+              <div class="form-group" *ngIf="forma && forma.errors?.mismatch && !forma.pristine">
+                  <p class="text-danger">
+                    Las contraseñas deben ser iguales.
+                  </p>
+              </div>    
+
+
+
+              <br>
+              <div class="row">
+                  <div class="col-sm-6">
+                      <label for="dni">Rol</label>
+                      <select formControlName="role_id" name="role_id" class="form-control" *ngIf="roles">
+                          <option *ngFor="let rol of roles" [value]="rol.id">
+                                {{rol.title}}
+                          <option>
+                      </select>
+                  </div>
+                  <div class="col-sm-6">
+                      <label for="dv">Estatus</label>
+                      <select formControlName="status" name="stattus" class="form-control">
+                          <option value="1">Activo</option>
+                          <option value="0">Inactivo</option>
+                      </select>
+                  </div>                
+              </div>
+
+
+
+              <br>
+              <div class="row">
+                  <div class="col-sm-6">
+                    <label for="inputCity">Teléfono:</label>
+                    <input type="text" class="form-control" id="inputTelefono" name="telefono" formControlName="telefono">
+                  </div>
+      
+                  <div class="col-sm-6">
+                    <label for="inputZip">Otro Teléfono:</label>
+                    <input type="text" class="form-control" id="inputTelefono2" name="telefono2" formControlName="telefono2">
+                  </div>
+              </div>                    
+
+
+              <br>
+              <div class="row">
+                  <div class="col-sm-6">
+                      <label for="dni">Proyecto</label>
+                      <select formControlName="project_id" name="project_id" class="form-control" *ngIf="proyectos && project_id" required>
+                          <option *ngFor="let proyecto of proyectos" [value]="proyecto.id">
+                                 {{proyecto.project_name}}
+                          <option>
+                      </select>
+                  </div>
+                  <div class="col-sm-6">
+                      <label for="dv">División</label>
+                      <select formControlName="departamento_id" name="departamento_id" class="form-control" *ngIf="departamentos && departamento_id" required>
+                        <option *ngFor="let departamento of departamentos" [value]="departamento.id">
+                               {{departamento.dept_name}}
+                        <option>
+                    </select>
+
+                   </div>                
+              </div>
+
+
+          </div>
+
+
+
+      
+        </form>
+</div>
+
+<br>
+<div mat-dialog-actions >      
+    <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="confirmAdd()">Guardar</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+</div>
+
+

@@ -1,0 +1,225 @@
+<meta name="Description" content="Profile">
+
+<div class="loading" *ngIf="!proyectos && identity">
+        <app-loading></app-loading>  
+</div>
+    
+
+
+    <div id="wrapper" *ngIf="proyectos && identity">
+
+        <!-- Sidebar <app-menu (RefreshMenu) = "refreshMenu( $event )"></app-menu>-->
+        
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()">
+            <div class="container-fluid" >               
+
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                    <h1 class="h4">{{title}}</h1>
+                    <div class="btn-toolbar mb-2 mb-md-0">
+                    </div>
+                  </div>
+                  <br>
+
+                  <div class="row animated fadeIn">
+                    <div class="loading" *ngIf="isLoading">
+                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                    </div>
+
+                    <div class="col-lg-7" *ngIf="!show">
+                        <div class="card">
+                            <div class="card-body">                                                                                                
+                                  <div class="d-flex ">
+                                    <div class="p-2 w-100 ">
+                                            <div class="_1fH43YlMAnPCr8RI9qH98P" style="width: 44px; height: 44px;">
+                                            <div id="meInitialsButton" class="M_s6agPZfWvz2OH8iRoGk" style="background-color: #DE473C; font-size: 22px;">
+                                                <span>{{identity.name | slice:0:1}}{{identity.surname | slice:0:1}}</span>
+                                            </div>
+                                            </div>                                        
+                                    </div>
+                                    <div class="p-2 flex-shrink-1 "><a class="nav-link pointer" href="javascript:;" (click)="toggle()" >Editar</a></div>
+                                  </div>
+
+
+                                    <div class="form-group">
+                                        <label for="exampleInputuname">Primer Nombre</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><mat-icon>person_outline</mat-icon></div>
+                                            <p class="card-text"><span class="text-muted">{{identity.name}}</span></p>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="exampleInputuname">Primer Apellido</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><mat-icon>person_outline</mat-icon></div>
+                                            <p class="card-text"><span class="text-muted">{{identity.surname}}</span></p>
+                                        </div>
+                                    </div>
+            
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email Primario</label>
+                                        <div class="input-group">
+                                            <div class="input-group-addon"><mat-icon>mail_outline</mat-icon></div>
+                                            <p class="card-text"><span class="text-muted">{{identity.email}}</span></p>
+                                        </div>
+                                    </div>
+            
+                                    <div class="form-group row">
+                                            <div class="col-12">
+                                            <label for="exampleInput">DNI</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><mat-icon>fingerprint</mat-icon></div>
+                                                <p class="card-text"><span class="text-muted">{{identity.dni}} <span class="text-muted" *ngIf="identity.dv">- {{identity.dv}}</span> </span></p>
+                                            </div>
+                                            </div>
+                                    </div>
+                                    
+            
+            
+                                    <div class="form-group">
+                                            <label for="exampleInput">Teléfono</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><mat-icon>smartphone</mat-icon></div>
+                                                <p class="card-text"><span class="text-muted">{{identity.telefono1}}</span></p>
+                                            </div>
+                                    </div>
+            
+                                    <div class="form-group">
+                                            <label for="exampleInput">Otro Teléfono</label>
+                                            <div class="input-group">
+                                                <div class="input-group-addon"><mat-icon>smartphone</mat-icon></div>
+                                                <p class="card-text"><span class="text-muted">{{identity.telefono2}}</span></p>
+                                            </div>
+                                     </div>
+                                                        
+                            </div>
+                        </div>
+                  </div>
+                  
+
+                    <div class="col-lg-7" *ngIf="show">
+                          <div class="card">
+                              <div class="card-body">                                                                                                
+                                    <div class="d-flex ">
+                                            <div class="p-2 w-100 ">
+                                                    <div class="_1fH43YlMAnPCr8RI9qH98P" style="width: 44px; height: 44px;">
+                                                            <div id="meInitialsButton" class="M_s6agPZfWvz2OH8iRoGk" style="background-color: #DE473C; font-size: 22px;">
+                                                                <span>{{identity.name | slice:0:1}}{{identity.surname | slice:0:1}}</span>
+                                                            </div>
+                                                    </div>                                                        
+                                            </div>
+                                            <div class="p-2 flex-shrink-1 "><a class="nav-link pointer" href="javascript:;" (click)="toggle()" >Cancelar</a></div>
+                                    </div>
+        
+
+                                    <form ngNativeValidate #registerForm="ngForm" (ngSubmit)="guardar( registerForm.value )" class="form p-t-20" *ngIf="identity && !isLoading">
+                                      <div class="form-group">
+                                          <label for="exampleInputuname">Primer Nombre</label>
+                                          <div class="input-group">
+                                              <div class="input-group-addon"><mat-icon>person_outline</mat-icon></div>
+                                              <input [(ngModel)]="identity.name" name="name" type="text" class="form-control" placeholder="Nombre de usuario" required  [disabled]="!_userService.isRole(7)">
+                                          </div>
+                                      </div>
+                                      <div class="form-group">
+                                          <label for="exampleInputuname">Primer Apellido</label>
+                                          <div class="input-group">
+                                              <div class="input-group-addon"><mat-icon>person_outline</mat-icon></div>
+                                              <input [(ngModel)]="identity.surname" name="surname" type="text" class="form-control" placeholder="Nombre de usuario" required [disabled]="!_userService.isRole(7)">
+                                          </div>
+                                      </div>
+              
+                                      <div class="form-group">
+                                          <label for="exampleInputEmail1">Email Primario</label>
+                                          <div class="input-group">
+                                              <div class="input-group-addon"><mat-icon>mail_outline</mat-icon></div>
+                                              <input [(ngModel)]="identity.email" name="email" type="email" class="form-control" placeholder="Correo del usuario" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required [disabled]="!_userService.isRole(7)">
+                                          </div>
+                                      </div>
+              
+                                      <div class="form-group row">
+                                              <div class="col-9">
+                                              <label for="exampleInput">DNI</label>
+                                              <div class="input-group">
+                                                  <div class="input-group-addon"><mat-icon>fingerprint</mat-icon></div>
+                                                  <input [(ngModel)]="identity.dni" name="dni" type="text" class="form-control" placeholder="DNI del usuario" [disabled]="!_userService.isRole(7)">
+                                              </div>
+                                              </div>
+                                              <div class="col-3">
+                                              <label for="exampleInput">Dv</label>
+                                              <div class="input-group">
+                                                 <input [(ngModel)]="identity.dv" name="dv" type="text" class="form-control" placeholder="DV del usuario" [disabled]="!_userService.isRole(7)">
+                                              </div>
+                                              </div>
+                                      </div>
+                                      
+              
+              
+                                      <div class="form-group">
+                                              <label for="exampleInput">Teléfono</label>
+                                              <div class="input-group">
+                                                  <div class="input-group-addon"><mat-icon>smartphone</mat-icon></div>
+                                                  <input [(ngModel)]="identity.telefono1" name="telefono1" type="text" class="form-control" placeholder="Teléfono del usuario">
+                                              </div>
+                                      </div>
+              
+                                      <div class="form-group">
+                                              <label for="exampleInput">Otro Teléfono</label>
+                                              <div class="input-group">
+                                                  <div class="input-group-addon"><mat-icon>smartphone</mat-icon></div>
+                                                  <input type="text" class="form-control" id="inputTelefono" name="telefono2" [(ngModel)]="identity.telefono2" placeholder="Otro Teléfono del usuario">
+                                              </div>
+                                       </div>
+                                                                                                           
+                                          
+                                      <button type="submit" class="btn btn-primary waves-effect waves-light m-r-10" [disabled]="!registerForm.form.valid" *ngIf="!isSave">
+                                        <i class="fa fa-save" ></i>
+                                        Guardar
+                                      </button>
+
+                                          
+                                      <button type="submit" class="btn btn-primary waves-effect waves-light m-r-10" [disabled]="true" *ngIf="isSave">
+                                        <i class="fa fa-spin fa-sync" ></i>
+                                        Guardando
+                                      </button>
+                                   </form>
+                              </div>
+                          </div>
+                    </div>
+              
+                  
+                  
+                      <div class="col-lg-5">
+                          <div class="card">
+                              <div class="loading" *ngIf="isLoadingPerfil">
+                                  <app-loading></app-loading> 
+                              </div>                        
+                              <div class="card-body" align="center" *ngIf="!isLoadingPerfil">
+                                  <h4 class="card-title"><mat-icon>account_circle</mat-icon> Fotografía del usuario</h4>
+                                  <h6 class="card-subtitle  mb-2 text-muted">{{identity.name + ' ' + identity.surname}} </h6>
+                                  <img *ngIf="!imagenTemp && fotoperfil && fotoperfil.length > 0" src="data:image/jpg;base64,{{fotoperfil}}" class="img-fluid">
+                                  <img *ngIf="!imagenTemp && !fotoperfil" src="../../../assets/img/noprofile.png" class="img-fluid">
+                                  <img *ngIf="imagenTemp" [src]="imagenTemp" class="img-fluid">
+                  
+                                  <input (change)="seleccionImage($event.target.files)" type="file">
+              
+                                  <br><br>
+                  
+                                  <button (click)="cambiarImagen()" [disabled]="!imagenSubir" type="button" class="btn btn-block btn-primary waves-effect waves-light m-r-10">
+                                      <i class="fa fa-save"></i>
+                                      Actualizar Foto
+                                    </button>
+                              </div>
+                          </div>
+                      </div>
+                  
+                  </div>
+              
+
+
+                
+            </div>
+        </div>
+        <!-- /#page-content-wrapper -->
+</div>

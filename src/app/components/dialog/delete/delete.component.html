@@ -1,0 +1,32 @@
+            <mat-toolbar color="warn">
+                    <h3>{{title}} {{data.order_number}}</h3>            
+     <span class="mat-spacer"></span>
+     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+     <mat-icon class="mat-icon">close</mat-icon>       
+     </button>
+
+            </mat-toolbar>
+<p></p>
+
+  <div mat-dialog-content>
+    <strong>Proyecto:</strong> {{data.project_name}}
+    <p></p>
+    <strong>Num. Cliente:</strong> {{data.cc_number}} 
+    <p></p>
+    <strong>Servicio:</strong> {{data.service_name}}
+    <p></p>
+    <strong>Tipo de Servicio:</strong> {{data.servicetype}}
+    <p></p>
+    <strong>Estatus del Servicio:</strong> {{data.estatus}}
+    <p></p>
+    <strong>Creado El:</strong> {{data.create_at}}
+    <p></p>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="1" (click)="confirmDelete()" mat-raised-button color="warn">Confirmar</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button>Cancelar</button>
+  </div>
+
+
+

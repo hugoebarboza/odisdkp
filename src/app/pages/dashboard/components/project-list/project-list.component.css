@@ -1,0 +1,213 @@
+.mr-auto, .mx-auto {
+    margin-left: 0px !important;
+}
+.mr-auto, .mx-auto {
+    margin-right: 0px !important;
+}
+.guBSSR {
+    width: 260px;
+}
+.gZVoLr {
+    height: 140px;
+    max-width: 260px;
+    min-width: 188px;
+    display: flex;
+    flex-direction: column;
+    color: inherit;
+    position: relative;
+    margin-right: 12px;
+    box-sizing: border-box;
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 3px;
+    box-shadow: rgb(122, 134, 154) 0px 0px 0.5px 0px, rgb(193, 199, 208) 0px 1px 1px 0px;
+    margin-bottom: 12px;
+}
+.glwMLG {
+    text-align: left;
+    color: inherit;
+    height: 40px;
+    box-shadow: rgb(122, 134, 154) 0px 0px 0.5px 0px, rgb(193, 199, 208) 0px 1px 1px 0px;
+    display: flex;
+    padding: 40px 16px 60px;
+    transition: box-shadow 0.3s ease-in-out 0s, background-color 0.6s ease-in 0s;
+}
+.fPXeiI {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease-in 0s;
+}
+.gktDVd {
+    display: inline-block;
+}
+.ckHgUs {
+    -webkit-box-align: baseline;
+    align-items: baseline;
+    box-sizing: border-box;
+    cursor: default;
+    display: inline-flex;
+    font-size: inherit;
+    font-style: normal;
+    height: auto;
+    line-height: inherit;
+    max-width: 100%;
+    text-align: center;
+    vertical-align: baseline;
+    white-space: nowrap;
+    width: auto;
+    color: rgb(80, 95, 121) !important;
+    background: none;
+    border-radius: 3px;
+    border-width: 0px;
+    margin: 0px;
+    padding: 0px;
+    text-decoration: none;
+    transition: background 0.1s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
+    outline: none !important;
+}
+button {
+    -webkit-appearance: button;
+    -webkit-writing-mode: horizontal-tb !important;
+    text-rendering: auto;
+    color: buttontext;
+    letter-spacing: normal;
+    word-spacing: normal;
+    text-transform: none;
+    text-indent: 0px;
+    text-shadow: none;
+    display: inline-block;
+    text-align: center;
+    align-items: flex-start;
+    cursor: default;
+    background-color: buttonface;
+    box-sizing: border-box;
+    margin: 0em;
+    font: 400 13.3333px Arial;
+    padding: 1px 6px;
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonface;
+    border-image: initial;
+}
+.eYWpxJ {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    -webkit-box-pack: center;
+    justify-content: center;
+    height: 32px;
+    width: 32px;
+    color: rgb(66, 82, 110);
+}
+.bcqBjl {
+    color: currentColor;
+    display: inline-block;
+    fill: #FFFFFF;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.cjCeEB {
+    width: 40px;
+    height: 40px;
+    margin-right: 12px;
+    border-radius: 3px;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+    border-bottom-left-radius: 3px;
+}
+.dhkAlX {
+    display: inline-block;
+    vertical-align: top;
+    width: calc(100% - 52px);
+}
+.LGtaQ {
+    font-size: 14px;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    margin: 0px;
+}
+.gnvrqV {
+    font-size: 12px;
+    color: inherit;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    margin: 0px;
+    overflow: hidden;
+}
+.jeEvnX {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    box-sizing: border-box;
+    width: 100%;
+    height: 40px;
+    background-color: white;
+    font-size: 12px;
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    padding: 0px 8px;
+}
+
+a.efsTEk {
+    -webkit-box-align: baseline;
+    align-items: baseline;
+    box-sizing: border-box;
+    display: inline-flex;
+    font-size: inherit;
+    font-style: normal;
+    height: 2.28571em;
+    line-height: 2.28571em;
+    max-width: 100%;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: auto;
+    color: rgb(80, 95, 121) !important;
+    background: none;
+    border-radius: 3px;
+    border-width: 0px;
+    margin: 0px;
+    padding: 0px 8px;
+    text-decoration: none;
+    transition: background 0.1s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
+    outline: none !important;
+    cursor: pointer;
+}
+.dqqHMN {
+    height: 16px;
+    width: 16px;
+    color: currentColor;
+    display: inline-block;
+    fill: #FFFFFF;
+    -webkit-flex-shrink: 0;
+    -ms-flex-negative: 0;
+    flex-shrink: 0;
+    line-height: 1;
+}
+._1fH43YlMAnPCr8RI9qH98P {
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.M_s6agPZfWvz2OH8iRoGk {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    text-align: center;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    font-family: SegoeUI-SemiLight-final,"Segoe UI Semilight",SegoeUI-Regular-final,"Segoe UI","Segoe UI Web (West European)",Segoe,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
+    line-height: 195%;
+}

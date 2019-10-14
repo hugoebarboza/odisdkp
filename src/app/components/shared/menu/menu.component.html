@@ -1,0 +1,79 @@
+<nav id="sidebar"  *ngIf="proyectos && identity">
+    <div id="sidebar-body" class="sidebar-body">
+      
+      <!----
+      <ul class="list-unstyled components">
+          <p class="font-color-red pointer"  routerLinkActive="active" [routerLink]="['/support']">SOPORTE</p>
+      </ul>-->
+      <ul class="list-unstyled components">
+          <p class="font-color-red" *ngIf="proyectos && proyectos.length > 0">PROYECTOS 
+            <button mat-icon-button (click)="refresh()">
+              <mat-icon>sync</mat-icon>
+            </button> 
+          </p>
+          <li *ngFor="let k of proyectos | keys;" >
+              <a href="#pro{{proyectos[k].id}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">{{proyectos[k].project_name}}
+                <h6><span class="badge badge-light"> {{ proyectos[k].service.length }}</span></h6>       
+              </a>
+              <ul class="collapse list-unstyled" id="pro{{proyectos[k].id}}" *ngFor="let service of proyectos[k].service; let i = index" (click)="navigate(service.id)">
+                  <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/calendar', proyectos[k].id]" > 
+                        <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'calendar'">date_range</i> 
+                        <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'calendar' ">calendar_today</i> 
+                        Calendario
+                      </a>
+                  </li>
+                  <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0 && _userService.isRole(7)">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/project', proyectos[k].id]" > 
+                        <!--<i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'project'">folder</i>-->
+                        <!--<i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'project' ">folder_open</i> -->
+                        
+                        <img draggable="false" class="Md9X2e" *ngIf="proyectos[k].id === projectselected && path === 'project'" src="../../../../assets/icons/icon-project-96x96.png" title="Añade, quita, cambia de nombre, mueve o busca una unidad organizativa" alt="Unidades organizativas">
+                        <img draggable="false" class="Md9X2e" *ngIf="proyectos[k].id != projectselected || path != 'project'" src="../../../../assets/icons/icon-project-96x96.png" title="Añade, quita, cambia de nombre, mueve o busca una unidad organizativa" alt="Unidades organizativas">
+
+                        Proyectos
+                      </a>
+                  </li>
+                  <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="i == 0 && _userService.isRole(7)">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/users', proyectos[k].id]" > 
+                        <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'users'">people</i>
+                        <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'users' ">people_outline</i>
+
+                        
+                        Usuarios
+                      </a>
+                  </li>
+                  <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}">
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', service.id]" > 
+                          <i class="material-icons md-14-color" *ngIf="service.id === selected && path === 'service'">launch</i> 
+                          <i class="material-icons md-14" *ngIf="service.id != selected || path != 'service'">launch</i> 
+                          {{service.service_name}} 
+                      </a>
+                  </li>
+              </ul>
+          </li>
+      </ul>
+    </div>
+  
+</nav>
+
+<nav id="sidebar"  *ngIf="!proyectos && identity">
+    <div id="sidebar-body" class="sidebar-body">
+      
+      <!-----
+      <ul class="list-unstyled components">
+          <p class="font-color-red pointer"  routerLinkActive="active" [routerLink]="['/support']">SOPORTE</p>
+      </ul>-->
+      <ul class="list-unstyled components">
+          <p class="font-color-red">PROYECTOS 
+            <button mat-icon-button (click)="refresh()">
+              <mat-icon>sync</mat-icon>
+            </button> 
+          </p>
+      </ul>
+    </div>
+  
+</nav>
+  
+
+

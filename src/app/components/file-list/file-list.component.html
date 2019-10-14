@@ -1,0 +1,154 @@
+
+    <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+      No se encontraron archivos.
+    </div>
+    
+    
+
+    <div class="container" *ngIf="isLoadingResults || isRateLimitReached">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingResults" ></mat-spinner>
+        </div>
+      </div>
+    </div>
+
+    <button mat-stroked-button color="primary"*ngIf="selection.selected && selection.selected.length > 0" (click)="descargar()"><mat-icon>archive</mat-icon> Descargar zip</button>
+    <mat-table
+    #table  
+    [dataSource]="dataSource"  
+    matSort  
+    *ngIf="!isRateLimitReached && dataSource"
+    [class.isMobile]="isMobile"
+    >
+
+    <ng-container matColumnDef="select">
+        <mat-header-cell *matHeaderCellDef>          
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [aria-label]="checkboxLabel()"
+                        >
+          </mat-checkbox>
+        </mat-header-cell>
+        <mat-cell *matCellDef="let row">
+          <span class="mobile-label">Select:</span>
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? selection.toggle(row) : null"
+                        [checked]="selection.isSelected(row)"
+                        [aria-label]="checkboxLabel(row)"
+                        >
+          </mat-checkbox>
+        </mat-cell>
+    </ng-container>
+                
+    
+    <ng-container matColumnDef="nombre"  >  
+      <mat-header-cell *matHeaderCellDef  mat-sort-header> Nombre </mat-header-cell>
+        <mat-cell *matCellDef="let items; let i = index" >
+        <span class="mobile-label">Nombre:</span>
+          {{items.nombre}}             
+    
+      </mat-cell>
+    </ng-container>
+    
+    
+    
+    
+    <ng-container matColumnDef="tipo" >
+      <mat-header-cell *matHeaderCellDef > Tipo </mat-header-cell>
+      <mat-cell *matCellDef="let items; let i = index" > 
+        <span class="mobile-label">Tipo:</span>
+
+        <a mat-icon-button href="{{items.url}}" target="_blank" matTooltip="{{items.nombre}}" style="color: #303f9f;" *ngIf="items.type == 'application/mp4' || items.type == 'mp4' || items.type == 'video/mp4' || items.type == 'image/png' || items.type == 'image/jpg' || items.type == 'image/jpeg' || items.type == 'jpg' || items.type == 'jpeg'">
+            <mat-icon aria-label="launch">image</mat-icon>
+        </a>
+
+        <a mat-icon-button href="{{items.url}}" target="_blank" matTooltip="{{items.nombre}}" color="accent"*ngIf="items.type == 'application/x-zip-compressed' || items.type == 'application/x-rar-compressed'">
+          <mat-icon aria-label="launch">work</mat-icon>
+        </a> 
+
+        <a mat-icon-button href="{{items.url}}" target="_blank" matTooltip="{{items.nombre}}" color="accent"*ngIf="items.type == 'dwg'">
+          <mat-icon aria-label="launch">collections</mat-icon>
+        </a> 
+
+
+        <a mat-icon-button href="{{items.url}}" target="_blank" matTooltip="{{items.nombre}}" color="accent" *ngIf="items.type == 'application/pdf' || items.type == 'pdf' || items.type == 'application/msword' || items.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || items.type == 'application/vnd.ms-excel' || items.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+          <mat-icon aria-label="launch">insert_drive_file</mat-icon>
+        </a>        
+    
+    
+    
+      </mat-cell>
+    </ng-container>
+    
+    
+    
+    <ng-container matColumnDef="create_at" >
+      <mat-header-cell *matHeaderCellDef > Creado El </mat-header-cell>
+        <mat-cell *matCellDef="let items">
+          <span class="mobile-label">Creado El:</span>
+          {{items.created }}
+        </mat-cell>
+    </ng-container>
+    
+    <ng-container matColumnDef="create_by" >
+      <mat-header-cell *matHeaderCellDef > Creado Por </mat-header-cell>
+        <mat-cell *matCellDef="let items" >
+        <span class="mobile-label">Creado Por:</span>          
+        {{items.username.name }} {{items.username.surname }}
+        </mat-cell>
+    </ng-container>
+
+    <ng-container matColumnDef="visualizar" >
+      <mat-header-cell *matHeaderCellDef >  </mat-header-cell>
+        <mat-cell *matCellDef="let items; let i = index">  
+    
+          <div class="row">
+            <button mat-icon-button color="primary" (click)="downloadItem(items, i)"
+            matTooltip="Decargar documento."
+            [matTooltipPosition]="positiondatasourceaction.value"
+            >          
+              <div *ngIf="i != indexitem">
+              <mat-icon aria-label="download">get_app</mat-icon>
+              </div>
+             
+              <div *ngIf="i == indexitem">
+              <app-progress-spinner *ngIf="isLoadingDownload"></app-progress-spinner>  
+              </div>
+    
+            </button>
+    
+            
+            <button mat-icon-button color="warn"  (click)="deleteItem(items)" 
+            matTooltip="Eliminar documento."
+            [matTooltipPosition]="positiondatasourceaction.value"
+            *ngIf="_userService.isRole(7)"
+            >
+              
+            <div>
+              <mat-icon aria-label="Delete">delete</mat-icon>
+            </div>
+            </button>
+    
+    
+    
+            <a mat-button href="{{items.url}}" target="_blank" rel="noopener">
+              <div>
+              <mat-icon aria-label="launch">launch</mat-icon>
+              </div>
+            </a> 
+    
+    
+          </div>
+    
+        </mat-cell>
+    </ng-container>
+    
+    <mat-header-row *matHeaderRowDef="columnsToDisplay" color="primary"></mat-header-row>
+    <mat-row *matRowDef="let items; columns: columnsToDisplay;" ></mat-row>
+    </mat-table>
+    <mat-paginator [pageSizeOptions]="[10, 25, 100]"></mat-paginator>
+  
+    
+    

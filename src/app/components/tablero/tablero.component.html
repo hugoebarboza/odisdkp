@@ -1,0 +1,127 @@
+<div class="p-2" >
+<mat-card [ngStyle]="{'padding':'0px'}">
+<mat-card-header [ngClass]="{'custom-card':true}">
+    <div class="mat-card-header-text">
+				<mat-card-title>
+					<div class="row">
+						<div class="col-8">
+								<div class="float-left">
+								{{title}}
+								</div>
+						</div>
+						<div class="col-4">
+								<div class="float-right">
+										<button mat-icon-button [matMenuTriggerFor]="menuview"
+										matTooltip="Cambiar vista."
+										[matTooltipPosition]="positionleftaction.value"
+										>
+											<mat-icon>view_headline</mat-icon>
+										</button>
+										
+										<mat-menu #menuview="matMenu" [overlapTrigger]="false">
+											<button mat-menu-item (click)="toggleTemplate(0)">
+											<mat-icon class="material-icons md-20-color" *ngIf="view ==0">view_list</mat-icon>
+											<mat-icon class="material-icons md-20" *ngIf="view !== 0">view_list</mat-icon>      
+											<span >Vista de Lista </span>
+											</button>
+											<button mat-menu-item (click)="toggleTemplate(1)">
+											<mat-icon class="material-icons md-20-color" *ngIf="view ==1">view_quilt</mat-icon>
+											<mat-icon class="material-icons md-20" *ngIf="view !== 1">view_quilt</mat-icon>
+											<span >Vista de Detalle</span>
+											</button>
+											<button mat-menu-item (click)="toggleTemplate(2)">
+											<mat-icon class="material-icons md-20-color" *ngIf="view ==2">view_week</mat-icon>
+											<mat-icon class="material-icons md-20" *ngIf="view !== 2">view_week</mat-icon>
+											<span >Vista de Tablero</span>
+											</button>
+										
+										</mat-menu>
+								</div>
+						</div>
+						<div class="w-100"></div>
+						<div class="col-8"><input [(ngModel)]="terms" style="margin-bottom: 10px;" class="search" placeholder="Buscar..."></div>
+						<div class="col-4"></div>
+
+					</div>
+				</mat-card-title>
+		</div>
+    <mat-card-subtitle>
+		</mat-card-subtitle>
+	
+</mat-card-header>
+
+
+<mat-card-content>
+
+
+	<div class="p-2">
+		<div class="container-fluid " >
+				<div class="row mb-2" *ngIf="bootstrapClass !== null">
+					<div class="{{bootstrapClass}}" *ngFor="let estatu of estatus; let i = index">	
+						<div class="card flex-md-row mb-4 shadow-sm h-md-250">
+							<div class="card-body d-flex flex-column align-items-start bg-light">
+								<strong class="d-inline-block mb-2 text-primary" *ngIf="estatu.label > 1"><h5 class="text-uppercase">{{estatu.name}}</h5></strong>
+								<strong class="d-inline-block mb-2 text-danger" *ngIf="estatu.label == 1"><h5 class="text-uppercase">{{estatu.name}}</h5></strong>
+								<div *ngIf="isLoadingResults">
+										<app-loading *ngIf="isLoadingResults"></app-loading>  
+								</div>          			
+								<div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+									No se encontraron registros que coincidan con su búsqueda.
+								</div>
+											  
+								<div  *ngIf="datasource && !isRateLimitReached && !isLoadingResults" class="container-fluid">								
+									<h6 class="border-bottom border-gray pb-2 mb-0">{{subtitle}}</h6>
+									<div *ngFor="let c of count">
+										<h6 *ngIf="c.id == estatu.id">Total: {{c.value}}</h6>
+								  </div>
+									<div *ngFor="let data of datasource | filter:terms">
+									<div *ngIf="data.status_id == estatu.id">
+									
+									    	<mat-card class="pointer" (click)="showItem(data.order_id, data.order_number, data.category_id, data.customer_id, data.cc_number, data.servicetype_id, data.status_id, data.estatus, data.order_date, data.required_date, data.vencimiento_date, data.observation, data.create_at, data.user, data.project_name, data.service_name, data.servicetype, data.update_at, data.userupdate, data.region, data.provincia, data.comuna, data.direccion)">
+													<mat-card-content>
+														
+														 <svg *ngIf="estatu.label == 2" class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect fill="#007bff" width="100%" height="100%"/><text fill="#007bff" dy=".3em" x="50%" y="50%">32x32</text></svg>
+														 <svg *ngIf="estatu.label == 1" class="bd-placeholder-img mr-2 rounded" width="32" height="32" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice" focusable="false" role="img" aria-label="Placeholder: 32x32"><title>Placeholder</title><rect fill="#FF0000" width="100%" height="100%"/><text fill="#FF0000" dy=".3em" x="50%" y="50%">32x32</text></svg>															
+														 <strong  *ngIf="data.userassigned">@{{data.userassigned}}</strong>
+														 <strong  *ngIf="!data.userassigned">Sin Asignar</strong>
+														 <br>
+														 <strong>N. Orden:</strong>	<div [innerHTML]="data.order_number | highlight: terms"></div>
+														 <strong>N. Cliente:</strong> <div [innerHTML]="data.cc_number | highlight: terms"></div>
+														 <strong>Dirección:</strong> <div [innerHTML]="data.direccion | highlight: terms"></div>
+														 <strong>Observación:</strong> <div [innerHTML]="data.observation | highlight: terms"></div>
+														 <strong>Creado El:</strong> {{data.create_at}}  <strong *ngIf="data.update_at">/ Editado El:</strong> {{data.update_at}}
+														 <br>
+														 <strong>Creada Por:</strong> {{data.user}} <strong *ngIf="data.userupdate">/ Editada Por:</strong> {{data.userupdate}}
+													</mat-card-content>
+											</mat-card>
+											<br>
+
+									</div>
+									</div>
+
+
+
+									<small class="d-block text-right mt-3">
+											<mat-paginator    [length]="resultsLength"
+											[pageSize]="pageSize"
+											[pageSizeOptions]="pageSizeOptions"
+											(page)="onPaginateChange($event)"
+											[showFirstLastButtons]="true" 
+											></mat-paginator>    
+		
+									</small>
+								</div>
+							</div>
+						</div>
+					</div>						
+			</div>
+		</div>
+		</div>
+</mat-card-content>
+</mat-card>
+
+
+
+
+
+</div>

@@ -1,0 +1,1209 @@
+<div class="row" *ngIf="identity">
+    <div class="col">
+        <div class=" jfCYPT">
+            <div class=" jfCYPT">
+                <div class=" didcdr" data-test-selector="profile-worked-with">
+                    <div class=" iDwfcE" >
+                        <div>
+                            <div class=" dIOqge" >
+                                    <!------------------------------------------------------------- Órdenes por Ubicación. --------------------------------------------------->
+                                    <div class=" jmuLsE" *ngIf="project && project.project_type == 0">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Órdenes de Trabajo vs Ubicación.
+                                                <button mat-icon-button 
+                                                matTooltip="Indicador por Fecha de Edición"
+                                                [matTooltipPosition]="positionrightaction.value"
+                                                (event)="$event.stopinmediatePropagation()"
+                                                >
+                                                <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                                </button>        
+
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+            
+                                        <div class=" pUmbZ">
+
+                                            <!-------------SPACE---------------->
+                                            <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <!---------------------------------->
+                                            <div class="container-fluid" *ngIf="isLoading">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="!isLoading">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-4" align="left">
+                                                        <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoption">
+                                                            <ng-select
+                                                            [items]="kpisearchoptions"
+                                                            [clearable]="false"
+                                                            bindLabel="name"
+                                                            bindValue="value"
+                                                            [(ngModel)]="kpiselectedoption"
+                                                            (change)="selectChangeKpi($event)"
+                                                            class="width-70percentage">
+                                                            </ng-select>
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-4">                                            
+                                                        </div>
+                                                        <div class="col-4" align="right">
+                                                        <div class=" jNlJODT" *ngIf="kpidata && kpidata.length > 0">Total: <span>{{kpitotal | number}}</span>
+                                                        </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="container-fluid" *ngIf="serviceestatus && serviceestatus.length > 0 && kpiselectstatus && kpiselectstatus > 0 ">
+                                                    <div class="row" >
+                                                        <div class="col-4" align="left">
+                                                            <div class="input-group input-group-sm mb-3" >
+                                                                <ng-select
+                                                                    [items]="serviceestatus"
+                                                                    [clearable]="false"
+                                                                    bindLabel="name"
+                                                                    bindValue="id"
+                                                                    [(ngModel)]="kpiselectstatus"
+                                                                    (change)="selectChangeKpiStatus($event)"
+                                                                    class="width-70percentage">
+                                                                </ng-select>
+                                                            </div>
+                                                        </div>
+        
+                                                        <div class="col-4">                                            
+                                                        </div>                                                
+                                            
+                                                        <div class="col-4">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row justify-content-center align-items-center" align="center">
+                                                    <div class="col" *ngIf="kpidata && kpidata.length > 0 ">
+                                                        <div class="p-2">
+                                                        <div class="table-responsive">
+                                                                <table class="table">
+                                                                    <thead class="thead-light">
+                                                                        <tr>
+                                                                        <th scope="col">Región/Comuna</th>
+                                                                        <th scope="col"># OT</th>
+                                                                        <th scope="col">% Total</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let k of kpidata | keys;">
+                                                                        <th scope="row">{{ kpidata[k].region }} / {{ kpidata[k].comuna }}</th>
+                                                                        <td>{{ kpidata[k].produccion | number}} </td>
+                                                                        <td>{{ kpidata[k].porcentaje | number}} %</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>                                                            
+                                                        </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-sm" *ngIf="kpidata && kpidata.length == 0">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">
+                                                                Sin Información.
+                                                                </p>
+                                                                <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                            </div>                        
+                                                        </div>    
+                                                    </div>                
+                                                </div>                                                
+            
+                                            </div>                                        
+    
+
+                                        </div>
+                                    </div>
+                                    <!---------------------------------------------------------------------------------------------------------------------------------------->
+
+
+                                    <!------------------------------------------------------------- Órdenes por Inspector. --------------------------------------------------->
+                                    <div class=" jmuLsE" *ngIf="project && project.project_type == 0">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Órdenes de Trabajo Asignadas y Editadas vs Ubicación.
+                                                <button mat-icon-button 
+                                                matTooltip="Indicador por Fecha de Creación"
+                                                [matTooltipPosition]="positionrightaction.value"
+                                                (event)="$event.stopinmediatePropagation()"
+                                                >
+                                                <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                                </button>        
+
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                        <div class=" pUmbZ">
+
+                                            <!-------------SPACE---------------->
+                                            <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <!---------------------------------->
+                                            <div class="container-fluid" *ngIf="isLoadingKpiGroupedByLocation">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiGroupedByLocation" ></mat-spinner>
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="!isLoadingKpiGroupedByLocation">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-4" align="left">
+                                                        <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptionsuser && kpiselectedoptiongroupedbylocation">
+                                                            <ng-select
+                                                            [items]="kpisearchoptionsuser"
+                                                            [clearable]="false"
+                                                            bindLabel="name"
+                                                            bindValue="value"
+                                                            [(ngModel)]="kpiselectedoptiongroupedbylocation"
+                                                            (change)="selectChangeKpiGroupedLocation($event)"
+                                                            class="width-70percentage">
+                                                            </ng-select>
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-4">                                            
+                                                        </div>
+                                                        <div class="col-4" align="right">
+                                                        <div class=" jNlJODT" *ngIf="kpidatagrupedbylocation && kpidatagrupedbylocation.length > 0">
+                                                                Avance: <span>{{promediogroupedlocation}}%</span>
+                                                                <p class="hkvxBPL"><span>Asignadas: {{countassignedlocation | number }}, Editadas: {{countupdatelocation | number}}</span></p>
+                                                        </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+
+                                                <div class="row justify-content-center align-items-center" align="center">
+                                                    <div class="col" *ngIf="kpidatagrupedbylocation && kpidatagrupedbylocation.length > 0 ">
+                                                            <ngx-charts-bar-horizontal-2d
+                                                            (window:resize)="onResize($event)"
+                                                            [view]="view"
+                                                            [scheme]="colorScheme"
+                                                            [results]="kpidatagrupedbylocation"
+                                                            [gradient]="gradient"
+                                                            [xAxis]="showXAxis"
+                                                            [yAxis]="showYAxis"
+                                                            [legend]="showLegend"
+                                                            [legendTitle]="['Leyenda']"
+                                                            [showXAxisLabel]="showXAxisLabel"
+                                                            [showYAxisLabel]="showYAxisLabel"
+                                                            [xAxisLabel]="xAxisLabelGroupedLocation"
+                                                            [yAxisLabel]="yAxisLabelGroupedLocation"
+                                                            >
+                                                          </ngx-charts-bar-horizontal-2d>
+    
+                                                    </div>
+                                                    <div class="col-sm" *ngIf="kpidatagrupedbylocation && kpidatagrupedbylocation.length == 0">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">
+                                                                Sin Información.
+                                                                </p>
+                                                                <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                            </div>        
+                                                        </div>    
+                                                    </div>                
+                                                </div>                                                
+            
+                                            </div>                                                
+                                        </div>
+    
+
+
+                                        
+                                    </div>
+                                    <!---------------------------------------------------------------------------------------------------------------------------------------->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<br>
+<div class="row" *ngIf="identity">
+    <div class="col">
+        <div class=" jfCYPT">
+            <div class=" jfCYPT">
+                <div class=" didcdr" data-test-selector="profile-worked-with">
+                    <div class=" iDwfcE" >
+                        <div>
+                            <div class=" dIOqge" >
+
+                                <!------------------------------------------------------------- Órdenes por Inspector. --------------------------------------------------->
+                                <div class=" jmuLsE" *ngIf="project">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                            Órdenes de Trabajo vs Usuario.
+                                            <button mat-icon-button 
+                                            matTooltip="Indicador por Fecha de Edición"
+                                            [matTooltipPosition]="positionrightaction.value"
+                                            (event)="$event.stopinmediatePropagation()"
+                                            >
+                                            <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                            </button>        
+
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div> 
+
+                                    <div class=" pUmbZ">
+                                        <!-------------SPACE---------------->
+                                        <div class="container-fluid" >
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>        
+                                        <!---------------------------------->
+                                        <div class="container-fluid" *ngIf="isLoadingKpiUser">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiUser" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="!isLoadingKpiUser">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-4" align="left">
+                                                    <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptionsuser && kpiselectedoptionuser">
+                                                        <ng-select
+                                                        [items]="kpisearchoptionsuser"
+                                                        [clearable]="false"
+                                                        bindLabel="name"
+                                                        bindValue="value"
+                                                        [(ngModel)]="kpiselectedoptionuser"
+                                                        (change)="selectChangeKpiUser($event)"
+                                                        class="width-70percentage">
+                                                        </ng-select>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-4">                                            
+                                                    </div>
+                                                    <div class="col-4" align="right">
+                                                    <div class=" jNlJODT" *ngIf="kpidatauser && kpidatauser.length > 0">Total: <span>{{kpitotaluser | number}}</span>
+                                                    </div> 
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="container-fluid" *ngIf="serviceestatus && serviceestatus.length > 0 && kpiselectstatususer && kpiselectstatususer > 0 ">
+                                                <div class="row" >
+                                                    <div class="col-4" align="left">
+                                                        <div class="input-group input-group-sm mb-3" >
+                                                            <ng-select
+                                                                [items]="serviceestatus"
+                                                                [clearable]="false"
+                                                                bindLabel="name"
+                                                                bindValue="id"
+                                                                [(ngModel)]="kpiselectstatususer"
+                                                                (change)="selectChangeKpiStatusUser($event)"
+                                                                class="width-70percentage">
+                                                            </ng-select>
+                                                        </div>
+                                                    </div>
+    
+                                                    <div class="col-4">                                            
+                                                    </div>                                                
+                                        
+                                                    <div class="col-4">
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="row justify-content-center align-items-center" align="center">
+                                                <div class="col" *ngIf="kpidatauser && kpidatauser.length > 0 ">
+                                                    <div class="p-2">
+                                                    <div class="table-responsive">
+                                                            <table class="table">
+                                                                <thead class="thead-light">
+                                                                    <tr>
+                                                                    <th scope="col">Usuario</th>
+                                                                    <th scope="col"></th>
+                                                                    <th scope="col"># OT</th>
+                                                                    <th scope="col">% Total</th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                    <tr *ngFor="let k of kpidatauser | keys;">
+                                                                    <td scope="row">{{ kpidatauser[k].name }} {{ kpidatauser[k].surname }}</td>
+                                                                    <td><a mat-button [routerLink]="['/users/', kpidatauser[k].id, 'settings']" class="btn btn-sm btn-outline-secondary" *ngIf="kpidatauser[k].id > 0" target="_blank">Ver Perfil</a></td>
+                                                                    <td>{{ kpidatauser[k].produccion | number}} </td>
+                                                                    <td>{{ kpidatauser[k].porcentaje | number}} %</td>
+                                                                    </tr>
+                                                                </tbody>
+                                                            </table>                                                            
+                                                    </div>
+                                                    </div>
+
+                                                </div>
+                                                <div class="col-sm" *ngIf="kpidatauser && kpidatauser.length == 0">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="dGHjBt">
+                                                            <p class="hAzwqT">
+                                                            Sin Información.
+                                                            </p>
+                                                            <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                        </div>        
+                                                    </div>    
+                                                </div>                
+                                            </div>                                                
+        
+                                        </div>
+                                    </div>                                        
+                                </div>
+                                <!---------------------------------------------------------------------------------------------------------------------------------------->
+
+                                <!------------------------------------------------------------- Órdenes por Inspector. --------------------------------------------------->
+                                <div class=" jmuLsE" *ngIf="project">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                            Órdenes de Trabajo Asignadas y Editadas vs Usuario.
+                                            <button mat-icon-button 
+                                            matTooltip="Indicador por Fecha de Creación"
+                                            [matTooltipPosition]="positionrightaction.value"
+                                            (event)="$event.stopinmediatePropagation()"
+                                            >
+                                            <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                            </button>        
+
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class=" pUmbZ">
+
+                                        <!-------------SPACE---------------->
+                                        <div class="container-fluid" >
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>        
+                                        <!---------------------------------->
+                                        <div class="container-fluid" *ngIf="isLoadingKpiGroupedByUser">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiGroupedByUser" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="!isLoadingKpiGroupedByUser">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-4" align="left">
+                                                    <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoptiongroupedbyuser">
+                                                        <ng-select
+                                                        [items]="kpisearchoptions"
+                                                        [clearable]="false"
+                                                        bindLabel="name"
+                                                        bindValue="value"
+                                                        [(ngModel)]="kpiselectedoptiongroupedbyuser"
+                                                        (change)="selectChangeKpiGroupedUser($event)"
+                                                        class="width-70percentage">
+                                                        </ng-select>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-4">                                            
+                                                    </div>
+                                                    <div class="col-4" align="right">
+                                                    <div class=" jNlJODT" *ngIf="kpidatagrupedbyuser && kpidatagrupedbyuser.length > 0">
+                                                            Avance: <span>{{promediogropeduser}}%</span>
+                                                        <p class="hkvxBPL"><span>Asignadas: {{countassigned | number}}, Editadas: {{countupdate | number}}</span></p>
+                                                    </div> 
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row justify-content-center align-items-center" align="center">
+                                                <div class="col" *ngIf="kpidatagrupedbyuser && kpidatagrupedbyuser.length > 0 ">
+                                                        <ngx-charts-bar-horizontal-2d
+                                                        (window:resize)="onResize($event)"
+                                                        [view]="view"
+                                                        [scheme]="colorScheme"
+                                                        [results]="kpidatagrupedbyuser"
+                                                        [gradient]="gradient"
+                                                        [xAxis]="showXAxis"
+                                                        [yAxis]="showYAxis"
+                                                        [legend]="showLegend"
+                                                        [legendTitle]="['Leyenda']"
+                                                        [showXAxisLabel]="showXAxisLabel"
+                                                        [showYAxisLabel]="showYAxisLabel"
+                                                        [xAxisLabel]="xAxisLabelGroupedUser"
+                                                        [yAxisLabel]="yAxisLabelGroupedUser"
+                                                        >
+                                                      </ngx-charts-bar-horizontal-2d>
+                                                </div>
+                                                <div class="col-sm" *ngIf="kpidatagrupedbyuser && kpidatagrupedbyuser.length == 0">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="dGHjBt">
+                                                            <p class="hAzwqT">
+                                                            Sin Información.
+                                                            </p>
+                                                            <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                        </div>        
+                                                    </div>    
+                                                </div>                
+                                            </div>            
+                                        </div>
+    
+    
+
+                                    </div>
+                                </div>
+                                <!------------------------------------------------------------- Órdenes por Inspector. --------------------------------------------------->
+                                    
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="row" *ngIf="identity">
+    <div class="col">
+        <div class=" jfCYPT">
+            <div class=" jfCYPT">
+                <div class=" didcdr" data-test-selector="profile-worked-with">
+                    <div class=" iDwfcE" >
+                        <div>
+                            <div class=" dIOqge" >
+                                    <!------------------------------------------------------------- Órdenes por Tiempo de Atención. --------------------------------------------------->
+                                    <div class=" jmuLsE" *ngIf="project && service">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Órdenes de Trabajo vs Tiempo de Atención.
+                                                <button mat-icon-button 
+                                                matTooltip="Indicador por Fecha de Edición"
+                                                [matTooltipPosition]="positionrightaction.value"
+                                                (event)="$event.stopinmediatePropagation()"
+                                                >
+                                                <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                                </button>        
+
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+            
+                                        <div class=" pUmbZ">
+
+                                            <!-------------SPACE---------------->
+                                            <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <!---------------------------------->
+                                            <div class="container-fluid" *ngIf="isLoadingKpiTime">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiTime" ></mat-spinner>
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div *ngIf="!isLoadingKpiTime">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-4" align="left">
+                                                        <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoptiontime">
+                                                            <ng-select
+                                                            [items]="kpisearchoptions"
+                                                            [clearable]="false"
+                                                            bindLabel="name"
+                                                            bindValue="value"
+                                                            [(ngModel)]="kpiselectedoptiontime"
+                                                            (change)="selectChangeKpiTime($event)"
+                                                            class="width-70percentage">
+                                                            </ng-select>
+                                                        </div>
+                                                        </div>
+                                                        <div class="col-4">                                            
+                                                        </div>
+                                                        <div class="col-4" align="right">
+                                                        <div class=" jNlJODT" *ngIf="kpidatatimeavg && kpidatatimeavg.length > 0">Promedio: <span>{{hours}}h </span><span>{{minutes}}m </span><span>{{seconds | number}}s </span>
+                                                        </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row justify-content-center align-items-center" align="center">
+                                                    <div class="col" *ngIf="kpidatatimeavg && kpidatatimeavg.length > 0 ">
+                                                        <div class="p-2">
+                                                        <div class="table-responsive">
+                                                                <table class="table">
+                                                                    <thead class="thead-light">
+                                                                        <tr>
+                                                                        <th scope="col">Proyecto/Servicio</th>
+                                                                        <th scope="col"># OT</th>
+                                                                        <th scope="col">T. Atención</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr *ngFor="let k of kpidatatimeavg | keys;">
+                                                                        <th scope="row">{{ project.project_name }} / {{ service.service_name }}</th>
+                                                                        <td>{{ kpidatatimeavg[k].user_count | number}}</td>
+                                                                        <td>{{ kpidatatimeavg[k].time}}</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>                                                            
+                                                        </div>
+                                                        </div>
+
+                                                    </div>
+                                                    <div class="col-sm" *ngIf="kpidatatimeavg && kpidatatimeavg.length == 0">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">
+                                                                Sin Información.
+                                                                </p>
+                                                                <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                            </div>                        
+                                                        </div>    
+                                                    </div>                
+                                                </div>                                                
+            
+                                            </div>                                        
+    
+
+                                        </div>
+                                    </div>
+                                    <!---------------------------------------------------------------------------------------------------------------------------------------->
+
+
+                                    <!------------------------------------------------------------- Órdenes por XXXXXXXXX. --------------------------------------------------->
+                                    
+                                    
+                                    <div class=" jmuLsE">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Órdenes de Trabajo, Carga Procesada.
+                                                <button mat-icon-button 
+                                                matTooltip="Indicador por Fecha de Creación"
+                                                [matTooltipPosition]="positionrightaction.value"
+                                                (event)="$event.stopinmediatePropagation()"
+                                                >
+                                                <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                                </button>        
+
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                        <div class=" pUmbZ">
+
+                                            <!-------------SPACE---------------->
+                                            <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <!---------------------------------->
+                                            <div class="container-fluid" *ngIf="isLoadingKpiOrderCreated">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiOrderCreated" ></mat-spinner>
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+                                            <div *ngIf="!isLoadingKpiOrderCreated">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-4" align="left">
+                                                            <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoptionordercreated">
+                                                                <ng-select
+                                                                [items]="kpisearchoptions"
+                                                                [clearable]="false"
+                                                                bindLabel="name"
+                                                                bindValue="value"
+                                                                [(ngModel)]="kpiselectedoptionordercreated"
+                                                                (change)="selectChangeKpiOrderCreated($event)"
+                                                                class="width-70percentage">
+                                                                </ng-select>
+                                                            </div>            
+                                                        </div>
+                                                        <div class="col-4">                                            
+                                                        </div>
+                                                        <div class="col-4" align="right">
+                                                        <div class=" jNlJODT" *ngIf="kpidataOrderCreated && kpidataOrderCreated.length > 0">Promedio: <span>{{promedioordercreated | number}}</span>
+                                                        </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row justify-content-center align-items-center" align="center">
+
+                                                    <div class="col" *ngIf="kpidataOrderCreated && kpidataOrderCreated.length > 0">
+                                                        <div class="p-2">
+                                                            <div class="table-responsive">
+                                                                    <table class="table">
+                                                                        <thead class="thead-light">
+                                                                            <tr>
+                                                                            <th scope="col">Proyecto/Servicio</th>
+                                                                            <th scope="col"># OT</th>
+                                                                            <th scope="col">T. Atención</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr *ngFor="let k of kpidataOrderCreated | keys;">
+                                                                            <th scope="row">{{ project.project_name }} / {{ service.service_name }}</th>
+                                                                            <td>{{ kpidataOrderCreated[k].user_count | number}}</td>
+                                                                            <td>{{ kpidataOrderCreated[k].fecha}}</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-sm" *ngIf="kpidataOrderCreated && kpidataOrderCreated.length == 0">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">
+                                                                Sin Información.
+                                                                </p>
+                                                                <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                            </div>                        
+                                                        </div>    
+                                                    </div>                
+                                                </div>                
+                                            </div>                                        
+    
+                                            
+                                        </div>                                        
+                                    </div>
+                                    <!---------------------------------------------------------------------------------------------------------------------------------------->    
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+
+<div class="row" *ngIf="identity">
+    <div class="col">
+        <div class=" jfCYPT">
+            <div class=" jfCYPT">
+                <div class=" didcdr" data-test-selector="profile-worked-with">
+                    <div class=" iDwfcE" >
+                        <div>
+                            <div class=" dIOqge" >
+
+
+                                    <!------------------------------------------------------- Órdenes de Trabajo Asignadas, Año Anterior vs Actual.---------------------------->
+                                    <div class=" jmuLsE">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Órdenes de Trabajo Asignadas, Año Anterior vs Actual.
+                                                <button mat-icon-button 
+                                                matTooltip="Indicador por Fecha de Creación"
+                                                [matTooltipPosition]="positionrightaction.value"
+                                                (event)="$event.stopinmediatePropagation()"
+                                                >
+                                                <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                                </button>        
+
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                        <div class=" pUmbZ">
+
+                                            <!-------------SPACE---------------->
+                                            <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <!---------------------------------->
+                                            <div class="container-fluid" *ngIf="isLoadingKpiYearAssigned">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiYearAssigned" ></mat-spinner>
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+                                            <div *ngIf="!isLoadingKpiYearAssigned">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-4" align="left">
+                                                        </div>
+                                                        <div class="col-4">                                            
+                                                        </div>
+                                                        <div class="col-4" align="right">
+                                                        <div class=" jNlJODT">
+                                                        </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row justify-content-center align-items-center" align="center">
+
+                                                    <div class="col" *ngIf="kpidatayearassigned[0].series && kpidatayearassigned[0].series.length > 0">
+                                                        <ngx-charts-bar-vertical-2d
+                                                        (window:resize)="onResize($event)"
+                                                        [view]="view"
+                                                        [scheme]="colorScheme"
+                                                        [results]="kpidatayearassigned"
+                                                        [gradient]="gradient"
+                                                        [xAxis]="showXAxis"
+                                                        [yAxis]="showYAxis"
+                                                        [legend]="true"
+                                                        [legendTitle]="['Leyenda']"
+                                                        [showXAxisLabel]="showXAxisLabel"
+                                                        [showYAxisLabel]="showYAxisLabel"
+                                                        [xAxisLabel]="xAxisLabel"
+                                                        [yAxisLabel]="yAxisLabel"
+                                                        >
+                                                        </ngx-charts-bar-vertical-2d>                                                        
+                                                    </div>
+
+                                                    <div class="col-sm" *ngIf="kpidatayearassigned[0].series && kpidatayearassigned[0].series.length == 0">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">
+                                                                Sin Información.
+                                                                </p>
+                                                                <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                            </div>                        
+                                                        </div>    
+                                                    </div>                
+                                                </div>                
+                                            </div>                                                
+                                        </div>                                        
+                                    </div>
+                                        <!---------------------------------------------------------------------------------------------------------------------------------------->    
+    
+
+
+
+                                    <!------------------------------------------------------- Órdenes de Trabajo Editadas, Año Anterior vs Actual.---------------------------->
+                                    <div class=" jmuLsE">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Órdenes de Trabajo Editadas, Año Anterior vs Actual.
+                                                <button mat-icon-button 
+                                                matTooltip="Indicador por Fecha de Edición"
+                                                [matTooltipPosition]="positionrightaction.value"
+                                                (event)="$event.stopinmediatePropagation()"
+                                                >
+                                                <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                                </button>        
+
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div> 
+
+                                        <div class=" pUmbZ">
+
+                                            <!-------------SPACE---------------->
+                                            <div class="container-fluid" >
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <br>
+                                                    </div>
+                                                </div>
+                                            </div>        
+                                            <!---------------------------------->
+                                            <div class="container-fluid" *ngIf="isLoadingKpiYear">
+                                                <div class="row">
+                                                    <div class="col-sm">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiYear" ></mat-spinner>
+                                                        </div>                        
+                                                    </div>
+                                                </div>
+                                            </div>
+    
+                                            <div *ngIf="!isLoadingKpiYear">
+                                                <div class="container-fluid">
+                                                    <div class="row">
+                                                        <div class="col-4" align="left">
+                                                        </div>
+                                                        <div class="col-4">                                            
+                                                        </div>
+                                                        <div class="col-4" align="right">
+                                                        <div class=" jNlJODT">
+                                                        </div> 
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row justify-content-center align-items-center" align="center">
+
+                                                    <div class="col" *ngIf="kpidatayear[0].series && kpidatayear[0].series.length > 0">
+                                                        <ngx-charts-bar-vertical-2d
+                                                        (window:resize)="onResize($event)"
+                                                        [view]="view"
+                                                        [scheme]="colorScheme"
+                                                        [results]="kpidatayear"
+                                                        [gradient]="gradient"
+                                                        [xAxis]="showXAxis"
+                                                        [yAxis]="showYAxis"
+                                                        [legend]="true"
+                                                        [legendTitle]="['Leyenda']"
+                                                        [showXAxisLabel]="showXAxisLabel"
+                                                        [showYAxisLabel]="showYAxisLabel"
+                                                        [xAxisLabel]="xAxisLabel"
+                                                        [yAxisLabel]="yAxisLabel"
+                                                        >
+                                                        </ngx-charts-bar-vertical-2d>                                                        
+                                                    </div>
+
+                                                    <div class="col-sm" *ngIf="kpidatayear[0].series && kpidatayear[0].series.length == 0">
+                                                        <div class="row d-flex justify-content-center">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">
+                                                                Sin Información.
+                                                                </p>
+                                                                <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                            </div>                        
+                                                        </div>    
+                                                    </div>                
+                                                </div>                
+                                            </div>                                        
+    
+                                            
+                                        </div>                                        
+                                    </div>
+                                    <!---------------------------------------------------------------------------------------------------------------------------------------->    
+    
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<br>
+<div class="row" *ngIf="identity">
+    <div class="col">
+        <div class=" jfCYPT">
+            <div class=" jfCYPT">
+                <div class=" didcdr" data-test-selector="profile-worked-with">
+                    <div class=" iDwfcE" >
+                        <div>
+                            <div class=" dIOqge" >
+
+                                <!------------------------------------------------------------- Órdenes por Service Type. --------------------------------------------------->
+                                <div class=" jmuLsE" *ngIf="project">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                            Órdenes de Trabajo Asignadas y Editadas vs Tipo se Servicio.
+                                            <button mat-icon-button 
+                                            matTooltip="Indicador por Fecha de Creación"
+                                            [matTooltipPosition]="positionrightaction.value"
+                                            (event)="$event.stopinmediatePropagation()"
+                                            >
+                                            <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                            </button>        
+
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class=" pUmbZ">
+
+                                        <!-------------SPACE---------------->
+                                        <div class="container-fluid" >
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>        
+                                        <!---------------------------------->
+                                        <div class="container-fluid" *ngIf="isLoadingKpiGroupedByST">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiGroupedByST" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="!isLoadingKpiGroupedByST">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-4" align="left">
+                                                    <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoptiongroupedbyst">
+                                                        <ng-select
+                                                        [items]="kpisearchoptions"
+                                                        [clearable]="false"
+                                                        bindLabel="name"
+                                                        bindValue="value"
+                                                        [(ngModel)]="kpiselectedoptiongroupedbyst"
+                                                        (change)="selectChangeKpiGroupedST($event)"
+                                                        class="width-70percentage">
+                                                        </ng-select>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-4">                                            
+                                                    </div>
+                                                    <div class="col-4" align="right">
+                                                    <div class=" jNlJODT" *ngIf="kpidatagrupedbyst && kpidatagrupedbyst.length > 0">
+                                                            Avance: <span>{{promediogropedst}}%</span>
+                                                        <p class="hkvxBPL"><span>Asignadas: {{countassignedst | number}}, Editadas: {{countupdatest | number}}</span></p>
+                                                    </div> 
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row justify-content-center align-items-center" align="center">
+                                                <div class="col" *ngIf="kpidatagrupedbyst && kpidatagrupedbyst.length > 0 ">
+                                                        <ngx-charts-bar-horizontal-2d
+                                                        (window:resize)="onResize($event)"
+                                                        [view]="view"
+                                                        [scheme]="colorScheme"
+                                                        [results]="kpidatagrupedbyst"
+                                                        [gradient]="gradient"
+                                                        [xAxis]="showXAxis"
+                                                        [yAxis]="showYAxis"
+                                                        [legend]="showLegend"
+                                                        [legendTitle]="['Leyenda']"
+                                                        [showXAxisLabel]="showXAxisLabel"
+                                                        [showYAxisLabel]="showYAxisLabel"
+                                                        [xAxisLabel]="xAxisLabelGroupedSt"
+                                                        [yAxisLabel]="yAxisLabelGroupedSt"
+                                                        >
+                                                        </ngx-charts-bar-horizontal-2d>
+                                                </div>
+                                                <div class="col-sm" *ngIf="kpidatagrupedbyst && kpidatagrupedbyst.length == 0">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="dGHjBt">
+                                                            <p class="hAzwqT">
+                                                            Sin Información.
+                                                            </p>
+                                                            <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                        </div>        
+                                                    </div>    
+                                                </div>                
+                                            </div>            
+                                        </div>
+    
+    
+
+                                    </div>
+                                </div>
+                                <!------------------------------------------------------------- Órdenes por Service Type. --------------------------------------------------->
+    
+
+                                <!------------------------------------------------------------- Órdenes por Service Status. --------------------------------------------------->
+                                <div class=" jmuLsE" *ngIf="project">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                            Órdenes de Trabajo vs Estatus del Servicio.
+                                            <button mat-icon-button 
+                                            matTooltip="Indicador por Fecha de Creación"
+                                            [matTooltipPosition]="positionrightaction.value"
+                                            (event)="$event.stopinmediatePropagation()"
+                                            >
+                                            <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                            </button>        
+
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div class=" pUmbZ">
+
+                                        <!-------------SPACE---------------->
+                                        <div class="container-fluid" >
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>        
+                                        <!---------------------------------->
+                                        <div class="container-fluid" *ngIf="isLoadingKpiGroupedByStatus">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingKpiGroupedByStatus" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div *ngIf="!isLoadingKpiGroupedByStatus">
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-4" align="left">
+                                                    <div class="input-group input-group-sm mb-3" *ngIf="kpisearchoptions && kpiselectedoptiongroupedbystatus">
+                                                        <ng-select
+                                                        [items]="kpisearchoptions"
+                                                        [clearable]="false"
+                                                        bindLabel="name"
+                                                        bindValue="value"
+                                                        [(ngModel)]="kpiselectedoptiongroupedbystatus"
+                                                        (change)="selectChangeKpiGroupedStatus($event)"
+                                                        class="width-70percentage">
+                                                        </ng-select>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-4">                                            
+                                                    </div>
+                                                    <div class="col-4" align="right">
+                                                    <div class=" jNlJODT" *ngIf="kpidatastatus && kpidatastatus.length > 0">
+                                                            Total: <span>{{kpitotalStatus | number}}</span>
+                                                    </div> 
+                                                    </div>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="row justify-content-center align-items-center" align="center">
+                                                <div class="col" *ngIf="kpidatastatus && kpidatastatus.length > 0 ">
+                                                        <ngx-charts-pie-chart
+                                                        (window:resize)="onResize($event)"
+                                                        [view]="view"
+                                                        [scheme]="colorScheme"
+                                                        [results]="kpidatastatus"
+                                                        [explodeSlices]="explodeSlices"
+                                                        [labels]="showLabels"
+                                                        [legend]="showLegend"
+                                                        [legendTitle]="['Leyenda']"
+                                                        [legendPosition]="['right']"
+                                                        [doughnut]="doughnut">
+                                                        </ngx-charts-pie-chart>
+            
+                                                </div>
+                                                <div class="col-sm" *ngIf="kpidatastatus && kpidatastatus.length == 0">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div class="dGHjBt">
+                                                            <p class="hAzwqT">
+                                                            Sin Información.
+                                                            </p>
+                                                            <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                        </div>        
+                                                    </div>    
+                                                </div>                
+                                            </div>            
+                                        </div>
+                                        <!-----------SPACE------------------->
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <!---------------------------------->
+        
+    
+
+                                    </div>
+                                </div>
+                                <!------------------------------------------------------------- Órdenes por Service Status. --------------------------------------------------->
+    
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

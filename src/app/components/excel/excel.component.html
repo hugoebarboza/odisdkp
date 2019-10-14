@@ -1,0 +1,747 @@
+<div class="p-2">
+<mat-card [ngStyle]="{'padding':'0px'}">
+  <mat-card-header [ngClass]="{'custom-card':true}">
+    <mat-card-title>Modulo de Carga</mat-card-title>
+    <mat-card-subtitle>Siga los pasos 1, 2 y 3 que aparecen en la pantalla</mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content style="height: 100vh">
+
+<div class="mat-app-background basic-container" >
+  <mat-horizontal-stepper linear #stepper>
+      <mat-step [stepControl]="firtsFormGroup">
+          <form [formGroup]="firtsFormGroup">
+            <ng-template matStepLabel>Validación</ng-template>
+            <div class="excel-selector"  >
+                <button mat-mini-fab color="accent" (click)="fileInput.click()">
+                    <mat-icon>attachment</mat-icon>
+                    <input hidden type="file" #fileInput class="none" (change)="incomingfile($event)" (click)="$event.target.value = null " accept=".xlsx" required formControlName="inputCtrl" >                  
+                </button>
+                <mat-form-field class="marginLeft">
+                    <input matInput #inputFileName placeholder="Seleccione archivo" value="{{nombreFile}}"  (click)="fileInput.click()">
+                </mat-form-field>
+                <button mat-raised-button (click)="Upload()" [disabled]="!bandera">Validar</button>
+                <!--
+                <mat-form-field class="marginLeftX2">
+                  <mat-select placeholder="Llaves de Validación" [formControl]="toppings" multiple>
+                    <mat-select-trigger>
+                      {{toppings.value ? toppings.value[0] : ''}}
+                      <span *ngIf="toppings.value?.length > 1" class="example-additional-selection">
+                        (+{{toppings.value.length - 1}} {{toppings.value?.length === 2 ? '' : ''}})
+                      </span>
+                    </mat-select-trigger>
+                    <mat-option value="Número CC" [disabled]="true">Número CC</mat-option>
+                    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
+                  </mat-select>
+                </mat-form-field>-->
+
+                <mat-form-field class="example-full-width marginLeftX2" *ngIf="dateend !== undefined">
+                    <input matInput placeholder="Fecha vencimiento" formControlName="inputDate" (readonly)="true">
+                </mat-form-field>
+
+                <mat-slide-toggle class="marginLeftX2" (change)="checkAutoGenerar($event)">
+                    Generar N°Orden
+                </mat-slide-toggle>
+                <mat-slide-toggle class="marginLeftX2" (change)="checkduplicatOt($event)">
+                  Duplicar N°OT
+                </mat-slide-toggle>
+                <div class="floatIzq">
+                  <a mat-mini-fab target="_self" color="primary" href="../../assets/ModuloCarga.xlsx" download="ModuloCarga.xlsx">
+                    <mat-icon>archive</mat-icon>
+                  </a><label class=" marginLeft">Descargar Plantilla</label>
+                </div>
+                
+            </div>
+
+            <div class="example-container " *ngIf="show_table">
+                  
+                <mat-form-field appearance="legacy" class="mat-form-field-custom">
+                    <mat-label>Buscar</mat-label>
+                    <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Buscar">
+                    <mat-icon matSuffix>search</mat-icon>
+                </mat-form-field>
+                  
+                <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+                  <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+                </div>
+                <div class="rate-limit-reached" *ngIf="isRateLimitReached">
+                </div>
+                <div class="table-container">
+                  <table mat-table #table [dataSource]="dataSource">
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="cc_number" >
+                      <th mat-header-cell *matHeaderCellDef> Número CC  </th>
+                      <td mat-cell *matCellDef="let element"> {{element.cc_number}} </td>
+                    </ng-container>
+                
+                    <!-- Name Column -->
+                    <ng-container matColumnDef="nombrecc">
+                      <th mat-header-cell *matHeaderCellDef> Nombre CC </th>
+                      <td mat-cell *matCellDef="let element"> {{element.nombrecc}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="ruta">
+                      <th mat-header-cell *matHeaderCellDef> Ruta </th>
+                      <td mat-cell *matCellDef="let element"> {{element.ruta}} </td>
+                    </ng-container>
+                
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="calle">
+                      <th mat-header-cell *matHeaderCellDef> Calle </th>
+                      <td mat-cell *matCellDef="let element"> {{element.calle}} </td>
+                    </ng-container>
+        
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="numero">
+                        <th mat-header-cell *matHeaderCellDef> Número </th>
+                        <td mat-cell *matCellDef="let element"> {{element.numero}} </td>
+                    </ng-container>
+        
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="block">
+                        <th mat-header-cell *matHeaderCellDef> Block </th>
+                        <td mat-cell *matCellDef="let element"> {{element.block}} </td>
+                    </ng-container>
+        
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="depto">
+                        <th mat-header-cell *matHeaderCellDef> Depto </th>
+                        <td mat-cell *matCellDef="let element"> {{element.depto}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="region">
+                        <th mat-header-cell *matHeaderCellDef> Región </th>
+                        <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="provincia">
+                        <th mat-header-cell *matHeaderCellDef> Provincia </th>
+                        <td mat-cell *matCellDef="let element"> {{element.provincia}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="comuna">
+                        <th mat-header-cell *matHeaderCellDef> Comuna </th>
+                        <td mat-cell *matCellDef="let element"> {{element.comuna}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="latitud">
+                      <th mat-header-cell *matHeaderCellDef> Latitud </th>
+                      <td mat-cell *matCellDef="let element"> {{element.latitud}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="longitud">
+                      <th mat-header-cell *matHeaderCellDef> Longitud </th>
+                      <td mat-cell *matCellDef="let element"> {{element.longitud}} </td>
+                    </ng-container>
+        
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="medidor">
+                        <th mat-header-cell *matHeaderCellDef> Medidor </th>
+                        <td mat-cell *matCellDef="let element"> {{element.medidor}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="modelo_medidor">
+                      <th mat-header-cell *matHeaderCellDef> Modelo medidor </th>
+                      <td mat-cell *matCellDef="let element"> {{element.modelo_medidor}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="transformador">
+                      <th mat-header-cell *matHeaderCellDef> Transformador </th>
+                      <td mat-cell *matCellDef="let element"> {{element.transformador}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="tarifa">
+                      <th mat-header-cell *matHeaderCellDef> Tarifa </th>
+                      <td mat-cell *matCellDef="let element"> {{element.tarifa}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="constante">
+                      <th mat-header-cell *matHeaderCellDef> Constante </th>
+                      <td mat-cell *matCellDef="let element"> {{element.constante}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="giro">
+                      <th mat-header-cell *matHeaderCellDef> Giro </th>
+                      <td mat-cell *matCellDef="let element"> {{element.giro}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="zona">
+                      <th mat-header-cell *matHeaderCellDef> Zona </th>
+                      <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="sector">
+                      <th mat-header-cell *matHeaderCellDef> Sector </th>
+                      <td mat-cell *matCellDef="let element"> {{element.sector}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="mercado">
+                      <th mat-header-cell *matHeaderCellDef> Mercado </th>
+                      <td mat-cell *matCellDef="let element"> {{element.mercado}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="observacion">
+                      <th mat-header-cell *matHeaderCellDef> Observación de cliente</th>
+                      <td mat-cell *matCellDef="let element"> {{element.observacion}} </td>
+                    </ng-container>
+
+                    <!-- Position Column -->
+                    <ng-container matColumnDef="order_number">
+                      <th mat-header-cell *matHeaderCellDef> N°Orden </th>
+                      <td mat-cell *matCellDef="let element"> {{element.order_number}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="tipo_servicio">
+                      <th mat-header-cell *matHeaderCellDef> Tipo servicio </th>
+                      <td mat-cell *matCellDef="let element"> {{element.tipo_servicio}} </td>
+                    </ng-container>
+                
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="asignado_a">
+                      <th mat-header-cell *matHeaderCellDef> Asignado</th>
+                      <td mat-cell *matCellDef="let element"> {{element.asignado_a}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="required_date">
+                        <th mat-header-cell *matHeaderCellDef> Fecha requerida </th>
+                        <td mat-cell *matCellDef="let element"> {{element.required_date}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="observation">
+                        <th mat-header-cell *matHeaderCellDef> Observación de orden </th>
+                        <td mat-cell *matCellDef="let element"> {{element.observation}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="estatus" stickyEnd>
+                        <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                        <td mat-cell *matCellDef="let element" [style.color]="element.label"> {{element.estatus}} </td>
+                    </ng-container>
+                
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                  </table>
+                </div>
+              
+                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                <div>
+                <table width="100%">
+                  <tbody>
+                    <tr>
+                      <td width="15%">
+                      </td>
+                      <td width="55%"></td>
+                      <td width="25%">
+                          <button mat-raised-button color="warn" (click)="resetAll();stepper.reset()">Reset</button>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+      
+            <div>
+                <table>
+                    <tr>
+                      <th *ngIf="countError>0">
+                          <mat-card>
+                              <span class="colorError">Registros invalidos {{countError}}</span> 
+                              <button mat-raised-button class="checkbox-margin" (click)="downloadErrorExcel()">Descargar Excel</button>
+                          </mat-card>
+                      </th>
+                      <th *ngIf="countSuccess>0">
+                          <mat-card>
+                              Registros validados {{countSuccess}}  
+                              <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)" md-colors="{background: 'indigo'}" formControlName="confirmarCtrl"  required>  Confirmar</mat-checkbox>
+                              <button mat-raised-button matStepperNext [disabled]="!checkValidation" (click)="fulltable()">Continuar</button>
+                          </mat-card>
+                      </th>
+                    </tr>
+                </table>
+            </div>
+          </form>
+        </mat-step>
+        <mat-step [stepControl]="secondFormGroup">
+          <form [formGroup]="secondFormGroup">
+          <ng-template matStepLabel>Clientes</ng-template>
+          <div class="example-container " *ngIf="show_table">
+              <mat-form-field appearance="legacy" class="mat-form-field-custom">
+                  <mat-label>Buscar</mat-label>
+                  <input matInput (keyup)="applyFilterCliente($event.target.value)" placeholder="Buscar">
+                  <mat-icon matSuffix>search</mat-icon>
+              </mat-form-field>
+              <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+                <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+              </div>
+              <div class="rate-limit-reached" *ngIf="isRateLimitReached">
+              </div>
+              <div class="table-container">
+                <table mat-table #table [dataSource]="dataSourceClientes">
+                  
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="cc_number">
+                    <th mat-header-cell *matHeaderCellDef> Número CC  </th>
+                    <td mat-cell *matCellDef="let element"> {{element.cc_number}} </td>
+                  </ng-container>
+              
+                  <!-- Name Column -->
+                  <ng-container matColumnDef="nombrecc">
+                    <th mat-header-cell *matHeaderCellDef> Nombre CC </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nombrecc}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="ruta">
+                    <th mat-header-cell *matHeaderCellDef> Ruta </th>
+                    <td mat-cell *matCellDef="let element"> {{element.ruta}} </td>
+                  </ng-container>
+              
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="calle">
+                    <th mat-header-cell *matHeaderCellDef> Calle </th>
+                    <td mat-cell *matCellDef="let element"> {{element.calle}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="numero">
+                      <th mat-header-cell *matHeaderCellDef> Número </th>
+                      <td mat-cell *matCellDef="let element"> {{element.numero}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="block">
+                      <th mat-header-cell *matHeaderCellDef> Block </th>
+                      <td mat-cell *matCellDef="let element"> {{element.block}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="depto">
+                      <th mat-header-cell *matHeaderCellDef> Depto </th>
+                      <td mat-cell *matCellDef="let element"> {{element.depto}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="region">
+                      <th mat-header-cell *matHeaderCellDef> Región </th>
+                      <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="provincia">
+                      <th mat-header-cell *matHeaderCellDef> Provincia </th>
+                      <td mat-cell *matCellDef="let element"> {{element.provincia}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="comuna">
+                      <th mat-header-cell *matHeaderCellDef> Comuna </th>
+                      <td mat-cell *matCellDef="let element"> {{element.comuna}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="latitud">
+                    <th mat-header-cell *matHeaderCellDef> Latitud </th>
+                    <td mat-cell *matCellDef="let element"> {{element.latitud}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="longitud">
+                    <th mat-header-cell *matHeaderCellDef> Longitud </th>
+                    <td mat-cell *matCellDef="let element"> {{element.longitud}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="medidor">
+                      <th mat-header-cell *matHeaderCellDef> Medidor </th>
+                      <td mat-cell *matCellDef="let element"> {{element.medidor}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="modelo_medidor">
+                    <th mat-header-cell *matHeaderCellDef> Modelo medidor </th>
+                    <td mat-cell *matCellDef="let element"> {{element.modelo_medidor}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="transformador">
+                    <th mat-header-cell *matHeaderCellDef> Transformador </th>
+                    <td mat-cell *matCellDef="let element"> {{element.transformador}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="tarifa">
+                    <th mat-header-cell *matHeaderCellDef> Tarifa </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tarifa}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="constante">
+                    <th mat-header-cell *matHeaderCellDef> Constante </th>
+                    <td mat-cell *matCellDef="let element"> {{element.constante}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="giro">
+                    <th mat-header-cell *matHeaderCellDef> Giro </th>
+                    <td mat-cell *matCellDef="let element"> {{element.giro}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="zona">
+                    <th mat-header-cell *matHeaderCellDef> Zona </th>
+                    <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="sector">
+                    <th mat-header-cell *matHeaderCellDef> Sector </th>
+                    <td mat-cell *matCellDef="let element"> {{element.sector}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="mercado">
+                    <th mat-header-cell *matHeaderCellDef> Mercado </th>
+                    <td mat-cell *matCellDef="let element"> {{element.mercado}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="observacion">
+                    <th mat-header-cell *matHeaderCellDef> Observación de cliente</th>
+                    <td mat-cell *matCellDef="let element"> {{element.observacion}} </td>
+                  </ng-container>
+
+                  <!-- Position Column -->
+                  <ng-container matColumnDef="order_number">
+                    <th mat-header-cell *matHeaderCellDef> N°Orden </th>
+                    <td mat-cell *matCellDef="let element"> {{element.order_number}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="tipo_servicio">
+                    <th mat-header-cell *matHeaderCellDef> Tipo servicio </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tipo_servicio}} </td>
+                  </ng-container>
+              
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="asignado_a">
+                    <th mat-header-cell *matHeaderCellDef> Asignado</th>
+                    <td mat-cell *matCellDef="let element"> {{element.asignado_a}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="required_date">
+                      <th mat-header-cell *matHeaderCellDef> Fecha requerida </th>
+                      <td mat-cell *matCellDef="let element"> {{element.required_date}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="observation">
+                      <th mat-header-cell *matHeaderCellDef> Observación de orden </th>
+                      <td mat-cell *matCellDef="let element"> {{element.observation}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="estatus" stickyEnd>
+                      <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                      <td mat-cell *matCellDef="let element" [style.color]="element.label"> {{element.estatus}} </td>
+                  </ng-container>
+              
+                  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
+              </div>
+            
+              <mat-paginator #paginatorClientes [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+          </div>
+          <div>
+              <table width="100%">
+                <tbody>
+                  <tr>
+                    <td width="15%">
+                      <button mat-button matStepperPrevious>Atrás</button><!--stepper.reset()-->
+                    </td>
+                    <td width="55%"></td>
+                    <td width="25%">
+                        <button mat-raised-button color="warn" (click)="resetAll();stepper.reset()">Reset</button>
+                        <button mat-raised-button color="warn" class="marginLeft" (click)="openDialog()" [disabled]="!checkPost" *ngIf="this.arrayExcelSuccess.length != this.countExiste">Rollback clientes</button>
+                        <button mat-raised-button color="primary"  class="marginLeft" [disabled]="checkPost" (click)="uploadExcelPost()" *ngIf="this.arrayExcelSuccess.length != this.countExiste">Registrar cliente</button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          <div>  
+          <table>
+              <tr>
+                <th>
+                    <mat-card *ngIf="countErrorPost>0">
+                        <span class="colorError">Clientes no {{msj}} {{countErrorPost}}</span> 
+                        <button mat-raised-button class="checkbox-margin" (click)="downloadPostErrorExcel()">Descargar Excel</button>
+                    </mat-card>
+                </th>
+                <th>
+                    <mat-card *ngIf="countSuccessPost>0">
+                        Clientes {{msj}} con exito! {{countSuccessPost}}  
+                        <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)"   *ngIf="!checkPost" md-colors="{background: 'indigo'}" [disabled]="true">Confirmar</mat-checkbox>
+                        <mat-checkbox class="checkbox-margin" (change)="checkConfirmacion($event)"   *ngIf="checkPost" md-colors="{background: 'indigo'}" formControlName="confirmarCli" required>Confirmar</mat-checkbox>
+                        <button mat-raised-button matStepperNext [disabled]="!checkPost" (click)="fulltableOrdenes();">Continuar</button>
+                    </mat-card>
+                </th>
+              </tr>
+          </table>
+        </div>
+      </form>
+    </mat-step>
+    <mat-step>
+        <form>
+        <ng-template matStepLabel>Ordenes</ng-template>
+        <div class="example-container " *ngIf="show_table">
+            <mat-form-field appearance="legacy" class="mat-form-field-custom">
+                <mat-label>Buscar</mat-label>
+                <input matInput (keyup)="applyFilterOrdenes($event.target.value)" placeholder="Buscar">
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+            <div class="loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
+              <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+            </div>
+            <div class="rate-limit-reached" *ngIf="isRateLimitReached">
+            </div>
+            <div class="table-container">
+              <table mat-table #table [dataSource]="dataSourceOrdenes">
+                
+                <!-- Position Column -->
+                <ng-container matColumnDef="cc_number">
+                  <th mat-header-cell *matHeaderCellDef> Número CC  </th>
+                  <td mat-cell *matCellDef="let element"> {{element.cc_number}} </td>
+                </ng-container>
+            
+                <!-- Name Column -->
+                <ng-container matColumnDef="nombrecc">
+                  <th mat-header-cell *matHeaderCellDef> Nombre CC </th>
+                  <td mat-cell *matCellDef="let element"> {{element.nombrecc}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="ruta">
+                  <th mat-header-cell *matHeaderCellDef> Ruta </th>
+                  <td mat-cell *matCellDef="let element"> {{element.ruta}} </td>
+                </ng-container>
+            
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="calle">
+                  <th mat-header-cell *matHeaderCellDef> Calle </th>
+                  <td mat-cell *matCellDef="let element"> {{element.calle}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="numero">
+                    <th mat-header-cell *matHeaderCellDef> Número </th>
+                    <td mat-cell *matCellDef="let element"> {{element.numero}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="block">
+                    <th mat-header-cell *matHeaderCellDef> Block </th>
+                    <td mat-cell *matCellDef="let element"> {{element.block}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="depto">
+                    <th mat-header-cell *matHeaderCellDef> Depto </th>
+                    <td mat-cell *matCellDef="let element"> {{element.depto}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="region">
+                    <th mat-header-cell *matHeaderCellDef> Región </th>
+                    <td mat-cell *matCellDef="let element"> {{element.region}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="provincia">
+                    <th mat-header-cell *matHeaderCellDef> Provincia </th>
+                    <td mat-cell *matCellDef="let element"> {{element.provincia}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="comuna">
+                    <th mat-header-cell *matHeaderCellDef> Comuna </th>
+                    <td mat-cell *matCellDef="let element"> {{element.comuna}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="latitud">
+                  <th mat-header-cell *matHeaderCellDef> Latitud </th>
+                  <td mat-cell *matCellDef="let element"> {{element.latitud}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="longitud">
+                  <th mat-header-cell *matHeaderCellDef> Longitud </th>
+                  <td mat-cell *matCellDef="let element"> {{element.longitud}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="medidor">
+                    <th mat-header-cell *matHeaderCellDef> Medidor </th>
+                    <td mat-cell *matCellDef="let element"> {{element.medidor}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="modelo_medidor">
+                  <th mat-header-cell *matHeaderCellDef> Modelo medidor </th>
+                  <td mat-cell *matCellDef="let element"> {{element.modelo_medidor}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="transformador">
+                  <th mat-header-cell *matHeaderCellDef> Transformador </th>
+                  <td mat-cell *matCellDef="let element"> {{element.transformador}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="tarifa">
+                  <th mat-header-cell *matHeaderCellDef> Tarifa </th>
+                  <td mat-cell *matCellDef="let element"> {{element.tarifa}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="constante">
+                  <th mat-header-cell *matHeaderCellDef> Constante </th>
+                  <td mat-cell *matCellDef="let element"> {{element.constante}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="giro">
+                  <th mat-header-cell *matHeaderCellDef> Giro </th>
+                  <td mat-cell *matCellDef="let element"> {{element.giro}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="zona">
+                  <th mat-header-cell *matHeaderCellDef> Zona </th>
+                  <td mat-cell *matCellDef="let element"> {{element.zona}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="sector">
+                  <th mat-header-cell *matHeaderCellDef> Sector </th>
+                  <td mat-cell *matCellDef="let element"> {{element.sector}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="mercado">
+                  <th mat-header-cell *matHeaderCellDef> Mercado </th>
+                  <td mat-cell *matCellDef="let element"> {{element.mercado}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="observacion">
+                  <th mat-header-cell *matHeaderCellDef> Observación de cliente</th>
+                  <td mat-cell *matCellDef="let element"> {{element.observacion}} </td>
+                </ng-container>
+
+                <!-- Position Column -->
+                <ng-container matColumnDef="order_number">
+                  <th mat-header-cell *matHeaderCellDef> N°Orden </th>
+                  <td mat-cell *matCellDef="let element"> {{element.order_number}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="tipo_servicio">
+                  <th mat-header-cell *matHeaderCellDef> Tipo servicio </th>
+                  <td mat-cell *matCellDef="let element"> {{element.tipo_servicio}} </td>
+                </ng-container>
+            
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="asignado_a">
+                  <th mat-header-cell *matHeaderCellDef> Asignado</th>
+                  <td mat-cell *matCellDef="let element"> {{element.asignado_a}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="required_date">
+                    <th mat-header-cell *matHeaderCellDef> Fecha requerida </th>
+                    <td mat-cell *matCellDef="let element"> {{element.required_date}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="observation">
+                    <th mat-header-cell *matHeaderCellDef> Observación de orden </th>
+                    <td mat-cell *matCellDef="let element"> {{element.observation}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="estatus" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                    <td mat-cell *matCellDef="let element" [style.color]="element.label"> {{element.estatus}} </td>
+                </ng-container>
+            
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+              </table>
+            </div>
+          
+            <mat-paginator #paginatorOrdenes [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+        <div>
+            <table width="100%">
+              <tbody>
+                <tr>
+                  <td width="15%">
+                    <button mat-button matStepperPrevious>Atrás</button>
+                  </td>
+                  <td width="55%"></td>
+                  <td width="26%">
+                      <button mat-raised-button color="warn" (click)="resetAll();stepper.reset()">Reset</button>
+                      <button mat-raised-button color="warn" class="marginLeft" (click)="openDialogRollbackOrdenes()" [disabled]="!checkOrdenes || arrayExcelSuccess.length == countErrorOrdenes" >Rollback Ordenes</button>
+                      <button mat-raised-button color="primary" [disabled]="checkOrdenes" class="marginLeft" (click)="uploadExcelPostOrdenes()">Registrar ordenes</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        <div>  
+        <table>
+            <tr>
+              <th>
+                  <mat-card *ngIf="countErrorOrdenes>0">
+                      <span class="colorError">Ordenes no {{msj_ordenes}} {{countErrorOrdenes}}</span> 
+                      <button mat-raised-button class="checkbox-margin" (click)="downloadPostErrorExcel()">Descargar Excel</button>
+                  </mat-card>
+              </th>
+              <th>
+                  <mat-card *ngIf="countSuccessOrdenes>0">
+                      Ordenes {{msj_ordenes}} con exito! {{countSuccessOrdenes}}  
+                  </mat-card>
+              </th>
+            </tr>
+        </table>
+      </div>
+    </form>
+  </mat-step>
+  </mat-horizontal-stepper>
+</div>
+
+
+
+  </mat-card-content>
+</mat-card>
+</div>
+
+
+

@@ -1,0 +1,109 @@
+<div class="row" *ngIf="id && id > 0">
+    <div class="col">
+        <div class="jfCYPT">
+
+                <div class="didcdr" data-test-selector="profile-worked-with">
+                    <div class="iDwfcE" >           
+                        <div>
+        
+                        <div class=" dIOqge" >
+                            
+                            <div class="jmuLsE" >
+                            <div class="row" *ngIf="!isLoading">
+                                <div class="col-sm">
+                                    <div class="row d-flex justify-content-center">        
+                                    <span>
+                                    Órdenes de Trabajo.
+                                    </span>
+                                    </div>
+                                </div>
+                            </div>
+        
+                            <div >
+                                <div class="container-fluid" *ngIf="isLoading">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">
+                                                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                                            </div>                        
+                                        </div>
+                                    </div>
+                                </div>
+                
+
+                                <div class="row justify-content-center align-items-center" align="center" *ngIf="!isLoading">
+                                    <br>
+                                    <div class="container-fluid" *ngIf="kpipayment && kpipayment.length > 0 ">
+                                        <div class="row">
+                                            <div class="col-12">
+                                            <div class="row d-flex justify-content-center ">
+
+                                                <ngx-charts-bar-vertical
+                                                (window:resize)="onResize($event)"
+                                                [view]="view"
+                                                [scheme]="colorScheme"
+                                                [results]="kpipayment"
+                                                [gradient]="gradient"
+                                                [xAxis]="showXAxis"
+                                                [yAxis]="showYAxis"
+                                                [legend]="showLegend"
+                                                [legendTitle]="['Leyenda']"
+                                                [legendPosition]="['right']"
+                                                [showXAxisLabel]="showXAxisLabel"
+                                                [showYAxisLabel]="showYAxisLabel"
+                                                [xAxisLabel]="xAxisLabel"
+                                                [yAxisLabel]="yAxisLabel"
+                                                >
+                                                </ngx-charts-bar-vertical>
+
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-sm" *ngIf="kpipayment && kpipayment.length == 0">
+                                        <div class="row d-flex justify-content-center">
+                                            <div class="dGHjBt">
+                                            <p class="hAzwqT">
+                                            Sin Información.
+                                            </p>
+                                            <p class="hkvxBP"><span>(Verifique fecha seleccionada ó valores de la actividad).</span></p>
+                                            </div>
+                                        </div>    
+                                    </div>
+                                    
+                                </div>
+
+                            </div>
+                            </div>    
+                        </div>
+
+                        </div>
+                    </div>
+
+                    <div id="table">
+                        <table class="table table-bordered table-striped responsive" *ngIf="kpidatatable && kpidatatable.length > 0 && !isLoading">
+                            <thead >
+                                <tr>
+                                <th scope="col">Servicio</th>
+                                <th scope="col">Actividades</th>                                
+                                <th scope="col">Valor Actividad</th>
+                                <th scope="col">Servicio Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let k of kpidatatable | keys;">
+                                <th scope="row">{{ kpidatatable[k].name }}</th>
+                                <td>{{ kpidatatable[k].activity | number}} </td>
+                                <td>{{ kpidatatable[k].value | number}}</td>
+                                <td>{{ kpidatatable[k].revenue | number}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+
+        </div>
+    </div>
+</div>
+

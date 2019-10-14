@@ -1,0 +1,779 @@
+<meta name="Description" content="Dashboard">
+<!--CONTENT-->
+<div class="loading" *ngIf="!proyectos && identity">
+<app-loading></app-loading>  
+</div>
+
+    <div id="wrapper" *ngIf="proyectos && identity">
+
+        <!-- Sidebar <app-menu  (RefreshMenu) = "refreshMenu( $event )" ></app-menu> -->
+            
+        <!-- /#sidebar-wrapper -->
+
+        <!-- Page Content -->
+        <div id="page-content-wrapper" >
+
+            <div class="container-fluid">               
+
+              <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                <h1 class="h4">{{title}}</h1>
+              </div>
+
+              <div class="container-fluid p-2">
+
+                <!--
+                <div class="callout callout--info">
+                  <p>Plataforma de Gestión Operacional. Reunimos todos nuestros servicios bajo una misma herramienta.</p>
+                </div>
+                -->
+
+                <div class="callout-link">
+                  <div class="callout-link__copy">
+                    <h3 id="do-you-want-expert-help-to-get-your-email-program-started-on-the-right-foot" >                      
+                    <img draggable="false" class="Md9X2e" src="../../../../assets/icons/icon-project-96x96.png" title="Añade, quita, cambia de nombre, mueve o busca una unidad organizativa" alt="Unidades organizativas">
+                    Proyectos
+                    </h3>
+                    <app-project-list *ngIf="identity && proyectos && proyectos.length > 0"></app-project-list>
+                    <div class="container-fluid" *ngIf="identity && proyectos && proyectos.length == 0">
+                        <div class="col-12">
+                        <div class="row d-flex justify-content-left">
+                            <div >
+                                <p >
+                                No tiene proyectos asignados.
+                                </p>
+                            </div>                        
+                        </div>
+                        </div>  
+                    </div>                    
+                  </div>                    
+                </div>
+
+                
+                  
+                  <!--
+                  <svg aria-hidden="true" height="16" version="1.1" viewBox="0 0 16 16" width="16">
+                    <path fill-rule="evenodd" d="M4 9h1v1H4c-1.5 0-3-1.69-3-3.5S2.55 3 4 3h4c1.45 0 3 1.69 3 3.5 0 1.41-.91 2.72-2 3.25V8.59c.58-.45 1-1.27 1-2.09C10 5.22 8.98 4 8 4H4c-.98 0-2 1.22-2 2.5S3 9 4 9zm9-3h-1v1h1c1 0 2 1.22 2 2.5S13.98 12 13 12H9c-.98 0-2-1.22-2-2.5 0-.83.42-1.64 1-2.09V6.25c-1.09.53-2 1.84-2 3.25C6 11.31 7.55 13 9 13h4c1.45 0 3-1.69 3-3.5S14.5 6 13 6z">
+                    </path>
+                  </svg>
+
+
+                  <div class="btn-toolbar mb-2 mb-md-0">
+                      <div class="btn-group mr-2">
+                        <button (click)="sendMsj()">Send FCM via Cloud Function</button>
+                      </div>
+                  </div>
+                  -->
+
+                    <!--
+                    <table bgcolor="#F9F9F9" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody>
+                          <tr>
+                            <td align="center" valign="top">
+                            <table border="0" cellpadding="0" cellspacing="0" class="m_7824864304269148342mobile-shell" width="600">
+                              <tbody>
+                                <tr>
+                                  <td  style="width:600px;min-width:600px;font-size:0pt;line-height:0pt;font-weight:normal;margin:0;padding:0px 0px 00px">
+                                  <table bgcolor="#f9f9f9" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tbody>
+                                      <tr>
+                                        <td  style="border-bottom-width:1px;padding:16px 0px 16px 32px;background-color: #0b3357;">
+                                        <div  style="font-size:0pt;line-height:0pt;background-color: #0b3357;" align="left">
+                                          <a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">
+                                          <img alt="" src="https://ocaglobal.com/themes/ledel-foundation6-october/assets/img/logo.svg" style="width:130px;height:31px;border:0px solid" >
+                                        </a>
+                                        </div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  
+                      
+                                  <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tbody>
+                                      <tr>
+                                        <td  style="padding:40px 50px">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                          <tbody>
+                                            <tr>
+                                              <td style="padding-bottom:24px">
+                                              <div  style="color:#555555;font-family:'Nunito',sans-serif;font-size:34px;font-weight:700;line-height:44px" align="left">¡Tu retiro fue exitoso!</div>
+                                              </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                              <td style="padding-bottom:24px">
+                                              <div  style="color:#6e6e70;font-family:'Nunito',sans-serif;font-size:16px;line-height:24px" align="left">Hiciste un retiro por $380.000 a tu cuenta en Banco Estado.<br>
+                                              <br>
+                                              Puedes retirar hasta $1.000.000 al mes a tu banco y $400.000 cada semana por cajeros automáticos. Ambos son gratis y sin comisiones <img goomoji="1f609" data-goomoji="1f609" style="margin:0 0.2ex;vertical-align:middle;max-height:24px" alt="😉" src="https://mail.google.com/mail/e/1f609" data-image-whitelisted="" class="CToWUd">.<br>
+                                              <br>
+                                              Saludos,<br>
+                                              Equipo MACH</div>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      -->             
+
+
+
+
+                    <!--
+                    <table bgcolor="#F9F9F9" border="0" cellpadding="0" cellspacing="0" width="100%">
+                        <tbody>
+                          <tr>
+                            <td align="center" valign="top">
+                            <table border="0" cellpadding="0" cellspacing="0" class="m_7824864304269148342mobile-shell" width="600">
+                              <tbody>
+                                <tr>
+                                  <td  style="width:600px;min-width:600px;font-size:0pt;line-height:0pt;font-weight:normal;margin:0;padding:0px 0px 00px">
+                                  <table bgcolor="#f9f9f9" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tbody>
+                                      <tr>
+                                        <td  style="border-bottom-width:1px;padding:16px 0px 16px 32px">
+                                        <div  style="font-size:0pt;line-height:0pt" align="left"><a href="#m_7824864304269148342_" style="color:#45abd9;text-decoration:none">
+                                          <img alt="" src="https://ci3.googleusercontent.com/proxy/_AH48-5BfgOgX8LROtQk5EdD0H0D89BmTyrgNrv5ZROy3cjFTGVl_f0qsRz-f5PbfdM09S84DXEZQ6RCb-xr6ZAwkwdvJE80U67tYsJ8o5k6hZmGoR5vdVztiBW5Pf-IX-utHvLBmsEpo-dxYmEj5FIjQX9d_Cy4qhQvg3AaftHQYw=s0-d-e1-ft#https://appboy-images.com/appboy/communication/assets/image_assets/images/5c893e79d5b68202cada05ec/original.png" style="width:130px;height:31px;border:0px solid" class="CToWUd"></a></div>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  
+                      
+                                  <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tbody>
+                                      <tr>
+                                        <td  style="padding:40px 50px">
+                                        <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                          <tbody>
+                                            <tr>
+                                              <td style="padding-bottom:24px">
+                                              <div  style="color:#555555;font-family:'Nunito',sans-serif;font-size:34px;font-weight:700;line-height:44px" align="left">¡Tu retiro fue exitoso!</div>
+                                              </td>
+                                            </tr>
+                                            
+                                            <tr>
+                                              <td style="padding-bottom:24px">
+                                              <div  style="color:#6e6e70;font-family:'Nunito',sans-serif;font-size:16px;line-height:24px" align="left">Hiciste un retiro por $380.000 a tu cuenta en Banco Estado.<br>
+                                              <br>
+                                              Puedes retirar hasta $1.000.000 al mes a tu banco y $400.000 cada semana por cajeros automáticos. Ambos son gratis y sin comisiones <img goomoji="1f609" data-goomoji="1f609" style="margin:0 0.2ex;vertical-align:middle;max-height:24px" alt="😉" src="https://mail.google.com/mail/e/1f609" data-image-whitelisted="" class="CToWUd">.<br>
+                                              <br>
+                                              Saludos,<br>
+                                              Equipo MACH</div>
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                        </td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                  </td>
+                                </tr>
+                              </tbody>
+                            </table>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>-->
+                      
+
+                      <!---
+                      <!DOCTYPE html>
+                      <html>
+                      <head>
+                      <style >
+                      .callout {
+                        padding: 1.875rem 2.25rem;
+                        margin: 2.25rem 0;
+                        position: relative;
+                        }
+                        .callout--info {
+                        background: #f3f9fd;
+                        border-left: 2px solid #1a82e2;
+                        }
+                        .callout--info:before {
+                        content: "Bienvenido";
+                        color: #1a82e2;
+                        }
+                        .callout:before {
+                        display: block;
+                        text-transform: uppercase;
+                        font-family: Colfax,Helvetica,Arial,sans-serif;
+                        font-style: normal;
+                        font-weight: 600;
+                        font-size: .833rem;
+                        letter-spacing: .7px;
+                        }
+                        .callout-link {
+                        box-shadow: 0 2px 6px 0 rgba(41,70,97,.2);
+                        display: grid;
+                        grid-template-columns: auto auto;
+                        margin: 0.25rem 0;
+                        }
+                        .callout-link__copy {
+                        padding: 1.875rem 1rem 1.875rem 2.25rem;
+                        flex-grow: 1;
+                        }
+                      </style>
+                      </head>
+                      <body>
+                      <strong>Hola.<hr><div>&nbsp;</div>Nueva incidencia, enviada a las por </strong><div>&nbsp;</div> <div> ${body}</div>
+                      <div class="callout callout--info">
+                      <p>Plataforma de Gestión Operacional. Reunimos todos nuestros servicios bajo una misma herramienta.</p>
+                      </div>
+                      <table bgcolor="#F9F9F9" border="0" cellpadding="0" cellspacing="0" width="100%">
+                      <tbody>
+                        <tr>
+                        <td align="center" valign="top">
+                        <table border="0" cellpadding="0" cellspacing="0" class="m_7824864304269148342mobile-shell" width="600">
+                          <tbody>
+                          <tr>
+                            <td  style="width:600px;min-width:600px;font-size:0pt;line-height:0pt;font-weight:normal;margin:0;padding:0px 0px 00px">
+                            <table bgcolor="#f9f9f9" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody>
+                              <tr>
+                              <td  style="border-bottom-width:1px;padding:16px 0px 16px 32px">
+                              <div  style="font-size:0pt;line-height:0pt" align="left"><a href="#m_7824864304269148342_" style="color:#45abd9;text-decoration:none">
+                                <img alt="" src="https://ci3.googleusercontent.com/proxy/_AH48-5BfgOgX8LROtQk5EdD0H0D89BmTyrgNrv5ZROy3cjFTGVl_f0qsRz-f5PbfdM09S84DXEZQ6RCb-xr6ZAwkwdvJE80U67tYsJ8o5k6hZmGoR5vdVztiBW5Pf-IX-utHvLBmsEpo-dxYmEj5FIjQX9d_Cy4qhQvg3AaftHQYw=s0-d-e1-ft#https://appboy-images.com/appboy/communication/assets/image_assets/images/5c893e79d5b68202cada05ec/original.png" style="width:130px;height:31px;border:0px solid" class="CToWUd"></a></div>
+                              </td>
+                              </tr>
+                            </tbody>
+                            </table>
+                            
+                      
+                            <table bgcolor="#ffffff" border="0" cellpadding="0" cellspacing="0" width="100%">
+                            <tbody>
+                              <tr>
+                              <td  style="padding:40px 50px">
+                              <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                <tbody>
+                                <tr>
+                                  <td style="padding-bottom:24px">
+                                  <div  style="color:#555555;font-family:'Nunito',sans-serif;font-size:34px;font-weight:700;line-height:44px" align="left">¡Tu retiro fue exitoso!</div>
+                                  </td>
+                                </tr>
+                                
+                                <tr>
+                                  <td style="padding-bottom:24px">
+                                  <div  style="color:#6e6e70;font-family:'Nunito',sans-serif;font-size:16px;line-height:24px" align="left">Hiciste un retiro por $380.000 a tu cuenta en Banco Estado.<br>
+                                  <br>
+                                  Puedes retirar hasta $1.000.000 al mes a tu banco y $400.000 cada semana por cajeros automáticos. Ambos son gratis y sin comisiones <img goomoji="1f609" data-goomoji="1f609" style="margin:0 0.2ex;vertical-align:middle;max-height:24px" alt="😉" src="https://mail.google.com/mail/e/1f609" data-image-whitelisted="" class="CToWUd">.<br>
+                                  <br>
+                                  Saludos,<br>
+                                  Equipo MACH</div>
+                                  </td>
+                                </tr>
+                                </tbody>
+                              </table>
+                              </td>
+                              </tr>
+                            </tbody>
+                            </table>
+                            </td>
+                          </tr>
+                          </tbody>
+                        </table>
+                        </td>
+                        </tr>
+                      </tbody>
+                      </table>  				
+                      </body>
+                      </html>                      
+                      -->
+                      
+
+                    <!---
+                    <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#f9f9f9">
+                        <tbody>
+                            <tr>
+                              <td><p></p></td>
+                            </tr>
+                          <tr>
+                            <td align="center">
+                            <table width="640" cellpadding="0" cellspacing="0" >
+                              <tbody>
+
+                                <tr>
+                                  <td>
+                                  <table border="0" cellspacing="0" cellpadding="0" width="100%"  style="border-collapse:collapse;background:#fff;border:1px solid #ededed" bgcolor="#fff">
+                                    <tbody>
+                                      <tr>
+                                        <td>
+                                        <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+
+                                          <tbody>
+                                              <tr>
+                                                  <td  style="border-bottom-width:1px;padding:12px 0px 12px 24px;background-color: #0b3357;">
+                                                  <div  style="font-size:0pt;line-height:0pt;background-color: #0b3357;" align="left">
+                                                    <a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">
+                                                    <img src="https://odisdkp.firebaseapp.com/assets/img/logo.png" alt="logo_oca" width="138" >                                                                                                        
+                                                    </a>
+                                                  </div>
+                                                  </td>
+                                              </tr>                                            
+                                            <tr>
+                                              <td align="left" style="padding:25px 30px 30px">
+                                              <h2 style="font-size:16px;font-weight:400;color:#222222;margin:0">
+                                                <p>Gracias por contactar al equipo de soporte de OCA GLOBAL.</p>
+                                                <p>Hemos recibido su solicitud y estamos trabajando para resolver su problema. Le ayudaremos tan pronto como podamos.</p>
+                                                <p></p>
+                                                <p>Para verificar el estado del ticket y agregar comentarios adicionales, siga el enlace aquí
+                                                  <a href="https://odisdkp.firebaseapp.com/#/support" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://support.sendgrid.com/hc/requests/2306369&amp;source=gmail&amp;ust=1561827470902000&amp;usg=AFQjCNHthhPllbak25dNtf46FraBxDF9uQ">odisdkp.firebaseapp.com/#/support</a>.</p>
+                                                    <p>Saludos cordiales!</p>
+                                                    <p></p>
+                                                <div style="margin-top:25px">
+                                                  <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+                                                    <tbody>
+                                                      <tr>    
+                                                      <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
+                                                        <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
+                                                          <tbody>
+                                                          <tr>
+                                                            <td valign="top" style="padding:0 15px 0 15px;width:40px">
+                                                            <img width="40" height="40" alt="" style="height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:5px;" src="https://ci3.googleusercontent.com/proxy/xGsxYfjTvh6KWP4Lx7W_FDfJ5hrmw5YzNi8mji33NvpeZVLJrbcGzQpCDmHxN6OjhGSNobgFjJ4rnYnBGcU1xaIo5cH_JaOEOuPmGSQJNL_HVBWOXal0C2cKf1u_LS6tFrb6JJqHLX52AuZJnnGA5AyLgYDocA5vccvWTdiXZZVM07oRqBesIqndZxnmxx7e1ToFhvl1fEliLx35oWxK2-TVk8jFBCcwAG-CjQn9nbyx5EEF=s0-d-e1-ft#https://secure.gravatar.com/avatar/f375267e4ec6266af88de6e4e70accfc?size=40&amp;default=https%3A%2F%2Fassets.zendesk.com%2Fimages%2F2016%2Fdefault-avatar-80.png&amp;r=g" >
+                                                            </td>
+                                                            <td width="100%" style="padding:0;margin:0" valign="top">
+                                                              <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:15px;line-height:18px;margin-bottom:0;margin-top:0;padding:0;color:#1b1d1e;margin-left:17px;">
+                                                              <strong>hugoebarbozar</strong>
+                                                              </p>
+                                                              <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:17px;">Jun 27, 15:38 MDT</p>
+                                                              <div dir="auto" style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0">
+                                                                <p style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0" dir="auto">Secure Email, I receive emails like spam or not secure. I need to resolve it, how can I do ?</p>
+                                                              </div>                                  
+                                                            </td>        
+                                                          </tr>      
+                                                          </tbody>
+                                                        </table>    
+                                                      </td>  
+                                                      </tr>
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </h2>                                              
+                                              </td>
+                                            </tr>
+                                          </tbody>
+                                        </table>
+                                      </td>
+                                    </tr>
+                                  </tbody>
+                                </table>
+                                </td>
+                            </tr>           
+                            </tbody>
+                          </table>
+                          </td>
+                        </tr>
+                        <tr>
+                            <td><p></p></td>
+                        </tr>                        
+                        </tbody>
+                    </table>-->
+                    
+                    <!---
+                    <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#f9f9f9">
+                      <tbody>
+                          <tr>
+                            <td><p></p></td>
+                          </tr>
+                        <tr>
+                          <td align="center">
+                          <table width="640" cellpadding="0" cellspacing="0" >
+                            <tbody>
+
+                              <tr>
+                                <td>
+                                <table border="0" cellspacing="0" cellpadding="0" width="100%"  style="border-collapse:collapse;background:#fff;border:1px solid #ededed" bgcolor="#fff">
+                                  <tbody>
+                                    <tr>
+                                      <td>
+                                      <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+
+                                        <tbody>
+                                            <tr>
+                                                <td  style="border-bottom-width:1px;padding:12px 0px 12px 24px;background-color: #0b3357;">
+                                                <div  style="font-size:0pt;line-height:0pt;background-color: #0b3357;" align="left">
+                                                  <a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">                                                                                                    
+                                                  <img src="https://odisdkp.firebaseapp.com/assets/img/logo.png" alt="logo_oca" width="138" >
+                                                </a>
+                                                </div>
+                                                </td>
+                                            </tr>                                            
+                                          <tr>
+                                            <td align="left" style="padding:25px 30px 30px">
+                                            <h2 style="font-size:16px;font-weight:400;color:#222222;margin:0">
+                                              <p>Hemos recibido un nuevo comentario sobre su solicitud. Le daremos respuesta tan pronto como podamos.</p>
+                                              <p></p>
+                                              <p>Para verificar el estado del ticket y agregar comentarios adicionales, siga el enlace aquí
+                                                <a href="https://odisdkp.firebaseapp.com/#/support" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://support.sendgrid.com/hc/requests/2306369&amp;source=gmail&amp;ust=1561827470902000&amp;usg=AFQjCNHthhPllbak25dNtf46FraBxDF9uQ">odisdkp.firebaseapp.com/#/support</a>.</p>
+                                                  <p>Saludos cordiales!</p>
+                                                  <p></p>
+
+                                                  <div style="margin-top:25px">
+                                                    <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+                                                      <tbody>
+                                                        <tr>    
+                                                        <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
+                                                          <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
+                                                            <tbody>
+                                                            <tr>
+                                                              <td valign="top" style="padding:0 15px 0 15px;width:40px">
+                                                              <img width="40" height="40" alt="" style="height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:5px;" src="https://ci3.googleusercontent.com/proxy/xGsxYfjTvh6KWP4Lx7W_FDfJ5hrmw5YzNi8mji33NvpeZVLJrbcGzQpCDmHxN6OjhGSNobgFjJ4rnYnBGcU1xaIo5cH_JaOEOuPmGSQJNL_HVBWOXal0C2cKf1u_LS6tFrb6JJqHLX52AuZJnnGA5AyLgYDocA5vccvWTdiXZZVM07oRqBesIqndZxnmxx7e1ToFhvl1fEliLx35oWxK2-TVk8jFBCcwAG-CjQn9nbyx5EEF=s0-d-e1-ft#https://secure.gravatar.com/avatar/f375267e4ec6266af88de6e4e70accfc?size=40&amp;default=https%3A%2F%2Fassets.zendesk.com%2Fimages%2F2016%2Fdefault-avatar-80.png&amp;r=g" >
+                                                              </td>
+                                                              <td width="100%" style="padding:0;margin:0" valign="top">
+                                                                <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:15px;line-height:18px;margin-bottom:0;margin-top:0;padding:0;color:#1b1d1e;margin-left:17px;">
+                                                                <strong>hugoebarbozar</strong>
+                                                                </p>
+                                                                <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:17px;">Jun 27, 15:38 MDT</p>
+                                                                <div dir="auto" style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0">
+                                                                  <p style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0" dir="auto">Secure Email, I receive emails like spam or not secure. I need to resolve it, how can I do ?</p>
+                                                                </div>                                  
+                                                              </td>        
+                                                            </tr>      
+                                                            </tbody>
+                                                          </table>    
+                                                        </td>  
+                                                        </tr>
+                                                      </tbody>
+                                                    </table>
+                                                  </div>
+    
+                                               <div style="margin-top:25px">
+                                                <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+                                                  <tbody>
+                                                    <tr>    
+                                                    <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
+                                                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
+                                                        <tbody>
+                                                        <tr>
+                                                          <td valign="top" style="padding:0 15px 0 15px;width:40px">
+                                                          <img width="40" height="40" alt="" style="height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:5px;" src="https://ci3.googleusercontent.com/proxy/xGsxYfjTvh6KWP4Lx7W_FDfJ5hrmw5YzNi8mji33NvpeZVLJrbcGzQpCDmHxN6OjhGSNobgFjJ4rnYnBGcU1xaIo5cH_JaOEOuPmGSQJNL_HVBWOXal0C2cKf1u_LS6tFrb6JJqHLX52AuZJnnGA5AyLgYDocA5vccvWTdiXZZVM07oRqBesIqndZxnmxx7e1ToFhvl1fEliLx35oWxK2-TVk8jFBCcwAG-CjQn9nbyx5EEF=s0-d-e1-ft#https://secure.gravatar.com/avatar/f375267e4ec6266af88de6e4e70accfc?size=40&amp;default=https%3A%2F%2Fassets.zendesk.com%2Fimages%2F2016%2Fdefault-avatar-80.png&amp;r=g" >
+                                                          </td>
+                                                          <td width="100%" style="padding:0;margin:0" valign="top">
+                                                            <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:15px;line-height:18px;margin-bottom:0;margin-top:0;padding:0;color:#1b1d1e;margin-left:17px;">
+                                                            <strong>hugoebarbozar</strong>
+                                                            </p>
+                                                            <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:17px;">Jun 27, 15:38 MDT</p>
+                                                            <div dir="auto" style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0">
+                                                              <p style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0" dir="auto">Secure Email, I receive emails like spam or not secure. I need to resolve it, how can I do ?</p>
+                                                            </div>                                  
+                                                          </td>        
+                                                        </tr>      
+                                                        </tbody>
+                                                      </table>    
+                                                    </td>  
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+                                            </h2>                                              
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              </td>
+                          </tr>           
+                          </tbody>
+                        </table>
+                        </td>
+                      </tr>
+                      <tr>
+                          <td><p></p></td>
+                      </tr>                        
+                      </tbody>
+                  </table>
+                  -->
+
+                  <!--
+                  <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#f9f9f9">
+                      <tbody>
+                          <tr>
+                            <td><p></p></td>
+                          </tr>
+                        <tr>
+                          <td align="center">
+                          <table width="640" cellpadding="0" cellspacing="0" >
+                            <tbody>
+
+                              <tr>
+                                <td>
+                                <table border="0" cellspacing="0" cellpadding="0" width="100%"  style="border-collapse:collapse;background:#fff;border:1px solid #ededed" bgcolor="#fff">
+                                  <tbody>
+                                    <tr>
+                                      <td>
+                                      <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
+
+                                        <tbody>
+                                            <tr>
+                                                <td  style="border-bottom-width:1px;padding:12px 0px 12px 24px;background-color: #0b3357;">
+                                                <div  style="font-size:0pt;line-height:0pt;background-color: #0b3357;" align="left">
+                                                  <a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">
+                                                  <img src="https://odisdkp.firebaseapp.com/assets/img/logo.png" alt="logo_oca" width="138" >                                                                                                        
+                                                  </a>
+                                                </div>
+                                                </td>
+                                            </tr>                                            
+                                          <tr>
+                                            <td align="left" style="padding:25px 30px 30px">
+                                            <h2 style="font-size:16px;font-weight:400;color:#222222;margin:0">
+                                              <p>Estimados,</p>
+                                              <p>Junto con saludar, se detalla información de la solicitud de Gestión de Proyecto con Num. OT XXXX, creado el día (xx-xx-xxxx).</p>
+                                              <p>PROYECTO:</p>
+                                              <ul>
+                                                <li>Nombre: </li>
+                                                <li>Num. OT:</li>
+                                                <li>Dirección:</li>
+                                                <li>Descripción:</li>
+                                                <li>Contratista:</li>
+                                                <li>Actividad Realizada:</li>
+                                                <li>Observaciones:</li>
+                                              </ul>
+                                              <p></p>
+                                              <p>Para verificar el estado del proyecto y agregar comentarios adicionales, siga el enlace aquí
+                                                <a href="https://odisdkp.firebaseapp.com/#/service/" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://support.sendgrid.com/hc/requests/2306369&amp;source=gmail&amp;ust=1561827470902000&amp;usg=AFQjCNHthhPllbak25dNtf46FraBxDF9uQ">odisdkp.firebaseapp.com/#/support</a>.
+                                              </p>
+                                              <p>Saludos cordiales!</p>
+                                              <p></p>
+                                              <div style="margin-top:25px">
+                                                <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+                                                  <tbody>
+                                                    <tr>    
+                                                    <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
+                                                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
+                                                        <tbody>
+                                                        <tr>
+                                                          <td valign="top" style="padding:0 15px 0 15px;width:40px">
+                                                          <img width="40" height="40" alt="" style="height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:5px;" src="https://ci3.googleusercontent.com/proxy/xGsxYfjTvh6KWP4Lx7W_FDfJ5hrmw5YzNi8mji33NvpeZVLJrbcGzQpCDmHxN6OjhGSNobgFjJ4rnYnBGcU1xaIo5cH_JaOEOuPmGSQJNL_HVBWOXal0C2cKf1u_LS6tFrb6JJqHLX52AuZJnnGA5AyLgYDocA5vccvWTdiXZZVM07oRqBesIqndZxnmxx7e1ToFhvl1fEliLx35oWxK2-TVk8jFBCcwAG-CjQn9nbyx5EEF=s0-d-e1-ft#https://secure.gravatar.com/avatar/f375267e4ec6266af88de6e4e70accfc?size=40&amp;default=https%3A%2F%2Fassets.zendesk.com%2Fimages%2F2016%2Fdefault-avatar-80.png&amp;r=g" >
+                                                          </td>
+                                                          <td width="100%" style="padding:0;margin:0" valign="top">
+                                                            <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:15px;line-height:18px;margin-bottom:0;margin-top:0;padding:0;color:#1b1d1e;margin-left:17px;">
+                                                            <strong>hugoebarbozar</strong>
+                                                            </p>
+                                                            <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:17px;">Jun 27, 15:38 MDT</p>
+                                                            <div dir="auto" style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0">
+                                                              <p style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0" dir="auto">Secure Email, I receive emails like spam or not secure. I need to resolve it, how can I do ?</p>
+                                                            </div>
+                                                          </td>
+                                                        </tr>     
+                                                        </tbody>
+                                                      </table>
+                                                    </td>  
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+
+                                              <div style="margin-top:25px">
+                                                <table width="100%" cellpadding="0" cellspacing="0" border="1" role="presentation">
+                                                  <tbody>
+                                                    <tr>    
+                                                    <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
+                                                      <table width="100%" cellpadding="0" cellspacing="0"  style="table-layout:fixed" role="presentation">
+                                                        <tbody>
+                                                            <tr >
+                                                                <td width="100%" valign="top">
+                                                          
+                                                                    <div style="display: flex;margin-left: 0px;margin-right: 0px;">
+                                                                      <div>
+                                                                      <a href="https://firebasestorage.googleapis.com/v0/b/odisdkp.appspot.com/o/allfiles%2Fprojects%2F6%2F41%2F55%2F251020%2FcommentsFiles%2Forden_trabajo_mobility.pdf?alt=media&token=21640ed3-c351-4873-95b5-e3c1b69eba9a" style="padding-left:5px; margin-left: 2px" target="_blank" >
+                                                                        <img src="https://odisdkp.firebaseapp.com/assets/icons/level-512x512.png" width="25" height="25" border="0" style="border:none;clear:both;display:inline-block;height:25px;max-width:100%;outline:none;text-decoration:none;width:25px;margin-left: 7px;margin-top: 14px;">
+                                                                      </a>
+                                                                      </div>
+                                                                      <div>
+                                                                          <a title="Free Web tutorials" href="https://firebasestorage.googleapis.com/v0/b/odisdkp.appspot.com/o/allfiles%2Fprojects%2F6%2F41%2F55%2F251020%2FcommentsFiles%2Forden_trabajo_mobility.pdf?alt=media&token=21640ed3-c351-4873-95b5-e3c1b69eba9a" style="padding-left:5px; margin-left: 2px" target="_blank" >
+                                                                            <img src="../../../../assets/icons/file-icon-681x681.png" width="27" height="27" border="0" style="border:none;clear:both;display:inline-block;height:27px;max-width:100%;outline:none;text-decoration:none;width:27px;margin-left: 7px">
+                                                                          </a>
+                                                                      </div>
+          
+                                                                    </div>
+                                                                </td>        
+                                                              </tr>                                                           
+                                                        </tbody>  
+                                                      </table>                                                      
+                                                    </td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>
+
+                                              <div style="margin-top:25px">
+                                                <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
+                                                  <tbody>
+                                                    <tr>    
+                                                      <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
+                                                      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
+                                                      <tbody>
+                                                      <tr>
+                                                      <td valign="top" style="padding:0 15px 0 15px;width:40px">
+                                                      <img width="40" height="40" alt="" style="height:auto;line-height:100%;outline:none;text-decoration:none;border-radius:5px;" src="https://ci3.googleusercontent.com/proxy/xGsxYfjTvh6KWP4Lx7W_FDfJ5hrmw5YzNi8mji33NvpeZVLJrbcGzQpCDmHxN6OjhGSNobgFjJ4rnYnBGcU1xaIo5cH_JaOEOuPmGSQJNL_HVBWOXal0C2cKf1u_LS6tFrb6JJqHLX52AuZJnnGA5AyLgYDocA5vccvWTdiXZZVM07oRqBesIqndZxnmxx7e1ToFhvl1fEliLx35oWxK2-TVk8jFBCcwAG-CjQn9nbyx5EEF=s0-d-e1-ft#https://secure.gravatar.com/avatar/f375267e4ec6266af88de6e4e70accfc?size=40&amp;default=https%3A%2F%2Fassets.zendesk.com%2Fimages%2F2016%2Fdefault-avatar-80.png&amp;r=g" >
+                                                      </td>  
+                                                      <td width="100%" style="padding:0;margin:0" valign="top">
+                                                      <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:15px;line-height:18px;margin-bottom:0;margin-top:0;padding:0;color:#1b1d1e;margin-left:2px;">
+                                                      <strong>hugoebarboza</strong>
+                                                      </p>
+                                                      <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:2px;">Documento(s) adjunto(s)</p>
+                                                      <div style="display: flex;margin-left: 0px;margin-right: 0px;">
+                                                      
+                                                      <table border="0" cellpadding="0" cellspacing="0" width="100%" align="left" style="border:none;border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%">
+                                                        <tbody>                                                          
+                                                            <tr>
+                                                              <td style="direction:ltr;text-align:left">
+                                                              <div  lang="x-btn" style="font-family:'Uber18-Text-Bold',Helvetica,Arial,sans-serif!important;font-size:14px;line-height:20px;text-transform:uppercase">
+                                                                <a href="" style="background-color:#276ef1;border-color:#276ef1;border-radius:0px;border-style:solid;border-width:13px 16px;color:#ffffff;display:inline-block;letter-spacing:1px;max-width:300px;min-width:100px;text-align:center;text-decoration:none;text-transform:uppercase" target="_blank" >
+                                                                  <span style="float:left;text-align:left">Ver imágenes</span>
+                                                                  <span style="padding-top:2px;display:inline-block"> 
+                                                                  <img src="https://ci3.googleusercontent.com/proxy/axtMpR0rilnyjOmpHXDbY1OX1so5KIx1c7N4ECE3jBlwH30xUmvhGOGKbU87XdBRIGH3Z15F6rihfEg9xh84z0jtpziZ3_bNXW1G25P7eB2cgmNXQDw5chmkBgxC=s0-d-e1-ft#https://s3.amazonaws.com/uber-static/emails/2017/01/uber18_arrow_right.png" width="11" height="12" style="Margin-left:10px;border:none;clear:both;display:block;margin-top:2px;max-width:100%;outline:none;text-decoration:none" >
+                                                                </span>
+                                                                </a>
+                                                              </div>
+                                                              </td>
+                                                            </tr>
+                                                        </tbody>
+                                                      </table>
+
+
+                                                      </div>  
+                                                      </td>        
+                                                      </tr>      
+                                                      </tbody>
+                                                      </table>      
+                                                      </td>
+                                                    </tr>
+                                                  </tbody>
+                                                </table>
+                                              </div>  
+
+
+                                            </h2>                                              
+                                            </td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                              </td>
+                          </tr>           
+                          </tbody>
+                        </table>
+                        </td>
+                      </tr>
+                      <tr>
+                          <td><p></p></td>
+                      </tr>                        
+                      </tbody>
+                  </table>
+                 -->
+                 
+
+                <!--        
+                <div style="box-sizing:border-box;width:100%;margin-bottom:30px;background:#ffffff;border:1px solid #f0f0f0">
+                  <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+            
+                    <tbody>
+            
+                      <tr>
+            
+                        <td  style="box-sizing:border-box;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;padding:30px" valign="top">
+            
+                        <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+            
+                          <tbody>
+            
+                            <tr>
+            
+                              <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+            
+                              <h2 style="margin:0;margin-bottom:30px;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;line-height:1.5;font-size:24px;color:#294661!important">Archivos adjunto(s)</h2>
+            
+                              </td>
+            
+                            </tr>
+            
+                            <tr>
+            
+                              <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top" valign="top">
+            
+                              <table style="box-sizing:border-box;width:100%;border-spacing:0;border-collapse:separate!important" width="100%">
+            
+                                <tbody>
+            
+                                  <tr>
+            
+                                    <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:80%;border-bottom:1px solid #f0f0f0" valign="top" width="80%">&nbsp;</td>
+                        
+                                    <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:20%;border-bottom:1px solid #f0f0f0" valign="top" width="20%">
+            
+                                    <p style="margin:0;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;margin-bottom:10px;margin-top:10px;font-size:12px;text-transform:uppercase">Descarga</p>
+            
+                                    </td>
+            
+            
+                                  </tr>
+            
+                                  <tr>            
+                                    <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:80%;border-bottom:1px solid #f0f0f0" valign="top" width="80%">            
+                                    <p style="margin:0;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;margin-bottom:10px;font-size:14px;margin-top:10px"><strong>Credits</strong></p>            
+                                    </td>                        
+                                    <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:20%;border-bottom:1px solid #f0f0f0" valign="top" width="20%">            
+                                    <p style="margin:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;margin-bottom:10px;font-size:14px;margin-top:10px;color:#4cb04f">0</p>            
+                                    </td>            
+                                  </tr>
+
+                                  <tr>            
+                                    <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:80%;border-bottom:1px solid #f0f0f0" valign="top" width="80%">            
+                                    <p style="margin:0;color:#294661;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;margin-bottom:10px;font-size:14px;margin-top:10px"><strong>Credits</strong></p>            
+                                    </td>                        
+                                    <td style="box-sizing:border-box;padding:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-size:16px;vertical-align:top;width:2%;border-bottom:1px solid #f0f0f0" valign="top" width="20%">            
+                                    <p style="margin:0;font-family:'Open Sans','Helvetica Neue','Helvetica',Helvetica,Arial,sans-serif;font-weight:300;margin-bottom:10px;font-size:14px;margin-top:10px;color:#4cb04f">0</p>            
+                                    </td>            
+                                  </tr>
+                                  
+                                </tbody>                                
+                                
+                              </table>
+            
+                              </td>
+            
+                            </tr>
+            
+                          </tbody>
+            
+                        </table>
+            
+                        </td>
+            
+                      </tr>
+            
+                    </tbody>
+            
+                  </table>
+                </div>
+              -->
+                
+
+
+              </div>
+            </div>
+        </div>
+
+        <!-- /#page-content-wrapper -->
+    </div>
+
+

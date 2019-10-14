@@ -1,0 +1,188 @@
+
+<div class="row" class="marginrlcero">
+
+    <div class="bKpvDg">
+    </div>
+
+    <div class="col-md-8 offset-md-2">
+        
+        <div class="app">
+
+            <mat-divider></mat-divider>
+            <h1 class="euCZcr">Nueva Solicitud</h1>
+            <mat-divider></mat-divider>
+
+            <div *ngIf="isLoading">
+                <app-loading *ngIf="isLoading"></app-loading>  
+            </div>
+            
+            <form *ngIf="forma" [formGroup]="forma">
+                <div class="row">
+
+                    <div class="col-md-8 order-first">
+            
+                        <h2 class="jeEmY">Asunto</h2>
+                        <mat-form-field appearance="outline" class="full-width mat-status">
+                            <input matInput  #asunto placeholder="Añadir asunto..." maxlength="60"  name="asunto" formControlName="asunto"   class="form-control" required>
+                            <mat-hint align="end">{{asunto.value.length}} / 60</mat-hint>
+                        </mat-form-field>
+                
+                        <h2 class="jeEmY">Descripción</h2>
+                        <mat-form-field appearance="outline" class="full-width mat-status">
+                            <textarea matInput #descripcion placeholder="Añadir descripción..." matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="356" name="descripcion" formControlName="descripcion"   class="form-control" required></textarea>
+                            <mat-hint align="end">{{descripcion.value.length}} / 356</mat-hint>
+                        </mat-form-field>
+                
+                        <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" class="marginbottom">
+                            <mat-icon>attachment</mat-icon>
+                            <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="startUpload($event)"  (click)="$event.target.value = null; archivos = []"  multiple >              
+                            <span class="margintop" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 3, Max. 3 </strong></span>
+                        </button>
+                
+                        <div *ngIf="archivos" >
+                            <mat-chip-list>
+                            <mat-chip *ngFor="let forFile of archivos; let i = index;" 
+                                color="primary"
+                                [removable]="true"
+                                (removed)="removeFile(i)">
+                                <span>{{ forFile.archivo.name }}</span>
+                                <span *ngIf="forFile.progreso &&  forFile.progreso > 0" class="marginrl6"><strong>{{forFile.progreso}}%</strong></span>
+                                <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
+                                <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
+                                <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
+                            
+                                <div class="progress container-fluid">
+                                <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
+                                </div>
+                            </mat-chip>
+                            </mat-chip-list>
+                        </div>
+                            
+                        <br>
+                
+                        <div class="row row-custom">
+                            
+                            <button mat-raised-button color="primary" class="marginright" [disabled]="forma.invalid" (click)="confirmAdd()">
+                                Enviar           
+                            </button>          
+                
+                        </div>
+                
+                        <div *ngIf="nota">
+                            <h2 class="jeEmY">*Importante</h2>
+                            <span class="smallfontRed">{{nota}}</span>
+                        </div>        
+                
+                    </div>
+                    <div class="col-md-4 order-md-last">
+                        <div *ngIf="tagPais$">
+                            <h2 class="jeEmY">País</h2>
+                            <ng-select  [items]="tagPais$ | async"
+                                        [clearable]="false" 
+                                        bindLabel="name"
+                                        bindValue="id"
+                                        (change)="changepais($event.id)"
+                                        class="example-full-width"
+                                        name="tagPais" formControlName="tagPais">
+                            </ng-select>
+                        </div>
+                        <div *ngIf="tagImportant$">
+                            <h2 class="jeEmY">Nivel de Urgencia</h2>
+                            <ng-select  [items]="tagImportant$ | async"
+                                        [clearable]="false" 
+                                        bindLabel="name"
+                                        class="full-width"
+                                        name="tagImportant" formControlName="tagImportant">
+                            </ng-select>
+                        </div>
+                
+                        <h2 class="jeEmY" *ngIf="arrayResponsables && arrayResponsables.length > 0">Responsable(s)</h2>
+                        <div class="fOqogj" *ngFor="let arrayresp of arrayResponsables">
+                            <div class="SZsdL">
+                            <div class="sdsDse">
+                                <span role="img" class="imagenavatar"></span>
+                            </div>
+                            </div>
+                            <div class="fLcKLS">{{arrayresp.email}}</div>
+                        </div>
+                
+                        <div *ngIf="departamento$">
+                            <h2 class="jeEmY">Departamento</h2>
+                            <ng-select  (change)="selectChangedepto($event)"
+                                        [items]="departamento$ | async"
+                                        bindLabel="name"
+                                        class="full-width"
+                                        name="departamento" formControlName="departamento" required>
+                            </ng-select>
+                        </div>
+                
+                        <div *ngIf="tipo$">
+                            <h2 class="jeEmY">Tipo de Solicitud</h2>
+                            <ng-select  (change)="selectChangetype($event)"
+                                        [items]="tipo$ | async"
+                                        bindLabel="name"
+                                        class="full-width"
+                                        name="tipo" formControlName="tipo" required>
+                            </ng-select>
+                        </div>
+                        
+                        <div *ngIf="categoria$">
+                            <h2 class="jeEmY">Categoria</h2>
+                            <ng-select  
+                                        (change)="selectChangeCategoria($event)"
+                                        [items]="categoria$ | async"
+                                        bindLabel="name"
+                                        class="full-width"
+                                        name="categoria" formControlName="categoria" required>
+                            </ng-select>
+                        </div>
+                
+                        <div *ngIf="categoriaPlazo">
+                            <h2 class="jeEmY">Plazo</h2>
+                            <span class="smallfont">{{categoriaPlazo}}</span>
+                        </div>
+                        <div *ngIf="(categoriaDocumentos$ | async) as catdoc">
+                            <div class="fLcKLS pointer" (click)="showlist= !showlist" *ngIf="catdoc.length > 0">  
+                                <span class="important-medio">
+                                    Ver documentos requeridos
+                                </span>
+                            </div>
+                            <ul class="list-group" *ngIf="showlist">
+                                <li class="list-group-item" *ngFor="let document of catdoc" >
+                                    <a mat-icon-button href="{{document.link}}" target="_blank"  color="primary" *ngIf="document.link">
+                                        {{document.name}} <mat-icon>get_app</mat-icon>
+                                    </a>
+                                    <span *ngIf="!document.link">{{document.name}}</span>
+                                </li>
+                            </ul>
+                        </div>
+                        <!----
+                        <div>
+                            <h2 class="jeEmY">Etiquetar</h2>
+                            <ng-select name="etiquetado" 
+                                [items]="users$ | async"
+                                [multiple]="true"
+                                [clearable]="false" 
+                                [closeOnSelect]="true"
+                                [searchable]="true"
+                                [loading]="userLoading"
+                                [typeahead]="userinput"
+                                bindLabel="email"
+                                placeholder="Seleccione usuario" 
+                                class="full-width"
+                                formControlName="etiquetado">
+                            </ng-select>
+                        </div>
+                        -->
+                
+                    </div>
+
+                </div>
+
+            </form>
+            
+        </div>
+
+    </div>
+
+</div>

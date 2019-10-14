@@ -1,0 +1,112 @@
+<div class="row">
+  <div class="col-12">
+    <div class="container-fluid p-2">
+      <div class="row animated fadeIn" *ngIf="isLoading">
+        <div class="col-sm-12">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+      </div>
+      <!--
+      <div class="row animated fadeIn" *ngIf="!isLoading">
+          <div class="col-sm-12">
+              <div class="alert alert-danger">
+                  No se encontraron registros que coincidan con su búsqueda. 
+                  <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+              </div>
+          </div>
+      </div>-->
+      <h2 class="jeEmY">Categorias de {{data.name}}</h2>
+      <div class="row animated fadeIn" *ngIf="!isLoading">
+        <div class="col-12">
+              <div class="alert alert-danger" *ngIf="categoria$ == null">
+                        No se encontraron registros que coincidan con su búsqueda. 
+              </div>
+  
+            <div>
+                    
+              <table class="table table-hover" >
+                  <thead>
+                      <tr>                       
+                          <th>Descripción</th>  
+                          <th>Plazo</th>                               
+                          <th></th>
+                      </tr>
+                  </thead>
+  
+                  <tbody>
+                      <tr *ngFor="let categoria of categoria$ | async; let i = index">
+                        <td>
+                          <label *ngIf="i !== indexitem || isLoadingDelete">{{categoria.name}}</label>
+                          <input type="text" class="form-control" [(ngModel)]="categoria.name" *ngIf="i == indexitem && !isLoadingDelete"  required>
+                        </td>
+                        <td>
+                          <label *ngIf="i !== indexitem || isLoadingDelete">{{categoria.plazo}}</label>
+                          <input type="text" class="form-control" [(ngModel)]="categoria.plazo" *ngIf="i == indexitem && !isLoadingDelete"  required>
+                        </td>
+                        <td>
+
+                          <button mat-icon-button color="primary" *ngIf="categoria.id.length > 1 && i != indexitem" (click)="startEdit(i)">
+                          <mat-icon aria-label="Edit">edit</mat-icon>          
+                          </button>            
+  
+                          <button mat-icon-button color="primary" *ngIf="categoria.name.trim().length > 1 && i == indexitem && editando && !isLoadingDelete" (click)="guardarcategoria(i, categoria)" >
+                          <mat-icon aria-label="Edit">done</mat-icon>                            
+                          </button>
+  
+                          <button mat-icon-button color="primary" *ngIf="categoria.name.trim().length > 1 && i == indexitem && editando && !isLoadingDelete" (click)="close()" >
+                              <mat-icon aria-label="Edit">close</mat-icon>                            
+                          </button>
+  
+                          <button mat-icon-button color="primary" *ngIf="isLoadingSave && i == indexitem && !editando">
+                          <app-progress-spinner ></app-progress-spinner>
+                          </button>
+  
+                          <button mat-icon-button color="warn" (click)="borrarcategoria(i, categoria)" *ngIf="i != indexitem">
+                              <mat-icon aria-label="Edit">delete</mat-icon>                             
+                          </button>
+  
+                          <button mat-icon-button color="primary" *ngIf="isLoadingDelete && i == indexitem && !editando">
+                          <app-progress-spinner ></app-progress-spinner>
+                          </button>
+  
+                        </td>
+                      </tr>
+                  </tbody>
+              </table>
+  
+            </div>
+  
+            <form ngNativeValidate [formGroup]="forma" class="form p-t-20">
+              <table class="table table-hover">                    
+                  <tbody>
+                      <tr >
+                        <td class="w10">
+                            <button mat-icon-button (click)="show = !show" >
+                                <mat-icon class="material-icons md-20-color">add</mat-icon><span *ngIf="!show">Agregar</span>
+                            </button>                            
+                        </td>
+                        <td>
+                          <input type="text" formControlName="name" class="form-control" placeholder="Descripción categoria" *ngIf="show" required>
+                        </td>
+                        <td>
+                          <input type="text" formControlName="plazo" class="form-control" placeholder="Plazo" *ngIf="show">
+                        </td>
+                        <td>
+                            <button  mat-icon-button color="primary"  *ngIf="show && !isLoadingSave && !isLoadingDelete"  [disabled]="forma.invalid || forma.value.name.trim().length === 0"  (click)="addCategoria(forma.value)" >
+                                <mat-icon aria-label="Edit">done</mat-icon>                            
+                            </button>  
+                            <button  mat-icon-button color="primary" *ngIf="show && !isLoadingSave && !isLoadingDelete" (click)="show = !show" >
+                              <mat-icon aria-label="Close">close</mat-icon>
+                            </button>       
+                        </td>
+                      </tr>
+                  </tbody>                    
+              </table>
+            </form>
+  
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+  

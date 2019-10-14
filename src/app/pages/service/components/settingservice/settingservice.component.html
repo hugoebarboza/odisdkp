@@ -1,0 +1,356 @@
+<meta name="Description" content="Settings Services">
+
+
+
+
+<div class="container-fluid p-2" *ngIf="proyectos && identity">
+<div class="d-flex  mb-3">
+        <div class="p-2 "><a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'/project/'+id" ><i class="material-icons">keyboard_backspace</i></a></div>
+        <div class="p-2 w-100"><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1></div>
+        <div class="p-2 flex-shrink-1 ">
+        </div>        
+</div>
+
+
+
+<div class="row animated fadeIn">
+  <div class="col-12">
+  <div class="container" *ngIf="loading">
+      <div class="row justify-content-md-center">
+        <div class="col col-lg-2">
+            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
+        </div>
+      </div>
+  </div>
+
+
+
+  <mat-card  [ngStyle]="{'padding':'0px'}">
+      <mat-card-header [ngClass]="{'custom-card':true, 'padding':'0px'}">     
+    
+        <div class="mat-card-header-text">
+        <mat-card-title >
+          
+          <div class="d-flex justify-content-end" >
+                <div class="p-2 ">
+                    <button type="button" class="btn btn-primary btn-sm" [matMenuTriggerFor]="menuviewselect" >
+                        <mat-icon class="material-icons md-14">settings</mat-icon>Gestiona</button>
+                    <mat-menu #menuviewselect="matMenu" [overlapTrigger]="false">
+                            <button mat-menu-item (click)="projectCurrencyValue(id)">
+                                <span >Baremos de Proyecto</span>
+                            </button>
+                                 
+                            <button mat-menu-item (click)="projectCategorie(id)">
+                               <span >Categorías de Proyecto</span>
+                            </button>
+      
+                            <button mat-menu-item (click)="projectType(id)">
+                              <span >Tipos de Proyecto</span>
+                            </button>
+                    </mat-menu>                    
+                </div>
+          </div>
+    
+        </mat-card-title>
+        </div>
+    
+        <mat-card-subtitle>
+        </mat-card-subtitle>
+      </mat-card-header>
+    
+    
+      <mat-card-content>
+      <div class="p-4">
+
+        <div class="d-flex " *ngIf="!show">
+              <div class="p-2">
+                  <h6 class="card-subtitle mb-2 text-muted" ><mat-icon>folder_open</mat-icon> {{project_name}} </h6>                  
+              </div>
+              <div class="p-2">
+              </div>
+              <div class="ml-auto p-2"><a class="nav-link pointer" href="javascript:;" (click)="toggle()" >Editar</a></div>
+        </div>
+
+        <div class="d-flex " *ngIf="show">
+            <div class="p-2 w-100 "><h6 class="card-subtitle mb-2 text-muted" ><mat-icon>folder_open</mat-icon> {{project_name}} </h6></div>
+            <div class="p-2 flex-shrink-1 "><a class="nav-link pointer" href="javascript:;" (click)="toggle()" >Cancelar</a></div>
+        </div>
+
+        <div *ngIf="!show && proyecto">
+  
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="nombre">Proyecto</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.project_name}}</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <label for="apellido">Api Key</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.apikey}}</span></p>
+                </div>                
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label >Calendar Key</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.calendarID}}</span></p>
+
+                </div>
+                <div class="col-sm-6">
+                    <label >Client ID</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.clientid}}</span></p>
+                </div>                
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label >País</label>      
+                    <p class="card-text"><span class="text-muted">{{proyecto.country.country_name}}</span></p>
+                </div>
+
+                <div class="col-sm-6">
+                    <label >Time Zone</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.country.timezone}}</span></p>
+
+                </div>  
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label >Cliente</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.customer.company_name}}</span></p>
+                </div>
+
+                <div class="col-sm-6">
+                    <label >Contacto Cliente</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.customer.contact_name}} ({{proyecto.customer.email_contact}})</span></p>
+                </div>  
+            </div>           
+
+
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="dni">Departamento</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.departamento.dept_name}}</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <label for="dv">Contacto Departamento</label>
+                    <p class="card-text"><span class="text-muted"></span></p>
+                </div>                
+            </div>
+
+
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                  <label for="inputCity">Fecha inicio</label>
+                  <p class="card-text"><span class="text-muted">{{proyecto.from_date}}</span></p>
+                </div>
+    
+                <div class="col-sm-6">
+                  <label for="inputZip">Fecha termino</label>
+                  <p class="card-text"><span class="text-muted">{{proyecto.to_date}}</span></p>
+                </div>
+            </div>                    
+
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="dni">GPS tiempo</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.gpstime}}</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <label for="dv">GPS hora termino</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.time_end}}</span></p>
+                 </div>                
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="dni">Creado por</label>
+                    <p class="card-text" *ngIf="proyecto.create_by > 0">
+                    <mat-form-field class="card-text" *ngIf="users && users.length > 0">
+                        <mat-select [(ngModel)]="proyecto.create_by" name="create_by" disabled>
+                            <mat-option *ngFor="let user of users" [value]="user.id">
+                              {{user.usuario}}
+                            </mat-option>
+                        </mat-select>                                      
+                    </mat-form-field>
+                    </p>                                                                                  
+        
+                </div>
+                <div class="col-sm-6">
+                    <label for="dv">Actualizado por</label>
+                    <p class="card-text" *ngIf="proyecto.update_by > 0">
+                        <mat-form-field class="card-text" *ngIf="users && users.length > 0">
+                            <mat-select [(ngModel)]="proyecto.update_by" name="create_by" disabled>
+                                <mat-option *ngFor="let user of users" [value]="user.id">
+                                  {{user.usuario}}
+                                </mat-option>
+                            </mat-select>                                      
+                        </mat-form-field>
+                        </p>    
+                 </div>                
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="dni">Fecha creación</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.create_at}}</span></p>
+                </div>
+                <div class="col-sm-6">
+                    <label for="dv">Fecha actualización</label>
+                    <p class="card-text"><span class="text-muted">{{proyecto.update_at}}</span></p>
+                 </div>                
+            </div>
+
+            <br>
+            <div class="row" >
+                <div class="col-sm-6">
+                    <label for="dni">Estatus</label>
+                    <mat-chip-list><mat-chip color="primary" selected *ngIf="proyecto.status == 1">ACTIVO</mat-chip></mat-chip-list>
+                    <mat-chip-list><mat-chip color="accent" selected *ngIf="proyecto.status == 0">INACTIVO</mat-chip></mat-chip-list>
+                </div>
+                <div class="col-sm-6">
+                </div>                
+            </div>
+
+        </div>
+
+        <div *ngIf="show && forma && proyecto">
+        <form ngNativeValidate *ngIf="forma" [formGroup]="forma"  >
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <label for="nombre">Proyecto</label>
+                    <input type="text" name="project_name" formControlName="project_name"   class="form-control" required>                              
+                    
+                </div>
+                <div class="col-sm-6">
+                    <label for="apikey">Api Key</label>
+                    <input type="text" name="apikey" formControlName="apikey"   class="form-control">
+                </div>                
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label>Calendar Key</label>
+                    <input type="text" name="calendarID" formControlName="calendarID"   class="form-control">
+                </div>
+                <div class="col-sm-6">
+                    <label>Client ID</label>
+                    <input type="text" name="clientid" formControlName="clientid"   class="form-control">
+                </div>                
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label >País</label>      
+                    <select formControlName="country_id" name="country_id" class="form-control" *ngIf="countries" required>
+                        <option *ngFor="let country of countries" [value]="country.id">
+                               {{country.country_name}}
+                        <option>
+                    </select>
+                </div>
+            </div>
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label >Cliente</label>
+                    <select formControlName="customer_id" name="customer_id" class="form-control" *ngIf="customers" required>
+                            <option *ngFor="let customer of customers" [value]="customer.id">
+                                   {{customer.company_name}}
+                            <option>
+                    </select>    
+                </div>
+
+            </div>           
+
+
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label >Departamento</label>
+                    <select formControlName="department_id" name="department_id" class="form-control" *ngIf="departamentos" required>
+                        <option *ngFor="let departamento of departamentos" [value]="departamento.id">
+                               {{departamento.dept_name}}
+                        <option>
+                </select>
+
+                </div>
+            </div>
+
+
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                  <label >Fecha inicio</label>
+                  <input type="datetime" name="from_date" formControlName="from_date"   class="form-control">
+
+                </div>
+    
+                <div class="col-sm-6">
+                  <label >Fecha termino</label>
+                  <input type="datetime" name="to_date" formControlName="to_date"   class="form-control">
+                </div>
+            </div>                    
+
+
+            <br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label >GPS tiempo</label>
+                    <input type="text" name="gpstime" formControlName="gpstime"   class="form-control">
+
+                </div>
+                <div class="col-sm-6">
+                    <label >GPS hora termino</label>
+                    <input type="text" name="time_end" formControlName="time_end"   class="form-control">
+                </div>                
+            </div>
+
+
+            <br>
+            <div class="row" *ngIf="_userService.isRole(8)">
+                <div class="col-sm-6">
+                    <label for="dni">Estatus</label>
+                    <select formControlName="status" name="status" class="form-control" *ngIf="estatus" required>
+                            <option *ngFor="let estatu of estatus" [value]="estatu.id">
+                                   {{estatu.description}}
+                            <option>
+                    </select>
+                </div>
+                <div class="col-sm-6">
+                </div>                
+            </div>
+
+
+            <br>
+            <div mat-dialog-actions >      
+                    <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="confirmEdit()">Actualizar</button>
+            </div>          
+        </form>
+        </div>
+
+      </div>
+      </mat-card-content>
+    </mat-card>
+    
+      
+  </div>
+</div>
+
+</div>
+
+
+    

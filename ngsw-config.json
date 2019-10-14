@@ -1,0 +1,48 @@
+{
+  "index": "/index.html",
+  "assetGroups": [
+    {
+      "name": "app",
+      "installMode": "prefetch",
+      "resources": {
+        "files": [
+          "/favicon.ico",
+          "/index.html",
+          "/*.css",
+          "/*.js",
+          "/manifest.json"
+        ],
+      "urls": [
+        "https://fonts.googleapis.com/**",
+        "https://fonts.gstatic.com/s/roboto/**",
+        "https://fonts.gstatic.com/s/materialicons/**",
+        "https://ocaglobal.com/themes/ledel-foundation6-october/assets/img/favicon.png",
+        "https://stackpath.bootstrapcdn.com/bootstrap/**"
+      ]
+      }
+    }, {
+      "name": "assets",
+      "installMode": "lazy",
+      "updateMode": "prefetch",
+      "resources": {
+        "files": [
+          "/assets/**"
+        ]
+      }
+    }
+  ],
+  "dataGroups": [
+    {
+      "name": "odis-api",
+      "urls": [
+        "https://odis.api.ocachile.cl/api/v1.0/**"
+      ],
+      "cacheConfig": {
+        "strategy": "performance",
+        "maxSize": 10,
+        "maxAge": "1h",
+        "timeout": "5s"
+      }
+    }
+  ]  
+}

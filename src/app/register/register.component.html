@@ -1,0 +1,176 @@
+ <main role="main" class="container-fluid animated fadeIn Fast">
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+        <h6 class="border-bottom border-gray pb-2 mb-0"><h2><i class="material-icons">person</i> {{title}}</h2></h6>
+        <div class="media text-muted pt-3">
+
+          <div class="col-lg-12 animated fadeIn">
+                  
+          <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="col-md-12" (ngSubmit)="onSubmit()" >
+
+            <div class="d-flex justify-content-center">
+              <img src="../../../assets/img/logoocapng.png" alt="Register Page" width="118" height="64">
+            </div>            
+  
+            <div class="text-center mb-4">
+              <h1 class="h3 mb-3 font-weight-normal">Ingrese sus datos</h1>
+              <p>Por favor ingrese sus datos de registro, por seguridad <code>sólo se permite</code> el uso de correo OCA GLOBAL. <a href=""></a></p>
+            </div>
+
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+              <label for="nombre">Primer Nombre</label>
+              <input type="text" name="name" formControlName="name"   class="form-control" required>
+              </div>
+              
+              <div class="form-group col-md-6">
+                <label for="apellido">Primer Apellido</label>
+                <input type="text" name="surname" class="form-control" formControlName="surname" required>
+              </div>
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputEmail4">Email Primario</label>      
+                <input type="email" name="email" class="form-control" formControlName="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="inputEmail4">Confirmar Email</label>      
+                <input type="email" name="email2" class="form-control" formControlName="email2" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="forma && forma.errors?.equal && !forma.pristine">
+                <p class="text-danger">
+                  Los email deben ser iguales.
+                </p>
+              </div>
+  
+
+            <div class="form-row">
+              <div class="form-group col-md-6">
+                <label for="inputPassword4">Contraseña</label>
+                <input type="password" id="inputPassword" aria-describedby="passwordHelpBlock" name="password"  class="form-control" formControlName="password" required>
+                <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>
+              </div>
+
+              <div class="form-group col-md-6">
+                <label for="inputPassword4">Confirmar Contraseña</label>
+                <input type="password" id="inputPassword2" aria-describedby="passwordHelpBlock" name="password2" class="form-control" formControlName="password2" required>
+                <small id="passwordHelpInline" class="text-muted">6-20 caracteres.</small>
+              </div>
+            </div>
+            <div class="form-group" *ngIf="forma && forma.errors?.mismatch && !forma.pristine">
+              <p class="text-danger">
+               Las contraseñas deben ser iguales.
+              </p>
+            </div>
+
+
+            <div class="form-row">
+
+              <div class="form-group col-md-6">
+                <label for="inputCity">Teléfono:</label>
+                <input type="text" class="form-control" id="inputTelefono" name="telefono" formControlName="telefono">
+              </div>
+
+
+              <div class="form-group col-md-6">
+                <label for="inputZip">Otro Teléfono:</label>
+                <input type="text" class="form-control" id="inputTelefono2" name="telefono2" formControlName="telefono2">
+              </div>
+            </div>
+
+
+            <div class="form-group">
+              <label for="inputAddress">Direccion</label>
+              <input type="text" class="form-control" id="inputAddress" name="address" placeholder="Calle, numero">
+            </div>
+
+            <div class="form-group">
+              <label for="inputAddress2">Direccion 2</label>
+              <input type="text" class="form-control" id="inputAddress2" name="address2" placeholder="Apartamento, estudio, o piso">
+            </div>
+
+            <div class="form-row">
+              <div class="form-group col-md-4">
+                <label for="inputState">País</label>
+                <select id="inputState" class="form-control">
+                  <option selected>Seleccione...</option>
+                  <option>Chile</option>
+                  <option>España</option>
+                  <option>México</option>
+                  <option>Perú</option>
+                  <option>Otro</option>
+                </select>
+              </div>
+
+              <div class="form-group col-md-4">
+                <label for="inputCity">Ciudad</label>
+                <input type="text" class="form-control" id="inputCity" name="city">
+              </div>
+
+
+              <div class="form-group col-md-4">
+                <label for="inputZip">Zip</label>
+                <input type="text" class="form-control" id="inputZip">
+              </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-12">
+                    <div class="checkbox checkbox-primary p-t-0">
+                        <input formControlName="condiciones" name="condiciones" id="checkbox-signup" type="checkbox">
+                        <label for="checkbox-signup"> Estoy de acuerdo con los <a href="#">términos</a></label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+              <div class="col-md-12">
+                  <ngx-recaptcha2 #captchaElem
+                  [siteKey]="siteKey"
+                  (reset)="handleReset()"
+                  (expire)="handleExpire()"
+                  (load)="handleLoad()"
+                  (success)="handleSuccess($event)"
+                  [useGlobalDomain]="false"
+                  [size]="size"
+                  [hl]="lang"
+                  [theme]="theme"
+                  [type]="type"
+                  formControlName="recaptcha">
+                </ngx-recaptcha2>
+                <!--- <re-captcha formControlName="recaptchaReactive"></re-captcha> -->
+              </div>
+            </div>
+            
+            <button type="submit" class="btn btn-primary btn-md" [disabled]="forma.invalid || !captchaResponse">Registrarme</button>
+
+            <div class="form-group row">
+              <div class="col-md-12 text-center">
+                <p>¿Tienes una cuenta? <a routerLink="/login" class="text-info m-l-5"><b>Ingresa ahora</b></a></p>
+              </div>
+          </div>
+
+          </form>
+
+          </div>
+
+
+
+          </div>
+      </div>
+    </main>
+    
+<style>
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948; /* green */
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442; /* red */
+}
+</style>        
+
+

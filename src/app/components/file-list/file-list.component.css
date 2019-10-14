@@ -1,0 +1,46 @@
+.example-rate-limit-reached {
+  color: #980000;
+  background: #f2f4f7;
+  max-width: 100%;
+  text-align: center;
+}
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}
+.mat-table {
+  overflow: auto;
+  width: 100%;
+}
+
+.mobile-label {
+  display: none;
+}
+
+@media(max-width: 600px) {
+  .mobile-label {
+    width: 97px;
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 5px;
+  }
+  .mat-cell:first-of-type {
+    padding-left: 0px; 
+}
+  .mat-header-row {
+    display: none;
+  }
+
+  .mat-row { 
+    flex-direction: column;
+    align-items: start;
+    padding: 8px 24px;
+  }
+}
+em {
+  font-style: italic;
+  font-weight: lighter !important;
+}
+::ng-deep .cdk-overlay-container {
+  z-index: 9999 !important;
+}

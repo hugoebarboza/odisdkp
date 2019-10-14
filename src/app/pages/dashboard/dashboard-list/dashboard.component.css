@@ -1,0 +1,67 @@
+.example-container {
+  position: absolute;
+  top: 56px;
+  bottom: 0px;
+  left: 0;
+  right: 0;
+}
+
+.example-sidenav {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 217px;
+  background: #FFFFFF;
+  box-shadow: 3px 0 6px rgba(0,0,0,.24);  
+}
+
+.example-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+
+.example-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+.callout {
+  padding: 1.875rem 2.25rem;
+  margin: 2.25rem 0;
+  position: relative;
+}
+.callout--info {
+  background: #f3f9fd;
+  border-left: 2px solid #1a82e2;
+}
+.callout--info:before {
+  content: "Bienvenido";
+  color: #1a82e2;
+}
+.callout:before {
+  display: block;
+  text-transform: uppercase;
+  font-family: Colfax,Helvetica,Arial,sans-serif;
+  font-style: normal;
+  font-weight: 600;
+  font-size: .833rem;
+  letter-spacing: .7px;
+}
+.callout-link {
+  box-shadow: 0 2px 6px 0 rgba(41,70,97,.2);
+  display: grid;
+  grid-template-columns: auto auto;
+  margin: 0.25rem 0;
+}
+.callout-link__copy {
+  padding: 1.875rem 1rem 1.875rem 2.25rem;
+  flex-grow: 1;
+}
+.Md9X2e {
+  color: #DE473C;
+  height: 24px;
+  width: 24px;
+}

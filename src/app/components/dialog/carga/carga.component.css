@@ -1,0 +1,25 @@
+/* Drop Zone */
+.main-container{
+  padding: 7px;
+  margin-top: 0px;
+  width: 100%;
+}
+.drop-zone { 
+	border: dotted 3px lightgray; 
+	opacity: 0.5; 
+	color: #666; 
+	text-align: center 
+}
+
+.file-over { 
+	border: dotted 3px dodgerblue; 
+}
+
+
+.text-green { 
+	color: green 
+}
+.example-button-row button,
+.example-button-row a {
+  margin-right: 8px;
+}

@@ -1,0 +1,195 @@
+<div class="row" *ngIf="identity && project">
+    <div class="col">
+        <div class="jfCYPT">
+            <div class="jfCYPT">
+                <div class="didcdr" data-test-selector="profile-worked-with">
+                    <div class="iDwfcE" >
+                        <div class="eCdVoi">
+                            <div class="jNlJOD">
+                                <span>
+                                    Resumen de Producción (3 meses anteriores) y Forecast próximo mes.
+                                </span>
+                            </div>
+                        </div>    
+                        <div>
+                        <div class="container-fluid" *ngIf="isLoading">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="row d-flex justify-content-center">
+                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                                    </div>                        
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class=" dIOqge" *ngIf="!isLoading">
+    
+                            <div class="jmuLsE" >
+                                <div class="row d-flex justify-content-center p-2" >
+                                    <mat-card class="container-fluid">
+                                        <mat-card-content>
+
+                                            <br>
+                                            <mat-table #table [dataSource]="kpiTableData" matSort [class.isMobile]="isMobile" *ngIf="kpiTableData && kpidata.length > 0">
+                                                <ng-container matColumnDef="status">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> 
+                                                        <span class="mobile-label">Estatus:</span>
+                                                        <span *ngIf="element && element.status">{{element.status}}</span>
+                                                    </mat-cell>
+                                                </ng-container>
+                            
+                            
+                                                <ng-container [matColumnDef]="displayedColumns[1]">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[1]}} </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> 
+                                                        <span class="mobile-label">{{ displayedColumns[1] }}:</span>
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> {{displayedColumns[1]}} </mat-header-cell>
+                                                        <span *ngIf="element && element[displayedColumns[1]].produccion || element && element[displayedColumns[1]].produccion == 0">{{ element[displayedColumns[1]].produccion | number}}</span>
+                                                    </mat-cell>
+                                                </ng-container>
+                                    
+                            
+                                                <ng-container [matColumnDef]="displayedColumns[2]">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> {{ displayedColumns[2] }} </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> 
+                                                        <span class="mobile-label">{{ displayedColumns[2] }}:</span>
+                                                        <span *ngIf="element && element[displayedColumns[2]].produccion || element && element[displayedColumns[2]].produccion == 0">{{ element[displayedColumns[2]].produccion | number}}</span>
+                                                    </mat-cell>
+                                                </ng-container>
+                                    
+                            
+                                                <ng-container [matColumnDef]="displayedColumns[3]">
+                                                    <mat-header-cell *matHeaderCellDef mat-sort-header> {{ displayedColumns[3] }} </mat-header-cell>
+                                                    <mat-cell *matCellDef="let element"> 
+                                                        <span class="mobile-label">{{ displayedColumns[3] }}:</span>
+                                                        <span *ngIf="element && element[displayedColumns[3]].produccion || element && element[displayedColumns[3]].produccion == 0">{{ element[displayedColumns[3]].produccion | number}}</span>
+                                                    </mat-cell>
+                                                </ng-container>
+
+                                                
+                                                <ng-container [matColumnDef]="displayedColumns[4]">
+                                                        <mat-header-cell *matHeaderCellDef mat-sort-header> {{ displayedColumns[4] }} </mat-header-cell>
+                                                        <mat-cell *matCellDef="let element"> 
+                                                            <span class="mobile-label">{{ displayedColumns[4] }}:</span>
+                                                            <span *ngIf="element && element[displayedColumns[4]].produccion || element && element[displayedColumns[4]].produccion == 0">{{ element[displayedColumns[4]].produccion | number}}</span>
+                                                        </mat-cell>
+                                                    </ng-container>
+    
+
+                                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                                <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
+                                    
+                                            </mat-table>
+                                            <div  *ngIf="kpidata && kpidata.length > 0 && kpiTableData != null">
+                                                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                                            </div>                                            
+
+                                        </mat-card-content>
+                                    </mat-card>
+                                </div>
+                            </div> 
+                            
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<div class="row" *ngIf="identity && project">
+    <div class="col">
+        <div class="jfCYPT">
+            <div class="jfCYPT">
+                <div class="didcdr" data-test-selector="profile-worked-with">
+                    <div class="iDwfcE" >
+                        <div class="eCdVoi">
+                            <div class="jNlJOD">
+                                <span>
+                                    Resumen de Producción (3 meses anteriores) y Forecast próximo mes.
+                                </span>
+                            </div>
+                        </div>    
+                        <div>
+                        <div class="container-fluid" *ngIf="isLoadingchart">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="row d-flex justify-content-center">
+                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingchart" ></mat-spinner>
+                                    </div>                        
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class=" dIOqge" *ngIf="!isLoadingchart">
+                            
+                            <div class="jmuLsE" >
+                                <mat-card class="container-fluid">
+                                <mat-card-content>                    
+                                <div class="row d-flex justify-content-center p-2" >
+                                    <br>
+                                    <div class="container-fluid" *ngIf="kpidataforecast && kpidataforecast.length > 0 ">
+                                        <div class="row">
+                                            <div class="col-12">
+                                            <div class="row d-flex justify-content-center">
+                                                <ngx-charts-bar-vertical-2d
+                                                    (window:resize)="onResize($event)"
+                                                    [view]="view"
+                                                    [scheme]="colorScheme"
+                                                    [results]="kpidataforecast"
+                                                    [gradient]="gradient"
+                                                    [xAxis]="showXAxis"
+                                                    [yAxis]="showYAxis"
+                                                    [legend]="showLegend"
+                                                    [showXAxisLabel]="showXAxisLabel"
+                                                    [showYAxisLabel]="showYAxisLabel"
+                                                    [xAxisLabel]="xAxisLabel"
+                                                    [yAxisLabel]="yAxisLabel"
+                                                    >
+                                                </ngx-charts-bar-vertical-2d>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>                                            
+                                </div>
+                                </mat-card-content>
+                                </mat-card>
+                            </div>
+
+                            <div class="jmuLsE" >
+                                <mat-card class="container-fluid">
+                                <mat-card-content>            
+                                <div class="row d-flex justify-content-center p-2" >
+                                    <br>
+                                    <div class="container-fluid" *ngIf="kpidataforecast && kpidataforecast.length > 0 ">
+                                        <div class="row">
+                                            <div class="col-12">
+                                            <div class="row d-flex justify-content-center">
+                                                <ngx-charts-advanced-pie-chart
+                                                    (window:resize)="onResize($event)"
+                                                    [view]="view"
+                                                    [scheme]="colorScheme"
+                                                    [results]="kpidatasingle"
+                                                    [gradient]="gradient"
+                                                    >
+                                                </ngx-charts-advanced-pie-chart>
+                                            </div>
+                                            </div>
+                                        </div>
+                                    </div>                                            
+                                </div>
+                                </mat-card-content>
+                                </mat-card>
+                            </div>
+    
+                        </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

@@ -1,0 +1,76 @@
+#target {
+    height: 400px;
+    width: 600px;
+    padding: 20px;
+    margin: 10px auto;
+    border: 1px solid gray;
+    border-radius: 4px;
+    position: relative;
+}
+.modal {
+    position: absolute;
+}
+.modal-left {
+    margin: 30px;
+}
+.modal-right {
+    margin: 30px;
+    float: right;
+}
+.button {
+    outline: 0;
+    border: none;
+}
+.span {
+    outline: 0;
+    border: none;
+}
+.fxjN {
+    display: flex;
+    flex-direction: column;
+    margin-left: 0px;
+}
+.dctR {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 18px;
+    color: #FFFFFF;
+    line-height: 1.33333em;
+    overflow: hidden;
+    margin: 12px 0px 0px;
+}
+.kyxP {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 14px;
+    color: #FFFFFF;
+    line-height: 1.71429em;
+    overflow: hidden;
+    margin: 0px 0px 12px;    
+}
+.huqV {
+    text-overflow: ellipsis;
+    /*color: rgb(23, 43, 77);*/
+    color: #FFFFFF;
+    font-size: 13px;
+    padding-left: 0px;
+    overflow: hidden;
+}
+._1fH43YlMAnPCr8RI9qH98P {
+    position: relative;
+    overflow: hidden;
+    border-radius: 50%;
+}
+.M_s6agPZfWvz2OH8iRoGk {
+    position: absolute;
+    left: 0;
+    top: 0;
+    border-radius: 50%;
+    text-align: center;
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    color: #fff;
+    font-family: SegoeUI-SemiLight-final,"Segoe UI Semilight",SegoeUI-Regular-final,"Segoe UI","Segoe UI Web (West European)",Segoe,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
+    line-height: 195%;    
+}

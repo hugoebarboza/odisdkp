@@ -1,0 +1,300 @@
+
+
+<div class="app">
+  <mat-toolbar color="primary">
+    <h3 *ngIf="(infocaso$ | async) as infocaso" >Seguimiento Solicitud N°{{ infocaso.ncase }}</h3> 
+    <span class="mat-spacer"></span>
+    <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+      <mat-icon class="mat-icon">close</mat-icon>       
+    </button>
+  </mat-toolbar>
+  <div class="row animated fadeIn" >
+          <mat-progress-bar mode="indeterminate" *ngIf="isLoading"></mat-progress-bar>
+  </div>    
+<br>
+
+  <!--*ngIf="!isLoading"-->  
+    
+  <div class="mat-dialog-content" *ngIf="!isLoading">
+    <div class="animated fadeIn row" *ngIf="(infocaso$| async) as infocaso">
+      <div class="col-md-8">
+        <div class="example-full-width" style="text-align:right;">
+          <!--{{infocaso.depto_id.name}} / {{infocaso.category_id.name}} / {{infocaso.typeselect.name}}-->
+            <span><strong>{{infocaso.depto_desc}} / {{infocaso.type_desc}} / {{infocaso.category_desc}} </strong></span>
+        </div>
+          
+        <h3 class="titulo">{{infocaso.asunto}}</h3>
+        
+        <div class="row float-right row-custom"> <!--float-right-->
+          <!--
+          <button mat-icon-button color="primary" matTooltip="Adjuntar archivo">
+              <mat-icon>attachment</mat-icon>   
+          </button>-->
+          
+          <div *ngFor="let documentos of documentos$ | async">
+
+              <a mat-icon-button href="{{documentos.url}}" target="_blank" matTooltip="{{documentos.nombre}}" color="accent" *ngIf="documentos.type == 'image/png' || documentos.type == 'image/jpg'">
+                  <mat-icon aria-label="launch">image</mat-icon>
+              </a> 
+
+              <a mat-icon-button href="{{documentos.url}}" target="_blank" matTooltip="{{documentos.nombre}}" color="accent"*ngIf="documentos.type == 'video/mp4'">
+                <mat-icon aria-label="launch">movie</mat-icon>
+              </a> 
+
+              <a mat-icon-button href="{{documentos.url}}" target="_blank" matTooltip="{{documentos.nombre}}" color="accent"*ngIf="documentos.type == 'application/x-zip-compressed' || documentos.type == 'application/x-rar-compressed'">
+                <mat-icon aria-label="launch">work</mat-icon>
+              </a> 
+
+              <a mat-icon-button href="{{documentos.url}}" target="_blank" matTooltip="{{documentos.nombre}}" color="accent" *ngIf="documentos.type == 'application/pdf' || documentos.type == 'application/msword' || documentos.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || documentos.type == 'application/vnd.ms-excel' || documentos.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+                <mat-icon aria-label="launch">insert_drive_file</mat-icon>
+              </a>
+
+          </div>
+        </div>
+        
+        <h2 class="jeEmY">Descripción</h2>
+        <p>{{infocaso.description}}</p>
+        <mat-divider></mat-divider>
+
+        <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar">
+
+            <h2 class="jeEmY">Responder</h2>
+            <mat-form-field appearance="outline" class="example-full-width mat-status">
+              <textarea matInput #comentario placeholder="Añadir una respuesta..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="356" formControlName="comentario"   class="form-control" required></textarea>
+              <mat-hint align="end">{{comentario.value.length}} / 356</mat-hint>
+            </mat-form-field>
+
+            <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
+              <mat-icon>attachment</mat-icon>
+              <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >              
+              <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 3, Max. 3 </strong></span>
+            </button>
+            
+            <div *ngIf="archivos" >
+              <mat-chip-list>
+                <mat-chip *ngFor="let forFile of archivos; let i = index;" 
+                  color="primary"
+                  [removable]="true"
+                  (removed)="removeFile(i)">
+                  <span>{{ forFile.archivo.name }}</span>
+                  <span *ngIf="forFile.progreso &&  forFile.progreso > 0" style="margin-left: 6px; margin-right: 6px;"><strong>{{forFile.progreso}}%</strong></span>
+                  <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
+                  <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
+                  <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
+                
+                  <div class="progress container-fluid">
+                    <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
+                  </div>
+                </mat-chip>
+              </mat-chip-list>
+            </div>
+            
+            <br>
+
+            <div class="row row-custom">
+                
+                <button mat-raised-button color="primary" class="margin-left" [disabled]="formComentar.invalid" (click)="addComentario()">
+                    Guardar           
+                </button>
+
+        
+                
+            </div>
+
+        </form>
+
+        <br>
+        <mat-tab-group animationDuration="0ms" class="mat-tab-style">
+          <mat-tab label="Respuestas">
+            <br>
+            <cdk-virtual-scroll-viewport itemSize="60" class="list-container list-group" *ngIf="comentarios$ !== null">
+            <!--<div style="height: 250px; overflow: auto;" *ngIf="comentarios$">-->
+              <div *cdkVirtualFor="let comentarios of comentarios$ | async">
+                
+                <div class="fOqogj">
+                  <div class="SZsdL">
+                    <div style="display: inline-block; position: relative; outline: 0px; height: 22px; width: 22px;">
+                      <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                          <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                      </span>
+                    </div>
+                  </div>
+                  <div class="fLcKLS">  
+                      <span class="sc-fdcRnX jmTFIN">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
+                      ha respondido hace
+                      <span class="sc-fdcRnX jmTFIN">{{comentarios.create_at | countTime}}</span>
+                  </div>
+                </div>
+                <div class="fOqogj" style="padding-left: 30px">
+                  → {{comentarios.comentario}}
+                </div>
+        
+                <div class="fOqogj" style="padding-left: 30px">
+                  <div class="row float-right row-custom" *ngIf="comentarios.adjuntos">
+                    
+                    <div *ngFor="let adjuntos of comentarios.adjuntos">
+              
+                        <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'image/png' || adjuntos.type == 'image/jpg' || adjuntos.type == 'image/jpeg'">
+                            <mat-icon aria-label="launch">image</mat-icon>
+                        </a>
+              
+                        <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent"*ngIf="adjuntos.type == 'application/x-zip-compressed' || adjuntos.type == 'application/x-rar-compressed'">
+                          <mat-icon aria-label="launch">work</mat-icon>
+                        </a> 
+              
+                        <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'application/pdf' || adjuntos.type == 'application/msword' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || adjuntos.type == 'application/vnd.ms-excel' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+                          <mat-icon aria-label="launch">insert_drive_file</mat-icon>
+                        </a>
+              
+                    </div>
+                    
+                  </div>
+                </div>
+        
+                <hr width="96%"  noshade="noshade" size="4px" style="color: #303f9f;"/>
+                
+              </div>
+            <!--</div>-->
+            </cdk-virtual-scroll-viewport>
+          </mat-tab>
+          <mat-tab label="Actividad">
+              <br>
+              <cdk-virtual-scroll-viewport itemSize="60" class="list-container list-group" *ngIf="actividad$ !== null">
+              <!--<div style="height: 250px; overflow: auto;" *ngIf="actividad$">-->
+                <div *cdkVirtualFor="let actividad of actividad$ | async">
+                  
+                  <div class="fOqogj">
+                    <div class="SZsdL">
+                      <div style="display: inline-block; position: relative; outline: 0px; height: 22px; width: 22px;">
+                        <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                            <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                        </span>
+                      </div>
+                    </div>
+                    <div class="fLcKLS">  
+                        <span class="sc-fdcRnX jmTFIN">{{actividad.usercomment.name}} {{actividad.usercomment.surname}}</span>
+                        ha comentado hace
+                        <span class="sc-fdcRnX jmTFIN">{{actividad.create_at | countTime}}</span>
+                    </div>
+                  </div>
+                  <div class="fOqogj" style="padding-left: 30px">
+                    → {{actividad.comentario}}
+                  </div>
+        
+                  <hr width="96%"  noshade="noshade" size="4px" style="color: #303f9f;"/>
+                  
+                </div>
+              <!--</div>-->
+              </cdk-virtual-scroll-viewport>
+          </mat-tab>
+        </mat-tab-group>
+        
+
+        <!--<h2 class="jeEmY" *ngIf="comentarios$ !== null">Comentarios</h2>-->
+
+      </div>
+
+      <div class="col-md-4 order-first order-md-last">
+
+          <h2 class="jeEmY">Nivel de Urgencia</h2>
+          <div class="fOqogj">
+              <div class="SZsdL">
+                <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                  <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                    <span role="img" style="background-color: transparent; background-image: url('../../assets/icons/level-512x512.png'); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                  </span>
+                </div>
+              </div>
+              <div class="fLcKLS">  
+                  <span [ngClass]="infocaso.important == 'Bajo' ? 'important-bajo' : infocaso.important == 'Medio' ? 'important-medio' : infocaso.important == 'Alto' ? 'important-alto': infocaso.important == 'Urgente' ? 'important-urgente'  : 'important-default'">
+                      {{infocaso.important}}
+                  </span>
+              </div>
+            </div>
+
+          <h2 class="jeEmY">Estatus</h2>
+          <ng-select  (change)="ngChangeEstatus($event)"
+                      [items]="infocaso.supportstatus"
+                      bindLabel="name"
+                      bindValue="_iddoc"
+                      [(ngModel)]="infocaso.status_id">
+          </ng-select>
+
+          <h2 class="jeEmY">Informador</h2>
+          <div class="fOqogj">
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS">  {{infocaso.create_to.name}} {{infocaso.create_to.surname}}
+            </div>
+          </div>
+
+          <h2 class="jeEmY" *ngIf="arrayResponsables && arrayResponsables.length > 0">Responsable(s)</h2>
+          <div class="fOqogj" *ngFor="let arrayresp of arrayResponsables">
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS">  {{arrayresp.email}}
+            </div>
+          </div>
+
+          <!----
+          <h2 class="jeEmY" *ngIf="arrayEtiquetadosDefault && arrayEtiquetadosDefault.length > 0">Etiquetados
+          </h2>
+          <div class="fOqogj" *ngFor="let etiq of arrayEtiquetadosDefault">
+            <div class="SZsdL">
+              <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                </span>
+              </div>
+            </div>
+            <div class="fLcKLS">  {{etiq.email}}
+            </div>
+          </div>
+
+          <h2 class="jeEmY">Agregar Etiquetado
+            <mat-slide-toggle
+                style="margin-left: 20px;"
+                color="warn"
+                [checked]="checkedToggle"
+                (change)="onChangeToggle($event)">
+            </mat-slide-toggle>
+          </h2>
+          <ng-select *ngIf="checkedToggle"
+                    name="destinatario"
+                    [items]="users$ | async"
+                    [multiple]="true"
+                    [clearable]="false" 
+                    [closeOnSelect]="true"
+                    [loading]="userLoading"
+                    [typeahead]="userinput"
+                    [virtualScroll]="true"
+                    bindLabel="email"
+                    [(ngModel)]="arrayEtiquetados"
+                    class="example-full-width"
+                    >
+                </ng-select>
+                
+                <div class="row float-right row-custom"  *ngIf="arrayEtiquetadosDefault.length < arrayEtiquetados.length" style="margin-top: 6px;">
+                    <button mat-stroked-button color="warn"  (click)="etiquetadosChanged(0);"><mat-icon>close</mat-icon></button>
+                    <button mat-stroked-button color="primary" (click)="etiquetadosChanged(1);"><mat-icon>check</mat-icon></button>
+                </div>
+              -->
+              <span class="smallfont" style="margin-bottom: 20px;">Fecha de creación {{infocaso.create_at}}</span>
+          
+          <!--{{infocaso.to | json}}-->
+      </div>
+    
+    </div>
+  </div>
+</div>
+

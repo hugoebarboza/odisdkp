@@ -1,0 +1,24 @@
+.custom-card {
+    background-color: #f2f4f7;
+}
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    border: 1px;
+    width: 50%;
+  }
+  
+  td, th {
+    border: 0px solid #dddddd;
+    text-align: left;
+    padding: 0px;
+  }
+  
+  tr:nth-child(even) {
+    background-color: #dddddd;
+  }
+
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+}

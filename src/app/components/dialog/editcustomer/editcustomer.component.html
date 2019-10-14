@@ -1,0 +1,310 @@
+            <mat-toolbar color="primary">
+                    <h3>{{title}} Proyecto: {{this.project}}</h3>            
+     <span class="mat-spacer"></span>
+     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+     <mat-icon class="mat-icon">close</mat-icon>       
+     </button>
+
+            </mat-toolbar>
+<P></P>
+
+<div class="app animated fadeIn" >
+<form ngNativeValidate name="customerForm" #customerForm="ngForm" class="col-md-12"  id="customerForm">
+<mat-accordion class="mat-dialog-content">
+  <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Identificación del Cliente
+      </mat-panel-title>
+      <mat-panel-description>
+        Ingrese datos que identifican al cliente 
+        <mat-icon>account_circle</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+<p>
+    <mat-form-field appearance="legacy">      
+      <input matInput #input type="text" placeholder="Num. Cliente (CC, VIN)" maxlength="70" name="cc_number" [(ngModel)]="data.cc_number" class="form-control" [matAutocomplete]="auto" (keyup)="searchCustomer(input.value)" required>
+      <mat-hint align="end">{{input.value?.length || 0}}/70</mat-hint>
+        <mat-error *ngIf="customerForm.invalid">{{getErrorMessage()}}</mat-error>
+        <mat-autocomplete #auto="matAutocomplete" >
+          <mat-option *ngFor="let result of results" [value]="result.cc_number" >        
+            <span>{{result.cc_number}}</span>       
+          </mat-option>
+        </mat-autocomplete>
+
+    </mat-form-field>
+</p>
+<div class="example-container">
+    <mat-form-field appearance="legacy">
+      <input matInput type="text" placeholder="Descripcion Cliente" name="nombrecc" [(ngModel)]="data.nombrecc" class="form-control" maxlength="177">
+    </mat-form-field>
+  </div>
+
+    <mat-action-row>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Dirección
+      </mat-panel-title>
+      <mat-panel-description>
+        Ingrese dirección del cliente 
+        <mat-icon>place</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+  <div class="form">
+    <mat-form-field appearance="legacy" class="margin">
+      <input matInput type="text" placeholder="Ruta" name="ruta" [(ngModel)]="data.ruta" class="form-control" >
+    </mat-form-field>
+
+    <mat-form-field appearance="legacy" class="margin">
+      <input matInput type="text" placeholder="Calle" name="calle" [(ngModel)]="data.calle" class="form-control" >
+    </mat-form-field>
+
+    <mat-form-field appearance="legacy" class="margin">
+      <input matInput type="text" placeholder="Numero" name="numero" [(ngModel)]="data.numero" class="form-control" >
+    </mat-form-field>
+
+    <mat-form-field appearance="legacy" class="margin">
+      <input matInput type="text" placeholder="Block" name="block" [(ngModel)]="data.block" class="form-control" >
+    </mat-form-field>
+
+    <mat-form-field appearance="legacy" class="margin">
+      <input matInput type="text" placeholder="Dpto" name="depto" [(ngModel)]="data.depto" class="form-control" >
+    </mat-form-field>
+  </div>
+
+  <div class="form" appearance="legacy" class="margin">
+    <mat-form-field>
+     <mat-select class="form-control" placeholder="Region" [(ngModel)]="data.id_region" name="id_region"  (selectionChange)="onSelectRegion(data.id_region)">
+      <mat-option [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let regiones of region" [value]="regiones.id">
+      {{regiones.region_name}}
+    </mat-option>
+    </mat-select>      
+    </mat-form-field>
+
+
+    <mat-form-field appearance="legacy" class="margin">
+     <mat-select class="form-control" placeholder="Provincia" [(ngModel)]="data.id_provincia" name="id_provincia"  (selectionChange)="onSelectProvincia(data.id_provincia)">
+      <mat-option *ngIf='data.id_region == 0'  [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let provincia of resultsprovincias" [value]="provincia.id">
+      {{provincia.province_name}}
+    </mat-option>
+
+    </mat-select>      
+    </mat-form-field>
+
+
+
+    <mat-form-field appearance="legacy" class="margin">
+     <mat-select class="form-control" placeholder="Comuna" [(ngModel)]="data.id_comuna" name="id_comuna"  (selectionChange)="onSelectComuna($event)">
+      <mat-option *ngIf='data.id_provincia == 0' [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let comuna of resultscomunas" [value]="comuna.id">
+      {{comuna.commune_name}}
+    </mat-option>
+
+    </mat-select>      
+    </mat-form-field>
+</div>
+
+<div class="form">
+    <mat-form-field class="margin">
+      <input matInput type="text" placeholder="Latitud" name="latitud" [(ngModel)]="data.latitud" class="form-control" >
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+      <input matInput type="text" placeholder="Longitud" name="longitud" [(ngModel)]="data.longitud" class="form-control" >
+    </mat-form-field>
+  </div>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+
+
+  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Tipo de Cliente
+      </mat-panel-title>
+      <mat-panel-description>
+        Ingrese datos del tipo del cliente 
+        <mat-icon>group</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+  <div class="form" *ngIf="project_type == 0">
+    <mat-form-field class="margin">
+      <input matInput type="text" placeholder="Medidor" name="medidor" [(ngModel)]="data.medidor" class="form-control" >
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+      <input matInput type="text" placeholder="Modelo Medidor" name="modelo_medidor" [(ngModel)]="data.modelo_medidor" class="form-control" >
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+      <input matInput type="number" placeholder="Lectura" name="lectura" [(ngModel)]="data.lectura" class="form-control" >
+    </mat-form-field>
+
+
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Tarifa" [(ngModel)]="data.id_tarifa" name="id_tarifa" >
+     <mat-option [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let tarifa of tarifas" [value]="tarifa.id">
+      {{tarifa.descripcion}}
+    </mat-option>
+    </mat-select>      
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Constante" [(ngModel)]="data.id_constante" name="id_constante" >
+     <mat-option [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let constante of constantes" [value]="constante.id">
+      {{constante.descripcion}}
+    </mat-option>
+    </mat-select>      
+    </mat-form-field>
+</div>
+
+<div class="form" *ngIf="project_type == 0">
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Giro" [(ngModel)]="data.id_giro" name="id_giro" >
+     <mat-option  [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let giro of giros" [value]="giro.id">
+      {{giro.descripcion}}
+    </mat-option>
+    </mat-select>      
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Sector" [(ngModel)]="data.id_sector" name="id_sector" >
+     <mat-option [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let sector of sectores" [value]="sector.id">
+      {{sector.descripcion}}
+    </mat-option>
+    </mat-select>      
+    </mat-form-field>
+
+
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Zona" [(ngModel)]="data.id_zona" name="id_zona" >
+     <mat-option [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let zona of zonas" [value]="zona.id">
+      {{zona.descripcion}}
+    </mat-option>
+    </mat-select>
+    </mat-form-field>
+
+
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Mercado" [(ngModel)]="data.id_mercado" name="id_mercado" >
+     <mat-option [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let mercado of mercados" [value]="mercado.id">
+      {{mercado.descripcion}}
+    </mat-option>
+    </mat-select>
+    </mat-form-field>
+  </div>
+
+
+<div class="form" *ngIf="project_type == 1">
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Marca Vehículo" [(ngModel)]="data.marca_id" name="marca_id" (selectionChange)="onSelectMarca(data.marca_id)">
+     <mat-option  [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let marca of marcas" [value]="marca.id">
+      {{marca.title}}
+    </mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Modelo Vehículo" [(ngModel)]="data.modelo_id" name="modelo_id" >
+     <mat-option  [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let modelo of modelos" [value]="modelo.id">
+      {{modelo.description}}
+    </mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+     <mat-select class="form-control" placeholder="Color Vehículo" [(ngModel)]="data.color_id" name="color_id" >
+     <mat-option  [value]=0>No informa</mat-option>
+     <mat-option *ngFor="let color of colors" [value]="color.id">
+      {{color.title}}
+    </mat-option>
+    </mat-select>
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+      <input matInput type="text" placeholder="Embarque Vehículo" name="embarque_id" [(ngModel)]="data.embarque_id" class="form-control" >
+    </mat-form-field>
+</div>
+
+
+
+<div class="form" *ngIf="project_type == 1">
+    <mat-form-field class="margin">
+      <input matInput type="text" placeholder="Patio Vehículo" name="patio" [(ngModel)]="data.patio" class="form-control" >
+    </mat-form-field>
+
+    <mat-form-field class="margin">
+      <input matInput type="text" placeholder="Espiga Vehículo" name="espiga" [(ngModel)]="data.espiga" class="form-control" >
+    </mat-form-field>
+
+
+    <mat-form-field class="margin">
+      <input matInput type="text" placeholder="Posición Vehículo" name="posicion" [(ngModel)]="data.posicion" class="form-control" >
+    </mat-form-field>
+
+</div>
+
+
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+      <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+
+
+
+
+  <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)" hideToggle>
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        Observación
+      </mat-panel-title>
+      <mat-panel-description>
+        Ingrese observacion del cliente
+        <mat-icon>message</mat-icon>
+      </mat-panel-description>
+    </mat-expansion-panel-header>
+
+<div class="example-container">
+    <mat-form-field>
+      <textarea matInput placeholder="Observación" type="text" name="observacion" [(ngModel)]="data.observacion" class="form-control" maxlength="177"></textarea>
+    </mat-form-field>   
+  </div>
+
+    <mat-action-row>
+      <button mat-button color="warn" (click)="prevStep()">Anterior</button>      
+    </mat-action-row>
+  </mat-expansion-panel>
+</mat-accordion>
+</form>
+</div>
+
+<br>
+<div mat-dialog-actions>
+  <button mat-button color="primary" mat-raised-button  [(disabled)]="!customerForm.form.valid" (click)="confirmUpdate(customerForm)">Actualizar</button> 
+  <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button >Cancelar</button>
+</div>
+

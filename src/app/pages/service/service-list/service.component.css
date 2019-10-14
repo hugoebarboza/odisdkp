@@ -1,0 +1,96 @@
+.circle:before {
+  content: ' \25CF';
+  font-size: 20px;
+}
+.example-rate-limit-reached {
+  color: #980000;
+  background: #f2f4f7;
+  max-width: 100%;
+  text-align: center;
+}
+.row__email {
+  width: 100px;
+}
+
+.row__progressbar {
+  width: 100px;
+}
+.mat-card-header-text {
+  padding-top: 7px;
+  width: 100%;
+}
+
+.custom-card {
+  background-color: #f2f4f7;
+}
+.material-icons.md-14 { font-size: 14px; }
+.material-icons.md-20 { font-size: 20px; }
+.material-icons.md-20-color { font-size: 20px; color: #FB8C00;}
+.portalHost {
+  border: 0px solid red;
+  height: 100%;
+}
+.portalHostSplit {
+border: 0px solid red;
+height: 700px;
+}
+.font-small{
+  cursor: pointer;
+}
+.input-group-text {
+  width: 108px;
+}
+
+.mobile-label {
+  display: none;
+}
+
+@media(max-width: 600px) {
+  .mobile-label {
+    width: 95px;
+    display: inline-block;
+    font-weight: bold;
+    margin-right: 5px;    
+  }
+
+  .mat-cell:first-of-type {
+      padding-left: 0px; 
+  }
+
+  .mat-header-row {
+      display: none;
+  }
+
+  .mat-row { 
+      flex-direction: column;
+      align-items: start;
+      padding: 8px 24px;
+  }
+}
+
+.width-40percentage{
+  width: 60%;
+}
+
+.active {
+  border: 1px solid #0B3356;
+  background-color: #f2f4f7; 
+  color: #000000;
+}
+
+.mat-row:hover {
+  background-color: #f2f4f7;
+  cursor: pointer;
+}
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}
+.mat-button {
+  outline: 0;
+  border: none;
+}
+.mat-menu-item {
+  outline: 0;
+  border: none;
+}

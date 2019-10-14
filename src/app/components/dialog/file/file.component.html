@@ -1,0 +1,39 @@
+<mat-toolbar role="heading" color="primary">
+     <h3>{{title}} </h3>
+     <span class="mat-spacer"></span>
+     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+     <mat-icon class="mat-icon">close</mat-icon>       
+     </button>
+</mat-toolbar>
+
+
+<div class="main-container">
+  <mat-card [ngStyle]="{'padding':'0px'}" >
+  <mat-card-header [ngClass]="{'custom-card':true}">
+  <mat-tab-group  
+   [color]="colorToggle" [backgroundColor]="backgroundColorToggle" 
+   [selectedIndex]="selected.value"
+   (selectedIndexChange)="selected.setValue($event)"
+   animationDuration="0ms">
+    
+    <mat-tab label="Documentos">
+    </mat-tab>
+    <mat-tab label="Almacenar"> 
+    </mat-tab>
+  </mat-tab-group>
+  </mat-card-header>
+
+  <mat-card-content style="max-width:777px;max-height:650px; " *ngIf="selected.value==0">
+         <app-filelist [projectid]="project_id" [serviceid]="service_id" [orderid]="order_id"></app-filelist>
+  </mat-card-content>
+
+  <mat-card-content style="max-width:777px;max-height:650px; " *ngIf="selected.value==1">
+          <app-carga [projectid]="project_id" [serviceid]="service_id" [orderid]="order_id"></app-carga>
+  </mat-card-content>
+
+</mat-card>
+</div>
+
+
+
+

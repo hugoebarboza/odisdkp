@@ -1,0 +1,306 @@
+<meta name="Description" content="Support">
+<!--CONTENT-->
+<div class="loading" *ngIf="!identity">
+    <app-loading></app-loading>  
+</div>
+        
+<div *ngIf="identity">
+
+    <div id="page-content-wrapper" >
+        
+        <div class="container-fluid p-2">
+                <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                        <h1 class="h4">{{title}}</h1>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <div class="btn-group mr-2">
+                            </div>
+                        </div>
+                        <div class="p-2 flex-shrink-1 " *ngIf="identity && identity.role === 8">
+                            <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'" >
+                            <i class="material-icons"
+                              matTooltip="Configuración de soporte">settings</i>
+                            </a>
+                        </div>
+                </div>            
+            <br>
+
+            <div class="row animated fadeIn" *ngIf="!isLoading">
+                <div class="col-sm-12">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div>
+            </div>
+                          
+            <div class="row animated fadeIn" >
+                
+                <div class="col-12">
+    
+                    <div class="card">
+    
+                        <div class="card-body">
+    
+                            <div class="row">
+                                <div class="col-10" style="display: inline-flex;"> 
+                                    <h3 class="card-title"><mat-icon>list_alt</mat-icon> Solicitudes ({{datacount}})</h3> 
+                                    <div>
+                                        <button *ngIf="tiempopromedio != null" type="button" class="btn btn-default btn-sm aui-button" matTooltip="Tiempo promedio de atención mensual" style="margin-top: 8px;">  Tiempo de atención {{tiempopromedio}}</button>
+                                    </div>
+                                    <!--<div *ngFor="let blogPost of joined$ | async" > <p>{{blogPost}}</p><br><p>{{blogPost | json}}</p></div>-->
+                                </div>
+                                <div class="col-2">
+                                    <button type="button" class="btn btn-primary btn-sm" (click)="addNew()" *ngIf="_userService.isRole(7)" style="float: right;"><mat-icon class="material-icons md-16" style="vertical-align:middle;">add_circle_outline</mat-icon>  Nueva Solicitud</button>                       
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <mat-radio-group (change)="getdatacases()" [(ngModel)]="radioselect" *ngIf="radioOpciones">
+                                        <mat-radio-button class="marginleft" *ngFor="let opciones of radioOpciones;" [value]="opciones.value">{{opciones.descripcion}}</mat-radio-button>
+                                    </mat-radio-group>
+                                </div>
+                            </div>
+    
+                            <div class="row">
+
+                                <div class="col-md-3" *ngIf="tagPais$">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">País</span>
+                                        </div>
+                                        <ng-select  [items]="tagPais$ | async"
+                                                    [clearable]="false" 
+                                                    bindLabel="name"
+                                                    bindValue="id"
+                                                    (change)="getDepartamentos($event.id, true)"
+                                                    class="example-full-width"
+                                                    name="idPais" 
+                                                    [(ngModel)]="idPais"
+                                                    class="width-40percentage">
+                                        </ng-select>
+                                    </div>            
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Mes</span>
+                                        </div>
+                                        <ng-select  
+                                            [items]="allMeses"
+                                            [clearable]="false"
+                                            bindLabel="mes"
+                                            bindValue="value"
+                                            [(ngModel)]="selectedMes"
+                                            (change)="getdatacases()"
+                                            class="width-40percentage">
+                                        </ng-select>
+                                    </div>            
+                                </div>
+
+                                <div class="col-md-3"  *ngIf="departamentos && departamentos.length > 0  && radioselect === 3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Departamento</span>
+                                        </div>
+                                        <ng-select  
+                                            [items]="departamentos"
+                                            [clearable]="false"
+                                            bindLabel="name"
+                                            bindValue="id"
+                                            [(ngModel)]="selectedDepto"
+                                            (change)="getdatacases()"
+                                            class="width-40percentage">
+                                        </ng-select>
+                                    </div>            
+                                </div>
+
+                                <div class="col-md-3"  *ngIf="allDepartamentos.length > 1 && radioselect !== 3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Departamento</span>
+                                        </div>
+                                        <ng-select  
+                                            [items]="allDepartamentos"
+                                            [clearable]="false"
+                                            bindLabel="name"
+                                            bindValue="id"
+                                            [(ngModel)]="selectedDeptoAll"
+                                            (change)="getdatacases()"
+                                            class="width-40percentage">
+                                        </ng-select>
+                                    </div>            
+                                </div>
+
+                                <div class="col-md-3">
+                                    <div class="input-group input-group-sm mb-3">
+                                        <div class="input-group-prepend">
+                                            <span class="input-group-text">Busqueda</span>
+                                        </div>
+                                        <input type="text"  (keyup)="applyFilter($event.target.value)" class="width-40percentage">
+                                    </div>            
+                                </div>
+    
+                            </div>
+                            
+                            <div class="example-rate-limit-reached" *ngIf="joined$ === null && datacount === 0 && isLoading">
+                                No se encontraron registros que coincidan con su búsqueda.
+                            <button mat-button color="primary" (click)="getdatacases()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                                
+                            </div>
+
+                            <mat-table #table [dataSource]="joined$" matSort [class.isMobile]="isMobile">
+    
+                                <!--- Note that these columns can be defined in any order.
+                                        The actual rendered columns are set as a property on the row definition" -->
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="ncase">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> N° de Solicitud </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">N° de Solicitud:</span>
+                                        <span>{{element.ncase}}</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="asunto">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Asunto </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">Asunto:</span>
+                                        <span>{{element.asunto}}</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="departments">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Departamento </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">Departamento:</span>
+                                        <span>{{element.depto_desc}}</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="supporttype">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">Tipo:</span>
+                                        <span>{{element.type_desc}}</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="supportcategory">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Categoría </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">Categoría:</span>
+                                        <span>{{element.category_desc}}</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="users">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Creado por </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">Creado por:</span>
+                                        <span>{{element.users.name}} {{element.users.surname}}</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="create_at">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Creado el </mat-header-cell>
+                                    <mat-cell *matCellDef="let element" matTooltip="Creado hace {{element.create_at | countTime}}"> 
+                                        <span class="mobile-label">Creado el:</span>
+                                        <span>{{element.create_at}}</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="countTime">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> T. Atención </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">T. Atención:</span>
+                                        <span><app-viewordertimespent [timefrom]="element.create_at"  [timeuntil]="element.update_at"></app-viewordertimespent> </span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="update_at">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Editado el </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">Editado el:</span>
+                                        <span>{{element.update_at}}</span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="supportstatus">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">Estatus:</span>
+                                        <mat-chip-list>
+                                            <mat-chip *ngIf="element.label==1" selected color="warn">
+                                                {{element.status_desc}} 
+                                            </mat-chip>
+                                    
+                                            <mat-chip *ngIf="element.label==2" selected color="primary">
+                                                {{element.status_desc}} 
+                                            </mat-chip>
+                                    
+                                            <mat-chip *ngIf="element.label==3" selected color="accent">
+                                                {{element.status_desc}} 
+                                            </mat-chip>
+                                        </mat-chip-list>  
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="important">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header> Urgencia </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <span class="mobile-label">Urgencia:</span>
+                                        <span [ngClass]="element.important == 'Bajo' ? 'important-bajo' : element.important == 'Medio' ? 'important-medio' : element.important == 'Alto' ? 'important-alto': element.important == 'Urgente' ? 'important-urgente'  : 'important-default'">
+                                                {{element.important}}
+                                        </span>
+                                    </mat-cell>
+                                </ng-container>
+
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="accions">
+                                    <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> 
+                                        <div class="row" align="right">
+                                            <div class="col-md-12">
+                                                    <button mat-icon-button color="warn" matTooltip="Eliminar Solicitud." (click)="deleteItem(element.id)" *ngIf="userFirebase.uid === element.create_to || identity.role === 8"> <!-- -->
+                                                        <mat-icon aria-label="Delete">delete</mat-icon>
+                                                    </button>
+                                                    <button mat-icon-button color="primary"  (click)="abrirCaso(element)" matTooltip="Abrir Solicitud.">
+                                                        <mat-icon aria-label="launch">launch</mat-icon>
+                                                    </button>
+                                            </div>
+                                        </div>
+                                    </mat-cell>
+                                </ng-container>
+                                
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let element; columns: displayedColumns;"></mat-row>
+    
+                            </mat-table>
+                            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    
+                        </div>
+    
+                    </div>
+    
+                </div>
+    
+            </div>
+        
+        </div>
+
+        <br>
+        <br>
+  
+
+    </div>
+        
+</div>

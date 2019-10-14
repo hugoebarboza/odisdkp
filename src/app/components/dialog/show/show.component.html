@@ -1,0 +1,476 @@
+<meta name="Description" content="Component">
+<div class="app">
+
+  <mat-toolbar role="heading" color="primary">
+     <!---<h3>{{title}} </h3>-->
+     <span class="mat-spacer"></span>
+     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+     <mat-icon class="mat-icon">close</mat-icon>       
+     </button>
+</mat-toolbar>
+<p></p>  
+
+  
+  <div class="example-loading-shade" *ngIf="loading">
+    <app-loading *ngIf="loading"></app-loading>  
+  </div>
+
+<div id="content" #content *ngIf="!loading" class="mat-dialog-content" disableClose="true">
+    <table class="table table-bordered" width="100%" cellpadding="7">
+      <tr>
+        <th>
+        
+        <div >
+          <table id="t01" width="100%">
+            <tr >
+              <td width="90%" ><h1><strong>ORDEN DE TRABAJO</strong></h1></td>
+              <td><img src="../../../assets/img/logoocaorden.png" width="162"></td>
+            </tr>
+          </table>
+          <p></p>
+
+          <table id="t02" width="100%">
+            <tr>
+              <th ></th>    
+              <th ><p class="big"><strong>N.Documento: </strong></p></th>
+              <th><p class="small">{{order[0]['ndocumento']}}<p></th>
+            </tr>
+          </table>
+
+          <table id="t03" width="100%">
+            <tr >
+              <td>PROYECTO:</td>
+              <td>EMPRESA:</td>
+              <td>PAÍS:</td>
+            </tr>
+            <tr>
+              <td>{{data.project_name}} </td>
+              <td>{{order[0]['company_name']}}</td>
+              <td>{{order[0]['country_name']}}</td>
+            </tr>
+          </table>
+          <p></p>
+
+        <table id="t03" width="100%">
+          <tr>
+            <th>DATOS DE LA ORDEN</th>
+          </tr>
+        </table>
+
+          <table id="t04" width="100%">
+            <tr>
+              <td>N. ORDEN:</td>
+              <td>CREADA POR:</td>
+              <td>CREADA EL:</td>
+              <td>ASIGNADA A:</td>                          
+            </tr>
+            <tr>
+              <td>{{data.order_number}}</td>
+              <td><mat-icon  class="material-icons md-dark md-18">person</mat-icon> {{data.usercreate}}</td>
+              <td><mat-icon  class="material-icons md-dark md-18">date_range</mat-icon> {{data.create_at}}</td>
+              <td><mat-icon  class="material-icons md-dark md-18" *ngIf="order[0]['userassigned']">person</mat-icon> {{order[0]['userassigned']}}</td>
+            </tr>
+          </table>
+          <p></p>
+          <p></p>
+
+
+        <table id="t03" width="100%">
+          <tr>
+            <th>DATOS DEL SERVICIO</th>
+          </tr>
+        </table>
+
+        <table id="t04" width="100%">
+          <tr>
+            <td>SERVICIO:</td>
+            <td>TIPO SERVICIO:</td>
+            <td>CANTIDAD:</td>
+            <td>ESTATUS:</td>            
+          </tr>
+          <tr>
+            <td>{{data.service_name}}</td>
+            <td>{{data.servicetype}}</td>
+            <td>1</td>
+            <td>{{data.estatus}}</td>            
+          </tr>
+        </table>
+
+        <table id="t05" width="100%">
+          <tr>
+            <th width="20%"><p class="big"><strong>Descripción:</strong></p></th>    
+            <th width="80%">{{order[0]['ddocumento']}}</th>
+          </tr>
+        </table>
+        <p></p>
+        <p></p>
+
+        <table id="t03" width="100%">
+          <tr>
+            <th>DATOS DEL CLIENTE</th>
+          </tr>
+        </table>
+        <table id="t04" width="100%">
+          <tr>
+            <td>N. CLIENTE:</td>
+            <td>REGION:</td>
+            <td>PROVINCIA:</td>
+            <td>COMUNA:</td>
+          </tr>
+          <tr>
+            <td>{{data.cc_number}}</td>
+            <td>{{data.region}}</td>
+            <td>{{data.provincia}}</td>
+            <td>{{data.comuna}}</td>
+          </tr>
+        </table>
+        <table id="t04" width="100%">
+          <tr>
+            <td><strong>Cliente:</strong> {{order[0]['client_name']}}</td>
+          </tr>
+        </table>
+
+        <table id="t05" width="100%">
+          <tr>
+            <th width="20%"><p class="big"><strong>Ubicación:</strong></p></th>    
+            <th width="80%"><mat-icon  class="material-icons md-dark md-18">place</mat-icon> {{data.direccion}}</th>
+          </tr>
+        </table>
+        </div>
+
+
+
+        <div >
+        <table id="t03" width="100%">
+          <tr>
+            <th>DETALLES DE LA ORDEN</th>
+          </tr>
+        </table>
+
+        <table id="t04" width="100%">
+          <tr>
+            <td>FECHA SOLICITUD:</td>
+            <td>FECHA REQUERIDA:</td>
+            <td>FECHA VENCIMIENTO:</td>            
+            <td>EDITADA POR:</td>
+            <td>EDITADA EL:</td>            
+          </tr>
+          <tr>
+            <td><mat-icon  class="material-icons md-dark md-18" *ngIf="data.order_date">date_range</mat-icon> {{data.order_date}}</td>
+            <td><mat-icon  class="material-icons md-dark md-18" *ngIf="data.required_date">date_range</mat-icon> {{data.required_date}}</td>
+            <td><mat-icon  class="material-icons md-dark md-18" *ngIf="data.vencimiento_date">date_range</mat-icon> {{data.vencimiento_date}}</td>
+            <td>{{data.userupdate}}</td>
+            <td>{{data.update_at}}</td>            
+          </tr>
+        </table>
+
+        <table id="t05" width="100%">
+          <tr>
+            <th width="20%"><p class="big"><strong>Observación:</strong></p></th>    
+            <th width="80%">{{data.observation}}</th>
+          </tr>
+        </table>
+
+        <table id="t06" width="100%" *ngIf="orderatributo.length > 0">
+          <tr >
+            <td width="20%">REVISADO</td>
+            <td width="20%">CÓDIGO</td>
+            <td width="20%">DESCRIPCIÓN</td>
+            <td width="40%">VALOR</td>
+          </tr>
+        </table>
+
+
+
+        <table id="t04" width="100%" *ngFor="let detailatributo of atributo" cellpadding="0">
+          <tr *ngFor="let detailorderatributo of orderatributo">
+
+            <td width="20%" *ngIf="detailorderatributo.atributo_id == detailatributo.id">
+                  <h2 class="jeEmYB" style="text-align:center;" *ngIf="detailorderatributo.valor && detailorderatributo.valor !== 'S/N' && detailorderatributo.valor !== 'null' && detailorderatributo.valor !== null">
+                      <img src="../../../../assets/icons/check.png" width="17">
+                  </h2>
+            </td>
+
+            <td width="20%" *ngIf="detailorderatributo.atributo_id == detailatributo.id" >    
+                <div style="min-height: 2px;">
+                <p class="codigo">{{detailatributo.id}}</p>
+                </div>
+            </td>         
+
+            <td width="20%" *ngIf="detailorderatributo.atributo_id == detailatributo.id" >             
+                <div style="min-height: 2px;">
+              <p class="descripcion">{{detailatributo.descripcion}}: </p>
+                </div>
+            </td>
+            <td  width="40%" *ngIf="detailorderatributo.atributo_id == detailatributo.id" >             
+              <div style="min-height: 2px;" *ngIf="detailatributo.type == 'chip' ">
+                <div *ngFor="let itemschip of detailorderatributo.valor | split" style="display: flex;">
+                  <mat-icon *ngIf="itemschip.value"  class="material-icons md-18" style="margin-right: 4px;">done</mat-icon>
+                  <p class="valor" *ngIf="itemschip.value">{{itemschip.descripcion}}</p>
+                </div>
+              </div>
+              <div style="min-height: 2px;" *ngIf="detailatributo.type != 'chip' ">
+                <p class="valor">{{detailorderatributo.valor}}</p>
+              </div>
+            </td>            
+          </tr>
+        </table>
+        </div>
+
+
+        <div >
+          <table id="t03" width="100%">
+            <tr>
+              <th>AUDIO</th>
+            </tr>
+          </table>
+          <table id="t04" width="100%">
+              <tr>
+                <td>
+                  <mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggleaudio()" id="bt"  *ngIf="!showaudio">
+                    <mat-button-toggle value="bold">Play<i class="material-icons">arrow_right</i></mat-button-toggle>
+                  </mat-button-toggle-group>
+    
+                  <mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggleaudio()" id="bt"  *ngIf="showaudio">
+                    <mat-button-toggle value="bold">Play<i class="material-icons" style="color:blue">arrow_drop_down</i></mat-button-toggle>
+                  </mat-button-toggle-group>              
+                </td>
+              </tr>
+          </table>               
+
+          <div class="example-loading-shade" *ngIf="isAudioLoading && showaudio">
+              <app-loading *ngIf="isAudioLoading"></app-loading>  
+          </div>
+
+          <div class="animated fadeIn" style="visibility: visible; position: sticky; z-index: 1;" *ngIf="showaudio && audioRows.length > 0">
+              <table id="t09" width="100%"  >
+                <tr *ngFor="let row of audioRows; let isEven = even;let i = index;">
+                  <td width="50%" align="center" *ngFor="let audio of row; let j = index;" >
+                    <div>
+                      <div class="row">
+                        <div class="col-12">
+                            <audio controls id="{{audio.id}}" *ngIf="audio?.archivo" src="data:audio/ogg;base64,{{audio.archivo}}" style="outline: 0;border: none;"></audio>                            
+                        </div>
+                      </div>                                          
+                    </div>
+                  </td>
+                </tr>
+              </table>
+          </div>          
+
+        </div>
+
+        <div class="animated fadeIn" style="visibility: visible; position: sticky; z-index: 1;" *ngIf="showaudio && !audioRows.length">
+          <table id="t09" width="100%"  >
+            <tr >
+              <td width="50%" align="center"  >
+                      <p align="center" >Sin Audio</p>
+              </td>
+            </tr>
+          </table>
+        </div>
+
+
+
+        <div>
+
+        <table id="t03" width="100%">
+          <tr>
+            <th>IMÁGENES</th>
+          </tr>
+
+        </table>
+
+
+        <table id="t04" width="100%">
+          <tr>
+            <td>
+              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggle()" id="bt"  *ngIf="!show">
+                <mat-button-toggle value="bold">Ver Imágenes<i class="material-icons">arrow_right</i></mat-button-toggle>
+              </mat-button-toggle-group>
+
+              <mat-button-toggle-group name="fontStyle" aria-label="Font Style" (click)="toggle()" id="bt"  *ngIf="show">
+                <mat-button-toggle value="bold">Ver Imágenes<i class="material-icons" style="color:blue">arrow_drop_down</i></mat-button-toggle>
+              </mat-button-toggle-group>              
+            </td>
+          </tr>
+        </table>
+  
+        <div class="example-loading-shade" *ngIf="isImageLoading && show">
+          <app-loading *ngIf="isImageLoading"></app-loading>  
+        </div>
+
+        <div class="animated fadeIn" style="visibility: visible; position: sticky; z-index: 1;" *ngIf="show && imageRows.length > 0">
+        <table id="t09" width="100%"  >
+          <tr *ngFor="let row of imageRows; let isEven = even;let i = index;">
+            <td width="50%" align="center" *ngFor="let image of row; let j = index;" >
+              <div>
+                <div class="row" >
+                  <div class="col-6">
+                     <button mat-button (click)="rotateImage('left', image.id)" *ngIf="image && image.id">
+                        <i class="material-icons">
+                            keyboard_arrow_left
+                        </i>                       
+                     </button>
+                  </div>
+                  <div class="col-6">
+                      <button mat-button (click)="rotateImage('right', image.id)" *ngIf="image && image.id">
+                          <i class="material-icons">
+                              keyboard_arrow_right
+                          </i>                       
+                       </button>                    
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-12">
+                      <div class="zoom">
+                      <img id="{{image.id}}" *ngIf="image?.archivo" src="data:image/jpg;base64,{{image.archivo}}" style=" width: 300px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">
+                      </div>
+                  </div>
+                </div>                                          
+              </div>
+            </td>
+          </tr>
+        </table>
+        </div>
+
+        <div class="animated fadeIn" style="visibility: visible; position: sticky; z-index: 1;" *ngIf="show && !imageRows.length">
+        <table id="t09" width="100%"  >
+          <tr >
+            <td width="50%" align="center"  >
+
+                    <p align="center" >Sin Imágenes</p>
+            </td>
+          </tr>
+        </table>
+        </div>
+
+
+        <table id="t03" width="100%">
+          <tr>
+            <th>HISTÓRICO</th>
+          </tr>
+        </table>
+
+        <table id="t04" width="100%">
+          <tr>
+            <td width="20%">CREADO POR:</td>
+            <td width="20%">CREADA EL:</td>
+            <td width="10%">ESTATUS:</td>
+            <td width="10%">T.EJECUCIÓN:</td>
+            <td width="30%">OBSERVACIÓN:</td>                        
+            <td width="10%">GEOREFERENCIA:</td>
+          </tr>
+          <tr *ngFor="let orderdetail of order[0]['orderdata']">
+            <td>{{orderdetail.user.name}} {{orderdetail.user.surname}}</td>
+            <td>{{orderdetail.create_at}}</td>
+            <td>{{orderdetail.estatus.name}}</td>
+            <td>{{orderdetail.time}}</td>
+            <td>{{orderdetail.observation}}</td>            
+            <td>
+            <a class="nav-link" href="https://www.google.com/maps/search/?api=1&query={{orderdetail.latitud}},{{orderdetail.longitud}}" target="_blank" *ngIf="orderdetail.latitud && orderdetail.longitud && orderdetail.direccion">                  
+            <i class="material-icons">place</i> 
+            <p style="font-size:10px;  color: #585858;" > {{orderdetail.direccion}}</p>
+            </a>
+            <a class="nav-link" href="https://www.google.com/maps/search/?api=1&query={{orderdetail.latitud}},{{orderdetail.longitud}}" target="_blank" *ngIf="orderdetail.latitud && orderdetail.longitud && orderdetail.direccion == null">                  
+            <i class="material-icons">place</i> 
+            </a>
+          
+            </td>
+          </tr>
+        </table>
+        </div>
+
+
+
+
+
+
+        </th>
+      </tr>
+
+      <tr align="middle" *ngIf="atributofirma.length > 0 ">
+        <th>
+            <br>
+            <hr>
+              <div class="container">
+                  <div class="row">
+                    <div class="col" *ngFor="let detailatributofirma of atributofirma">
+                      <div *ngFor="let imagefirma of listfirmaimageorder">
+                        
+                        <div *ngIf="imagefirma.atributo_id === detailatributofirma.id">
+                        <img *ngIf="imagefirma?.archivo" src="data:image/jpg;base64,{{imagefirma.archivo}}" style="max-height: 150px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">
+                        </div>
+
+                      </div>                      
+                    </div>
+
+                    <div class="w-100"></div>
+                    <div class="col" *ngFor="let detailatributofirma of atributofirma">{{detailatributofirma.descripcion}}</div>
+                  </div>
+              </div>
+            <br>
+          </th>
+      </tr>
+        
+
+      <tr align="middle" *ngIf="sign && listfirmauser.length > 0">
+        <th>
+            <br>
+            <hr>
+              <div class="container">
+                  <div class="row">
+                    <div class="col" *ngFor="let detailatributofirmauser of atributofirmauser">
+                      <div *ngFor="let firmauser of listfirmauser;let i = index">
+
+
+                          <div class="container-fluid" *ngIf="i == detailatributofirmauser.index">
+                              <div class="row">
+                                <div class="col" >
+                                    <img *ngIf="firmauser[0]['archivo']" src="data:image/jpg;base64,{{firmauser[0]['archivo']}}" style="max-height: 150px; border-radius: 2px; padding: 4px; border: 1px solid #ddd; text-align: center; vertical-align: middle;" alt="Imagen" class="responsive">
+                                </div>                        
+                                <div class="w-100"></div>
+                                <div class="col">Firma {{firmauser[0]['user']}}</div>
+                              </div>
+                          </div>
+
+                        <div >
+                        </div>
+
+                      </div>                      
+                    </div>
+                  </div>
+              </div>
+            <br>
+          </th>
+      </tr>
+
+
+      <tr align="middle">
+        <th>
+          <hr>
+          <p class="footer" align="center">{{order[0]['company_footer']}}</p>
+
+        </th>
+      </tr>
+
+    </table>
+
+
+</div>
+
+  <div mat-dialog-actions *ngIf="!loading"> 
+    <br> 
+     <button mat-button color="primary" [type]="submit" (click)="print('content')" mat-raised-button color="primary" class="btnprint">Imprimir</button>    
+    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+    <br>
+  </div>
+
+
+
+
+</div>
+
+
+
+

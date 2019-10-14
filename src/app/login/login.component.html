@@ -1,0 +1,106 @@
+
+
+ <main role="main" class="container-fluid animated fadeIn Fast">
+      <div class="my-3 p-3 bg-white rounded box-shadow">
+        <h6 class="border-bottom border-gray pb-2 mb-0"> <h2><i class="material-icons">lock</i> {{title}}</h2></h6>
+
+
+
+        <div class="media text-muted pt-3">
+
+<div class="container">
+  <div class="row justify-content-md-center">
+
+
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto animated fadeIn">
+
+      <mat-card class="bg-light">  
+      <mat-card-content>
+
+      
+      <form ngNativeValidate #formControl="ngForm" class="form-signin"  novalidate="novalidate">   
+          <div class="d-flex justify-content-center">
+            <img src="../../../assets/img/logoocalogin.png" alt="Login Page" width="118" height="64">
+          </div>
+          <div class="login-container" *ngIf="!_userService.isIdaccount()">
+            <mat-form-field>
+              <input matInput placeholder="Usuario" name="email" [(ngModel)]="email"  size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+              <mat-icon matSuffix ><i class="material-icons">person</i></mat-icon>
+              <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+            </mat-form-field>
+          </div>      
+
+
+          <div class="login-container" *ngIf="_userService.isIdaccount()">
+            <mat-form-field>
+            <input matInput placeholder="Usuario." name="email"  [(ngModel)]="email"   size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" >          
+            <mat-icon matSuffix ><i class="material-icons">person</i></mat-icon>
+            </mat-form-field>
+          </div>      
+
+
+
+        <div class="login-container">
+          <mat-form-field >
+            <input preventCutCopyPaste ngModel matInput placeholder="Password" [type]="hide ? 'password' : 'text'" name="password"  min="4" required >
+            <mat-icon matSuffix (click)="hide = !hide">{{hide ? 'visibility' : 'visibility_off'}}</mat-icon>
+            <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
+          </mat-form-field>
+        </div>
+          
+          <div class="checkbox mb-3">
+            <label>
+              <section class="example-section">
+          <mat-slide-toggle
+              name="rememberMe" 
+              [(ngModel)]="rememberMe"
+              (change)="onChange($event)"
+              class="example-margin"
+              color="primary"
+              >
+            Recordarme
+          </mat-slide-toggle>
+        </section>
+            </label>
+          </div>
+
+          
+
+          <mat-spinner-button [options]="spinnerButtonOptionsDisabled"  *ngIf="!_userService.isAuthenticated() && !formControl.valid" ></mat-spinner-button>
+          <mat-spinner-button [options]="spinnerButtonOptions" (click)="onSubmit(formControl)" *ngIf="!_userService.isAuthenticated() && formControl.valid" ></mat-spinner-button>
+          <mat-spinner-button [options]="spinnerButtonOptions" *ngIf="_userService.isAuthenticated() && formControl.valid" ></mat-spinner-button>
+
+          <div class="container">
+          <div class="d-block text-center mt-3">
+            <label>
+              <a class="nav-link" [routerLink]="['/forgot']"><i class="fas fa-lock"></i> Olvidó su clave ?</a>
+            </label>
+          </div>
+          </div>
+
+          <div class="form-group m-b-0">
+            <div class="col-sm-12 text-center">
+                <a class="nav-link" [routerLink]="['/register']"> <b>Crear cuenta</b></a>
+            </div>
+          </div>
+          
+        </form>
+      </mat-card-content>
+      
+      <mat-card-actions>
+      </mat-card-actions>
+    </mat-card>
+
+    </div>
+  
+
+  </div>
+
+</div>
+
+
+          </div>
+      </div>
+    </main>
+
+    

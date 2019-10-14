@@ -1,0 +1,258 @@
+<div class="p-2">
+    <mat-card [ngStyle]="{'padding':'0px'}">
+        <mat-card-header [ngClass]="{'custom-card':true}">
+            <mat-card-title>Carga de Inspecciones</mat-card-title>
+            <mat-card-subtitle>Permite crear multiples tipos de inspecciones</mat-card-subtitle>
+        </mat-card-header>        
+        <mat-card-content style="height: 100vh">
+
+            <div class="p-2">
+                <form ngNativeValidate [formGroup]="forma">
+                    <!--<div class="row">
+                        <div class="col-md-12">
+                            <button mat-icon-button (click)="showform = !showform" >
+                                <mat-icon class="material-icons md-20-color">add</mat-icon><span *ngIf="!showform">Agregar</span>
+                            </button>  
+                        </div>
+                    </div>-->
+                    <div class="row">
+                            <div class="col-md-6">
+                                <h2 class="jeEmY">Tipo de servicio</h2>
+                                <ng-select  
+                                    [items]="tipoServicio"
+                                    [clearable]="false" 
+                                    bindLabel="name"
+                                    class="full-width"
+                                    name="servicetype" formControlName="servicetype">
+                                </ng-select>
+                                <h2 class="jeEmY">Asignar orden (s)</h2>
+                                <ng-select  
+                                    [items]="usuarios"
+                                    [clearable]="true" 
+                                    bindLabel="usuario"
+                                    class="full-width"
+                                    name="assigned_to" formControlName="assigned_to">
+                                </ng-select>
+                                <h2 class="jeEmY">N° de Cliente</h2>
+                                <ng-select  
+                                    [items]="ccnumber$ | async"
+                                    bindLabel="cc_number"
+                                    [clearable]="true" 
+                                    [searchable]="true"
+                                    [loading]="ccnumberLoading"
+                                    [typeahead]="ccnumberInput"
+                                    class="full-width"
+                                    name="ccnumber" formControlName="ccnumber">
+                                </ng-select>
+                                <h2 class="jeEmY">Estatus</h2>
+                                <ng-select  
+                                    [items]="status"
+                                    [clearable]="false" 
+                                    bindLabel="name"
+                                    class="full-width"
+                                    name="status" formControlName="status">
+                                </ng-select>
+                            </div>
+                            <div class="col-md-6">
+                                
+                                <div class="row">
+                                    <div class="col-md-5">
+                                        <h2 class="jeEmY">Fecha vencimiento unica</h2>
+                                        <!--<input type="text" formControlName="date_end" class="form-control" placeholder="Fecha de vencimiento">-->
+                                        <p-calendar placeholder="yyyy-mm-dd hh:mm" formControlName="date_end"  dateFormat="yy-mm-dd"   [minDate]="minDateValue"  showButtonBar="true" readonlyInput="true" showTime="true" hourFormat="24" [locale]="es"  [showIcon]="true">
+                                            <p-footer></p-footer>
+                                        </p-calendar>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <h2 class="jeEmY">Fecha de vencimiento multiple</h2>
+                                        <div class="row">
+                                                <div class="col-md-2">
+                                                    <mat-slide-toggle formControlName="enableiItervalo"
+                                                    (change)="slide($event)"></mat-slide-toggle>
+                                                </div>
+                                                <div class="col-md-8">
+                                                    <p-calendar *ngIf="forma.value.enableiItervalo"
+                                                    (onClose)="calendarmultiple(forma.value.multidate)"
+                                                    formControlName="multidate" [minDate]="minDateValue" selectionMode="multiple"  [readonlyInput]="true" showButtonBar="true" [locale]="es"  [showIcon]="true"></p-calendar>
+                                                </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <h2 class="jeEmY">Cantidad de ordenes</h2>
+                                <input type="number" formControlName="cantidad" class="form-control" [readonly]="forma.value.enableiItervalo"  placeholder="Cantidad de ordenes">
+                                <h2 class="jeEmY">Observación</h2>
+                                <textarea rows="4" formControlName="observation" class="form-control" placeholder="Añada observación..."> </textarea>
+                            </div>
+                    </div>
+                    <div class="row" style="margin-top: 14px;">
+                        <div class="col-md-12">
+                            <div class="text-center">
+                                <button  mat-raised-button color="primary" [disabled]="forma.invalid || forma.value.cantidad <= 0 || upload"  (click)="addOrdenes(forma.value)" style="margin-right: 2px;">
+                                    <mat-icon aria-label="Edit">done</mat-icon>Guardar                       
+                                </button>  
+                                <button  mat-raised-button color="accent" (click)="clearvalues(); forma.reset(); " style="margin-left: 2px;">
+                                    <mat-icon aria-label="Close">close</mat-icon>Limpiar formulario
+                                </button>  
+                                <button  mat-raised-button color="warn" (click)="clearvalues(); reset(); forma.reset()" style="margin-left: 4px;">
+                                    <mat-icon aria-label="Close">delete_sweep</mat-icon>Eliminar todo
+                                </button>  
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+
+            <div class="p-2">
+                <div style="margin-left: 40px; margin-right: 40px;">
+                    <mat-divider *ngIf="listOrdenes && listOrdenes.length > 0"></mat-divider>
+                </div>
+                <div class="row" *ngIf="listOrdenes && listOrdenes.length > 0" style="margin-top: 20px; margin-bottom: 40px;">
+                    <div class="col-md-12">
+                        <mat-table #table [dataSource]="dataSource" matSort [class.isMobile]="isMobile">
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="ID">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> ID </mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <span class="mobile-label">ID:</span>
+                                    <span>{{row.posicion}}</span>
+                                    <!--<input type="text" class="form-control" id="{{row.servicetype.name}}" [(ngModel)]="row.servicetype.name" *ngIf="i == indexitem && !isLoadingDelete">-->
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="servicetype">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de servicio </mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <span class="mobile-label">Tipo de servicio:</span>
+                                    <span>{{row.servicetype.name}}</span>
+                                    <!--<input type="text" class="form-control" id="{{row.servicetype.name}}" [(ngModel)]="row.servicetype.name" *ngIf="i == indexitem && !isLoadingDelete">-->
+                                </mat-cell>
+                            </ng-container>
+                        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="assigned_to">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Asignado </mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <span class="mobile-label">Asignado:</span>
+                                    <span *ngIf="row.assigned_to && row.assigned_to.usuario">{{row.assigned_to.usuario}}</span>
+                                    <!--<input type="text" class="form-control"  id="{{row.assigned_to.usuario}}" [(ngModel)]="row.assigned_to.usuario" *ngIf="i == indexitem && !isLoadingDelete">-->
+                                </mat-cell>
+                            </ng-container>
+        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="ccnumber">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>  N° de Cliente </mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <span class="mobile-label">N° de Cliente:</span>
+                                    <span>{{row.ccnumber.cc_number}}</span>                        
+                                    <!--<input type="text" class="form-control" id="{{row.ccnumber.cc_number}}" [(ngModel)]="row.ccnumber.cc_number" *ngIf="i == indexitem && !isLoadingDelete">-->
+                                </mat-cell>
+                            </ng-container>
+        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="status">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <span class="mobile-label">Estatus:</span>
+                                    <span>{{row.status.name}}</span>
+                                    <!--<input type="text" class="form-control" id="{{row.status.name}}" [(ngModel)]="row.status.name" *ngIf="i == indexitem && !isLoadingDelete">-->
+                                </mat-cell>
+                            </ng-container>
+        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="date_end">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header> Fecha de vencimiento </mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <span class="mobile-label">Fecha de vencimiento:</span>
+                                    <span>{{row.date_end}}</span>
+                                    <!--<input type="text" class="form-control" id="{{row.date_end}}" [(ngModel)]="row.date_end" *ngIf="i == indexitem && !isLoadingDelete">-->
+                                </mat-cell>
+                            </ng-container>
+        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="observation">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>  Observación </mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <span class="mobile-label">Observación:</span>
+                                    <span>{{row.observation}}</span>
+                                    <!--<input type="text" class="form-control" id="{{row.observation}}" [(ngModel)]="row.observation" *ngIf="i == indexitem && !isLoadingDelete">-->
+                                </mat-cell>
+                            </ng-container>
+        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="cantidad">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header>  Cantidad </mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <span class="mobile-label">Cantidad:</span>
+                                    <span>{{row.cantidad}}</span>
+                                    <!--<input type="number" class="form-control" id="{{row.cantidad}}" [(ngModel)]="row.cantidad" *ngIf="i == indexitem && !isLoadingDelete">-->
+                                </mat-cell>
+                            </ng-container>
+                        
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="actions">
+                                <mat-header-cell *matHeaderCellDef mat-sort-header></mat-header-cell>
+                                <mat-cell *matCellDef="let row; let i = index"> 
+                                    <button mat-icon-button color="primary"  matTooltip="Editar" (click)="edit(row, i)" *ngIf="i != indexitem && !upload">
+                                            <mat-icon>edit</mat-icon>                             
+                                    </button>
+                                    <button mat-icon-button color="warn"  matTooltip="Eliminar" (click)="delete(i)" *ngIf="i != indexitem && !upload">
+                                            <mat-icon>delete</mat-icon>                             
+                                    </button>
+                                    <button mat-icon-button color="primary" *ngIf="i == indexitem && isLoadingDelete">
+                                            <app-progress-spinner ></app-progress-spinner>
+                                    </button>
+                                    <div *ngIf="upload && row.cantidad !== row.countupload" style="min-width: 180px;">
+                                        <div class="row">
+                                            <div class="col-2">
+                                                <button mat-icon-button color="primary">
+                                                    <app-progress-spinner></app-progress-spinner>
+                                                </button>
+                                            </div>
+                                            <div class="col-10">
+                                                <button mat-icon-button color="primary">
+                                                        <span><strong>Procesado {{row.countupload}} de {{row.cantidad}}</strong></span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div> 
+                                    <div *ngIf="upload && row.cantidad === row.countupload">
+                                        <div class="circle" [style.color]="'green'" *ngIf="row.estado === 'success'" matTooltip="Ordenes correctamente creadas"></div>   
+                                        <div class="circle" [style.color]="'red'" *ngIf="row.estado === 'error'" matTooltip="Error en creación de ordenes, descargar excel con detalle de la carga procesada"
+                                        #tooltip="matTooltip" (click)="tooltip.toggle()" matTooltipPosition="above"></div>                   
+                                    </div>
+                                </mat-cell>
+                            </ng-container>
+                        
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </mat-table>
+                        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                        <div class="row" style="margin-top: 14px;">
+                            <div class="col-md-12">
+                                <div class="text-center">
+                                    <button  mat-raised-button color="primary" (click)="procesarAll()" style="margin-right: 8px;"  [disabled]="upload" matBadge="{{total}}" matBadgePosition="after" matBadgeColor="accent">
+                                        <mat-icon aria-label="Edit">done</mat-icon>Procesar carga                       
+                                    </button>  
+                                    <button  mat-raised-button color="warn" (click)="reset()" style="margin-left: 8px;">
+                                        <mat-icon aria-label="Close">delete_sweep</mat-icon>Limpiar
+                                    </button>  
+                                    <button  mat-raised-button color="accent" style="margin-left: 16px;" *ngIf="arrayPost.length > 0 && arrayPost.length == total" (click)="downloadExcel()">
+                                        <mat-icon aria-label="downloader">save_alt</mat-icon>Detalle de carga
+                                    </button>  
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </mat-card-content>
+    </mat-card>
+</div>
+        
+        
+        
+        

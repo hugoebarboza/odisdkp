@@ -1,0 +1,60 @@
+
+<div class="row" *ngIf="proyectos && proyectos.length > 0">
+
+<div *ngFor="let k of proyectos | keys;" class="guBSSR">
+
+<div class="gZVoLr" >
+    <a class="glwMLG" [routerLink]="['/project', proyectos[k].id]" style="background-color: #0B3356; color: rgb(255, 255, 255);">
+        <div class="fPXeiI">
+            <span class="gktDVd" role="presentation" data-is-favourite="false">
+            <div>
+            <button class="ckHgUs" spacing="none" aria-label="Marcar" type="button">
+                <span style="align-self: center; display: inline-flex; flex-wrap: nowrap; max-width: 100%; position: relative;">
+                    <span style="align-items: center; align-self: center; flex: 1 1 auto; margin: 0px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: opacity 0.3s ease 0s; opacity: 1;">
+                    <span class="eYWpxJ" data-test-id="favouriting.favourite-button-stateless.icon-wrapper">
+                        <span class="bcqBjl">
+                        <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                            <path d="M12 16.373l3.98 2.193-.76-4.655 3.276-3.347-4.524-.69L12 5.687l-1.972 4.189-4.524.689L8.78 13.91l-.762 4.655L12 16.373zm0 2.283l-3.016 1.662a2 2 0 0 1-2.939-2.075l.599-3.656-2.57-2.624a2 2 0 0 1 1.129-3.377l3.47-.528 1.518-3.224a2 2 0 0 1 3.618 0l1.519 3.224 3.47.528a2 2 0 0 1 1.127 3.377l-2.569 2.624.599 3.656a2 2 0 0 1-2.94 2.075L12 18.656z" fill="currentColor"></path>
+                        </svg>
+                        </span>
+                    </span>
+                    </span>
+                </span>
+            </button>
+            </div>
+            </span>
+        </div>
+        <div class="cjCeEB">
+            <div class="_1fH43YlMAnPCr8RI9qH98P" style="width: 44px; height: 44px;">
+                <div id="meInitialsButton" class="M_s6agPZfWvz2OH8iRoGk" style="background-color: #DE473C; font-size: 22px;">
+                    <span>{{proyectos[k].project_name | slice:0:1}}</span>
+                </div>
+            </div>
+            <!---<img src="../../../../../assets/icons/level-512x512.png" style="background-color: transparent; background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;">-->
+        </div>
+        <div class="dhkAlX">
+            <p class="LGtaQ">{{proyectos[k].project_name}}</p><p class="gnvrqV">Número de Servicios: {{ proyectos[k].service.length }} </p>
+        </div>
+    </a>
+    <div class="jeEvnX" *ngIf="_userService.isRole(8)">
+        <a class="efsTEk" spacing="default" [routerLink]="['/project', proyectos[k].id, 'settings']">
+        <span style="align-self: center; display: inline-flex; flex-wrap: nowrap; max-width: 100%; position: relative;">
+        <span style="align-self: center; display: flex; flex-shrink: 0; line-height: 0; font-size: 0px; margin: 0px 4px; user-select: none; transition: opacity 0.3s ease 0s; opacity: 1; padding-bottom: 6px;">
+        <span class="dqqHMN" aria-label="board">
+        <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+        <g fill="currentColor">
+        <path d="M4 18h16.008C20 18 20 6 20 6H3.992C4 6 4 18 4 18zM2 5.994C2 4.893 2.898 4 3.99 4h16.02C21.108 4 22 4.895 22 5.994v12.012A1.997 1.997 0 0 1 20.01 20H3.99A1.994 1.994 0 0 1 2 18.006V5.994z"></path>
+        <path d="M8 6v12h2V6zm6 0v12h2V6z"></path>
+        </g>
+        </svg>
+        </span>
+        </span>
+        <span  style="align-items: baseline; align-self: baseline; flex: 1 1 auto; margin: 0px 4px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; transition: opacity 0.3s ease 0s; opacity: 1;"> Configuración
+        </span>
+        </span>
+        </a>
+    </div>
+
+</div>
+</div>
+</div>

@@ -1,0 +1,26 @@
+.card {
+    background-color: white;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px rgba(0, 0, 0, 0.1);
+}
+.card h6 {
+    margin-left: 0;
+    margin-top: 0;
+}
+.circle:before {
+    content: ' \25CF';
+    font-size: 20px;
+}
+
+.example-container {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+  }
+  

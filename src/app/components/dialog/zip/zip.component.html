@@ -1,0 +1,78 @@
+<form>
+  <h1 mat-dialog-title>{{title}}</h1>
+  <div mat-dialog-content disableClose="true">
+    <div class="mat-app-background basic-container" >
+
+        <mat-form-field>
+            <mat-select  placeholder="Fecha de OT" [(ngModel)]="data.createEdit" name="data.createEdit">
+                <mat-option value="create_at">Creado el</mat-option>
+                <mat-option value="update_at">Editado el</mat-option>
+            </mat-select>
+          </mat-form-field>
+                
+      <mat-form-field>
+        <input matInput [max]="data.dateend" [matDatepicker]="picker" [(ngModel)]="data.date" name="data.date" placeholder="Fecha Desde" required>
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <input matInput [min]="data.date" [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" placeholder="Fecha Hasta">
+        <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
+        <mat-datepicker #pickerEnd></mat-datepicker>
+      </mat-form-field>
+
+      <mat-form-field>
+        <mat-select  placeholder="Tipo de Servicio" [(ngModel)]="data.selectedValueservicio" name="data.selectedValueservicio" required>
+          <mat-option>Seleccione</mat-option>
+          <mat-option *ngFor="let type of tiposervicio" [value]="type.id">
+              {{type.name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      
+      <mat-form-field>
+        <mat-select placeholder="Zona" [(ngModel)]="data.selectedValuezona" name="data.selectedValuezona" >
+          <mat-option>Seleccione</mat-option>
+          <mat-option *ngFor="let z of zona" [value]="z.id">
+            {{z.descripcion}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>     
+  
+      <mat-form-field>
+        <mat-select placeholder="Region" [(ngModel)]="data.id_region" name="id_region"  (selectionChange)="onSelectRegion(data.id_region)">
+          <mat-option>Seleccione</mat-option>
+          <mat-option *ngFor="let regiones of region" [value]="regiones.id">
+          {{regiones.region_name}}
+          </mat-option>
+        </mat-select>      
+      </mat-form-field>
+     
+      <mat-form-field appearance="legacy">
+        <mat-select placeholder="Provincia" [(ngModel)]="data.id_provincia" name="id_provincia"  (selectionChange)="onSelectProvincia(data.id_provincia)">
+          <mat-option *ngFor="let provincia of resultsprovincias" [value]="provincia.id">
+          {{provincia.province_name}}
+          </mat-option>
+        </mat-select>      
+      </mat-form-field>
+     
+      <mat-form-field appearance="legacy">
+        <mat-select placeholder="Comuna" [(ngModel)]="data.id_comuna" name="id_comuna"  (selectionChange)="onSelectComuna($event)">
+          <mat-option *ngFor="let comuna of resultscomunas" [value]="comuna.id">
+            {{comuna.commune_name}}
+          </mat-option>
+        </mat-select>      
+      </mat-form-field>
+
+    </div>
+  </div>
+  <div mat-dialog-actions>
+    <div class="container">
+       <div class="row justify-content-center">
+      <button mat-raised-button color="primary" [disabled]="data.date === null || data.selectedValueservicio === null" (click)="stardownload(data)" >Descargar</button>
+      <button mat-button (click)="onNoClick()" >Cancelar</button>
+      </div>
+    </div>
+  </div>
+</form>

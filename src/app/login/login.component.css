@@ -1,0 +1,46 @@
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 10px;
+}
+
+.login-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.login-container > * {
+  width: 100%;
+}
+.mat-card-header {
+    margin-top: 0;
+    margin-bottom: 0;
+    width: auto;
+    height: 1px !important;    
+}
+.topleft {
+    position: absolute;
+    top: 0px;
+    left: 16px;
+    font-size: 18px;
+}
+.login-card {
+  background-color: #F9F9F9;
+}
+.header-image {
+  background-image: url('https://ocaglobal.com/themes/ledel-foundation6-october/assets/img/favicon.png');
+  background-size: cover;    
+}
+.spacer {
+  flex: 1 1 auto;
+}
+

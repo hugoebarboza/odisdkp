@@ -1,0 +1,22 @@
+.example-button-row button,
+.example-button-row a {
+  margin-right: 0px;
+}
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+}
+.circle:before {
+  content: ' \25CF';
+  font-size: 20px;
+}
+.custom-card {
+  background-color: #f2f4f7;
+}
+.material-icons.md-14 { font-size: 14px; }
+.material-icons.md-17 { font-size: 17px; }
+.material-icons.md-13-color { font-size: 13px; color: #809c13; padding: 1px;}
+.material-icons.md-13-nocolor { font-size: 13px; color: #CFCFCF; padding: 1px;}
+.material-icons.md-color { color: #FB8C00;}
+.material-icons.md-20-color-green { color: green;}
+.material-icons.md-20-color-red { color:red;}

@@ -1,0 +1,47 @@
+<form  novalidate="novalidate">
+    <h1 mat-dialog-title>{{title}}</h1>
+  
+  
+      <div class="mat-app-background" *ngIf="table && table == 'vehiculos'">
+
+
+          <mat-form-field class="middle-width" >
+              <mat-select placeholder="Seleccione Patio" [(ngModel)]="selectedValuePatio" name="patio" required>
+                <mat-option *ngFor="let patio of patios" [value]="patio.value">
+                  {{patio.name}}
+                </mat-option>
+              </mat-select>
+          </mat-form-field>
+
+          <br>  
+
+          <h4 style="color:#747474; font-size: 14px;">Ordenar datos (Opcional):</h4>
+          <mat-radio-group [(ngModel)]="selectedValueOrdeno" name="ordenado"  class="order-radio-group" [disabled]="!selectedValuePatio">
+            <mat-radio-button class="order-radio-button" *ngFor="let sortdateby of sortdate" [value]="sortdateby" >
+            {{sortdateby.name}}
+            </mat-radio-button>
+          </mat-radio-group>
+
+  
+      </div>
+
+<div mat-dialog-actions>
+
+    <div class="container">      
+      <div class="row justify-content-center">
+      <div class="footer-button-row">
+      <mat-bar-button [options]="barButtonOptionsDisabled" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="!selectedValuePatio ">
+      </mat-bar-button>
+
+      <mat-bar-button [options]="barButtonOptions" (click)="ExportTOExcelClient(selectedValueFormat)" style="margin-right: 8px;" *ngIf="selectedValuePatio ">
+      </mat-bar-button>
+      
+      <button mat-raised-button color="warn" (click)="reset()" [disabled]="!selectedValuePatio" >Limpiar</button>
+
+      <button mat-button (click)="onNoClick()" >Cancelar</button>
+      </div>
+
+      </div>
+    </div>
+  </div>
+</form>

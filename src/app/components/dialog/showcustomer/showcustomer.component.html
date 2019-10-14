@@ -1,0 +1,97 @@
+<mat-toolbar color="accent" >
+  <h3>{{title}} Proyecto: {{this.project}}</h3>            
+  <span class="mat-spacer"></span>
+  <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+  <mat-icon class="mat-icon">close</mat-icon>       
+  </button>
+</mat-toolbar>
+            
+<P></P>
+<div class="row animated fadeIn">
+<div class="col-12">
+
+<div class="container-fluid" *ngIf="isLoading">
+    <div class="row d-flex justify-content-center">
+        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+    </div>
+</div>
+
+  <div *ngIf="!isLoading">
+
+  <div mat-dialog-content *ngIf='data.name_table == "address"'>
+    <strong>Proyecto:</strong> {{this.project}}
+    <p></p>
+    <strong>Num. Cliente:</strong> {{data.cc_number}} 
+    <p></p>
+    <strong>Nombre:</strong> {{data.nombrecc}} 
+    <p></p>
+    <strong>Región:</strong> {{data.region}} 
+    <p></p>
+    <strong>Provincia:</strong> {{data.provincia}} 
+    <p></p>
+    <strong>Comuna:</strong> {{data.comuna}} 
+    <p></p>
+    <strong>Ruta:</strong> {{data.ruta}} 
+    <p></p>
+    <strong>Calle:</strong> {{data.calle}} 
+    <p></p>
+    <strong>Número:</strong> {{data.numero}} 
+    <p></p>
+    <strong>Block:</strong> {{data.block}} 
+    <p></p>
+    <strong>Depto:</strong> {{data.depto}} 
+    <p></p>
+    <strong>Medidor:</strong> {{data.medidor}} 
+    <p></p>
+    <strong>Modelo Medidor:</strong> {{data.modelo_medidor}} 
+    <p></p>
+    <strong>Tarifa:</strong> {{data.tarifa}} 
+    <p></p>
+    <strong>Constante:</strong> {{data.constante}} 
+    <p></p>
+    <strong>Giro:</strong> {{data.giro}} 
+    <p></p>
+    <strong>Sector:</strong> {{data.sector}} 
+    <p></p>
+    <strong>Zona:</strong> {{data.zona}} 
+    <p></p>
+    <strong>Mercado:</strong> {{data.mercado}} 
+
+
+
+    <p></p>
+  </div>
+
+
+  <div mat-dialog-content *ngIf='data.name_table == "vehiculos"'>
+    <strong>Proyecto:</strong> {{this.project}}
+    <p></p>
+    <strong>Num. Cliente:</strong> {{data.cc_number}} 
+    <p></p>
+    <strong>Marca:</strong> {{data.marca}} 
+    <p></p>
+    <strong *ngIf="data.modelo">Modelo:</strong> {{data.modelo}} 
+    <p></p>
+    <strong *ngIf="data.description">Modelo:</strong> {{data.description}} 
+    <p></p>
+    <strong>Color:</strong> {{data.color}} 
+    <p></p>
+    <strong>Patio:</strong> {{data.patio}} 
+    <p></p>
+    <strong>Espiga:</strong> {{data.espiga}} 
+    <p></p>
+    <strong>Posición:</strong> {{data.posicion}} 
+
+
+    <p></p>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()" tabindex="-1">Cancelar</button>
+  </div>
+  
+  </div>
+
+
+</div>
+</div>

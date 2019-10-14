@@ -1,0 +1,750 @@
+
+        <mat-card [ngStyle]="{'padding':'0px'}">
+          
+          <!----
+          <mat-card-header [ngClass]="{'custom-card':true}">
+ 
+            <mat-card-title *ngIf="project" [ngClass]="{'custom-card':true}">
+
+            <div class="row">
+                <div class="col-md-12 order-first">
+                  Proyecto: {{project}}
+                </div>
+            </div>
+  
+          </mat-card-title>
+                                          
+          <mat-card-subtitle *ngIf="servicename">            
+            <div class="row">
+                <div class="col-md-12 order-first">
+                  Servicio: <b>{{servicename}} </b>
+                </div>
+            </div>
+          </mat-card-subtitle>
+          <img src="assets/img/logoocaorden.png" width="70" height="39">
+          </mat-card-header>
+          -->
+
+        <mat-card-content>         
+        <div class="d-flex">
+            <div class="mr-auto p-2">
+              <div *ngIf="_userService.isRole(7) && id > 0" class="d-flex">
+                  <div class="p-2">
+                      <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
+                          <div class="btn-group mr-2" role="group" aria-label="First group">
+                              <button type="button" class="btn btn-light btn-sm" (click)="startEdit(id)"><mat-icon aria-label="Edit" class="material-icons md-14">edit</mat-icon>Editar</button>
+                          </div>
+                          <div class="btn-group mr-2" role="group" aria-label="Second group">
+                              <button type="button" class="btn btn-light btn-sm" (click)="loadInfo()"><mat-icon aria-label="Edit" class="material-icons md-14">sync</mat-icon>Refrescar</button>            
+                          </div>
+                          <div class="btn-group mr-2" role="group" aria-label="Tird group">
+                              <button type="button" class="btn btn-light btn-sm" (click)="togglemain()"><mat-icon aria-label="Edit" class="material-icons md-14">chat_bubble_outline</mat-icon>Comentar</button>
+                          </div>
+                      </div>        
+                  </div>
+              </div>               
+            </div>
+            <div class="p-2"></div>
+
+            <div class="p-2" *ngIf="project_type == 0">
+              
+                <button type="button" class="btn btn-primary btn-sm" [matMenuTriggerFor]="menuviewselect" >
+                  <mat-icon class="material-icons md-14">settings</mat-icon>Gestiona
+                </button>
+
+                <mat-menu #menuviewselect="matMenu" [overlapTrigger]="false">
+
+                        <button mat-menu-item (click)="constante(id)">
+                            <span >Constante</span>
+                        </button>
+
+                        <button mat-menu-item (click)="status(id)">
+                          <span >Estatus</span>
+                        </button>
+
+
+                        <button mat-menu-item (click)="giro(id)">
+                            <span >Giro</span>
+                        </button>
+
+                        <button mat-menu-item (click)="mercado(id)">
+                            <span >Mercado</span>
+                        </button>
+
+                        <button mat-menu-item (click)="sector(id)">
+                            <span >Sector</span>
+                        </button>
+
+                        <button mat-menu-item (click)="tarifa(id)">
+                            <span >Tarifa</span>
+                        </button>
+
+                        <button mat-menu-item (click)="servicetype(id)">
+                            <span >Tipos de Servicio</span>
+                        </button>
+  
+                        <button mat-menu-item (click)="zona(id)">
+                            <span >Zona</span>
+                        </button>
+
+                        <button mat-menu-item (click)="servicevalue(id)">
+                          <span >Valor de Servicio</span>
+                        </button>
+
+                        <button mat-menu-item [matMenuTriggerFor]="vertebrates"  *ngIf="tipoServicio && tipoServicio.length > 0">
+                          <span >Valor de T. Serv.</span>
+                        </button>
+                        
+                </mat-menu>   
+
+                <mat-menu #vertebrates="matMenu">
+                    <button mat-menu-item *ngFor="let ts of tipoServicio" (click)="servicetypevalue(id, ts.id)">{{ts.name}}</button>                    
+                </mat-menu>
+  
+                               
+                
+            </div>
+
+            <div class="p-2" *ngIf="project_type && project_type == 1">
+              <button type="button" class="btn btn-primary btn-sm" [matMenuTriggerFor]="menuviewselect" >
+              <mat-icon class="material-icons md-14">settings</mat-icon>Gestiona</button>
+              <mat-menu #menuviewselect="matMenu" [overlapTrigger]="false">
+
+                    <button mat-menu-item (click)="color(id)">
+                      <span >Color</span>
+                    </button>
+
+                      <button mat-menu-item (click)="status(id)">
+                        <span >Estatus</span>
+                      </button>
+
+                      <button mat-menu-item (click)="marca(id)">
+                          <span >Marca</span>
+                      </button>
+
+                      <button mat-menu-item (click)="modelo(id)">
+                          <span >Modelo</span>
+                      </button>
+
+                      <button mat-menu-item (click)="servicevalue(id)">
+                        <span >Valor de Servicio</span>
+                      </button>
+
+
+                      
+              </mat-menu>              
+          </div>
+
+        </div>          
+
+        <div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+        Favor seleccione Proyecto.
+        </div>
+
+        <div class="example-loading-shade" *ngIf="isLoadingResults">
+          <app-loading *ngIf="isLoadingResults"></app-loading>  
+        </div>          
+
+        <div class="row p-2" *ngIf="!isRateLimitReached && !isLoadingResults">
+          <div class="col-6"  *ngFor="let model of models; let i = index">
+            
+            
+
+                  <div class="container-fluid mb-2 bg-light text-dark border" (click)="enableDiv(i)" *ngIf="!model.expand">
+                  <button mat-icon-button  id="bt" >
+                  <mat-icon class="material-icons md-14-color" >keyboard_arrow_right</mat-icon>
+                  {{model.name}}
+                  </button>
+                  </div>
+
+                  
+                  <div class="container-fluid mb-2 bg-light text-dark border" (click)="enableDiv(i)" *ngIf="model.expand">
+                  <button mat-icon-button  id="bt" >
+                  <mat-icon class="material-icons md-14-color">keyboard_arrow_down</mat-icon>
+                  {{model.name}}
+                  </button>
+                  </div>
+
+                  <div *ngIf="model.id === 0 && model.expand && service_detail && service_detail.length == 0">
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
+                  </div>
+
+                  <div *ngIf="model.id === 1 && model.expand && service_detail && service_detail.length == 0">
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
+                  </div>
+
+                  <div *ngIf="model.id === 2 && model.expand && service_detail && service_detail.length == 0">
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
+                  </div>
+
+                  <div *ngIf="model.id === 3 && model.expand && service_detail && service_detail.length == 0">
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
+                  </div>
+
+                  <div *ngIf="model.id === 4 && model.expand && service_detail && service_detail.length == 0">
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
+                  </div>
+
+                  <div *ngIf="model.id === 5 && model.expand && service_detail && service_detail.length == 0">
+                      <div class="col"><div class="p-3 border bg-light">No hay información.</div></div>
+                  </div>
+
+
+                      
+                      <div class="card bg-light mb-3" *ngIf="model.id === 0 && model.expand && service_detail && service_detail.length > 0">
+                          <div class="card-body">
+                            <h5 class="card-title">N° OT</h5>
+                            <p class="card-text" *ngIf="service_data.order_number">{{service_data.order_number}}</p>
+                          </div>
+
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngIf="service_data.order_number"><h6 class="text-muted">N° OT: <small>{{service_data.order_number}}</small></h6> </li>
+                            <li class="list-group-item" *ngIf="service_data.gom_number"><h6 class="text-muted">N° GOM: <small>{{service_data.gom_number}}</small></h6> </li>
+                            <li class="list-group-item" *ngIf="service_data.gestor"><h6 class="text-muted">Gestor: <small>{{service_data.gestor}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.unidad_responsable"><h6 class="text-muted">Unidad Responsable: <small>{{service_data.unidad_responsable}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.area_solicitante"><h6 class="text-muted">Area Solicitante: <small>{{service_data.area_solicitante}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.contratista"><h6 class="text-muted">Contratista: <small>{{service_data.contratista}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.contract_number"><h6 class="text-muted">N° Contrato: <small>{{service_data.contract_number}}</small></h6></li>
+                            <li class="list-group-item" *ngIf="service_data.address"><h6 class="text-muted">Dirección: <small>{{service_data.address}}</small></h6></li>
+                          </ul>
+                          <div class="card-body">
+                            <mat-chip-list><mat-chip color="primary" selected *ngIf="service_data.status == 1">ACTIVO</mat-chip></mat-chip-list>
+                            <mat-chip-list><mat-chip color="accent" selected *ngIf="service_data.status == 0">INACTIVO</mat-chip></mat-chip-list>
+                          </div>
+                      </div>
+
+
+
+                      <div class="card bg-light mb-3" *ngIf="model.id === 1 && model.expand && service_detail && service_detail.length > 0">
+                          <div class="card-body">
+                            <h5 class="card-title">Creado por</h5>
+                            <p>
+                                <mat-form-field class="card-text" *ngIf="users && users.length > 0">
+                                    <mat-select [(ngModel)]="service_data.create_by" name="create_by" disabled>
+                                        <mat-option *ngFor="let user of users" [value]="user.id">
+                                          {{user.usuario}}
+                                        </mat-option>
+                                    </mat-select>                                      
+                                </mat-form-field>                                                                                      
+                            </p>
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngIf="users && users.length > 0">
+                              <h6 class="text-muted">Editado por
+                              <small>
+                                  <mat-form-field *ngIf="users && users.length > 0">
+                                      <mat-select [(ngModel)]="service_data.update_by" name="update_by" disabled>
+                                          <mat-option *ngFor="let user of users" [value]="user.id">
+                                            {{user.usuario}}
+                                          </mat-option>
+                                      </mat-select>                                      
+                                  </mat-form-field>                                    
+                              </small>
+                              </h6> 
+                            </li>
+                            <li class="list-group-item" *ngIf="users && users.length > 0">
+                              <h6 class="text-muted">Informado por 
+                                <small>
+                                    <mat-form-field *ngIf="users && users.length > 0">
+                                        <mat-select [(ngModel)]="service_data.user_informador" name="user_informador" disabled>
+                                            <mat-option *ngFor="let user of users" [value]="user.id">
+                                              {{user.usuario}}
+                                            </mat-option>
+                                        </mat-select>                                      
+                                    </mat-form-field>            
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="users && users.length > 0">
+                              <h6 class="text-muted">Responsable
+                                <small>
+                                    <mat-form-field *ngIf="users && users.length > 0">
+                                        <mat-select [(ngModel)]="service_data.user_responsable" name="user_responsable" disabled>
+                                            <mat-option *ngFor="let user of users" [value]="user.id">
+                                              {{user.usuario}}
+                                            </mat-option>
+                                        </mat-select>                                      
+                                    </mat-form-field>            
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="users_ito && users_ito.length > 0">
+                              <h6 class="text-muted">ITO Civil
+                                <small>
+                                    <mat-form-field *ngIf="users_ito && users_ito.length > 0">
+                                        <mat-select [(ngModel)]="service_data.user_itocivil_assigned_to" name="user_itocivil_assigned_to" disabled>
+                                            <mat-option *ngFor="let user of users_ito" [value]="user.id">
+                                              {{user.usuario}}
+                                            </mat-option>
+                                          </mat-select>                                      
+                                    </mat-form-field>                                                                                          
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="users_ito && users_ito.length > 0">
+                              <h6 class="text-muted">ITO Eléctrico
+                                <small>
+                                    <mat-form-field *ngIf="users_ito && users_ito.length > 0">
+                                        <mat-select [(ngModel)]="service_data.user_itoelec_assigned_to" name="user_itoelec_assigned_to" disabled>
+                                            <mat-option *ngFor="let user of users_ito" [value]="user.id">
+                                              {{user.usuario}}
+                                            </mat-option>
+                                          </mat-select>                                      
+                                    </mat-form-field>                                                                              
+            
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="service_data.other_ito_civil">
+                              <h6 class="text-muted">ITO Civil Externo
+                                <small *ngIf="service_data.other_ito_civil">
+                                    {{service_data.other_ito_civil}}
+                                </small>
+                              </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="service_data.other_ito_electrico">
+                              <h6 class="text-muted">ITO Eléctrico Externo
+                                <small *ngIf="service_data.other_ito_electrico">
+                                    {{service_data.other_ito_electrico}}
+                                </small>
+                              </h6>
+                            </li>
+                          </ul>
+                          <div class="card-body">
+                          </div>
+                        </div>
+
+
+                      <div class="card bg-light mb-3" *ngIf="model.id === 2 && model.expand && service_detail && service_detail.length > 0">
+                          <div class="card-body">
+                            <h5 class="card-title">Región</h5>
+                            <p class="card-text" *ngIf="service_data.region_id">
+                                <mat-form-field >
+                                    <mat-select [(ngModel)]="service_data.region_id" name="region_id" required (selectionChange)="onSelectRegion(service_data.region_id)" disabled>
+                                      <mat-option *ngFor="let region of regiones" [value]="region.id">
+                                        {{region.region_name}}
+                                      </mat-option>
+                                    </mat-select>
+                                </mat-form-field>        
+                            </p>
+                          </div>
+                          <ul class="list-group list-group-flush">
+                            <li class="list-group-item" *ngIf="service_data.provincia_id"><h6 class="text-muted">Provincia
+                              <small>
+                                  <mat-form-field *ngIf="service_data.provincia_id">
+                                      <mat-select [(ngModel)]="service_data.provincia_id" name="provincia_id" required (selectionChange)="onSelectProvincia(service_data.provincia_id)" disabled>
+                                        <mat-option *ngFor="let provincia of provincias" [value]="provincia.id">
+                                          {{provincia.province_name}}
+                                        </mat-option>
+                                      </mat-select>
+                                    </mat-form-field>                                              
+                              </small>
+                            </h6> 
+                            </li>
+                            <li class="list-group-item" *ngIf="service_data.comuna_id"><h6 class="text-muted">Comuna 
+                              <small>
+                                  <mat-form-field *ngIf="service_data.comuna_id">
+                                      <mat-select [(ngModel)]="service_data.comuna_id" name="comuna_id" disabled>
+                                        <mat-option *ngFor="let comuna of comunas" [value]="comuna.id">
+                                          {{comuna.commune_name}}
+                                        </mat-option>
+                                      </mat-select>                                    
+                                    </mat-form-field>                                              
+                              </small>
+                            </h6>
+                            </li>
+                            <li class="list-group-item" *ngIf="service_data.address"><h6 class="text-muted">Dirección 
+                              <small *ngIf="service_data.address">
+                                  {{service_data.address}}
+                              </small>
+                            </h6>
+                          </li>
+                          </ul>
+                          <div class="card-body">
+                          </div>
+                        </div>
+
+
+
+                        <div class="card bg-light mb-3" *ngIf="model.id === 3 && model.expand && service_detail && service_detail.length > 0">
+                            <div class="card-body">
+                              <h5 class="card-title">Creado el</h5>
+                              <p class="card-text" *ngIf="service_data.create_at">{{service_data.create_at}}</p>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                              <li class="list-group-item" *ngIf="service_data.update_at"><h6 class="text-muted">Editado el: <small>{{service_data.update_at}}</small></h6> </li>
+                              <li class="list-group-item" *ngIf="service_data.reception_date"><h6 class="text-muted">Recepcionado: <small>{{service_data.reception_date}}</small></h6> </li>
+                              <li class="list-group-item" *ngIf="service_data.required_date"><h6 class="text-muted">Ter. Estimada: <small>{{service_data.required_date}}</small></h6></li>
+                              <li class="list-group-item" *ngIf="service_data.due_date"><h6 class="text-muted">Vencimiento: <small>{{service_data.due_date}}</small></h6></li>
+                              <li class="list-group-item" *ngIf="service_data.assigned_date_touser1"><h6 class="text-muted">Asignación ITO Civil: <small>{{service_data.assigned_date_touser1}}</small></h6></li>
+                              <li class="list-group-item" *ngIf="service_data.assigned_date_touser2"><h6 class="text-muted">Asignación ITO Eléctrico: <small>{{service_data.assigned_date_touser2}}</small></h6></li>
+                              <li class="list-group-item" *ngIf="service_data.other_assigned_date_toitocivil"><h6 class="text-muted">Asignación ITO Civil Externo: <small>{{service_data.other_assigned_date_toitocivil}}</small></h6></li>
+                              <li class="list-group-item" ><h6 class="text-muted">Asignación ITO Eléctrico Externo: <small>{{service_data.other_assigned_date_toitoelec}}</small></h6></li>
+                            </ul>
+                            <div class="card-body">
+                            </div>
+                          </div>
+  
+
+
+                          <div class="card bg-light mb-3" *ngIf="model.id === 4 && model.expand && service_detail && service_detail.length > 0">
+                              <div class="card-body">
+                                <h5 class="card-title">Tipo</h5>
+                                <p class="card-text" *ngIf="service_data.type_id">
+                                    <mat-form-field>
+                                        <mat-select [(ngModel)]="service_data.type_id" name="type_id" disabled>
+                                          <mat-option *ngFor="let value of projectservicetype" [value]="value.id">
+                                            {{value.descripcion}}
+                                          </mat-option>
+                                        </mat-select>
+                                      </mat-form-field>                                              
+                                </p>
+                              </div>
+                              <ul class="list-group list-group-flush">
+                                <li class="list-group-item" *ngIf="service_data.type_id">
+                                  <h6 class="text-muted">Categoría: 
+                                    <small>
+                                        <mat-form-field >
+                                            <mat-select [(ngModel)]="service_data.category_id" name="category_id" disabled>
+                                              <mat-option *ngFor="let value of projectservicecategorie" [value]="value.id">
+                                                {{value.descripcion}}
+                                              </mat-option>
+                                            </mat-select>
+                                        </mat-form-field>                                                    
+                                    </small>
+                                  </h6>
+                                </li>
+                                <li class="list-group-item" *ngIf="service_data.description"><h6 class="text-muted">Descripción: <small>{{service_data.description}}</small></h6> </li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_obra"><h6 class="text-muted">Responsable Obra: <small>{{service_data.responsable_obra}}</small></h6></li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_phone"><h6 class="text-muted">Tlf. Responsable Obra: <small>{{service_data.responsable_phone}}</small></h6></li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_email"><h6 class="text-muted">Email Responsable Obra: <small>{{service_data.responsable_email}}</small></h6></li>
+
+                                <li class="list-group-item" *ngIf="service_data.responsable_unidad"><h6 class="text-muted">Responsable Unidad: <small>{{service_data.responsable_unidad}}</small></h6></li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_unidad_phone"><h6 class="text-muted">Tlf. Responsable Unidad: <small>{{service_data.responsable_unidad_phone}}</small></h6></li>
+                                <li class="list-group-item" *ngIf="service_data.responsable_unidad_email"><h6 class="text-muted">Email Responsable Unidad: <small>{{service_data.responsable_unidad_email}}</small></h6></li>
+                              </ul>
+                              <div class="card-body">
+                              </div>
+                            </div>
+
+                            
+
+                            <div class="card bg-light mb-3" *ngIf="model.id === 5 && model.expand && service_detail && service_detail.length > 0">
+                                <div class="card-body">
+                                  <h5 class="card-title">N° Cliente</h5>
+                                  <p class="card-text" *ngIf="service_data.cc_number">
+                                      <a mat-button color="primary" (click)="showItem(id, cc_id, service_data.cc_number, category_id)" >
+                                          {{service_data.cc_number}}
+                                          <i class="material-icons md-14-color" >launch</i> 
+                                      </a>            
+                                  </p>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                  <li class="list-group-item" *ngIf="service_data.ejecutivo">
+                                    <h6 class="text-muted">Ejecutivo Market:
+                                      <small>
+                                          {{service_data.ejecutivo}}
+                                      </small>
+                                    </h6>
+                                  </li>
+                                  <li class="list-group-item" *ngIf="service_data.cro_number"><h6 class="text-muted">N° CRO: <small>{{service_data.cro_number}}</small></h6> </li>
+                                  <li class="list-group-item" *ngIf="service_data.cro_status"><h6 class="text-muted">CRO Estatus: <small>{{service_data.cro_status}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.reception_crodate"><h6 class="text-muted">Fecha Recepción CRO: <small>{{service_data.reception_crodate}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.checked_crodate"><h6 class="text-muted">Fecha Revisión CRO: <small>{{service_data.checked_crodate}}</small></h6></li>  
+                                  <li class="list-group-item" *ngIf="service_data.mo_number"><h6 class="text-muted">MO (Mayor Obra): <small>{{service_data.mo_number}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.edp_number"><h6 class="text-muted">N° EDP: <small>{{service_data.edp_number}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.edp_status"><h6 class="text-muted">EDP. Estatus: <small>{{service_data.edp_status}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.edp_amount"><h6 class="text-muted">EDP. Monto: <small>{{service_data.edp_amount}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.send_edpdate"><h6 class="text-muted">Fecha Envío EDP: <small>{{service_data.send_edpdate}}</small></h6></li>
+
+                                  <li class="list-group-item" *ngIf="service_data.accept_edpdate"><h6 class="text-muted">Fecha Aprobación EDP: <small>{{service_data.accept_edpdate}}</small></h6></li>
+                                  <li class="list-group-item" *ngIf="service_data.reject_edpdate"><h6 class="text-muted">Fecha Rechazo EDP: <small>{{service_data.reject_edpdate}}</small></h6></li>                                  
+                                </ul>
+                                <div class="card-body">
+                                </div>
+                              </div>
+
+          </div>
+
+          <div class="w-100"></div>
+          <div class="col-12"  *ngIf="!isRateLimitReached && !isLoadingResults && toggleContentMain">
+              <section id="tabs" class="project-tab">
+                  <div class="row">
+                      <div class="col-12">
+                            <div class="p-3 animated fadeIn Fast">
+
+                            <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar">
+
+                                <h2 class="jeEmY">Descripción del Trabajo</h2>
+                                <mat-form-field appearance="outline" class="example-full-width mat-status">
+                                  <textarea matInput #comentario placeholder="Añadir descripción..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
+                                  <mat-hint align="end">{{comentario.value.length}} / 256</mat-hint>
+                                </mat-form-field>
+                    
+                                <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
+                                  <mat-icon>attachment</mat-icon>
+                                  <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >
+                                  <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 3, Max. 3 </strong></span>
+                                </button>
+                                
+                                <div *ngIf="archivos" >
+                                  <mat-chip-list>
+                                    <mat-chip *ngFor="let forFile of archivos; let i = index;" 
+                                      color="primary"
+                                      [removable]="true"
+                                      (removed)="removeFile(i)">
+                                      <span>{{ forFile.archivo.name }}</span>
+                                      <span *ngIf="forFile.progreso &&  forFile.progreso > 0" style="margin-left: 6px; margin-right: 6px;"><strong>{{forFile.progreso}}%</strong></span>
+                                      <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
+                                      <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
+                                      <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
+                                    
+                                      <div class="progress container-fluid">
+                                        <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
+                                      </div>
+                                    </mat-chip>
+                                  </mat-chip-list>
+                                </div>
+                                
+                                <br>
+                    
+                                <div class="row row-custom">
+                                    
+                                    <button mat-raised-button color="primary" class="margin-left" [disabled]="formComentar.invalid" (click)="addComentario()">
+                                        Guardar           
+                                    </button>
+                                    <button mat-raised-button (click)="togglemain()" style="margin-left: 4px">Cancelar</button>
+                    
+                                    <!--
+                                    <button mat-raised-button color="warn"> 
+                                        cancelar           
+                                    </button>-->
+                                    
+                                </div>
+                    
+                            </form>
+                          </div>
+                        </div>                      
+                    </div>
+
+
+                
+                        <!----
+                        
+                        <div class="row">
+                          <div class="col-12">
+                                <div class="p-3 animated fadeIn Fast">
+                                
+                                <mat-form-field appearance="outline" class="full-width" *ngIf="toggleContentMain">
+                                  <textarea matInput #inputstate  placeholder="Observación" [(ngModel)]="projectContent" name="observation" maxlength="177"  ></textarea>
+                                </mat-form-field>
+
+                                <div *ngIf="toggleContentMain" >
+                                    <div class="row" *ngIf="userFirebase">
+                                        <div class="col-12" >
+                                          <h2 class="jeEmY">Etiquetados</h2>
+                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>
+                                        </div>
+                                    </div>                                                                      
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <div class="button-row p-2" *ngIf="toggleContentMain">
+                                    <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="!projectContent" disabled>Guardar</button>                                    
+                                    <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="projectContent && projectContent.length <= 3" disabled>Guardar</button>
+                                    <button mat-raised-button color="primary" (click)="addComment(projectContent)" *ngIf="projectContent && projectContent.length > 3">Guardar</button>                                                                        
+                                    <button mat-raised-button (click)="togglemain()">Cancelar</button>
+                                </div>
+                                </div>
+                          </div>                      
+                      </div>-->
+
+
+              </section>          
+          </div>
+          
+          <div class="w-100"></div>
+          <div class="col-12"  *ngIf="!isRateLimitReached && !isLoadingResults">
+              <section id="tabs" class="project-tab">
+                      <div class="row">
+                          <div class="col-12">
+                              <nav>
+                                  <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                      <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Histórico</a>
+                                      <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Registro de Trabajo</a>
+                                  </div>
+                              </nav>
+
+                              <div class="tab-content" id="nav-tabContent">
+                                  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                                    <br>
+                                    <cdk-virtual-scroll-viewport itemSize="60" class="list-container list-group" *ngIf="comentarios$ !== null">
+                                      <div *cdkVirtualFor="let comentarios of comentarios$ | async">
+                                        
+                                        <div class="fOqogj">
+                                          <div class="SZsdL">
+                                            <div style="display: inline-block; position: relative; outline: 0px; height: 22px; width: 22px;">
+                                              <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                                                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                                              </span>
+                                            </div>
+                                          </div>
+                                          <div class="fLcKLS">  
+                                              <span class="sc-fdcRnX jmTFIN" style="padding-left: 7px;">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
+                                              ha realizado registro de trabajo hace
+                                              <span class="sc-fdcRnX jmTFIN">{{comentarios.create_at | countTime}}</span>
+                                          </div>
+                                        </div>
+                                        <div class="fOqogj" style="padding-left: 30px;">
+                                          → {{comentarios.comentario}}
+                                        </div>
+                                
+                                        <div class="fOqogj" style="padding-left: 30px">
+                                          <div class="row float-right row-custom" *ngIf="comentarios.adjuntos">
+                                            
+                                            <div *ngFor="let adjuntos of comentarios.adjuntos">
+                                      
+                                                <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" style="color: #303f9f;" *ngIf="adjuntos.type == 'image/png' || adjuntos.type == 'image/jpg' || adjuntos.type == 'image/jpeg'">
+                                                    <mat-icon aria-label="launch">image</mat-icon>
+                                                </a>
+                                      
+                                                <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent"*ngIf="adjuntos.type == 'application/x-zip-compressed' || adjuntos.type == 'application/x-rar-compressed'">
+                                                  <mat-icon aria-label="launch">work</mat-icon>
+                                                </a> 
+                                      
+                                                <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'application/pdf' || adjuntos.type == 'application/msword' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || adjuntos.type == 'application/vnd.ms-excel' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+                                                  <mat-icon aria-label="launch">insert_drive_file</mat-icon>
+                                                </a>
+                                      
+                                            </div>
+                                            
+                                          </div>
+                                        </div>
+                                
+                                        <hr width="96%"  noshade="noshade" size="4px" style="color: #303f9f;"/>
+                                        
+                                      </div>
+                                    <!--</div>-->
+                                    </cdk-virtual-scroll-viewport>
+
+                                    <div class="example-rate-limit-reached" *ngIf="!comentarios$">
+                                        No se encontraron registros de trabajo.
+                                    </div>
+                                  
+                                  </div>
+
+                              <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <div class="p-3 animated fadeIn Fast">
+                                <button mat-flat-button style=" background:#F8F8F8;" (click)="toggle()" *ngIf="!toggleContent">
+                                   <mat-icon class="material-icons md-14-color" >comment</mat-icon>
+                                   Comentar
+                                </button>
+
+
+                                  <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar" *ngIf="toggleContent">
+
+                                    <h2 class="jeEmY">Descripción del Trabajo</h2>
+                                    <mat-form-field appearance="outline" class="example-full-width mat-status">
+                                      <textarea matInput #comentario placeholder="Añadir descripción..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
+                                      <mat-hint align="end">{{comentario.value.length}} / 256</mat-hint>
+                                    </mat-form-field>
+                        
+                                    <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
+                                      <mat-icon>attachment</mat-icon>
+                                      <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >
+                                      <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 7, Max. 7 </strong></span>
+                                    </button>
+                                    
+                                    <div *ngIf="archivos" >
+                                      <mat-chip-list>
+                                        <mat-chip *ngFor="let forFile of archivos; let i = index;" 
+                                          color="primary"
+                                          [removable]="true"
+                                          (removed)="removeFile(i)">
+                                          <span>{{ forFile.archivo.name }}</span>
+                                          <span *ngIf="forFile.progreso &&  forFile.progreso > 0" style="margin-left: 6px; margin-right: 6px;"><strong>{{forFile.progreso}}%</strong></span>
+                                          <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
+                                          <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
+                                          <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
+                                        
+                                          <div class="progress container-fluid">
+                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
+                                          </div>
+                                        </mat-chip>
+                                      </mat-chip-list>
+                                    </div>
+                                    
+                                    <br>
+                        
+                                    <div class="row row-custom">
+                                        
+                                        <button mat-raised-button color="primary" class="margin-left" [disabled]="formComentar.invalid" (click)="addComentario()">
+                                            Guardar           
+                                        </button>
+
+                                        <button mat-raised-button (click)="toggle()" style="margin-left: 4px">Cancelar</button>
+                        
+                                        <!--
+                                        <button mat-raised-button color="warn"> 
+                                            cancelar           
+                                        </button>-->
+                                        
+                                    </div>
+                        
+                                </form>
+                                <br>
+                                <div *ngIf="toggleContent" >
+                                    <div class="row" *ngIf="userFirebase">
+                                        <div class="col-12" >
+                                          <h2 class="jeEmY">Etiquetados</h2>
+                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>
+                                        </div>
+                                    </div>                                                                      
+                                </div>
+
+                                </div>
+                              </div>
+
+                              </div>
+                          </div>
+                      </div>
+
+
+              </section>          
+          </div>
+
+          <div class="w-100"></div>
+          <div class="col-12"  *ngIf="!isRateLimitReached && !isLoadingResults">
+              <section id="tabs" class="project-tab">
+                      <div class="row">
+                          <div class="col-12">
+                              <nav>
+                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                  <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home-file" role="tab" aria-controls="nav-home" aria-selected="true">Listado</a>
+                                  <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile-file" role="tab" aria-controls="nav-profile" aria-selected="false">Adjuntos</a>
+                                </div>
+                              </nav>
+                              <div class="tab-content" id="nav-tabContent">
+                                <div class="tab-pane fade show active" id="nav-home-file" role="tabpanel" aria-labelledby="nav-home-tab">
+                                  <div class="p-3">
+                                  <app-file-list [project_id]="project_id" [service_id]="service_id"></app-file-list>
+                                  </div>                  
+                                </div>
+                              <div class="tab-pane fade" id="nav-profile-file" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                <div class="p-3">
+                                  <file-upload [project_id]="project_id"  [service_id]="service_id"></file-upload>
+                                </div>
+                              </div>
+                              </div>
+                          </div>
+                      </div>
+              </section>          
+          </div>
+
+
+
+        </div>        
+
+        </mat-card-content>            
+      </mat-card>
+

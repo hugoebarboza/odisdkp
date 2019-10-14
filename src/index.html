@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>OCA Global - ODIS</title>
+  <base href="/">
+  <meta name="Description" content="OCA Global - ODIS DKP">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">  
+  <link rel="icon" type="img/png" href="https://ocaglobal.com/themes/ledel-foundation6-october/assets/img/favicon.png"/>
+  <meta name="theme-color" content="#1976d2"/>
+  <link rel="manifest" href="manifest.json">
+    
+  <link type="text/css" rel="stylesheet" href="assets/css/font.css"/>
+  <link type="text/css" rel="stylesheet" href="assets/css/animated.css"/>
+
+  <script defer src="https://use.fontawesome.com/releases/v5.0.8/js/all.js"></script>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en">
+  <link href="https://unpkg.com/angular-calendar@0.26.4/css/angular-calendar.css" rel="stylesheet">
+  
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <link rel="apple-touch-icon" href="assets/icons/icon-512x512.png">
+  <link rel="apple-touch-icon" sizes="192x192" href="assets/icons/icon-192x192.png">
+  <link rel="apple-touch-icon" sizes="152x152" href="assets/icons/icon-152x152.png">
+  <link rel="apple-touch-icon" sizes="144x144" href="assets/icons/icon-144x144.png">
+  <link rel="apple-touch-icon" sizes="96x96" href="assets/icons/icon-96x96.png">
+  <link rel="apple-touch-icon" sizes="72x72" href="assets/icons/icon-72x72.png">
+
+
+   <style>
+      .body{
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        display: table;
+        font-weight: 70;
+        font-family: 'Lato';
+      }
+
+      .home-container {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+      }
+
+      .home-content {
+        text-align: center;
+        display: inline-block;
+      }
+      .title {
+        font-size: 9px
+      }
+
+      #page-content-wrapper {
+          width: 100%;
+          transition: all 0.3s;
+        }
+
+        #wrapper {
+          width: 100%;
+          overflow-y: auto;
+          align-items: stretch;
+        }
+
+        /* SCROLL */
+        ::-webkit-scrollbar {
+          width: 8px;
+          margin-top: 5%;
+          margin-bottom: 5%;
+          margin-left: 1px;
+          margin-right: 1px;
+          border-radius: 10px;
+        }
+
+        /*SCROLL Track */
+        ::-webkit-scrollbar-track {
+          background: #fff; 
+          border-radius: 10px;
+        }
+        
+        /*SCROLL Handle */
+        ::-webkit-scrollbar-thumb {
+          background: #C7C7C7; 
+          border-radius: 10px;
+        }
+
+        /*SCROLL Handle on hover */
+        ::-webkit-scrollbar-thumb:hover {
+          background: #828282; 
+          border-radius: 10px;
+        }
+
+
+      #loading{display:inline-block;width:55px;height: 55px;border:3px solid #DE473C;border-radius:50%;border-top-color:#fbeae9;animation:spin 1s ease-in-out infinite;position:fixed;left:calc(50% - 25px);top:calc(50% - 25px)}@keyframes spin{to{transform:rotate(360deg)}}
+    </style>
+    
+  
+</head>
+
+<body class="bg-light">  
+   <app-root>  
+       <noscript>
+        <h3 style="color: #673ab7; font-family: Helvetica; margin: 2rem;">
+            Sorry, but app is not available without javascript
+        </h3>
+      </noscript>
+      <div class="home-container">
+        <div class="home-content"> 
+        <div class="title">
+        <p class="loader__label">Loading</p>
+        </div>
+        </div>
+
+      </div>
+      <div id="loading">
+      </div>   
+   </app-root>
+
+    <!-- Script Slide Menu-->
+    <script defer>
+    func = function(event) {        
+        $("#wrapper").toggleClass("toggled");
+    };
+    </script>
+    <script defer src="https://apis.google.com/js/platform.js"></script>
+    <script defer data-jsd-embedded data-key="c328d0a0-394f-40ed-8f0c-0aee379b69d1" data-base-url="https://jsd-widget.atlassian.com" src="https://jsd-widget.atlassian.com/assets/embed.js"></script>    
+</body>
+</html>

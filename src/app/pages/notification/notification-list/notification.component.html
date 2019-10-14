@@ -1,0 +1,266 @@
+<meta name="Description" content="Users">
+<!--CONTENT-->
+
+<div  *ngIf="proyectos && identity">
+
+  <div  >
+
+
+        <div class="container-fluid p-2">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+            <h1 class="h4" >{{title}}</h1>
+        </div>
+        <br>
+
+        <div class="row animated fadeIn" >
+            
+          <div class="col-12">
+
+              <div class="container" *ngIf="isLoading">
+                  <div class="row justify-content-md-center">
+                    <div class="col col-lg-2">
+                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                    </div>
+                  </div>
+              </div>
+              
+
+              <mat-card [ngStyle]="{'padding':'0px'}" *ngIf="!isLoading">
+
+
+                  <mat-card-content>
+                    
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-3 float-left">
+
+                            <ul class="filter-list" data-pjax="">
+                                <li>
+                                  <a class="filter-item selected" [routerLink]="['/notification']" > 
+                                    <span class="count">{{resultCount}}</span>
+                                    Todas
+                                  </a>
+                                </li>
+                                <li>
+                                  <a [routerLink]="['/notification/unread']" class="filter-item ">
+                                    <span class="count">{{resultCountUnread}}</span>
+                                    No Leídas
+                                  </a>
+                                </li>
+                                <li>
+                                  <a [routerLink]="['/notification/read']" class="filter-item ">
+                                    <span class="count">{{resultCountRead}}</span>
+                                    Leídas
+                                  </a>
+                                </li>
+                            </ul>                          
+
+                        </div>
+                        <div class="col-9 float-right">
+                          <div class="rate-limit-reached" *ngIf="resultCount == 0">
+                                Sin notificaciones.
+                          </div>
+
+
+                          <ul class="filter-list" *ngIf="notifications$ !== null">
+                              <div class="container-fluid" >
+                                  <div class="row">
+                                    <div class="col">
+                                        Asunto
+                                    </div>
+                                    <div class="col">
+                                        Mensaje
+                                    </div>
+                                    <div class="col">
+                                        Informador
+                                    </div>
+
+                          
+
+                                    <div class="col">
+                                      Estatus
+                                    </div>    
+                                  </div>
+                              </div>
+
+                            
+                              <cdk-virtual-scroll-viewport itemSize="50" class="list-container list-group" *ngIf="notifications$ !== null && !isLoading">
+
+                                
+                                  <div *cdkVirtualFor="let element of notifications$ | async; let i = index; let conteo = count">                                    
+
+                                      <div class="active-link-red list-group-item list-group-item-action" *ngIf="element.status == 1">
+                                          <div class="container-fluid" *ngIf="element.status == 1">
+                                              <div class="row">
+                                                <div class="col">
+                                                    {{ i + 1 }}. {{element.title}}
+                                                </div>
+                                                <div class="col">
+                                                    {{element.body}}. Hace <code class="highlighter-rouge">{{element.create_at | countTime}}</code>
+                                                </div>
+                                                <div class="col">
+                                                    {{element.users.name}} {{element.users.surname}}
+                                                </div>
+        
+        
+                                                <div class="col">
+                                                    <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 1"
+                                                    matTooltip="Marcar como leida."
+                                                    [matTooltipPosition]="positionleftaction.value"                                                        
+                                                    >
+                                                    <div class="circle"  [style.color]="'red'"></div> 
+                                                    </button>
+                                                    <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 0" 
+                                                    matTooltip="Marcar como no leida."
+                                                    [matTooltipPosition]="positionleftaction.value"                        
+                                                    >
+                                                    <div class="circle"  [style.color]="'green'"></div>
+                                                    </button>          
+                                                </div>    
+                                              </div>
+                                          </div>    
+                                      </div>
+
+                                      <div class="active-link-green list-group-item list-group-item-action" *ngIf="element.status == 0">
+                                          <div class="container-fluid" *ngIf="element.status == 0">
+                                              <div class="row">
+                                                <div class="col">
+                                                    {{ i + 1 }}. {{element.title}}
+                                                </div>
+                                                <div class="col">
+                                                    {{element.body}}. Hace <code class="highlighter-rouge">{{element.create_at | countTime}}</code>
+                                                </div>
+                                                <div class="col">
+                                                    {{element.users.name}} {{element.users.surname}}
+                                                </div>
+        
+        
+                                                <div class="col">
+                                                    <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 1"
+                                                    matTooltip="Marcar como leida."
+                                                    [matTooltipPosition]="positionleftaction.value"                                                        
+                                                    >
+                                                    <div class="circle"  [style.color]="'red'"></div> 
+                                                    </button>
+                                                    <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 0" 
+                                                    matTooltip="Marcar como no leida."
+                                                    [matTooltipPosition]="positionleftaction.value"                        
+                                                    >
+                                                    <div class="circle"  [style.color]="'green'"></div>
+                                                    </button>          
+                                                </div>    
+                                              </div>
+                                          </div>                                        
+                                      </div>
+  
+
+
+
+
+
+                                  </div>
+                              </cdk-virtual-scroll-viewport>   
+
+                          </ul>
+                          <ul class="filter-list" *ngIf="notifications$ !== null">
+                              <div class="row">                                                                
+                                  <div class="col text-right">                                       
+
+
+                                      <button mat-button color="primary" (click)="irInicio()"> <mat-icon aria-label="Example icon-button with a heart icon" >keyboard_arrow_up</mat-icon></button>                                      
+                                      <button mat-button color="primary" (click)="irFinal()"> <mat-icon aria-label="Example icon-button with a heart icon" >keyboard_arrow_down</mat-icon></button>                                      
+
+  
+                                  </div>
+                                </div>    
+                           </ul>
+    
+                      
+                
+
+                          <!--
+                          <table mat-table [dataSource]="notifications$" *ngIf="notifications$">
+                            
+
+
+                            <ng-container matColumnDef="title">
+                              <th mat-header-cell *matHeaderCellDef> Titulo </th>
+                              <td mat-cell *matCellDef="let element"> {{element.title}} </td>
+                            </ng-container>
+  
+  
+                            
+                            <ng-container matColumnDef="body">
+                                <th mat-header-cell *matHeaderCellDef> Mensaje </th>
+                                <td mat-cell *matCellDef="let element"> {{element.body}} </td>
+                            </ng-container>
+                          
+                          
+                            
+                            <ng-container matColumnDef="create_by">
+                              <th mat-header-cell *matHeaderCellDef> Informador </th>
+                              <td mat-cell *matCellDef="let element">  {{element.users.name}} {{element.users.surname}}</td>
+                            </ng-container>
+                          
+                            
+                            <ng-container matColumnDef="create_at">
+                              <th mat-header-cell *matHeaderCellDef> Creado El </th>
+                              <td mat-cell *matCellDef="let element"> {{element.create_at}} </td>
+                            </ng-container>
+  
+  
+  
+                            
+                            <ng-container matColumnDef="status">
+                                <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                                <td mat-cell *matCellDef="let element" > 
+                                  <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 1"
+                                  matTooltip="Marcar como leida."
+                                  [matTooltipPosition]="positionleftaction.value"                                                        
+                                  >
+                                  <div class="circle"  [style.color]="'red'"></div> 
+                                  </button>
+                                  <button mat-icon-button (click)="update(element.id, element)" *ngIf="element.status == 0" 
+                                  matTooltip="Marcar como no leida."
+                                  [matTooltipPosition]="positionleftaction.value"                        
+                                  >
+                                  <div class="circle"  [style.color]="'green'"></div>
+                                  </button>
+                            </ng-container>
+  
+                          
+                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                          </table>
+
+                          ---->
+                          
+                          
+                        </div>
+                      </div>
+                    </div>
+
+
+
+                  </mat-card-content>
+
+              </mat-card>
+
+          </div>
+
+      </div>
+
+
+        
+      </div>
+
+</div>
+<!-- /#page-content-wrapper -->
+</div>
+
+<div *ngIf="getnotifications$ | async as All">  
+</div>  
+<div *ngIf="getnotificationsUnread$ | async as Unread">
+</div>
+<div *ngIf="getnotificationsRead$ | async as Unread">
+</div>

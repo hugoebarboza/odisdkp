@@ -1,0 +1,81 @@
+<mat-toolbar color="warn">
+    <h3>{{title}} {{service_name}}</h3>            
+    <span class="mat-spacer"></span>
+    <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+    <mat-icon class="mat-icon">close</mat-icon>       
+    </button>
+</mat-toolbar>
+<p></p>
+<div *ngIf="loading">
+  <app-loading *ngIf="loading"></app-loading>  
+</div>
+    
+<div *ngIf="!loading && service_detail && service_detail.length > 0">
+    <form class="mat-dialog-content" #formControl="ngForm"  novalidate="novalidate">
+        <div class="form">
+            <mat-form-field color="accent">
+              <input matInput #input class="form-control" placeholder="Proyecto" [(ngModel)]="project" name="project"  [value]="project" disabled>
+            </mat-form-field>
+        </div>
+      <div class="form">
+          <mat-form-field color="accent">
+             <input matInput #input  placeholder="Num. OT" [(ngModel)]="service_data.order_number" name="order_number"   disabled>
+           </mat-form-field>
+        </div>
+  
+        <div class="form">
+            <mat-form-field >
+              <input matInput #input  placeholder="Nombre Corto del Proyecto" [(ngModel)]="services.service_name" name="service_name"   disabled>
+            </mat-form-field>
+        </div>
+  
+        <div class="form">
+            <mat-form-field >
+              <textarea matInput #inputstate  placeholder="Descripción Amplia del Proyecto" [(ngModel)]="service_data.description" name="description" maxlength="177"  disabled></textarea>
+            </mat-form-field>
+        </div>
+
+
+        <div class="form" *ngIf="users && users.length > 0">
+          <mat-form-field>
+              <mat-select placeholder="Creado Por" [(ngModel)]="service_data.create_by" name="create_by" disabled>
+                <mat-option *ngFor="let user of users" [value]="user.id">
+                  {{user.usuario}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+  
+        <div class="form">
+          <mat-form-field >
+            <input matInput #input  placeholder="Creado El" [(ngModel)]="service_data.create_at" name="create_at"   disabled>
+          </mat-form-field>
+        </div>
+  
+        <div class="form" *ngIf="users && users.length > 0">
+          <mat-form-field>
+              <mat-select placeholder="Actualizado Por" [(ngModel)]="service_data.update_by" name="update_by" disabled>
+                <mat-option *ngFor="let user of users" [value]="user.id">
+                  {{user.usuario}}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+        </div>
+  
+        <div class="form">
+          <mat-form-field >
+            <input matInput #input  placeholder="Actualizado El" [(ngModel)]="service_data.update_at" name="update_at"   disabled>
+          </mat-form-field>
+        </div>
+        
+
+
+    </form>
+    <br>  
+      <div mat-dialog-actions>      
+          <button mat-button [mat-dialog-close]="1" (click)="confirmDelete()" mat-raised-button color="warn">Confirmar</button>
+          <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button>Cancelar</button>      
+      </div>
+</div>
+<br>        
+    
