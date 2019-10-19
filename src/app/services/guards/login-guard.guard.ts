@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { CanLoad , Router } from '@angular/router';
-//import { Route } from '@angular/router';
+// import { Route } from '@angular/router';
 
 import { UserService, AuthService } from '../../services/service.index';
 
@@ -31,23 +31,21 @@ export class LoginGuardGuard implements CanLoad  {
 
   canLoad(): boolean {
 
-    //let url: string = route.path;
-    //console.log('Url:'+ url);
+    // let url: string = route.path;
+    // console.log('Url:'+ url);
 
     if ( this.auth.isAuthenticated() ) {
       console.log( 'Paso Guard' );
       return true;
     } else {
       console.log( 'Bloqueado por Guard' );
-      //this.auth.resetAction();    
+      // this.auth.resetAction();
       this.auth.logout();
       this.authService.logout();
-      //this.router.navigate(['/login']);
+      // this.router.navigate(['/login']);
       return false;
     }
 
-  }  
-
-
-
+  }
 }
+

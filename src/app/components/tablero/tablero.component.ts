@@ -151,40 +151,28 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  public getData(response: any){
-    if(response){
-        response.subscribe(
-          (some: any) => 
-          {
-            if(some.datos.data){    
-            //console.log(some.datos);
-            this.resultsLength = some.datos.total;
-            this.servicename = some.datos.data[0]['service_name'];
-            this.category_id =  some.datos.data[0]['category_id'];
-            this.project_id = some.datos.data[0]['project_id'];
-            this.isRateLimitReached = false;          
-            this.datasource = some.datos.data;
-            }else{
-            this.resultsLength = 0;
-            this.servicename = some.datos['service_name'];
-            this.category_id =  some.datos['projects_categories_customers']['id'];
-            this.project_id = some.datos['project']['id'];
-            this.isRateLimitReached = true;          
-            }
-            this.ServicioSeleccionado.emit(this.servicename);
-            if(this.datasource.length > 0 && this.estatus.length > 0){
-              this.getCountData(this.datasource, this.estatus);
-            }
-            //console.log(this.datasource.length);
-            //console.log(this.datasource);
-            this.isLoadingResults = false;
-          },
-          (error:any) => {                      
-            this.isLoadingResults = false;
-            this.isRateLimitReached = true;
-            console.log(<any>error);
-          });
-    }else{
+  public getData(response: any) {
+    if (response && response.status === 'success') {
+      if (response && response.datos.data) {
+      this.resultsLength = response.datos.total;
+      this.servicename = response.datos.data[0]['service_name'];
+      this.category_id =  response.datos.data[0]['category_id'];
+      this.project_id = response.datos.data[0]['project_id'];
+      this.isRateLimitReached = false;
+      this.datasource = response.datos.data;
+      } else {
+      this.resultsLength = 0;
+      this.servicename = response.datos['service_name'];
+      this.category_id =  response.datos['projects_categories_customers']['id'];
+      this.project_id = response.datos['project']['id'];
+      this.isRateLimitReached = true;
+      }
+      this.ServicioSeleccionado.emit(this.servicename);
+      if (this.datasource.length > 0 && this.estatus.length > 0) {
+        this.getCountData(this.datasource, this.estatus);
+      }
+      this.isLoadingResults = false;
+    } else {
       return;
     }
   }
@@ -216,30 +204,30 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedColumnnDate.columnValueHasta = '';
     this.filtersregion.fieldValue ='';
     this.selectedColumnnUsuario.fieldValue = '';
-    this.selectedColumnnUsuario.columnValue = '';    
+    this.selectedColumnnUsuario.columnValue = '';
     this.pageSize = 15;
     this.isLoadingResults = true;
     this.sort.active = 'create_at';
-    this.sort.direction = 'desc';  
+    this.sort.direction = 'desc';
 
-    if(this.paginator){
-      this.paginator.pageIndex = 0;      
-    }else{
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    } else {
       this.pageIndex = 0;
     }
 
-    
+
     this._orderService.getServiceOrder(
-      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
+      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
-      .then(response => {this.getData(response)})
-      .catch(error => {                      
+      .then(response => { this.getData(response); })
+      .catch(error => {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
-            console.log(<any>error);          
+            console.log(<any>error);
       });
   }
 

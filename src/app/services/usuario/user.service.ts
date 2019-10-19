@@ -8,19 +8,22 @@ import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 
 
-//NGRX REDUX
+// NGRX REDUX
 import { AppState } from '../../app.reducers';
 import { Store } from '@ngrx/store';
 import { LoginAction, ResetAction } from '../../contador.actions';
 import { ResetUserAction } from 'src/app/stores/auth/auth.actions';
 
 
-//MODELS
+// MODELS
 import { Departamento, Proyecto, User } from '../../models/types';
 
 
-//SETTINGS
+// SETTINGS
 import { GLOBAL } from '../global';
+
+// FIREBASE
+import { AngularFirePerformance } from '@angular/fire/performance';
 
 
 @Injectable()
@@ -30,13 +33,14 @@ export class UserService  {
     public departamentos: Array<Departamento>;
     public idaccount;
     public identity;
-    public token;	
+    public token;
     public proyectos: Array<Proyecto>;
     public usuario: any;
     public headers: HttpHeaders = undefined;
 
 
 	constructor(
+		private afp: AngularFirePerformance,
 		public _http: HttpClient,
 		private store: Store<AppState>,
 		public _router: Router,
@@ -237,7 +241,7 @@ export class UserService  {
     }
 
     let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		//console.log(headers);
+    // console.log(headers);
 
 		return this._http.post(this.url+'user/'+userid+'/verify/'+status, {headers: headers})
 						 .map( (resp: any) => {
@@ -257,11 +261,13 @@ export class UserService  {
 		let params = 'json='+json;
 		const href = this.url+'logindkp'
 		const requestUrl = href;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 		if(!requestUrl){
 			return;
 		}
+
+		const trace = this.afp.trace$('LoginDkp').subscribe();
 
 		try {
 
@@ -271,18 +277,20 @@ export class UserService  {
 					this.token = resp;
 					let key = 'token';
 					this.saveStorage(key, resp);
+					trace.unsubscribe();
 					return resp;
 				}			
 			})
-			.catch((error)=>{ 
-				console.log(error);
-				//return error;
+			.catch((_error)=>{
+				trace.unsubscribe();
+				// console.log(error);
+				// return error;
 			});
 
 		} catch (err) {
 			console.log(err);
-			//trace.putAttribute('errorCode', err.code);
-			//trace.stop();
+			// trace.putAttribute('errorCode', err.code);
+			// trace.stop();
 		}
 		
 

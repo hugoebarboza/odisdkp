@@ -5,19 +5,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 
-//DIRECTIVE
+// DIRECTIVE
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
-//MATERIAL
+// MATERIAL
 import {MaterialModule} from '../../material-module';
 
-//MODULES
+// MODULES
 import { CalendarModule } from 'primeng/calendar';
 
-//PROLOAD STRATEGY
+// PROLOAD STRATEGY
 import { QuicklinkModule } from 'ngx-quicklink';
 
-//COMPONENTS
+// COMPONENTS
 import {
     AddDocComponent,
     DropdownNotificationComponent,
@@ -30,6 +30,7 @@ import {
     HeaderComponent,
     KpiComponent,
     KpiProjectComponent,
+    KpiProjectAmchartsComponent,
     KpiProjectDetailComponent,
     KpiProjectForecastComponent,
     KpiProjectLocationComponent,
@@ -43,11 +44,12 @@ import {
     TagUserComponent,
     UploaderComponent,
     UploadTaskComponent,
-    ViewOrderTimeSpentComponent,    
+    ViewOrderTimeSpentComponent,
    } from './shared.index';
 
 // Pipes
 import { PipesModule } from '../../pipes/pipes.module';
+
 
 
 
@@ -59,7 +61,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         FormsModule,
         QuicklinkModule,
         RouterModule,
-        ReactiveFormsModule,    
+        ReactiveFormsModule,
         MaterialModule,
         NgSelectModule,
         NgxChartsModule,
@@ -72,12 +74,13 @@ import { PipesModule } from '../../pipes/pipes.module';
         EditServiceComponent,
         FilelistComponent,
         FileListComponent,
-        FileUploadComponent,    
+        FileUploadComponent,
         FooterComponent,
         FootermainComponent,
-        HeaderComponent,        
+        HeaderComponent,
         KpiComponent,
         KpiProjectComponent,
+        KpiProjectAmchartsComponent,
         KpiProjectDetailComponent,
         KpiProjectForecastComponent,
         KpiProjectLocationComponent,
@@ -99,12 +102,13 @@ import { PipesModule } from '../../pipes/pipes.module';
         EditServiceComponent,
         FilelistComponent,
         FileListComponent,
-        FileUploadComponent,    
+        FileUploadComponent,
         FooterComponent,
         FootermainComponent,
         HeaderComponent,
         KpiComponent,
         KpiProjectComponent,
+        KpiProjectAmchartsComponent,
         KpiProjectDetailComponent,
         KpiProjectForecastComponent,
         KpiProjectLocationComponent,
@@ -128,6 +132,5 @@ import { PipesModule } from '../../pipes/pipes.module';
         EditServiceComponent,
         ShowComponent,
       ],
-    
 })
 export class SharedModule { }

@@ -491,66 +491,55 @@ selectedColumnnEstatus = {
     this.selectedColumnnDate.columnValueHasta = '';
     this.filtersregion.fieldValue ='';
     this.selectedColumnnUsuario.fieldValue = '';
-    this.selectedColumnnUsuario.columnValue = '';    
+    this.selectedColumnnUsuario.columnValue = '';
     this.pageSize = 15;
     this.isLoadingResults = true;
     this.sort.active = 'create_at';
-    this.sort.direction = 'desc';  
-    this.show = false;  
-    if(this.paginator){
-      this.paginator.pageIndex = 0;      
-    }else{
+    this.sort.direction = 'desc';
+    this.show = false;
+    if (this.paginator) {
+      this.paginator.pageIndex = 0;
+    } else {
       this.pageIndex = 0;
     }
 
-    
+
     this._orderService.getServiceOrder(
-      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
+      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
-      .then(response => {this.getData(response)})
-      .catch(error => {                      
+      .then(response => { this.getData(response); })
+      .catch(error => {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
-            console.log(<any>error);          
+            console.log(<any>error);
       });
   }
 
-  public getData(response: any){
-    if(response){
-        response.subscribe(
-          (some: any) => 
-          {
-            if(some.datos.data){  
-            this.resultsLength = some.datos.total;
-            this.category_id =  some.datos.data[0]['category_id'];
-            this.project_id = some.datos.data[0]['project_id'];
-            this.isRateLimitReached = false;
-            }else{
-            this.resultsLength = 0;
-            this.category_id =  some.datos['projects_categories_customers']['id'];
-            this.project_id = some.datos['project']['id'];
-            this.isRateLimitReached = true;          
-            }
-            this.dataSource = new MatTableDataSource(some.datos.data);            
-            if(this.dataSource && this.dataSource.data.length > this.datasourceLength){
-              this.datasourceLength = this.dataSource.data.length;
-              this.isactiveSearch = true;
-              
-            }
-            this.isLoadingResults = false;
-          },
-          (error) => {                      
-            this.isLoadingResults = false;
-            this.isRateLimitReached = true;
-            this._userService.logout();
-            console.log(<any>error);
-          });
-    }else{
+  public getData(response: any) {
+    if (response && response.status === 'success') {
+      if (response.datos.data) {
+      this.resultsLength = response.datos.total;
+      this.category_id =  response.datos.data[0]['category_id'];
+      this.project_id = response.datos.data[0]['project_id'];
+      this.isRateLimitReached = false;
+      } else {
+      this.resultsLength = 0;
+      this.category_id =  response.datos['projects_categories_customers']['id'];
+      this.project_id = response.datos['project']['id'];
+      this.isRateLimitReached = true;
+      }
+      this.dataSource = new MatTableDataSource(response.datos.data);
+      if (this.dataSource && this.dataSource.data.length > this.datasourceLength) {
+        this.datasourceLength = this.dataSource.data.length;
+        this.isactiveSearch = true;
+      }
+      this.isLoadingResults = false;
+    } else {
       return;
-    }    
+    }
   }
 
 

@@ -1,19 +1,19 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
-//PRELOAD
+// PRELOAD
 import {QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
-//import { PreloadAllModules } from "@angular/router";
-//import { CustomPreloading } from './custompreloading';
+// import { PreloadAllModules } from "@angular/router";
+// import { CustomPreloading } from './custompreloading';
 
-//DEFAULT AND LOGIN
+// DEFAULT AND LOGIN
 import { DefaultComponent } from './default/default.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { LoginComponent } from './login/login.component';
 import { NotfoundComponent } from './components/shared/notfound/notfound.component';
 import { RegisterComponent } from './register/register.component';
 
-//PAGES
+// PAGES
 import { PagesComponent } from './pages/pages.component';
 
 // Guards
@@ -36,119 +36,102 @@ const appRoute: Routes = [
 	{ 
 		path:'calendar', 
     	canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/calendar/calendario.module#CalendarioModule',   
 		loadChildren : () => import('./pages/calendar/calendario.module').then(m => m.CalendarioModule),
 		data: { preload: false, delay: false }
 	},    
 	{ 
 		path:'change', 
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/changepassword/changepassword.module#ChangePasswordModule',
 		loadChildren : () => import('./pages/changepassword/changepassword.module').then(m => m.ChangePasswordModule),
 		data: { preload: false, delay: true }
 	},	
 	{
 		path: 'dashboard',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/dashboard/dashboard.module#DashboardModule',
 		loadChildren : () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
 		data: { preload: false, delay: false }
 	},
 	{
         path: 'formview',
         canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/customform/customform.module#CustomformModule',
 		loadChildren : () => import('./pages/customform/customform.module').then(m => m.CustomformModule),
         data: { preload: false, delay: false }
     },	
 	{
         path: 'formview/orderview/:serviceid/:orderid',
         canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/customform/customform.module#CustomformModule',
 		loadChildren : () => import('./pages/customform/customform.module').then(m => m.CustomformModule),
         data: { preload: false, delay: false }
     },	
 	{
 		path: 'notification',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/notification/notification.module#NotificationModule',
 		loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),
 		data: { preload: false, delay: false }
   	},
 	{
 		path: 'notification/read',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/notification/notification.module#NotificationModule',
 		loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),
 		data: { preload: false, delay: false }
   	},
 	{
 		path: 'notification/unread',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/notification/notification.module#NotificationModule',
 		loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),
 		data: { preload: false, delay: false }
 	},
 	{
 		path: 'payments',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/payments/payments.module#PaymentsModule',
 		loadChildren : () => import('./pages/payments/payments.module').then(m => m.PaymentsModule),
 		data: { preload: false, delay: false }
 	},	  
 	{
 		path: 'profile',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/profile/profile.module#ProfileModule',
 		loadChildren : () => import('./pages/profile/profile.module').then(m => m.ProfileModule),
 		data: { preload: false, delay: true }
 	},
 	{
 		path: 'project',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/service/service.module#ServiceModule',
 		loadChildren : () => import('./pages/service/service.module').then(m => m.ServiceModule),
 		data: { preload: false, delay: false }
 	},
 	{
 		path: 'project/:id/settings',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/service/service.module#ServiceModule',
 		loadChildren : () => import('./pages/service/service.module').then(m => m.ServiceModule),
 		data: { preload: false, delay: false }
 	},
 	{
 		path: 'service',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/orderservice/orderservice.module#OrderServiceModule',
 		loadChildren : () => import('./pages/orderservice/orderservice.module').then(m => m.OrderServiceModule),
 		data: { preload: false, delay: false }
   	},
 	  {
 		path: 'support',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/support/support.module#SupportModule',
 		loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
 		data: { preload: false, delay: false }
   	},
 	{ 	
 		path: 'users', 
     	canLoad: [LoginGuardGuard],
-		//loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
 		loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
 		data: { preload: false, delay: false }
   	},
 	{
 		path: 'users/:id/settings',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
 		loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
 		data: { preload: false, delay: false }
 	},
 	{
 		path: 'users/:id/work',
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/usuarios/usuarios.module#UsuariosModule',
 		loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
 		data: { preload: false, delay: false }
 	},
@@ -156,7 +139,6 @@ const appRoute: Routes = [
 		path: '',
 		component: PagesComponent,
 		canLoad: [ LoginGuardGuard ],
-		//loadChildren: './pages/pages.module#PagesModule'
 		loadChildren : () => import('./pages/pages.module').then(m => m.PagesModule),
   	},
 	{ path:'**', pathMatch: 'full', redirectTo: 'notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }

@@ -106,6 +106,48 @@
     min-height: 500px;
 }
 
+.jeEmY {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.857143em;
+    font-style: inherit;
+    color: rgb(94, 108, 132);
+    font-weight: 600;
+    margin-top: 20px;
+    text-transform: uppercase;
+    line-height: 12px;
+    overflow: hidden;
+}
+.gLOvjB {
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.31) 0px 0px 1px 0px;
+    padding: 16px;
+    border-radius: 3px;
+}
+
+.jMfZdr {
+    font-size: 1.14286em;
+    font-style: inherit;
+    line-height: 1;
+    color: rgb(23, 43, 77);
+    font-weight: 600;
+    letter-spacing: -0.006em;
+}
+.hGgeKi {
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.31) 0px 0px 1px 0px;
+    margin-top: 24px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    padding-left: 6px;
+    padding-right: 6px;
+    border-radius: 3px;
+    vertical-align: top;
+    background-color: white;
+}
+.width-100percentage{
+    width: 100%;
+}
 @media(max-width: 600px) {
     .mobile-label {
         width: 95px;

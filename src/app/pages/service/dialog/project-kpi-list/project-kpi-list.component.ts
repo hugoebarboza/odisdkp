@@ -170,58 +170,10 @@ export class ProjectKpiListComponent implements OnInit {
             return result;
         }
       }
-    }    
-  }  
-
-/*
-  public getProjectKpiDateLineByDate(id:number, termino:string){
-    this.isLoadingResults = true;
-    if(id > 0 ){
-      this.kpitotal = 0;
-      this.kpidata = [];
-      this.multi[0].series.length = 0;
-      this._kpiService.getProjectKpiByDate(this.token.token, id, termino).then(
-        (res: any) => 
-        {
-          res.subscribe(
-            (some:any) => 
-            {
-              if(some && some.datos.length > 0){
-                console.log(some.datos);
-                //console.log(some.datos.length);
-                if(some.datos.length > 0){
-                  for (let i = 0; i < some.datos.length; i++) {
-                    if(some.datos[i]['hora']){
-                      this.multi[0].series.push({ name: some.datos[i]['hora'] + ':00:00', value: some.datos[i]['user_count']});
-                      this.kpitotal = this.kpitotal + some.datos[i]['user_count'];
-                    }
-                    if(some.datos[i]['fecha']){
-                      this.multi[0].series.push({ name: some.datos[i]['fecha'], value: some.datos[i]['user_count']});
-                      this.kpitotal = this.kpitotal + some.datos[i]['user_count'];
-                    }
-
-                    if(some.datos[i]['month']){
-                      this.multi[0].series.push({ name: some.datos[i]['month'], value: some.datos[i]['user_count']});
-                      this.kpitotal = this.kpitotal + some.datos[i]['user_count'];
-                    }
-
-                  }
-                }
-                //console.log(this.kpidata);
-                this.isLoadingResults = false;
-              }else{
-                this.isLoadingResults = false;
-              }
-            },
-            (error:any) => { 
-            this.multi[0].series.length = 0;
-            this.isLoadingResults = false;
-            console.log(<any>error);
-            }  
-            )
-        })         
     }
-  }  */
+  }
+
+
 
 
   public getProjectKpiDateLineByDate(id:number, termino:string){
@@ -288,17 +240,17 @@ export class ProjectKpiListComponent implements OnInit {
 
 
             },
-            (error:any) => { 
+            (error: any) => {
             this.allmulti[0].series.length = 0;
             this.allmulti[1].series.length = 0;
             this.multi[0].series.length = 0;
             this.isLoadingResults = false;
             console.log(<any>error);
-            }  
-            )
-        })         
+            }
+            );
+        });
     }
-  }  
+  }
 
 
   public getProjectKpiDateLine(id:number, termino:string, status:number, service:number){

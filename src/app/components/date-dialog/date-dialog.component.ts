@@ -22,7 +22,7 @@ export class DateDialogComponent implements OnInit {
   ngOnInit() {
   }
 
-  addEvent() {
+  addEvent(_change: any, _event: any) {
     //console.log(event);
     this.showTime = true;
   }

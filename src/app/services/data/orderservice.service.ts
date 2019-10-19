@@ -57,97 +57,114 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
     if (!orderid || !token) {
       return;
     }
-    
+
     return this.getOrderData('orderdetail/'+orderid, token);
   }
 
 
 
-  getServiceOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, sort: string, order: string, pageSize: number, page: number, id:number, token: any){
-    //console.log(sort);
-    if(!fieldValue){
+  async getServiceOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, sort: string, order: string, pageSize: number, page: number, id:number, token: any) {
+    // console.log(sort);
+    if(!fieldValue) {
       fieldValue = '';
     }
 
-    if(!order){
+    if(!order) {
       order = 'desc';
     }
-    if(!sort){
+    if(!sort) {
       sort = 'create_at';
     }
-    
+
+    const url = this.url;
     const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
-    //console.log(paginate);
-	//const paginate = `?page=${page + 1}`;
-	//console.log(id);
-    return this.getOrderData('service/'+id+'/order'+paginate, token);
+    const query = 'service/' + id + '/order' + paginate;
+    const href = url + query;
+    const requestUrl = href;
+    // const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+    if(!requestUrl || !token) {
+        return;
+    }
+
+    try {
+        return await this._http.get<any>(requestUrl, {headers: headers}).toPromise();
+   } catch (err) {
+        console.log(err);
+   }
+
+    // console.log(paginate);
+    // const paginate = `?page=${page + 1}`;
+    // return this.getOrderData('service/' + id + '/order' + paginate, token);
   }
 
-  
+
 
   getProjectShareOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, fieldValueEstatus:string, columnValueEstatus:string, columnTimeFromValue:any, columnTimeUntilValue:any, columnValueZona:number, idservicetype:number, sort: string, order: string, pageSize: number, page: number, id:number, idservice:number, token: any, event: number) {
 
- 
-
-	//console.log(sort);
-    if(!fieldValue){
+    if (!fieldValue) {
       fieldValue = '';
     }
 
-    if(!order){
+    if (!order) {
       order = 'desc';
     }
     if(!sort){
       sort = 'create_at';
     }
-    
+
     const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&fieldValueEstatus=${fieldValueEstatus}&columnValueEstatus=${columnValueEstatus}&columnTimeFromValue=${columnTimeFromValue}&columnTimeUntilValue=${columnTimeUntilValue}&columnValueZona=${columnValueZona}&idservicetype=${idservicetype}&event=${event}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
-    //console.log('-----------------------------');
-	//console.log(paginate);
-	//console.log(id);
-	//console.log(idservice);
-    //const paginate = `?page=${page + 1}`;
+    // console.log('-----------------------------');
+    // console.log(paginate);
+    // console.log(id);
+    // console.log(idservice);
+    // const paginate = `?page=${page + 1}`;
     return this.getOrderData('projectservice/'+id+'/service/'+idservice+'/share'+paginate, token);
   }
 
 
-  	async getOrderData(query:string, token: any) {
-		if(!token){
-        	return;
-      	}
-      	try {
-			const url = this.url;
-			const href = url + query;
-			const requestUrl = href;
-			const headers = new HttpHeaders({'Content-Type': 'application/json'});
-			
-			if(!requestUrl){
-				return;
-			}
-			
-			return await new Promise((resolve, reject) => {
-			if (token == '')
-				reject('Sin Token');
-			if (query == '')
-				reject('Sin Query Consulta');
-			
-			resolve(this._http.get<Order>(requestUrl, {headers: headers}));    
-			});
+    async getOrderData(query:string, token: any) {
+        if(!token) {
+          return;
+        }
 
-		} catch (err) {
-			console.log(err)
-		}
+        try {
+            const url = this.url;
+            const href = url + query;
+            const requestUrl = href;
+            const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+            if(!requestUrl) {
+              return;
+            }
+
+            return await new Promise((resolve, reject) => {
+            if (token === '') {
+                reject('Sin Token');
+            }
+
+            if (query === '') {
+                reject('Sin Query Consulta');
+            }
+
+            resolve(this._http.get<Order>(requestUrl, {headers: headers}));
+            });
+
+        } catch (err) {
+          console.log(err);
+       }
+    }
+
+	getOrderService(token: any, id: string): Observable<any> {
+		return this.getQuery('service/' + id + '/order', token);
 	}
 
-	getOrderService(token: any, id: string): Observable<any> {								  
-		return this.getQuery('service/'+id+'/order', token);
+	getShowOrderService(token: any, id: number, orderid: number): Observable<any> {
+		return this.getQuery('service/' + id + '/order/' + orderid, token);
 	}
 
-	getShowOrderService(token: any, id: number, orderid: number): Observable<any> {								  
-		return this.getQuery('service/'+id+'/order/'+orderid, token);
-	}
-
-	getFirmaImageOrder(token: any, id: string): Observable<any> {								  
+	getFirmaImageOrder(token: any, id: string): Observable<any> {
 		return this.getQuery('order/'+id+'/firmaimage', token);
 	}
 

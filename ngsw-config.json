@@ -38,8 +38,8 @@
         "https://odis.api.ocachile.cl/api/v1.0/**"
       ],
       "cacheConfig": {
-        "strategy": "performance",
-        "maxSize": 10,
+        "strategy": "freshness",
+        "maxSize": 20,
         "maxAge": "1h",
         "timeout": "5s"
       }

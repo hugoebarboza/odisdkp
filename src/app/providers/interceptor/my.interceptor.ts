@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpInterceptor, HttpHandler, HttpResponse, HttpRequest, HttpEvent } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { retry } from 'rxjs/operators';
+import { HttpInterceptor, HttpHandler, HttpResponse, HttpRequest, HttpEvent, HttpErrorResponse } from '@angular/common/http';
+import { Observable, throwError } from 'rxjs';
+// import { of } from 'rxjs/observable/of';
+import { retry, catchError } from 'rxjs/operators';
 import { finalize } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { tap } from 'rxjs/operators';
@@ -21,7 +21,7 @@ export class MyInterceptor implements HttpInterceptor {
 
 
     constructor(
-      private cache: RequestCacheService,
+      // private cache: RequestCacheService,
       private store: Store<AppState>,
     ) {
 
@@ -43,23 +43,22 @@ export class MyInterceptor implements HttpInterceptor {
         if (token) {
           // const headers = new HttpHeaders({'Authorization': token	});
           // req = req.clone({ headers });
-          req = req.clone({ headers: req.headers.set('Authorization',token) });
+          req = req.clone({ headers: req.headers.set('Authorization', token) });
         }
 
-        // const reqClone = req;
+        const reqClone = req;
 
-        const cachedResponse = this.cache.get(req);
-        return cachedResponse ? of(cachedResponse) : this.sendRequest(req, next, this.cache);
+        /* const cachedResponse = this.cache.get(req);
+        return cachedResponse ? of(cachedResponse) : this.sendRequest(req, next, this.cache); */
 
-        /*
         return next.handle( reqClone ).pipe(
           finalize(() => this.store.dispatch(new HideLoaderAction())),
           retry(1),
-          //catchError( this.handleError )
+          // catchError( this.handleError )
           catchError((error: HttpErrorResponse) => {
               return throwError(error);
           })
-        );*/
+        );
 
     }
 

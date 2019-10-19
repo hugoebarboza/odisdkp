@@ -153,7 +153,7 @@ export class AddComponent implements OnInit, OnDestroy {
     this.isvalid = !isWhitespace;
   }
 
-  public confirmAdd(): void {
+  public confirmAdd(_form: any): void {
 
     const pila = [];
     let j = 0;

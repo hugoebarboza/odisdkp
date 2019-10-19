@@ -1,7 +1,4 @@
 import { Injectable } from '@angular/core';
-//import { AngularFireDatabase } from 'angularfire2/database';
-//import { AngularFireAuth } from 'angularfire2/auth';
-//import { AngularFirestore } from 'angularfire2/firestore';
 
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
@@ -13,7 +10,7 @@ import { Observable } from 'rxjs/Observable';
 import { User } from 'src/app/models/types';
 import { FormControl } from '@angular/forms';
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
@@ -22,24 +19,23 @@ const moment = _moment;
   providedIn: 'root'
 })
 export class AuthService {
-  
+
   authState: any = null;
   created: FormControl;
   user: Observable<firebase.User>;
-  
-  
+
 
   constructor(
     private afp: AngularFirePerformance,
     private afs: AngularFirestore,
     private db: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth,
-  ) { 
+  ) {
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
     this.user = firebaseAuth.authState;
 
-    
-    //firebase.auth().signOut();
+
+    // firebase.auth().signOut();
 
     /*
     this.firebaseAuth.authState.subscribe((auth) => {
@@ -64,22 +60,22 @@ export class AuthService {
   }
 
 
-  emailLogin(token:string, email: string, password: string) {
-    if(!token){
+  emailLogin(token: string, email: string, password: string) {
+    if (!token) {
       return;
     }
     return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
       .then((user) => {
-        this.authState = user
-        this.updateUserData()
+        this.authState = user;
+        this.updateUserData();
       })
       .catch(error => console.log(error));
   }
 
 
-  async login(token:string, email: string, password: string) {
+  async login(token: string, email: string, password: string) {
 
-    if(!token){
+    if (!token) {
       return;
     }
 
@@ -90,23 +86,22 @@ export class AuthService {
       return new Promise<any>((resolve, reject) => {
         this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
         .then(user => {
-          this.authState = user;                   
-          //console.log(this.authState.user.uid);
-          let key = 'uid';
-          this.saveStorage(key, this.authState.user.uid);          
+          this.authState = user;
+          // console.log(this.authState.user.uid);
+          const key = 'uid';
+          this.saveStorage(key, this.authState.user.uid);
           this.afp.trace('LoginFiresabe Init', { metrics: { something: 1 }, attributes: { app: 'odisdkp', user: this.authState.user.uid }, incrementMetric$: { },});
           trace.unsubscribe();
-          //this.updateUserData()
-          //trace.putAttribute('verified', `${this.authState.user.uid}`);
-          //trace.stop();
+          // this.updateUserData()
+          // trace.putAttribute('verified', `${this.authState.user.uid}`);
+          // trace.stop();
           resolve(user);
         }, err => reject(err))
-      })
-  
+      });
     } catch (err) {
-      //trace.putAttribute('errorCode', err.code);
-      //trace.stop();
-    }      
+      // trace.putAttribute('errorCode', err.code);
+      // trace.stop();
+    }
 
     /*
     this.firebaseAuth

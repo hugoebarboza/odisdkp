@@ -3,37 +3,37 @@ import { FormControl, Validators, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs';
 
-//MODELS
+// MODELS
 import { Proyecto, User } from '../models/types';
 
 
-//SERVICES
+// SERVICES
 import { AuthService, DashboardService, SettingsService, UserService } from '../services/service.index';
 
-//SETTINGS
+// SETTINGS
 import { GLOBAL } from '../services/global';
 
 
-//UTILITY
+// UTILITY
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
 
 
-//TOASTER MESSAGES
+// TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
 
-//NGRX REDUX
+// NGRX REDUX
 import { AppState } from '../app.reducers';
 import { Store } from '@ngrx/store';
 import { LoginAction } from '../contador.actions';
 
 declare var swal: any;
 
-//FIREBASE
+// FIREBASE
 import { AngularFirePerformance } from '@angular/fire/performance';
 
 
 @Component({
-  selector:'login',
+  selector: 'login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -42,24 +42,24 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   departamentos: Array<any> = [];
   email: string;
-  error:string;  
+  error: string;
   hide = true;
-  loading: boolean = false;  
-  identity:any;
+  loading = false;
+  identity: any;
   idaccount;
   proyectos: Array<Proyecto>;
-  rememberMe:number = 0;  
+  rememberMe = 0;
   selected: string;
-  success:string;
-  show:boolean = false;
-  status: string; 
+  success: string;
+  show = false;
+  status: string;
   title: string;
-  token:any;
+  token: any;
   usuario: User;
   userFirebase;
   useraccount: string;
   year: number;
-  version:string;
+  version: string;
   subscription: Subscription;
 
 
@@ -73,8 +73,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     spinnerColor: 'warn',
     fullWidth: true,
     disabled: true,
-    mode: 'indeterminate',    
-  }
+    mode: 'indeterminate',
+  };
 
   spinnerButtonOptions: MatProgressButtonOptions = {
     active: false,
@@ -86,8 +86,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     spinnerColor: 'warn',
     fullWidth: true,
     disabled: false,
-    mode: 'indeterminate',    
-  }
+    mode: 'indeterminate',
+  };
 
  barButtonOptions: MatProgressButtonOptions = {
     active: false,
@@ -99,7 +99,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     mode: 'indeterminate',
     value: 0,
     disabled: false
-  }
+  };
 
 
     formControl = new FormControl('', [Validators.required, Validators.email]);
@@ -122,24 +122,22 @@ export class LoginComponent implements OnInit, OnDestroy {
     public label: SettingsService,
     private store: Store<AppState>,
     public toasterService: ToastrService,
-
-  )
-    {
+  ) {
     // this.user = new User('','','','','','','', 1,'','',1,'','',1,1,1);
     this.year = new Date().getFullYear();
     this.identity = this._userService.getIdentity();
     this.idaccount = this._userService.getIdaccount();
-    this.token = this._userService.getToken();      
-    this._userService.handleAuthentication(this.identity, this.token);  
+    this.token = this._userService.getToken();
+    this._userService.handleAuthentication(this.identity, this.token);
     this.success = 'Exitoso.';
-    this.error = 'Credenciales no validas.'; 
+    this.error = 'Credenciales no validas.';
     this.version = GLOBAL.version;
     this.label.getDataRoute().subscribe(data => {
       this.title = data.subtitle;
     });
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this.afp.trace('LoginPage Init');
     if (this._userService.isAuthenticated()) {
       this._router.navigate(['dashboard']);
@@ -170,7 +168,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   onChange(value) {
-    if (value.checked == true) {
+    if (value.checked === true) {
       this.rememberMe = 1;
     } else {
           this.rememberMe = 0;
@@ -186,7 +184,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     return;
    }
 
-   this.usuario = new User('', '', '', '', '', form.value.email, form.value.password, 1, '', this.version, 1, '','',1, 1, 1);
+   this.usuario = new User('', '', '', '', '', form.value.email, form.value.password, 1, '', this.version, 1, '', '', 1, 1, 1);
 
    if (this.rememberMe === 1) {
     const key = 'idaccount';
@@ -199,7 +197,6 @@ export class LoginComponent implements OnInit, OnDestroy {
    }
 
    const user: any = await this.getUser();
-
    if (user && user.token) {
     this.status = 'success';
     const token = user;
@@ -207,7 +204,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     .then(async (resp) => {
       const identity: any = resp;
       if (identity && identity.sub) {
-        const profile = await this.getPerfilUser(identity.sub, token);
+        const profile: any = await this.getPerfilUser(identity.sub, token);
         if (profile && profile.datos && profile.datos[0]['archivo']) {
           const fotoperfil: string = profile.datos[0]['archivo'];
           if (fotoperfil.length > 0) {
@@ -223,7 +220,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.spinnerButtonOptions.active = false;
       this.spinnerButtonOptions.text = 'Iniciar sesión';
       this.status = 'error';
-      this.toasterService.warning('Error: No puede iniciar sesión'+error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
+      this.toasterService.warning('Error: No puede iniciar sesión' + error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
       this._userService.logout();
     });
    } else {
@@ -242,21 +239,20 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 
-  async afterSignIn(identity:any, token:any) {
-    if(!identity || !token){
+  async afterSignIn(identity: any, token: any) {
+    if (!identity || !token) {
       return;
     }
 
-    console.log('viene aftersign');
+
     const response: any = await this.getProyectos(identity, token);
-    console.log('viene aftersign proyectos');
     if (response && response.datos) {
       const proyectos = response.datos;
       const key = 'proyectos';
       this._userService.saveStorage(key, proyectos);
       this.spinnerButtonOptions.active = false;
       this.spinnerButtonOptions.text = 'Iniciar sesión'
-      this.toasterService.success('Acceso: '+this.success, 'Exito', {timeOut: 4000,closeButton: true,});      
+      this.toasterService.success('Acceso: ' + this.success, 'Exito', {timeOut: 4000, closeButton: true, });
       this._router.navigate(['dashboard']);
       this.loginAction(proyectos, identity);
       this.loginFirebase(token, this.usuario, identity);
@@ -264,37 +260,33 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.spinnerButtonOptions.active = false;
       this.spinnerButtonOptions.text = 'Iniciar sesión';
       this.status = 'error';
-      this.toasterService.warning('Error: No puede iniciar sesión. Verifique sus datos de acceso.', 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
+      this.toasterService.warning('Error: No puede iniciar sesión. Verifique sus datos.', 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
       this._userService.logout();
     }
   }
 
 
-  async getProyectos(identity:any, token:any){
+  async getProyectos(identity: any, token: any) {
 
-    if(!identity || !token){
+    if(!identity || !token) {
       return;
     }
 
-    return this._userService.getDptoProyectos(token.token, identity.dpto)
-    .then((resp: any) => { return resp; })
-    .catch((error) => {console.log(error); });
+    return this._userService.getDptoProyectos(token.token, identity.dpto);
   }
 
 
-  async getPerfilUser(id: number, token:any){
-    if(!id || !token.token){
+  async getPerfilUser(id: number, token: any) {
+    if (!id || !token.token) {
       return;
     }
 
-    return this._userService.getPerfilUser(token.token, id)
-    .then((resp: any) => { return resp; })
-    .catch((error) => {console.log(error); });
+    return this._userService.getPerfilUser(token.token, id);
   }
 
 
-  loginFirebase(token:any, value:User, identity:any){
-    if(!token || !value){
+  loginFirebase(token: any, value: User, identity: any) {
+    if (!token || !value) {
       return;
     }
     this.authService.login(token.token, value.email, value.password)
@@ -323,12 +315,13 @@ export class LoginComponent implements OnInit, OnDestroy {
               }
               },
             }).then( item => {
-              if (item == 'confirmar') {
+              if (item === 'confirmar') {
                 swal({icon: 'success', title: 'Se envio correo para su verificación!', text: 'Una vez verificado cerrar y abrir sesión'});
                 this.authService.updateUser(value)
                 .then(res => {
                 return console.log(res);
-                }, err => {
+                },
+                (_err: any ) => {
                 return console.log(err);
                 });
               }
@@ -342,60 +335,54 @@ export class LoginComponent implements OnInit, OnDestroy {
               //console.log(res);
             }, err => {
               //console.log(err);
-            })        
+            })
             return console.log('update password');*/
         }
         default: {
             return console.log('Login Firebase error try again later.');
         }
-      }      
+      }
 
-    })
+    });
   }
 
 
-  tryRegister(value:User, identity:any){
-    if(!value){
+  tryRegister(value: User, identity: any) {
+    if (!value) {
       return;
     }
-
     this.authService.doRegister(value, identity)
     .then(_res => {
-      //console.log(res);
     }, err => {
       console.log(err);
-    })
+    });
   }
 
-  tryUpdate(value:User, identity:any){
-    if(!value){
+  tryUpdate(value: User, identity: any) {
+    if (!value) {
       return;
     }
 
     this.authService.doUpdate(identity)
     .then(_res => {
-      //console.log(res);
     }, err => {
       console.log(err);
-    })
+    });
   }
 
 
-  logout(){
+  logout() {
     this._route.params.subscribe(params => {
-      let logout = +params['sure'];
-      if(logout == 1){         
+      const logout = +params['sure'];
+      if (logout === 1) {
         this.identity = null;
         this.token = null;
-        this.proyectos = null; 
+        this.proyectos = null;
         this._userService.logout();
         this.authService.logout();
-        //this._router.navigate(['/login']);
+        // this._router.navigate(['/login']);
       }
-    })
+    });
   }
 
-
-
-  
 }

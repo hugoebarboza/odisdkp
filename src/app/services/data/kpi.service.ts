@@ -19,18 +19,16 @@ export class KpiService {
     this.error = false;
     }
 
-    async getQueryPromise(query:string, token:any) {
-      if(!token){
+    async getQueryPromise(query: string, token: any) {
+      if (!token) {
         return;
       }
 
       try {
         const url = this.url;
-        const href = url+query;
+        const href = url + query;
         const requestUrl = href;
-        const headers = new HttpHeaders({'Content-Type': 'application/json'});        
-
-        
+        const headers = new HttpHeaders({'Content-Type': 'application/json'});
         /*
         if(!requestUrl){
           throw new Error(`Error HTTP ${requestUrl}`);
@@ -42,28 +40,28 @@ export class KpiService {
             //throw new Error(`Error HTTP ${requestUrl}, ${error}`);
         );
         }*/
-        
-        
+
+
         return await new Promise((resolve, reject) => {
-          if (token == '') reject();
-          if (query == '') reject();
+          if (token === '') { reject(); }
+          if (query === '') { reject(); }
           resolve(this._http.get<any>(requestUrl, {headers: headers}));
           })
-          .catch((err) => {console.log(err);})
-  
+          .catch((err) => {console.log(err); });
+
       } catch (err) {
-          console.log(err)
+          console.log(err);
       }
 
 
     }
 
 
-    getProjectKpi(token:any, id:number, termino:string) {
-      if(!token){
+    getProjectKpi(token: any, id: number, termino: string) {
+      if (!token) {
         return;
       }
-      return this.getQueryPromise('project/'+id+'/kpi/'+termino, token);
+      return this.getQueryPromise('project/' + id + '/kpi/' + termino, token);
     }
 
     getProjectKpiByDate(token:any, id:number, termino:string) {

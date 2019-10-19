@@ -6,34 +6,31 @@ import { Subscription } from 'rxjs/Subscription';
 import { switchMap, map, tap } from 'rxjs/operators';
 import { FormControl } from '@angular/forms';
 
-//FIREBASE
+// FIREBASE
 import { AngularFirestore } from '@angular/fire/firestore';
 import {  AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-//import {  AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
-//import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 
-//MATERIAL
+// MATERIAL
 import { MatDialog } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
 
-//MODELS
+// MODELS
 import { User, UserFirebase } from 'src/app/models/types';
 
 
-//DIALOG
+// DIALOG
 import { LogoutComponent } from '../../../components/dialog/logout/logout.component';
 
-//NGRX REDUX
+// NGRX REDUX
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
 import { ResetAction } from 'src/app/contador.actions';
 import { SetUserAction } from 'src/app/stores/auth/auth.actions';
-//import { SetNotificationAction, ResetNotificationAction } from '../../../stores/notification/notification.actions';
 
 
-//SERVICES
+// SERVICES
 import { SidenavService, UserService } from '../../../services/service.index';
 
 

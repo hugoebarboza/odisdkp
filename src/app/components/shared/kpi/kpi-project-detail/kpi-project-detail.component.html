@@ -193,7 +193,7 @@
                                                 <p class="hAzwqT">
                                                 Sin Información.
                                                 </p>
-                                                <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                <p class="hkvxBP"><span>De acuerdo a la fecha o filtros seleccionados.</span></p>
                                                 </div>
                                             </div>    
                                         </div>
@@ -405,7 +405,7 @@
                                                         <p class="hAzwqT">
                                                         Sin Información.
                                                         </p>
-                                                        <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                        <p class="hkvxBP"><span>De acuerdo a la fecha o filtros seleccionados.</span></p>
                                                     </div>                
                                                 </div>                                                
                                             </div>                    
@@ -543,7 +543,7 @@
                                                         <p class="hAzwqT">
                                                         Sin Información.
                                                         </p>
-                                                        <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                        <p class="hkvxBP"><span>De acuerdo a la fecha o filtros seleccionados.</span></p>
                                                     </div>                
                                                 </div>    
                                             </div>        
@@ -737,7 +737,7 @@
                                                             <p class="hAzwqT">
                                                             Sin Información.
                                                             </p>
-                                                            <p class="hkvxBP"><span>De acuerdo a lo seleccionado.</span></p>
+                                                            <p class="hkvxBP"><span>De acuerdo a la fecha o filtros seleccionados.</span></p>
                                                         </div>                    
                                                     </div>    
                                                 </div>        
@@ -771,14 +771,6 @@
 </div>
 </div>
 
-<app-kpi-project-forecast [id]="id" *ngIf="id > 0"></app-kpi-project-forecast>
-
-<div class="row" *ngIf="identity">
-<div class="col">
-<br>
-</div>
-</div>
-
 <app-kpi [id]="id" *ngIf="id > 0 && service && service.kpi > 0"></app-kpi>
 
 <div class="row" *ngIf="identity && service && service.kpi > 0">
@@ -795,3 +787,4 @@
         </div>
     </div>
 </div>
+        

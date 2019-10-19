@@ -240,7 +240,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
   }
 
 
-  confirmAdd(){
+  confirmAdd(_form: any){
     //console.log(this.category_id);
     this._customerService.add(this.token.token, this.customer, this.category_id);
     this.dialogRef.close();
@@ -301,7 +301,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
 
    }
 
-   onSelectComuna() {
+   onSelectComuna(_event: any) {
    // this.states = this._dataService.getStates().filter((item)=> item.countryid == countryid);
    }
 

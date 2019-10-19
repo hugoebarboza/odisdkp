@@ -1,3 +1,15 @@
+.width-100percentage{
+    width: 100%;
+}
+
+::ng-deep .ng-dropdown-panel .scroll-host{
+    max-height: 110px !important;
+}
+
+::ng-deep .mat-expansion-panel-content {
+    z-index: 100 !important;
+}
+
 .jmuLsE {
     max-width: none;
     min-width: auto;
@@ -80,6 +92,26 @@
     font-weight: 500;
     letter-spacing: -0.008em;
     margin-bottom: 16px;
+}
+.jeEmY {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.857143em;
+    font-style: inherit;
+    color: rgb(94, 108, 132);
+    font-weight: 600;
+    margin-top: 20px;
+    text-transform: uppercase;
+    line-height: 12px;
+    overflow: hidden;
+}
+
+.gLOvjB {
+    display: flex;
+    flex-direction: column;
+    box-shadow: rgba(9, 30, 66, 0.25) 0px 1px 1px, rgba(9, 30, 66, 0.31) 0px 0px 1px 0px;
+    padding: 16px;
+    border-radius: 3px;
 }
 
 @media(max-width: 600px) {

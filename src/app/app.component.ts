@@ -1,6 +1,7 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
+import { Router } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
-import { Router, ActivationEnd } from '@angular/router';
+import { ActivationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
 import { Subscription } from 'rxjs/Subscription';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
@@ -93,7 +94,7 @@ export class AppComponent implements OnInit, OnDestroy {
     .subscribe( objNgrx  => {
       if (objNgrx) {
         this.identity = objNgrx.identificacion;
-        //this.identity = this._userService.getIdentity();
+        // this.identity = this._userService.getIdentity();
       }
 
       this.proyectos = this._userService.getProyectos();
@@ -101,7 +102,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
       if (!this.identity) {
-        //console.log('no identity');
+        // console.log('no identity');
         /*this.identity = {};
         if(Object.keys(this.identity).length == 0){
         }*/
