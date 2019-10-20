@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnDestroy, OnChanges, ViewChild } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Subscription, ReplaySubject } from 'rxjs';
+import { ReplaySubject } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 import { Sort, MatPaginator, TooltipPosition, MatDialog, PageEvent } from '@angular/material';
 
 

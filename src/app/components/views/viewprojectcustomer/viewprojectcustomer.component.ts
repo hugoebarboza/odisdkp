@@ -1,7 +1,9 @@
 import {Component, OnInit, OnDestroy, ViewChild, Input, ElementRef, Output, EventEmitter, OnChanges, SimpleChanges} from '@angular/core';
 import { debounceTime, distinctUntilChanged } from 'rxjs/operators';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource} from '@angular/material';
-import {  Subject ,  ReplaySubject ,  SubscriptionLike as ISubscription } from 'rxjs';
+import { Subject  } from 'rxjs/Subject';
+import { ReplaySubject  } from 'rxjs/ReplaySubject';
+import { SubscriptionLike as ISubscription } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { PageEvent } from '@angular/material';

@@ -49,10 +49,12 @@ const moment = _moment;
 
 // PDF
 import jsPDF from 'jspdf';
-//import 'jspdf-autotable';
 
 // TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
+
+// FIREBASE
+import { AngularFirePerformance } from '@angular/fire/performance';
 
 
 
@@ -323,6 +325,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('myTemplate4', { static: true }) myTemplate4: TemplatePortal<any>;
 
   constructor(
+    private afp: AngularFirePerformance,
     public _modalManage: ModalManageService,
     private _regionService: CountriesService,
     private _orderService: OrderserviceService,
@@ -660,6 +663,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }
 
 
+    const trace = this.afp.trace$('getServiceOrder').subscribe();
+
     this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
@@ -668,6 +673,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
       .then(response => {
         this.getData(response);
+        if(response && response.datos.data && response.datos.data.length) {
+          this.afp.trace('getServiceOrder', { metrics: { count: response.datos.data.length }, attributes: { app: 'odisdkp'}, incrementMetric$: { },});
+        }
+        trace.unsubscribe();
         this.snackBar.open('Órdenes de Trabajo de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500,});
       }
       )

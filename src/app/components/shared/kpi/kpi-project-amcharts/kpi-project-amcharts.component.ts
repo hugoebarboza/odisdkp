@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 
 @Component({
   selector: 'app-kpi-project-amcharts',
@@ -21,7 +22,7 @@ export class KpiProjectAmchartsComponent implements OnInit {
 
   ngOnInit() {
     // Themes begin
-    // this.am4core.useTheme(am4themes_animated);
+    this.am4core.useTheme(am4themes_animated);
     // Themes end
 
     // Create chart instance

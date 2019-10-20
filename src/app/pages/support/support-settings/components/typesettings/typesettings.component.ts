@@ -1,11 +1,8 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 import * as _moment from 'moment';
 import { UserService } from 'src/app/services/service.index';
-
-//import { AngularFireAuth } from 'angularfire2/auth';
-//import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';

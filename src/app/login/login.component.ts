@@ -1,7 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, Validators, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
-import { Subscription } from 'rxjs';
 
 // MODELS
 import { Proyecto, User } from '../models/types';
@@ -15,7 +14,7 @@ import { GLOBAL } from '../services/global';
 
 
 // UTILITY
-import { MatProgressButtonOptions } from 'mat-progress-buttons'
+import { MatProgressButtonOptions } from 'mat-progress-buttons';
 
 
 // TOASTER MESSAGES
@@ -33,7 +32,7 @@ import { AngularFirePerformance } from '@angular/fire/performance';
 
 
 @Component({
-  selector: 'login',
+  selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
@@ -55,13 +54,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   status: string;
   title: string;
   token: any;
+  trace: any;
   usuario: User;
   userFirebase;
   useraccount: string;
   year: number;
   version: string;
-  subscription: Subscription;
-
 
   spinnerButtonOptionsDisabled: MatProgressButtonOptions = {
     active: false,
@@ -138,7 +136,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.afp.trace('LoginPage Init');
+    this.trace = this.afp.trace$('LoginPage Init').subscribe();
     if (this._userService.isAuthenticated()) {
       this._router.navigate(['dashboard']);
     }
@@ -160,11 +158,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    this.afp.trace('LoginPage OnDestroy');
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-      // console.log("ngOnDestroy unsuscribeeeee");
-    }
+    this.trace.unsubscribe();
   }
 
   onChange(value) {
@@ -220,14 +214,14 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.spinnerButtonOptions.active = false;
       this.spinnerButtonOptions.text = 'Iniciar sesión';
       this.status = 'error';
-      this.toasterService.warning('Error: No puede iniciar sesión' + error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
+      this.toasterService.warning('Error: No puede iniciar sesión' + error, 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
       this._userService.logout();
     });
    } else {
     this.spinnerButtonOptions.active = false;
     this.spinnerButtonOptions.text = 'Iniciar sesión';
     this.status = 'error';
-    this.toasterService.warning('Error: No puede iniciar sesión. Verifique sus datos de acceso.', 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
+    this.toasterService.warning('Error: No puede iniciar sesión. Verifique sus datos de acceso.', 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
     this._userService.logout();
    }
   }
@@ -251,7 +245,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       const key = 'proyectos';
       this._userService.saveStorage(key, proyectos);
       this.spinnerButtonOptions.active = false;
-      this.spinnerButtonOptions.text = 'Iniciar sesión'
+      this.spinnerButtonOptions.text = 'Iniciar sesión';
       this.toasterService.success('Acceso: ' + this.success, 'Exito', {timeOut: 4000, closeButton: true, });
       this._router.navigate(['dashboard']);
       this.loginAction(proyectos, identity);
@@ -260,7 +254,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this.spinnerButtonOptions.active = false;
       this.spinnerButtonOptions.text = 'Iniciar sesión';
       this.status = 'error';
-      this.toasterService.warning('Error: No puede iniciar sesión. Verifique sus datos.', 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
+      this.toasterService.warning('Error: No puede iniciar sesión. Verifique sus datos.', 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
       this._userService.logout();
     }
   }
@@ -268,7 +262,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
   async getProyectos(identity: any, token: any) {
 
-    if(!identity || !token) {
+    if (!identity || !token) {
       return;
     }
 

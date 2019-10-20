@@ -1,28 +1,25 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { AngularFirestore } from '@angular/fire/firestore';
-//import { AngularFirestore } from 'angularfire2/firestore';
 import { FormControl} from '@angular/forms';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material';
 
-//FIREBASE
-//import { AngularFireAuth } from 'angularfire2/auth';
-//import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
+// FIREBASE
+import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireStorage, AngularFireUploadTask } from '@angular/fire/storage';
 
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
-//MODELS
+// MODELS
 import { Item, UserFirebase } from 'src/app/models/types';
 
 
-//SERVICES
+// SERVICES
 import { UserService } from 'src/app/services/service.index';
 
 

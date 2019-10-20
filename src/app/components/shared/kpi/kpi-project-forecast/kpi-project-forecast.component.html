@@ -1,4 +1,5 @@
 
+<div *ngIf="identity && project">
 
 <div class="row animated fadeIn">
     <div class="col-12">
@@ -23,7 +24,7 @@
                                     <div class="col-sm">
                                         <div class="row d-flex justify-content-center">        
                                         <span>
-                                        Órdenes de Trabajo. <span *ngIf="formulario && formulario.value.dateoptions && kpidateoption">({{kpidateoption.name}})</span>
+                                        Resumen de Producción Económica. <span *ngIf="formulario && formulario.value.dateoptions && kpidateoption">({{kpidateoption.name}})</span>
                                         </span>
                                         </div>
                                     </div>
@@ -49,7 +50,7 @@
                                                 <ngx-charts-bar-vertical
                                                 (window:resize)="onResize($event)"
                                                 [view]="view"
-                                                [scheme]="colorScheme"
+                                                [scheme]="colorSchemePayment"
                                                 [results]="kpipaymentprojectservice"
                                                 [gradient]="gradient"
                                                 [xAxis]="showXAxis"
@@ -154,15 +155,9 @@
     </div>
 </div>
 
-
-
-<div *ngIf="identity && project">
-
-
 <br>
 
-                
-<div class="row" >
+<div class="row animated fadeIn" >
     <div class="col">
         <div class="jfCYPT">
             <div class="jfCYPT">
@@ -171,35 +166,73 @@
                         <div class="eCdVoi">
                             <div class="jNlJOD">
                                 <span>
-                                    Resumen de Producción Económica (3 meses anteriores) y Previsión próximo mes.
+                                    Resumen de Producción Económica.
                                 </span>
                             </div>
                         </div>    
                         <div>
-                        <div class="container-fluid" *ngIf="isLoadingchart">
+                        <div class="container-fluid" *ngIf="isLoadingservice">
                             <div class="row">
                                 <div class="col-sm">
                                     <div class="row d-flex justify-content-center">
-                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingchart" ></mat-spinner>
+                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingservice" ></mat-spinner>
                                     </div>                        
                                 </div>
                             </div>
                         </div>
         
-                        <div class=" dIOqge" *ngIf="!isLoadingchart">
+                        <div class=" dIOqge" >
                             
-                            <div class="jmuLsE" >
+                            <div class="jmuLsE" *ngIf="!isLoadingservice">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="row d-flex justify-content-center">        
+                                        <span>
+                                        Producción (3 meses anteriores).
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+        
                                 <mat-card class="container-fluid">
                                 <mat-card-content>                    
                                 <div class="row d-flex justify-content-center p-2" >
                                     <br>
-                                    <div class="container-fluid" *ngIf="kpidataforecast && kpidataforecast.length > 0 ">
+                                    <div class="container-fluid" >
                                         <div class="row">
-                                            <div class="col-12">
+                                            <div class="col-12" *ngIf="kpipaymentservice && kpipaymentservice.length > 0 ">
                                             <div class="row d-flex justify-content-center">
-                                            AAA
+                                                <div id="chartdiv" style="width: 100%; height: 500px"></div>
+                                                <!---
+                                                <ngx-charts-bar-vertical
+                                                    (window:resize)="onResize($event)"
+                                                    [view]="view"
+                                                    [scheme]="colorSchemePayment"
+                                                    [results]="kpipaymentservice"
+                                                    [gradient]="gradient"
+                                                    [xAxis]="showXAxis"
+                                                    [yAxis]="showYAxis"
+                                                    [legend]="showLegend"
+                                                    [showXAxisLabel]="showXAxisLabel"
+                                                    [showYAxisLabel]="showYAxisLabel"
+                                                    [xAxisLabel]="xAxisLabelPayment"
+                                                    [yAxisLabel]="yAxisLabelPayment"
+                                                    >
+                                                </ngx-charts-bar-vertical>
+                                                -->
                                             </div>
                                             </div>
+                                            <div class="col-12" *ngIf="kpipaymentservice && kpipaymentservice.length == 0">
+                                                <div class="row d-flex justify-content-center ">
+                                                    <div class="dGHjBt">
+                                                        <p class="hAzwqT">                                                        
+                                                        </p>
+                                                        <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                    </div>                    
+                                                </div>    
+                                            </div>        
+
+
                                         </div>
                                     </div>                                            
                                 </div>
@@ -207,18 +240,38 @@
                                 </mat-card>
                             </div>
 
-                            <div class="jmuLsE" >
+                            <div class="jmuLsE" *ngIf="!isLoadingpaymentmonth">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="row d-flex justify-content-center">        
+                                        <span>
+                                        Producción por Servicio (mensual hasta la fecha).
+                                        </span>
+                                        </div>
+                                    </div>
+                                </div>
+        
                                 <mat-card class="container-fluid">
                                 <mat-card-content>
                                 <div class="row d-flex justify-content-center p-2" >
                                     <br>
-                                    <div class="container-fluid" *ngIf="kpidataforecast && kpidataforecast.length > 0 ">
+                                    <div class="container-fluid" >
                                         <div class="row">
-                                            <div class="col-12">
+                                            <div class="col-12" *ngIf="kpipaymentprojectservicemonth && kpipaymentprojectservicemonth.length > 0">
                                             <div class="row d-flex justify-content-center">
-                                            BBB
+                                            <div id="chartpiediv" style="width: 100%; height: 500px" ></div>
                                             </div>
                                             </div>
+
+                                            <div class="col-12" *ngIf="kpipaymentprojectservicemonth && kpipaymentprojectservicemonth.length == 0">
+                                                <div class="row d-flex justify-content-center ">
+                                                    <div class="dGHjBt">
+                                                        <p class="hAzwqT">
+                                                        </p>
+                                                        <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                    </div>                    
+                                                </div>    
+                                            </div>                                            
                                         </div>
                                     </div>                                            
                                 </div>            
@@ -235,11 +288,9 @@
     </div>
 </div>
 
-
 <br>
 
-    
-<div class="row" >
+<div class="row animated fadeIn" >
     <div class="col">
         <div class="jfCYPT">
             <div class="jfCYPT">
@@ -342,7 +393,7 @@
 
 <br>
 
-<div class="row" >
+<div class="row animated fadeIn" >
     <div class="col">
         <div class="jfCYPT">
             <div class="jfCYPT">

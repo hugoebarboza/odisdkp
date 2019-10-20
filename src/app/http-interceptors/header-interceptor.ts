@@ -10,7 +10,7 @@ import {
 
 import { Observable } from 'rxjs/Observable';
 
-//SERVICES
+// SERVICES
 import { UserService } from '../services/service.index';
 
 @Injectable()

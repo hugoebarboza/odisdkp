@@ -1,16 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-// import { Router, ActivatedRoute } from '@angular/router';
-// import { Observable } from 'rxjs/';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material';
 import {MessageService} from 'primeng/api';
 import {Message} from 'primeng/api';
 
-
-//SERVICES
+// SERVICES
 import { OrderserviceService, UserService } from '../../../services/service.index';
 
-//MODELS
-// import { Service, ServiceType } from '../../../models/types';
 
 
 @Component({

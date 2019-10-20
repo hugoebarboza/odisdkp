@@ -1,6 +1,6 @@
 import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 //MATERIAL
 import { MAT_DIALOG_DATA, MatDialogRef, Sort, MatTableDataSource } from '@angular/material';

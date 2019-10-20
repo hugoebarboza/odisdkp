@@ -3,7 +3,7 @@ import {
   HttpEvent, HttpInterceptor, HttpHandler, HttpRequest
 } from '@angular/common/http';
 
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 @Injectable()
 export class EnsureHttpsInterceptor implements HttpInterceptor {
@@ -13,7 +13,7 @@ export class EnsureHttpsInterceptor implements HttpInterceptor {
       url: req.url.replace('http://', 'https://')
     });
     // send the cloned, "secure" request to the next handler.
-    //console.log('Intercepted HTTP call', secureReq);
+    // console.log('Intercepted HTTP call', secureReq);
     return next.handle(secureReq);
   }
 }

@@ -2,7 +2,7 @@ import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@
 import { FormControl  } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 //SERVICES
 import { OrderserviceService, UserService } from '../../../services/service.index';

@@ -4,7 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 
 // MOMENT
 import * as _moment from 'moment';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 const moment = _moment;
 
 // MODELS

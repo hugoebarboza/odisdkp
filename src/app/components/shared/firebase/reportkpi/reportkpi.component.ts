@@ -1,18 +1,20 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material';
-//import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-//import { AngularFireAuth } from 'angularfire2/auth';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { Observable } from 'rxjs/Observable';
+import { map } from 'rxjs/operators';
+
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 //MODELS
 import { UserFirebase } from 'src/app/models/types';
-import { Observable } from 'rxjs';
+
 import * as _moment from 'moment';
 const moment = _moment;
+
 import { ToastrService } from 'ngx-toastr';
-import { map } from 'rxjs/operators';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+
 
 @Component({  
   selector: 'app-reportkpi',

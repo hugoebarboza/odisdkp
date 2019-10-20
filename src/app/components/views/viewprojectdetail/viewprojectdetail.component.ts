@@ -1,7 +1,8 @@
 import { Component, OnInit, Input, EventEmitter, SimpleChanges, OnChanges, OnDestroy, Output, ViewChild } from '@angular/core';
 import { FormControl, FormGroup, Validators  } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
-import { defer, combineLatest, Subscription } from 'rxjs';
+import { defer, combineLatest } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { tap, switchMap, map } from 'rxjs/operators';
@@ -9,11 +10,9 @@ import { tap, switchMap, map } from 'rxjs/operators';
 
 declare var swal: any;
 
-//FIREBASE
+// FIREBASE
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
-//import { AngularFireAuth } from 'angularfire2/auth';
-//import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 
 
 //DIALOG
@@ -21,7 +20,7 @@ import { EditServiceComponent } from '../../../components/shared/shared.index';
 import { ShowcustomerComponent } from '../../../components/dialog/showcustomer/showcustomer.component';
 import { StatusComponent } from '../../../pages/orderservice/components/dialog/status/status.component';
 import { AddColorComponent } from '../../../pages/orderservice/components/dialog/add-color/add-color.component';
-import { AddConstanteComponent } from   '../../../pages/orderservice/components/dialog/add-constante/add-constante.component';
+import { AddConstanteComponent } from '../../../pages/orderservice/components/dialog/add-constante/add-constante.component';
 import { AddGiroComponent } from '../../../pages/orderservice/components/dialog/add-giro/add-giro.component';
 import { AddMarcaComponent } from '../../../pages/orderservice/components/dialog/add-marca/add-marca.component';
 import { AddMercadoComponent } from '../../../pages/orderservice/components/dialog/add-mercado/add-mercado.component';

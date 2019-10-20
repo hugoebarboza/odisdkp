@@ -5,7 +5,7 @@ import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { MatSnackBar } from '@angular/material';
 import * as FileSaver from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material';
-import { Subscription } from 'rxjs';
+import { Subscription } from 'rxjs/Subscription';
 
 // MODEL
 import { Service } from '../../models/types';

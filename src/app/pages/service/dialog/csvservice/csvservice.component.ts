@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { Sort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
 import { FormControl, Validators } from '@angular/forms';
-import { ReplaySubject, Subject, Subscription } from 'rxjs';
+import { ReplaySubject } from 'rxjs/ReplaySubject';
+import { Subject } from 'rxjs/Subject';
+import { Subscription } from 'rxjs/Subscription';
 import { takeUntil } from 'rxjs/operators';
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
 

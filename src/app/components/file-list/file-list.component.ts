@@ -9,7 +9,6 @@ import { tap, switchMap, map } from 'rxjs/operators';
 declare var swal: any;
 
 
-//import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
 //MATERIAL

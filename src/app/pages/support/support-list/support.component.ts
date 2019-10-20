@@ -2,7 +2,9 @@ import { Component, OnInit, ViewChild, OnDestroy } from '@angular/core';
 import { UserService, SettingsService } from 'src/app/services/service.index';
 import { AddcaseComponent } from '../dialog/addcase/addcase.component';
 import { MatDialog, MatTableDataSource, MatSnackBar, MatPaginator, MatSort } from '@angular/material';
-import { Observable, combineLatest, defer, Subscription } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
+import { Subscription } from 'rxjs/Subscription';
+import { combineLatest, defer } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 
 import { switchMap, map, tap } from 'rxjs/operators';
@@ -13,8 +15,6 @@ import { UserFirebase } from '../../../models/types';
 import * as _moment from 'moment';
 
 
-//import { AngularFireAuth } from 'angularfire2/auth';
-//import { AngularFirestoreCollection, AngularFirestore} from 'angularfire2/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreCollection, AngularFirestore} from '@angular/fire/firestore';
 

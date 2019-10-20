@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpResponse, HttpRequest, HttpEvent, HttpErrorResponse } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { throwError } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 // import { of } from 'rxjs/observable/of';
 import { retry, catchError } from 'rxjs/operators';
 import { finalize } from 'rxjs/operators';

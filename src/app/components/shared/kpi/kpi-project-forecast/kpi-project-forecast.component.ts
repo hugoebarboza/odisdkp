@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy, AfterViewInit, NgZone } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
@@ -16,13 +16,18 @@ const moment = _moment;
 // TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
 
+// AMCHARTS
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+
 
 @Component({
   selector: 'app-kpi-project-forecast',
   templateUrl: './kpi-project-forecast.component.html',
   styleUrls: ['./kpi-project-forecast.component.css']
 })
-export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy {
+export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy, AfterViewInit {
 
   @Input() id: number;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -32,6 +37,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
   count = 0;
   formulario: FormGroup;
   kpipaymentprojectservice = [];
+  kpipaymentprojectservicemonth = [];
   kpipaymentdatatable = [];
   kpipaymentservice = [];
   kpidateoption: any;
@@ -41,6 +47,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
   isLoadingchart = true;
   isLoadingchartsingle = true;
   isLoadingservice = true;
+  isLoadingpaymentmonth = true;
   isMobile: any;
   mesactual: any;
   months: Month[] = [
@@ -73,7 +80,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
     {name: 'October', series: []},
     {name: 'November', series: []},
     {name: 'December', series: []},
-    {name: 'Prevision', series: []}
+    {name: 'Previsión', series: []}
   ];
 
   datesearchoptions = [
@@ -96,9 +103,6 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
     clear: 'Borrar'
   };
 
-
-
-
   kpiTableData = new MatTableDataSource();
   project: any;
   proyectos: any;
@@ -118,15 +122,24 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
   showLegendVertical = false;
   showXAxisLabel = true;
   xAxisLabel = 'Fecha';
+  xAxisLabelPayment = 'Fecha';
   showYAxisLabel = true;
   yAxisLabel = 'Estatus';
+  yAxisLabelPayment = 'Producción';
 
   colorScheme = {
     domain: ['#5AA454', '#C7B42C', '#A10A28', '#AAAAAA']
   };
 
+  colorSchemePayment = {
+    domain: ['#5AA454', '#C7B42C', '#3399FF', '#AAAAAA']
+  };
+
+  // AM CHARTS
+  chart: any;
 
   constructor(
+    private zone: NgZone,
     private _kpiPayment: PaymentService,
     private _kpiService: KpiService,
     private _orderService: OrderserviceService,
@@ -165,7 +178,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
         }
     }
 
-    this.displayedColumns[4] = 'Prevision';
+    this.displayedColumns[4] = 'Previsión';
 
 
     if (this.id > 0) {
@@ -175,6 +188,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
         if (this.formulario && this.formulario.value.dateoptions) {
           this.getDataPayment(this.project.id, this.id, this.formulario.value.dateoptions);
           this.getDataPaymentService(this.project.id, this.id);
+          this.getDataPaymentMonth(this.project.id, this.id, 'month');
         }
       }
     }
@@ -182,9 +196,14 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
   }
 
   ngOnDestroy() {
-  if (this.subscription) {
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.zone.runOutsideAngular(() => {
+      if (this.chart) {
+          this.chart.dispose();
+      }
+    });
   }
 
 
@@ -266,11 +285,11 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
                       if (some && some.datos && some.datos.length > 0) {
                         const object: Element = {
                           desc_mes: this.displayedColumns[i],
-                          produccion: some.datos[0]['user_count'],
+                          produccion: Math.round(some.datos[0]['user_count']),
                         };
                         const data: Data = {
                           name: this.displayedColumns[i],
-                          s: { name: status[x]['name'], value: some.datos[0]['user_count'] }
+                          s: { name: status[x]['name'], value: Math.round(some.datos[0]['user_count']) }
                         };
 
                         if (this.kpidatavertical.find( ({ name }) => name === data.name )) {
@@ -417,7 +436,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
                         this.kpiTableData.sort = this.sort;
                       }
                     }
-                    console.log(<any>error);
+                    // console.log(<any>error);
                     }
                     );
                 });
@@ -442,14 +461,6 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
   }
 
 
-  findObjectByKey(array, key, value) {
-    for (let i = 0; i < array.length; i++) {
-        if (array[i][key] === value) {
-            return array[i];
-        }
-    }
-    return null;
-  }
 
 
   async getDataPayment(project_id: number, service_id: number, term: string) {
@@ -547,12 +558,210 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
 
     if (data && data.datos) {
       console.log(data.datos);
+      for (let x = 0; x < data.datos.length; x++) {
+        if (x === 0) {
+          const object: Single = {
+            name: 'Mes (' + data.datos[x]['date'] + ' )',
+            value: Math.round(data.datos[x]['value_count']),
+          };
+          if (object && object.value > 0) {
+            this.kpipaymentservice.unshift(object);
+          }
+        }
+        if (x === 1) {
+          const object: Single = {
+            name: 'Mes (' + data.datos[x]['date'] + ' )',
+            value: Math.round(data.datos[x]['value_count']),
+          };
+          if (object && object.value > 0) {
+            this.kpipaymentservice.unshift(object);
+          }
+        }
+        if (x === 2) {
+          const object: Single = {
+            name: 'Mes (' + data.datos[x]['date'] + ' )',
+            value: Math.round(data.datos[x]['value_count']),
+          };
+          if (object && object.value > 0) {
+            this.kpipaymentservice.unshift(object);
+          }
+        }
+        if (x + 1 === data.datos.length) {
+          this.isLoadingservice = false;
+        }
+      }
+      if (this.kpipaymentservice.length === data.datos.length) {
+        this.isLoadingservice = false;
+        // console.log(this.kpipaymentservice);
+        this.createamXYChart(this.kpipaymentservice);
+      }
     } else {
       this.kpipaymentservice = [];
       this.isLoadingservice = false;
     }
   }
 
+  async getDataPaymentMonth(project_id: number, service_id: number, term: string) {
+    this.kpipaymentprojectservicemonth = [];
+    this.isLoadingpaymentmonth = true;
+    const datedesde = new FormControl();
+    const datehasta = new FormControl();
+
+    const data: any = await this._kpiPayment.getProjectServicePayment(this.token.token, project_id, service_id, term, datedesde.value, datehasta.value);
+
+    if (data && data.datos) {
+      for (let i = 0; i < data.datos.length; i++) {
+          const object: Single = {
+            name: data.datos[i]['name'],
+            value: Math.round(data.datos[i]['value_count']),
+          };
+          if (object && object.value > 0) {
+            this.kpipaymentprojectservicemonth.push(object);
+          }
+          if (i + 1 === data.datos.length) {
+            this.isLoadingpaymentmonth = false;
+          }
+      }
+      if (this.kpipaymentprojectservicemonth.length === data.datos.length) {
+        this.isLoadingpaymentmonth = false;
+        // console.log(this.kpipaymentprojectservicemonth);
+        this.createamPieChart(this.kpipaymentprojectservicemonth);
+      }
+    } else {
+      this.kpipaymentprojectservicemonth = [];
+      this.isLoadingpaymentmonth = false;
+    }
+  }
+
+
+  createamXYChart(datasource: any[]) {
+    if (datasource && datasource.length > 0) {
+      setTimeout(() => {
+        this.zone.runOutsideAngular(() => {
+          Promise.all([
+              // import('@amcharts/amcharts4/core'),
+              // import('@amcharts/amcharts4/charts'),
+              // import('@amcharts/amcharts4/themes/animated')
+          ])
+              .then(() => {
+                  // this.am4core = modules[0];
+                  // this.am4charts = modules[1];
+                  // this.am4themes_animated = modules[2].default;
+                  // this.am4core.useTheme(this.am4themes_animated);
+
+                  // const chart = am4core.create(this.chartdiv, am4charts.XYChart);
+                  am4core.useTheme(am4themes_animated);
+                  const chart = am4core.create('chartdiv', am4charts.XYChart);
+
+                  chart.paddingRight = 20;
+
+                  chart.data = datasource;
+
+                  const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                  categoryAxis.dataFields.category = 'name';
+                  categoryAxis.renderer.grid.template.location = 0;
+                  categoryAxis.renderer.minGridDistance = 30;
+
+                  categoryAxis.renderer.labels.template.adapter.add('dy', function(dy, target) {
+                    if (target.dataItem && target.dataItem.index && 2 === 2) {
+                      return dy + 25;
+                    }
+                    return dy;
+                  });
+
+                  chart.yAxes.push(new am4charts.ValueAxis());
+
+                  // Create series
+                  const series = chart.series.push(new am4charts.ColumnSeries());
+                  series.dataFields.valueY = 'value';
+                  series.dataFields.categoryX = 'name';
+                  series.name = 'value';
+                  series.columns.template.tooltipText = '{categoryX}: [bold]{valueY}[/]';
+                  series.columns.template.fillOpacity = .8;
+
+                  const columnTemplate = series.columns.template;
+                  columnTemplate.strokeWidth = 2;
+                  columnTemplate.strokeOpacity = 1;
+
+                  this.chart = chart;
+              })
+              .catch(e => {
+                  console.error('Error when creating chart', e);
+              });
+        });
+      }, 2000);
+    }
+  }
+
+
+  createamPieChart(datasource: any[]) {
+    if (datasource && datasource.length > 0) {
+      setTimeout(() => {
+        this.zone.runOutsideAngular(() => {
+          Promise.all([
+          ])
+              .then(() => {
+                  am4core.useTheme(am4themes_animated);
+                  const chart = am4core.create('chartpiediv', am4charts.PieChart);
+
+                  // Add and configure Series
+                  const pieSeries = chart.series.push(new am4charts.PieSeries());
+                  pieSeries.dataFields.value = 'value';
+                  pieSeries.dataFields.category = 'name';
+
+
+                  // Let's cut a hole in our Pie chart the size of 30% the radius
+                  chart.innerRadius = am4core.percent(30);
+
+                  // Put a thick white border around each Slice
+                  pieSeries.slices.template.stroke = am4core.color('#fff');
+                  pieSeries.slices.template.strokeWidth = 2;
+                  pieSeries.slices.template.strokeOpacity = 1;
+                  pieSeries.slices.template
+                    // change the cursor on hover to make it apparent the object can be interacted with
+                    .cursorOverStyle = [
+                      {
+                        'property': 'cursor',
+                        'value': 'pointer'
+                      }
+                    ];
+
+                  pieSeries.alignLabels = false;
+                  pieSeries.labels.template.bent = true;
+                  pieSeries.labels.template.radius = 3;
+                  pieSeries.labels.template.padding(0, 0, 0, 0);
+
+                  pieSeries.ticks.template.disabled = true;
+
+                  // Create a base filter effect (as if it's not there) for the hover to return to
+                  const shadow = pieSeries.slices.template.filters.push(new am4core.DropShadowFilter);
+                  shadow.opacity = 0;
+
+                  // Create hover state
+                  const hoverState = pieSeries.slices.template.states.getKey('hover');
+
+                  // Slightly shift the shadow and make it more prominent on hover
+                  const hoverShadow = hoverState.filters.push(new am4core.DropShadowFilter);
+                  hoverShadow.opacity = 0.7;
+                  hoverShadow.blur = 5;
+
+                  // Add a legend
+                  chart.legend = new am4charts.Legend();
+
+                  chart.data = datasource;
+
+              })
+              .catch(e => {
+                  console.error('Error when creating chart', e);
+              });
+        });
+      }, 2000);
+    }
+  }
+
+
+  ngAfterViewInit() {
+  }
 
 }
 

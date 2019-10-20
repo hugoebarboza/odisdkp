@@ -1,10 +1,11 @@
 import { Component, OnInit, Output, EventEmitter, Input } from '@angular/core';
 import { FormControl, FormGroup, Validators} from '@angular/forms';
-import { Subject, Observable, concat, of } from 'rxjs';
+import { Subject, concat } from 'rxjs';
+import { of } from 'rxjs/observable/of';
+import { Observable } from 'rxjs/Observable';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
 
 
-//import { AngularFirestoreCollection, AngularFirestore } from 'angularfire2/firestore';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
 

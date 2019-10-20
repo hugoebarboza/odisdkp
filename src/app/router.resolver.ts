@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Resolve, RouterStateSnapshot, ActivatedRouteSnapshot } from '@angular/router';
-import { Observable, timer } from 'rxjs';
+import { timer } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 
 
 @Injectable()

@@ -1,3 +1,7 @@
+#chartdiv {
+    width: 100%;
+    height: 500px;
+}
 .full-width {
     width: 100%;
 }
@@ -147,6 +151,26 @@
 }
 .width-100percentage{
     width: 100%;
+}
+
+.hAzwqT {
+    font-size: 1.42857em;
+    font-style: inherit;
+    line-height: 1.2;
+    color: rgb(23, 43, 77);
+    font-weight: 500;
+    letter-spacing: -0.008em;
+    margin-bottom: 16px;
+}
+.hkvxBP{
+    font-size: 12px;
+    font-style: inherit;
+    line-height: 1.25;
+    color: rgb(23, 43, 77);
+    letter-spacing: -0.006em;
+    margin-top: 0px;
+    margin-bottom: 7px;
+    word-break: break-all;
 }
 @media(max-width: 600px) {
     .mobile-label {
