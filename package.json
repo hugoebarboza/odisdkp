@@ -85,7 +85,7 @@
     "selenium-webdriver": "^4.0.0-alpha.3",
     "source-map-explorer": "^2.1.0",
     "sweetalert": "^2.1.2",
-    "typescript": "^3.6.4",
+    "typescript": "^3.5.3",
     "webpack-dev-server": "^3.8.2",
     "webpack-sources": "^1.4.3",
     "xlsx": "^0.15.1",
