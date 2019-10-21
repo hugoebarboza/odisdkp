@@ -15,8 +15,8 @@ export class RequestCacheService  {
       return undefined;
     }
 
-    //const isExpired = cached.lastRead < (Date.now() - maxAge);
-    //const expired = isExpired ? 'expired ' : '';
+    // const isExpired = cached.lastRead < (Date.now() - maxAge);
+    // const expired = isExpired ? 'expired ' : '';
     return cached.response;
   }
 
@@ -26,10 +26,10 @@ export class RequestCacheService  {
     this.cache.set(url, entry);
 
     const expired = Date.now() - maxAge;
-    //console.log(expired);
+    // console.log(expired);
     this.cache.forEach(expiredEntry => {
       if (expiredEntry.lastRead < expired) {
-        //console.log(expiredEntry.url);
+        // console.log(expiredEntry.url);
         this.cache.delete(expiredEntry.url);
       }
     });

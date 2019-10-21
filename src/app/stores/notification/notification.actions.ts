@@ -8,7 +8,7 @@ export class SetNotificationAction implements Action {
     readonly type = SET_NOTIFICATION;
     constructor( public notification: object ) {}
   }
-  
+
   export class ResetNotificationAction implements Action{
     readonly type = RESET_NOTIFICATION;
   }

@@ -8,16 +8,14 @@ import { switchMap, map, tap } from 'rxjs/operators';
 import { TooltipPosition } from '@angular/material';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-//FIREBASE
+// FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
-//import { AngularFirestore, AngularFirestoreCollection, AngularFirestoreDocument } from 'angularfire2/firestore';
-//import { AngularFireAuth } from 'angularfire2/auth';
 
-//MODELS
+// MODELS
 import { Proyecto, User } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { SettingsService, UserService } from 'src/app/services/service.index';
 
 

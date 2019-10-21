@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 
-//PIPE
+// PIPE
 import { DatePipe } from './countTime.pipe';
 import { FileSizePipe } from './file-size.pipe';
 import { HighlightSearch } from './highlight.pipe';
@@ -15,22 +15,21 @@ import { TruncatePipe } from './truncate.pipe';
     DatePipe,
     FileSizePipe,
     HighlightSearch,
-    KeysPipe, 
+    KeysPipe,
     SearchPipe,
     SplitPipe,
     TruncatePipe
   ],
   imports: [
-    
   ],
   exports: [
     DatePipe,
     FileSizePipe,
     HighlightSearch,
-    KeysPipe, 
+    KeysPipe,
     SearchPipe,
     SplitPipe,
     TruncatePipe
-  ]  
+  ]
 })
 export class PipesModule { }

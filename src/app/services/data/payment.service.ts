@@ -50,7 +50,6 @@ export class PaymentService {
 
     if (fromdate !== 'Undefined' && fromdate !== null && todate !== 'Undefined' && todate !== null) {
       paginate = `?fromdate=${fromdate}&todate=${todate}`;
-      console.log(paginate);
     }
 
     if (paginate === null) {

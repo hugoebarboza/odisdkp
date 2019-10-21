@@ -3,23 +3,23 @@ import { CommonModule } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-//PROVIDERS
+// PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
-//COMPONENTS
+// COMPONENTS
 import { AddUserServiceComponent } from './components/adduserservice/adduserservice.component';
 import { ProjectCategorieListComponent } from './dialog/project-categorie-list/project-categorie-list.component';
 import { ProjectTypeListComponent } from './dialog/project-type-list/project-type-list.component';
 import { RemoveUserComponent } from './components/removeuser/removeuser.component';
 import { ServiceComponent } from './service-list/service.component';
 
-//DIRECTIVES
+// DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
 
-//DIALOG
+// DIALOG
 import { AddServiceComponent } from './dialog/addservice/addservice.component';
 import { AddProjectTypeComponent } from './dialog/add-project-type/add-project-type.component';
 import { AddProjectCategorieComponent } from './dialog/add-project-categorie/add-project-categorie.component';
@@ -33,27 +33,24 @@ import { ProjectCurrencyValueListComponent } from './dialog/project-currency-val
 import { ProjectKpiListComponent } from './dialog/project-kpi-list/project-kpi-list.component';
 import { UserComponent } from './dialog/user/user.component';
 
-//MODULES
+// MODULES
 import { AngularSplitModule } from 'angular-split';
 import { CalendarModule } from 'primeng/calendar';
 import { MaterialModule } from '../../material-module';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-//import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-//import { TableModule } from 'ngx-easy-table';
 import { ViewModule } from '../../components/views/view.module';
 
-
-//MOMENT
+// MOMENT
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
-//ROUTING
+// ROUTING
 import { ServiceRoutingModule } from './service.routing';
 
 
@@ -73,7 +70,6 @@ import { ServiceRoutingModule } from './service.routing';
     MatProgressButtonsModule,
     NgSelectModule,
     NgxMatSelectSearchModule,
-    //NgxChartsModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
     PipesModule,
@@ -81,10 +77,9 @@ import { ServiceRoutingModule } from './service.routing';
     ServiceRoutingModule,
     SharedModule,
     ScrollingModule,
-    //TableModule,
     ViewModule
   ],
-  declarations: 
+  declarations:
   [
     AddProjectTypeComponent,
     AddProjectCategorieComponent,
@@ -95,14 +90,14 @@ import { ServiceRoutingModule } from './service.routing';
     CsvServiceComponent,
     DeleteServiceComponent,
     InviteUserComponent,
-    RemoveUserComponent,    
+    RemoveUserComponent,
     ServiceComponent,
     SettingServiceComponent,
     UserComponent,
     ProjectCategorieListComponent,
     ProjectTypeListComponent,
     ProjectCurrencyValueListComponent,
-    ProjectKpiListComponent,        
+    ProjectKpiListComponent,
   ],
   entryComponents: [
     AddProjectTypeComponent,
@@ -125,5 +120,3 @@ import { ServiceRoutingModule } from './service.routing';
   ],
 })
 export class ServiceModule { }
-
-

@@ -4,7 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
-//COMPONENTS
+// COMPONENTS
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 import { ExcelComponent, DialogOverviewDialog } from '../../components/excel/excel.component';
 import { ExcelVehiculoComponent } from '../../components/excel-vehiculo/excel-vehiculo.component';
@@ -22,7 +22,7 @@ import { ViewprojectcustomerComponent } from '../../components/views/viewproject
 import { ViewprojectorderComponent } from '../../components/views/viewprojectorder/viewprojectorder.component';
 import { ViewModule } from '../../components/views/view.module';
 
-//DIALOG
+// DIALOG
 import { AddComponent } from '../../components/dialog/add/add.component';
 import { AddcustomerComponent } from '../../components/dialog/addcustomer/addcustomer.component';
 import { AddJobComponent } from './components/dialog/add-job/add-job.component';
@@ -57,7 +57,6 @@ import { SendOrderByEmailComponent } from './components/dialog/send-order-by-ema
 import { ServiceTypeListComponent } from './components/dialog/service-type-list/service-type-list.component';
 import { ServiceTypeValueListComponent } from './components/dialog/service-type-value-list/service-type-value-list.component';
 import { ServiceValueListComponent } from './components/dialog/service-value-list/service-value-list.component';
-//import { ShowComponent } from '../../components/dialog/show/show.component';
 import { ShowcustomerComponent } from '../../components/dialog/showcustomer/showcustomer.component';
 import { ShowProfileComponent } from '../../components/dialog/showprofile/showprofile.component';
 import { SettingsComponent } from '../../components/dialog/settings/settings.component';
@@ -72,39 +71,39 @@ import { ZipComponent } from '../../components/dialog/zip/zip.component';
 import { ZonaListComponent } from './components/dialog/zona-list/zona-list.component';
 
 
-//MODAL
+// MODAL
 import { ModalMapaComponent } from '../../components/modal/modalmapa/modalmapa.component';
 import { ModalImageComponent } from '../../components/modal/modalimage/modalimage.component';
 
 
-//DIRECTIVES
+// DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
-//PROVIDERS
+// PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
-//MODULES
+// MODULES
 import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule} from 'agm-direction'; 
+import { AgmDirectionModule} from 'agm-direction';
 import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
-//SERVICES
+// SERVICES
 import { ServiceModule } from 'src/app/services/service.module';
 
 
-//MOMENT
+// MOMENT
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 
-//ROUTER
+// ROUTER
 import { OrderServiceRoutingModule } from './orderservice.routes';
 
-//UTILITY
+// UTILITY
 import 'hammerjs';
 import { AngularSplitModule } from 'angular-split';
 import { CalendarModule } from 'primeng/calendar';
@@ -118,18 +117,15 @@ import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { Ng5SliderModule } from 'ng5-slider';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
 import { ScrollingModule } from '@angular/cdk/scrolling';
-//import { TableModule } from 'ngx-easy-table';
 import { VerticalTimelineModule } from 'angular-vertical-timeline';
 
-//Import toast module
-//import { ToastModule } from 'primeng/toast';
 import { ToastrModule } from 'ngx-toastr';
 
-//ESPAÑOL DATE
+// ESPAÑOL DATE
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
-//PAGES
+// PAGES
 import { OrderserviceComponent } from './components/orderservice/orderservice.component';
 
 
@@ -169,8 +165,6 @@ registerLocaleData(localeEs);
     ScrollingModule,
     SharedModule,
     ServiceModule,
-    //TableModule,
-    //ToastModule,    
     ToastrModule.forRoot(),
     VerticalTimelineModule,
     ViewModule
@@ -187,7 +181,7 @@ registerLocaleData(localeEs);
     AddModeloComponent,
     AddServiceTypeComponent,
     AddServiceTypeValueComponent,
-    AddServiceValueComponent,     
+    AddServiceValueComponent,
     AddSectorComponent,
     AddTarifaComponent,
     AddZonaComponent,
@@ -198,7 +192,7 @@ registerLocaleData(localeEs);
     CsvCustomerComponentComponent,
     DeletecustomerComponent,
     DeleteComponent,
-    DownloadComponent,    
+    DownloadComponent,
     DateDialogComponent,
     DialogOverviewDialog,
     EditcustomerComponent,
@@ -218,12 +212,12 @@ registerLocaleData(localeEs);
     ModeloListComponent,
     OrderserviceComponent,
     ServiceTypeListComponent,
-    SettingsComponent, 
+    SettingsComponent,
     SettingscustomerComponent,
     SectorListComponent,
     SendOrderByEmailComponent,
-    ServiceTypeValueListComponent, 
-    ServiceValueListComponent, 
+    ServiceTypeValueListComponent,
+    ServiceValueListComponent,
     ShowcustomerComponent,
     ShowProfileComponent,
     StatusComponent,
@@ -240,14 +234,14 @@ registerLocaleData(localeEs);
     VehiculoOverviewDialog,
     ViewOrderDetailComponent,
     ViewprojectorderComponent,
-    ViewprojectcustomerComponent, 
-    VieworderserviceComponent, 
-    ViewOrderServiceSelectComponent, 
+    ViewprojectcustomerComponent,
+    VieworderserviceComponent,
+    ViewOrderServiceSelectComponent,
   ],
   exports: [
   ],
   entryComponents: [
-    AddComponent, 
+    AddComponent,
     AddConstanteComponent,
     AddColorComponent,
     AddcustomerComponent,
@@ -266,17 +260,17 @@ registerLocaleData(localeEs);
     CsvCustomerComponentComponent,
     ColorListComponent,
     DateDialogComponent,
-    DeleteComponent, 
-    DeletecustomerComponent, 
-    DialogOverviewDialog, 
-    DownloadComponent, 
+    DeleteComponent,
+    DeletecustomerComponent,
+    DialogOverviewDialog,
+    DownloadComponent,
     EditComponent,
-    EditcustomerComponent,    
+    EditcustomerComponent,
     FileComponent,
     MarcaListComponent,
-    ModalMapaComponent, 
+    ModalMapaComponent,
     ModalImageComponent,
-    ModalMapaComponent, 
+    ModalMapaComponent,
     ModalImageComponent,
     ModeloListComponent,
     SendOrderByEmailComponent,
@@ -284,19 +278,19 @@ registerLocaleData(localeEs);
     SnackSuccessComponent,
     ShowcustomerComponent,
     ShowProfileComponent,
-    SettingsComponent, 
-    SettingscustomerComponent, 
+    SettingsComponent,
+    SettingscustomerComponent,
     StatusComponent,
     VehiculoOverviewDialog,
-    ZipComponent    
+    ZipComponent
   ],
   providers: [
-    NgbActiveModal, 
+    NgbActiveModal,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
     { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
-  ],  
+  ],
 })
 export class OrderServiceModule { }

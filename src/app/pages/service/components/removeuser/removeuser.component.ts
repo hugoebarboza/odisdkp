@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angu
 import { Subscription } from 'rxjs/Subscription';
 
 
-//SERVICES
+// SERVICES
 import { UserService } from '../../../../services/service.index';
 
 
@@ -14,24 +14,24 @@ import { UserService } from '../../../../services/service.index';
 export class RemoveUserComponent implements OnInit, OnDestroy {
 
   identity: any;
-  isLoading: boolean = true;
-  page: number = 1;
-  pageSize: number = 0;
+  isLoading = true;
+  page = 1;
+  pageSize = 0;
   status: string;
   subscription: Subscription;
-  termino: string = '';
-  totalRegistros: number = 0;
+  termino = '';
+  totalRegistros = 0;
   token: any;
   usuarios: any[] = [];
 
-  @Input() id : number;
+  @Input() id: number;
   @Output() totalUsuariosNoActive: EventEmitter<number>;
-  @Input() customerid : number;
+  @Input() customerid: number;
   @Output() addUsuario: EventEmitter<number>;
-  
+
   constructor(
     public _userService: UserService,
-  ) { 
+  ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.addUsuario = new EventEmitter();
@@ -39,13 +39,13 @@ export class RemoveUserComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if(this.id > 0){
+    if (this.id > 0) {
       this.cargarUsuarios();
     }
   }
 
   ngOnDestroy(): void {
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
@@ -60,7 +60,6 @@ export class RemoveUserComponent implements OnInit, OnDestroy {
                 this.totalRegistros = resp.datos.total;
                 this.usuarios = resp.datos.data;
                 this.totalUsuariosNoActive.emit(this.totalRegistros);
-                //console.log(this.totalRegistros);
                 this.isLoading = false;
                 this.status = 'success';
               },
@@ -93,11 +92,11 @@ export class RemoveUserComponent implements OnInit, OnDestroy {
               console.log(<any>error);
             }
             );
-  }  
+  }
 
-  paginate( valor: number, increment:number ) {
+  paginate( valor: number, increment: number ) {
 
-    let desde = this.pageSize + valor;
+    const desde = this.pageSize + valor;
 
     if ( desde >= this.totalRegistros ) {
       return;
@@ -111,7 +110,7 @@ export class RemoveUserComponent implements OnInit, OnDestroy {
     this.pageSize += valor;
     this.page += increment;
 
-    if ( this.page == 0 ) {
+    if ( this.page === 0 ) {
       this.page = 1;
       return;
     }
@@ -119,11 +118,10 @@ export class RemoveUserComponent implements OnInit, OnDestroy {
     this.cargarUsuarios();
   }
 
-  adduser(userid:number){
+  adduser(userid: number) {
 
-    if(userid > 0){
+    if (userid > 0) {
       this.addUsuario.emit(userid);
-      //this.cargarUsuarios();  
     }
   }
 

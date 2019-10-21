@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material';
 import { MatSelect } from '@angular/material';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 
+
 // CDK
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
 
@@ -343,7 +344,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this._userService.handleAuthentication(this.identity, this.token);
-    this.ServicioSeleccionado = new EventEmitter(); 
+    this.ServicioSeleccionado = new EventEmitter();
     this.dataSource = new MatTableDataSource();
     this.error = '';
     this.role = 5; // USUARIOS INSPECTORES
@@ -674,7 +675,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       .then(response => {
         this.getData(response);
         if(response && response.datos.data && response.datos.data.length) {
-          this.afp.trace('getServiceOrder', { metrics: { count: response.datos.data.length }, attributes: { app: 'odisdkp'}, incrementMetric$: { },});
+          this.afp.trace('getServiceOrder', { metrics: { count: response.datos.data.length }, attributes: { user: this.identity.email}, incrementMetric$: { } });
         }
         trace.unsubscribe();
         this.snackBar.open('Órdenes de Trabajo de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500,});

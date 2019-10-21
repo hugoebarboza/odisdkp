@@ -7,11 +7,11 @@ export class KeysPipe implements PipeTransform {
 
   transform(value: any): any {
 
-  	let keys = [];
+    const keys: any = [];
 
-  	for(let key in value){
+    for (let key in value) {
   		keys.push(key);
-  	}
+    }
 
     return keys;
   }

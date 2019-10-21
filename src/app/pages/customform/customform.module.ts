@@ -30,7 +30,7 @@ import { DirectiveModule } from 'src/app/directives/directive.module';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomformRoutingModule } from './customform.routing';
 
-//MODULES
+// MODULES
 import { SupportModule } from '../support/support.module';
 
 

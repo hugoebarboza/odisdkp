@@ -15,7 +15,7 @@ import * as _moment from 'moment';
 // const moment = _moment;
 
 
-@Component({	
+@Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
@@ -80,28 +80,20 @@ export class DashboardComponent implements OnInit, OnDestroy {
 		}		
 	}
 
-	ngOnDestroy(){
-		if(this.subscription){
+	ngOnDestroy() {
+		if (this.subscription) {
 			this.subscription.unsubscribe();
-			//console.log("ngOnDestroy unsuscribe");
 		}
 	}
 
-	/*
-  	ngDoCheck(){
-    	//this.identity = this._userService.getIdentity();
-    	//this.token = this._userService.getToken();    
-  	}*/
 
-
-	refreshMenu(event:number){
-		if(event == 1){
+	refreshMenu(event: number) {
+		if (event === 1) {
 		}
 	}
 	
 	/*
 	sendMsj() {
-				
 
 		this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:MM'));
 		
@@ -115,9 +107,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 		};
 
 		this._cdf.fcmsend(this.token.token, data).subscribe(
-			response => {        
+			response => {
 			  if(!response){
-				return false;        
+				return false;
 			  }
 				if(response.status == 200){ 
 					console.log(response);
@@ -125,9 +117,9 @@ export class DashboardComponent implements OnInit, OnDestroy {
 			},
 				error => {
 				console.log(<any>error);
-				}   
+				}
 			);
-			
+
 			// const body = ' nueva incidencia ';
 
 			const msg = {
@@ -151,7 +143,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 					  <tbody>
 						<tr>
 						<td><p></p></td>
-						</tr>                        
+						</tr>
 
 						<tr>
 						  <td>
@@ -170,7 +162,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 										  </a>
 										  </div>
 										  </td>
-									  </tr>                                            
+									  </tr>
 									<tr>
 									  <td align="left" style="padding:25px 30px 30px">
 									  <h2 style="font-size:16px;font-weight:400;color:#222222;margin:0">
@@ -199,17 +191,17 @@ export class DashboardComponent implements OnInit, OnDestroy {
 													  <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:2px;">Jun 27, 15:38 MDT</p>
 													  <div dir="auto" style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0">
 														<p style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0" dir="auto">Secure Email, I receive emails like spam or not secure. I need to resolve it, how can I do ?</p>
-													  </div>                                  
-													</td>        
-												  </tr>      
+													  </div>
+													</td>
+												  </tr>
 												  </tbody>
-												</table>    
-											  </td>  
+												</table>
+											  </td>
 											  </tr>
 											</tbody>
 										  </table>
 										</div>
-									  </h2>                                              
+									  </h2>
 									  </td>
 									</tr>
 								  </tbody>
@@ -219,7 +211,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 						  </tbody>
 						</table>
 						</td>
-					</tr>           
+					</tr>
 					</tbody>
 				  </table>
 				  </td>

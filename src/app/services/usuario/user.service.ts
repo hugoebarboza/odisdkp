@@ -703,7 +703,7 @@ export class UserService  {
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
-							  
+
 		return this._http.post(this.url+'changepassword', params, {headers: headers});
 	}
 
@@ -716,7 +716,7 @@ export class UserService  {
 		let json = JSON.stringify(user);
 		let params = 'json='+json;
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
-							  
+
 		return this._http.post(this.url+'changepasswordprofile/'+id, params, {headers: headers});
 	}
 

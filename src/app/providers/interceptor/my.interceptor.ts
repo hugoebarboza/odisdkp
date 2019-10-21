@@ -74,7 +74,7 @@ export class MyInterceptor implements HttpInterceptor {
         tap(event => {
           if (event instanceof HttpResponse) {
             // console.log(req.url.indexOf("/role/"));
-            if (req.method === 'PUT' || req.method === 'POST' || req.method === 'DELETE'){
+            if (req.method === 'PUT' || req.method === 'POST' || req.method === 'DELETE') {
               return;
             }
             if (req.url.indexOf('/customer') > 0) {

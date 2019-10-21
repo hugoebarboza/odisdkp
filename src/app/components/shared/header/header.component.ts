@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { defer, combineLatest } from 'rxjs/';
 import { of } from 'rxjs/observable/of';
@@ -11,14 +11,12 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import {  AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 
-
 // MATERIAL
 import { MatDialog } from '@angular/material';
 import { TooltipPosition } from '@angular/material';
 
 // MODELS
 import { User, UserFirebase } from 'src/app/models/types';
-
 
 // DIALOG
 import { LogoutComponent } from '../../../components/dialog/logout/logout.component';
@@ -29,11 +27,8 @@ import { AppState } from 'src/app/app.reducers';
 import { ResetAction } from 'src/app/contador.actions';
 import { SetUserAction } from 'src/app/stores/auth/auth.actions';
 
-
 // SERVICES
 import { SidenavService, UserService } from '../../../services/service.index';
-
-
 
 export interface Item { id: number; }
 
@@ -45,90 +40,80 @@ export interface Item { id: number; }
   providers: [UserService]
 })
 
-export class HeaderComponent {
+export class HeaderComponent implements OnInit, OnDestroy {
 
-	public title: string;
-	public titlelogout: string;
-  public fotoperfil: string = '';
+  public title: string;
+  public titlelogout: string;
+  public fotoperfil = '';
   public identity: any;
-  public isLoading: boolean = true;
+  public isLoading = true;
   public token: any;
   userid: any;
 
   getnotifications$: Observable<any>;
-  //private notificationsCollection: AngularFirestoreCollection<any>;
-  
 
   notificationsRef: AngularFirestoreCollection<any>;
   notifications$: any;
-  resultCount: number = 0;
+  resultCount = 0;
 
   private userDoc: AngularFirestoreDocument<User>;
   user$: Observable<User>;
 
-  uid:any;
+  uid: any;
 
-  //private itemsCollection: AngularFirestoreCollection<Item>;
+  // private itemsCollection: AngularFirestoreCollection<Item>;
 
   private itemsCollection: AngularFirestoreCollection<Item>;
   items: Observable<Item[]>;
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionheaderaction = new FormControl(this.positionOptions[3]);
-  
-	subscription: Subscription;
 
-	constructor(
+  subscription: Subscription;
+
+  constructor(
     public _userService: UserService,
     private afs: AngularFirestore,
     private afAuth: AngularFireAuth,
-		public dialog: MatDialog,
+    public dialog: MatDialog,
     private store: Store<AppState>,
     private supportDrawer: SidenavService
 
-   ){
-		this.title = 'Header';	  	
-		this.titlelogout = '¿ Está seguro de salir ?';	  	
-  	this.identity = this._userService.getIdentity();
+   ) {
+    this.title = 'Header';
+    this.titlelogout = '¿ Está seguro de salir ?';
+    this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.fotoperfil = this._userService.getFotoProfile();
     this.itemsCollection = afs.collection<Item>('items');
     this.items = this.itemsCollection.valueChanges();
     this.isLoading = true;
-	}
- 
-	ngOnInit(){
+  }
+
+  ngOnInit() {
     this.store.select('objNgrx')
     .subscribe( objNgrx  => {
       if (objNgrx) {
-        this.identity = objNgrx.identificacion; 
-      }else{
-        if(this.subscription){
-          //console.log('header unsubscribe');
+        this.fotoperfil = this._userService.getFotoProfile();
+        this.identity = objNgrx.identificacion;
+      } else {
+        if (this.subscription) {
           this.subscription.unsubscribe();
-         }    
+         }
       }
       this.identity = this._userService.getIdentity();
-      if(this.identity){        
+      if (this.identity) {
+
         this.isLoading = false;
-      }  
+      }
     });
 
-  /*    
-    if(this.identity){
-      this.isLoading = false;
-    }
-    if (this.identity == null ){
-      this._userService.logout();
-    }else{
-    }
-*/
+ 
 
    this. subscription = this.afAuth.authState.subscribe((auth: any) => {
     if ( auth ) {
 
           const newUser = new UserFirebase( auth );
-          //console.log(auth.uid);
           this.userid = auth.uid;
           const accion = new SetUserAction(newUser);
           this.store.dispatch( accion );
@@ -138,13 +123,10 @@ export class HeaderComponent {
           this.subscription = this.notificationsRef.snapshotChanges()
           .pipe(
             map(actions => {
-              //console.log(actions);
               this.isLoading = false;
               this.resultCount = actions.length;
-              if (this.resultCount == 0){
-               // console.log(this.resultCount);
+              if (this.resultCount === 0) {
                 this.notifications$ = null;
-                //return;
               }
               return actions.map(a => {
                 const data = a.payload.doc.data() as any;
@@ -161,15 +143,14 @@ export class HeaderComponent {
             }
           }
         );
-              
-          
+
     } else {
 
     }
     });
 
   }
-  
+
   gojoin(collection): Observable<any> {
     return this.notifications$ = collection.pipe(
       leftJoin(this.afs, 'create_by', 'users')
@@ -179,8 +160,7 @@ export class HeaderComponent {
 
 
   ngOnDestroy() {
-    //console.log('La página se va a cerrar');
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
 
@@ -188,15 +168,8 @@ export class HeaderComponent {
 
   addTodo(iddb: number) {
       this.itemsCollection.add({ id: iddb });
-      //console.log('paso');
   }
 
-  
-  ngDoCheck(){
-    //this.identity = this._userService.getIdentity();
-    //this.token = this._userService.getToken();
-    this.fotoperfil = this._userService.getFotoProfile();    
-  }
 
   resetAction() {
     const accion = new ResetAction();
@@ -204,36 +177,34 @@ export class HeaderComponent {
   }
 
 
- 
-  logout(id:number) {
+  logout(id: number) {
      const dialogRef = this.dialog.open(LogoutComponent, {
-     width: '280px',             
+     width: '280px',
      data: { id: id, title: this.titlelogout }
      });
 
 
      dialogRef.afterClosed().subscribe(
-           result => {       
+           result => {
               if (result === 1) {
-              //this.resetAction();
-              // After dialog is closed we're doing frontend updates 
+              // this.resetAction();
+              // After dialog is closed we're doing frontend updates
               // For add we're just pushing a new row inside DataService
-              //this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  
+              // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());
               }
             });
   }
 
-  readAllNotifications(){    
+  readAllNotifications() {
     const userDoc = this.afs.doc<User>(`/users/${this.userid}`);
-    userDoc.collection('notifications',  ref => ref.where('status', '==', '1'))    
+    userDoc.collection('notifications',  ref => ref.where('status', '==', '1'))
     .get()
-    .subscribe((data: any) => 
-      { 
+    .subscribe((data: any) => {
         if (data) {
           data.forEach((doc) => {
-            if(doc.id){
+            if (doc.id) {
               userDoc.collection('notifications').doc(doc.id).update({status : '0'});
-            }            
+            }
             }
           );
         }
@@ -243,7 +214,7 @@ export class HeaderComponent {
 
   toggleRightSidenav() {
     this.supportDrawer.toggle();
-  }  
+  }
 
 
 
@@ -279,7 +250,7 @@ export const leftJoin = (
             if (doc[field]) {
               // Perform query on join key, with optional limit
               // const q = ref => ref.where(field, '==', doc[field]).limit(limit);
-              //console.log(collection + '/' + doc[field]);
+              // console.log(collection + '/' + doc[field]);
               reads$.push(afs.doc(collection + '/' + doc[field]).valueChanges());
             } else {
               reads$.push(of([]));
@@ -288,9 +259,9 @@ export const leftJoin = (
           return combineLatest(reads$);
         }),
         map(joins => {
-            return collectionData.map((v: any, i: any) => {          
+            return collectionData.map((v: any, i: any) => {
               // totalJoins += joins[i].length;
-              return { ...v, [collection]: joins[i] || null };  
+              return { ...v, [collection]: joins[i] || null };
           });
         }),
         tap(_final => {

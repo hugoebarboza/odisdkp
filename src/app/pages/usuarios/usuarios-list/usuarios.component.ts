@@ -111,31 +111,20 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();      
-      //console.log("ngOnDestroy unsuscribe");
-		}
-	}
+  ngOnDestroy() {
+    if (this.subscription) {
+    this.subscription.unsubscribe();
+   }
+  }
 
 
-  /*
-  ngDoCheck(){
-    console.log(this.id);
-    console.log(this.service);
-    if(this.service != this.id){
-      this.service = this.id;
-      this.ngOnInit()
-    }
-  }*/
+  onChangeIcon(userid: number, status: number) {
 
-  onChangeIcon(userid:number, status:number) {
-
-    if(status){
+    if (status) {
       this.verify = 1;
     }
 
-    if(!status){
+    if (!status) {
       this.verify = 0;
     }
 
@@ -145,7 +134,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
                 swal('Solicitud procesada exitosamente', resp.message, 'success' );
               },
               error => {
-                //swal('Importante', error.error.message, 'error');
                 swal('Importante', error, 'error');
               }
               );

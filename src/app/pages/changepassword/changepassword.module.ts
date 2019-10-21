@@ -1,23 +1,23 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule }   from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-//PROVIDERS
+// PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
-//MODULES
+// MODULES
 import { MaterialModule } from '../../material-module';
 import { SharedModule } from '../../components/shared/shared.module';
 
-//PIPE MODULE
+// PIPE MODULE
 import { PipesModule } from '../../pipes/pipes.module';
 
 import { ChangePasswordRoutingModule } from './changepassword.routing';
 import { ChangepasswordComponent } from './changepassword-list/changepassword.component';
 
-//SERVICES
+// SERVICES
 import { ServiceModule } from 'src/app/services/service.module';
 
 

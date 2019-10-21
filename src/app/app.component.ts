@@ -1,5 +1,6 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+// import { Router } from '@angular/router';
+import { Router, RouteConfigLoadStart, RouteConfigLoadEnd, RouterEvent } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { ActivationEnd } from '@angular/router';
 import { filter, map } from 'rxjs/operators';
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit, OnDestroy {
   description: string;
   departamentos: Array<any> = [];
   identity: any;
+  loading: boolean;
   proyectos: Array<Proyecto>;
   subscription: Subscription;
   token: any;
@@ -68,8 +70,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery.addListener(this._mobileQueryListener);
 
 
-    this.getDataRoute()
-    .subscribe( data => {
+    this.getDataRoute().subscribe( data => {
       this.titulo = data.titulo;
       this.description = data.descripcion;
       this._title.setTitle( this.titulo );
@@ -80,6 +81,18 @@ export class AppComponent implements OnInit, OnDestroy {
       };
       this._meta.updateTag( metaTag );
     });
+
+    _router.events.subscribe(
+      (event: RouterEvent): void => {
+        if (event instanceof RouteConfigLoadStart) {
+          // console.log('trueeee');
+          this.loading = true;
+        } else if (event instanceof RouteConfigLoadEnd) {
+          // console.log('false');
+          this.loading = false;
+        }
+      }
+    );
 
 
   }
@@ -117,11 +130,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
   getDataRoute() {
     return this._router.events.pipe(
-
       filter( evento => evento instanceof ActivationEnd ),
       filter( (evento: ActivationEnd) => evento.snapshot.firstChild === null ),
       map( (evento: ActivationEnd ) => evento.snapshot.data )
-
     );
   }
 

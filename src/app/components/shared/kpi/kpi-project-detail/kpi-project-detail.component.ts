@@ -4,7 +4,7 @@ import { FormControl} from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
 
 
-//SERVICES
+// SERVICES
 import { KpiService, OrderserviceService, UserService } from 'src/app/services/service.index';
 
 @Component({
@@ -14,29 +14,28 @@ import { KpiService, OrderserviceService, UserService } from 'src/app/services/s
 })
 export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
 
-  @Input() id : number;
+  @Input() id: number;
   @Input() tiposervicio = [];
   @Input() users = [];
 
-  
-  avancegauge: number = 0;
+  avancegauge = 0;
   identity: any;
-  isLoadingResultsKpiDate: boolean = true;
-  isLoadingResultsKpiST: boolean = true;
-  isLoadingResultsKpiGauge: boolean = true;
-  isLoadingResultsKpiLine: boolean = true;
-  ngxcharttype: number = 1;
+  isLoadingResultsKpiDate = true;
+  isLoadingResultsKpiST = true;
+  isLoadingResultsKpiGauge = true;
+  isLoadingResultsKpiLine = true;
+  ngxcharttype = 1;
   proyectos: any;
   project: any;
-  role: number = 6; // ROLE DE USUARIOS ADMINISTRADORES
+  role = 6; // ROLE DE USUARIOS ADMINISTRADORES
   service: any;
   serviceestatus = [];
   subscription: Subscription;
   token: any;
-  isShow: boolean = false;
+  isShow = false;
 
-  kpidateallselectedoption: number = 0;
-  kpiselectedoption: number = 0;
+  kpidateallselectedoption = 0;
+  kpiselectedoption = 0;
   kpiselecttiposervicio: any;
   kpidateselecttiposervicio: any;
   kpiselectuser: any;
@@ -83,32 +82,32 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
     {value: 0, name: 'Todo'},
     {value: 1, name: 'Tipo de Servicio'},
   ];
-  
 
-  kpidateselectedoption:string = '';
-  kpidatelineselectedoption:string = '';
-  kpiselectedoptionST:string = '';
-  kpiselectedoptiongauge:string = '';
-  kpiselectedoptionline:string = '';
+
+  kpidateselectedoption = '';
+  kpidatelineselectedoption = '';
+  kpiselectedoptionST = '';
+  kpiselectedoptiongauge = '';
+  kpiselectedoptionline = '';
   kpidatadate = [];
   kpidataST = [];
   kpidatagauge =  [
     {
-      name: "",
+      name: '',
       value: 0
     },
     {
-      name: "",
+      name: '',
       value: 0
-    }      
+    }
   ];
-  kpitotaldate: number = 0;
-  kpitotalST: number = 0;
-  kpitotalgauge: number = 0;
-  kpitotalgaugeupdate:number = 0;
+  kpitotaldate = 0;
+  kpitotalST = 0;
+  kpitotalgauge = 0;
+  kpitotalgaugeupdate = 0;
 
 
-  //CHARTS OPTIONS DATE
+  // CHARTS OPTIONS DATE
   showLegend = true;
   showLabels = false;
   explodeSlices = false;
@@ -122,7 +121,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
     domain: ['#5AA454', '#A10A28', '#C7B42C']
   };
 
-  //LINE OPTIONS
+  // LINE OPTIONS
   viewline: any[] = [700, 400];
   viewgauge: any[] = [700, 400];
   showXAxis = true;
@@ -136,41 +135,41 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
   autoScale = true;
   multi = [
     {
-      name: "N. Órdenes",
-      series: [      
+      name: 'N. Órdenes',
+      series: [
       ]
-    },  
-  ];  
+    },
+  ];
 
 
-  //ALL LINE VAR AND OPTIONS
+  // ALL LINE VAR AND OPTIONS
   allmulti = [
     {
-      name: "",
-      series: [      
+      name: '',
+      series: [
       ]
     },
     {
-      name: "",
-      series: [      
+      name: '',
+      series: [
       ]
-    }      
+    }
   ];
 
   single = [
     {
-      name: "Creadas",
+      name: 'Creadas',
       value: 0
-    },    
+    },
     {
-      name: "Editadas",
+      name: 'Editadas',
       value: 0
-    }    
+    }
   ];
   xAxisLabelVertical = '(Estatus)';
-  kpitotalline:number = 0;
-  kpitotalcreated:number = 0;
-  kpitotalupdate:number = 0;
+  kpitotalline = 0;
+  kpitotalcreated = 0;
+  kpitotalupdate = 0;
 
 
 
@@ -178,34 +177,30 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionheaderaction = new FormControl(this.positionOptions[2]);
   positiondatasourceaction = new FormControl(this.positionOptions[3]);
-  positionleftaction = new FormControl(this.positionOptions[4]);  
-  positionrightaction = new FormControl(this.positionOptions[5]);  
+  positionleftaction = new FormControl(this.positionOptions[4]);
+  positionrightaction = new FormControl(this.positionOptions[5]);
 
 
   constructor(
-    //private _dataService: OrderserviceService,
     private _kpiService: KpiService,
     private _orderService: OrderserviceService,
     private _userService: UserService,
-  ) { 
+  ) {
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
-    //this.view = [innerWidth / 1.3, 400];
   }
 
   onResize(event) {
-    //console.log(event.target.innerWidth);
-    if(event.target.innerWidth > 1080){
+    if (event.target.innerWidth > 1080) {
       this.viewline = [700, 400];
       return;
     }
-    let param = event.target.innerWidth / 7;    
-    if(param < 400){
+    let param = event.target.innerWidth / 7;
+    if (param < 400) {
       param = 400;
     }
     this.viewline = [param, 400];
-    //console.log(this.viewline);
   }
 
   ngOnInit() {
@@ -214,7 +209,7 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
   ngOnChanges(_changes: SimpleChanges) {
     this.kpiusers = [];
     this.service = [];
-    if(this.id > 0 && this.tiposervicio.length > 0){
+    if (this.id > 0 && this.tiposervicio.length > 0) {
       this.filterUsers();
       this.kpiselectedoption = 0;
       this.kpidateallselectedoption = 0;
@@ -227,146 +222,138 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
       this.kpidateselecttiposervicio = this.tiposervicio[0]['id'];
       this.project = this.filterProjectByService();
       this.getServiceEstatus(this.id);
-      if(this.kpiusers.length > 0){
+      if (this.kpiusers.length > 0) {
         this.kpiselectuser = this.kpiusers[0]['id'];
       }
-      if(this.project && this.project.id){
-        //console.log(this.project);
+      if (this.project && this.project.id) {
         this.service = this.filterService();
         this.loaduserordeneskpigauge(this.project.id, this.kpiselectedoptiongauge, this.id );
         this.loaduserordeneskpiline(this.project.id, this.kpiselectedoptionline, this.id );
       }
 
-    }    
+    }
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();
-			//console.log("ngOnDestroy unsuscribe");
-		}
-	}
+  ngOnDestroy() {
+    if (this.subscription) {
+       this.subscription.unsubscribe();
+    }
+  }
 
 
-  filterProjectByService(){
-    for(var i = 0; i < this.proyectos.length; i += 1){
-      var result = this.proyectos[i];
-      if(result && result.service){
-        for(var y = 0; y < result.service.length; y += 1){
-          var response = result.service[y];
-          if(response && response.id === this.id){
+  filterProjectByService() {
+    for (let i = 0; i < this.proyectos.length; i += 1) {
+      const result = this.proyectos[i];
+      if (result && result.service) {
+        for (let y = 0; y < result.service.length; y += 1) {
+          const response = result.service[y];
+          if (response && response.id === this.id) {
             return result;
           }
         }
       }
     }
   }
-  
-  filterService(){
-    if(this.project.service && this.id){
-      for(var i = 0; i < this.project.service.length; i += 1){
-        var result = this.project.service[i];
-        if(result.id === this.id){
+
+  filterService() {
+    if (this.project.service && this.id) {
+      for (let i = 0; i < this.project.service.length; i += 1) {
+        const result = this.project.service[i];
+        if (result.id === this.id) {
             return result;
         }
       }
-    }    
-  }  
+    }
+  }
 
 
-  filterUsers(){
-    if(this.users && this.users.length > 0){
-      for(var i = 0; i < this.users.length; i += 1){
-        var result = this.users[i];
-        //console.log(result.role_id);
-        if(result.role_id <= this.role){
-          //console.log(result);
+  filterUsers() {
+    if (this.users && this.users.length > 0) {
+      for (let i = 0; i < this.users.length; i += 1) {
+        const result = this.users[i];
+        if (result.role_id <= this.role) {
           this.kpiusers.push(result);
         }
       }
     }
   }
 
-  public loaduserordeneskpiline(id:number, termino:string, service:number){
+  public loaduserordeneskpiline(id: number, termino: string, service: number) {
     this.isLoadingResultsKpiLine = true;
-    if(id > 0 ){
+    if (id > 0 ) {
       this.kpitotalline = 0;
       this.kpitotalcreated = 0;
       this.kpitotalupdate = 0;
       this.allmulti[0].series.length = 0;
       this.allmulti[1].series.length = 0;
       this._kpiService.getProjectKpiServiceByDate(this.token.token, id, termino, 0, service).then(
-        (res: any) => 
-        {
-
+        (res: any) => {
           res.subscribe(
-            (some:any) => 
-            {
-              //console.log(some);
-              if(some && some.datos && some.datos.length > 0){                
+            (some: any) => {
+              if (some && some.datos && some.datos.length > 0) {
                   for (let i = 0; i < some.datos.length; i++) {
-                    if(some.datos[i]['hora']){
+                    if (some.datos[i]['hora']) {
                       this.allmulti[0].series.push({ name: some.datos[i]['hora'] + ':00:00', value: some.datos[i]['user_count']});
                     }
-                    if(some.datos[i]['fecha']){
+                    if (some.datos[i]['fecha']) {
                       this.allmulti[0].series.push({ name: some.datos[i]['fecha'], value: some.datos[i]['user_count']});
                     }
 
-                    if(some.datos[i]['month']){
+                    if (some.datos[i]['month']) {
                       this.allmulti[0].series.push({ name: some.datos[i]['month'], value: some.datos[i]['user_count']});
                     }
                     this.kpitotalline = this.kpitotalline + some.datos[i]['user_count'];
                     this.kpitotalcreated = this.kpitotalcreated + some.datos[i]['user_count'];
-                    this.allmulti[0].name = "Cradas: " + this.kpitotalcreated;
-                    this.single[0].name = "Cradas: " + this.kpitotalcreated;
+                    this.allmulti[0].name = 'Cradas: ' + this.kpitotalcreated;
+                    this.single[0].name = 'Cradas: ' + this.kpitotalcreated;
                     this.single[0].value = this.kpitotalcreated;
                   }
                 this.isLoadingResultsKpiLine = false;
-              }else{
-                    this.allmulti[0].name = "Cradas: " + this.kpitotalupdate;
-                    this.single[0].name = "Cradas: " + this.kpitotalupdate;
+              } else {
+                    this.allmulti[0].name = 'Cradas: ' + this.kpitotalupdate;
+                    this.single[0].name = 'Cradas: ' + this.kpitotalupdate;
               }
 
-              if(some && some.datosupdate && some.datosupdate.length > 0){
+              if (some && some.datosupdate && some.datosupdate.length > 0) {
                   for (let i = 0; i < some.datosupdate.length; i++) {
-                    if(some.datosupdate[i]['hora']){
+                    if (some.datosupdate[i]['hora']) {
                       this.allmulti[1].series.push({ name: some.datosupdate[i]['hora'] + ':00:00', value: some.datosupdate[i]['user_count']});
                     }
-                    if(some.datosupdate[i]['fecha']){
+                    if (some.datosupdate[i]['fecha']) {
                       this.allmulti[1].series.push({ name: some.datosupdate[i]['fecha'], value: some.datosupdate[i]['user_count']});
                     }
 
-                    if(some.datosupdate[i]['month']){
+                    if (some.datosupdate[i]['month']) {
                       this.allmulti[1].series.push({ name: some.datosupdate[i]['month'], value: some.datosupdate[i]['user_count']});
                     }
                     this.kpitotalline = this.kpitotalline + some.datosupdate[i]['user_count'];
                     this.kpitotalupdate = this.kpitotalupdate + some.datosupdate[i]['user_count'];
-                    this.allmulti[1].name = "Editadas: " + this.kpitotalupdate;
-                    this.single[1].name = "Editadas: " + this.kpitotalupdate;
+                    this.allmulti[1].name = 'Editadas: ' + this.kpitotalupdate;
+                    this.single[1].name = 'Editadas: ' + this.kpitotalupdate;
                     this.single[1].value = this.kpitotalupdate;
 
                   }
                 this.isLoadingResultsKpiLine = false;
-              }else{
-                  this.allmulti[1].name = "Editadas: " + this.kpitotalupdate;
-                  this.single[1].name = "Editadas: " + this.kpitotalupdate;
+              } else {
+                  this.allmulti[1].name = 'Editadas: ' + this.kpitotalupdate;
+                  this.single[1].name = 'Editadas: ' + this.kpitotalupdate;
               }
 
-              if(this.single.length > 0){
-                //console.log(this.single);
-                //console.log(this.allmulti);
+              if (this.single.length > 0) {
+                // console.log(this.single);
+                // console.log(this.allmulti);
               }
 
 
             },
-            (error:any) => { 
+            (error: any) => {
             this.allmulti[0].series.length = 0;
             this.allmulti[1].series.length = 0;
             this.isLoadingResultsKpiLine = false;
             console.log(<any>error);
-            }  
-            )
-        })         
+            }
+            );
+        });
     }
   }
 
@@ -374,7 +361,6 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
 
 
   public loaduserordeneskpigauge(id:number, termino:string, service:number){
-    //console.log(termino);
     this.isLoadingResultsKpiGauge = true;
     if(id > 0 ){ 
         this.kpidatagauge[0].value = 0;

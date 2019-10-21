@@ -63,26 +63,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
-      //console.log("ngOnDestroy unsuscribe");
     }
   }
 
-  /*
-  ngDoCheck(){
-    this.identity = this._userService.getIdentity();  
-  }*/
 
-
-  
   guardar( usuario: User ) {
 
     this.show = true;
     this.isLoading = false;
     this.isSave = true;
 
-		if(!usuario){
+		if (!usuario) {
 			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}

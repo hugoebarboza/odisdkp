@@ -1,1 +1,155 @@
-<div id="chartdiv"></div>
+<div *ngIf="identity && id > 0 && projectid > 0">
+    <div class="row animated fadeIn" >
+        <div class="col">
+        <div class="jfCYPT">
+            <div class="jfCYPT">
+                <div  data-test-selector="profile-worked-with">
+                    <div class="iDwfcE" >
+                    <!---
+                    <div class="eCdVoi">
+                        <div class="jNlJOD">
+                            <span>
+                                Resumen Económico.
+                            </span>
+                        </div>
+                    </div>    
+                    -->
+                    <div class="container-fluid">
+                    <div class="row">
+                    <div class="col-12">
+
+                    <mat-drawer-container class="container-fluid containerb" autosize>
+                    <mat-drawer #drawer class="sidenav" mode="side" position="end">
+
+                        <form ngNativeValidate [formGroup]="formulario">
+                            <div *ngIf="datesearchoptions">
+                                <div class="input-group input-group-sm mb-3" >
+                                    <ng-select
+                                    [items]="datesearchoptions"
+                                    [clearable]="false"
+                                    bindLabel="name"
+                                    bindValue="value"
+                                    class="width-100percentage" name="dateoptions" formControlName="dateoptions">
+                                    </ng-select>
+                                </div>
+                            </div>
+                            <div *ngIf="formulario.value.dateoptions == 'custom'">
+                                <h2 class="jeEmY">Rango de fecha</h2>
+                                <p-calendar placeholder="yyyy-mm-dd" dateFormat="yy-mm-dd"   showButtonBar="true" readonlyInput="true" hourFormat="24"  [locale]="es"  selectionMode="range" [showIcon]="true" name="date_rango" formControlName="date_rango">
+                                    <p-footer></p-footer>
+                                </p-calendar>
+                            </div>
+                            <div class="row" style="margin-top: 14px;">
+                                <div class="col-md-12">
+                                    <div class="text-center">                                            
+                                        <button  mat-raised-button color="primary" (click)="getDataDateTime(projectid, formulario.value.dateoptions, id)" style="margin-right: 8px;"  [disabled]="formulario.invalid" *ngIf="projectid > 0 && id > 0">
+                                            <mat-icon aria-label="Edit">done</mat-icon>Aceptar                  
+                                        </button>
+                                        <button  mat-raised-button color="warn" (click)="formulario.reset(); servicetype = null; serviceestatus = null;" style="margin-left: 4px;">
+                                            <mat-icon aria-label="Close">delete_sweep</mat-icon>Limpiar
+                                        </button>  
+                                    </div>
+                                </div>
+                            </div>
+                        </form>
+
+                    </mat-drawer>
+                    
+                    <div class="sidenav-content">
+                        <div class="container-fluid" *ngIf="isLoading">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <div class="row d-flex justify-content-center">
+                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                                    </div>                        
+                                </div>
+                            </div>
+                        </div>
+                        <div class=" dIOqge" >
+                            <div class="jmuLsE" *ngIf="!isLoading">
+
+                            <div class="row">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="row d-flex justify-content-center">
+                                    <span>
+                                    Órdenes de Trabajo vs Tiempos de Atención <span *ngIf="formulario && formulario.value.dateoptions && kpidateoption">({{kpidateoption.name}}).</span>
+                                    <button mat-icon-button 
+                                    matTooltip="Indicador por Fecha de Edición"
+                                    [matTooltipPosition]="positionrightaction.value"
+                                    (event)="$event.stopinmediatePropagation()"
+                                    >
+                                    <mat-icon class="material-icons md-14-color">help_outline</mat-icon>
+                                    </button>
+                                    </span>
+                                    </div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="row d-flex justify-content-end">
+                                    <button type="button" mat-button (click)="drawer.toggle()">
+                                    <mat-icon>filter_list</mat-icon>
+                                    </button>
+                                            
+                                    <!---
+                                    <ng-select
+                                    [items]="kpisearchoptions"
+                                    [clearable]="false"
+                                    bindLabel="name"
+                                    bindValue="value"
+                                    [(ngModel)]="kpidateselectedoption"
+                                    (change)="getDataDateTime(projectid, kpidateselectedoption, id)"
+                                    class="width-70percentage">
+                                    </ng-select>
+                                    -->
+                                    </div>            
+                                </div>
+                            </div>
+
+                            <mat-card class="container-fluid">
+                            <mat-card-content>                    
+                                <div class="row d-flex justify-content-center p-2" >
+                                    <br>
+                                    <div class="container-fluid" >
+                                    <div class="row">
+
+                                        <div class="col-12" *ngIf="kpidatadatetime && kpidatadatetime.length > 0 ">
+                                        <div class="row d-flex justify-content-center">
+                                            <div id="chartdiv"></div>
+                                        </div>
+                                        </div>
+
+                                        <div class="col-12" *ngIf="kpidatadatetime && kpidatadatetime.length == 0">
+                                            <div class="row d-flex justify-content-center ">
+                                                <div class="dGHjBt">
+                                                    <p class="hAzwqT">                                                        
+                                                    </p>
+                                                    <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                </div>                    
+                                            </div>    
+                                        </div>        
+
+                                    </div>
+                                    </div>                                            
+                                </div>
+                            </mat-card-content>
+                            </mat-card>
+
+                            </div>
+                        </div>
+                    </div>
+                    
+                    </mat-drawer-container>                        
+
+
+                    </div>
+                    </div>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+    </div>
+
+
+</div>

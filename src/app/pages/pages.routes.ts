@@ -6,7 +6,7 @@ import { LoginGuardGuard } from '../services/guards/login-guard.guard';
 
 
 const pagesRoutes: Routes = [
-    { path: '', redirectTo: '/dashboard', pathMatch: 'full' }    
+    { path: '', redirectTo: '/dashboard', pathMatch: 'full' }
 ];
 
 @NgModule({

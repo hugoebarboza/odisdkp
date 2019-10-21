@@ -8,8 +8,8 @@ export class ShowLoaderAction implements Action {
     readonly type = SET_LOADER;
     constructor( public isloading: object ) {}
   }
-  
-  export class HideLoaderAction implements Action{
+
+  export class HideLoaderAction implements Action {
     readonly type = RESET_LOADER;
   }
 

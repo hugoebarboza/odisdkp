@@ -12,7 +12,7 @@ export class CustomPreloading implements PreloadingStrategy {
       const loadRoute = (delay) => delay
           ? timer(150).pipe(flatMap(_ => load()))
           : load();
-      return route.data && route.data.preload 
+      return route.data && route.data.preload
           ? loadRoute(route.data.delay)
           : of(null);
     }

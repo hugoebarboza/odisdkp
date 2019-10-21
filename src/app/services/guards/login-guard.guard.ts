@@ -1,6 +1,5 @@
 import { Injectable } from '@angular/core';
 import { CanLoad , Router } from '@angular/router';
-// import { Route } from '@angular/router';
 
 import { UserService, AuthService } from '../../services/service.index';
 

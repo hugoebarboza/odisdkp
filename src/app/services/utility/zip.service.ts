@@ -9,12 +9,12 @@ import { GLOBAL } from '../global';
 
 export class ZipService {
 
-  public url:string;
-  
+  public url: string;
+
   constructor (private _http: HttpClient) {
     this.url = GLOBAL.url;
   }
-  
+
 
 
   getTipoServicio(id, token) {

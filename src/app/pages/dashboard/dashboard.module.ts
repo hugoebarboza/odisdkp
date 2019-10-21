@@ -2,23 +2,23 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
 
-//COMPONENTS
+// COMPONENTS
 import { DashboardComponent } from './dashboard-list/dashboard.component';
 import { ProjectListComponent } from './components/project-list/project-list.component';
 
-//PROVIDERS
+// PROVIDERS
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
-//MODULES
+// MODULES
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
-//ROUTING
+// ROUTING
 import { DashboardRoutingModule } from './dashboard.routing';
 
-//SERVICES
+// SERVICES
 import { ServiceModule } from 'src/app/services/service.module';
 import { MessagingService } from 'src/app/services/service.index';
 

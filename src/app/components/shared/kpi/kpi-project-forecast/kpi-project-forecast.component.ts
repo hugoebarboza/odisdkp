@@ -557,7 +557,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
     const data: any = await this._kpiPayment.getProjectServicePaymentDate(this.token.token, project_id, service_id, this.mesactual, year);
 
     if (data && data.datos) {
-      console.log(data.datos);
+      // console.log(data.datos);
       for (let x = 0; x < data.datos.length; x++) {
         if (x === 0) {
           const object: Single = {
