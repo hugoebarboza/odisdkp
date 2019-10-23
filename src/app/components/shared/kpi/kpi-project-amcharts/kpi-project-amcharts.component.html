@@ -113,9 +113,17 @@
 
                                     <div class="col-12" *ngIf="kpidatadatetime && kpidatadatetime.length > 0 ">
                                     <div class="row d-flex justify-content-center">
-                                        <div class="col"><div id="chartdiv"></div></div>
+                                        <div class="col-12">
+                                            <div id="chartdiv"></div>
+                                        </div>
                                         <div class="w-100"></div>
-                                        <div class="col">col</div>
+                                        <div class="col-12">
+                                            <div class="row d-flex justify-content-end">
+                                                <button type="button" mat-button (click)="SerpentineChart(kpidatadatetime)" *ngIf="kpidatadatetime && kpidatadatetime.length > 0">
+                                                Ver más
+                                                </button>
+                                            </div>
+                                        </div>
                                     </div>
                                     </div>
 

@@ -208,6 +208,25 @@ export class KpiProjectAmchartsComponent implements OnInit {
     }
   }
 
+
+  SerpentineChart(datasource: any[]) {
+    console.log(datasource);
+    if (datasource && datasource.length > 0) {
+      setTimeout(() => {
+
+        this.zone.runOutsideAngular(() => {
+          Promise.all([
+          ])
+          .then(() => {
+          })
+          .catch(e => {
+              console.error('Error when creating chart', e);
+          });
+      });
+      }, 2000);
+    }
+  }
+
   amChart() {
     // Themes begin
     am4core.useTheme(am4themes_animated);
