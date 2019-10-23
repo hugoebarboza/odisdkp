@@ -13,4 +13,8 @@ res.sendFile(path.join(__dirname+'/dist/odisdkp/index.html'));
 });
 
 // Start the app by listening on the default Heroku port
-app.listen(process.env.PORT || 8080);
+// app.listen(process.env.PORT || 8080);
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
+});
