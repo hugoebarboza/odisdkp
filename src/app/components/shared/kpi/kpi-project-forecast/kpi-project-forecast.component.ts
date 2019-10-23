@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy, AfterViewInit, NgZone } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator, MatSort, MatTableDataSource, TooltipPosition } from '@angular/material';
 
 // MODELS
 import { Month } from 'src/app/models/types';
@@ -137,6 +137,13 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
 
   // AM CHARTS
   chart: any;
+
+  positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  positionheaderaction = new FormControl(this.positionOptions[2]);
+  positiondatasourceaction = new FormControl(this.positionOptions[3]);
+  positionleftaction = new FormControl(this.positionOptions[4]);
+  positionrightaction = new FormControl(this.positionOptions[5]);
+
 
   constructor(
     private zone: NgZone,

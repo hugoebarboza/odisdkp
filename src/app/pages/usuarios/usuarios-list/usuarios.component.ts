@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { MatDialog, TooltipPosition } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
 // DIALOG
 import { AddUserComponent } from '../dialog/adduser/adduser.component';
@@ -131,10 +131,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     this.subscription = this._userService.verifyStatusUser( this.token.token, userid, this.verify )
               .subscribe( (resp: any) => {
-                swal('Solicitud procesada exitosamente', resp.message, 'success' );
+                Swal.fire('Solicitud procesada exitosamente', resp.message, 'success' );
               },
               error => {
-                swal('Importante', error, 'error');
+                Swal.fire('Importante', error, 'error');
               }
               );
 
@@ -146,30 +146,29 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       this.snackBar.open('Se ha marcado la orden como importante.', 'Destacada', {duration: 2000,});
     }*/
 
-  }  
+  }
 
 
 
-  addNew(id:number, departamento:number) {
-    if(id > 0 && departamento > 0){
+  addNew(id: number, departamento: number) {
+    if (id > 0 && departamento > 0) {
       const dialogRef = this.dialog.open(AddUserComponent, {
         width: '777px',
-        disableClose: true,        
+        disableClose: true,
         data: { project_id: id,
                 departamento_id: departamento
         }
         });
-    
-    
+
         dialogRef.afterClosed().subscribe(
-              result => {       
-                 if (result === 1) { 
+              result => {
+                 if (result === 1) {
                  // After dialog is closed we're doing frontend updates 
                  // For add we're just pushing a new row inside DataService
-                 //this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  
-                 //this.refresh();
+                 // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  
+                 // this.refresh();
                  }
-               });    
+               });
     }
  }
 
@@ -182,7 +181,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
               .subscribe( (resp: any) => {
                 this.totalRegistros = resp.datos.total;
                 this.usuarios = resp.datos.data;
-                //console.log(this.usuarios);
                 this.isLoading = false;
                 this.status = 'success';
               },
@@ -223,48 +221,51 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   borrarUsuario( usuario: any, i:number ) {
 
     if ( usuario.id === this.identity.sub ) {
-      swal('No puede borrar usuario', 'No se puede borrar a si mismo', 'error');
+      Swal.fire('No puede borrar usuario', 'No se puede borrar a si mismo', 'error');
       return;
     }
-    
-    swal({
+
+    Swal.fire({
       title: '¿Esta seguro?',
       text: 'Esta a punto de borrar a ' + usuario.name + ' ' + usuario.surname,
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
     })
-
     .then( borrar => {
-
-      if (borrar) {
-        this.indexitemdelete = i;
-        this.isLoadingDelete = true;
-        this._userService.delete(this.token.token, usuario.id )
-                  .subscribe( response => {
-                    if(!response){
-                      return;        
-                    }
-                    if(response.status == 'success'){ 
-                      swal('Usuario eliminado', usuario.name +' '+usuario.surname, 'success' );
-                      this.isLoadingDelete = false;
-                      this.indexitemdelete = -1;
-                      this.cargarUsuarios();
-                    }else{
-                      swal('Importante', response.message, 'error');
-                      this.isLoadingDelete = false;
-                      this.indexitemdelete = -1;
-                    }
-                  },
-                    error => {
-                      //swal('Importante', error.error.message, 'error');
-                      swal('Importante', error, 'error');
-                      this.isLoadingDelete = false;
-                      this.indexitemdelete = -1;
-                    }                               
-                  );
+      if (borrar.value) {
+        if (borrar) {
+          this.indexitemdelete = i;
+          this.isLoadingDelete = true;
+          this._userService.delete(this.token.token, usuario.id )
+                    .subscribe( response => {
+                      if (!response) {
+                        return;
+                      }
+                      if (response.status === 'success') {
+                        Swal.fire('Usuario eliminado', usuario.name + ' ' + usuario.surname, 'success' );
+                        this.isLoadingDelete = false;
+                        this.indexitemdelete = -1;
+                        this.cargarUsuarios();
+                      } else {
+                        Swal.fire('Importante', response.message, 'error');
+                        this.isLoadingDelete = false;
+                        this.indexitemdelete = -1;
+                      }
+                    },
+                      error => {
+                        Swal.fire('Importante', error, 'error');
+                        this.isLoadingDelete = false;
+                        this.indexitemdelete = -1;
+                      }
+                    );
+        }
+      } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+        );
       }
-
     });
   }
 
@@ -272,28 +273,27 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
     this.indexitem = i;
     this.isLoadingDownload = true;
-    
+
     this._userService.update(this.token.token, usuario, usuario.id)
-            .subscribe( (resp: any) => {              
-              if(!resp){
-                return;        
+            .subscribe( (resp: any) => {
+              if (!resp) {
+                return;
               }
-              if(resp.status == 'success'){ 
-                swal('Usuario actualizado', usuario.name +' '+usuario.surname, 'success' );
+              if (resp.status === 'success') {
+                Swal.fire('Usuario actualizado', usuario.name + ' ' + usuario.surname, 'success' );
                 this.isLoadingDownload = false;
                 this.indexitem = -1;
-              }else{
-                swal('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
+              } else {
+                Swal.fire('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
                 this.isLoadingDownload = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                //swal('Importante', error.error.message, 'error');
-                swal('Importante', error, 'error');
+                Swal.fire('Importante', error, 'error');
                 this.isLoadingDownload = false;
                 this.indexitem = -1;
-              }       
+              }
             );
   }
 

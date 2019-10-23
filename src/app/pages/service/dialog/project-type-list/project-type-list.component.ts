@@ -3,12 +3,12 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MatSnackBar } from '@angular/material';
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
-//MODELS
+// MODELS
 import { ProjectServiceType } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { ProjectsService, UserService } from 'src/app/services/service.index';
 
 
@@ -21,29 +21,29 @@ import { ProjectsService, UserService } from 'src/app/services/service.index';
 export class ProjectTypeListComponent implements OnInit, OnDestroy {
 
   data: ProjectServiceType;
-  editando: boolean = false;
+  editando = false;
   forma: FormGroup;
   projectype: ProjectServiceType[] = [];
-  indexitem:number;
-  isLoading: boolean = true;
-  isLoadingSave: boolean = false;
-  isLoadingDelete: boolean = false;
-  label:number = 0;
+  indexitem: number;
+  isLoading = true;
+  isLoadingSave = false;
+  isLoadingDelete = false;
+  label = 0;
   status: string;
   subscription: Subscription;
-  show:boolean = false;
+  show = false;
   token: any;
 
 
 
-  @Input() id : number;
-  @Output() total: EventEmitter<number>;  
+  @Input() id: number;
+  @Output() total: EventEmitter<number>;
 
-  constructor(    
+  constructor(
     public _userService: UserService,
     public dataService: ProjectsService,
     public snackBar: MatSnackBar,
-  ) { 
+  ) {
     this.token = this._userService.getToken();
     this.total = new EventEmitter();
   }
@@ -51,9 +51,8 @@ export class ProjectTypeListComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    //console.log(this.id);
-    if(this.id > 0){
-      
+    if (this.id > 0) {
+
       this.forma = new FormGroup({
         descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
         observacion: new FormControl(null, ),
@@ -101,25 +100,23 @@ export class ProjectTypeListComponent implements OnInit, OnDestroy {
 
 
 
-  onSubmit(){
-  
+  onSubmit() {
 
-		if(this.forma.invalid){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+		if (this.forma.invalid) {
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}
 
     this.data = new ProjectServiceType (0, this.forma.value.descripcion, this.forma.value.observacion, this.forma.value.order_by, '', 1, '');
 
-    
     this.dataService.addProjecType(this.token.token, this.id, this.data)
-            .subscribe( (resp: any) => {              
-              if(!resp){
+            .subscribe( (resp: any) => {
+              if (!resp) {
                 this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
+              if (resp.status === 'success') {
                 this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
                 this.isLoadingSave = false;
                 this.indexitem = -1;
@@ -129,41 +126,38 @@ export class ProjectTypeListComponent implements OnInit, OnDestroy {
                   this.cargar();
                   this.show = false;
                 }, 1000);
-            
-              }else{
+              } else {
                 this.show = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
-            );  
+              }
+            );
   }
 
 
-  save(i, element){
+  save(i, element) {
     this.indexitem = i;
     this.editando = false;
     this.isLoadingSave = true;
-    //console.log(element);
 
-    
     this.dataService.updateProjecType(this.token.token, this.id, element, element.id)
             .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
+              if (resp.status === 'success'){
                 this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-              }else{
+              } else {
                 this.isLoadingSave = false;
                 this.indexitem = -1;
               }
@@ -173,67 +167,71 @@ export class ProjectTypeListComponent implements OnInit, OnDestroy {
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
+              }
             );
-  }  
-  
-  delete(i, element){
+  }
 
-    swal({
+  delete(i, element) {
+
+    Swal.fire({
       title: '¿Esta seguro?',
       text: 'Esta seguro de borrar información ',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
     })
     .then( borrar => {
-      if(borrar){
+      if (borrar.value) {
+      if (borrar) {
         this.indexitem = i;
         this.isLoadingDelete = true;
-        
+
         this.dataService.deleteProjecType(this.token.token, this.id, element.id)
                 .subscribe( (resp: any) => {
-                  if(!resp){
-                    this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                  if (!resp) {
+                    this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                     this.isLoadingDelete = false;
                     this.indexitem = -1;
-                    return;        
+                    return;
                   }
-                  if(resp.status == 'success'){
-                    this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+                  if (resp.status === 'success'){
+                    this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                     this.isLoadingDelete = false;
                     this.indexitem = -1;
                     setTimeout( () => {
                       this.cargar();
                     }, 2000);
-                    
-                  }else{
+                  } else {
                     this.isLoadingDelete = false;
                     this.indexitem = -1;
                   }
                 },
                   error => {
-                    //console.log(<any>error.error);
-                    //this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
-                    this.snackBar.open(error.error.message, '', {duration:3000, });
+                    this.snackBar.open(error.error.message, '', {duration: 3000, });
                     this.isLoadingDelete = false;
                     this.indexitem = -1;
-                  }       
-                );    
+                  }
+                );
+      }
+      } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+        );
       }
     });
 
-  }  
+  }
 
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();      
-      //console.log("ngOnDestroy unsuscribe");
+	ngOnDestroy() {
+		if (this.subscription) {
+			this.subscription.unsubscribe();
 		}
   }
 
   toggle() {
     this.show = !this.show;
-  }  
+  }
+
 }

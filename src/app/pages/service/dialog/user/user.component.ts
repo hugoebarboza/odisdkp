@@ -3,7 +3,7 @@ import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 //MODELS
 import { 
@@ -86,17 +86,16 @@ export class UserComponent implements OnInit, OnDestroy {
         response => {
          if(response.status == 'success'){
           this.dialogRef.close();
-          swal('Solicitud procesada ', 'exitosamente.', 'success' );  
+          Swal.fire('Solicitud procesada ', 'exitosamente.', 'success' );  
          }else{
           //console.log(response);
           this.dialogRef.close();
-          swal('No fue posible procesar su solicitud', '', 'error');  
+          Swal.fire('No fue posible procesar su solicitud', '', 'error');  
         }
         },
         error => {
           this.dialogRef.close();
-          //swal('No fue posible procesar su solicitud', error.error.message, 'error');
-          swal('No fue posible procesar su solicitud', error.error.message, 'error');
+          Swal.fire('No fue posible procesar su solicitud', error.error.message, 'error');
         }
       );
     }
@@ -107,7 +106,7 @@ export class UserComponent implements OnInit, OnDestroy {
   remover(userid:number){
     if (userid === this.identity.sub ) {
       this.dialogRef.close();
-      swal('No puede borrar usuario', 'No se puede borrar a si mismo', 'error');
+      Swal.fire('No puede borrar usuario', 'No se puede borrar a si mismo', 'error');
       return;
     }
     
@@ -115,16 +114,16 @@ export class UserComponent implements OnInit, OnDestroy {
       response => {
        if(response.status == 'success'){
         this.dialogRef.close();
-        swal('Solicitud procesada ', 'exitosamente.', 'success' );
+        Swal.fire('Solicitud procesada ', 'exitosamente.', 'success' );
         //this.cargarUsuarios();
        }else{
         this.dialogRef.close();
-        swal('No fue posible procesar su solicitud', '', 'error');
+        Swal.fire('No fue posible procesar su solicitud', '', 'error');
        }
       },
       error => {
         this.dialogRef.close();
-        swal('No fue posible procesar su solicitud', error, 'error');
+        Swal.fire('No fue posible procesar su solicitud', error, 'error');
       }
     );
 

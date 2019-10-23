@@ -84,11 +84,16 @@
 }
 
 .sidenav {
-  padding: 20px;
+  width: 370px;
+  padding: 17px;
 }
 ::ng-deep .mat-drawer-content { 
   overflow-x: hidden !important;
 }
+::ng-deep .mat-drawer-inner-container { 
+  overflow-x: hidden !important;
+}
+
 .containerb {
   background: rgb(244, 245, 247);
 }

@@ -1,7 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 //MODEL
 import { Proyecto, User } from '../../../models/types';
@@ -76,7 +76,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.isSave = true;
 
 		if (!usuario) {
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}
 
@@ -86,7 +86,7 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this.subscription = this._userService.updateProfile(this.token.token, this.user, this.identity.sub).subscribe(
       response => {
 				if(response.status == 'success'){
-          swal('Usuario actualizado', this.user.email, 'success' );
+          Swal.fire('Usuario actualizado', this.user.email, 'success' );
           this.isLoading = false;
           this.isSave = false;
           //this.ngOnInit();
@@ -94,14 +94,14 @@ export class ProfileComponent implements OnInit, OnDestroy {
 					//this.user = new User('','','','',1,'','',1);
 				}else{
 
-          swal('Importante', response.message, 'error');
+          Swal.fire('Importante', response.message, 'error');
           this.isLoading = false;
           this.isSave = false;
 					//this.status = 'error';
 				}
 	 		},
 	 		error => {
-        swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+         Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
          console.log(<any>error);
          this.isLoading = false;
          this.isSave = false;
@@ -121,13 +121,13 @@ export class ProfileComponent implements OnInit, OnDestroy {
     }
 
     if ( this.file.type.indexOf('image') < 0 ) {
-      swal('Sólo imágenes', 'El archivo seleccionado no es una imagen', 'error');
+      Swal.fire('Sólo imágenes', 'El archivo seleccionado no es una imagen', 'error');
       this.imagenSubir = null;
       return;
     }
 
     this.imagenSubir = this.file;
-    let reader = new FileReader();
+    const reader = new FileReader();
     this.urlImagenTemp = reader.readAsDataURL( this.file );
     reader.onloadend = () => {
       this.imagenTemp = reader.result;
@@ -140,15 +140,15 @@ export class ProfileComponent implements OnInit, OnDestroy {
     this._userService.updateFotoProfile( this.token.token, this.file).subscribe( 
     (response: any) => {
         if(response.status == 'success'){
-        swal('Foto de Perfil de Usuario actualizada.', 'success' );
+        Swal.fire('Foto de Perfil de Usuario actualizada.', 'success' );
         this.getPerfilUser(this.identity.sub);
         }else{
-        swal('No fue posible procesar su solicitud.', '', 'error');
+        Swal.fire('No fue posible procesar su solicitud.', '', 'error');
         this.isLoadingPerfil = false;
         }
       },    
       error => {
-      swal('Importante', 'A ocurrido un error.', 'error');
+      Swal.fire('Importante', 'A ocurrido un error.', 'error');
       console.log(<any>error);
       this.isLoadingPerfil = false;
       }    

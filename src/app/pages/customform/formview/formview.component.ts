@@ -5,14 +5,12 @@ import { FormGroup, Validators, FormControl} from '@angular/forms';
 import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map, combineLatest } from 'rxjs/operators';
 
 // FIREBASE
-//import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
-//import { AngularFireAuth } from 'angularfire2/auth';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireUploadTask } from 'angularfire2/storage';
 
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -436,7 +434,7 @@ export class FormviewComponent implements OnInit {
     this.CARPETA_ARCHIVOS = this.supportcase;
 
     if (this.forma.invalid) {
-      swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
       return;
     }
 
@@ -499,7 +497,7 @@ export class FormviewComponent implements OnInit {
           that.selectstatus = null;
         }
 
-        swal('Solicitud registrada', '', 'success');
+        Swal.fire('Solicitud registrada', '', 'success');
 
         /*
         if (array_usersInfo && array_usersInfo.length > 0 && docRef) {

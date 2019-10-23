@@ -7,7 +7,7 @@ import { MustMatch } from '../../../../helpers/must-match.validator';
 
 
 //UTYLITY
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 //MODELS
 import { User } from '../../../../models/types';
@@ -77,8 +77,8 @@ export class ShowProfileSecurityComponent implements OnInit {
 
     this.dialogRef.close();
 
-		if(!data){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+		if(!data) {
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}
 
@@ -86,15 +86,15 @@ export class ShowProfileSecurityComponent implements OnInit {
 
 
    this._userService.forgotpassword(this.user).subscribe(
-     response => {       
-       if(response.status != 'error' ){
-         swal('Se procesó exitosamente el reinicio de clave con email:', this.user.email, 'success' );
-       }else{
-         swal('Ha ocurrido un error con el reinicio de clave con email:', this.user.email, 'error');    
+     response => {
+       if (response.status !== 'error' ) {
+         Swal.fire('Se procesó exitosamente el reinicio de clave con email:', this.user.email, 'success' );
+       } else {
+         Swal.fire('Ha ocurrido un error con el reinicio de clave con email:', this.user.email, 'error');
        }
      },
      error => {
-      swal('Ha ocurrido un error. Email no registrado.', this.user.email, 'error');
+      Swal.fire('Ha ocurrido un error. Email no registrado.', this.user.email, 'error');
        console.log(<any>error);
      }
      );
@@ -112,15 +112,15 @@ export class ShowProfileSecurityComponent implements OnInit {
     
     
     this._userService.changepasswordprofile(this.token.token, this.usuario.id, formValue).subscribe(
-     response => {       
-       if(response.status != 'error' ){
-        swal('Se procesó exitosamente el reinicio de clave con email:', this.usuario.email, 'success' );
-       }else{
-        swal('Ha ocurrido un error con el reinicio de clave con email:', this.usuario.email, 'error');    
+     response => {
+       if (response.status !== 'error' ) {
+        Swal.fire('Se procesó exitosamente el reinicio de clave con email:', this.usuario.email, 'success' );
+       } else {
+        Swal.fire('Ha ocurrido un error con el reinicio de clave con email:', this.usuario.email, 'error');
        }
      },
      error => {
-      swal('Ha ocurrido un error con el reinicio de clave con email:', this.usuario.email, 'error');
+      Swal.fire('Ha ocurrido un error con el reinicio de clave con email:', this.usuario.email, 'error');
       console.log(<any>error);
      });
 

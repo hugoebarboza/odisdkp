@@ -1,9 +1,9 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
-//SERVICES
+// SERVICES
 import { UserService } from '../../../../services/service.index';
 
 
@@ -49,20 +49,20 @@ export class ModalUploadImageComponent implements OnInit {
     this.file = archivo.item(0);
     if ( !this.file ) {
       this.dialogRef.close();
-      swal('Importante', 'A ocurrido un error.', 'error');
+      Swal.fire('Importante', 'A ocurrido un error.', 'error');
       this.imagenSubir = null;
       return;
     }
 
     if ( this.file.type.indexOf('image') < 0 ) {
       this.dialogRef.close();
-      swal('Sólo imágenes', 'El archivo seleccionado no es una imagen', 'error');
+      Swal.fire('Sólo imágenes', 'El archivo seleccionado no es una imagen', 'error');
       this.imagenSubir = null;
       return;
     }
 
     this.imagenSubir = this.file;
-    let reader = new FileReader();
+    const reader = new FileReader();
     this.urlImagenTemp = reader.readAsDataURL( this.file );
     reader.onloadend = () => {
       this.imagenTemp = reader.result;
@@ -74,22 +74,22 @@ export class ModalUploadImageComponent implements OnInit {
     this.isLoadingPerfil = true;
     this._userService.updateFotoProfileUser( this.token.token, this.file, this.usuario.id).subscribe( 
     (response: any) => {
-        if(response.status == 'success'){
+        if (response.status === 'success') {
         this.dialogRef.close();
-        swal('Foto de Perfil de Usuario actualizada.', 'success' );
+        Swal.fire('Foto de Perfil de Usuario actualizada.', 'success' );
         this.getPerfilUser(this.usuario.id);
-        }else{
+        } else {
         this.dialogRef.close();
-        swal('No fue posible procesar su solicitud.', '', 'error');
+        Swal.fire('No fue posible procesar su solicitud.', '', 'error');
         this.isLoadingPerfil = false;
         }
-      },    
+      },
       error => {
         this.dialogRef.close();
-      swal('Importante', 'A ocurrido un error.', 'error');
+      Swal.fire('Importante', 'A ocurrido un error.', 'error');
       console.log(<any>error);
       this.isLoadingPerfil = false;
-      }    
+      }
     );
   }
 

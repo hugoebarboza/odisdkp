@@ -2,14 +2,14 @@ import { Component, OnInit,  ChangeDetectorRef, ChangeDetectionStrategy } from '
 import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
-//MODELS
+// MODELS
 import { User } from '../models/types';
 
-//SERVICES
+// SERVICES
 import { UserService } from '../services/service.index';
 
-//UTYLITY
-import swal from 'sweetalert';
+// UTYLITY
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -19,37 +19,34 @@ import swal from 'sweetalert';
   styleUrls: ['./forgotpassword.component.css']
 })
 export class ForgotpasswordComponent implements OnInit {
-	title: string = 'Olvido Clave';
-  
-  forma: FormGroup;  
-  resetForm:FormGroup;
+  title = 'Olvido Clave';
+
+  forma: FormGroup;
+  resetForm: FormGroup;
   status: String;
-  user : User;
-  
-  
-  nuevopassword : string;
-  username : string;    
+  user: User;
+  nuevopassword: string;
+  username: string;
   year: number;
 
-  //CAPTCHA UTILITY
+  // CAPTCHA UTILITY
   captchaIsLoaded = false;
   captchaSuccess = false;
   captchaIsExpired = false;
-  captchaResponse?: string;  
-  lang: string = 'es';  
-  siteKey: string = "6LdY_pwUAAAAANNCwxFDBNTGRDg2hrDvZSLTfxLl";
+  captchaResponse?: string;
+  lang = 'es';
+  siteKey = '6LdY_pwUAAAAANNCwxFDBNTGRDg2hrDvZSLTfxLl';
   theme: 'light' | 'dark' = 'light';
   size: 'compact' | 'normal' = 'normal';
   type: 'image' | 'audio' = 'image';
 
 
   constructor(
-	private _router: Router,
+  private _router: Router,
   private _userService: UserService,
   private cdr: ChangeDetectorRef
-  	) 
-  { 
-    this.user = new User('','','','','','','',1,'','',1,'','',1,1,1);  
+  )  {
+    this.user = new User('', '', '', '', '', '', '', 1, '', '', 1, '', '', 1, 1, 1);
     this.year = new Date().getFullYear();
 
   }
@@ -67,7 +64,7 @@ export class ForgotpasswordComponent implements OnInit {
   forgotpassword(){
 
 		if(this.forma.invalid){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}
 
@@ -75,20 +72,19 @@ export class ForgotpasswordComponent implements OnInit {
 
 
    this._userService.forgotpassword(this.user).subscribe(
-     response => {       
-       if(response.status != 'error' ){
+     response => {
+       if (response.status !== 'error' ) {
          this.status = 'success';
-         this.user.email = "";
-         swal('Se procesó exitosamente el reinicio de su clave. Recibirá un email con las instrucciones para restablecerla:', this.user.email, 'success' );
-         //console.log('forgotpassword exitoso');
-       }else{
+         this.user.email = '';
+         Swal.fire('Se procesó exitosamente el reinicio de su clave. Recibirá un email con las instrucciones para restablecerla:', this.user.email, 'success' );
+       } else {
          this.status = 'error';
-         swal('Ha ocurrido un error con el reinicio de su clave con email:', this.user.email, 'error');    
+         Swal.fire('Ha ocurrido un error con el reinicio de su clave con email:', this.user.email, 'error');    
          console.log('forgotpassword nooo exitoso');
        }
      },
      error => {
-      swal('Ha ocurrido un error. Email no registrado.', this.user.email, 'error');        
+       Swal.fire('Ha ocurrido un error. Email no registrado.', this.user.email, 'error');        
        this.status = 'error';
        console.log(<any>error);
      }

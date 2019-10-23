@@ -6,22 +6,23 @@ import { defer, combineLatest } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { tap, switchMap, map } from 'rxjs/operators';
-declare var swal: any;
+
+import Swal from 'sweetalert2';
 
 
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
-//MATERIAL
+// MATERIAL
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource, TooltipPosition } from '@angular/material';
 
 import * as FileSaver from 'file-saver';
 
 import * as firebase from 'firebase/app';
 
-//SERVICES
+// SERVICES
 import { UserService } from '../../services/service.index';
 
-//MODELS
+// MODELS
 import { Item } from '../../models/types';
 
 import * as _moment from 'moment';
@@ -43,10 +44,11 @@ export class FileListComponent implements OnInit {
   title = 'Listado de documentos';
   subtitle = 'Seleccione el archivo a borrar, descargar o visualizar.';
   items: Item[];
+  isMobile: any;
   CARPETA_ARCHIVOS: string;
   isLoadingResults = true;
   isLoadingDownload = false;
-  isRateLimitReached: boolean = true;
+  isRateLimitReached = true;
   file: any;
   indexitem: number;
   profileUrl: Observable<any>;
@@ -55,7 +57,7 @@ export class FileListComponent implements OnInit {
   public files$: Observable<any[]>;
   private filesCollection: AngularFirestoreCollection<any>;
 
-  columnsToDisplay: string[] = ['select', 'nombre', 'tipo', 'create_at', 'create_by', 'visualizar'];   
+  columnsToDisplay: string[] = ['select', 'nombre', 'tipo', 'create_at', 'create_by', 'visualizar'];
   dataSource: MatTableDataSource<Item>;
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
@@ -81,7 +83,7 @@ export class FileListComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.project_id > 0 && this.service_id > 0){
+    if (this.project_id > 0 && this.service_id > 0) {
         // this.CARPETA_ARCHIVOS = 'filesprojects/'+this.project_id+'/'+this.service_id;
         this.CARPETA_ARCHIVOS = 'allfiles/projects/' + this.project_id + '/' + this.service_id + '/files';
         this.filesCollection = this._afs.collection(this.CARPETA_ARCHIVOS, ref => ref.orderBy('created', 'desc'));
@@ -136,7 +138,7 @@ export class FileListComponent implements OnInit {
   }
 
   descargar() {
-    
+
     this.isLoadingResults = true;
     this.getRequests = [];
     this.createGetRequets(this.selection.selected);
@@ -185,7 +187,7 @@ export class FileListComponent implements OnInit {
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.dataSource.data.forEach(row => {this.selection.select(row)});
+        this.dataSource.data.forEach(row => { this.selection.select(row); } );
         // console.log(this.selection);
   }
 
@@ -235,11 +237,10 @@ export class FileListComponent implements OnInit {
           this.isLoadingDownload = false;
           this.indexitem = -1;
         },
-        (error:any) => {
+        (error: any) => {
           console.log(error);
-        },        
+        },
         );
-        
     }
     /*
     this.isLoadingDownload = true;
@@ -253,13 +254,13 @@ export class FileListComponent implements OnInit {
          this._http.get(url, {responseType: "blob"})
           .subscribe(blob => {
             FileSaver.saveAs(blob, item.nombre);
-          });          
-          //this.isLoadingResults = false;      
+          });
+          //this.isLoadingResults = false;
           this.isLoadingDownload = false;
           this.indexitem = -1;
        })
       .catch(
-        (error)=> { 
+        (error)=> {
          console.log(error);
          this.isLoadingDownload = false;
          this.indexitem = -1;
@@ -270,20 +271,20 @@ export class FileListComponent implements OnInit {
   }
 
 
-  deleteItem(item: any){
+  deleteItem(item: any) {
 
     const storageRef = firebase.storage().ref();
-    
+
     /*
-    if(item.data){      
+    if(item.data){
       storageRef.child(item.ref +'/'+ item.nombre).delete();
       this._afs.doc(item.ref +'/'+ item.iddocfile).delete();
       this._afs.doc(this.CARPETA_ARCHIVOS +'/'+ item.idfile).delete();
-      this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});   
+      this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});
     }else{
       storageRef.child(this.CARPETA_ARCHIVOS +'/'+ item.nombre).delete();
       this._afs.doc(this.CARPETA_ARCHIVOS +'/'+ item.idfile).delete();
-      this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});       
+      this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});
     }*/
 
     /*
@@ -293,13 +294,13 @@ export class FileListComponent implements OnInit {
       data => {
         this.ngOnInit();
        //this.items = data;
-       //this.dataSource = new MatTableDataSource(this.items);      
+       //this.dataSource = new MatTableDataSource(this.items);
        this.isLoadingResults = false;
        if(data.length == 0){
          this.isRateLimitReached = true;
        }
        });
-       this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});   
+       this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});
     }*/
 
     /*
@@ -313,34 +314,35 @@ export class FileListComponent implements OnInit {
           return storageRef.storage.refFromURL(url).delete();
        })
       .catch(
-        (error)=> { 
+        (error)=> {
          console.log(error);
       });
     } */
 
-    
-
-    
-    
-    swal({
+    Swal.fire({
       title: '¿Esta seguro?',
       text: 'Esta seguro de borrar documento con nombre ' + item.nombre,
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
     })
     .then( borrar => {
-      if(borrar){
-        if(item.data){      
-          storageRef.child(item.ref +'/'+ item.nombre).delete();
-          this._afs.doc(item.ref +'/'+ item.iddocfile).delete();
-          this._afs.doc(this.CARPETA_ARCHIVOS +'/'+ item.idfile).delete();
-          this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});   
-        }else{
-          storageRef.child(this.CARPETA_ARCHIVOS +'/'+ item.nombre).delete();
-          this._afs.doc(this.CARPETA_ARCHIVOS +'/'+ item.idfile).delete();
-          this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000,});       
+      if (borrar.value) {
+        if (item.data) {
+          storageRef.child(item.ref + '/' + item.nombre).delete();
+          this._afs.doc(item.ref + '/' + item.iddocfile).delete();
+          this._afs.doc(this.CARPETA_ARCHIVOS + '/' + item.idfile).delete();
+          this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000, });
+        } else {
+          storageRef.child(this.CARPETA_ARCHIVOS + '/' + item.nombre).delete();
+          this._afs.doc(this.CARPETA_ARCHIVOS + '/' + item.idfile).delete();
+          this.snackBar.open('Se ha eliminado el documento.', 'Eliminado', {duration: 2000, });
         }
+      } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+        );
       }
     });
 

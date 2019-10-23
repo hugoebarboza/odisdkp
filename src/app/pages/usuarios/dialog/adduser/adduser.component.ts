@@ -2,16 +2,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
-//HELPERS
+// HELPERS
 import { MustMatch } from '../../../../helpers/must-match.validator';
 
-//MODELS
+// MODELS
 
 import { Departamento, Proyecto, User } from '../../../../models/types';
 
-//SERVICES
+// SERVICES
 import { UserService } from '../../../../services/service.index';
 
 
@@ -114,7 +114,7 @@ export class AddUserComponent implements OnInit {
 
   confirmAdd() {
 		if(this.forma.invalid){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
     }
 
@@ -124,16 +124,15 @@ export class AddUserComponent implements OnInit {
       this._userService.registeruseremployee(this.token.token, this.user).subscribe(
         response => {
           console.log(response);
-         if(response.status == 'success'){
-           swal('Usuario creado', this.user.email, 'success' );
+         if (response.status === 'success') {
+           Swal.fire('Usuario creado', this.user.email, 'success' );
            this.forma.reset();
-         }else{
-           swal('Importante', response.message ,'error');
+         } else {
+           Swal.fire('Importante', response.message ,'error');
          }
         },
         error => {
-          //swal('Importante', error.error.message, 'error');
-          swal('Importante', error, 'error');
+          Swal.fire('Importante', error, 'error');
         }
       );
     }

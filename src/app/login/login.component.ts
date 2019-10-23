@@ -12,6 +12,8 @@ import { AuthService, DashboardService, SettingsService, UserService } from '../
 // SETTINGS
 import { GLOBAL } from '../services/global';
 
+import Swal from 'sweetalert2';
+
 
 // UTILITY
 import { MatProgressButtonOptions } from 'mat-progress-buttons';
@@ -25,7 +27,6 @@ import { AppState } from '../app.reducers';
 import { Store } from '@ngrx/store';
 import { LoginAction } from '../contador.actions';
 
-declare var swal: any;
 
 // FIREBASE
 import { AngularFirePerformance } from '@angular/fire/performance';
@@ -293,24 +294,18 @@ export class LoginComponent implements OnInit, OnDestroy {
             return console.log('usuario registrado en Firebase');
         }
         case 'auth/wrong-password': {
-          swal({
+          Swal.fire({
             title: 'Error en credencial firebase',
             text: 'Favor actualizar contraseña de acceso, de lo contrario algunas funcionalidades se desactivaran.',
-            icon: 'error',
-            buttons: {
-              cancelar: {
-                text: 'No validar',
-                value: 'cancel',
-                className: 'swal-button--danger'
-                } ,
-              confirmar: {
-                text: 'Validar credencial',
-                value: 'confirmar'
-              }
-              },
-            }).then( item => {
+            type: 'error',
+            showCancelButton: true,
+            confirmButtonText: 'Si',
+            cancelButtonText: 'No'
+          }).then( item => {
+            if (item.value) {
               if (item === 'confirmar') {
-                swal({icon: 'success', title: 'Se envio correo para su verificación!', text: 'Una vez verificado cerrar y abrir sesión'});
+                // Swal.fire({icon: 'success', title: 'Se envio correo para su verificación!', text: 'Una vez verificado cerrar y abrir sesión'});
+                Swal.fire('Se envio correo para su verificación!', 'Una vez verificado cerrar y abrir sesión', 'success' );
                 this.authService.updateUser(value)
                 .then(res => {
                 return console.log(res);
@@ -319,6 +314,11 @@ export class LoginComponent implements OnInit, OnDestroy {
                 return console.log(err);
                 });
               }
+            } else if (item.dismiss === Swal.DismissReason.cancel) {
+              Swal.fire(
+                'Cancelado',
+              );
+            }
             });
 
           return console.log('update password');

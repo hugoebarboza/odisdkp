@@ -11,7 +11,7 @@ import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/fire
 import { UserFirebase } from 'src/app/models/types';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
 // MOMENT
 const moment = _moment;
@@ -104,27 +104,24 @@ export class StatussettingsComponent implements OnInit, OnChanges {
         .subscribe((respons: any) => {
           if (respons.size > 0) {
             respons.forEach((doc) => {
-                // const info = doc.data();
-                // info.id = doc.id;
-                //this._afs.doc('supportcase/' + this.identity.country + '/cases/' + doc.id).update({status_desc: data.name.trim()});
                 this._afs.doc('supportcase/' + this.identity.country + '/cases/' + doc.id).update({status_desc: data.name.trim(), label: data.label});
             });
             this.isLoadingSave = false;
           }
         });
 
-        swal('Categoria editada', '', 'success');
+        Swal.fire('Categoria editada', '', 'success');
 
         this.indexitem = -1;
       })
       .catch(function(error) {
         this.isLoadingSave = false;
-        swal('Importante', 'A ocurrido un error', 'error');
+        Swal.fire('Importante', 'A ocurrido un error', 'error');
         console.error('Error updating document: ', error);
       });
 
     } else {
-      swal('Importante', 'A ocurrido un error', 'error');
+      Swal.fire('Importante', 'A ocurrido un error', 'error');
     }
 
 
@@ -134,13 +131,15 @@ export class StatussettingsComponent implements OnInit, OnChanges {
 
     if (data && data.name && data.name.trim().length > 0) {
 
-      swal({
+      Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar el estatus',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
       }).then( borrar => {
+        if (borrar.value) {
         if (borrar) {
         this.editando = false;
         this.indexitem = index;
@@ -151,20 +150,23 @@ export class StatussettingsComponent implements OnInit, OnChanges {
             if (respons.size === 0) {
 
               this._afs.doc('supportstatus/' + data.id).delete().then(_then => {
-                swal('Estatus Eliminado', '', 'success');
+                Swal.fire('Estatus Eliminado', '', 'success');
                 this.isLoadingDelete = false;
               }).catch(_error => {
                 this.isLoadingDelete = false;
-                swal('Importante', 'A ocurrido un error', 'error');
+                Swal.fire('Importante', 'A ocurrido un error', 'error');
               });
             } else {
               this.isLoadingDelete = false;
-              swal('Importante', 'No se puede eliminar el "Estatus" por que existen solicitudes asociadas', 'error');
+              Swal.fire('Importante', 'No se puede eliminar el "Estatus" por que existen solicitudes asociadas', 'error');
             }
           });
-
         }
-
+        } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+          );
+        }
       });
     }
 
@@ -194,7 +196,7 @@ export class StatussettingsComponent implements OnInit, OnChanges {
     })
     .then(function(_docRef) {
         // console.log('Document written with ID: ', docRef.id);
-        swal('Estatus registrado', '', 'success');
+        Swal.fire('Estatus registrado', '', 'success');
 
     })
     .catch(function(error) {

@@ -3,12 +3,12 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
-//MODELS
+// MODELS
 import { Currency, CurrencyValue } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { UserService, ProjectsService } from 'src/app/services/service.index';
 
 @Component({
@@ -147,7 +147,7 @@ export class ProjectCurrencyValueListComponent implements OnInit, OnDestroy {
   
 
 		if(this.forma.invalid || this.forma.value.value_id == 0){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}
 
@@ -221,48 +221,55 @@ export class ProjectCurrencyValueListComponent implements OnInit, OnDestroy {
   
   delete(i:number, element:CurrencyValue){
 
-    swal({
+    Swal.fire({
       title: '¿Esta seguro?',
       text: 'Esta seguro de borrar información ',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
     })
     .then( borrar => {
-      if(borrar){
-        this.indexitem = i;
-        this.isLoadingDelete = true;    
-        this.dataService.deleteCurrencyValue(this.token.token, element.id)
-        .subscribe( (resp: any) => {
-          if(!resp){
-            this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
-            this.isLoadingDelete = false;
-            this.indexitem = -1;
-            return;        
-          }
-          if(resp.status == 'success'){
-            this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
-            this.isLoadingDelete = false;
-            this.indexitem = -1;
-            setTimeout( () => {
-              this.ngOnInit();
-            }, 2000);
-            
-          }else{
-            this.isLoadingDelete = false;
-            this.indexitem = -1;
-          }
-        },
-          error => {
-            //console.log(<any>error.error);
-            //this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
-            this.snackBar.open(error.error.message, '', {duration:3000, });
-            this.isLoadingDelete = false;
-            this.indexitem = -1;
-          }       
+      if (borrar.value) {
+        if (borrar) {
+          this.indexitem = i;
+          this.isLoadingDelete = true;    
+          this.dataService.deleteCurrencyValue(this.token.token, element.id)
+          .subscribe( (resp: any) => {
+            if(!resp){
+              this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              this.isLoadingDelete = false;
+              this.indexitem = -1;
+              return;        
+            }
+            if(resp.status == 'success'){
+              this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              this.isLoadingDelete = false;
+              this.indexitem = -1;
+              setTimeout( () => {
+                this.ngOnInit();
+              }, 2000);
+              
+            }else{
+              this.isLoadingDelete = false;
+              this.indexitem = -1;
+            }
+          },
+            error => {
+              //console.log(<any>error.error);
+              //this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              this.snackBar.open(error.error.message, '', {duration:3000, });
+              this.isLoadingDelete = false;
+              this.indexitem = -1;
+            }       
+          );
+        }
+      } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
         );
       }
-    });    
+    });
   }
 
 

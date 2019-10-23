@@ -1,18 +1,18 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from 'rxjs/Subscription';
 
-//HELPERS
+// HELPERS
 import { MustMatch } from '../../../helpers/must-match.validator';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
-//MODEL
+// MODEL
 import { Proyecto } from '../../../models/types';
 
 
-//SERVICES
+// SERVICES
 import { SettingsService, UserService, AuthService } from '../../../services/service.index';
-//import { AngularFireAuth } from 'angularfire2/auth';
+
 
 import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
@@ -113,72 +113,63 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
         if (response.status !== 'error' && user) {
             user.reauthenticateWithCredential(credential)
             .then(_succes => {
-              //console.log('reauthenticateWithCredential - SUCCESS');
-              //console.log(succes);
               user.updatePassword(formValue.newpassword)
               .then(_respsucces => {
-                //console.log('updatePassword - SUCCESS');
-                //console.log(respsucces);
-                swal('Cambio de clave exitoso.', this.identity.email, 'success' );
+                Swal.fire('Cambio de clave exitoso.', this.identity.email, 'success' );
                 this.changeForm.reset(this.changeForm);
               }).catch(error => {
-                //console.log('updatePassword - ERROR');
                 console.log(error);
                 this.sendpasswordfirebase();
               });
             }).catch(error => {
-              //console.log('reauthenticateWithCredential - ERROR');
               console.log(error);
               this.sendpasswordfirebase();
             });
         } else {
-          swal('Importante', 'Verifique: 1) Su clave actual sea correcta, 2) La nueva clave no sea la misma que la actual.', 'error');
+          Swal.fire('Importante', 'Verifique: 1) Su clave actual sea correcta, 2) La nueva clave no sea la misma que la actual.', 'error');
         }
         this.isSave = false;
       },
       error => {
         this.isSave = false;
         console.log(error);
-        swal('Importante', error.error.message, 'error');
+        Swal.fire('Importante', error.error.message, 'error');
       }
     );
 
   }
 
   sendpasswordfirebase() {
-    swal({
+    Swal.fire({
       title: 'Error en actulización credencial firebase',
       text: 'Favor actualizar contraseña de acceso, de lo contrario algunas funcionalidades se desactivaran.',
-      icon: 'warning',
-      buttons: {
-        cancelar: {
-          text: 'No validar',
-          value: 'cancel',
-          className: 'swal-button--danger'
-          } ,
-        confirmar: {
-          text: 'Validar credencial',
-          value: 'confirmar'
-        }
-        },
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
       }).then( item => {
-        if (item === 'confirmar') {
-          // tslint:disable-next-line:max-line-length
-          swal({icon: 'success', title: 'Se envío correo a ' + this.identity.email + ' para su verificación!', text: 'Una vez verificado cerrar cuenta y abrir sesión'});
-          this.authService.updateUser(this.identity)
-          .then(_res => {
-          //return console.log(res);
-          }, err => {
-          return console.log(err);
-          });
+        if (item.value) {
+          if (item === 'confirmar') {
+            // Swal({icon: 'success', title: 'Se envío correo a ' + this.identity.email + ' para su verificación!', text: 'Una vez verificado cerrar cuenta y abrir sesión'});
+            Swal.fire('Se envío correo a ' + this.identity.email + ' para su verificación!', 'Una vez verificado cerrar cuenta y abrir sesión', 'success' );
+            this.authService.updateUser(this.identity)
+            .then(_res => {
+            }, err => {
+            return console.log(err);
+            });
+          }
+        } else if (item.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+          );
         }
       });
   }
 
-	refreshMenu(event:number){
-		if(event == 1){
-		}
-	}
+  refreshMenu(event: number) {
+    if (event === 1) {
+    }
+  }
 
 
 }

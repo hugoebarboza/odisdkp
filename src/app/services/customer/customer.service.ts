@@ -7,9 +7,7 @@ import 'rxjs/add/operator/map';
 // MODELS
 import { Customer } from '../../models/types';
 
-// TOASTER MESSAGES
-//import { ToastrService } from 'ngx-toastr';
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 
 @Injectable()
@@ -20,7 +18,6 @@ export class CustomerService {
 
   constructor(
 	public _http: HttpClient,
-	//private toasterService: ToastrService,
   	) 
   { 
 	this.url = GLOBAL.url;
@@ -163,21 +160,21 @@ export class CustomerService {
     			  //console.log(data);
     			  this.dialogData = customer;    		      
 						//this.toasterService.success('Cliente almacenado.', 'Exito', {timeOut: 6000,});
-						if(data.status === 'success'){
-							if(data.lastInsertedId){
-								swal('Cliente almacenado con ID: ', data.lastInsertedId +' exitosamente.', 'success' );
+						if(data.status === 'success') {
+							if(data.lastInsertedId) {
+								Swal.fire('Cliente almacenado con ID: ', data.lastInsertedId + ' exitosamente.', 'success' );
 							}else{
-								swal('Cliente almacenado exitosamente.', 'success' );
+								Swal.fire('Cliente almacenado exitosamente.', 'success' );
 							}
 							
-						}else{
-							swal('No fue posible procesar su solicitud', '', 'error');
+						} else {
+							Swal.fire('No fue posible procesar su solicitud', '', 'error');
 						}
 						
 			      },
-			      (err: HttpErrorResponse) => {	
+			      (err: HttpErrorResponse) => {
 						this.error = err.error.message;
-						swal('No fue posible procesar su solicitud', err.error.message, 'error');
+                        Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
 			      //console.log(err.error.message);
 			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 			    });			   
@@ -196,13 +193,13 @@ export class CustomerService {
     		_data => { 
     			  //console.log(data);
 						this.dialogData = customer;   
-						swal('Cliente con ID: ', customerid +' actualizado exitosamente.', 'success' ); 		      
+						Swal.fire('Cliente con ID: ', customerid +' actualizado exitosamente.', 'success' ); 		      
 			      //this.toasterService.success('Cliente actualizado.', 'Exito', {timeOut: 6000,});
 			      },
 			      (err: HttpErrorResponse) => {	
 						this.error = err.error.message;
 						//console.log(<any>err);
-						swal('No fue posible procesar su solicitud', err.error.message, 'error');
+						Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
 			      //console.log(err.error.message);
 			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 			    });			   
@@ -217,11 +214,11 @@ export class CustomerService {
 	const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     
     this._http.delete(this.url+'project'+'/'+id+'/'+'customer/'+customerid, {headers: headers}).subscribe(_data => {
-				swal('Cliente con ID: ', customerid +' eliminado exitosamente.', 'success' ); 		      
+				Swal.fire('Cliente con ID: ', customerid +' eliminado exitosamente.', 'success' ); 		      
       },
       (err: HttpErrorResponse) => {
 				this.error = err.error.message;
-				swal('No fue posible procesar su solicitud', '', 'error');
+				Swal.fire('No fue posible procesar su solicitud', '', 'error');
       });
   	}
 

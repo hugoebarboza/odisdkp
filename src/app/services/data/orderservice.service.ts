@@ -5,14 +5,10 @@ import { GLOBAL } from '../global';
 import {BehaviorSubject} from 'rxjs';
 import 'rxjs/add/operator/map';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 // MODELS
 import {  Order, ServiceEstatus } from 'src/app/models/types';
-
-
-// TOASTER MESSAGES
-//import { ToastrService } from 'ngx-toastr';
 
 
 @Injectable()
@@ -26,7 +22,6 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
 
 		constructor(
 			public _http: HttpClient,
-			// private toasterService: ToastrService,
 			)
 		{
 			this.url = GLOBAL.url;
@@ -39,7 +34,7 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
   	}
 
 
-  getQuery( query:string, token: string | string[] ): Observable<any>{
+  getQuery( query:string, token: string | string[] ): Observable<any> {
     if (!token) {
        return;
     }
@@ -261,9 +256,9 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
     			  this.dialogData = order;    		      
 						//this.toasterService.success('Orden de Trabajo creada.', 'Exito', {timeOut: 6000,});
 						if(data.status === 'success'){
-							swal('Creada Orden de Trabajo: ', this.dialogData.order_number +' exitosamente.', 'success' );
+							Swal.fire('Creada Orden de Trabajo: ', this.dialogData.order_number + ' exitosamente.', 'success' );
 						}else{
-							swal('N. Orden de Trabajo: ', this.dialogData.order_number +' no fue posible crearla.' , 'error');
+							Swal.fire('N. Orden de Trabajo: ', this.dialogData.order_number + ' no fue posible crearla.' , 'error');
 						}
 					
 			      },
@@ -271,7 +266,7 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
 						this.error = err.error.message;
 						//console.log('viene');
 						//console.log(<any>err);
-						swal('No fue posible procesar su solicitud', err.error.message, 'error');
+						Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
 			      //console.log(err.error.message);
 			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 			    });
@@ -309,15 +304,15 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
 							//this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
     			    this.dialogData = order;   		      						
 							if(data.status === 'success'){
-								swal('Actualizada Orden de Trabajo: ', this.dialogData.order_number +' exitosamente.', 'success' );
+								Swal.fire('Actualizada Orden de Trabajo: ', this.dialogData.order_number +' exitosamente.', 'success' );
 							}else{
-								swal('N. Orden de Trabajo: ', this.dialogData.order_number +' no actualizada.' , 'error');
+								Swal.fire('N. Orden de Trabajo: ', this.dialogData.order_number +' no actualizada.' , 'error');
 							}
 			      },
 			      (err: HttpErrorResponse) => {
 						//this.error = err.error.message;							
 						//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-						swal('No fue posible procesar su solicitud', err.error.message, 'error');
+						Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
 					})
 					;
 	}
@@ -401,15 +396,15 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
 		this._http.delete(this.url+'project'+'/'+id+'/'+'order/'+orderid, {headers: headers}).subscribe(
 			(data: any) => {
 				if(data.status === 'success'){
-					swal('Eliminada Orden de Trabajo con identificador: ', orderid +' exitosamente.', 'success' );
+					Swal.fire('Eliminada Orden de Trabajo con identificador: ', orderid +' exitosamente.', 'success' );
 				}else{
-					swal('Orden de Trabajo con identificador: ', orderid +' no eliminada.' , 'error');
+					Swal.fire('Orden de Trabajo con identificador: ', orderid +' no eliminada.' , 'error');
 				}
       	//this.toasterService.success('Orden de Trabajo eliminada.', 'Exito', {timeOut: 6000,});
       },
       (err: HttpErrorResponse) => {
 				this.error = err.error.message;
-				swal('No fue posible procesar su solicitud', '', 'error');
+				Swal.fire('No fue posible procesar su solicitud', '', 'error');
         //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
       });
 	}

@@ -5,13 +5,12 @@ import { FormControl, Validators, NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
-//import { AngularFireAuth } from 'angularfire2/auth';
 
 import { AngularFireAuth } from '@angular/fire/auth';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
-//MODELS
+// MODELS
 import { 
   Comuna,
   Customer,
@@ -174,7 +173,7 @@ export class AddServiceComponent implements OnInit, OnDestroy {
 			(data:any) => { 
 
 				if(data.status === 'success'){
-          swal('Proyecto creado exitosamente con ID: ', data.lastInsertedId +'.', 'success' );
+          Swal.fire('Proyecto creado exitosamente con ID: ', data.lastInsertedId +'.', 'success' );
           this.lastInsertedId = data.lastInsertedId;
           this.afterAddService();
           this.refresh();
@@ -183,12 +182,12 @@ export class AddServiceComponent implements OnInit, OnDestroy {
             this.sendCdf(this.destinatario);
           }                
 				}else{
-					swal('No fue posible procesar su solicitud', data.message, 'error');
+					Swal.fire('No fue posible procesar su solicitud', data.message, 'error');
 				}
 
 				},
 				(err: HttpErrorResponse) => {	
-				swal('No fue posible procesar su solicitud', err.error.message, 'error');
+				Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
 				});
 
   }

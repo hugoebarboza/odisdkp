@@ -8,7 +8,8 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
 import { UserFirebase } from 'src/app/models/types';
-declare var swal: any;
+
+import Swal from 'sweetalert2';
 
 // MOMENT
 const moment = _moment;
@@ -26,17 +27,17 @@ export class TypesettingsComponent implements OnInit {
 
   public tipo$: Observable<any[]>;
   private tipoCollection: AngularFirestoreCollection<any>;
-  isLoading: boolean = false;
+  isLoading = false;
   indexitem: number;
-  isLoadingDelete: boolean = false;
-  isLoadingSave: boolean = false;
-  editando: boolean = false;
-  newtype: string = '';
-  show:boolean = false;
+  isLoadingDelete = false;
+  isLoadingSave = false;
+  editando = false;
+  newtype = '';
+  show = false;
   booStatus = false;
   booCategory = false;
-  showstatus: boolean = false;
-  showcategory: boolean = false;
+  showstatus = false;
+  showcategory = false;
   datasend: any;
 
 
@@ -83,13 +84,15 @@ export class TypesettingsComponent implements OnInit {
 
     if (data && data.name && data.name.trim().length > 0) {
 
-      swal({
+      Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar Tipo de solicitud',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
       }).then( borrar => {
+        if (borrar.value) {
         if (borrar) {
         this.booStatus = false;
         this.booCategory = false;
@@ -107,7 +110,7 @@ export class TypesettingsComponent implements OnInit {
                   this.validarDelete(data.id);
                 } else {
                   this.isLoadingDelete = false;
-                  swal('Importante', 'No se puede eliminar el "Tipo de solicitud" por que existen categorias asociadas', 'error');
+                  Swal.fire('Importante', 'No se puede eliminar el "Tipo de solicitud" por que existen categorias asociadas', 'error');
                 }
               });
               this._afs.collection('supportstatus', ref => ref.where('stype_id', '==', data.id)).get()
@@ -117,17 +120,21 @@ export class TypesettingsComponent implements OnInit {
                   this.validarDelete(data.id);
                 } else {
                   this.isLoadingDelete = false;
-                  swal('Importante', 'No se puede eliminar el "Tipo de solicitud" por que existen categorias asociadas', 'error');
+                  Swal.fire('Importante', 'No se puede eliminar el "Tipo de solicitud" por que existen categorias asociadas', 'error');
                 }
               });
             } else {
               this.isLoadingDelete = false;
-              swal('Importante', 'No se puede eliminar el "Tipo de solicitud" por que existen solicitudes asociadas', 'error');
+              Swal.fire('Importante', 'No se puede eliminar el "Tipo de solicitud" por que existen solicitudes asociadas', 'error');
             }
           });
 
         }
-
+        } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+          );
+        }
       });
     }
 
@@ -136,11 +143,11 @@ export class TypesettingsComponent implements OnInit {
   validarDelete(id) {
     if (this.booStatus && this.booCategory) {
       this._afs.doc('supporttype/' + id).delete().then(_then => {
-        swal('Tipo de solicitud Eliminado', '', 'success');
+        Swal.fire('Tipo de solicitud Eliminado', '', 'success');
         this.isLoadingDelete = false;
       }).catch(_error => {
         this.isLoadingDelete = false;
-        swal('Importante', 'A ocurrido un error', 'error');
+        Swal.fire('Importante', 'A ocurrido un error', 'error');
       });
     }
     this.indexitem = -1;
@@ -166,18 +173,18 @@ export class TypesettingsComponent implements OnInit {
           }
         });
 
-        swal('Tipo de solicitud editado', '', 'success');
+        Swal.fire('Tipo de solicitud editado', '', 'success');
 
         this.indexitem = -1;
       })
       .catch(function(error) {
         this.isLoadingSave = false;
-        swal('Importante', 'A ocurrido un error', 'error');
+        Swal.fire('Importante', 'A ocurrido un error', 'error');
         console.error('Error updating document: ', error);
       });
 
     } else {
-      swal('Importante', 'A ocurrido un error', 'error');
+      Swal.fire('Importante', 'A ocurrido un error', 'error');
     }
 
   }
@@ -194,7 +201,7 @@ export class TypesettingsComponent implements OnInit {
     })
     .then(function(_docRef) {
         // console.log('Document written with ID: ', docRef.id);
-        swal('Tipo de solicitud registrado', '', 'success');
+        Swal.fire('Tipo de solicitud registrado', '', 'success');
 
     })
     .catch(function(error) {

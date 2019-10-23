@@ -3,9 +3,8 @@ import { FormControl} from '@angular/forms';
 import { HttpClient} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 
-// declare var swal: any;
 
-//MATERIAL
+// MATERIAL
 import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource, TooltipPosition } from '@angular/material';
 
 import * as FileSaver from 'file-saver';
@@ -13,10 +12,10 @@ import * as FileSaver from 'file-saver';
 
 import * as firebase from 'firebase/app';
 
-//SERVICES
+// SERVICES
 import { ItemFirebaseService } from '../../../services/service.index';
 
-//MODELS
+// MODELS
 import { Item } from '../../../models/types';
 
 
@@ -28,15 +27,15 @@ import { Item } from '../../../models/types';
 })
 export class FilelistComponent implements OnInit {
 
-  title = "Listado de documentos";
-  subtitle = "Seleccione el archivo a borrar, descargar o visualizar.";
+  title = 'Listado de documentos';
+  subtitle = 'Seleccione el archivo a borrar, descargar o visualizar.';
   items: Item[];
   CARPETA_ARCHIVOS: string;
   isLoadingResults = true;
   isLoadingDownload = false;
   isRateLimitReached = false;
   file: any;
-  indexitem:number;
+  indexitem: number;
   profileUrl: Observable<any>;
 
   columnsToDisplay: string[] = ['nombre', 'tipo', 'create_at', 'visualizar'];   

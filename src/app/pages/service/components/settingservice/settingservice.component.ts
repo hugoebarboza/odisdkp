@@ -4,18 +4,18 @@ import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TooltipPosition, MatDialog } from '@angular/material';
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
-//DIALOG
+// DIALOG
 import { AddProjectTypeComponent } from '../../dialog/add-project-type/add-project-type.component';
 import { AddProjectCategorieComponent } from '../../dialog/add-project-categorie/add-project-categorie.component';
 import { AddProjectCurrencyValueComponent } from '../../dialog/add-project-currency-value/add-project-currency-value.component';
 
 
-//MODELS
+// MODELS
 import { Countries, Customers, Departamento, Estatus, Proyecto, Service, User } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { CountriesService, ProjectsService, SettingsService, UserService} from 'src/app/services/service.index';
 
 
@@ -76,10 +76,10 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
     });
 
 
-    this.sub = this._route.params.subscribe(params => { 
-      let id = +params['id'];            
+    this.sub = this._route.params.subscribe(params => {
+      const id = +params['id'];
       this.id = id;
-    });    
+    });
 
   }
 
@@ -198,29 +198,27 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
   }
 
 
-  loadCountries(){
+  loadCountries() {
     this.subscription = this._countryService.getCountries(this.token.token).subscribe(
       response => {
-                if(!response){
+                if (!response) {
                   return;
                 }
-                if(response.status == 'success'){    
+                if (response.status === 'success') {
                   this.countries = response.datos;
-                  //console.log(this.countries);
                 }
-                });  
+                });
   }
 
-  loadUser(){
+  loadUser() {
 
     this.subscription = this._proyectoService.getUserProject(this.token.token, this.id, 8).subscribe(
     response => {
-              if(!response){
+              if (!response) {
                 return;
               }
-              if(response.status == 'success'){    
+              if (response.status === 'success') {
                 this.users = response.datos;
-                //console.log(this.users);
               }
               });
    }
@@ -228,7 +226,7 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
 
   confirmEdit() {
 		if(this.forma.invalid){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
     }
 
@@ -257,75 +255,77 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
       ''
     );
 
-    if(this.forma.value.status == 0){
-      swal({
+    if (this.forma.value.status === 0) {
+      Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta a punto de desactivar proyecto ' + this.forma.value.project_name,
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
       })
       .then( borrar => {
-  
+        if (borrar.value) {
         if (borrar) {
-
           this._proyectoService.updateProject(this.token.token, this.project, this.id)
-          .subscribe( (resp: any) => {              
-            if(!resp){
-              return;        
+          .subscribe( (resp: any) => {
+            if (!resp) {
+              return;
             }
-            if(resp.status == 'success'){ 
-              swal('Proyecto actualizado', this.project.project_name, 'success' );
+            if (resp.status === 'success') {
+              Swal.fire('Proyecto actualizado', this.project.project_name, 'success' );
               this.ngOnInit();
               this.show = false;
-            }else{
-              swal('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
+            } else {
+              Swal.fire('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
             }
           },
             error => {
               console.log(<any>error);
-              swal('Importante', error.error.message, 'error');
-            }       
-          );             
+              Swal.fire('Importante', error.error.message, 'error');
+            }
+          );
         }
-  
-      });      
-      
+        } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+          );
+        }
+      });
+
     }
 
-    if(this.project && this.forma.value.status > 0){
+    if (this.project && this.forma.value.status > 0) {
       this._proyectoService.updateProject(this.token.token, this.project, this.id)
-      .subscribe( (resp: any) => {              
-        if(!resp){
-          return;        
+      .subscribe( (resp: any) => {
+          if (!resp) {
+            return;
+          }
+          if (resp.status === 'success') {
+            Swal.fire('Proyecto actualizado', this.project.project_name, 'success' );
+            this.ngOnInit();
+            this.show = false;
+          } else {
+            Swal.fire('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
+          }
+        }, error => {
+          console.log(<any>error);
+          Swal.fire('Importante', error, 'error');
         }
-        if(resp.status == 'success'){ 
-          swal('Proyecto actualizado', this.project.project_name, 'success' );
-          this.ngOnInit();
-          this.show = false;
-        }else{
-          swal('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
-        }
-      },
-        error => {
-          //swal('Importante', error.error.message, 'error');
-          swal('Importante', error, 'error');
-        }       
-      );     
+      );
     }
-
 
   }
 
-  filter(){
-    if(this.proyectos && this.id){
-      for(var i = 0; i < this.proyectos.length; i += 1){
-        var result = this.proyectos[i];
-        if(result.id === this.id){
+  filter() {
+    if (this.proyectos && this.id) {
+      for (let i = 0; i < this.proyectos.length; i += 1) {
+        const result = this.proyectos[i];
+        if (result.id === this.id) {
             return result;
         }
       }
-    }    
+    }
   }
 
 

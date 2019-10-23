@@ -2,15 +2,15 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
-//HELPERS
+// HELPERS
 import { MustMatch } from '../../../../helpers/must-match.validator';
 
-//MODELS
+// MODELS
 import { User } from '../../../../models/types';
 
-//SERVICES
+// SERVICES
 import { UserService } from '../../../../services/service.index';
 
 
@@ -35,7 +35,7 @@ export class EditUserComponent implements OnInit {
     public _userService: UserService,
     public dialogRef: MatDialogRef<EditUserComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any,
-  ) { 
+  ) {
     this.isLoading = true;
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -83,7 +83,7 @@ export class EditUserComponent implements OnInit {
 
   confirmEdit() {
 		if(this.forma.invalid){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
     }
     
@@ -97,14 +97,13 @@ export class EditUserComponent implements OnInit {
           return;        
         }
         if(resp.status == 'success'){ 
-          swal('Usuario actualizado', this.user.name +' '+this.user.surname, 'success' );
+          Swal.fire('Usuario actualizado', this.user.name +' '+this.user.surname, 'success' );
         }else{
-          swal('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
+          Swal.fire('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
         }
       },
         error => {
-          //swal('Importante', error.error.message, 'error');
-          swal('Importante', error, 'error');
+          Swal.fire('Importante', error, 'error');
         }       
       );     
     }

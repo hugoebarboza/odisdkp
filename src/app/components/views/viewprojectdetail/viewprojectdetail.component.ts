@@ -8,7 +8,7 @@ import { of } from 'rxjs/observable/of';
 import { tap, switchMap, map } from 'rxjs/operators';
 
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
 // FIREBASE
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -348,7 +348,7 @@ addComentario() {
   this.CARPETA_ARCHIVOS = this.newpath;
 
   if (this.formComentar.invalid ) {
-    swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+    Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
     return;
   }
 
@@ -446,26 +446,32 @@ sendCdf(data, message){
 
 }
 
-deleteCommentDatabase(item: any) {    
+deleteCommentDatabase(item: any) {
   
-  swal({
+  Swal.fire({
     title: '¿Esta seguro?',
     text: 'Esta seguro de borrar registro de trabajo ' + item.comment,
-    icon: 'warning',
-    buttons: true,
-    dangerMode: true,
+    type: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'Si',
+    cancelButtonText: 'No'
   })
   .then( borrar => {
-    if(borrar){
-      this.itemsCollection.doc(item.id).delete();
-      this.snackBar.open('Eliminando Registro de Trabajo.', '', {duration: 2000,});  
-      if(this.toggleContent){
-        this.toggleContent=false;
-      }    
+    if (borrar.value) {
+      if (borrar) {
+        this.itemsCollection.doc(item.id).delete();
+        this.snackBar.open('Eliminando Registro de Trabajo.', '', {duration: 2000,});  
+        if (this.toggleContent) {
+          this.toggleContent = false;
+        }
+      }
+    } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+      Swal.fire(
+        'Cancelado',
+      );
     }
   });
-}  
-
+}
 
   public loadInfo(){
     this.isLoadingResults = true;

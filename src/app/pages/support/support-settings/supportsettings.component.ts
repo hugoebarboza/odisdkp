@@ -8,8 +8,8 @@ import { Observable, concat, of, Subject } from 'rxjs';
 import { map, distinctUntilChanged, tap, switchMap, catchError, debounceTime } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
+import Swal from 'sweetalert2';
 
-declare var swal: any;
 import * as _moment from 'moment';
 
 // MOMENT
@@ -126,7 +126,7 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
 
     this._afs.doc('countries/' + this.identity.country + '/departments/' + data.id).update({note: data.note_tem, day: integer })
       .then(function(_docRef) {
-        swal('Nota registrada', '', 'success');
+        Swal.fire('Nota registrada', '', 'success');
       })
       .catch(function(error) {
         console.error('Error updating document: ', error);
@@ -160,7 +160,7 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
       }
       this._afs.doc('countries/' + this.identity.country + '/departments/' + data.id).update({admins: newadmins})
       .then(function(_docRef) {
-        swal('Responsables registrados', '', 'success');
+        Swal.fire('Responsables registrados', '', 'success');
       })
       .catch(function(error) {
         console.error('Error updating document: ', error);
@@ -208,30 +208,35 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
 
     if (data && data.name) {
 
-      swal({
+      Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar el departamento',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
       }).then( borrar => {
+        if (borrar.value) {
         if (borrar) {
-
           this._afs.collection('supportcase/' + this.identity.country + '/cases', ref => ref.where('depto_id', '==', data.id)).get()
           .subscribe((respons: any) => {
             if (respons.size === 0) {
               this._afs.doc('countries/' + this.identity.country + '/departments/' + data.id).delete().then(_then => {
-                swal('Departamento Eliminado', '', 'success');
+                Swal.fire('Departamento Eliminado', '', 'success');
               }).catch(_error => {
-                swal('Importante', 'A ocurrido un error', 'error');
+                Swal.fire('Importante', 'A ocurrido un error', 'error');
               });
             } else {
-              swal('Importante', 'No se puede eliminar el "Departamento" por que existen solicitudes asociadas', 'error');
+              Swal.fire('Importante', 'No se puede eliminar el "Departamento" por que existen solicitudes asociadas', 'error');
             }
           });
 
         }
-
+        } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+          );
+        }
       });
     }
 
@@ -243,7 +248,7 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (this.forma.invalid) {
-      swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
       return;
     }
 
@@ -266,7 +271,7 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
     .then(function(_docRef) {
         // console.log('Document written with ID: ', docRef.id);
         that.forma.reset();
-        swal('Departamento registrado', '', 'success');
+        Swal.fire('Departamento registrado', '', 'success');
 
     })
     .catch(function(error) {

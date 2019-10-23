@@ -1,6 +1,5 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef, MatSlideToggleChange } from '@angular/material';
-//import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
 import { UserService, CargaImagenesService, CdfService } from 'src/app/services/service.index';
 import { ToastrService } from 'ngx-toastr';
 import { Proyecto, FileItem, UserFirebase } from 'src/app/models/types';
@@ -8,12 +7,13 @@ import { defer, combineLatest, Observable, Subject, concat } from 'rxjs';
 import { of } from 'rxjs/observable/of';
 import { distinctUntilChanged, tap, switchMap, catchError, debounceTime, map } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import swal from 'sweetalert';
+
+import Swal from 'sweetalert2';
 
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 import * as _moment from 'moment';
 
-//import { AngularFireAuth } from 'angularfire2/auth';
+
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
@@ -430,7 +430,7 @@ export class ShowcaseComponent implements OnInit {
     this.CARPETA_ARCHIVOS = this.supportcase + '/';
 
     if (this.formComentar.invalid ) {
-      swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
       return;
     }
 

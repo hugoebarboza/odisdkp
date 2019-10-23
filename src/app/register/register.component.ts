@@ -1,7 +1,7 @@
 import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 //HELPERS
 import { MustMatch } from '../helpers/must-match.validator';
@@ -120,12 +120,12 @@ export class RegisterComponent implements OnInit {
 	onSubmit(){
 	
 		if(this.forma.invalid){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}
 
 		if ( !this.forma.value.condiciones ) {
-			swal('Importante', 'Debe de aceptar las condiciones', 'warning');
+			Swal.fire('Importante', 'Debe de aceptar las condiciones', 'warning');
 			return;
 		}
 		
@@ -134,12 +134,12 @@ export class RegisterComponent implements OnInit {
 	 	this._userService.register(this.user).subscribe(
 	 		response => {
 				if(response.status == 'success'){
-					swal('Usuario creado', this.user.email, 'success' );
+					Swal.fire('Usuario creado', this.user.email, 'success' );
 					//this.status = response.status;	
 					//this.user = new User('','','','',1,'','',1);
 					this.forma.reset();
 				}else{
-					swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+					Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 					//this.status = 'error';
 				}
 	 		},

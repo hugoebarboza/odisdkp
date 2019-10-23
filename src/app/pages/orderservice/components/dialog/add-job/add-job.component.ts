@@ -7,18 +7,17 @@ import { defer, combineLatest, Observable} from 'rxjs';
 import { of } from 'rxjs/observable/of';
 
 import { tap, switchMap, map } from 'rxjs/operators';
-import swal from 'sweetalert';
 
-//FIREBASE
-//import { AngularFireAuth } from 'angularfire2/auth';
-//import { AngularFirestore, AngularFirestoreCollection } from 'angularfire2/firestore';
+import Swal from 'sweetalert2';
+
+// FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 
-//MODELS
+// MODELS
 import { FileItem, Proyecto, Service, User, UserFirebase } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { CargaImagenesService, CdfService, OrderserviceService, UserService, ZipService } from 'src/app/services/service.index';
 
 
@@ -272,7 +271,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
     this.CARPETA_ARCHIVOS = this.path;
 
     if (this.formComentar.invalid ) {
-      swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
       return;
     }
 

@@ -11,7 +11,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
 // MOMENT
 const moment = _moment;
@@ -106,18 +106,18 @@ export class CategorysettingsComponent implements OnInit, OnChanges {
           }
         });
 
-        swal('Categoria editada', '', 'success');
+        Swal.fire('Categoria editada', '', 'success');
 
         this.indexitem = -1;
       })
       .catch(function(error) {
         this.isLoadingSave = false;
-        swal('Importante', 'A ocurrido un error', 'error');
+        Swal.fire('Importante', 'A ocurrido un error', 'error');
         console.error('Error updating document: ', error);
       });
 
     } else {
-      swal('Importante', 'A ocurrido un error', 'error');
+      Swal.fire('Importante', 'A ocurrido un error', 'error');
     }
 
   }
@@ -125,37 +125,43 @@ export class CategorysettingsComponent implements OnInit, OnChanges {
   borrarcategoria (index, data) {
     if (data && data.name && data.name.trim().length > 0) {
 
-      swal({
+      Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar la categoria',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
       }).then( borrar => {
-        if (borrar) {
-        this.editando = false;
-        this.indexitem = index;
-        this.isLoadingDelete = true;
+        if (borrar.value) {
+          if (borrar) {
+          this.editando = false;
+          this.indexitem = index;
+          this.isLoadingDelete = true;
 
-          this._afs.collection('supportcase/' + this.identity.country + '/cases', ref => ref.where('category_id', '==', data.id)).get()
-          .subscribe((respons: any) => {
-            if (respons.size === 0) {
+            this._afs.collection('supportcase/' + this.identity.country + '/cases', ref => ref.where('category_id', '==', data.id)).get()
+            .subscribe((respons: any) => {
+              if (respons.size === 0) {
 
-              this._afs.doc('supportcategory/' + data.id).delete().then(_then => {
-                swal('Categoria Eliminada', '', 'success');
+                this._afs.doc('supportcategory/' + data.id).delete().then(_then => {
+                  Swal.fire('Categoria Eliminada', '', 'success');
+                  this.isLoadingDelete = false;
+                }).catch(_error => {
+                  this.isLoadingDelete = false;
+                  Swal.fire('Importante', 'A ocurrido un error', 'error');
+                });
+              } else {
                 this.isLoadingDelete = false;
-              }).catch(_error => {
-                this.isLoadingDelete = false;
-                swal('Importante', 'A ocurrido un error', 'error');
-              });
-            } else {
-              this.isLoadingDelete = false;
-              swal('Importante', 'No se puede eliminar el "Categoria" por que existen solicitudes asociadas', 'error');
-            }
-          });
+                Swal.fire('Importante', 'No se puede eliminar el "Categoria" por que existen solicitudes asociadas', 'error');
+              }
+            });
 
+          }
+        } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+          );
         }
-
       });
     }
   }
@@ -183,7 +189,7 @@ export class CategorysettingsComponent implements OnInit, OnChanges {
     })
     .then(function(_docRef) {
         // console.log('Document written with ID: ', docRef.id);
-        swal('Categoria registrada', '', 'success');
+        Swal.fire('Categoria registrada', '', 'success');
 
     })
     .catch(function(error) {

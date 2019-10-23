@@ -4,16 +4,15 @@ import { Subscription } from 'rxjs/Subscription';
 import { timer } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
-//FIREBASE
-//import { AngularFireAuth } from 'angularfire2/auth';
+// FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
 
-//MODELS
+// MODELS
 import { Proyecto, Service, User, UserFirebase } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { CdfService, OrderserviceService, UserService, ZipService } from 'src/app/services/service.index';
 
 
@@ -30,10 +29,10 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
 
   destinatario = [];
   email_responsable_obra: string;
-  emailbody:string = 'Orden de Trabajo compartida por correo.';
-  id:number;
-  identity: any;  
-  isLoading: boolean = true;
+  emailbody = 'Orden de Trabajo compartida por correo.';
+  id: number;
+  identity: any;
+  isLoading = true;
   listimageorder = [];
   subscription: Subscription;
   project: any;
@@ -43,16 +42,15 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
   services: Service;
   service_type: any;
   tipoServicio: any;
-  title:string = "Enviar Orden por Correo";
+  title = 'Enviar Orden por Correo';
   token: any;
   user_informador: User;
-	user_responsable:User;
-	user_itocivil_assigned_to: User;
+  user_responsable: User;
+  user_itocivil_assigned_to: User;
   user_itoelec_assigned_to: User;
   user_responsable_obra: User;
   userFirebase: UserFirebase;
 
-  
   constructor(
     private _cdf: CdfService,
     public _userService: UserService,
@@ -60,9 +58,9 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
     public dataservice: OrderserviceService,
     public dialogRef: MatDialogRef<SendOrderByEmailComponent>,
     private toasterService: ToastrService,
-    public zipService: ZipService,   
+    public zipService: ZipService,
     @Inject(MAT_DIALOG_DATA) public data: any
-  ) { 
+  ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
@@ -242,10 +240,9 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
         res.subscribe(
           (some: any) => {
             this.tipoServicio = some['datos'];
-            if(this.tipoServicio){
+            if (this.tipoServicio) {
               this.service_type = this.filterServiceType()
-              //console.log(this.service_type);
-            }      
+            }
           },
           (error: any) => {
             console.log(<any>error);
@@ -260,38 +257,39 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-  sendEmail(event:number){
+  sendEmail(event: number) {
 
-    
-    swal({
+    Swal.fire({
       title: '¿Esta seguro?',
       text: 'Está seguro de enviar por correo la Orden de Trabajo ? ',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
     })
     .then( borrar => {
-      if(borrar){
-        if(event == 1 && this.destinatario.length>0){
-          this.destinatario.forEach(res => {
-            //console.log(res.email);
-            this.sendCdfUser(res.email, this.emailbody);
-          });
-        }    
+      if (borrar.value) {
+        if (borrar) {
+          if (event === 1 && this.destinatario.length > 0) {
+            this.destinatario.forEach(res => {
+              this.sendCdfUser(res.email, this.emailbody);
+            });
+          }
+        }
+      } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+        );
       }
     });
   }
 
 
-  sendCdfUser(to:string, body: string){
+  sendCdfUser(to: string, body: string) {
 
-    if(!to || !body){
+    if (!to || !body) {
       return;
     }
-
-    //console.log(to);
-    //console.log(this.data);
-    //return;
 
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
     const project = {
@@ -315,8 +313,6 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
 
     if (to && body && project ){
       const asunto = 'OCA GLOBAL - Orden de Trabajo en Proyecto: ' + ' ' + this.service.service_name + '. OT: ' + this.data.order_number;
-      //console.log(asunto);
-      
       this._cdf.httpEmailShareOrder(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
         response => {
           if (!response) {
@@ -328,7 +324,6 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
             this.destinatario = [];
             this.toasterService.success('Orden de Trabajo enviada exitosamente.', 'Exito', {timeOut: 8000});
             this.subscription = timer(2000).subscribe(_res => this.onNoClick());
-            //console.log(response);
           }
         },
           error => {
@@ -338,12 +333,11 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
           }
         );
     }
-  }    
+  }
 
 
-  taguser(data){
+  taguser(data) {
       this.destinatario = data;
-      //console.log(this.destinatario);
   }
 
 

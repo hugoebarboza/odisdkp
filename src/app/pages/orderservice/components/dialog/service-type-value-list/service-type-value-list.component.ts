@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 //MODELS
 import { CurrencyValue, ServiceTypeValue } from 'src/app/models/types';
@@ -165,7 +165,7 @@ export class ServiceTypeValueListComponent implements OnInit, OnDestroy {
   
 
 		if(this.forma.invalid || this.forma.value.value_id == 0){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}
  

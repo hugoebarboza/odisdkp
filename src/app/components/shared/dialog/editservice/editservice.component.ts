@@ -6,30 +6,29 @@ import { MatSnackBar } from '@angular/material';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
-//FIREBASE
-//import { AngularFireAuth } from 'angularfire2/auth';
+// FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
 
-//MODELS
-import { 
+// MODELS
+import {
   Comuna,
   Customer,
   Provincia,
   ProjectServiceCategorie,
   ProjectServiceType,
-  Region, 
-  Service, 
-  User, 
+  Region,
+  Service,
+  User,
   UserFirebase} from '../../../../models/types';
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
 
-//SERVICES
+// SERVICES
 import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
 
 
@@ -39,7 +38,7 @@ import { CdfService, CountriesService, OrderserviceService, ProjectsService, Use
   styleUrls: ['./editservice.component.css']
 })
 export class EditServiceComponent implements OnInit, OnDestroy {
-  public title: string = 'Editar';
+  public title = 'Editar';
   public comunas: Comuna[] = [];
   public customers: Customer [] = [];
   created: FormControl;
@@ -47,16 +46,16 @@ export class EditServiceComponent implements OnInit, OnDestroy {
 
   destinatarios = [];
   public en: any;
-  emailbody:string ='';
-  emailprojectservicetype:any;
-  emailcomuna:any;
+  emailbody = '';
+  emailprojectservicetype: any;
+  emailcomuna: any;
   emailuser: any;
 
 
   public identity: any;
-  public isLoading:boolean = false;
+  public isLoading = false;
   public label: boolean;
-  public loading: boolean = true;
+  public loading = true;
 
   /** 
   public new_accept_edpdate: any;
@@ -311,18 +310,18 @@ export class EditServiceComponent implements OnInit, OnDestroy {
     this._project.updateService(this.token.token, this.service_data, this.project_id, this.data.service_id).subscribe(
       (data:any) => { 
         if(data.status === 'success'){
-          swal('Proyecto actualizado exitosamente ', '', 'success' );
+          Swal.fire('Proyecto actualizado exitosamente ', '', 'success' );
           this.afterEditService();
           if(this.destinatario.length > 0)  {
             //SEND CDF MESSAGING AND NOTIFICATION
             this.sendCdf(this.destinatario);
           }                
         }else{
-          swal('No fue posible procesar su solicitud', '', 'error');
+          Swal.fire('No fue posible procesar su solicitud', '', 'error');
         }				  
           },
           (err: HttpErrorResponse) => {	
-        swal('No fue posible procesar su solicitud', err.error.message, 'error');
+        Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
         });
   }
 

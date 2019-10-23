@@ -186,3 +186,33 @@
         padding: 8px 24px;
     }
 }
+
+.sidenav-content {
+    width: 100%;
+    height: 720px;
+    background: rgb(244, 245, 247);
+  }
+  
+.sidenav {
+    width: 370px;
+    padding: 17px;
+}
+
+::ng-deep .mat-drawer-content { 
+    overflow-x: hidden !important;
+}
+
+::ng-deep .mat-drawer-inner-container { 
+    overflow-x: hidden !important;
+}
+  
+.containerb {
+    background: rgb(244, 245, 247);
+}
+
+.mat-button {
+    outline: 0;
+    border: none;
+}
+
+  

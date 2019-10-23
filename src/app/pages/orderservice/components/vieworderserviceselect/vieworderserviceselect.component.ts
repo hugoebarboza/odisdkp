@@ -10,18 +10,18 @@ import { takeUntil } from 'rxjs/operators/takeUntil';
 import { Subscription } from 'rxjs/Subscription';
 
 
-//MODELS
+// MODELS
 import { Order, ServiceEstatus } from '../../../../models/types';
 
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
-//SERVICES
+// SERVICES
 import { CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
 
-declare var swal: any;
+import Swal from 'sweetalert2';
 
 
 interface Inspector {
@@ -43,13 +43,20 @@ interface Region {
 })
 export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
 
+  @Input() id: number;
+  @Input() view: number;
+  @Output() portalevent: EventEmitter<number>;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatSort, { static: true }) matSort: MatSort;
+
+
   category_id: number;
   date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
   datedesde: FormControl;
   datehasta: FormControl;
-  datasourceLength: number = 0;
+  datasourceLength = 0;
   dataSource: MatTableDataSource<Order[]>;
-  es:any;
+  es: any;
   filteredRegion: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
   filteredInspectorMulti: ReplaySubject<Inspector[]> = new ReplaySubject<Inspector[]>(1);
   filteredRegionMulti: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
@@ -151,11 +158,6 @@ selectedColumnnEstatus = {
 
 
 
-  @Input() id : number;
-  @Input() view : number;
-  @Output() portalevent: EventEmitter<number>;
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  @ViewChild(MatSort, { static: true }) matSort: MatSort;
 
   columnsSelect: Array<any> = [
     { name: 'select', label: 'Select' },
@@ -187,9 +189,9 @@ selectedColumnnEstatus = {
     public dataService: OrderserviceService,
   ) { 
     this.identity = this._userService.getIdentity();
-    this.token = this._userService.getToken();    
+    this.token = this._userService.getToken();
     this.portalevent = new EventEmitter();
-    this.role = 5; //USUARIOS INSPECTORES
+    this.role = 5;
     this.dataSource = new MatTableDataSource();
     this.select = 1;
 
@@ -251,104 +253,104 @@ selectedColumnnEstatus = {
   }
 
 
-  commit(){
+  commit() {
 
-    if(!this.form4.value || this.form4.value <= 0){
+    if (!this.form4.value || this.form4.value <= 0) {
       return;
     }
 
-    if(!this.selection.selected){
-      swal('Solicitud no procesada', 'No existen órdenes seleccionadas', 'error');
+    if (!this.selection.selected) {
+      Swal.fire('Solicitud no procesada', 'No existen órdenes seleccionadas', 'error');
       return;
     }
 
-    
-    swal({
+    Swal.fire({
       title: '¿Esta seguro?',
       text: 'Esta a punto de cambiar las órdenes seleccionadas ',
-      icon: 'warning',
-      buttons: true,
-      dangerMode: true,
+      type: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
     })
 
     .then( commit => {
 
-      if (commit) {
-        if(this.selection.selected){
+      if (commit.value) {
+        if (commit) {
 
-          if(this.form5.value){
-            if(this.form5.value.action5 == 1 && this.form5.value.estatus > 0){
-              this.paramset = 'status_id';
-              this.paramvalue = this.form5.value.estatus;
+
+          if (this.selection.selected) {
+
+            if (this.form5.value) {
+              if (this.form5.value.action5 === 1 && this.form5.value.estatus > 0) {
+                this.paramset = 'status_id';
+                this.paramvalue = this.form5.value.estatus;
+              }
+              if (this.form5.value.action5 === 2 && this.form5.value.asignado > 0) {
+                this.paramset = 'assigned_to';
+                this.paramvalue = this.form5.value.asignado;
+              }
+              if (this.form5.value.action5 === 3 && this.form5.value.vencimiento) {
+                this.paramset = 'vencimiento_date';
+                this.paramvalue = this.form5.value.vencimiento;
+              }
             }
-            if(this.form5.value.action5 == 2 && this.form5.value.asignado > 0){
-              this.paramset = 'assigned_to';
-              this.paramvalue = this.form5.value.asignado;
+
+            if (this.selection.selected && this.id && this.paramset && this.paramvalue && this.form4.value.action4 === 1) {
+
+              this.isLoadingResults = true;
+              this.subscription = this.dataService.updateMass(this.token.token, this.selection.selected, this.id, this.paramset, this.paramvalue)
+              .subscribe( response => {
+                if (!response) {
+                  this.isLoadingResults = false;
+                  return;
+                }
+                if (response.status === 'success') { 
+                  this.isLoadingResults = false;
+                  Swal.fire('Órdenes actualizadas', 'exitosamente', 'success' );
+                } else {
+                  this.isLoadingResults = false;
+                  Swal.fire('Importante', response.message, 'error');
+                }
+              },
+                error => {
+                  this.isLoadingResults = false;
+                  Swal.fire('Importante', error, 'error');
+                }
+              );
             }
-            if(this.form5.value.action5 == 3 && this.form5.value.vencimiento){
-              this.paramset = 'vencimiento_date';
-              this.paramvalue = this.form5.value.vencimiento;          
+
+            if (this.selection.selected && this.id && this.form4.value.action4 === 2) {
+              this.isLoadingResults = true;
+              this.subscription = this.dataService.deleteMass(this.token.token, this.selection.selected, this.id)
+              .subscribe( response => {
+                if (!response) {
+                  this.isLoadingResults = false;
+                  return;
+                }
+                if (response.status === 'success') {
+                  this.isLoadingResults = false;
+                  Swal.fire('Órdenes eliminadas', 'exitosamente', 'success' );
+                } else {
+                  this.isLoadingResults = false;
+                  Swal.fire('Importante', response.message, 'error');
+                }
+              },
+                error => {
+                  this.isLoadingResults = false;
+                  Swal.fire('Importante', error, 'error');
+                }
+              );
             }
+
+
+
           }
-
-
-                    
-          if(this.selection.selected && this.id && this.paramset && this.paramvalue && this.form4.value.action4 == 1){
-
-            this.isLoadingResults = true;
-            this.subscription = this.dataService.updateMass(this.token.token, this.selection.selected, this.id, this.paramset, this.paramvalue)
-            .subscribe( response => {
-              if(!response){
-                this.isLoadingResults = false;
-                return;        
-              }
-              if(response.status == 'success'){ 
-                this.isLoadingResults = false;
-                swal('Órdenes actualizadas', 'exitosamente', 'success' );
-              }else{
-                this.isLoadingResults = false;
-                swal('Importante', response.message, 'error');
-              }
-            },
-              error => {
-                this.isLoadingResults = false;                
-                //swal('Importante', error.error.message, 'error');
-                swal('Importante', error, 'error');
-              }                               
-            );
-          }/*else{
-            swal('Solicitud no procesada', 'Los valores seleccionados no coinciden', 'error');
-            return;
-          }*/
-          
-
-          if(this.selection.selected && this.id && this.form4.value.action4 == 2){
-            this.isLoadingResults = true;
-            this.subscription = this.dataService.deleteMass(this.token.token, this.selection.selected, this.id)
-            .subscribe( response => {
-              if(!response){
-                this.isLoadingResults = false;
-                return;        
-              }
-              if(response.status == 'success'){ 
-                this.isLoadingResults = false;
-                swal('Órdenes eliminadas', 'exitosamente', 'success' );
-              }else{
-                this.isLoadingResults = false;
-                swal('Importante', response.message, 'error');
-              }
-            },
-              error => {
-                this.isLoadingResults = false;                
-                //swal('Importante', error.error.message, 'error');
-                swal('Importante', error, 'error');
-              }                               
-            );
-          }
-            
-
-
         }
+      } else if (commit.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Cancelado',
+        );
       }
     });
 

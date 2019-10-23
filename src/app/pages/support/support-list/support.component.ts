@@ -14,13 +14,14 @@ import * as firebase from 'firebase/app';
 import { UserFirebase } from '../../../models/types';
 import * as _moment from 'moment';
 
+import Swal from 'sweetalert2';
 
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestoreCollection, AngularFirestore} from '@angular/fire/firestore';
 
 
 const moment = _moment;
-declare var swal: any;
+
 
 @Component({
   selector: 'app-support',
@@ -416,74 +417,80 @@ export class SupportComponent implements OnInit, OnDestroy  {
     if (item) {
 
       const that = this;
-      swal({
+      Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar registro de solicitud ',
-        icon: 'warning',
-        buttons: true,
-        dangerMode: true,
+        type: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Si',
+        cancelButtonText: 'No'
       }).then( borrar => {
-        if (borrar) {
+        if (borrar.value) {
+          if (borrar) {
+            this._afs.collection(this.supportcase + '/' + item + '/comments').get().subscribe(
+              res => {
+                if (res.size > 0) {
+                  // console.log(res);
+                  this._afs.collection(this.supportcase + '/' + item + '/activity').get().subscribe(
+                    activity => {
+                      if (activity.size > 0) {
+                        activity.forEach((doc) => {
+                          this._afs.doc(this.supportcase + '/' + item + '/activity/' + doc.id).delete();
+                        });
+                      }
+                    });
+                  Swal.fire('Importante', 'No se puede eliminar solicitud ya que contiene comentarios', 'error');
+                } else {
+                  // console.log('Document does not exist comments');
+                  this._afs.collection(this.supportcase + '/' + item + '/caseFiles').get().subscribe(
+                    caseFiles => {
+                      if (caseFiles.size > 0) {
+                        // console.log(caseFiles);
 
-          this._afs.collection(this.supportcase + '/' + item + '/comments').get().subscribe(
-            res => {
-              if (res.size > 0) {
-                // console.log(res);
-                this._afs.collection(this.supportcase + '/' + item + '/activity').get().subscribe(
-                  activity => {
-                    if (activity.size > 0) {
-                      activity.forEach((doc) => {
-                        this._afs.doc(this.supportcase + '/' + item + '/activity/' + doc.id).delete();
-                      });
-                    }
-                  });
-                swal('Importante', 'No se puede eliminar solicitud ya que contiene comentarios', 'error');
-               } else {
-                // console.log('Document does not exist comments');
-                this._afs.collection(this.supportcase + '/' + item + '/caseFiles').get().subscribe(
-                  caseFiles => {
-                    if (caseFiles.size > 0) {
-                      // console.log(caseFiles);
-
-                      caseFiles.forEach((doc) => {
-                        const cfiles = doc.data();
-                        cfiles.id = doc.id;
-                        // console.log(cfiles);
-                        const storageRef = firebase.storage().ref();
-                        storageRef.child(this.supportcase + '/' + item + '/caseFiles/' + cfiles.nombre).delete();
-                        this._afs.doc(this.supportcase + '/' + item + '/caseFiles/' + cfiles.id).delete();
-                      });
-
-                      this._afs.collection(this.supportcase).doc(item).delete().then(function() {
-                        swal('Solicitud eliminada', '', 'success');
-                        that.snackBar.open('Eliminando Registro de Solicitud.', '', {duration: 2000 } );
-                      }).catch(function(_error) {
-                        swal('A ocurrido un error al eliminar solicitud', '', 'error');
-                      });
-
-                      this._afs.collection(this.supportcase + '/' + item + '/activity').get().subscribe(
-                        activity => {
-                          if (activity.size > 0) {
-                            activity.forEach((doc) => {
-                              this._afs.doc(this.supportcase + '/' + item + '/activity/' + doc.id).delete();
-                            });
-                          }
+                        caseFiles.forEach((doc) => {
+                          const cfiles = doc.data();
+                          cfiles.id = doc.id;
+                          // console.log(cfiles);
+                          const storageRef = firebase.storage().ref();
+                          storageRef.child(this.supportcase + '/' + item + '/caseFiles/' + cfiles.nombre).delete();
+                          this._afs.doc(this.supportcase + '/' + item + '/caseFiles/' + cfiles.id).delete();
                         });
 
-                     } else {
-                      // console.log('Document does not exist caseFiles');
-                      this._afs.collection(this.supportcase).doc(item).delete().then(function() {
-                        swal('Solicitud eliminada', '', 'success');
-                      }).catch(function(_error) {
-                        swal('A ocurrido un error al eliminar solicitud', '', 'error');
-                      });
-                     }
-                  }
-                );
-               }
-            }
-          );
+                        this._afs.collection(this.supportcase).doc(item).delete().then(function() {
+                          Swal.fire('Solicitud eliminada', '', 'success');
+                          that.snackBar.open('Eliminando Registro de Solicitud.', '', {duration: 2000 } );
+                        }).catch(function(_error) {
+                          Swal.fire('A ocurrido un error al eliminar solicitud', '', 'error');
+                        });
 
+                        this._afs.collection(this.supportcase + '/' + item + '/activity').get().subscribe(
+                          activity => {
+                            if (activity.size > 0) {
+                              activity.forEach((doc) => {
+                                this._afs.doc(this.supportcase + '/' + item + '/activity/' + doc.id).delete();
+                              });
+                            }
+                          });
+
+                      } else {
+                        // console.log('Document does not exist caseFiles');
+                        this._afs.collection(this.supportcase).doc(item).delete().then(function() {
+                          Swal.fire('Solicitud eliminada', '', 'success');
+                        }).catch(function(_error) {
+                          Swal.fire('A ocurrido un error al eliminar solicitud', '', 'error');
+                        });
+                      }
+                    }
+                  );
+                }
+              }
+            );
+
+          }
+        } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+          Swal.fire(
+            'Cancelado',
+          );
         }
       });
 

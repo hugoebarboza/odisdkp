@@ -12,7 +12,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireUploadTask } from 'angularfire2/storage';
 
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 import { ToastrService } from 'ngx-toastr';
 
@@ -429,7 +429,7 @@ export class AddcaseComponent implements OnInit {
     this.CARPETA_ARCHIVOS = this.supportcase;
 
     if (this.forma.invalid) {
-      swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
       return;
     }
 
@@ -495,7 +495,7 @@ export class AddcaseComponent implements OnInit {
         }
 
         that.onNoClick();
-        swal('Solicitud registrada', '', 'success');
+        Swal.fire('Solicitud registrada', '', 'success');
 
         /** 
         if (array_usersInfo && array_usersInfo.length > 0 && docRef) {

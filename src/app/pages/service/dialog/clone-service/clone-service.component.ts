@@ -4,7 +4,7 @@ import { MatSnackBar, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 import { HttpErrorResponse } from '@angular/common/http';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 //MODELS
 import { Proyecto, Service, ServiceValue, ServiceEstatus, ServiceTypeValue } from 'src/app/models/types';
@@ -168,7 +168,7 @@ export class CloneServiceComponent implements OnInit {
 
   confirmClone(){
 		if(this.forma.invalid || !this.forma.value.order_number || !this.forma.value.service_name){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
     }
     //console.log(this.forma.value);
@@ -191,16 +191,16 @@ export class CloneServiceComponent implements OnInit {
             this.afterCloneAddServiceStatus(data, this.lastInsertedId);  
           }
           this.onNoClick();
-          swal('Proyecto clonado exitosamente ', '', 'success' );
+          Swal.fire('Proyecto clonado exitosamente ', '', 'success' );
           this.refresh();
         }else{
           this.onNoClick();
-          swal('No fue posible procesar su solicitud', '', 'error');
+          Swal.fire('No fue posible procesar su solicitud', '', 'error');
         }				  
           },
           (err: HttpErrorResponse) => {	
           this.onNoClick();
-          swal('No fue posible procesar su solicitud', err.error.message, 'error');
+          Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
         });
 
 

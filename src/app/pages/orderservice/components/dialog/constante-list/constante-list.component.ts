@@ -3,7 +3,7 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 //MODELS
 import { Constante } from 'src/app/models/types';
@@ -139,7 +139,7 @@ export class ConstanteListComponent implements OnInit, OnDestroy {
   
 
 		if(this.forma.invalid){
-			swal('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
 			return;
 		}
  

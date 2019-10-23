@@ -10,7 +10,7 @@ import { Color, Constante, CurrencyValue, Giro, Mercado, Order, Proyecto, Projec
 // TOASTER MESSAGES
 // import { ToastrService } from 'ngx-toastr';
 
-import swal from 'sweetalert';
+import Swal from 'sweetalert2';
 
 
 @Injectable({
@@ -610,16 +610,14 @@ export class ProjectsService {
     		(data: any) => { 
 				  //this.toasterService.success('Proyecto eliminado.', 'Exito', {timeOut: 6000,});
 					if(data.status === 'success'){
-						swal('Proyecto eliminado exitosamente con ID: ', id +'.', 'success' );
+                        Swal.fire('Proyecto eliminado exitosamente con ID: ', id +'.', 'success' );
 					}else{
-						swal('No fue posible procesar su solicitud', '', 'error');
+                        Swal.fire('No fue posible procesar su solicitud', '', 'error');
 					}				  
 			      },
 			      (err: HttpErrorResponse) => {	
 			      this.error = err.error.message;
-			      //console.log(err.error.message);
-				  //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-				  swal('No fue posible procesar su solicitud', '', 'error');
+                  Swal.fire('No fue posible procesar su solicitud', '', 'error');
 			    });
 	}
 

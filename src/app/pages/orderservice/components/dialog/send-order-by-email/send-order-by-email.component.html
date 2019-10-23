@@ -48,7 +48,7 @@
                 <br>
                 <br>
                 <div class="row row-custom">                                                
-                    <button mat-raised-button color="accent"  class="margin-left" (click)="sendEmail(1)">
+                    <button mat-raised-button color="accent"  class="margin-left" (click)="sendEmail(1)" [disabled]="destinatario.length === 0">
                         Guardar y enviar correo
                     </button>                            
                 </div>

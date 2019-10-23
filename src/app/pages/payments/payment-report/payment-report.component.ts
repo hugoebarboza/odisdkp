@@ -1,5 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { TooltipPosition } from '@angular/material';
 
 // SERVICES
 import { OrderserviceService, PaymentService, UserService } from 'src/app/services/service.index';
@@ -10,8 +11,6 @@ const moment = _moment;
 
 // TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
-
-
 
 @Component({
   selector: 'app-payment-report',
@@ -74,6 +73,12 @@ export class PaymentReportComponent implements OnInit {
     today: 'Hoy',
     clear: 'Borrar'
   };
+
+  positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
+  positionheaderaction = new FormControl(this.positionOptions[2]);
+  positiondatasourceaction = new FormControl(this.positionOptions[3]);
+  positionleftaction = new FormControl(this.positionOptions[4]);
+  positionrightaction = new FormControl(this.positionOptions[5]);
 
 
   constructor(
