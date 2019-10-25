@@ -3,9 +3,9 @@ import { MatProgressButtonOptions } from 'mat-progress-buttons';
 import { MatSnackBar } from '@angular/material';
 import { FormControl} from '@angular/forms';
 
-import { FileItem } from '../../../models/types';
+import { FileItem } from 'src/app/models/types';
 
-import { CargaImagenesService } from '../../../services/service.index';
+import { CargaImagenesService } from 'src/app/services/service.index';
 
 
 // MOMENT

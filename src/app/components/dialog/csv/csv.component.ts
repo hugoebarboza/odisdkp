@@ -6,28 +6,25 @@ import { Subscription } from 'rxjs/Subscription';
 import { takeUntil } from 'rxjs/operators';
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
 
-//MODELS
+// MODELS
 import {
-  Order, 
+  Order,
   ServiceEstatus,
   ServiceType,
-  Zona } from '../../../models/types';
+  Zona } from 'src/app/models/types';
 
-
-
-
-//SERVICES
-import { CustomerService, OrderserviceService, ProjectsService } from '../../../services/service.index';
+// SERVICES
+import { CustomerService, OrderserviceService, ProjectsService } from 'src/app/services/service.index';
 
 
 import * as FileSaver from 'file-saver';
 
-//TOASTER MESSAGES
+// TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
 
 

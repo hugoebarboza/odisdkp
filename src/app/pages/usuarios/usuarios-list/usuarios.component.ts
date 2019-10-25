@@ -13,7 +13,7 @@ import { ModalUploadImageComponent } from '../dialog/modaluploadimage/modaluploa
 import { ShowProfileSecurityComponent } from '../dialog/showprofilesecurity/showprofilesecurity.component';
 
 // MODEL
-import { Proyecto } from '../../../models/types';
+import { Proyecto } from 'src/app/models/types';
 
 
 // NGRX REDUX
@@ -22,7 +22,7 @@ import { Proyecto } from '../../../models/types';
 
 
 // SERVICES
-import { SettingsService, UserService } from '../../../services/service.index';
+import { SettingsService, UserService } from 'src/app/services/service.index';
 
 
 

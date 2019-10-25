@@ -8,6 +8,7 @@ import { ToastrService } from 'ngx-toastr';
 // AMCHARTS
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
+import * as am4plugins_timeline from '@amcharts/amcharts4/plugins/timeline';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 
 // SERVICES
@@ -119,6 +120,7 @@ export class KpiProjectAmchartsComponent implements OnInit {
       }
       if (this.kpidatadatetime.length === data.datos.length) {
           this.createamXYChart(this.kpidatadatetime);
+          this.SerpentineChart(this.kpidatadatetime);
           this.isLoading = false;
       }
     } else {
@@ -210,7 +212,7 @@ export class KpiProjectAmchartsComponent implements OnInit {
 
 
   SerpentineChart(datasource: any[]) {
-    console.log(datasource);
+    // console.log(datasource);
     if (datasource && datasource.length > 0) {
       setTimeout(() => {
 
@@ -218,6 +220,47 @@ export class KpiProjectAmchartsComponent implements OnInit {
           Promise.all([
           ])
           .then(() => {
+            // Themes begin
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            const chart = am4core.create('chartdivstepline', am4plugins_timeline.SerpentineChart);
+            chart.levelCount = 3;
+            chart.curveContainer.padding(50, 20, 50, 20);
+
+            chart.data = datasource;
+
+            const dateAxis = chart.xAxes.push(new am4charts.DateAxis() as any);
+            dateAxis.renderer.grid.template.location = 0;
+            dateAxis.renderer.line.disabled = true;
+            dateAxis.cursorTooltipEnabled = false;
+            dateAxis.minZoomCount = 5;
+
+            const valueAxis = chart.yAxes.push(new am4charts.ValueAxis() as any);
+            valueAxis.tooltip.disabled = true;
+            valueAxis.renderer.innerRadius = -50;
+            valueAxis.renderer.radius = 50;
+            chart.seriesContainer.zIndex = -1;
+
+            const series = chart.series.push(new am4plugins_timeline.CurveStepLineSeries());
+            series.fillOpacity = 0.3;
+            series.dataFields.dateX = 'date';
+            series.dataFields.valueY = 'value';
+            series.tooltipText = '{valueY}';
+            series.tooltip.pointerOrientation = 'vertical';
+            series.tooltip.background.fillOpacity = 0.7;
+            series.fill = chart.colors.getIndex(3);
+            series.strokeWidth = 2;
+
+            chart.cursor = new am4plugins_timeline.CurveCursor();
+            chart.cursor.xAxis = dateAxis;
+            chart.cursor.yAxis = valueAxis;
+            chart.cursor.lineY.disabled = true;
+
+            chart.scrollbarX = new am4core.Scrollbar();
+            chart.scrollbarX.width = am4core.percent(80);
+            chart.scrollbarX.align = 'center';
+
           })
           .catch(e => {
               console.error('Error when creating chart', e);

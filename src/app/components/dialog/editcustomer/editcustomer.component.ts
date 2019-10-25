@@ -1,30 +1,28 @@
 import { Component, Inject, OnInit } from '@angular/core';
-// import { Router, ActivatedRoute  } from '@angular/router';
 import { FormControl, Validators  } from '@angular/forms';
-// import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
 
-//MODELS
-import { 
+// MODELS
+import {
   Color,
   Comuna,
-  Constante, 
+  Constante,
   Customer,
-  Giro, 
+  Giro,
   Marca,
-  Mercado, 
+  Mercado,
   Modelo,
   Provincia,
-  Region, 
-  Sector, 
-  Service, 
-  Tarifa, 
-  Zona } from '../../../models/types';
+  Region,
+  Sector,
+  Service,
+  Tarifa,
+  Zona } from 'src/app/models/types';
 
 
-//SERVICES
-import { CountriesService, CustomerService, OrderserviceService, UserService } from '../../../services/service.index';
+// SERVICES
+import { CountriesService, CustomerService, OrderserviceService, UserService } from 'src/app/services/service.index';
 
 
 @Component({
@@ -33,8 +31,8 @@ import { CountriesService, CustomerService, OrderserviceService, UserService } f
   styleUrls: ['./editcustomer.component.css']
 })
 export class EditcustomerComponent implements OnInit {
-  
-  public identity:any;
+
+  public identity: any;
   public provincia: Provincia;
   project_type: number;
   public results: Object = [];
@@ -43,9 +41,9 @@ export class EditcustomerComponent implements OnInit {
   public region: Region;
   private services: Service[] = [];
   public title: string;
-  public token:any;  
+  public token: any;
   public termino: string;
-  
+
   public comuna: Comuna;
   public customer: Customer[] = [];
 

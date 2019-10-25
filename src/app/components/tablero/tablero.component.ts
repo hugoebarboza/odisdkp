@@ -4,17 +4,16 @@ import { ReplaySubject } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 import { Sort, MatPaginator, TooltipPosition, MatDialog, PageEvent } from '@angular/material';
 
+// SERVICES
+import { OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
-//SERVICES
-import { OrderserviceService, ProjectsService, UserService } from '../../services/service.index';
+// MODELS
+import { Order, ServiceEstatus } from 'src/app/models/types';
 
-//MODELS
-import { Order, ServiceEstatus } from '../../models/types';
-
-//DIALOG
+// DIALOG
 import { ShowComponent } from '../dialog/show/show.component';
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
@@ -35,7 +34,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
 
   title = "Tablero de Inspecciones";
   subtitle = "Listado de Inspecciones";
-  
+
   category_id: number;
   /*
   count: Object = [{

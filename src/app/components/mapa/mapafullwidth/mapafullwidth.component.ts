@@ -6,25 +6,25 @@ import { takeUntil } from 'rxjs/operators';
 
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
-//AGM
+// AGM
 import { InfoWindow } from '@agm/core/services/google-maps-types';
 import { MapsAPILoader, MouseEvent} from '@agm/core';
 
-//MODELS
-import { 
+// MODELS
+import {
   Order,
   ServiceEstatus,
   UserGeoreference
- } from '../../../models/types';
+ } from 'src/app/models/types';
 
 
-//SERVICES
-import { CountriesService, MapaService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
+// SERVICES
+import { CountriesService, MapaService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
-//CLASSES
+// CLASSES
 import { Marcador } from '../../../classes/marcador.class';
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
@@ -34,8 +34,8 @@ interface User {
 }
 
 interface Time {
-  hour: any; 
-  minute: any
+  hour: any;
+  minute: any;
 }
 
 @Component({
@@ -48,20 +48,19 @@ export class MapaFullWidthComponent implements OnInit, OnDestroy {
 
   public datedesde: FormControl;
   public identity;
-  public infoWindow: InfoWindow = undefined;  
+  public infoWindow: InfoWindow = undefined;
   public region = new Array();
-  public renderMap: boolean = false;
+  public renderMap = false;
   public token;
   public wayspoints = [];
-  public url: string = "https://www.google.com/";
+  public url = 'https://www.google.com/';
 
   selected = 'option2';
 
   public renderOptions: any = {
       suppressMarkers: true,
-  }  
+  };
 
- 
   public markerOptions = {
       origin: {
           icon: '',

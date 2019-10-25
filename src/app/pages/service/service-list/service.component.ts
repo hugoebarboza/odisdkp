@@ -20,10 +20,10 @@ import { ProjectKpiListComponent } from '../dialog/project-kpi-list/project-kpi-
 import { UserComponent } from '../dialog/user/user.component';
 
 // MODELS
-import { Order, Proyecto } from '../../../models/types';
+import { Order, Proyecto } from 'src/app/models/types';
 
 // SERVICES
-import { ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+import { ProjectsService, SettingsService, UserService } from 'src/app/services/service.index';
 
 
 /*
@@ -44,7 +44,6 @@ export const columns: Columns[] = [
   selector: 'app-service',
   templateUrl: './service.component.html',
   styleUrls: ['./service.component.css'],
-  //providers: [SettingsNgxEasyTableService],
 })
 
 export class ServiceComponent  implements OnInit, OnDestroy {

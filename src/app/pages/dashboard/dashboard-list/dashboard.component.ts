@@ -5,10 +5,10 @@ import { FormBuilder, FormGroup, FormControl } from '@angular/forms';
 
 
 // MODELS
-import { Proyecto, Service } from '../../../models/types';
+import { Proyecto, Service } from 'src/app/models/types';
 
 // SERVICES
-import { MessagingService, ProjectsService, SettingsService, UserService } from '../../../services/service.index';
+import { MessagingService, ProjectsService, SettingsService, UserService } from 'src/app/services/service.index';
 
 // MOMENT
 import * as _moment from 'moment';

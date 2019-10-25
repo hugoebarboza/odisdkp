@@ -1,26 +1,26 @@
-//ANGULAR
+// ANGULAR
 import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
-import { Subscription } from "rxjs/Subscription";
+import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material';
 import { ActivatedRoute, Router } from '@angular/router';
 
-//MODEL
-import { Proyecto } from '../../../models/types';
+// MODEL
+import { Proyecto } from 'src/app/models/types';
 
-//CALENDAR
+// CALENDAR
 import {  CalendarEvent,  CalendarEventTimesChangedEvent,  CalendarView} from 'angular-calendar';
 
 import {  isSameDay,  isSameMonth } from 'date-fns';
 
-//DIALOG
+// DIALOG
 import { AddCalendarComponent } from '../dialog/addcalendar/addcalendar.component';
 
-//SERVICES
-import { SettingsService, UserService } from '../../../services/service.index';
+// SERVICES
+import { SettingsService, UserService } from 'src/app/services/service.index';
 
-//MOMENT
+// MOMENT
 import * as moment from 'moment';
 
 

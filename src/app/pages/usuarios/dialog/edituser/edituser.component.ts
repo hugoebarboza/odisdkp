@@ -8,10 +8,10 @@ import Swal from 'sweetalert2';
 import { MustMatch } from '../../../../helpers/must-match.validator';
 
 // MODELS
-import { User } from '../../../../models/types';
+import { User } from 'src/app/models/types';
 
 // SERVICES
-import { UserService } from '../../../../services/service.index';
+import { UserService } from 'src/app/services/service.index';
 
 
 

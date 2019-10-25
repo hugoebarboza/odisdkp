@@ -20,10 +20,10 @@ import * as FileSaver from 'file-saver';
 import * as firebase from 'firebase/app';
 
 // SERVICES
-import { UserService } from '../../services/service.index';
+import { UserService } from 'src/app/services/service.index';
 
 // MODELS
-import { Item } from '../../models/types';
+import { Item } from 'src/app/models/types';
 
 import * as _moment from 'moment';
 const moment = _moment;

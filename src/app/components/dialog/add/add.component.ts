@@ -12,10 +12,10 @@ import * as _moment from 'moment';
 const moment = _moment;
 
 // SERVICES
-import { CdfService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
+import { CdfService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
 // MODELS
-import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from '../../../models/types';
+import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
 
 interface ObjectServiceType {
       id: number;

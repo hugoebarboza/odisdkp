@@ -11,7 +11,7 @@ import {
 import { Observable } from 'rxjs/Observable';
 
 // SERVICES
-import { UserService } from '../services/service.index';
+import { UserService } from 'src/app/services/service.index';
 
 @Injectable()
 export class HeaderInterceptor implements HttpInterceptor {

@@ -8,29 +8,29 @@ import { MapsAPILoader, MouseEvent} from '@agm/core';
 // import {} from '@types/googlemaps';
 
 
-//AGM
+// AGM
 import { InfoWindow } from '@agm/core/services/google-maps-types'
 
-//MODAL
+// MODAL
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { ModalMapaComponent } from '../../modal/modalmapa/modalmapa.component'; 
 
 
-//MODELS
-import { 
+// MODELS
+import {
   Order,
   ServiceEstatus,
   UserGeoreference
- } from '../../../models/types';
+ } from 'src/app/models/types';
 
 
-//SERVICES
-import { CountriesService, MapaService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
+// SERVICES
+import { CountriesService, MapaService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
-//CLASSES
+// CLASSES
 import { Marcador } from '../../../classes/marcador.class';
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
@@ -40,8 +40,8 @@ interface User {
 }
 
 interface Time {
-  hour: any; 
-  minute: any
+  hour: any;
+  minute: any;
 }
 
 
@@ -54,24 +54,23 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
 
   public datedesde: FormControl;
   public identity;
-  public infoWindow: InfoWindow = undefined;  
+  public infoWindow: InfoWindow = undefined;
   public region = new Array();
-  public renderMap: boolean = false;
+  public renderMap = false;
   public token;
   public wayspoints = [];
-  public url: string = "https://www.google.com/";
+  public url = 'https://www.google.com/';
 
   public renderOptions: any = {
       suppressMarkers: true,
-  }  
+  };
 
- 
   public markerOptions = {
       origin: {
           icon: '',
           infoWindow: `
           <h4>Origen<h4>
-        `          
+        `
       },
       destination: {
           icon: '',

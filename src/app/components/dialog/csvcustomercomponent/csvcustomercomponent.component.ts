@@ -2,23 +2,22 @@ import { Component, OnInit, Inject, OnDestroy } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
-//MATERIAL
+// MATERIAL
 import { MAT_DIALOG_DATA, MatDialogRef, Sort, MatTableDataSource } from '@angular/material';
 
-//MODELS
-import { Customer } from '../../../models/types';
+// MODELS
+import { Customer } from 'src/app/models/types';
 
 
-//UTILITY
+// UTILITY
 import { MatProgressButtonOptions } from 'mat-progress-buttons'
 
-//SERVICES
-import { CustomerService, OrderserviceService } from '../../../services/service.index';
+// SERVICES
+import { CustomerService, ExcelService, OrderserviceService } from 'src/app/services/service.index';
 
-//TOASTER MESSAGES
+// TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';
 
-import { ExcelService } from '../../../services/service.index';
 
 
 

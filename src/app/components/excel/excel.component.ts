@@ -10,10 +10,10 @@ import { Subscription } from 'rxjs/Subscription';
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 
 // SERVICES
-import { DataService, OrderserviceService, UserService } from '../../services/service.index';
+import { DataService, OrderserviceService, UserService } from 'src/app/services/service.index';
 
 // MODEL
-import { Service } from '../../models/types';
+import { Service } from 'src/app/models/types';
 
 // MOMENT
 import * as _moment from 'moment';

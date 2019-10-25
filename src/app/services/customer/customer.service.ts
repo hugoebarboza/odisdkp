@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 // MODELS
-import { Customer } from '../../models/types';
+import { Customer } from 'src/app/models/types';
 
 import Swal from 'sweetalert2';
 

@@ -28,7 +28,7 @@ import { ResetAction } from 'src/app/contador.actions';
 import { SetUserAction } from 'src/app/stores/auth/auth.actions';
 
 // SERVICES
-import { SidenavService, UserService } from '../../../services/service.index';
+import { SidenavService, UserService } from 'src/app/services/service.index';
 
 export interface Item { id: number; }
 

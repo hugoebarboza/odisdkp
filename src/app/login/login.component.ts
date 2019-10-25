@@ -3,11 +3,11 @@ import { FormControl, Validators, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 
 // MODELS
-import { Proyecto, User } from '../models/types';
+import { Proyecto, User } from 'src/app/models/types';
 
 
 // SERVICES
-import { AuthService, DashboardService, SettingsService, UserService } from '../services/service.index';
+import { AuthService, DashboardService, SettingsService, UserService } from 'src/app/services/service.index';
 
 // SETTINGS
 import { GLOBAL } from '../services/global';
@@ -23,9 +23,9 @@ import { MatProgressButtonOptions } from 'mat-progress-buttons';
 import { ToastrService } from 'ngx-toastr';
 
 // NGRX REDUX
-import { AppState } from '../app.reducers';
+import { AppState } from 'src/app/app.reducers';
 import { Store } from '@ngrx/store';
-import { LoginAction } from '../contador.actions';
+import { LoginAction } from 'src/app/contador.actions';
 
 
 // FIREBASE

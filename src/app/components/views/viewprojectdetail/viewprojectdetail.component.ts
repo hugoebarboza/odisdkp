@@ -33,35 +33,35 @@ import { AddTarifaComponent } from '../../../pages/orderservice/components/dialo
 import { AddZonaComponent } from '../../../pages/orderservice/components/dialog/add-zona/add-zona.component';
 
 
-//MATERIAL
+// MATERIAL
 import { MatDialog, MatSnackBar } from '@angular/material';
 
-//MODELS
-import { 
+// MODELS
+import {
   Comuna,
   Customer,
   FileItem,
   Provincia,
   ProjectServiceCategorie,
   ProjectServiceType,
-  Region, 
-  Service, 
-  User, 
-  UserFirebase} from '../../../models/types';
+  Region,
+  Service,
+  User,
+  UserFirebase} from 'src/app/models/types';
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
 
-//SERVICES
-import { CargaImagenesService, CdfService, CountriesService, OrderserviceService, ProjectsService, ZipService, UserService } from '../../../services/service.index';
+// SERVICES
+import { CargaImagenesService, CdfService, CountriesService, OrderserviceService, ProjectsService, ZipService, UserService } from 'src/app/services/service.index';
 
-//UTILITY
+// UTILITY
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 
-export interface Item { id: any, comment: string; created: any, identity: string}
+export interface Item { id: any; comment: string; created: any; identity: string; }
 
 export interface Users {
   id: any;

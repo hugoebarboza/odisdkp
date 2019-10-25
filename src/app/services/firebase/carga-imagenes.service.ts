@@ -3,20 +3,15 @@ import * as firebase from 'firebase/app';
 import { AngularFirestore } from '@angular/fire/firestore';
 
 // MODELS
-import { FileItem, Item } from '../../models/types';
+import { FileItem, Item } from 'src/app/models/types';
 
 import { Observable } from 'rxjs/Observable';
-//import { image } from 'html2canvas/dist/types/css/types/image';
-
 
 
 @Injectable()
 export class CargaImagenesService {
 
-
-  //private itemsCollection: AngularFirestoreCollection<Item>;
   items: Observable<Item[]>;
-  //private itemDoc: AngularFirestoreDocument<Item>;
   item: Observable<Item>;
 
 

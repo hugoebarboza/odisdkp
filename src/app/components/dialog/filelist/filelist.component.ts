@@ -13,10 +13,10 @@ import * as FileSaver from 'file-saver';
 import * as firebase from 'firebase/app';
 
 // SERVICES
-import { ItemFirebaseService } from '../../../services/service.index';
+import { ItemFirebaseService } from 'src/app/services/service.index';
 
 // MODELS
-import { Item } from '../../../models/types';
+import { Item } from 'src/app/models/types';
 
 
 

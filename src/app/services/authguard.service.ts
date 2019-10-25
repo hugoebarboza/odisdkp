@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ActivatedRouteSnapshot, RouterStateSnapshot, CanActivate, Router } from '@angular/router';
-import { AuthService, UserService } from '../services/service.index';
+import { AuthService, UserService } from 'src/app/services/service.index';
 
 // NGRX REDUX
 import { Store } from '@ngrx/store';

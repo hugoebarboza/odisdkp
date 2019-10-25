@@ -575,136 +575,135 @@
                               </nav>
 
                               <div class="tab-content" id="nav-tabContent">
-                                  <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
 
-                                    <br>
-                                    <cdk-virtual-scroll-viewport itemSize="60" class="list-container list-group" *ngIf="comentarios$ !== null">
-                                      <div *cdkVirtualFor="let comentarios of comentarios$ | async">
-                                        
-                                        <div class="fOqogj">
-                                          <div class="SZsdL">
-                                            <div style="display: inline-block; position: relative; outline: 0px; height: 22px; width: 22px;">
-                                              <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
-                                                  <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
-                                              </span>
-                                            </div>
-                                          </div>
-                                          <div class="fLcKLS">  
-                                              <span class="sc-fdcRnX jmTFIN" style="padding-left: 7px;">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
-                                              ha realizado registro de trabajo hace
-                                              <span class="sc-fdcRnX jmTFIN">{{comentarios.create_at | countTime}}</span>
+                                  <br>
+                                  <cdk-virtual-scroll-viewport itemSize="60" class="list-container list-group" *ngIf="comentarios$ !== null">
+                                    <div *cdkVirtualFor="let comentarios of comentarios$ | async">
+                                      
+                                      <div class="fOqogj">
+                                        <div class="SZsdL">
+                                          <div style="display: inline-block; position: relative; outline: 0px; height: 22px; width: 22px;">
+                                            <span class="styledCache__StyledSpan-zohhd2-3 cwXEzS">
+                                                <span role="img" style="background-color: transparent; background-image: url(&quot;https://avatar-cdn.atlassian.com/64dc6928b9d27242b695fc9f0cdb9a3d?s=48&amp;d=https%3A%2F%2Fsecure.gravatar.com%2Favatar%2F64dc6928b9d27242b695fc9f0cdb9a3d%3Fd%3Dmm%26s%3D48%26noRedirect%3Dtrue&quot;); background-position: center center; background-repeat: no-repeat; background-size: cover; border-radius: 50%; display: flex; flex: 1 1 100%; height: 100%; width: 100%;"></span>
+                                            </span>
                                           </div>
                                         </div>
-                                        <div class="fOqogj" style="padding-left: 30px;">
-                                          → {{comentarios.comentario}}
+                                        <div class="fLcKLS">  
+                                            <span class="sc-fdcRnX jmTFIN" style="padding-left: 7px;">{{comentarios.usercomment.name}} {{comentarios.usercomment.surname}}</span>
+                                            ha realizado registro de trabajo hace
+                                            <span class="sc-fdcRnX jmTFIN">{{comentarios.create_at | countTime}}</span>
                                         </div>
-                                
-                                        <div class="fOqogj" style="padding-left: 30px">
-                                          <div class="row float-right row-custom" *ngIf="comentarios.adjuntos">
-                                            
-                                            <div *ngFor="let adjuntos of comentarios.adjuntos">
-                                      
-                                                <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" style="color: #303f9f;" *ngIf="adjuntos.type == 'image/png' || adjuntos.type == 'image/jpg' || adjuntos.type == 'image/jpeg'">
-                                                    <mat-icon aria-label="launch">image</mat-icon>
-                                                </a>
-                                      
-                                                <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent"*ngIf="adjuntos.type == 'application/x-zip-compressed' || adjuntos.type == 'application/x-rar-compressed'">
-                                                  <mat-icon aria-label="launch">work</mat-icon>
-                                                </a> 
-                                      
-                                                <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'application/pdf' || adjuntos.type == 'application/msword' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || adjuntos.type == 'application/vnd.ms-excel' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
-                                                  <mat-icon aria-label="launch">insert_drive_file</mat-icon>
-                                                </a>
-                                      
-                                            </div>
-                                            
-                                          </div>
-                                        </div>
-                                
-                                        <hr width="96%"  noshade="noshade" size="4px" style="color: #303f9f;"/>
-                                        
                                       </div>
-                                    <!--</div>-->
-                                    </cdk-virtual-scroll-viewport>
-
-                                    <div class="example-rate-limit-reached" *ngIf="!comentarios$">
-                                        No se encontraron registros de trabajo.
+                                      <div class="fOqogj" style="padding-left: 30px;">
+                                        → {{comentarios.comentario}}
+                                      </div>
+                              
+                                      <div class="fOqogj" style="padding-left: 30px">
+                                        <div class="row float-right row-custom" *ngIf="comentarios.adjuntos">
+                                          
+                                          <div *ngFor="let adjuntos of comentarios.adjuntos">
+                                    
+                                              <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" style="color: #303f9f;" *ngIf="adjuntos.type == 'image/png' || adjuntos.type == 'image/jpg' || adjuntos.type == 'image/jpeg'">
+                                                  <mat-icon aria-label="launch">image</mat-icon>
+                                              </a>
+                                    
+                                              <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent"*ngIf="adjuntos.type == 'application/x-zip-compressed' || adjuntos.type == 'application/x-rar-compressed'">
+                                                <mat-icon aria-label="launch">work</mat-icon>
+                                              </a> 
+                                    
+                                              <a mat-icon-button href="{{adjuntos.url}}" target="_blank" matTooltip="{{adjuntos.nombre}}" color="accent" *ngIf="adjuntos.type == 'application/pdf' || adjuntos.type == 'application/msword' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' || adjuntos.type == 'application/vnd.ms-excel' || adjuntos.type == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'">
+                                                <mat-icon aria-label="launch">insert_drive_file</mat-icon>
+                                              </a>
+                                    
+                                          </div>
+                                          
+                                        </div>
+                                      </div>
+                              
+                                      <hr width="96%"  noshade="noshade" size="4px" style="color: #303f9f;"/>
+                                      
                                     </div>
-                                  
+                                  <!--</div>-->
+                                  </cdk-virtual-scroll-viewport>
+
+                                  <div class="example-rate-limit-reached" *ngIf="!comentarios$">
+                                      No se encontraron registros de trabajo.
+                                  </div>
+                                
+                                </div>
+
+                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                  <div class="p-3 animated fadeIn Fast">
+                                  <button mat-flat-button style=" background:#F8F8F8;" (click)="toggle()" *ngIf="!toggleContent">
+                                    <mat-icon class="material-icons md-14-color" >comment</mat-icon>
+                                    Comentar
+                                  </button>
+
+
+                                    <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar" *ngIf="toggleContent">
+
+                                      <h2 class="jeEmY">Descripción del Trabajo</h2>
+                                      <mat-form-field appearance="outline" class="example-full-width mat-status">
+                                        <textarea matInput #comentario placeholder="Añadir descripción..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
+                                        <mat-hint align="end">{{comentario.value.length}} / 256</mat-hint>
+                                      </mat-form-field>
+                          
+                                      <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
+                                        <mat-icon>attachment</mat-icon>
+                                        <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >
+                                        <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 7, Max. 7 </strong></span>
+                                      </button>
+                                      
+                                      <div *ngIf="archivos" >
+                                        <mat-chip-list>
+                                          <mat-chip *ngFor="let forFile of archivos; let i = index;" 
+                                            color="primary"
+                                            [removable]="true"
+                                            (removed)="removeFile(i)">
+                                            <span>{{ forFile.archivo.name }}</span>
+                                            <span *ngIf="forFile.progreso &&  forFile.progreso > 0" style="margin-left: 6px; margin-right: 6px;"><strong>{{forFile.progreso}}%</strong></span>
+                                            <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
+                                            <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
+                                            <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
+                                          
+                                            <div class="progress container-fluid">
+                                              <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
+                                            </div>
+                                          </mat-chip>
+                                        </mat-chip-list>
+                                      </div>
+                                      
+                                      <br>
+                          
+                                      <div class="row row-custom">
+                                          
+                                          <button mat-raised-button color="primary" class="margin-left" [disabled]="formComentar.invalid" (click)="addComentario()">
+                                              Guardar           
+                                          </button>
+
+                                          <button mat-raised-button (click)="toggle()" style="margin-left: 4px">Cancelar</button>
+                          
+                                          <!--
+                                          <button mat-raised-button color="warn"> 
+                                              cancelar           
+                                          </button>-->
+                                          
+                                      </div>
+                          
+                                  </form>
+                                  <br>
+                                  <div *ngIf="toggleContent" >
+                                      <div class="row" *ngIf="userFirebase">
+                                          <div class="col-12" >
+                                            <h2 class="jeEmY">Etiquetados</h2>
+                                            <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>
+                                          </div>
+                                      </div>                                                                      
                                   </div>
 
-                              <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-                                <div class="p-3 animated fadeIn Fast">
-                                <button mat-flat-button style=" background:#F8F8F8;" (click)="toggle()" *ngIf="!toggleContent">
-                                   <mat-icon class="material-icons md-14-color" >comment</mat-icon>
-                                   Comentar
-                                </button>
-
-
-                                  <form class="mat-dialog-content" (keydown.tab)="$event.stopPropagation()" [formGroup]="formComentar" *ngIf="toggleContent">
-
-                                    <h2 class="jeEmY">Descripción del Trabajo</h2>
-                                    <mat-form-field appearance="outline" class="example-full-width mat-status">
-                                      <textarea matInput #comentario placeholder="Añadir descripción..."  name="comentario" matTextareaAutosize matAutosizeMinRows=6 matAutosizeMaxRows=10 maxlength="256" formControlName="comentario"   class="form-control" required></textarea>
-                                      <mat-hint align="end">{{comentario.value.length}} / 256</mat-hint>
-                                    </mat-form-field>
-                        
-                                    <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
-                                      <mat-icon>attachment</mat-icon>
-                                      <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >
-                                      <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 7, Max. 7 </strong></span>
-                                    </button>
-                                    
-                                    <div *ngIf="archivos" >
-                                      <mat-chip-list>
-                                        <mat-chip *ngFor="let forFile of archivos; let i = index;" 
-                                          color="primary"
-                                          [removable]="true"
-                                          (removed)="removeFile(i)">
-                                          <span>{{ forFile.archivo.name }}</span>
-                                          <span *ngIf="forFile.progreso &&  forFile.progreso > 0" style="margin-left: 6px; margin-right: 6px;"><strong>{{forFile.progreso}}%</strong></span>
-                                          <mat-icon matChipRemove *ngIf="!forFile.progreso">cancel</mat-icon>
-                                          <mat-icon *ngIf="forFile.progreso &&  (forFile.progreso > 0 && 100 > forFile.progreso)">cloud_upload</mat-icon>
-                                          <mat-icon matChipRemove *ngIf="forFile.progreso && forFile.progreso == 100">cancel</mat-icon>
-                                        
-                                          <div class="progress container-fluid">
-                                            <div class="progress-bar" role="progressbar" [ngStyle]="{ 'width': forFile.progreso + '%' }"></div>
-                                          </div>
-                                        </mat-chip>
-                                      </mat-chip-list>
-                                    </div>
-                                    
-                                    <br>
-                        
-                                    <div class="row row-custom">
-                                        
-                                        <button mat-raised-button color="primary" class="margin-left" [disabled]="formComentar.invalid" (click)="addComentario()">
-                                            Guardar           
-                                        </button>
-
-                                        <button mat-raised-button (click)="toggle()" style="margin-left: 4px">Cancelar</button>
-                        
-                                        <!--
-                                        <button mat-raised-button color="warn"> 
-                                            cancelar           
-                                        </button>-->
-                                        
-                                    </div>
-                        
-                                </form>
-                                <br>
-                                <div *ngIf="toggleContent" >
-                                    <div class="row" *ngIf="userFirebase">
-                                        <div class="col-12" >
-                                          <h2 class="jeEmY">Etiquetados</h2>
-                                          <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>
-                                        </div>
-                                    </div>                                                                      
+                                  </div>
                                 </div>
-
-                                </div>
-                              </div>
-
                               </div>
                           </div>
                       </div>

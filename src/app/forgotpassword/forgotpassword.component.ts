@@ -3,10 +3,10 @@ import { FormControl, Validators, FormGroup } from '@angular/forms';
 import { Router } from '@angular/router';
 
 // MODELS
-import { User } from '../models/types';
+import { User } from 'src/app/models/types';
 
 // SERVICES
-import { UserService } from '../services/service.index';
+import { UserService } from 'src/app/services/service.index';
 
 // UTYLITY
 import Swal from 'sweetalert2';

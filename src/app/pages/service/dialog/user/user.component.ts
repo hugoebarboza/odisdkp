@@ -5,15 +5,15 @@ import { Subscription } from 'rxjs/Subscription';
 
 import Swal from 'sweetalert2';
 
-//MODELS
-import { 
+// MODELS
+import {
   Proyecto,
   Service
-  } from '../../../../models/types';
+  } from 'src/app/models/types';
 
 
-//SERVICES
-import { UserService } from '../../../../services/service.index';
+// SERVICES
+import { UserService } from 'src/app/services/service.index';
 
 
 @Component({

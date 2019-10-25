@@ -8,12 +8,12 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
 // MODEL
-import { Service } from '../../models/types';
+import { Service } from 'src/app/models/types';
 
 // SERVICES
-import { DataService, OrderserviceService, UserService } from '../../services/service.index';
+import { DataService, OrderserviceService, UserService } from 'src/app/services/service.index';
 
-//UTILITY
+// UTILITY
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 import * as moment from 'moment';
 
@@ -672,7 +672,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
                 }
 
               } else {
-                
+
                 observacion_orden = observacion_orden.replace(/\–/g, '-');
                 observacion_orden = observacion_orden.replace(/\&/g, 'Y');
                 const observacion_orden_array: string[] = observacion_orden.split(' ');
@@ -806,7 +806,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
                 'orden_id': '',
                 'parametro': 0,
                 'estatus': '',
-                'banderatracker': false                
+                'banderatracker': false
               };
 
               if (that.liberar) {
@@ -814,8 +814,6 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
               }
 
               if (that.dateend !== undefined) {
-                //const newdateend = moment(that.dateend.value).format('YYYY-MM-DD');
-                //objectJson['vencimiento_date'] = newdateend + ' 23:59:59';
                 objectJson['vencimiento_date'] = that.dateend;
               }
 
@@ -912,7 +910,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
       this.liberar = true;
       this.checkboxAuto = true;
     }
-  }  
+  }
 
   checkUpdateVIN(event) {
     if (!event.checked) {

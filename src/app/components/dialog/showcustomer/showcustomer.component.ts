@@ -1,26 +1,26 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
-//MODELS
-import { 
+// MODELS
+import {
   Color,
   Comuna,
-  Constante, 
+  Constante,
   Customer,
-  Giro, 
+  Giro,
   Marca,
-  Mercado, 
+  Mercado,
   Modelo,
   Provincia,
-  Region, 
-  Sector, 
-  Service, 
-  Tarifa, 
-  Zona } from '../../../models/types';
+  Region,
+  Sector,
+  Service,
+  Tarifa,
+  Zona } from 'src/app/models/types';
 
 
-//SERVICES
-import { CustomerService, OrderserviceService, UserService } from '../../../services/service.index';
+// SERVICES
+import { CustomerService, OrderserviceService, UserService } from 'src/app/services/service.index';
 
 
 @Component({

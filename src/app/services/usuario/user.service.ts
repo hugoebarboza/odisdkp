@@ -10,14 +10,14 @@ import 'rxjs/add/operator/map';
 
 
 // NGRX REDUX
-import { AppState } from '../../app.reducers';
+import { AppState } from 'src/app/app.reducers';
 import { Store } from '@ngrx/store';
-import { LoginAction, ResetAction } from '../../contador.actions';
+import { LoginAction, ResetAction } from 'src/app/contador.actions';
 import { ResetUserAction } from 'src/app/stores/auth/auth.actions';
 
 
 // MODELS
-import { Departamento, Proyecto, User } from '../../models/types';
+import { Departamento, Proyecto, User } from 'src/app/models/types';
 
 
 // SETTINGS

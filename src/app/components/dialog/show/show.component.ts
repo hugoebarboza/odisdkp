@@ -3,23 +3,22 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
 
-//SERVICES
-import { OrderserviceService, UserService } from '../../../services/service.index';
+// SERVICES
+import { OrderserviceService, UserService } from 'src/app/services/service.index';
 
 
-//MODELS
+// MODELS
 import {
   AtributoFirma,
   Order,
   OrderAtributoFirma,
   User
- } from '../../../models/types';
+ } from 'src/app/models/types';
 
 
-//PDF
+// PDF
 import * as jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';  
-//import 'jspdf-autotable';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-show',

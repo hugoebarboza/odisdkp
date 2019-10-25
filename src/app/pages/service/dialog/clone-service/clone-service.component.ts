@@ -6,18 +6,18 @@ import { HttpErrorResponse } from '@angular/common/http';
 
 import Swal from 'sweetalert2';
 
-//MODELS
+// MODELS
 import { Proyecto, Service, ServiceValue, ServiceEstatus, ServiceTypeValue } from 'src/app/models/types';
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
-//SERVICES
+// SERVICES
 import { OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
-import { ServiceType } from '../../../../models/types';
+import { ServiceType } from 'src/app/models/types';
 
-//REDUX
+// REDUX
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
 import { LoginAction } from 'src/app/contador.actions';

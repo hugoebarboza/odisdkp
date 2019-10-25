@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 
 // SERVICES
-import { UserService } from '../../../../services/service.index';
+import { UserService } from 'src/app/services/service.index';
 
 
 @Component({

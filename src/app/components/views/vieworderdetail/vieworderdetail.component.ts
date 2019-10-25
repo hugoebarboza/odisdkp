@@ -4,21 +4,20 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
 import { Observable } from 'rxjs/Observable';
 
-//SERVICES
-import { OrderserviceService, UserService } from '../../../services/service.index';
+// SERVICES
+import { OrderserviceService, UserService } from 'src/app/services/service.index';
 
-//MODELS
-import { Order } from '../../../models/types';
+// MODELS
+import { Order } from 'src/app/models/types';
 
-//SLIDE COMPONENT
+// SLIDE COMPONENT
 import { Options } from 'ng5-slider';
 
-//MOMENT
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
-export interface Item { id: any, comment: string; created: any, identity: string}
+export interface Item { id: any; comment: string; created: any; identity: string; }
 
 @Component({
   selector: 'app-vieworderdetail',

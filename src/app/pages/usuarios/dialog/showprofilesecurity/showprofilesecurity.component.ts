@@ -2,21 +2,21 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
-//HELPERS
+// HELPERS
 import { MustMatch } from '../../../../helpers/must-match.validator';
 
 
-//UTYLITY
+// UTYLITY
 import Swal from 'sweetalert2';
 
-//MODELS
-import { User } from '../../../../models/types';
+// MODELS
+import { User } from 'src/app/models/types';
 
-//SERVICES
-import { UserService } from '../../../../services/service.index';
+// SERVICES
+import { UserService } from 'src/app/services/service.index';
 
 
-@Component({  
+@Component({
   selector: 'app-showprofilesecurity',
   templateUrl: './showprofilesecurity.component.html',
   styleUrls: ['./showprofilesecurity.component.css']

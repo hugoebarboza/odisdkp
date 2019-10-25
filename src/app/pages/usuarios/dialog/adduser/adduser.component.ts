@@ -9,10 +9,10 @@ import { MustMatch } from '../../../../helpers/must-match.validator';
 
 // MODELS
 
-import { Departamento, Proyecto, User } from '../../../../models/types';
+import { Departamento, Proyecto, User } from 'src/app/models/types';
 
 // SERVICES
-import { UserService } from '../../../../services/service.index';
+import { UserService } from 'src/app/services/service.index';
 
 
 @Component({

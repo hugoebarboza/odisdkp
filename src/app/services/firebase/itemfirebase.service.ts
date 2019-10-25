@@ -4,7 +4,7 @@ import { Observable } from 'rxjs/Observable';
 import { map } from 'rxjs/operators';
 
 // MODELS
-import { Item } from '../../models/types';
+import { Item } from 'src/app/models/types';
 
 import * as firebase from 'firebase/app';
 import { AngularFirestore } from '@angular/fire/firestore';

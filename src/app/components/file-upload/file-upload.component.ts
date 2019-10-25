@@ -1,27 +1,22 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { AngularFireUploadTask } from '@angular/fire/storage';
-//import { AngularFireStorage, AngularFireUploadTask } from 'angularfire2/storage';
-//import { AngularFirestore } from 'angularfire2/firestore';
-//import { AngularFirestoreCollection } from '@angular/fire/firestore';
-//import { AngularFirestoreCollection } from 'angularfire2/firestore';
 import { FormControl} from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-// import { finalize } from 'rxjs/operators';
 
-//MATERIAL
+// MATERIAL
 import { MatSnackBar } from '@angular/material';
 
-//MODELS
-import { Item } from '../../models/types';
+// MODELS
+import { Item } from 'src/app/models/types';
 
-//SERVICES
-import { UserService } from '../../services/service.index';
+// SERVICES
+import { UserService } from 'src/app/services/service.index';
 
-//TOASTER MESSAGES
+// TOASTER MESSAGES
 // import { ToastrService } from 'ngx-toastr';
 
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 
@@ -41,12 +36,10 @@ export class FileUploadComponent implements OnInit {
   item: Observable<Item>;
   // private itemsCollection: AngularFirestoreCollection<Item>;
   profileUrl: any;
-  type:any;
+  type: any;
   Url: string;
 
-
-  
-  // Main task 
+  // Main task
   task: AngularFireUploadTask;
   // Progress monitoring
   percentage: Observable<number>;

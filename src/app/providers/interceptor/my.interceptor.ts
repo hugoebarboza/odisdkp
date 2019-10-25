@@ -2,20 +2,19 @@ import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpResponse, HttpRequest, HttpEvent, HttpErrorResponse } from '@angular/common/http';
 import { throwError } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
-// import { of } from 'rxjs/observable/of';
 import { retry, catchError } from 'rxjs/operators';
 import { finalize } from 'rxjs/operators';
 import 'rxjs/add/operator/do';
 import { tap } from 'rxjs/operators';
 
 // NGRX REDUX
-import { AppState } from '../../app.reducers';
+import { AppState } from 'src/app/app.reducers';
 import { Store } from '@ngrx/store';
-import { ShowLoaderAction, HideLoaderAction } from '../../stores/loader/loader.actions';
+import { ShowLoaderAction, HideLoaderAction } from 'src/app/stores/loader/loader.actions';
 
 
 // SERVICES
-import { RequestCacheService } from '../../services/utility/request-cache.service';
+import { RequestCacheService } from 'src/app/services/utility/request-cache.service';
 
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {

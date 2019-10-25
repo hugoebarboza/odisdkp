@@ -5,7 +5,7 @@ import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
 
 // MODELS
-import { Color, Constante, CurrencyValue, Giro, Mercado, Order, Proyecto, ProjectServiceType, Sector, Service, ServiceValue, ServiceType, ServiceTypeValue, Tarifa,  Zona } from '../../models/types';
+import { Color, Constante, CurrencyValue, Giro, Mercado, Order, Proyecto, ProjectServiceType, Sector, Service, ServiceValue, ServiceType, ServiceTypeValue, Tarifa,  Zona } from 'src/app/models/types';
 
 // TOASTER MESSAGES
 // import { ToastrService } from 'ngx-toastr';

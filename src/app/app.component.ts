@@ -12,7 +12,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { Proyecto } from './models/types';
 
 
-import { SettingsService, SidenavService, UserService } from './services/service.index';
+import { SettingsService, SidenavService, UserService } from 'src/app/services/service.index';
 
 
 import { AppState } from './app.reducers';

@@ -3,11 +3,11 @@ import { Subscription } from 'rxjs/Subscription';
 
 import Swal from 'sweetalert2';
 
-//MODEL
-import { Proyecto, User } from '../../../models/types';
+// MODEL
+import { Proyecto, User } from 'src/app/models/types';
 
-//SERVICES
-import { SettingsService, UserService } from '../../../services/service.index';
+// SERVICES
+import { SettingsService, UserService } from 'src/app/services/service.index';
 
 
 
@@ -17,17 +17,17 @@ import { SettingsService, UserService } from '../../../services/service.index';
   styles: ['./profile.component.css']
 })
 export class ProfileComponent implements OnInit, OnDestroy {
-  fotoperfil: string = '';
-  file:any;
+  fotoperfil = '';
+  file: any;
   imagenSubir: File;
   imagenTemp: any;
   identity: any;
-  isLoading: boolean = true;
-  isLoadingPerfil: boolean = true;
-  isSave: boolean = false;
+  isLoading = true;
+  isLoadingPerfil = true;
+  isSave = false;
   proyectos: Array<Proyecto>;
   subscription: Subscription;
-  show:boolean = false;
+  show = false;
   title: string;
   token: any;
   usuario: User;
@@ -81,23 +81,19 @@ export class ProfileComponent implements OnInit, OnDestroy {
 		}
 
 
-    this.user = new User('',usuario.dni, usuario.dv, '',usuario.name, usuario.email, '', this.identity.role, usuario.surname, '', 1, usuario.telefono1, usuario.telefono2, 1, 1, 1);
+    this.user = new User('', usuario.dni, usuario.dv, '', usuario.name, usuario.email, '', this.identity.role, usuario.surname, '', 1, usuario.telefono1, usuario.telefono2, 1, 1, 1);
 
     this.subscription = this._userService.updateProfile(this.token.token, this.user, this.identity.sub).subscribe(
       response => {
-				if(response.status == 'success'){
+				if (response.status === 'success') {
           Swal.fire('Usuario actualizado', this.user.email, 'success' );
           this.isLoading = false;
           this.isSave = false;
-          //this.ngOnInit();
-					//this.status = response.status;	
-					//this.user = new User('','','','',1,'','',1);
-				}else{
+				} else {
 
           Swal.fire('Importante', response.message, 'error');
           this.isLoading = false;
           this.isSave = false;
-					//this.status = 'error';
 				}
 	 		},
 	 		error => {

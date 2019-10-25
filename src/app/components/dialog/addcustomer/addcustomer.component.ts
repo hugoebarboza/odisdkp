@@ -3,26 +3,26 @@ import { FormControl, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
-//MODELS
-import { 
+// MODELS
+import {
   Color,
   Comuna,
-  Constante, 
+  Constante,
   Customer,
-  Giro, 
+  Giro,
   Marca,
-  Mercado, 
+  Mercado,
   Modelo,
   Provincia,
-  Region, 
-  Sector, 
-  Service, 
-  Tarifa, 
-  Zona } from '../../../models/types';
+  Region,
+  Sector,
+  Service,
+  Tarifa,
+  Zona } from 'src/app/models/types';
 
 
-//SERVICES
-import { CountriesService, CustomerService, OrderserviceService, UserService } from '../../../services/service.index';
+// SERVICES
+import { CountriesService, CustomerService, OrderserviceService, UserService } from 'src/app/services/service.index';
 
 @Component({
   selector: 'app-addcustomer',

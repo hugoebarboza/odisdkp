@@ -12,13 +12,13 @@ import { MatSelect } from '@angular/material';
 import {TooltipPosition} from '@angular/material';
 
 
-import { 
+import {
   Customer,
   Proyecto,
   Tarifa
-  } from '../../../models/types';
+  } from 'src/app/models/types';
 
-//DIALOG
+// DIALOG
 import { AddcustomerComponent } from '../../dialog/addcustomer/addcustomer.component';
 import { CsvCustomerComponentComponent } from '../../dialog/csvcustomercomponent/csvcustomercomponent.component';
 import { EditcustomerComponent } from '../../dialog/editcustomer/editcustomer.component';
@@ -27,12 +27,12 @@ import { ShowcustomerComponent } from '../../dialog/showcustomer/showcustomer.co
 import { SettingscustomerComponent } from '../../dialog/settingscustomer/settingscustomer.component';
 
 
-//SERVICES
-import { CountriesService, CustomerService, ExcelService, UserService } from '../../../services/service.index';
+// SERVICES
+import { CountriesService, CustomerService, ExcelService, UserService } from 'src/app/services/service.index';
 
 
 
-//MOMENT
+// MOMENT
 import * as _moment from 'moment';
 const moment = _moment;
 

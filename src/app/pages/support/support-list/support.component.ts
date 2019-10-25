@@ -11,7 +11,7 @@ import { switchMap, map, tap } from 'rxjs/operators';
 import { ShowcaseComponent } from '../dialog/showcase/showcase.component';
 import { FormGroup} from '@angular/forms';
 import * as firebase from 'firebase/app';
-import { UserFirebase } from '../../../models/types';
+import { UserFirebase } from 'src/app/models/types';
 import * as _moment from 'moment';
 
 import Swal from 'sweetalert2';

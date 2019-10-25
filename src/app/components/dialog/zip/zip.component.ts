@@ -8,10 +8,10 @@ import { Subscription } from 'rxjs/Subscription';
 const moment = _moment;
 
 // MODELS
-import { Comuna, Provincia, Region } from '../../../models/types';
+import { Comuna, Provincia, Region } from 'src/app/models/types';
 
 // SERVICES
-import { CountriesService, UserService } from '../../../services/service.index';
+import { CountriesService, UserService } from 'src/app/services/service.index';
 
 @Component({
   selector: 'app-zip',

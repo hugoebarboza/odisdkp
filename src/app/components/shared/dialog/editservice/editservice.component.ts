@@ -21,7 +21,7 @@ import {
   Region,
   Service,
   User,
-  UserFirebase} from '../../../../models/types';
+  UserFirebase} from 'src/app/models/types';
 
 // MOMENT
 import * as _moment from 'moment';
@@ -29,7 +29,7 @@ const moment = _moment;
 
 
 // SERVICES
-import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
+import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
 
 @Component({

@@ -6,7 +6,8 @@ import { MatSnackBar } from '@angular/material';
 @Injectable()
 export class ErrorsHandler implements ErrorHandler {
 
-    public errorMessage = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
+    public errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
+    public errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
     public errorMessage400 = '400 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
 
     constructor(private _snackBar: MatSnackBar) { }
@@ -22,8 +23,12 @@ export class ErrorsHandler implements ErrorHandler {
                   console.error('Browser Offline!');
               } else {
                   // Handle Http Error (4xx, 5xx, ect.)
-                  if (error.status === 500) {
+                  if (error.status === 0) {
                     this._snackBar.open(this.errorMessage, '', {duration: 3000, });
+                    // Se debe redireccionar a pagina 500
+                  }
+                  if (error.status === 500) {
+                    this._snackBar.open(this.errorMessage500, '', {duration: 3000, });
                     // Se debe redireccionar a pagina 500
                   }
                   if (error.status === 400) {

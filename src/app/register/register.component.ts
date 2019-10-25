@@ -3,14 +3,14 @@ import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import Swal from 'sweetalert2';
 
-//HELPERS
+// HELPERS
 import { MustMatch } from '../helpers/must-match.validator';
 
-//MODELS
-import { User } from '../models/types';
+// MODELS
+import { User } from 'src/app/models/types';
 
-//SERVICES
-import { SettingsService, UserService } from '../services/service.index';
+// SERVICES
+import { SettingsService, UserService } from 'src/app/services/service.index';
 
 
 @Component({

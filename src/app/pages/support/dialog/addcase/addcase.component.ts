@@ -19,7 +19,7 @@ import { ToastrService } from 'ngx-toastr';
 import * as _moment from 'moment';
 
 // MODEL
-import { UserFirebase } from '../../../../models/types';
+import { UserFirebase } from 'src/app/models/types';
 
 // MOMENT
 const moment = _moment;

@@ -114,15 +114,20 @@
                                     <div class="col-12" *ngIf="kpidatadatetime && kpidatadatetime.length > 0 ">
                                     <div class="row d-flex justify-content-center">
                                         <div class="col-12">
-                                            <div id="chartdiv"></div>
-                                        </div>
-                                        <div class="w-100"></div>
-                                        <div class="col-12">
-                                            <div class="row d-flex justify-content-end">
-                                                <button type="button" mat-button (click)="SerpentineChart(kpidatadatetime)" *ngIf="kpidatadatetime && kpidatadatetime.length > 0">
-                                                Ver más
-                                                </button>
-                                            </div>
+                                            <nav>
+                                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="nav-general-tab" data-toggle="tab" href="#nav-general" role="tab" aria-controls="nav-general" aria-selected="true">General</a>
+                                                    <a class="nav-item nav-link" id="nav-detail-tab" data-toggle="tab" href="#nav-detail" role="tab" aria-controls="nav-detail" aria-selected="false">Detalle</a>
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content" id="nav-tabContent">
+                                                <div class="tab-pane fade show active" id="nav-general" role="tabpanel" aria-labelledby="nav-general-tab">
+                                                    <div id="chartdiv"></div>
+                                                </div>
+                                                <div class="tab-pane fade" id="nav-detail" role="tabpanel" aria-labelledby="nav-detail-tab">
+                                                    <div id="chartdivstepline"></div>
+                                                </div>
+                                            </div>              
                                         </div>
                                     </div>
                                     </div>
@@ -130,8 +135,7 @@
                                     <div class="col-12" *ngIf="kpidatadatetime && kpidatadatetime.length == 0">
                                         <div class="row d-flex justify-content-center ">
                                             <div class="dGHjBt">
-                                                <p class="hAzwqT">                                                        
-                                                </p>
+                                                <p class="hAzwqT"></p>
                                                 <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
                                             </div>                    
                                         </div>    

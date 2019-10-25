@@ -4,7 +4,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import Swal from 'sweetalert2';
 
 // SERVICES
-import { UserService } from '../../../../services/service.index';
+import { UserService } from 'src/app/services/service.index';
 
 
 @Component({
@@ -14,22 +14,22 @@ import { UserService } from '../../../../services/service.index';
 })
 export class ModalUploadImageComponent implements OnInit {
 
-  title = "Perfil del Usuario - Imagen";
+  title = 'Perfil del Usuario - Imagen';
 
-  file:any;
-  fotoperfil: string = '';
-  isLoadingPerfil: boolean = true;
+  file: any;
+  fotoperfil = '';
+  isLoadingPerfil = true;
   imagenSubir: File;
   imagenTemp: any;
   token: any;
-  usuario:any;
+  usuario: any;
   urlImagenTemp: any;
 
   constructor(
     public _userService: UserService,
     public dialogRef: MatDialogRef<ModalUploadImageComponent>,
     @Inject(MAT_DIALOG_DATA) public data
-  ) { 
+  ) {
     this.token = this._userService.getToken();
     this.usuario = this.data.usuario;
   }

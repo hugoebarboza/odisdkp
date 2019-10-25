@@ -7,11 +7,11 @@ import { MustMatch } from '../../../helpers/must-match.validator';
 import Swal from 'sweetalert2';
 
 // MODEL
-import { Proyecto } from '../../../models/types';
+import { Proyecto } from 'src/app/models/types';
 
 
 // SERVICES
-import { SettingsService, UserService, AuthService } from '../../../services/service.index';
+import { SettingsService, UserService, AuthService } from 'src/app/services/service.index';
 
 
 import { AngularFireAuth } from '@angular/fire/auth';

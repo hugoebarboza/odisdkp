@@ -13,10 +13,10 @@ import * as _moment from 'moment';
 const moment = _moment;
 
 // SERVICES
-import { CdfService, OrderserviceService, ProjectsService, UserService } from '../../../services/service.index';
+import { CdfService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
 // MODELS
-import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from '../../../models/types';
+import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
 
 
 @Component({
@@ -24,14 +24,6 @@ import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 
   templateUrl: './edit.component.html',
   styleUrls: ['./edit.component.css'],
   providers: [
-    // The locale would typically be provided on the root module of your application. We do it at
-    // the component level here, due to limitations of our example generation script.
-    // {provide: MAT_DATE_LOCALE, useValue: { useUtc: true }},
-    // `MomentDateAdapter` and `MAT_MOMENT_DATE_FORMATS` can be automatically provided by importing
-    // `MatMomentDateModule` in your applications root module. We provide it at the component level
-    // here, due to limitations of our example generation script.
-    // {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    // {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
 })
 export class EditComponent implements OnInit, OnDestroy {

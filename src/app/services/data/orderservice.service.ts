@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { GLOBAL } from '../global';
-import {BehaviorSubject} from 'rxjs';
+import { MatSnackBar } from '@angular/material';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+import { throwError } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 import Swal from 'sweetalert2';
@@ -10,28 +11,33 @@ import Swal from 'sweetalert2';
 // MODELS
 import {  Order, ServiceEstatus } from 'src/app/models/types';
 
+import { GLOBAL } from '../global';
 
 @Injectable()
 	export class OrderserviceService {
 
-		public url:string;
-		dialogData: any;
-		error: boolean;
-		
-		dataChange: BehaviorSubject<Order[]> = new BehaviorSubject<Order[]>([]);
+	public url:string;
+	dialogData: any;
+	error: boolean;
+	errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
+	errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
+	
+	
+	dataChange: BehaviorSubject<Order[]> = new BehaviorSubject<Order[]>([]);
 
-		constructor(
-			public _http: HttpClient,
-			)
-		{
-			this.url = GLOBAL.url;
-			this.error = false;
-		}
+	constructor(
+		private _snackBar: MatSnackBar,
+		public _http: HttpClient,
+		)
+	{
+		this.url = GLOBAL.url;
+		this.error = false;
+	}
 
 	
- 	getDialogData() {
+  getDialogData() {
     	return this.dialogData;
-  	}
+  }
 
 
   getQuery( query:string, token: string | string[] ): Observable<any> {
@@ -84,7 +90,10 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
     }
 
     try {
-        return await this._http.get<any>(requestUrl, {headers: headers}).toPromise();
+		return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
+        .then()
+        .catch((error) => { this.handleError (error); }
+        );		
    } catch (err) {
         console.log(err);
    }
@@ -430,5 +439,31 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
 						});
 		}
 
-		
+	private handleError( error: HttpErrorResponse ) {
+		if (!navigator.onLine) {
+			// Handle offline error
+			console.error('Browser Offline!');
+		} else {
+			if (error instanceof HttpErrorResponse) {
+			// Server or connection error happened
+			if (!navigator.onLine) {
+				console.error('Browser Offline!');
+			} else {
+				// Handle Http Error (4xx, 5xx, ect.)
+				if (error.status === 500) {
+					this._snackBar.open(this.errorMessage500, '', {duration: 7000, });
+				}
+	
+				if (error.status === 0) {
+					this._snackBar.open(this.errorMessage, '', {duration: 7000, });
+				}
+			}
+			} else {
+				// Handle Client Error (Angular Error, ReferenceError...)
+				console.error('Client Error!');
+			}
+			return throwError(error.error);
+		}
+	}
+				
 }

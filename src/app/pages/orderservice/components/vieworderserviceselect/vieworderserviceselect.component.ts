@@ -11,7 +11,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 
 // MODELS
-import { Order, ServiceEstatus } from '../../../../models/types';
+import { Order, ServiceEstatus } from 'src/app/models/types';
 
 
 // MOMENT
@@ -19,7 +19,7 @@ import * as _moment from 'moment';
 const moment = _moment;
 
 // SERVICES
-import { CountriesService, OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
+import { CountriesService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
 import Swal from 'sweetalert2';
 

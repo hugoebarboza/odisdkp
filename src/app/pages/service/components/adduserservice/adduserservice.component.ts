@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 
-//SERVICES
-import { UserService } from '../../../../services/service.index';
+// SERVICES
+import { UserService } from 'src/app/services/service.index';
 import { Subscription } from 'rxjs/Subscription';
 
 

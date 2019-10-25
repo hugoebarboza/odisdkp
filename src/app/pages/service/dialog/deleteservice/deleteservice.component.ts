@@ -2,17 +2,17 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
-//MODELS
+// MODELS
 import { Proyecto, Service, User } from 'src/app/models/types';
 
-//REDUX
+// REDUX
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/app.reducers';
 import { LoginAction } from 'src/app/contador.actions';
 
 
-//SERVICES
-import { OrderserviceService, ProjectsService, UserService } from '../../../../services/service.index';
+// SERVICES
+import { OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
 
 @Component({
@@ -61,12 +61,12 @@ export class DeleteServiceComponent implements OnInit {
                     return;
                   }
                   if(response.status == 'success'){
-                    this.services = response.datos;                  
+                    this.services = response.datos;
                     this.project = this.services['project']['project_name'];
                     this.project_id = this.services['project']['id'];
                     this.service_name = this.services['service_name'];
                     if(this.services['servicedetail'][0]){
-                      this.service_detail = response.datos.servicedetail;                      
+                      this.service_detail = response.datos.servicedetail;
                       this.service_data = response.datos.servicedetail[0];
                     }    
                     
