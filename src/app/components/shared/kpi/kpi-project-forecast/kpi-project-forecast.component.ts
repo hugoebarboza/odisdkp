@@ -136,7 +136,9 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
   };
 
   // AM CHARTS
-  chart: any;
+  private chartxy: any;
+  private chartpie: any;
+
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionheaderaction = new FormControl(this.positionOptions[2]);
@@ -206,9 +208,13 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+
     this.zone.runOutsideAngular(() => {
-      if (this.chart) {
-          this.chart.dispose();
+      if (this.chartxy) {
+          this.chartxy.dispose();
+      }
+      if (this.chartpie) {
+        this.chartpie.dispose();
       }
     });
   }
@@ -690,7 +696,7 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
                   columnTemplate.strokeWidth = 2;
                   columnTemplate.strokeOpacity = 1;
 
-                  this.chart = chart;
+                  this.chartxy = chart;
               })
               .catch(e => {
                   console.error('Error when creating chart', e);
@@ -756,6 +762,8 @@ export class KpiProjectForecastComponent implements OnInit, OnChanges, OnDestroy
                   chart.legend = new am4charts.Legend();
 
                   chart.data = datasource;
+
+                  this.chartpie = chart;
 
               })
               .catch(e => {

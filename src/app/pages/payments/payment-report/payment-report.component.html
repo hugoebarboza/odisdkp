@@ -423,6 +423,118 @@
                                     </mat-card>
                                 </div>
 
+                                <div class="jmuLsE" *ngIf="!isLoadingPaymentStacked">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                            Producción por Servicio (mensual hasta la fecha).
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <mat-card class="container-fluid">
+                                    <mat-card-content>                    
+                                    <div class="row d-flex justify-content-center p-2" >
+                                        <div class="container-fluid" >
+                                        <div class="row">    
+                                                <div class="col-12" *ngIf="kpipaymentprojecstacked && kpipaymentprojecstacked.length > 0 ">
+                                                <div class="row d-flex justify-content-center">
+                                                    <div id="chartdivstacked" style="width: 100%; height: 500px" ></div>
+                                                </div>
+                                                </div>
+                                                <div class="col-12" *ngIf="kpipaymentprojecstacked && kpipaymentprojecstacked.length == 0">
+                                                    <div class="row d-flex justify-content-center ">
+                                                        <div class="dGHjBt">
+                                                            <p class="hAzwqT">                                                        
+                                                            </p>
+                                                            <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                        </div>                    
+                                                    </div>    
+                                                </div>        
+                                        </div>
+                                        </div>                
+                                    </div>
+                                    </mat-card-content>
+                                    </mat-card>            
+                                </div>
+
+                                
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<br>
+<br>
+<div class="row animated fadeIn" >
+        <div class="col">
+            <div class="jfCYPT">
+                <div class="jfCYPT">
+                    <div class="didcdr" data-test-selector="profile-worked-with">
+                        <div class="iDwfcE" >
+                            <div class="eCdVoi">
+                                <div class="jNlJOD">
+                                    <span>
+                                        Resumen Económico.
+                                    </span>
+                                </div>
+                            </div>    
+                            <div>
+                            <div class="container-fluid" *ngIf="isLoadingPaymentProject">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="row d-flex justify-content-center">
+                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingPaymentProject" ></mat-spinner>
+                                        </div>                        
+                                    </div>
+                                </div>
+                            </div>
+            
+                            <div class=" dIOqge" >
+                                <div class="jmuLsE" *ngIf="!isLoadingPaymentProject">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">        
+                                            <span>
+                                            Producción (3 meses anteriores).
+                                            </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <mat-card class="container-fluid">
+                                    <mat-card-content>                    
+                                    <div class="row d-flex justify-content-center p-2" >
+                                        <div class="container-fluid" >
+                                        <div class="row">
+    
+                                                <div class="col-12" *ngIf="kpipaymentproject && kpipaymentproject.length > 0 ">
+                                                <div class="row d-flex justify-content-center">
+                                                    
+                                                </div>
+                                                </div>
+                                                <div class="col-12" *ngIf="kpipaymentproject && kpipaymentproject.length == 0">
+                                                    <div class="row d-flex justify-content-center ">
+                                                        <div class="dGHjBt">
+                                                            <p class="hAzwqT">                                                        
+                                                            </p>
+                                                            <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                        </div>                    
+                                                    </div>    
+                                                </div>        
+                                        </div>
+                                        </div>    
+                                    </div>
+                                    </mat-card-content>
+                                    </mat-card>
+                                </div>
+
                                 <div class="jmuLsE" *ngIf="!isLoadingPaymentMonth">
                                     <div class="row">
                                         <div class="col-sm">
@@ -470,4 +582,3 @@
         </div>
     </div>
 </div>
-    

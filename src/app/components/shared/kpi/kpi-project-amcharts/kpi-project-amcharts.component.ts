@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnDestroy } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
 
@@ -25,10 +25,13 @@ const moment = _moment;
   templateUrl: './kpi-project-amcharts.component.html',
   styleUrls: ['./kpi-project-amcharts.component.css']
 })
-export class KpiProjectAmchartsComponent implements OnInit {
+export class KpiProjectAmchartsComponent implements OnInit, OnDestroy {
 
   @Input() id: number;
   @Input() projectid: number;
+
+  private chartxy: any;
+  private chartserpentine: any;
 
   formulario: FormGroup;
   identity: any;
@@ -85,6 +88,18 @@ export class KpiProjectAmchartsComponent implements OnInit {
       this.getDataDateTime(this.projectid, this.kpidateoption, this.id);
     }
   }
+
+  ngOnDestroy() {
+    this.zone.runOutsideAngular(() => {
+      if (this.chartxy) {
+          this.chartxy.dispose();
+      }
+      if (this.chartserpentine) {
+        this.chartserpentine.dispose();
+      }
+    });
+  }
+
 
   async getDataDateTime(project: number, term: string, service: number) {
 
@@ -173,6 +188,7 @@ export class KpiProjectAmchartsComponent implements OnInit {
             chart.scrollbarX = scrollbarX;
             dateAxis.start = 0.8;
             dateAxis.keepSelection = true;
+            this.chartxy = chart;
 
             /*
             function generateChartData() {
@@ -260,6 +276,8 @@ export class KpiProjectAmchartsComponent implements OnInit {
             chart.scrollbarX = new am4core.Scrollbar();
             chart.scrollbarX.width = am4core.percent(80);
             chart.scrollbarX.align = 'center';
+
+            this.chartserpentine = chart;
 
           })
           .catch(e => {

@@ -15,7 +15,7 @@ import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/fire
 import { AngularFireAuth } from '@angular/fire/auth';
 
 
-//DIALOG
+// DIALOG
 import { EditServiceComponent } from '../../../components/shared/shared.index';
 import { ShowcustomerComponent } from '../../../components/dialog/showcustomer/showcustomer.component';
 import { StatusComponent } from '../../../pages/orderservice/components/dialog/status/status.component';

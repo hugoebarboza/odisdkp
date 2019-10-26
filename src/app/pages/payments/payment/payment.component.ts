@@ -3,8 +3,10 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { Proyecto } from 'src/app/models/types';
 import { UserService } from 'src/app/services/service.index';
 import { Subscription } from 'rxjs/Subscription';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import * as _moment from 'moment';
+
 
 
 @Component({
@@ -20,7 +22,8 @@ export class PaymentComponent implements OnInit,  OnChanges {
   project_name: string;
   title: String = 'Estado de Pago';
   services: any = [];
-  id: Number;
+  items: any;
+  id = new BehaviorSubject(this.items);
   sub: any;
   identity: any;
   token: any;
@@ -54,11 +57,11 @@ export class PaymentComponent implements OnInit,  OnChanges {
   startData() {
 
     this._route.params.subscribe(params => {
-      this.id = +params['id'];
-      if (this.id) {
-
+      this.id.next(params);
+      // this.id = +params['id'];
+      if (this.id.value) {
         this.loading = false;
-        this.project = this.filter();
+        this.project = this.filter(Number(this.id.value.id));
         this.services = this.project.service;
         if (this.project !== 'Undefined' && this.project !== null && this.project) {
           this.project_name = this.project.project_name;
@@ -70,11 +73,11 @@ export class PaymentComponent implements OnInit,  OnChanges {
 
   }
 
-  filter() {
-    if (this.proyectos && this.id) {
+  filter(id: number) {
+    if (this.proyectos && id > 0) {
       for (let i = 0; i < this.proyectos.length; i += 1) {
         const result = this.proyectos[i];
-        if (result.id === this.id) {
+        if (result.id === id) {
             return result;
         }
       }

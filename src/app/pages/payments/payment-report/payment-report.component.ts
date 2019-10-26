@@ -1,9 +1,6 @@
-import { Component, OnInit, Input, NgZone } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnDestroy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
-
-// MODELS
-import { Month } from 'src/app/models/types';
 
 
 // SERVICES
@@ -27,7 +24,7 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
   templateUrl: './payment-report.component.html',
   styleUrls: ['./payment-report.component.css']
 })
-export class PaymentReportComponent implements OnInit {
+export class PaymentReportComponent implements OnInit, OnDestroy {
 
   @Input() id: number;
   @Input() project: any;
@@ -36,15 +33,15 @@ export class PaymentReportComponent implements OnInit {
   formulario: FormGroup;
   isLoading = true;
   isLoadingPaymentProject = true;
+  isLoadingPaymentStacked = true;
   isLoadingPaymentMonth = true;
   kpipayment = [];
   kpipaymentproject = [];
   kpipaymentprojectmonth = [];
+  kpipaymentprojecstacked = [];
   kpidateoption: any = [];
   kpidatatable = [];
-  kpitotalactivity = 0;
-  kpitotalactivityvalue = 0;
-  kpitotalrevenue = 0;
+
   service: any;
   serviceestatus = [];
   servicetype = [];
@@ -52,6 +49,8 @@ export class PaymentReportComponent implements OnInit {
 
 
   // CHART OPTIONS
+  private chartxy: any;
+  private chartpie: any;
   view: any[] = [1280, 400];
 
   // options
@@ -88,22 +87,6 @@ export class PaymentReportComponent implements OnInit {
     clear: 'Borrar'
   };
 
-  mesactual: any;
-  months: Month[] = [
-    {value: 1, name: 'January'},
-    {value: 2, name: 'February'},
-    {value: 3, name: 'March'},
-    {value: 4, name: 'April'},
-    {value: 5, name: 'May'},
-    {value: 6, name: 'June'},
-    {value: 7, name: 'July'},
-    {value: 8, name: 'August'},
-    {value: 9, name: 'September'},
-    {value: 10, name: 'October'},
-    {value: 11, name: 'November'},
-    {value: 12, name: 'December'}
-  ];
-
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionheaderaction = new FormControl(this.positionOptions[2]);
@@ -123,6 +106,7 @@ export class PaymentReportComponent implements OnInit {
 
   }
 
+
   ngOnInit() {
 
     this.formulario = new FormGroup({
@@ -133,29 +117,30 @@ export class PaymentReportComponent implements OnInit {
       // status: new FormControl (null)
     });
 
-    if (this.id > 0) {
-      this.servicetype = [];
-      this.serviceestatus = [];
-
-      const mm = moment().month('month').format('MM');
-
-      for (let e = 0; e < this.months.length; e++) {
-        // tslint:disable-next-line:radix
-        if ( parseInt(mm) === this.months[e]['value']) {
-          this.mesactual = this.months[e]['name'];
+      const projectid: number = this.id;
+      if ( projectid && projectid > 0 ) {
+        this.servicetype = [];
+        this.serviceestatus = [];
+        if (this.formulario.value.dateoptions) {
+          this.getData(projectid, this.formulario.value.dateoptions);
+          this.getDataPaymentProject(projectid, 'month');
+          this.getDataPaymentMonth(projectid, 'month');
+          this.getDataPaymentProjectStacked(projectid, 'service');
         }
       }
-
-      if (this.id > 0 && this.formulario.value.dateoptions && this.mesactual) {
-        this.getData(this.id, this.formulario.value.dateoptions);
-        this.getDataPaymentProject(this.id);
-        this.getDataPaymentMonth(this.id, 'month');
-      }
-
-    }
-
-
   }
+
+  ngOnDestroy() {
+    this.zone.runOutsideAngular(() => {
+      if (this.chartxy) {
+          this.chartxy.dispose();
+      }
+      if (this.chartpie) {
+        this.chartpie.dispose();
+      }
+    });
+  }
+
 
   onResize(event: any) {
     if (event.target.innerWidth > 1080) {
@@ -176,25 +161,25 @@ export class PaymentReportComponent implements OnInit {
     const data: any = await this.getDataPayment(id, term);
 
     if (data && data.datos) {
-      // console.log(data.datos);
-      let index = 0;
-      let count = 0;
-      let activityvalue = 0;
-      let revenue = 0;
 
+      const params: ArraySingle = {atribute: 'name', value: 'value_count'};
+      this.kpipayment = await this.arraypush(data.datos, params);
+      this.kpidatatable = await this.arraypushmulti(data.datos);
+      this.isLoading = false;
+
+      /*
       for (let i = 0; i < data.datos.length; i++) {
           count = count + Number(data.datos[i]['user_count']);
           activityvalue = activityvalue + Number(data.datos[i]['value']);
           revenue = revenue + Number(data.datos[i]['value_count']);
           if (revenue > 0) {
             const object: Single = {
-              name: data.datos[i]['name'],
+              name: data.datos[i]['service_name'],
               value: data.datos[i]['value_count'],
             };
 
             const objecttable: Table = {
-              name: data.datos[i]['name'],
-              shortname: data.datos[i]['shortname'],
+              name: data.datos[i]['service_name'],
               date: data.datos[i]['date'],
               activity: data.datos[i]['user_count'],
               value: data.datos[i]['value'],
@@ -211,7 +196,9 @@ export class PaymentReportComponent implements OnInit {
       index = index + 1;
       }
 
+      console.log(this.kpipayment.length);
       if (this.kpipayment.length === data.datos.length) {
+        console.log('pasooooooooooooooo');
         this.isLoading = false;
         this.kpitotalactivity = count;
         this.kpitotalactivityvalue = activityvalue;
@@ -219,7 +206,6 @@ export class PaymentReportComponent implements OnInit {
         if (this.kpitotalactivity && this.kpitotalactivityvalue && this.kpitotalrevenue) {
           const objecttable: Table = {
             name: 'Totales:',
-            shortname: '',
             date: '',
             activity: this.kpitotalactivity,
             value: this.kpitotalactivityvalue,
@@ -230,8 +216,9 @@ export class PaymentReportComponent implements OnInit {
       }
 
       if ((index === data.datos.length) && (this.kpipayment.length === 0)) {
+        console.log('***************************');
         this.isLoading = false;
-      }
+      } */
 
     } else {
       this.kpipayment = [];
@@ -244,8 +231,6 @@ export class PaymentReportComponent implements OnInit {
 
     this.kpipayment = [];
     this.kpidatatable = [];
-    this.kpitotalactivity = 0;
-    this.kpitotalrevenue = 0;
     let datedesde = new FormControl();
     let datehasta = new FormControl();
 
@@ -303,7 +288,7 @@ export class PaymentReportComponent implements OnInit {
   }
 
 
-  async getDataPaymentProject(id: number) {
+  async getDataPaymentProject(id: number, term: string) {
 
     if (id && id > 0) {
 
@@ -311,13 +296,13 @@ export class PaymentReportComponent implements OnInit {
       this.isLoadingPaymentProject = true;
       const year: any = new Date().getFullYear();
 
-      const data: any = await this._kpiPayment.getProjectPaymentDate(this.token.token, id, this.mesactual, year);
+      const data: any = await this._kpiPayment.getProjectPaymentDate(this.token.token, id, term, year);
       if (data && data.datos) {
         for (let x = 0; x < data.datos.length; x++) {
           if (x === 0) {
             const object: Single = {
               name: 'Mes (' + data.datos[x]['date'] + ' )',
-              value: Math.round(data.datos[x]['value_count']),
+              value: Number(Math.round(data.datos[x]['value_count'])),
             };
             if (object && object.value > 0) {
               this.kpipaymentproject.unshift(object);
@@ -326,7 +311,7 @@ export class PaymentReportComponent implements OnInit {
           if (x === 1) {
             const object: Single = {
               name: 'Mes (' + data.datos[x]['date'] + ' )',
-              value: Math.round(data.datos[x]['value_count']),
+              value: Number(Math.round(data.datos[x]['value_count'])),
             };
             if (object && object.value > 0) {
               this.kpipaymentproject.unshift(object);
@@ -335,7 +320,7 @@ export class PaymentReportComponent implements OnInit {
           if (x === 2) {
             const object: Single = {
               name: 'Mes (' + data.datos[x]['date'] + ' )',
-              value: Math.round(data.datos[x]['value_count']),
+              value: Number(Math.round(data.datos[x]['value_count'])),
             };
             if (object && object.value > 0) {
               this.kpipaymentproject.unshift(object);
@@ -347,7 +332,6 @@ export class PaymentReportComponent implements OnInit {
         }
         if (this.kpipaymentproject.length === data.datos.length) {
           this.isLoadingPaymentProject = false;
-          // console.log(this.kpipaymentservice);
           this.createamXYChart(this.kpipaymentproject);
         }
       } else {
@@ -374,26 +358,6 @@ export class PaymentReportComponent implements OnInit {
         if (this.kpipaymentprojectmonth.length > 0) {
           this.createamPieChart(this.kpipaymentprojectmonth);
         }
-
-        /* for (let i = 0; i < data.datos.length; i++) {
-            const object: Single = {
-              name: data.datos[i]['shortname'],
-              value: Math.round(data.datos[i]['value_count']),
-            };
-            if (object) {
-              this.kpipaymentprojectmonth.push(object);
-            }
-            if (i + 1 === data.datos.length) {
-              this.isLoadingPaymentMonth = false;
-            }
-        }
-
-
-        if (this.kpipaymentprojectmonth.length === data.datos.length) {
-          this.isLoadingPaymentMonth = false;
-          this.createamPieChart(this.kpipaymentprojectmonth);
-        } */
-
       } else {
         this.kpipaymentprojectmonth = [];
         this.isLoadingPaymentMonth = false;
@@ -401,16 +365,86 @@ export class PaymentReportComponent implements OnInit {
     }
   }
 
+
+  async getDataPaymentProjectStacked(id: number, term: string) {
+
+    if (id && id > 0) {
+
+      this.kpipaymentproject = [];
+      this.isLoadingPaymentStacked = true;
+      const year: any = new Date().getFullYear();
+
+      const data: any = await this._kpiPayment.getProjectPaymentDate(this.token.token, id, term, year);
+      if (data && data.datos) {
+        const params: ArraySingle = {atribute: 'shortname', value: 'value_count'};
+        this.kpipaymentprojecstacked = await this.arraypush(data.datos, params);
+        this.isLoadingPaymentStacked = false;
+        if (this.kpipaymentprojecstacked.length > 0) {
+          const mm = moment().month('month').format('MMMM');
+          const datavalue: object = [{ }];
+          datavalue[0]['name'] = mm;
+          for (let i = 0; i < this.kpipaymentprojecstacked.length; i++) {
+
+            datavalue[0]['value' + i] = this.kpipaymentprojecstacked[i]['value'];
+
+          }
+          this.createamStacked(datavalue, this.kpipaymentprojecstacked);
+        }
+      } else {
+        this.kpipaymentproject = [];
+        this.isLoadingPaymentStacked = false;
+      }
+
+    }
+  }
+
+
   async arraypush (array = [], params: ArraySingle) {
     const data = [];
       if (array && array.length > 0) {
         for (let i = 0; i < array.length; i++) {
-          const object = {name: array[i][params.atribute],  value: array[i][params.value] };
+          const object = {name: array[i][params.atribute],  value: Number(array[i][params.value]) };
           // const object = { name: array[i]['shortname'], value: Math.round(array[i]['value_count']) };
           if (object && object.value > 0) {
             data.push(object);
           }
         }
+        return data;
+      }
+  }
+
+  async arraypushmulti (array = []) {
+    const data = [];
+    let count = 0;
+    let activityvalue = 0;
+    let revenue = 0;
+
+      if (array && array.length > 0) {
+        for (let i = 0; i < array.length; i++) {
+          count = count + Number(array[i]['user_count']);
+          activityvalue = activityvalue + Number(array[i]['value']);
+          revenue = revenue + Number(array[i]['value_count']);
+          const object: Table = {
+            name: array[i]['name'],
+            shortname: array[i]['shortname'],
+            date: array[i]['date'],
+            activity: array[i]['user_count'],
+            value: array[i]['value'],
+            revenue: array[i]['value_count']
+          };
+          if (object && object.value > 0 && object.revenue > 0) {
+            data.push(object);
+          }
+        }
+        const objecttablelast: Table = {
+          name: 'Totales:',
+          shortname: '',
+          date: '',
+          activity: count,
+          value: activityvalue,
+          revenue: revenue
+        };
+        data.push(objecttablelast);
         return data;
       }
   }
@@ -464,6 +498,8 @@ export class PaymentReportComponent implements OnInit {
                   const columnTemplate = series.columns.template;
                   columnTemplate.strokeWidth = 2;
                   columnTemplate.strokeOpacity = 1;
+
+                  this.chartxy = chart;
 
               })
               .catch(e => {
@@ -532,6 +568,8 @@ export class PaymentReportComponent implements OnInit {
 
                   chart.data = datasource;
 
+                  this.chartpie = chart;
+
               })
               .catch(e => {
                   console.error('Error when creating chart', e);
@@ -541,6 +579,73 @@ export class PaymentReportComponent implements OnInit {
     }
   }
 
+  createamStacked(datasource: any, dataseries: any []) {
+    if (datasource && datasource.length > 0) {
+      setTimeout(() => {
+        this.zone.runOutsideAngular(() => {
+          Promise.all([
+          ])
+              .then(() => {
+
+                // Themes begin
+                am4core.useTheme(am4themes_animated);
+                // Themes end
+
+                const chart = am4core.create('chartdivstacked', am4charts.XYChart);
+                chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
+
+                chart.data = datasource;
+
+                chart.colors.step = 2;
+                chart.padding(30, 30, 10, 30);
+                chart.legend = new am4charts.Legend();
+
+                const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+                categoryAxis.dataFields.category = 'name';
+                categoryAxis.renderer.grid.template.location = 0;
+
+                const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+                valueAxis.min = 0;
+                valueAxis.max = 100;
+                valueAxis.strictMinMax = true;
+                valueAxis.calculateTotals = true;
+                valueAxis.renderer.minWidth = 50;
+
+                for (let i = 0; i < dataseries.length; i++) {
+                  const series1 = chart.series.push(new am4charts.ColumnSeries());
+                  series1.columns.template.width = am4core.percent(80);
+                  series1.columns.template.tooltipText =
+                    // tslint:disable-next-line:quotemark
+                    "{name}: {valueY.totalPercent.formatNumber('#.00')}%";
+                  series1.name = dataseries[i]['name'];
+                  series1.dataFields.categoryX = 'name';
+                  const valuey = 'value' + i;
+                  series1.dataFields.valueY = valuey;
+                  series1.dataFields.valueYShow = 'totalPercent';
+                  series1.dataItems.template.locations.categoryX = 0.5;
+                  series1.stacked = true;
+                  series1.tooltip.pointerOrientation = 'vertical';
+
+                  const bullet1 = series1.bullets.push(new am4charts.LabelBullet());
+                  bullet1.interactionsEnabled = false;
+                  // tslint:disable-next-line:quotemark
+                  bullet1.label.text = "{valueY.totalPercent.formatNumber('#.00')}%";
+                  bullet1.label.fill = am4core.color('#ffffff');
+                  bullet1.locationY = 0.5;
+                }
+
+
+
+                // chart.scrollbarX = new am4core.Scrollbar();
+              })
+              .catch(e => {
+                  console.error('Error when creating chart', e);
+              });
+        });
+      }, 2000);
+    }
+
+  }
 
 }
 
