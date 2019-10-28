@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Proyecto } from 'src/app/models/types';
 import { UserService } from 'src/app/services/service.index';
@@ -14,7 +14,7 @@ import * as _moment from 'moment';
   templateUrl: './payment.component.html',
   styleUrls: ['./payment.component.css']
 })
-export class PaymentComponent implements OnInit,  OnChanges {
+export class PaymentComponent implements OnInit {
 
   loading: Boolean = true;
   project: any;
@@ -22,14 +22,12 @@ export class PaymentComponent implements OnInit,  OnChanges {
   project_name: string;
   title: String = 'Estado de Pago';
   services: any = [];
-  items: any;
-  id = new BehaviorSubject(this.items);
+  item: any;
+  id = new BehaviorSubject(this.item);
   sub: any;
   identity: any;
   token: any;
   subscription: Subscription;
-
-
 
   constructor(
     private _route: ActivatedRoute,
@@ -41,27 +39,18 @@ export class PaymentComponent implements OnInit,  OnChanges {
       this.identity = this._userService.getIdentity();
       this.proyectos = this._userService.getProyectos();
       this.token = this._userService.getToken();
-
   }
 
 
   ngOnInit() {
-    this.startData();
-  }
-
-
-  ngOnChanges(_changes: SimpleChanges) {
-    this.startData();
-  }
-
-  startData() {
-
     this._route.params.subscribe(params => {
-      this.id.next(params);
-      // this.id = +params['id'];
-      if (this.id.value) {
+      this.item = +params['id'];
+      const oldid = this.item;
+      const newid: any = oldid;
+      this.id.next(newid);
+      if (this.id && this.id.value > 0) {
         this.loading = false;
-        this.project = this.filter(Number(this.id.value.id));
+        this.project = this.filter(Number(this.id.value));
         this.services = this.project.service;
         if (this.project !== 'Undefined' && this.project !== null && this.project) {
           this.project_name = this.project.project_name;
@@ -70,8 +59,9 @@ export class PaymentComponent implements OnInit,  OnChanges {
         }
       }
     });
-
   }
+
+
 
   filter(id: number) {
     if (this.proyectos && id > 0) {

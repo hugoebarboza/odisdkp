@@ -1,5 +1,5 @@
 
-<div *ngIf="id && id > 0 && project && services">
+<div *ngIf="id && project && services">
     <div class="row animated fadeIn" >
         <div class="col">
         <div class="jfCYPT">
@@ -33,7 +33,7 @@
                     <div class="row" style="margin-top: 14px;">
                         <div class="col-md-12">
                             <div class="text-center">
-                                <button  mat-raised-button color="primary" (click)="getData(id, formulario.value.dateoptions)" style="margin-right: 8px;"  [disabled]="formulario.invalid" *ngIf="project && id > 0 && formulario.value.dateoptions">
+                                <button  mat-raised-button color="primary" (click)="getData(id, formulario.value.dateoptions)" style="margin-right: 8px;"  [disabled]="formulario.invalid" *ngIf="project && id && formulario.value.dateoptions">
                                     <mat-icon aria-label="Edit">done</mat-icon>Aceptar                  
                                 </button>
                                 <button  mat-raised-button color="warn" (click)="formulario.reset(); servicetype = null; serviceestatus = null;" style="margin-left: 4px;">
@@ -44,7 +44,6 @@
                     </div>
                 </form>                    
                 </mat-drawer>
-
                 <div class="sidenav-content">
                     <div class="container-fluid" *ngIf="isLoading">
                         <div class="row">
@@ -158,423 +157,224 @@
         </div>
         </div>
     </div>        
-</div>
+<br>
+<br>
+    <div class="row animated fadeIn" >
+            <div class="col">
+                <div class="jfCYPT">
+                    <div class="jfCYPT">
+                        <div class="didcdr" data-test-selector="profile-worked-with">
+                            <div class="iDwfcE" >
+                                <div class="eCdVoi">
+                                    <div class="jNlJOD">
+                                        <span>
+                                            Resumen Económico.
+                                        </span>
+                                    </div>
+                                </div>    
+                                <div>
+                                <div class="container-fluid" *ngIf="isLoadingPaymentProject || isLoadingPaymentLine">
+                                    <div class="row">
+                                        <div class="col-sm">
+                                            <div class="row d-flex justify-content-center">
+                                                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingPaymentProject || isLoadingPaymentLine" ></mat-spinner>
+                                            </div>                        
+                                        </div>
+                                    </div>
+                                </div>
+                
+                                <div class=" dIOqge" >
+
+                                    <div class="jmuLsE" *ngIf="!isLoadingPaymentLine">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Producción (últimos 12 meses).
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <mat-card class="container-fluid">
+                                        <mat-card-content>                    
+                                        <div class="row d-flex justify-content-center p-2" >
+                                            <div class="container-fluid" >
+                                            <div class="row">    
+                                                    <div class="col-12" *ngIf="kpipaymentprojectline && kpipaymentprojectline.length > 0 ">
+                                                    <div class="row d-flex justify-content-center">
+                                                            <div id="chartdivline" style="width: 100%; height: 500px"></div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-12" *ngIf="kpipaymentprojectline && kpipaymentprojectline.length == 0">
+                                                        <div class="row d-flex justify-content-center ">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">                                                        
+                                                                </p>
+                                                                <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                            </div>                    
+                                                        </div>    
+                                                    </div>        
+                                            </div>
+                                            </div>                
+                                        </div>
+                                        </mat-card-content>
+                                        </mat-card>            
+                                    </div>
         
-<!--
-<div class="row" *ngIf="id && id > 0 && project && services">
-    <div class="col-9">
 
-        <div class="jfCYPT">
-            <div class="didcdr" data-test-selector="profile-worked-with">
-                <div class="iDwfcE" >           
-                    <div>
-    
-                    <div class=" dIOqge" >                            
-                    <div class="jmuLsE" >
-                        
-                        <div class="row" *ngIf="kpidatatable && kpidatatable.length > 0 && !isLoading">
-                            <div class="col-sm">
-                                <div class="row d-flex justify-content-center">        
-                                <span>
-                                Órdenes de Trabajo. <span *ngIf="formulario && formulario.value.dateoptions && kpidateoption">({{kpidateoption.name}})</span>
-                                </span>
-                                </div>
-                            </div>
-                        </div>
-    
-                        <div>
-                            <div class="container-fluid" *ngIf="isLoading">
-                                <div class="row">
-                                    <div class="col-sm">
-                                        <div class="row d-flex justify-content-center">
-                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
-                                        </div>                        
-                                    </div>
-                                </div>
-                            </div>                
-
-                            <div class="row justify-content-center align-items-center" align="center" *ngIf="!isLoading">
-                                <br>
-                                <div class="container-fluid" *ngIf="kpipayment && kpipayment.length > 0 ">
-                                    <div class="row">
-                                        <div class="col-12">
-                                        <div class="row d-flex justify-content-center ">
-
-                                            <ngx-charts-bar-vertical
-                                            (window:resize)="onResize($event)"
-                                            [view]="view"
-                                            [scheme]="colorScheme"
-                                            [results]="kpipayment"
-                                            [gradient]="gradient"
-                                            [xAxis]="showXAxis"
-                                            [yAxis]="showYAxis"
-                                            [legend]="showLegend"
-                                            [legendTitle]="['Leyenda']"
-                                            [legendPosition]="['right']"
-                                            [showXAxisLabel]="showXAxisLabel"
-                                            [showYAxisLabel]="showYAxisLabel"
-                                            [xAxisLabel]="xAxisLabel"
-                                            [yAxisLabel]="yAxisLabel"
-                                            >
-                                            </ngx-charts-bar-vertical>
-
-                                        </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm" *ngIf="kpipayment && kpipayment.length == 0">
-                                    <div class="row d-flex justify-content-center">
-                                        <div class="dGHjBt">
-                                        <p class="hAzwqT">
-                                        Sin Información.
-                                        </p>
-                                        <p class="hkvxBP"><span>(Verifique fecha seleccionada ó valores de la actividad).</span></p>
-                                        </div>
-                                    </div>    
-                                </div>
-                                
-                            </div>
-
-                        </div>
-
-                    </div>    
-                    </div>
-
-                    </div>
-                </div>
-
-                <div id="table">
-                    <table class="table table-bordered table-striped responsive" *ngIf="kpidatatable && kpidatatable.length > 0 && !isLoading">
-                        <thead >
-                            <tr>
-                            <th scope="col">Servicio</th>
-                            <th scope="col">Actividades</th>                                
-                            <th scope="col">Valor Actividad</th>
-                            <th scope="col">Servicio Total</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr *ngFor="let k of kpidatatable | keys;">
-                            <th scope="row">{{ kpidatatable[k].name }}</th>
-                            <td>{{ kpidatatable[k].activity | number}} </td>
-                            <td>{{ kpidatatable[k].value | number}}</td>
-                            <td>{{ kpidatatable[k].revenue | number}}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-
-            </div>
-        </div>
-
-    </div>
-
-
-    <div class="col-3">
-        <div class="gLOvjB">
-            <form ngNativeValidate [formGroup]="formulario">
-                <div *ngIf="datesearchoptions">
-                    <h2 class="jeEmY">Fecha</h2>
-                    <div class="input-group input-group-sm mb-3" >
-                        <ng-select
-                        [items]="datesearchoptions"
-                        [clearable]="false"
-                        bindLabel="name"
-                        bindValue="value"
-                        class="width-100percentage" name="dateoptions" formControlName="dateoptions">
-                        </ng-select>
-                    </div>
-                </div>
-                <div *ngIf="formulario.value.dateoptions == 'custom'">
-                    <h2 class="jeEmY">Rango de fecha</h2>
-                    <p-calendar placeholder="yyyy-mm-dd" dateFormat="yy-mm-dd"   showButtonBar="true" readonlyInput="true" hourFormat="24"  [locale]="es"  selectionMode="range" [showIcon]="true" name="date_rango" formControlName="date_rango">
-                        <p-footer></p-footer>
-                    </p-calendar>
-                </div>
-            -->
-
-
-
-
-
-
-                <!---
-                <div *ngIf="services && services.length > 0">
-                    <h2 class="jeEmY">Servicio</h2>
-                    <div class="input-group input-group-sm mb-3">
-                        <ng-select
-                            [items]="services"
-                            [clearable]="false"
-                            bindLabel="service_name"
-                            bindValue="id"
-                            (change)="selectChangeServicio($event)"
-                            class="width-100percentage" name="service" formControlName="service">
-                        </ng-select>
-                    </div>
-                </div>
-                <div *ngIf="servicetype && servicetype.length > 0">
-                    <h2 class="jeEmY">Tipo de servicio</h2>
-                    <div class="input-group input-group-sm mb-3">
-                        <ng-select
-                            [items]="servicetype"
-                            [clearable]="true"
-                            bindLabel="name"
-                            bindValue="id"
-                            class="width-100percentage" name="servicetype" formControlName="servicetype">
-                        </ng-select>
-                    </div>
-                </div>
-                <div *ngIf="serviceestatus && serviceestatus.length > 0">
-                    <h2 class="jeEmY">Estatus</h2>
-                    <div class="animated fadeIn input-group input-group-sm mb-3">
-                        <ng-select
-                            [items]="serviceestatus"
-                            [clearable]="true"
-                            bindLabel="name"
-                            bindValue="id"
-                            class="width-100percentage" name="status" formControlName="status">
-                        </ng-select>
-                    </div>
-                </div>
-                -->
-
-                <!---
-                <div class="row" style="margin-top: 14px;">
-                    <div class="col-md-12">
-                        <div class="text-center">
-                            <button  mat-raised-button color="primary" (click)="getData(id, formulario.value.dateoptions)" style="margin-right: 8px;"  [disabled]="formulario.invalid" *ngIf="project && id > 0 && formulario.value.dateoptions">
-                                <mat-icon aria-label="Edit">done</mat-icon>Aceptar                  
-                            </button>
-                            <button  mat-raised-button color="warn" (click)="formulario.reset(); servicetype = null; serviceestatus = null;" style="margin-left: 4px;">
-                                <mat-icon aria-label="Close">delete_sweep</mat-icon>Limpiar
-                            </button>  
-                        </div>
-                    </div>
-                </div>
-            </form>
-        </div>
-    </div>
-
-
-</div>
--->
-<br>
-<br>
-<div class="row animated fadeIn" >
-        <div class="col">
-            <div class="jfCYPT">
-                <div class="jfCYPT">
-                    <div class="didcdr" data-test-selector="profile-worked-with">
-                        <div class="iDwfcE" >
-                            <div class="eCdVoi">
-                                <div class="jNlJOD">
-                                    <span>
-                                        Resumen Económico.
-                                    </span>
-                                </div>
-                            </div>    
-                            <div>
-                            <div class="container-fluid" *ngIf="isLoadingPaymentProject">
-                                <div class="row">
-                                    <div class="col-sm">
-                                        <div class="row d-flex justify-content-center">
-                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingPaymentProject" ></mat-spinner>
-                                        </div>                        
-                                    </div>
-                                </div>
-                            </div>
-            
-                            <div class=" dIOqge" >
-                                <div class="jmuLsE" *ngIf="!isLoadingPaymentProject">
-                                    <div class="row">
-                                        <div class="col-sm">
-                                            <div class="row d-flex justify-content-center">        
-                                            <span>
-                                            Producción (3 meses anteriores).
-                                            </span>
+                                    <div class="jmuLsE" *ngIf="!isLoadingPaymentProject">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Producción (3 meses anteriores).
+                                                </span>
+                                                </div>
                                             </div>
                                         </div>
+                                        
+                                        <mat-card class="container-fluid">
+                                        <mat-card-content>                    
+                                        <div class="row d-flex justify-content-center p-2" >
+                                            <div class="container-fluid" >
+                                            <div class="row">
+        
+                                                    <div class="col-12" *ngIf="kpipaymentproject && kpipaymentproject.length > 0 ">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div id="chartdiv" style="width: 100%; height: 500px"></div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-12" *ngIf="kpipaymentproject && kpipaymentproject.length == 0">
+                                                        <div class="row d-flex justify-content-center ">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">                                                        
+                                                                </p>
+                                                                <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                            </div>                    
+                                                        </div>    
+                                                    </div>        
+                                            </div>
+                                            </div>    
+                                        </div>
+                                        </mat-card-content>
+                                        </mat-card>
                                     </div>
                                     
-                                    <mat-card class="container-fluid">
-                                    <mat-card-content>                    
-                                    <div class="row d-flex justify-content-center p-2" >
-                                        <div class="container-fluid" >
-                                        <div class="row">
-    
-                                                <div class="col-12" *ngIf="kpipaymentproject && kpipaymentproject.length > 0 ">
-                                                <div class="row d-flex justify-content-center">
-                                                    <div id="chartdiv" style="width: 100%; height: 500px"></div>                                                
-                                                </div>
-                                                </div>
-                                                <div class="col-12" *ngIf="kpipaymentproject && kpipaymentproject.length == 0">
-                                                    <div class="row d-flex justify-content-center ">
-                                                        <div class="dGHjBt">
-                                                            <p class="hAzwqT">                                                        
-                                                            </p>
-                                                            <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
-                                                        </div>                    
-                                                    </div>    
-                                                </div>        
-                                        </div>
-                                        </div>    
-                                    </div>
-                                    </mat-card-content>
-                                    </mat-card>
                                 </div>
 
-                                <div class="jmuLsE" *ngIf="!isLoadingPaymentStacked">
-                                    <div class="row">
-                                        <div class="col-sm">
-                                            <div class="row d-flex justify-content-center">        
-                                            <span>
-                                            Producción por Servicio (mensual hasta la fecha).
-                                            </span>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <mat-card class="container-fluid">
-                                    <mat-card-content>                    
-                                    <div class="row d-flex justify-content-center p-2" >
-                                        <div class="container-fluid" >
-                                        <div class="row">    
-                                                <div class="col-12" *ngIf="kpipaymentprojecstacked && kpipaymentprojecstacked.length > 0 ">
-                                                <div class="row d-flex justify-content-center">
-                                                    <div id="chartdivstacked" style="width: 100%; height: 500px" ></div>
-                                                </div>
-                                                </div>
-                                                <div class="col-12" *ngIf="kpipaymentprojecstacked && kpipaymentprojecstacked.length == 0">
-                                                    <div class="row d-flex justify-content-center ">
-                                                        <div class="dGHjBt">
-                                                            <p class="hAzwqT">                                                        
-                                                            </p>
-                                                            <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
-                                                        </div>                    
-                                                    </div>    
-                                                </div>        
-                                        </div>
-                                        </div>                
-                                    </div>
-                                    </mat-card-content>
-                                    </mat-card>            
-                                </div>
-
-                                
                             </div>
-
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 <br>
 <br>
-<div class="row animated fadeIn" >
-        <div class="col">
-            <div class="jfCYPT">
+    <div class="row animated fadeIn" >
+            <div class="col">
                 <div class="jfCYPT">
-                    <div class="didcdr" data-test-selector="profile-worked-with">
-                        <div class="iDwfcE" >
-                            <div class="eCdVoi">
-                                <div class="jNlJOD">
-                                    <span>
-                                        Resumen Económico.
-                                    </span>
-                                </div>
-                            </div>    
-                            <div>
-                            <div class="container-fluid" *ngIf="isLoadingPaymentProject">
-                                <div class="row">
-                                    <div class="col-sm">
-                                        <div class="row d-flex justify-content-center">
-                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingPaymentProject" ></mat-spinner>
-                                        </div>                        
+                    <div class="jfCYPT">
+                        <div class="didcdr" data-test-selector="profile-worked-with">
+                            <div class="iDwfcE" >
+                                <div class="eCdVoi">
+                                    <div class="jNlJOD">
+                                        <span>
+                                            Resumen Económico.
+                                        </span>
                                     </div>
-                                </div>
-                            </div>
-            
-                            <div class=" dIOqge" >
-                                <div class="jmuLsE" *ngIf="!isLoadingPaymentProject">
+                                </div>    
+                                <div>
+                                <div class="container-fluid" *ngIf="isLoadingPaymentProject">
                                     <div class="row">
                                         <div class="col-sm">
-                                            <div class="row d-flex justify-content-center">        
-                                            <span>
-                                            Producción (3 meses anteriores).
-                                            </span>
-                                            </div>
+                                            <div class="row d-flex justify-content-center">
+                                                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingPaymentProject" ></mat-spinner>
+                                            </div>                        
                                         </div>
                                     </div>
-                                    
-                                    <mat-card class="container-fluid">
-                                    <mat-card-content>                    
-                                    <div class="row d-flex justify-content-center p-2" >
-                                        <div class="container-fluid" >
+                                </div>
+                
+                                <div class=" dIOqge" >
+                                    <div class="jmuLsE" *ngIf="!isLoadingPaymentStacked">
                                         <div class="row">
-    
-                                                <div class="col-12" *ngIf="kpipaymentproject && kpipaymentproject.length > 0 ">
-                                                <div class="row d-flex justify-content-center">
-                                                    
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Producción por Servicio (mensual hasta la fecha).
+                                                </span>
                                                 </div>
-                                                </div>
-                                                <div class="col-12" *ngIf="kpipaymentproject && kpipaymentproject.length == 0">
-                                                    <div class="row d-flex justify-content-center ">
-                                                        <div class="dGHjBt">
-                                                            <p class="hAzwqT">                                                        
-                                                            </p>
-                                                            <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
-                                                        </div>                    
-                                                    </div>    
-                                                </div>        
-                                        </div>
-                                        </div>    
-                                    </div>
-                                    </mat-card-content>
-                                    </mat-card>
-                                </div>
-
-                                <div class="jmuLsE" *ngIf="!isLoadingPaymentMonth">
-                                    <div class="row">
-                                        <div class="col-sm">
-                                            <div class="row d-flex justify-content-center">        
-                                            <span>
-                                            Producción por Servicio (mensual hasta la fecha).
-                                            </span>
                                             </div>
                                         </div>
+
+                                        <mat-card class="container-fluid">
+                                        <mat-card-content>                    
+                                        <div class="row d-flex justify-content-center p-2" >
+                                            <div class="container-fluid" >
+                                            <div class="row">    
+                                                    <div class="col-12" *ngIf="kpipaymentprojecstacked && kpipaymentprojecstacked.length > 0 ">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div id="chartdivstacked" style="width: 100%; height: 500px" ></div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-12" *ngIf="kpipaymentprojecstacked && kpipaymentprojecstacked.length == 0">
+                                                        <div class="row d-flex justify-content-center ">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">                                                        
+                                                                </p>
+                                                                <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                            </div>                    
+                                                        </div>    
+                                                    </div>        
+                                            </div>
+                                            </div>                
+                                        </div>
+                                        </mat-card-content>
+                                        </mat-card>            
                                     </div>
 
-                                    <mat-card class="container-fluid">
-                                    <mat-card-content>                    
-                                    <div class="row d-flex justify-content-center p-2" >
-                                        <div class="container-fluid" >
-                                        <div class="row">    
-                                                <div class="col-12" *ngIf="kpipaymentprojectmonth && kpipaymentprojectmonth.length > 0 ">
-                                                <div class="row d-flex justify-content-center">
-                                                    <div id="chartpiediv" style="width: 100%; height: 500px" ></div>
+                                    <div class="jmuLsE" *ngIf="!isLoadingPaymentMonth">
+                                        <div class="row">
+                                            <div class="col-sm">
+                                                <div class="row d-flex justify-content-center">        
+                                                <span>
+                                                Producción por Servicio (mensual hasta la fecha).
+                                                </span>
                                                 </div>
-                                                </div>
-                                                <div class="col-12" *ngIf="kpipaymentprojectmonth && kpipaymentprojectmonth.length == 0">
-                                                    <div class="row d-flex justify-content-center ">
-                                                        <div class="dGHjBt">
-                                                            <p class="hAzwqT">                                                        
-                                                            </p>
-                                                            <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
-                                                        </div>                    
-                                                    </div>    
-                                                </div>        
+                                            </div>
                                         </div>
-                                        </div>                
+
+                                        <mat-card class="container-fluid">
+                                        <mat-card-content>                    
+                                        <div class="row d-flex justify-content-center p-2" >
+                                            <div class="container-fluid" >
+                                            <div class="row">    
+                                                    <div class="col-12" *ngIf="kpipaymentprojectmonth && kpipaymentprojectmonth.length > 0 ">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <div id="chartpiediv" style="width: 100%; height: 500px" ></div>
+                                                    </div>
+                                                    </div>
+                                                    <div class="col-12" *ngIf="kpipaymentprojectmonth && kpipaymentprojectmonth.length == 0">
+                                                        <div class="row d-flex justify-content-center ">
+                                                            <div class="dGHjBt">
+                                                                <p class="hAzwqT">                                                        
+                                                                </p>
+                                                                <p class="hkvxBP"><span>Sin Información, de acuerdo a la fecha ó valores de la actividad.</span></p>
+                                                            </div>                    
+                                                        </div>    
+                                                    </div>        
+                                            </div>
+                                            </div>                
+                                        </div>
+                                        </mat-card-content>
+                                        </mat-card>            
                                     </div>
-                                    </mat-card-content>
-                                    </mat-card>            
+
+                                    
                                 </div>
 
-                                
                             </div>
-
                         </div>
                     </div>
                 </div>

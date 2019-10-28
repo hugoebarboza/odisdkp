@@ -53,7 +53,7 @@ users = [];
   }
 
 
-  public loadInfo(){
+  public loadInfo() {
     this.isLoadingResults = true;
     this._dataService.getService(this.token.token, this.id).subscribe(
                 response => {

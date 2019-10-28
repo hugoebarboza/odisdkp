@@ -1,7 +1,7 @@
-import { Component, OnInit, Input, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
-
+import { Observable } from 'rxjs/Observable';
 
 // SERVICES
 import { OrderserviceService, PaymentService, UserService } from 'src/app/services/service.index';
@@ -22,23 +22,25 @@ import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 @Component({
   selector: 'app-payment-report',
   templateUrl: './payment-report.component.html',
-  styleUrls: ['./payment-report.component.css']
+  styleUrls: ['./payment-report.component.css'],
 })
-export class PaymentReportComponent implements OnInit, OnDestroy {
+export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input() id: number;
+  @Input() id: Observable<any>;
   @Input() project: any;
   @Input() services = [];
 
   formulario: FormGroup;
   isLoading = true;
   isLoadingPaymentProject = true;
+  isLoadingPaymentLine = true;
   isLoadingPaymentStacked = true;
   isLoadingPaymentMonth = true;
   kpipayment = [];
   kpipaymentproject = [];
   kpipaymentprojectmonth = [];
   kpipaymentprojecstacked = [];
+  kpipaymentprojectline = [];
   kpidateoption: any = [];
   kpidatatable = [];
 
@@ -51,6 +53,8 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
   // CHART OPTIONS
   private chartxy: any;
   private chartpie: any;
+  private chartline: any;
+  private chartstacked: any;
   view: any[] = [1280, 400];
 
   // options
@@ -103,12 +107,10 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
     private _userService: UserService,
   ) {
     this.token = this._userService.getToken();
-
   }
 
 
   ngOnInit() {
-
     this.formulario = new FormGroup({
       dateoptions: new FormControl ('day', [Validators.required]),
       date_rango: new FormControl (null),
@@ -117,7 +119,11 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
       // status: new FormControl (null)
     });
 
-      const projectid: number = this.id;
+  }
+
+  ngAfterViewInit() {
+    this.id.subscribe( id => {
+      const projectid = id;
       if ( projectid && projectid > 0 ) {
         this.servicetype = [];
         this.serviceestatus = [];
@@ -125,10 +131,13 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
           this.getData(projectid, this.formulario.value.dateoptions);
           this.getDataPaymentProject(projectid, 'month');
           this.getDataPaymentMonth(projectid, 'month');
+          this.getDataPaymentProjectLine(projectid, 'year');
           this.getDataPaymentProjectStacked(projectid, 'service');
         }
       }
+    });
   }
+
 
   ngOnDestroy() {
     this.zone.runOutsideAngular(() => {
@@ -137,6 +146,12 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
       }
       if (this.chartpie) {
         this.chartpie.dispose();
+      }
+      if (this.chartstacked) {
+        this.chartstacked.dispose();
+      }
+      if (this.chartline) {
+        this.chartline.dispose();
       }
     });
   }
@@ -166,6 +181,7 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
       this.kpipayment = await this.arraypush(data.datos, params);
       this.kpidatatable = await this.arraypushmulti(data.datos);
       this.isLoading = false;
+
 
       /*
       for (let i = 0; i < data.datos.length; i++) {
@@ -297,6 +313,7 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
       const year: any = new Date().getFullYear();
 
       const data: any = await this._kpiPayment.getProjectPaymentDate(this.token.token, id, term, year);
+
       if (data && data.datos) {
         for (let x = 0; x < data.datos.length; x++) {
           if (x === 0) {
@@ -341,6 +358,33 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
 
     }
   }
+
+
+  async getDataPaymentProjectLine(id: number, term: string) {
+
+    if (id && id > 0) {
+
+      this.kpipaymentprojectline = [];
+      this.isLoadingPaymentLine = true;
+      const year: any = new Date().getFullYear();
+
+      const data: any = await this._kpiPayment.getProjectPaymentDate(this.token.token, id, term, year);
+      if (data && data.datos) {
+        const params: ArraySingle = {atribute: 'fecha', value: 'value_count'};
+        this.kpipaymentprojectline = await this.arraypush(data.datos, params);
+        this.isLoadingPaymentLine = false;
+        if (this.kpipaymentprojectline.length > 0) {
+          this.createamLineChart(this.kpipaymentprojectline);
+        }
+      } else {
+        this.kpipaymentprojectline = [];
+        this.isLoadingPaymentLine = false;
+      }
+
+    }
+  }
+
+
 
   async getDataPaymentMonth(id: number, term: string) {
     if (id && id > 0 && term) {
@@ -437,7 +481,7 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
           }
         }
         const objecttablelast: Table = {
-          name: 'Totales:',
+          name: 'Total:',
           shortname: '',
           date: '',
           activity: count,
@@ -452,7 +496,6 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
 
   createamXYChart(datasource: any[]) {
     if (datasource && datasource.length > 0) {
-      setTimeout(() => {
         this.zone.runOutsideAngular(() => {
           Promise.all([
               // import('@amcharts/amcharts4/core'),
@@ -506,7 +549,6 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
                   console.error('Error when creating chart', e);
               });
         });
-      }, 2000);
     }
   }
 
@@ -514,7 +556,6 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
   createamPieChart(datasource: any[]) {
     // console.log(datasource);
     if (datasource && datasource.length > 0) {
-      setTimeout(() => {
         this.zone.runOutsideAngular(() => {
           Promise.all([
           ])
@@ -575,13 +616,11 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
                   console.error('Error when creating chart', e);
               });
         });
-      }, 2000);
     }
   }
 
   createamStacked(datasource: any, dataseries: any []) {
     if (datasource && datasource.length > 0) {
-      setTimeout(() => {
         this.zone.runOutsideAngular(() => {
           Promise.all([
           ])
@@ -634,6 +673,8 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
                   bullet1.locationY = 0.5;
                 }
 
+                this.chartstacked = chart;
+
 
 
                 // chart.scrollbarX = new am4core.Scrollbar();
@@ -642,9 +683,81 @@ export class PaymentReportComponent implements OnInit, OnDestroy {
                   console.error('Error when creating chart', e);
               });
         });
-      }, 2000);
     }
 
+  }
+
+  createamLineChart (datasource: any) {
+    if (datasource && datasource.length > 0) {
+      this.zone.runOutsideAngular(() => {
+        Promise.all([
+        ])
+            .then(() => {
+            // Themes begin
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+            const chart = am4core.create('chartdivline', am4charts.XYChart);
+            chart.paddingRight = 20;
+            const data = [];
+
+            for (let i = 0; i < datasource.length; i++) {
+              const object = {name: datasource[i]['name'],  value: Number(datasource[i]['value']), lineColor: chart.colors.next() };
+              if (object ) {
+                data.push(object);
+              }
+            }
+
+
+            chart.data = data;
+
+            const categoryAxis = chart.xAxes.push(new am4charts.CategoryAxis());
+            categoryAxis.renderer.grid.template.location = 0;
+            categoryAxis.renderer.ticks.template.disabled = true;
+            categoryAxis.renderer.line.opacity = 0;
+            categoryAxis.renderer.grid.template.disabled = true;
+            categoryAxis.renderer.minGridDistance = 40;
+            categoryAxis.dataFields.category = 'name';
+            categoryAxis.startLocation = 0.4;
+            categoryAxis.endLocation = 0.6;
+
+
+            const valueAxis = chart.yAxes.push(new am4charts.ValueAxis());
+            valueAxis.tooltip.disabled = true;
+            valueAxis.renderer.line.opacity = 0;
+            valueAxis.renderer.ticks.template.disabled = true;
+            valueAxis.min = 0;
+
+            const lineSeries = chart.series.push(new am4charts.LineSeries());
+            lineSeries.dataFields.categoryX = 'name';
+            lineSeries.dataFields.valueY = 'value';
+            lineSeries.tooltipText = 'value: {valueY.value}';
+            lineSeries.fillOpacity = 0.5;
+            lineSeries.strokeWidth = 3;
+            lineSeries.propertyFields.stroke = 'lineColor';
+            lineSeries.propertyFields.fill = 'lineColor';
+
+            const bullet = lineSeries.bullets.push(new am4charts.CircleBullet());
+            bullet.circle.radius = 6;
+            bullet.circle.fill = am4core.color('#fff');
+            bullet.circle.strokeWidth = 3;
+
+            chart.cursor = new am4charts.XYCursor();
+            chart.cursor.behavior = 'panX';
+            chart.cursor.lineX.opacity = 0;
+            chart.cursor.lineY.opacity = 0;
+
+            chart.scrollbarX = new am4core.Scrollbar();
+            chart.scrollbarX.parent = chart.bottomAxesContainer;
+
+            this.chartline = chart;
+
+            })
+            .catch(e => {
+                console.error('Error when creating chart', e);
+            });
+      });
+    }
   }
 
 }

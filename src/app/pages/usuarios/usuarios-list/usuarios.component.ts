@@ -61,7 +61,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionrightaction = new FormControl(this.positionOptions[5]);
 
-  
+
   constructor(
     private _route: ActivatedRoute,
     public _router: Router,
@@ -77,37 +77,28 @@ export class UsuariosComponent implements OnInit, OnDestroy {
       this.title = data.subtitle;
     });
 
-    this.sub = this._route.params.subscribe(params => { 
-      let id = +params['id'];            
+    this.sub = this._route.params.subscribe(params => {
+      const id = +params['id'];
       this.id = id;
       this.termino = '';
       this.page = 1;
       this.pageSize = 0;
-      if(this.id && this.proyectos){
+      if (this.id && this.proyectos) {
         this.project = this.filter();
-        if (this.project != "Undefined" && this.project !== null && this.project){
+        if (this.project !== 'Undefined' && this.project !== null && this.project) {
         this.departamento_id = this.project.department_id;
         this.project_name = this.project.project_name;
         this.cargarUsuarios();
         this.getRoleUser();
-        }else{
+        } else {
           this._router.navigate(['/notfound']);
         }
       }
     });
-    
+
   }
 
   ngOnInit() {
-
-    /*
-    this.subscription = this.store.select('loading')
-    .subscribe( loading => 
-      {
-        this.isLoading = loading.isLoading;  
-      }
-    );*/
-
 
   }
 
@@ -163,9 +154,9 @@ export class UsuariosComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe(
               result => {
                  if (result === 1) {
-                 // After dialog is closed we're doing frontend updates 
+                 // After dialog is closed we're doing frontend updates
                  // For add we're just pushing a new row inside DataService
-                 // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  
+                 // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());
                  // this.refresh();
                  }
                });
@@ -218,7 +209,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   }
 
 
-  borrarUsuario( usuario: any, i:number ) {
+  borrarUsuario( usuario: any, i: number ) {
 
     if ( usuario.id === this.identity.sub ) {
       Swal.fire('No puede borrar usuario', 'No se puede borrar a si mismo', 'error');
@@ -297,39 +288,39 @@ export class UsuariosComponent implements OnInit, OnDestroy {
             );
   }
 
-  getRoleUser(){
-    if(this.token.token){
+  getRoleUser() {
+    if (this.token.token) {
       this._userService.getRoleUser(this.token.token, this.identity.role).subscribe(
-        response => {        
-          if(!response){
-            return false;        
+        response => {
+          if (!response) {
+            return false;
           }
-            if(response.status == 'success'){ 
+            if (response.status === 'success') {
               this.roles = response.datos;
             }
         },
             error => {
             console.log(<any>error);
-            }   
-        );      
+            }
+        );
     }
 
   }
 
-  filter(){
-    if(this.proyectos && this.id){
-      for(var i = 0; i < this.proyectos.length; i += 1){
-        var result = this.proyectos[i];
-        if(result.id === this.id){
+  filter() {
+    if (this.proyectos && this.id) {
+      for (let i = 0; i < this.proyectos.length; i += 1) {
+        const result = this.proyectos[i];
+        if (result.id === this.id) {
             return result;
         }
       }
-    }    
+    }
   }
 
-  paginate( valor: number, increment:number ) {
+  paginate( valor: number, increment: number ) {
 
-    let desde = this.pageSize + valor;
+    const desde = this.pageSize + valor;
 
     if ( desde >= this.totalRegistros ) {
       return;
@@ -343,7 +334,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.pageSize += valor;
     this.page += increment;
 
-    if ( this.page == 0 ) {
+    if ( this.page === 0 ) {
       this.page = 1;
       return;
     }
@@ -352,39 +343,39 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   }
 
 
-  openDialogProfileSecurity(usuario:any): void {
+  openDialogProfileSecurity(usuario: any): void {
 
-    if(!usuario){
+    if (!usuario) {
       return;
     }
 
     const dialogRef = this.dialog.open(ShowProfileSecurityComponent, {
       width: '777px',
-      disableClose: true,                          
+      disableClose: true,
       data: { usuario: usuario,
             }
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) { 
+      if (result === 1) {
 
       }
     });
   }
 
-  openDialogProfileImage(usuario:any): void {
+  openDialogProfileImage(usuario: any): void {
 
-    if(!usuario){
+    if (!usuario) {
       return;
     }
 
     const dialogRef = this.dialog.open(ModalUploadImageComponent, {
       width: '777px',
-      disableClose: true,                          
+      disableClose: true,
       data: { usuario: usuario,
             }
     });
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) { 
+      if (result === 1) {
 
       }
     });
@@ -392,29 +383,25 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
 
 
-  startEdit(usuario:any) {
+  startEdit(usuario: any) {
     const dialogRef = this.dialog.open(EditUserComponent, {
       width: '777px',
-      disableClose: true,  
+      disableClose: true,
       data: {usuario: usuario}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        // When using an edit things are little different, firstly we find record inside DataService by id
-        //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
-        // Then you update that record using data from dialogData (values you enetered)
-        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
-        // And lastly refresh table
-       //this.refresh();
+       // this.refresh();
       }
     });
   }
 
-  refreshMenu(event:number){
-		if(event == 1){
-		}
-	}
+  refreshMenu(event: number) {
+    if (event === 1) {
+
+    }
+  }
 
 
 }

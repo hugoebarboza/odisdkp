@@ -124,7 +124,7 @@ export class KpiProjectAmchartsComponent implements OnInit, OnDestroy {
 
 
     const data: any = await this._kpiService.getProjectKpiServiceByDateTime(this.token.token, project, term, service, datedesde.value, datehasta.value);
-
+console.log(data);
     if (data && data.datos && data.datos.length > 0) {
       for (let i = 0; i < data.datos.length; i++) {
         const object: Single = {
