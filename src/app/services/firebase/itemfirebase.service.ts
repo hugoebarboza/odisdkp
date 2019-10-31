@@ -29,13 +29,13 @@ export class ItemFirebaseService {
     private afs: AngularFirestore,
     public _http: HttpClient,
 
-  	) { 
+    ) {
   }
 
-  getItems(path:any){
-    
-    this.itemsCollection = this.afs.collection<Item>(path, ref => ref.orderBy('nombre','asc'));
-    
+  getItems(path: any) {
+
+    this.itemsCollection = this.afs.collection<Item>(path, ref => ref.orderBy('nombre', 'asc'));
+
     this.items = this.itemsCollection.auditTrail().pipe(
       map(actions => actions.map(a => {
         const data = a.payload.doc.data() as Item;
@@ -53,32 +53,31 @@ export class ItemFirebaseService {
 
   deleteDoc(path, item: Item): Observable<any> {
       this.clearState();
-      //const pathReference = path+'/'+item;
-          
+
         this.deleteFileDatabase(path, item)
-          .then(() => {            
+          .then(() => {
             this.deleteFileStorage(path, item);
           })
           .catch(error => console.log(error));
-          
-   	 return this.getItems(path);  
+
+      return this.getItems(path);
 
   }
 
-     
+
   private deleteFileDatabase(path, item) {
          this.itemDoc = this.afs.doc(`${ path }/${ item.id }`);
          return this.itemDoc.delete();
   }
-     
+
   private deleteFileStorage(path, item) {
         const storageRef = firebase.storage().ref();
         storageRef.child(`${ path }/${ item.nombre }`).delete();
-  } 
+  }
 
-  clearState(){
+  clearState() {
     this.editState = false;
   //  this.itemToEdit = null;
-  }   
+  }
 
 }

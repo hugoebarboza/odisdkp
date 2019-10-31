@@ -4,10 +4,11 @@ import { FormControl} from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
 
 
-//SERVICES
+// SERVICES
 import { KpiService, OrderserviceService, UserService } from 'src/app/services/service.index';
 
 import { isNumeric } from 'rxjs/util/isNumeric';
+
 
 
 @Component({
@@ -19,73 +20,73 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
 
   @Input() id: number;
 
-  promedio:number = 0;
-  promedioordercreated:number = 0;
-  promediogropedst:number = 0;
-  promediogropeduser:number = 0;
-  promediogroupedlocation:number = 0;
-  countassigned:number = 0;
-  countupdate:number = 0;
-  countassignedst:number = 0;
-  countupdatest:number = 0;
-  countassignedlocation:number = 0;
-  countupdatelocation:number = 0;
-  
+  promedio = 0;
+  promedioordercreated = 0;
+  promediogropedst = 0;
+  promediogropeduser = 0;
+  promediogroupedlocation = 0;
+  countassigned = 0;
+  countupdate = 0;
+  countassignedst = 0;
+  countupdatest = 0;
+  countassignedlocation = 0;
+  countupdatelocation = 0;
 
-  hours:number = 0;
-  minutes:number = 0;
-  seconds:number = 0;
+
+  hours = 0;
+  minutes = 0;
+  seconds = 0;
   identity: any;
-  isLoading: boolean = true;
-  isLoadingKpiUser: boolean = true;
-  isLoadingKpiTime: boolean = true;
-  isLoadingKpiYear: boolean = true;
-  isLoadingKpiYearAssigned: boolean = true;
-  isLoadingKpiOrderCreated: boolean = true;
-  isLoadingKpiGroupedByUser: boolean = true;
-  isLoadingKpiGroupedByLocation: boolean = true;
-  isLoadingKpiGroupedByST: boolean = true;
-  isLoadingKpiGroupedByStatus: boolean = true;
-  
+  isLoading = true;
+  isLoadingKpiUser = true;
+  isLoadingKpiTime = true;
+  isLoadingKpiYear = true;
+  isLoadingKpiYearAssigned = true;
+  isLoadingKpiOrderCreated = true;
+  isLoadingKpiGroupedByUser = true;
+  isLoadingKpiGroupedByLocation = true;
+  isLoadingKpiGroupedByST = true;
+  isLoadingKpiGroupedByStatus = true;
+
   project: any;
   proyectos: any;
-  service:any;
+  service: any;
   serviceestatus = [];
   subscription: Subscription;
-  token:any;
+  token: any;
 
 
-  //KPI OPTIONS
-  count:number = 0;
-  countuser:number = 0;
+  // KPI OPTIONS
+  count = 0;
+  countuser = 0;
   kpidata = [];
   kpidatastatus = [];
   kpidataOrderCreated = [];
   kpidatauser = [];
   kpidatatimeavg = [];
   kpidatagrupedbyuser = [];
-  kpidatagrupedbylocation = [];  
+  kpidatagrupedbylocation = [];
   kpidatagrupedbyst = [];
   kpidatayear = [
     {
-      name: "",
+      name: '',
       series: [
       ]
-    },  
+    },
   ];
   kpidatayearassigned = [
     {
-      name: "",
+      name: '',
       series: [
       ]
-    },  
-  ];  
+    },
+  ];
 
 
 
-  kpitotal:number = 0;
-  kpitotaluser:number = 0;
-  kpitotalStatus: number = 0;
+  kpitotal = 0;
+  kpitotaluser = 0;
+  kpitotalStatus = 0;
   kpiselectstatus: any;
   kpiselectstatususer: any;
   kpisearchoptions = [
@@ -101,14 +102,14 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     {value: 'year', name: 'Año Actual'},
   ];
 
-  kpiselectedoption:string = 'day';
-  kpiselectedoptionuser:string = 'day';
-  kpiselectedoptiontime:string = 'day';
-  kpiselectedoptionordercreated:string = 'day';
-  kpiselectedoptiongroupedbylocation:string = 'day';
-  kpiselectedoptiongroupedbyuser:string = 'day';  
-  kpiselectedoptiongroupedbyst:string = 'day';
-  kpiselectedoptiongroupedbystatus:string = 'day';
+  kpiselectedoption = 'day';
+  kpiselectedoptionuser = 'day';
+  kpiselectedoptiontime = 'day';
+  kpiselectedoptionordercreated = 'day';
+  kpiselectedoptiongroupedbylocation = 'day';
+  kpiselectedoptiongroupedbyuser = 'day';
+  kpiselectedoptiongroupedbyst = 'day';
+  kpiselectedoptiongroupedbystatus = 'day';
 
   // CHART OPTIONS
   doughnut = false;
@@ -136,13 +137,13 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
 
   colorScheme = {
     domain: ['#5AA454', '#A10A28', '#C7B42C', '#AAAAAA']
-  };  
+  };
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionheaderaction = new FormControl(this.positionOptions[2]);
   positiondatasourceaction = new FormControl(this.positionOptions[3]);
-  positionleftaction = new FormControl(this.positionOptions[4]);  
-  positionrightaction = new FormControl(this.positionOptions[5]);  
+  positionleftaction = new FormControl(this.positionOptions[4]);
+  positionrightaction = new FormControl(this.positionOptions[5]);
 
 
 
@@ -150,7 +151,7 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     private _kpiService: KpiService,
     private _orderService: OrderserviceService,
     private _userService: UserService,
-  ) { 
+  ) {
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
@@ -161,7 +162,7 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
 
   ngOnChanges(_changes: SimpleChanges) {
 
-    if(this.id > 0){
+    if (this.id > 0) {
       this.kpiselectedoption = 'day';
       this.kpiselectedoptionuser = 'day';
       this.kpiselectedoptiontime = 'day';
@@ -171,7 +172,7 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
       this.kpiselectedoptiongroupedbyst = 'day';
       this.kpiselectedoptiongroupedbystatus = 'day';
       this.project = this.filterProjectByService();
-      if(this.project && this.project.id > 0){
+      if (this.project && this.project.id > 0) {
         this.service = this.filterService();
         this.getServiceEstatus(this.id);
         this.getDataTimeAvg(this.project.id, this.kpiselectedoptiontime, this.id);
@@ -187,25 +188,25 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
 
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
+	ngOnDestroy() {
+		if (this.subscription) {
 			this.subscription.unsubscribe();
-			//console.log("ngOnDestroy unsuscribe");
+
 		}
   }
-  
+
   onResize(event) {
-    //console.log(event.target.innerWidth);
-    if(event.target.innerWidth > 1080){
+
+    if (event.target.innerWidth > 1080) {
       this.view = [700, 400];
       return;
     }
-    let param = event.target.innerWidth / 7;    
-    if(param < 400){
+    let param = event.target.innerWidth / 7;
+    if (param < 400) {
       param = 400;
     }
     this.view = [param, 400];
-    //console.log(this.viewline);
+
   }
 
 
@@ -235,28 +236,27 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
   }  
 
 
-  public getServiceEstatus(id:number){
-    if(id > 0){
+  public getServiceEstatus(id:number) {
+    if(id > 0) {
       this.subscription = this._orderService.getServiceEstatus(this.token.token, id).subscribe(
         response => {
-                  if(!response){
+                  if(!response) {
                     return;
                   }
-                  if(response.status == 'success'){                  
+                  if(response.status === 'success') {
                     this.serviceestatus = response.datos;
-                    if(this.serviceestatus.length > 0){
+                    if(this.serviceestatus.length > 0) {
                       this.kpiselectstatus = this.serviceestatus[0]['id'];
                       this.kpiselectstatususer = this.serviceestatus[0]['id'];
                       if(this.project.id > 0 && this.kpiselectstatus > 0 && this.id > 0 ){
                         this.getData(this.project.id, this.project.country_id, this.kpiselectedoption, this.kpiselectstatus, this.id);
                         this.getDataUsers(this.project.id, this.kpiselectedoptionuser, this.kpiselectstatususer, this.id);
                       }
-                      
-                    }              
+                    }
                   }
-                  });    
+                  });
     }
-  }  
+  }
 
 
   public getData(id:number, country:number, termino:string, status:number, service:number){
@@ -273,24 +273,22 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
 
     this._kpiService.getProjectKpiServiceByLocation(this.token.token, id, country, termino, status, service)
     .then(
-      (res: any) => 
-      {
+      (res: any) => {
         res.subscribe(
-          (some:any) => 
-          {
-            //console.log(some);
-            if(some && some.datos && some.datos.length > 0){
-              for (let i = 0; i < some.datos.length; i++) {                
+          (some: any) => {
+            if (some && some.datos && some.datos.length > 0) {
+              for (let i = 0; i < some.datos.length; i++) {
                 this.kpitotal = this.kpitotal + some.datos[i]['user_count'];
                 this.count = this.count + 1;
               }
-              if(this.count == some.datos.length){
+              if(this.count === some.datos.length) {
                 for (let x = 0; x < some.datos.length; x++) {
-                  let porcentaje:number = 0;
-                  porcentaje = ((some.datos[x]['user_count']*100) / this.kpitotal);
+                  let porcentaje = 0;
+                  porcentaje = ((some.datos[x]['user_count'] * 100) / this.kpitotal);
                   porcentaje = Math.round(porcentaje);
                   const object: Element = {
                     region: some.datos[x]['region_name'],
+                    regioncode: some.datos[x]['region_code'],
                     comuna: some.datos[x]['commune_name'],
                     produccion: some.datos[x]['user_count'],
                     porcentaje: porcentaje
@@ -301,21 +299,20 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
 
               if (this.kpidata.length === some.datos.length) {
                 this.isLoading = false;
-                //console.log(this.kpidata);
+                // this.createamMapaChart(this.kpidata);
               }
-              
             }
           },
-          (error:any) => { 
+          (error: any) => {
           this.isLoading = false;
           this.kpitotal = 0;
           this.kpidata = [];
-          this.count = 0 ;      
+          this.count = 0 ;
           console.log(<any>error);
-          }  
-          )
+          }
+          );
       })
-      .catch((err) => {console.log(err);})   
+      .catch((err) => {console.log(err); });
   }
 
 
@@ -333,21 +330,18 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
 
     this._kpiService.getProjectKpiServiceByUsers(this.token.token, id, termino, status, service)
     .then(
-      (res: any) => 
-      {
+      (res: any) => {
         res.subscribe(
-          (some:any) => 
-          {
-            //console.log(some);
-            if(some && some.datos && some.datos.length > 0){
-              for (let i = 0; i < some.datos.length; i++) {                
+          (some:any) => {
+            if(some && some.datos && some.datos.length > 0) {
+              for (let i = 0; i < some.datos.length; i++) {
                 this.kpitotaluser = this.kpitotaluser + some.datos[i]['user_count'];
                 this.countuser = this.countuser + 1;
               }
-              if(this.countuser == some.datos.length){
+              if(this.countuser === some.datos.length) {
                 for (let x = 0; x < some.datos.length; x++) {
-                  let porcentaje:number = 0;
-                  porcentaje = ((some.datos[x]['user_count']*100) / this.kpitotaluser);
+                  let porcentaje: number = 0;
+                  porcentaje = ((some.datos[x]['user_count'] * 100) / this.kpitotaluser);
                   porcentaje = Math.round(porcentaje);
                   const object: User = {
                     id: some.datos[x]['id'],
@@ -362,21 +356,19 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
 
               if (this.kpidatauser.length === some.datos.length) {
                 this.isLoadingKpiUser = false;
-                //console.log(this.kpidatauser);
               }
-              
             }
           },
-          (error:any) => { 
+          (error:any) => {
           this.isLoadingKpiUser = false;
           this.kpitotaluser = 0;
           this.kpidatauser = [];
-          this.countuser = 0 ;      
+          this.countuser = 0;
           console.log(<any>error);
-          }  
-          )
+          }
+          );
       })
-    .catch((err) => {console.log(err);})    
+    .catch((err) => {console.log(err); });
   }
 
   public getDataTimeAvg(id:number, termino:string, service:number){
@@ -1053,16 +1045,13 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     this.promedioordercreated = 0;
 
     this._kpiService.getProjectKpiServiceByOrderCreated(this.token.token, id, termino, service).then(
-      (res: any) => 
-      {
+      (res: any) => {
         res.subscribe(
-          (some:any) => 
-          {
-            //console.log(some);
+          (some:any) => {
             if(some && some.datos && some.datos.length > 0){
               for (let i = 0; i < some.datos.length; i++) {
                 this.kpidataOrderCreated.push(some.datos[i]);
-                if(some.datos[i]['user_count']){
+                if (some.datos[i]['user_count']) {
                   this.promedioordercreated = this.promedioordercreated + some.datos[i]['user_count'];
                 }
               }
@@ -1070,63 +1059,60 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
                 this.isLoadingKpiOrderCreated = false;
                 this.promedioordercreated = Math.round(this.promedioordercreated / some.datos.length);
               }
-              
+
             }
           },
-          (error:any) => { 
+          (error:any) => {
           this.isLoadingKpiOrderCreated = false;
           this.kpidataOrderCreated = [];
           this.promedioordercreated = 0;
           console.log(<any>error);
-          }  
-          )
+          }
+          );
       })
-      .catch((err) => {console.log(err);})       
+      .catch((err) => {console.log(err); });
 
   }
 
 
-  selectChangeKpi(){
+  selectChangeKpi() {
     this.getData(this.project.id, this.project.country_id, this.kpiselectedoption, this.kpiselectstatus, this.id);
-    //console.log(event);
   }
 
-  selectChangeKpiStatus(){
+  selectChangeKpiStatus() {
     this.getData(this.project.id, this.project.country_id, this.kpiselectedoption, this.kpiselectstatus, this.id);
-    //console.log(event);
   }
 
-  selectChangeKpiTime(){
+  selectChangeKpiTime() {
     this.getDataTimeAvg(this.project.id, this.kpiselectedoptiontime, this.id);
-    //console.log(event);
   }
 
 
-  selectChangeKpiUser(){
+  selectChangeKpiUser() {
     this.getDataUsers(this.project.id, this.kpiselectedoptionuser, this.kpiselectstatususer, this.id);
   }
 
-  selectChangeKpiStatusUser(){
+  selectChangeKpiStatusUser() {
     this.getDataUsers(this.project.id, this.kpiselectedoptionuser, this.kpiselectstatususer, this.id);
   }
 
-  selectChangeKpiOrderCreated(){
-    this.getDataOrderCreated(this.project.id, this.kpiselectedoptionordercreated, this.id);    
+  selectChangeKpiOrderCreated() {
+    this.getDataOrderCreated(this.project.id, this.kpiselectedoptionordercreated, this.id);
   }
 
-  selectChangeKpiGroupedLocation(){
+  selectChangeKpiGroupedLocation() {
     this.getDataGroupedByLocation(this.project.id, this.kpiselectedoptiongroupedbylocation, this.id);
   }
 
-  selectChangeKpiGroupedUser(){
+  selectChangeKpiGroupedUser() {
     this.getDataGroupedByUser(this.project.id, this.kpiselectedoptiongroupedbyuser, this.id);
   }
 
-  selectChangeKpiGroupedST(){
+  selectChangeKpiGroupedST() {
     this.getDataGroupedByST(this.project.id, this.kpiselectedoptiongroupedbyst, this.id);
   }
 
-  selectChangeKpiGroupedStatus(){
+  selectChangeKpiGroupedStatus() {
     this.getDataGroupedByStatus(this.project.id, this.kpiselectedoptiongroupedbystatus, this.id);
   }
 
@@ -1139,26 +1125,30 @@ export class KpiProjectLocationComponent implements OnInit, OnChanges, OnDestroy
     }
     return null;
   }
-  
+
+
+
+
 }
 
 export interface Element {
-  region: String;
-  comuna: String;
+  region: string;
+  regioncode: string;
+  comuna: string;
   produccion: number;
   porcentaje: number;
 }
 
 export interface User {
   id:number;
-  name: String;
-  surname: String;
+  name: string;
+  surname: string;
   produccion: number;
   porcentaje: number;
 }
 
-export interface OrderCreated{  
-      name: string,
+export interface OrderCreated {
+      name: string;
       series: [
         {
          name: string,
@@ -1167,6 +1157,6 @@ export interface OrderCreated{
         {
           name: string,
           value: number
-         }        
-      ] 
+         }
+      ];
 }

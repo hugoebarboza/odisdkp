@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
 
@@ -25,7 +25,7 @@ const moment = _moment;
   templateUrl: './kpi-project-amcharts.component.html',
   styleUrls: ['./kpi-project-amcharts.component.css']
 })
-export class KpiProjectAmchartsComponent implements OnInit, OnDestroy {
+export class KpiProjectAmchartsComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input() id: number;
   @Input() projectid: number;
@@ -83,10 +83,12 @@ export class KpiProjectAmchartsComponent implements OnInit, OnDestroy {
         dateoptions: new FormControl ('day', [Validators.required]),
         date_rango: new FormControl (null),
       });
-
       this.kpidateoption = 'day';
-      this.getDataDateTime(this.projectid, this.kpidateoption, this.id);
     }
+  }
+
+  ngAfterViewInit() {
+    this.getDataDateTime(this.projectid, this.kpidateoption, this.id);
   }
 
   ngOnDestroy() {
@@ -124,7 +126,7 @@ export class KpiProjectAmchartsComponent implements OnInit, OnDestroy {
 
 
     const data: any = await this._kpiService.getProjectKpiServiceByDateTime(this.token.token, project, term, service, datedesde.value, datehasta.value);
-console.log(data);
+
     if (data && data.datos && data.datos.length > 0) {
       for (let i = 0; i < data.datos.length; i++) {
         const object: Single = {
@@ -148,7 +150,6 @@ console.log(data);
   createamXYChart(datasource: any[]) {
 
     if (datasource && datasource.length > 0) {
-      setTimeout(() => {
 
         this.zone.runOutsideAngular(() => {
           Promise.all([
@@ -190,39 +191,13 @@ console.log(data);
             dateAxis.keepSelection = true;
             this.chartxy = chart;
 
-            /*
-            function generateChartData() {
-              const chartData = [];
-              // current date
-              const firstDate = new Date();
-              // now set 500 minutes back
-              firstDate.setMinutes(firstDate.getDate() - 500);
-              // and generate 500 data items
-              let visits = 500;
-              for (let i = 0; i < 500; i++) {
-                  const newDate = new Date(firstDate);
-                  // each time we add one minute
-                  newDate.setMinutes(newDate.getMinutes() + i);
-                  // some random number
-                  visits += Math.round((Math.random() < 0.5 ? 1 : -1) * Math.random() * 10);
-                  // add data item to the array
-                  chartData.push({
-                      date: newDate,
-                      visits: visits
-                  });
-                  console.log(chartData);
-              }
-              return chartData;
-            }*/
-
-
 
           })
           .catch(e => {
               console.error('Error when creating chart', e);
           });
       });
-      }, 2000);
+
     }
   }
 
@@ -230,7 +205,6 @@ console.log(data);
   SerpentineChart(datasource: any[]) {
     // console.log(datasource);
     if (datasource && datasource.length > 0) {
-      setTimeout(() => {
 
         this.zone.runOutsideAngular(() => {
           Promise.all([
@@ -284,7 +258,6 @@ console.log(data);
               console.error('Error when creating chart', e);
           });
       });
-      }, 2000);
     }
   }
 

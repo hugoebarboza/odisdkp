@@ -33,7 +33,7 @@
                     <div class="row" style="margin-top: 14px;">
                         <div class="col-md-12">
                             <div class="text-center">
-                                <button  mat-raised-button color="primary" (click)="getData(id, formulario.value.dateoptions)" style="margin-right: 8px;"  [disabled]="formulario.invalid" *ngIf="project && id && formulario.value.dateoptions">
+                                <button  mat-raised-button color="primary" (click)="getData(projectid, formulario.value.dateoptions)" style="margin-right: 8px;"  [disabled]="formulario.invalid" *ngIf="project && id && formulario.value.dateoptions">
                                     <mat-icon aria-label="Edit">done</mat-icon>Aceptar                  
                                 </button>
                                 <button  mat-raised-button color="warn" (click)="formulario.reset(); servicetype = null; serviceestatus = null;" style="margin-left: 4px;">
@@ -173,24 +173,25 @@
                                     </div>
                                 </div>    
                                 <div>
-                                <div class="container-fluid" *ngIf="isLoadingPaymentProject || isLoadingPaymentLine">
+                                <div class="container-fluid" *ngIf="isLoadingPaymentLine || isLoadingPaymentProject">
                                     <div class="row">
                                         <div class="col-sm">
                                             <div class="row d-flex justify-content-center">
-                                                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingPaymentProject || isLoadingPaymentLine" ></mat-spinner>
+                                                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingPaymentLine || isLoadingPaymentProject" ></mat-spinner>
                                             </div>                        
                                         </div>
                                     </div>
                                 </div>
                 
-                                <div class=" dIOqge" >
+                                <div class=" dIOqge" >            
 
                                     <div class="jmuLsE" *ngIf="!isLoadingPaymentLine">
+                                        
                                         <div class="row">
                                             <div class="col-sm">
                                                 <div class="row d-flex justify-content-center">        
                                                 <span>
-                                                Producción (últimos 12 meses).
+                                                Producción (12 meses anteriores).
                                                 </span>
                                                 </div>
                                             </div>

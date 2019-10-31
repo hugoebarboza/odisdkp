@@ -97,29 +97,43 @@
                                                 </div>
 
                                                 <div class="row justify-content-center align-items-center" align="center">
-                                                    <div class="col" *ngIf="kpidata && kpidata.length > 0 ">
-                                                        <div class="p-2">
-                                                        <div class="table-responsive">
-                                                                <table class="table">
-                                                                    <thead class="thead-light">
-                                                                        <tr>
-                                                                        <th scope="col">Región/Comuna</th>
-                                                                        <th scope="col"># OT</th>
-                                                                        <th scope="col">% Total</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                    <tbody>
-                                                                        <tr *ngFor="let k of kpidata | keys;">
-                                                                        <th scope="row">{{ kpidata[k].region }} / {{ kpidata[k].comuna }}</th>
-                                                                        <td>{{ kpidata[k].produccion | number}} </td>
-                                                                        <td>{{ kpidata[k].porcentaje | number}} %</td>
-                                                                        </tr>
-                                                                    </tbody>
-                                                                </table>                                                            
-                                                        </div>
-                                                        </div>
 
+                                                    <div class="col" *ngIf="kpidata && kpidata.length > 0 ">
+                                                        <nav>
+                                                            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                                <a class="nav-item nav-link active" id="nav-general-tab" data-toggle="tab" href="#nav-general-ubicacion" role="tab" aria-controls="nav-general" aria-selected="true">General</a>
+                                                                <a class="nav-item nav-link" id="nav-detail-tab" data-toggle="tab" href="#nav-detail-mapa" role="tab" aria-controls="nav-detail" aria-selected="false">Mapa</a>
+                                                            </div>
+                                                        </nav>
+                                                        <div class="tab-content" id="nav-tabContent">
+                                                            <div class="tab-pane fade show active" id="nav-general-ubicacion" role="tabpanel" aria-labelledby="nav-general-tab">
+                                                            <div class="p-2">
+                                                            <div class="table-responsive">
+                                                                    <table class="table">
+                                                                        <thead class="thead-light">
+                                                                            <tr>
+                                                                            <th scope="col">Región/Comuna</th>
+                                                                            <th scope="col"># OT</th>
+                                                                            <th scope="col">% Total</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody>
+                                                                            <tr *ngFor="let k of kpidata | keys;">
+                                                                            <th scope="row">{{ kpidata[k].region }} / {{ kpidata[k].comuna }}</th>
+                                                                            <td>{{ kpidata[k].produccion | number}} </td>
+                                                                            <td>{{ kpidata[k].porcentaje | number}} %</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>                                                            
+                                                            </div>
+                                                            </div>                    
+                                                            </div>
+                                                            <div class="tab-pane fade" id="nav-detail-mapa" role="tabpanel" aria-labelledby="nav-detail-tab">
+                                                                <app-kpi-project-heatmap [data] = "kpidata" ></app-kpi-project-heatmap>
+                                                            </div>
+                                                        </div>
                                                     </div>
+
                                                     <div class="col-sm" *ngIf="kpidata && kpidata.length == 0">
                                                         <div class="row d-flex justify-content-center">
                                                             <div class="dGHjBt">
@@ -1207,3 +1221,5 @@
         </div>
     </div>
 </div>
+
+

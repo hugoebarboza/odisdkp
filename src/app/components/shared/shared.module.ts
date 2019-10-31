@@ -33,6 +33,8 @@ import {
     KpiProjectAmchartsComponent,
     KpiProjectDetailComponent,
     KpiProjectForecastComponent,
+    KpiProjectHeatdayComponent,
+    KpiProjectHeatmapComponent,
     KpiProjectLocationComponent,
     LoadingComponent,
     MenuComponent,
@@ -49,7 +51,6 @@ import {
 
 // Pipes
 import { PipesModule } from '../../pipes/pipes.module';
-
 
 
 
@@ -83,6 +84,8 @@ import { PipesModule } from '../../pipes/pipes.module';
         KpiProjectAmchartsComponent,
         KpiProjectDetailComponent,
         KpiProjectForecastComponent,
+        KpiProjectHeatmapComponent,
+        KpiProjectHeatdayComponent,
         KpiProjectLocationComponent,
         LoadingComponent,
         MenuComponent,
@@ -95,6 +98,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         UploaderComponent,
         UploadTaskComponent,
         ViewOrderTimeSpentComponent,
+
     ],
     exports: [
         AddDocComponent,
@@ -111,6 +115,8 @@ import { PipesModule } from '../../pipes/pipes.module';
         KpiProjectAmchartsComponent,
         KpiProjectDetailComponent,
         KpiProjectForecastComponent,
+        KpiProjectHeatdayComponent,
+        KpiProjectHeatmapComponent,
         KpiProjectLocationComponent,
         LoadingComponent,
         MenuComponent,

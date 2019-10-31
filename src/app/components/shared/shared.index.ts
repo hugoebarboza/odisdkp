@@ -12,6 +12,8 @@ export { KpiProjectComponent } from './kpi/kpi-project.component';
 export { KpiProjectAmchartsComponent } from './kpi/kpi-project-amcharts/kpi-project-amcharts.component';
 export { KpiProjectForecastComponent } from './kpi/kpi-project-forecast/kpi-project-forecast.component';
 export { KpiProjectDetailComponent } from './kpi/kpi-project-detail/kpi-project-detail.component';
+export { KpiProjectHeatdayComponent } from './kpi/kpi-project-heatday/kpi-project-heatday.component';
+export { KpiProjectHeatmapComponent } from './kpi/kpi-project-heatmap/kpi-project-heatmap.component';
 export { KpiProjectLocationComponent } from './kpi/kpi-project-location/kpi-project-location.component';
 export { LoadingComponent } from './loading/loading.component';
 export { MenuComponent } from './menu/menu.component';
