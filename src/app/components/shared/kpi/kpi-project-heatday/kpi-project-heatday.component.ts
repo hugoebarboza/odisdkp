@@ -1,8 +1,14 @@
-import { Component, Input, SimpleChanges, OnChanges } from '@angular/core';
+import { Component, Input, SimpleChanges, OnChanges, OnDestroy, NgZone } from '@angular/core';
 import { FormControl } from '@angular/forms';
 
 // MODELS
 import { PaymentService, UserService } from 'src/app/services/service.index';
+
+// AMCHARTS
+import * as am4core from '@amcharts/amcharts4/core';
+import * as am4charts from '@amcharts/amcharts4/charts';
+import am4themes_animated from '@amcharts/amcharts4/themes/animated';
+
 
 
 @Component({
@@ -10,10 +16,11 @@ import { PaymentService, UserService } from 'src/app/services/service.index';
   templateUrl: './kpi-project-heatday.component.html',
   styleUrls: ['./kpi-project-heatday.component.css']
 })
-export class KpiProjectHeatdayComponent implements OnChanges {
+export class KpiProjectHeatdayComponent implements OnChanges, OnDestroy {
 
   @Input() id: number;
 
+  chartxy: any;
   kpidata = [];
   identity: any;
   isLoading = true;
@@ -269,6 +276,7 @@ export class KpiProjectHeatdayComponent implements OnChanges {
   ];
 
   constructor(
+    private zone: NgZone,
     private _kpiPayment: PaymentService,
     private _userService: UserService,
   ) {
@@ -286,6 +294,15 @@ export class KpiProjectHeatdayComponent implements OnChanges {
       }
     }
   }
+
+  ngOnDestroy() {
+    this.zone.runOutsideAngular(() => {
+      if (this.chartxy) {
+          this.chartxy.dispose();
+      }
+    });
+  }
+
 
   filterProjectByService() {
     for (let i = 0; i < this.proyectos.length; i += 1) {
@@ -361,6 +378,21 @@ export class KpiProjectHeatdayComponent implements OnChanges {
     }
   }
 
+  createamXYChart(datasource: any[]) {
 
+    if (datasource && datasource.length > 0) {
+
+        this.zone.runOutsideAngular(() => {
+          Promise.all([
+          ])
+          .then(() => {
+
+          })
+          .catch(e => {
+              console.error('Error when creating chart', e);
+          });
+      });
+    }
+  }
 
 }
