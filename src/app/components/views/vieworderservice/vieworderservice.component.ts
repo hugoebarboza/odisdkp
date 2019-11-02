@@ -585,6 +585,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   public getData(response: any) {
 
     if (response && response.status === 'success') {
+
           if (response.datos && response.datos.data) {
             this.resultsLength = response.datos.total;
             this.servicename = response.datos.data[0]['service_name'];
@@ -607,6 +608,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
             this.isLoadingResults = false;
     } else {
       // console.log('No Response');
+      this.dataSource = new MatTableDataSource();
       return;
     }
     this.cd.markForCheck();
@@ -648,13 +650,14 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token);
 
-      if (data && data.datos && data.datos.data && data.datos.data.length) {
+      if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
         this.getData(data);
         const trace = this.afp.trace$('getServiceOrder').subscribe();
         this.afp.trace('getServiceOrder', { metrics: { count: data.datos.data.length }, attributes: { user: this.identity.email}, incrementMetric$: { } });
         trace.unsubscribe();
         this.snackBar.open('Órdenes de Trabajo de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
       } else {
+        this.dataSource = new MatTableDataSource();
         this.isLoadingResults = false;
         this.isRateLimitReached = true;
       }
@@ -837,9 +840,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token);
 
-      if (data && data.datos && data.datos.data && data.datos.data.length) {
+      if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
         this.getData(data);
       } else {
+        this.dataSource = new MatTableDataSource();
         this.isLoadingResults = false;
         this.isRateLimitReached = true;
       }
@@ -859,9 +863,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token);
 
-    if (data && data.datos && data.datos.data && data.datos.data.length) {
+    if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
       this.getData(data);
     } else {
+      this.dataSource = new MatTableDataSource();
       this.isLoadingResults = false;
       this.isRateLimitReached = true;
     }
@@ -925,9 +930,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
     this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token);
 
-    if (data && data.datos && data.datos.data && data.datos.data.length) {
+    if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
       this.getData(data);
     } else {
+      this.dataSource = new MatTableDataSource();
       this.isLoadingResults = false;
       this.isRateLimitReached = true;
     }

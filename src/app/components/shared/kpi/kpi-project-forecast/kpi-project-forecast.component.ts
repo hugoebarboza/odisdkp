@@ -509,7 +509,7 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
 
     const data: any = await this._kpiPayment.getProjectServicePayment(this.token.token, project_id, service_id, term, datedesde.value, datehasta.value);
 
-    if (data && data.datos) {
+    if (data && data.datos.length > 0) {
 
       let index = 0;
       let count = 0;
@@ -580,7 +580,7 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
 
     const data: any = await this._kpiPayment.getProjectServicePaymentDate(this.token.token, project_id, service_id, term, year);
 
-    if (data && data.datos) {
+    if (data && data.datos.length > 0) {
       // console.log(data.datos);
       for (let x = 0; x < data.datos.length; x++) {
         if (x === 0) {
@@ -633,7 +633,7 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
 
     const data: any = await this._kpiPayment.getProjectServicePayment(this.token.token, project_id, service_id, term, datedesde.value, datehasta.value);
 
-    if (data && data.datos) {
+    if (data && data.datos.length > 0) {
       for (let i = 0; i < data.datos.length; i++) {
           const object: Single = {
             name: data.datos[i]['name'],
@@ -683,7 +683,7 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
 
       const data: any = await this._kpiPayment.getProjectServicePaymentDate(this.token.token, project_id, service_id, term, year);
 
-      if (data && data.datos) {
+      if (data && data.datos.length > 0) {
         const params: ArraySingle = {atribute: 'date', value: 'value_count'};
         this.kpipaymentprojectserviceyear = await this.arraypush(data.datos, params);
         this.isLoadingpaymentyear = false;

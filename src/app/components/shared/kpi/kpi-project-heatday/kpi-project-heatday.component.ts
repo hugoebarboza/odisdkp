@@ -940,7 +940,7 @@ export class KpiProjectHeatdayComponent implements OnChanges, OnDestroy {
 
     const data: any = await this._kpiPayment.getProjectServicePayment(this.token.token, project_id, service_id, term, datedesde.value, datehasta.value);
 
-    if (data && data.datos) {
+    if (data && data.datos.length > 0) {
         this.isLoading = false;
         const that = this;
         data.datos.forEach(function (value: any) {

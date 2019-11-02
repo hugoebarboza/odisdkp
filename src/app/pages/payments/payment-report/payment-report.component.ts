@@ -320,7 +320,7 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
 
       const data: any = await this._kpiPayment.getProjectPaymentDate(this.token.token, id, term, year);
 
-      if (data && data.datos) {
+      if (data && data.datos.length > 0) {
         for (let x = 0; x < data.datos.length; x++) {
           if (x === 0) {
             const object: Single = {
@@ -376,11 +376,11 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
       const year: any = new Date().getFullYear();
 
       const data: any = await this._kpiPayment.getProjectPaymentDate(this.token.token, id, term, year);
-      if (data && data.datos) {
+      if (data && data.datos.length > 0) {
         const params: ArraySingle = {atribute: 'fecha', value: 'value_count'};
         this.kpipaymentprojectline = await this.arraypush(data.datos, params);
         this.isLoadingPaymentLine = false;
-        if (this.kpipaymentprojectline.length > 0) {
+        if (this.kpipaymentprojectline && this.kpipaymentprojectline.length > 0) {
           this.createamLineChart(this.kpipaymentprojectline);
         }
       } else {
@@ -402,11 +402,11 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
 
       const data: any = await this._kpiPayment.getProjectPaymentDate(this.token, id, term, year);
 
-      if (data && data.datos) {
+      if (data && data.datos.length > 0) {
         const params: ArraySingle = {atribute: 'service_name', value: 'value_count'};
         this.kpipaymentprojectmonth = await this.arraypush(data.datos, params);
         this.isLoadingPaymentMonth = false;
-        if (this.kpipaymentprojectmonth.length > 0) {
+        if (this.kpipaymentprojectmonth && this.kpipaymentprojectmonth.length > 0) {
           this.createamPieChart(this.kpipaymentprojectmonth);
         }
       } else {
@@ -428,11 +428,11 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
 
       const data: any = await this._kpiPayment.getProjectPaymentDate(this.token.token, id, term, year);
 
-      if (data && data.datos) {
+      if (data && data.datos.length > 0) {
         const params: ArraySingle = {atribute: 'service_name', value: 'value_count'};
         this.kpipaymentprojecstacked = await this.arraypush(data.datos, params);
         this.isLoadingPaymentStacked = false;
-        if (this.kpipaymentprojecstacked.length > 0) {
+        if (this.kpipaymentprojecstacked && this.kpipaymentprojecstacked.length > 0) {
           const mm = moment().month('month').format('MMMM');
           const datavalue: object = [{ }];
           datavalue[0]['name'] = mm;

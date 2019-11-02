@@ -6,6 +6,9 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { throwError } from 'rxjs';
 import 'rxjs/add/operator/map';
 
+// CACHE
+import { Cacheable } from 'ngx-cacheable';
+
 import Swal from 'sweetalert2';
 
 // MODELS
@@ -14,66 +17,62 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
 import { GLOBAL } from '../global';
 
 @Injectable()
-	export class OrderserviceService {
+    export class OrderserviceService {
 
-	public url:string;
-	dialogData: any;
-	error: boolean;
-	errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
-	errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
-	
-	
-	dataChange: BehaviorSubject<Order[]> = new BehaviorSubject<Order[]>([]);
+    url: string;
+    dialogData: any;
+    error: boolean;
+    errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
+    errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
 
-	constructor(
-		private _snackBar: MatSnackBar,
-		public _http: HttpClient,
-		)
-	{
-		this.url = GLOBAL.url;
-		this.error = false;
-	}
 
-	
+    dataChange: BehaviorSubject<Order[]> = new BehaviorSubject<Order[]>([]);
+
+    constructor(
+        private _snackBar: MatSnackBar,
+        public _http: HttpClient,
+    ) {
+        this.url = GLOBAL.url;
+        this.error = false;
+    }
+
+
   getDialogData() {
-    	return this.dialogData;
+      return this.dialogData;
   }
 
-
-  getQuery( query:string, token: string | string[] ): Observable<any> {
+  getQuery( query: string, token: string | string[] ): Observable<any> {
     if (!token) {
        return;
     }
-  
-		const url = this.url + query;
-		const headers = new HttpHeaders({
-		'Content-Type': 'application/json'
-		});
-		return this._http.get(url, {headers: headers}).map((res: any) => {
-      			return res;
-		});
+
+        const url = this.url + query;
+        const headers = new HttpHeaders({'Content-Type': 'application/json' });
+        return this._http.get(url, {headers: headers})
+        .map((res: any) => {
+            return res;
+        });
   }
 
-  getOrderDetail(orderid: number, token: any){
+  getOrderDetail(orderid: number, token: any) {
     if (!orderid || !token) {
       return;
     }
 
-    return this.getOrderData('orderdetail/'+orderid, token);
+    return this.getOrderData('orderdetail/' + orderid, token);
   }
 
 
-
-  async getServiceOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, sort: string, order: string, pageSize: number, page: number, id:number, token: any) {
+  async getServiceOrder(filter: string, fieldValue: string, columnValue: string, fieldValueDate: string, columnDateDesdeValue: string, columnDateHastaValue: string, fieldValueRegion: string, columnValueRegion: string, fieldValueUsuario: string, columnValueUsuario: string, sort: string, order: string, pageSize: number, page: number, id: number, token: any) {
     // console.log(sort);
-    if(!fieldValue) {
+    if (!fieldValue) {
       fieldValue = '';
     }
 
-    if(!order) {
+    if (!order) {
       order = 'desc';
     }
-    if(!sort) {
+    if (!sort) {
       sort = 'create_at';
     }
 
@@ -82,18 +81,17 @@ import { GLOBAL } from '../global';
     const query = 'service/' + id + '/order' + paginate;
     const href = url + query;
     const requestUrl = href;
-    // const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-    if(!requestUrl || !token) {
+    if (!requestUrl || !token) {
         return;
     }
 
     try {
-		return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
+        return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
         .then()
         .catch((error) => { this.handleError (error); }
-        );		
+        );
    } catch (err) {
         console.log(err);
    }
@@ -105,7 +103,7 @@ import { GLOBAL } from '../global';
 
 
 
-  getProjectShareOrder(filter: string, fieldValue:string, columnValue:string, fieldValueDate:string, columnDateDesdeValue:string, columnDateHastaValue:string, fieldValueRegion:string, columnValueRegion:string, fieldValueUsuario:string, columnValueUsuario:string, fieldValueEstatus:string, columnValueEstatus:string, columnTimeFromValue:any, columnTimeUntilValue:any, columnValueZona:number, idservicetype:number, sort: string, order: string, pageSize: number, page: number, id:number, idservice:number, token: any, event: number) {
+  getProjectShareOrder(filter: string, fieldValue: string, columnValue: string, fieldValueDate: string, columnDateDesdeValue: string, columnDateHastaValue: string, fieldValueRegion: string, columnValueRegion: string, fieldValueUsuario: string, columnValueUsuario: string, fieldValueEstatus: string, columnValueEstatus: string, columnTimeFromValue: any, columnTimeUntilValue: any, columnValueZona: number, idservicetype: number, sort: string, order: string, pageSize: number, page: number, id: number, idservice: number, token: any, event: number) {
 
     if (!fieldValue) {
       fieldValue = '';
@@ -114,7 +112,7 @@ import { GLOBAL } from '../global';
     if (!order) {
       order = 'desc';
     }
-    if(!sort){
+    if (!sort) {
       sort = 'create_at';
     }
 
@@ -124,12 +122,12 @@ import { GLOBAL } from '../global';
     // console.log(id);
     // console.log(idservice);
     // const paginate = `?page=${page + 1}`;
-    return this.getOrderData('projectservice/'+id+'/service/'+idservice+'/share'+paginate, token);
+    return this.getOrderData('projectservice/' + id + '/service/' + idservice + '/share' + paginate, token);
   }
 
 
-    async getOrderData(query:string, token: any) {
-        if(!token) {
+    async getOrderData(query: string, token: any) {
+        if (!token) {
           return;
         }
 
@@ -139,7 +137,7 @@ import { GLOBAL } from '../global';
             const requestUrl = href;
             const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-            if(!requestUrl) {
+            if (!requestUrl) {
               return;
             }
 
@@ -164,6 +162,10 @@ import { GLOBAL } from '../global';
 		return this.getQuery('service/' + id + '/order', token);
 	}
 
+	@Cacheable({		
+		maxCacheCount: 2,		
+		maxAge: 30000,
+	  })	
 	getShowOrderService(token: any, id: number, orderid: number): Observable<any> {
 		return this.getQuery('service/' + id + '/order/' + orderid, token);
 	}
@@ -181,18 +183,18 @@ import { GLOBAL } from '../global';
 		return this.getQuery('order/'+id+'/listimage', token);
 	}
 
-	getImageOrder(token: any, id: string): Observable<any> {								  
+	getImageOrder(token: any, id: string): Observable<any> {
 		return this.getQuery('order/'+id+'/getimage', token);
 	}
 
 
-	getShowImageOrder(token: any, id: string): Observable<any> {								  
+	getShowImageOrder(token: any, id: string): Observable<any> {
 		return this.getQuery('image/'+id, token);
 	}
 
 
-	getService(token: any, id: string | number): Observable <any> {	
-		return this.getQuery('service/'+id, token);		
+	getService(token: any, id: string | number): Observable <any> {
+		return this.getQuery('service/'+id, token);
 	}
 
 	getAtributoServiceType (token: any, id: string): Observable<any> {
@@ -209,37 +211,35 @@ import { GLOBAL } from '../global';
 	}
 
 	getCustomer(token: any, termino:string, id:number): Observable<any> {
-		return this.getQuery('search/'+termino+'/'+id, token);		
+		return this.getQuery('search/'+termino+'/'+id, token);
 	}
 
 	gettUserOrdenes(token:any, id:number, sort: string, order: string, pageSize: number, page: number,) {
-		if(!token){
+		if(!token) {
 			return;
 		}
 
-		if(!order){
+		if(!order) {
 			order = 'desc';
 		  }
-		  if(!sort){
+		  if(!sort) {
 			sort = 'create_at';
 		  }
 		  
 	    const paginate = `?sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
-		//console.log(paginate);
-	    return this.getProjectOrderData('user/'+id+'/order'+paginate, token);
+	    return this.getProjectOrderData('user/' + id + '/order' + paginate, token);
 	}
 
 
 
 
     getProjectOrderData(query:string, token:any) {
-		if(!token){
+		if(!token) {
 			return;
 		}
 	    const url = this.url;
-	    const href = url+query;
+	    const href = url + query;
 	    const requestUrl = href;
-	    //console.log(requestUrl);
 	    const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
 	    return new Promise((resolve, reject) => {
@@ -253,7 +253,7 @@ import { GLOBAL } from '../global';
 
 
   	add(token: any, order: Order, id:number): void {
-		if (!token){
+		if (!token) {
 			return;
 		}
 
