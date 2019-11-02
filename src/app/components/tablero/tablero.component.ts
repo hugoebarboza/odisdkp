@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnDestroy, OnChanges, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnDestroy, OnChanges, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
@@ -28,12 +28,13 @@ interface Inspector {
 @Component({
   selector: 'app-tablero',
   templateUrl: './tablero.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./tablero.component.css']
 })
 export class TableroComponent implements OnInit, OnDestroy, OnChanges {
 
-  title = "Tablero de Inspecciones";
-  subtitle = "Listado de Inspecciones";
+  title = 'Tablero de Inspecciones';
+  subtitle = 'Listado de Inspecciones';
 
   category_id: number;
   /*
@@ -45,21 +46,21 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
   count: Array<Object> = [];
   datedesde: FormControl;
   datehasta: FormControl;
-  error: string; 
+  error: string;
   estatus: ServiceEstatus[] = [];
   filterValue = '';
-  inspector: Inspector[] = [];    
+  inspector: Inspector[] = [];
   identity: any;
   isLoadingResults = true;
   isRateLimitReached = false;
-  pageIndex:number;
+  pageIndex: number;
   project_id: number;
   resultsLength = 0;
-  role:number;
+  role: number;
   servicename: string;
   subscription: Subscription;
   token: any;
-  terms="";  
+  terms = '';
 
   public inspectorCtrl: FormControl = new FormControl();
   public inspectorMultiFilterCtrl: FormControl = new FormControl();
@@ -69,16 +70,16 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionheaderaction = new FormControl(this.positionOptions[2]);
   positiondatasourceaction = new FormControl(this.positionOptions[3]);
-  positionleftaction = new FormControl(this.positionOptions[4]);  
-  positionrightaction = new FormControl(this.positionOptions[5]);  
+  positionleftaction = new FormControl(this.positionOptions[4]);
+  positionrightaction = new FormControl(this.positionOptions[5]);
 
-  
+
   filtersregion = {
     fieldValue: '',
     criteria: '',
     filtervalue: ''
   };
-  
+
   selectedColumnn = {
     fieldValue: '',
     criteria: '',
@@ -106,10 +107,10 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
   // MatPaginator Inputs
   pageSize = 15;
   pageSizeOptions: number[] = [15, 30, 100, 200];
-  pageEvent: PageEvent;  
+  pageEvent: PageEvent;
 
-  @Input() id : number;
-  @Input() view : number;
+  @Input() id: number;
+  @Input() view: number;
   @Output() portalevent: EventEmitter<number>;
   @Output() ServicioSeleccionado: EventEmitter<string>;
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
@@ -118,6 +119,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
 
 
   constructor(
+    private cd: ChangeDetectorRef,
     public dialog: MatDialog,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
@@ -127,9 +129,9 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     this.token = this._userService.getToken();
     this._userService.handleAuthentication(this.identity, this.token);
     this.portalevent = new EventEmitter();
-    this.ServicioSeleccionado = new EventEmitter(); 
+    this.ServicioSeleccionado = new EventEmitter();
     this.error = '';
-    this.role = 5; //USUARIOS INSPECTORES
+    this.role = 5; // USUARIOS INSPECTORES
 
    }
 
@@ -143,11 +145,13 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     this.getEstatus(this.id);
     this.getProject(this.id);
     this.refreshTable();
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
-    //console.log('La página se va a cerrar');
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 
@@ -175,24 +179,24 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     } else {
       return;
     }
+    this.cd.markForCheck();
   }
 
-  public getCountData(_data: any, _estatus:any){    
-    for (var i=0; i<this.estatus.length; i++){
+  public getCountData(_data: any, _estatus: any) {
+    for (let i = 0; i < this.estatus.length; i++) {
       let value = 0;
-      for (var x=0; x<this.datasource.length; x++){
-        if(this.estatus[i]['id'] == this.datasource[x]['status_id']) {
-          value = value + 1
+      for (let x = 0; x < this.datasource.length; x++) {
+        if (this.estatus[i]['id'] === this.datasource[x]['status_id']) {
+          value = value + 1;
       }
     }
       this.count.push({id: this.estatus[i]['id'], value: value});
     }
-    //console.log(this.count);
-
+    this.cd.markForCheck();
   }
 
 
-  public refreshTable() { 
+  public refreshTable() {
     this.regionMultiCtrl.reset();
     this.inspectorMultiFilterCtrl.reset();
     this.inspectorCtrl = new FormControl('');
@@ -202,7 +206,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     this.selectedColumnnDate.fieldValue = '';
     this.selectedColumnnDate.columnValueDesde = '';
     this.selectedColumnnDate.columnValueHasta = '';
-    this.filtersregion.fieldValue ='';
+    this.filtersregion.fieldValue = '';
     this.selectedColumnnUsuario.fieldValue = '';
     this.selectedColumnnUsuario.columnValue = '';
     this.pageSize = 15;
@@ -219,7 +223,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
 
     this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
@@ -229,41 +233,35 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
             this.isRateLimitReached = true;
             console.log(<any>error);
       });
+      this.cd.markForCheck();
   }
 
 
-  onPaginateChange(event){
+  onPaginateChange(event) {
     this.isLoadingResults = true;
-    //this.pageSize = this.pageSize + 15;
-    /*
-    if(this.paginator){
-      this.paginator.pageIndex = 0;      
-    }else{
-      this.pageIndex = 0;
-    }*/
-   
-    this.pageSize = event.pageSize;    
+    this.pageSize = event.pageSize;
     this.getParams();
     this._orderService.getServiceOrder(
-      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
-      .then(response => {this.getData(response)})
-      .catch(error => {                      
+      .then(response => {this.getData(response); })
+      .catch(error => {
              this.isLoadingResults = false;
              this.isRateLimitReached = true;
-             console.log(<any>error);          
+             console.log(<any>error);
        });
+       this.cd.markForCheck();
    }
- 
 
- 
 
-   getParams(){
-  
-    if(this.filterValue){
+
+
+   getParams() {
+
+    if (this.filterValue) {
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
        this.selectedColumnnDate.fieldValue = '';
@@ -271,69 +269,65 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';    
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
        this.regionMultiCtrl = new FormControl('');
        this.inspectorCtrl = new FormControl('');
-       //console.log('paso000')      
     }
 
-    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue){
+    if (this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue) {
        this.selectedColumnnDate.fieldValue = '';
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';           
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
        this.regionMultiCtrl = new FormControl('');
        this.inspectorCtrl = new FormControl('');
-       //console.log('paso111')
     }
 
-    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && !this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+    if (!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && !this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       //console.log('paso222')
+
     }
 
-    if(this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
+    if (this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)) {
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
-       this.selectedColumnnDate.fieldValue = '';       
+       this.selectedColumnnDate.fieldValue = '';
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
-       this.filtersregion.fieldValue= 'regions.region_name';
-       //console.log('paso333') 
-    }
-
-    if(this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';           
        this.filtersregion.fieldValue = 'regions.region_name';
-       //console.log('paso444') 
     }
 
-    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+    if (this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
+       this.selectedColumnn.fieldValue = '';
+       this.selectedColumnn.columnValue = '';
+       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
+       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
+       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';
+       this.filtersregion.fieldValue = 'regions.region_name';
+    }
+
+    if (!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
        this.filtersregion.fieldValue = '';
@@ -341,138 +335,132 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       //console.log('paso555')
-    }    
+    }
 
-    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
+    if (!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)) {
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
        this.filtersregion.fieldValue = '';
-       this.selectedColumnnDate.fieldValue = '';       
+       this.selectedColumnnDate.fieldValue = '';
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';                  
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
-       //console.log('777')
-    }    
+    }
+
+    this.cd.markForCheck();
 
   }
 
 
 
-  getEstatus(id:number) {    
+  getEstatus(id: number) {
     this.subscription = this._orderService.getServiceEstatus(this.token.token, id).subscribe(
      response => {
-               if(!response){
+               if (!response) {
                  return;
                }
-               if(response.status == 'success'){                  
+               if (response.status === 'success') {
                  this.estatus = response.datos;
-                 //console.log(this.estatus.length);                 
-                 if(this.estatus.length == 1){
+                 if (this.estatus.length === 1) {
                   this.bootstrapClass = 'col-md-12';
                  }
-                 if(this.estatus.length == 2){
+                 if (this.estatus.length === 2) {
                   this.bootstrapClass = 'col-md-6';
                  }
-                 if(this.estatus.length == 3){
+                 if (this.estatus.length === 3) {
                   this.bootstrapClass = 'col-md-4';
                  }
-                 if(this.estatus.length == 4){
+                 if (this.estatus.length === 4) {
                   this.bootstrapClass = 'col-md-2';
-                 }                 
+                 }
                }
-               });        
+               });
+    this.cd.markForCheck();
    }
- 
-   getProject(id:number) {
+
+   getProject(id: number) {
     this.subscription = this._orderService.getService(this.token.token, id).subscribe(
      response => {
-               if (response.status == 'success'){      
-               //console.log(response);
+               if (response.status === 'success') {
+
                this.project_id = response.datos['project_id'];
                this.servicename = response.datos['service_name'];
                this.ServicioSeleccionado.emit(this.servicename);
-               //console.log(this.servicename);
-               if(this.project_id > 0){
-                 this.getUser(this.project_id);                                       
+
+               if (this.project_id > 0) {
+                 this.getUser(this.project_id);
                }
                }
       });
+      this.cd.markForCheck();
    }
 
-   getUser(projectid:number){
-    if(projectid > 0){     
+   getUser(projectid: number) {
+    if (projectid > 0) {
         this._proyecto.getProjectUser(this.token.token, projectid, this.role).then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some: any) => 
-              {
-                if(some.datos){
+              (some: any) => {
+                if (some.datos) {
                   this.inspector = some.datos;
-                  for (var i=0; i<this.inspector.length; i++){
+                  for (let i = 0; i < this.inspector.length; i++) {
                     const userid = this.inspector[i]['id'];
                     const username = this.inspector[i]['usuario'];
                     this.inspector[i] = { name: username, id: userid };
                   }
-                  //console.log(this.inspector);
-                  this.filteredInspectorMulti.next(this.inspector.slice());                  
-                }else{
+                  this.filteredInspectorMulti.next(this.inspector.slice());
+                } else {
                 }
               },
-              (error: any) => { 
+              (error: any) => {
               this.inspector = [];
               console.log(<any>error);
-              }  
-              )
-        })
+              }
+              );
+        });
     }
+    this.cd.markForCheck();
   }
 
 
-  toggleTemplate(event:number) {
-    //this.showtemplate = !this.showtemplate;
-    if(event == 0){     
+  toggleTemplate(event: number) {
+    if (event === 0) {
       this.view = 0;
       this.portalevent.emit(this.view);
     }
-    if (event == 1){
+    if (event === 1) {
       this.view = 1;
       this.portalevent.emit(this.view);
     }
-    
-    if (event == 2){
+
+    if (event === 2) {
       this.view = 2;
-      this.portalevent.emit(this.view);      
+      this.portalevent.emit(this.view);
     }
+    this.cd.markForCheck();
   }
 
 
-  showItem(order_id: number, order_number: string, category_id:number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, estatus: string, order_date: string, required_date: string, vencimiento_date: string, observation: string, create_at: string, usercreate:string, project_name: string, service_name: string, servicetype:string, update_at: string, userupdate:string, region:string, provincia:string, comuna:string, direccion:string) {
-    let service_id = this.id;    
+  showItem(order_id: number, order_number: string, category_id: number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, estatus: string, order_date: string, required_date: string, vencimiento_date: string, observation: string, create_at: string, usercreate: string, project_name: string, service_name: string, servicetype: string, update_at: string, userupdate: string, region: string, provincia: string, comuna: string, direccion: string) {
+    const service_id = this.id;
     const dialogRef = this.dialog.open(ShowComponent, {
       height: '768px',
       width: '1024px',
       disableClose: true,
-      data: {order_id: order_id, order_number: order_number, service_id: service_id, 
-        category_id: category_id, customer_id: customer_id, cc_number: cc_number, 
-        servicetype_id: servicetype_id, status_id: status_id, estatus:estatus, 
-        order_date: order_date, required_date: required_date, vencimiento_date: vencimiento_date, observation: observation, 
-        create_at: create_at, usercreate: usercreate, update_at: update_at, userupdate: userupdate, 
-        project_name: project_name, service_name: service_name, servicetype:servicetype,
-        region:region, provincia:provincia, comuna:comuna, direccion:direccion}
+      data: {order_id: order_id, order_number: order_number, service_id: service_id,
+        category_id: category_id, customer_id: customer_id, cc_number: cc_number,
+        servicetype_id: servicetype_id, status_id: status_id, estatus: estatus,
+        order_date: order_date, required_date: required_date, vencimiento_date: vencimiento_date, observation: observation,
+        create_at: create_at, usercreate: usercreate, update_at: update_at, userupdate: userupdate,
+        project_name: project_name, service_name: service_name, servicetype: servicetype,
+        region: region, provincia: provincia, comuna: comuna, direccion: direccion}
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-
-        //const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
-        // for delete we use splice in order to remove single object from DataService
-        //this.exampleDatabase.dataChange.value.splice(foundIndex, 1);
-        //this.refreshTable();
       }
     });
   }

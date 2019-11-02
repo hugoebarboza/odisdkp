@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, Validators, FormGroup} from '@angular/forms';
 import { MatTableDataSource, MatPaginator, MatSort, Sort } from '@angular/material';
@@ -39,6 +39,7 @@ interface Region {
 @Component({
   selector: 'app-vieworderserviceselect',
   templateUrl: './vieworderserviceselect.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./vieworderserviceselect.component.css']
 })
 export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
@@ -71,35 +72,35 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   inspectorCtrl: FormControl = new FormControl();
   inspectorMultiFilterCtrl: FormControl = new FormControl();
   inspector = new Array();
-  indexitem:number;
-  isLoadingResults:boolean = true;
-  isRateLimitReached:boolean = false;
-  isactiveSearch: boolean = false;
+  indexitem: number;
+  isLoadingResults = true;
+  isRateLimitReached = false;
+  isactiveSearch = false;
   _onDestroy = new Subject<void>();
   order_id: number;
-  pageIndex:number;
+  pageIndex: number;
   pageSizeOptions: number[] = [15, 30, 100, 200];
-  pageSize:number = 15;
-  paramset: string = '';
+  pageSize = 15;
+  paramset = '';
   paramvalue: any;
   project_id: number;
   region = new Array();
-  role:number;
+  role: number;
   searchDecouncer$: Subject<string> = new Subject();
-  selectedRow : Number;
-  show:boolean = false;
-  showcell:boolean = true;
+  selectedRow: Number;
+  show = false;
+  showcell = true;
   subscription: Subscription;
   selection = new SelectionModel<Order[]>(true, []);
-  select: number= 0;
+  select = 0;
   selectedEntry;
   serviceestatus: ServiceEstatus[] = [];
-  resultsLength:number = 0;
+  resultsLength = 0;
   regionMultiCtrl: FormControl = new FormControl('', Validators.required );
-  regionMultiFilterCtrl: FormControl = new FormControl('', Validators.required);  
-  termino: string = '';
-  //title:string = "Seleccione Incidencias";
-  token:any;
+  regionMultiFilterCtrl: FormControl = new FormControl('', Validators.required);
+  termino = '';
+
+  token: any;
 
   filtersregion = {
     fieldValue: '',
@@ -134,7 +135,7 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   };
 
 
-//FILTRADO AVANZADO
+// FILTRADO AVANZADO
 step = 0;
 
 setStep(index: number) {
@@ -147,9 +148,9 @@ nextStep() {
 
 prevStep() {
   this.step--;
-}  
-  
+}
 
+// tslint:disable-next-line:member-ordering
 selectedColumnnEstatus = {
   fieldValue: 'orders_details.status_id',
   criteria: '',
@@ -159,35 +160,33 @@ selectedColumnnEstatus = {
 
 
 
-  columnsSelect: Array<any> = [
-    { name: 'select', label: 'Select' },
-    { name: 'order_number', label: 'N. Orden' },
-    { name: 'cc_number', label: 'N. Cliente' },
-    { name: 'direccion', label: 'Ubicación' },
-    { name: 'servicetype', label: 'Servicio' },
-    { name: 'user', label: 'Informador' },
-    { name: 'create_at', label: 'Creado El' },
-    { name: 'userassigned', label: 'Responsable' },
-    { name: 'estatus', label: 'Estatus' },
-  ];  
+  // tslint:disable-next-line:member-ordering
+  columnsSelect: Array<any> = [ { name: 'select', label: 'Select' }, { name: 'order_number', label: 'N. Orden' }, { name: 'cc_number', label: 'N. Cliente' },
+    { name: 'direccion', label: 'Ubicación' }, { name: 'servicetype', label: 'Servicio' }, { name: 'user', label: 'Informador' }, { name: 'create_at', label: 'Creado El' },
+    { name: 'userassigned', label: 'Responsable' }, { name: 'estatus', label: 'Estatus' },
+  ];
 
+  // tslint:disable-next-line:member-ordering
   selectoptions: Array<any> = [
     { id: 1, label: 'Seleccione Incidencias' },
     { id: 2, label: 'Seleccione Operación' },
     { id: 3, label: 'Confirmación' },
-  ];  
+  ];
 
-  columnsOrderToDisplay: string[] = this.columnsSelect.map(column => column.name);  
-  columnsSelectToDisplay: string[] = this.selectoptions.map(column => column);  
+  // tslint:disable-next-line:member-ordering
+  columnsOrderToDisplay: string[] = this.columnsSelect.map(column => column.name);
+  // tslint:disable-next-line:member-ordering
+  columnsSelectToDisplay: string[] = this.selectoptions.map(column => column);
 
 
   constructor(
+    private cd: ChangeDetectorRef,
+    public dataService: OrderserviceService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
     private _regionService: CountriesService,
     public _userService: UserService,
-    public dataService: OrderserviceService,
-  ) { 
+  ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.portalevent = new EventEmitter();
@@ -222,11 +221,11 @@ selectedColumnnEstatus = {
   }
 
 
-  public firstStep(){
+  public firstStep() {
 
     this.form2 = new FormGroup({
       action2: new FormControl ({value: '2', disabled: false}, )
-    }); 
+    });
 
     this.form4 = new FormGroup({
       action4: new FormControl ({value: '', disabled: false}, )
@@ -235,7 +234,7 @@ selectedColumnnEstatus = {
 
   }
 
-  secondStep(){
+  secondStep() {
 
     this.getServiceEstatus();
 
@@ -305,7 +304,7 @@ selectedColumnnEstatus = {
                   this.isLoadingResults = false;
                   return;
                 }
-                if (response.status === 'success') { 
+                if (response.status === 'success') {
                   this.isLoadingResults = false;
                   Swal.fire('Órdenes actualizadas', 'exitosamente', 'success' );
                 } else {
@@ -354,9 +353,11 @@ selectedColumnnEstatus = {
       }
     });
 
+    this.cd.markForCheck();
+
   }
 
-  cancel(){
+  cancel() {
     this.form2.setValue({
       'action2': {value: '', disabled: true},
     });
@@ -364,7 +365,7 @@ selectedColumnnEstatus = {
     this.form3.setValue({
       'action3': {value: '', disabled: true},
     });
-    
+
     this.form4.setValue({
       'action4': {value: '', disabled: true},
     });
@@ -376,6 +377,8 @@ selectedColumnnEstatus = {
       'vencimiento': {value: '0000-00-00 00:00:00', disabled: true},
     });
 
+    this.cd.markForCheck();
+
   }
 
 
@@ -383,18 +386,18 @@ selectedColumnnEstatus = {
 
     this.es = {
       firstDayOfWeek: 1,
-      dayNames: [ "domingo","lunes","martes","miércoles","jueves","viernes","sábado" ],
-      dayNamesShort: [ "dom","lun","mar","mié","jue","vie","sáb" ],
-      dayNamesMin: [ "D","L","M","X","J","V","S" ],
-      monthNames: [ "enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre" ],
-      monthNamesShort: [ "ene","feb","mar","abr","may","jun","jul","ago","sep","oct","nov","dic" ],
+      dayNames: [ 'domingo', 'lunes', 'martes', 'miércoles', 'jueves', 'viernes', 'sábado' ],
+      dayNamesShort: [ 'dom', 'lun', 'mar', 'mié', 'jue', 'vie', 'sáb' ],
+      dayNamesMin: [ 'D', 'L', 'M', 'X', 'J', 'V', 'S' ],
+      monthNames: [ 'enero', 'febrero', 'marzo', 'abril', 'mayo', 'junio', 'julio', 'agosto', 'septiembre', 'octubre', 'noviembre', 'diciembre' ],
+      monthNamesShort: [ 'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic' ],
       today: 'Hoy',
       clear: 'Borrar'
-  }
+  };
 
-    //console.log('on init');
-    //VALORES POR DEFECTO DE FILTRO AVANZADO
-    
+    // console.log('on init');
+    // VALORES POR DEFECTO DE FILTRO AVANZADO
+
     this.selectedColumnnDate.fieldValue = 'orders.create_at';
     this.selectedColumnn.fieldValue = 'orders.create_at';
     this.selectedColumnnDate.columnValueDesde = this.date.value;
@@ -409,8 +412,6 @@ selectedColumnnEstatus = {
     this.datasourceLength = 0;
     this.loadInfo();
     this.getProject(this.id);
-    //this.getTipoServicio(this.id);    
-    //this.getEstatus(this.id);
     this.refreshTable();
 
     this.setupSearchDebouncer();
@@ -418,19 +419,23 @@ selectedColumnnEstatus = {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filterInspector();
-      });    
+        this.cd.markForCheck();
+      });
+
+      this.cd.markForCheck();
   }
 
 
   /** Whether the number of selected elements matches the total number of rows. */
-  isAllSelected() {    
-    if (this.selection.isEmpty()) { 
-      return false; 
+  isAllSelected() {
+    if (this.selection.isEmpty()) {
+      return false;
     }
     const numSelected = this.selection.selected.length;
     const numRows = this.dataSource.data.length;
-    //console.log(this.selection.selected.length);
-    //console.log(this.selection.selected);
+    // console.log(this.selection.selected.length);
+    // console.log(this.selection.selected);
+    this.cd.markForCheck();
     return numSelected === numRows;
   }
 
@@ -439,9 +444,9 @@ selectedColumnnEstatus = {
   masterToggle() {
     this.isAllSelected() ?
         this.selection.clear() :
-        this.dataSource.data.forEach(row => this.selection.select(row));    
-        //console.log(this.selection);
-  }  
+        this.dataSource.data.forEach(row => this.selection.select(row));
+        // console.log(this.selection);
+  }
 
   /** The label for the checkbox on the passed row */
   checkboxLabel(row?: any): string {
@@ -450,35 +455,34 @@ selectedColumnnEstatus = {
   }
   return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.position + 1}`;
   }
-  
 
-  hoverIn(index: number){
+
+  hoverIn(index: number) {
     this.indexitem = index;
   }
 
-  hoverOut(_index: number){
+  hoverOut(_index: number) {
     this.indexitem = -1;
 
   }
 
-  getServiceEstatus(){  
+  getServiceEstatus() {
     this.dataService.getServiceEstatus(this.token, this.id)
     .pipe(takeUntil(this._onDestroy))
     .subscribe(
     response => {
-              if(!response){
+              if (!response) {
                 return;
               }
-              if(response.status == 'success'){   
+              if (response.status === 'success') {
                 this.serviceestatus = response.datos;
               }
-              });        
-    }  
+              });
+    this.cd.markForCheck();
+    }
 
 
-  
-
-  public refreshTable() { 
+  public refreshTable() {
     this.termino = '';
     this.selectedRow = -1;
     this.order_id = 0;
@@ -491,7 +495,7 @@ selectedColumnnEstatus = {
     this.selectedColumnnDate.fieldValue = '';
     this.selectedColumnnDate.columnValueDesde = '';
     this.selectedColumnnDate.columnValueHasta = '';
-    this.filtersregion.fieldValue ='';
+    this.filtersregion.fieldValue = '';
     this.selectedColumnnUsuario.fieldValue = '';
     this.selectedColumnnUsuario.columnValue = '';
     this.pageSize = 15;
@@ -508,7 +512,7 @@ selectedColumnnEstatus = {
 
     this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
@@ -518,6 +522,7 @@ selectedColumnnEstatus = {
             this.isRateLimitReached = true;
             console.log(<any>error);
       });
+      this.cd.markForCheck();
   }
 
   public getData(response: any) {
@@ -542,27 +547,29 @@ selectedColumnnEstatus = {
     } else {
       return;
     }
+    this.cd.markForCheck();
   }
 
 
 
-  ngOnDestroy() {   
+  ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
-  }  
+  }
 
 
 
   applyFilter() {
-    if(this.filterValue.length > 0 && this.filterValue.trim() !== '' && this.termino !== this.filterValue){
+    if (this.filterValue.length > 0 && this.filterValue.trim() !== '' && this.termino !== this.filterValue) {
       this.isLoadingResults = true;
       this.getParams();
       this.termino = this.filterValue;
       this.searchDecouncer$.next(this.filterValue);
     }
+    this.cd.markForCheck();
   }
 
 
@@ -574,27 +581,29 @@ selectedColumnnEstatus = {
       // Remember value after debouncing
       this.debouncedInputValue = term;
       this._orderService.getServiceOrder(
-        this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
-        this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+        this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+        this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
         this.filtersregion.fieldValue, this.regionMultiCtrl.value,
         this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
         this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
         .then(response => {
           this.getData(response);
-          //console.log(<any>response);
+
         })
-        .catch(error => {                      
+        .catch(error => {
               this.isLoadingResults = false;
               this.isRateLimitReached = true;
-              console.log(<any>error);          
+              console.log(<any>error);
         });
       // Do the actual search
-    });    
+      this.cd.markForCheck();
+    });
+    this.cd.markForCheck();
   }
 
 
   private filterInspector() {
-    //console.log('filter');
+
     if (!this.inspector) {
       return;
     }
@@ -613,13 +622,13 @@ selectedColumnnEstatus = {
   }
 
 
-  public loadInfo(){
-    //console.log(this.identity.country);
+  public loadInfo() {
+
    this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                 response => {
-                  //console.log(response);
-                   if(response.status == 'success'){
-                    for (var i=0; i<response.datos.region.length; i++){
+
+                   if (response.status === 'success') {
+                    for (let i = 0; i < response.datos.region.length; i++) {
                       const regionname = response.datos.region[i]['region_name'];
                       const regionid = response.datos.region[i]['id'];
                       this.region[i] = { name: regionname, id: regionid };
@@ -634,54 +643,49 @@ selectedColumnnEstatus = {
                           this.filterRegionMulti();
                         });
 
-                     //console.log('paso success');
-                      //this.region = response.datos.region;
-
-                    }else{
+                    } else {
                       this.region = null;
                          }
-                    });    
+                    });
   }
 
 
 
-  getProject(id:number) {
+  getProject(id: number) {
     this.subscription = this._orderService.getService(this.token.token, id).subscribe(
      response => {
-               if (response.status == 'success'){         
+               if (response.status === 'success') {
                this.project_id = response.datos['project_id'];
-               if(this.project_id > 0){
-                 this.getUser(this.project_id);                                       
+               if (this.project_id > 0) {
+                 this.getUser(this.project_id);
                }
                }
       });
    }
- 
-   getUser(projectid:number){
-    if(projectid > 0){     
+
+   getUser(projectid: number) {
+    if (projectid > 0) {
         this._proyecto.getProjectUser(this.token.token, projectid, this.role).then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
+              (some) => {
+                if (some.datos) {
                   this.inspector = some.datos;
-                  for (var i=0; i<this.inspector.length; i++){
+                  for (let i = 0; i < this.inspector.length; i++) {
                     const userid = this.inspector[i]['id'];
                     const username = this.inspector[i]['usuario'];
-                    this.inspector[i] = { name: username, id: userid };                  
+                    this.inspector[i] = { name: username, id: userid };
                   }
-                  this.filteredInspectorMulti.next(this.inspector.slice());                  
-                }else{
+                  this.filteredInspectorMulti.next(this.inspector.slice());
+                } else {
                 }
               },
-              (error) => { 
+              (error) => {
               this.inspector = [];
               console.log(<any>error);
-              }  
-              )
-        })
+              }
+              );
+        });
     }
   }
 
@@ -706,11 +710,11 @@ selectedColumnnEstatus = {
 
 
 
-  getParams(){
-  
+  getParams() {
+
     this.isLoadingResults = true;
 
-    if(this.filterValue){
+    if (this.filterValue) {
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
        this.selectedColumnnDate.fieldValue = '';
@@ -718,67 +722,59 @@ selectedColumnnEstatus = {
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';       
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
        this.regionMultiCtrl = new FormControl('');
-       //console.log('paso000')      
     }
 
-    if(this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue && !this.selectedColumnnDate.fieldValue){
+    if (this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue && !this.selectedColumnnDate.fieldValue) {
        this.selectedColumnnDate.fieldValue = '';
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';              
-       //this.datedesde = new FormControl('');
-       //this.datehasta = new FormControl('');
+       this.selectedColumnnUsuario.columnValue = '';
        this.regionMultiCtrl = new FormControl('');
-       //console.log('paso111')
     }
 
-    if(!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       //this.selectedColumnn.fieldValue = '';
-       //this.selectedColumnn.columnValue = '';
+    if (!this.regionMultiCtrl.value && !this.selectedColumnnUsuario.fieldValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
        this.filtersregion.fieldValue = '';
        this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';              
+       this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
-       //console.log('paso222')
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
+
     }
 
-    if(this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)){
+    if (this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)) {
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
-       this.selectedColumnnDate.fieldValue = '';       
+       this.selectedColumnnDate.fieldValue = '';
        this.selectedColumnnDate.columnValueDesde = '';
        this.selectedColumnnDate.columnValueHasta = '';
        this.selectedColumnnUsuario.fieldValue = '';
        this.selectedColumnnUsuario.columnValue = '';
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
-       this.filtersregion.fieldValue= 'regions.region_name';
-       //console.log('paso333') 
-    }
-
-    if(this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
-       this.selectedColumnn.fieldValue = '';
-       this.selectedColumnn.columnValue = '';
-       this.selectedColumnnUsuario.fieldValue = '';
-       this.selectedColumnnUsuario.columnValue = '';
-       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
-       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;       
        this.filtersregion.fieldValue = 'regions.region_name';
-       //console.log('paso444') 
     }
 
-    if(!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta){
+    if (this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
+       this.selectedColumnn.fieldValue = '';
+       this.selectedColumnn.columnValue = '';
+       this.selectedColumnnUsuario.fieldValue = '';
+       this.selectedColumnnUsuario.columnValue = '';
+       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
+       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
+       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
+       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
+       this.filtersregion.fieldValue = 'regions.region_name';
+    }
+
+    if (!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
        this.selectedColumnn.fieldValue = '';
        this.selectedColumnn.columnValue = '';
        this.filtersregion.fieldValue = '';
@@ -786,34 +782,33 @@ selectedColumnnEstatus = {
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       //console.log('paso555')
     }
+    this.cd.markForCheck();
   }
 
 
   handleSortChange(sort: Sort): void {
     if (sort.active && sort.direction) {
-      this.sort = sort;      
+      this.sort = sort;
     }
-    
+
     this.getParams();
 
     this._orderService.getServiceOrder(
-    this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
-    this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+    this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+    this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
     this.filtersregion.fieldValue, this.regionMultiCtrl.value,
     this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
     this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
-    .then(response => {this.getData(response)})
-    .catch(error => {                      
+    .then(response => {this.getData(response); })
+    .catch(error => {
           this.isLoadingResults = false;
           this.isRateLimitReached = true;
-          console.log(<any>error);          
+          console.log(<any>error);
     });
   }
 
 
-   
 
   resetFilters() {
     this.filterValue = '';
@@ -831,79 +826,81 @@ selectedColumnnEstatus = {
 
   resetRegionFilters() {
     this.regionMultiCtrl.reset();
-  }  
+  }
 
 
 
   search() {
-    this.getParams();    
+    this.getParams();
     this._orderService.getServiceOrder(
-      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
-      .then(response => {this.getData(response)})
-      .catch(error => {                      
+      .then(response => {this.getData(response); })
+      .catch(error => {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
-            console.log(<any>error);          
+            console.log(<any>error);
       });
+      this.cd.markForCheck();
   }
 
 
 
-  onPaginateChange(event){
-    //this.isLoadingResults = true;
-    this.pageSize = event.pageSize;    
+  onPaginateChange(event) {
+    this.pageSize = event.pageSize;
     this.getParams();
      this._orderService.getServiceOrder(
-       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,             
-       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
        this.filtersregion.fieldValue, this.regionMultiCtrl.value,
        this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
        this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
-       .then(response => {this.getData(response)})
-       .catch(error => {                      
+       .then(response => { this.getData(response); } )
+       .catch(error => {
              this.isLoadingResults = false;
              this.isRateLimitReached = true;
-             console.log(<any>error);          
+             console.log(<any>error);
        });
+       this.cd.markForCheck();
    }
- 
 
 
 
-  toggle(e:any) {
+
+  toggle(e: any) {
     this.show = !this.show;
-
     // CHANGE THE NAME OF THE BUTTON.
-    this.selectedColumnn.fieldValue='';
-    this.selectedColumnn.columnValue='';
-    this.selectedColumnnDate.fieldValue='';
-    this.selectedColumnnDate.columnValueDesde='';
-    this.selectedColumnnDate.columnValueHasta='';
+    this.selectedColumnn.fieldValue = '';
+    this.selectedColumnn.columnValue = '';
+    this.selectedColumnnDate.fieldValue = '';
+    this.selectedColumnnDate.columnValueDesde = '';
+    this.selectedColumnnDate.columnValueHasta = '';
     this.filtersregion.fieldValue = '';
     this.regionMultiCtrl.reset();
     e.stopPropagation();
+    this.cd.markForCheck();
   }
 
 
-  toggleTemplate(event:number) {
-    //this.showtemplate = !this.showtemplate;
-    if(event == 0){     
+  toggleTemplate(event: number) {
+
+    if (event === 0) {
       this.view = 0;
       this.portalevent.emit(this.view);
     }
-    if (event == 1){
+    if (event === 1) {
       this.view = 1;
       this.portalevent.emit(this.view);
     }
-    
-    if (event == 2){
+
+    if (event === 2) {
       this.view = 2;
-      this.portalevent.emit(this.view);      
+      this.portalevent.emit(this.view);
     }
+    this.cd.markForCheck();
   }
 
 

@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
@@ -58,7 +58,6 @@ import { ToastrService } from 'ngx-toastr';
 import { AngularFirePerformance } from '@angular/fire/performance';
 
 
-
 interface Inspector {
   id: number;
   name: string;
@@ -79,6 +78,7 @@ interface Time {
 @Component({
   selector: 'app-vieworderservice',
   templateUrl: './vieworderservice.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./vieworderservice.component.css'],
   providers: [CountriesService, ExcelService, OrderserviceService, UserService]
 })
@@ -324,6 +324,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     private afp: AngularFirePerformance,
+    private cd: ChangeDetectorRef,
     public _modalManage: ModalManageService,
     private _regionService: CountriesService,
     private _orderService: OrderserviceService,
@@ -421,7 +422,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filterInspector();
+        this.cd.markForCheck();
       });
+    this.cd.markForCheck();
   }
 
 
@@ -448,6 +451,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.getTipoServicio(this.id);
     this.getEstatus(this.id);
     this.refreshTable();
+    // this.cd.detectChanges();
+    const serviceid = this.id;
+    this.service_id = serviceid;
+    this.cd.markForCheck();
   }
 
 
@@ -599,9 +606,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
             }
             this.isLoadingResults = false;
     } else {
-      console.log('No Response');
+      // console.log('No Response');
       return;
     }
+    this.cd.markForCheck();
   }
 
 
@@ -650,6 +658,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         this.isLoadingResults = false;
         this.isRateLimitReached = true;
       }
+
+      this.cd.markForCheck();
   }
 
 
@@ -808,7 +818,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
        // console.log('paso000');
     }
-
+    this.cd.markForCheck();
     // console.log(this.filterValue);
 
   }
@@ -833,6 +843,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         this.isLoadingResults = false;
         this.isRateLimitReached = true;
       }
+      this.cd.markForCheck();
   }
 
 
@@ -854,6 +865,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.isLoadingResults = false;
       this.isRateLimitReached = true;
     }
+    this.cd.markForCheck();
 
   }
 
@@ -861,10 +873,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.filterValue = this.filterValue.trim();
     if (this.filterValue.length > 1 && this.filterValue.trim() !== '' && this.termino !== this.filterValue) {
       this.isLoadingResults = true;
-      this.getParams();
+      // this.getParams();
       this.termino = this.filterValue.trim();
       this.searchDecouncer$.next(this.filterValue.trim());
     }
+    this.cd.markForCheck();
 
   }
 
@@ -874,8 +887,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       debounceTime(3000),
     ).subscribe((term: string) => {
       // Remember value after debouncing
+      this.getParams();
       this.debouncedInputValue = term;
-
       this._orderService.getServiceOrder(
         this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
         this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
@@ -890,7 +903,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
               this.isRateLimitReached = true;
               console.log(<any>error);
         });
-
+        this.cd.markForCheck();
     });
   }
 
@@ -918,6 +931,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.isLoadingResults = false;
       this.isRateLimitReached = true;
     }
+    this.cd.markForCheck();
 
   }
 
@@ -946,6 +960,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
                       this.region = null;
                          }
                     });
+    this.cd.markForCheck();
   }
 
 
@@ -971,30 +986,57 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   toggleTemplate(event: number) {
+
+    const object: Single = {serviceid: 0, view: 0};
+    const template: Single = object;
+    this.portal = object.view;
+    this.service_id = object.serviceid;
+
     if (event === 0) {
       this._portal = this.myTemplate;
       this.showcell = true;
-      this.portal = 0;
+      template.serviceid = this.id;
+      template.view = 0;
+      this.portal = template.view;
+      this.service_id = template.serviceid;
       this.columnsOrderToDisplay = this.columns.map(column => column.name);
     }
+
     if (event === 1) {
       this._portal = this.myTemplate2;
       this.showcell = false;
-      this.portal = 1;
+      template.serviceid = this.id;
+      template.view = 1;
+      this.portal = template.view;
+      this.service_id = template.serviceid;
+      // this.portal = 1;
       this.columnsOrderToDisplay = this.columnsHide.map(column => column.name);
+      // this.service_id = this.id;
     }
 
     if (event === 2) {
       this._portal = this.myTemplate3;
       this.showcell = false;
-      this.portal = 2;
+      template.serviceid = this.id;
+      template.view = 2;
+      this.portal = template.view;
+      this.service_id = template.serviceid;
+      // this.portal = 2;
+      // this.service_id = this.id;
     }
 
     if (event === 3) {
       this._portal = this.myTemplate4;
       this.showcell = false;
-      this.portal = 2;
+      template.serviceid = this.id;
+      template.view = 2;
+      this.portal = template.view;
+      this.service_id = template.serviceid;
+      // this.portal = 2;
+      // this.service_id = this.id;
     }
+
+    this.cd.markForCheck();
   }
 
 
@@ -1567,7 +1609,7 @@ private filterRegionMulti() {
 
     this._orderService.getProjectShareOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta, 
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.selectedColumnnEstatus.fieldValue, this.selectedColumnnEstatus.columnValue,
@@ -1606,10 +1648,11 @@ private filterRegionMulti() {
                         if (this.exportDataSource.data[j]['name_table'] === 'address') {
                            valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;PATIO;ESPIGA;POSICION;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;';
                         }
-                        for (let key in this.exportDataSource.data[j]['atributo_share']) {
-                          let newarray = this.exportDataSource.data[j]['atributo_share'][key];
+                        // tslint:disable-next-line:forin
+                        for (const key in this.exportDataSource.data[j]['atributo_share']) {
+                          const newarray = this.exportDataSource.data[j]['atributo_share'][key];
                           if (newarray['type']  !== 'label') {
-                             valuearrayexcel = valuearrayexcel+newarray['descripcion']+';';
+                             valuearrayexcel = valuearrayexcel + newarray['descripcion'] + ';';
                           }
                         }
                         banderatitulo = false;
@@ -1622,9 +1665,11 @@ private filterRegionMulti() {
 
                       }
                         if (this.exportDataSource.data[j]['name_table'] === 'address') {
+                          // tslint:disable-next-line:no-var-keyword
                           var ubicacion = this.exportDataSource.data[j]['direccion'];
                         }
                         if (this.exportDataSource.data[j]['name_table'] === 'vehiculos') {
+                          // tslint:disable-next-line:prefer-const
                           var ubicacion = this.exportDataSource.data[j]['patio'] + '-' + this.exportDataSource.data[j]['espiga'] + '-' + this.exportDataSource.data[j]['posicion'];
                         }
 
@@ -1643,16 +1688,17 @@ private filterRegionMulti() {
                           if (this.exportDataSource.data[j]['atributo_share'][keyatributovalue] !== null) {
                             orderatributovalue[keyatributovalue] = this.exportDataSource.data[j]['atributo_share'][keyatributovalue];
                             let banderasindato = true;
-                            for (let keyorderatributovalue in this.exportDataSource.data[j]['orderatributo']) {
-                             if (this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['atributo_id'] == this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['id']) {
-                                 var ordervalue = this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor'];
-                                 ordervalue = ordervalue.split("\n").join(" ");
-                                 ordervalue = ordervalue.split("\t").join(" ");
-                                 ordervalue = ordervalue.split(";").join(" ");
+                            // tslint:disable-next-line:forin
+                            for (const keyorderatributovalue in this.exportDataSource.data[j]['orderatributo']) {
+                             if (this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['atributo_id'] === this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['id']) {
+                                 let ordervalue = this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor'];
+                                 ordervalue = ordervalue.split('\n').join('');
+                                 ordervalue = ordervalue.split('\t').join('');
+                                 ordervalue = ordervalue.split(';').join('');
                                  valuearrayexcel = valuearrayexcel + ordervalue + ';';
                                  banderasindato = false;
                              }
-                             if (this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label') {
+                             if (this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] === 'label') {
                                 banderasindato = false;
                              }
                             }
@@ -1667,7 +1713,7 @@ private filterRegionMulti() {
 
 
                         } else {
-                           valuearrayexcel = valuearrayexcel +'\n';
+                           valuearrayexcel = valuearrayexcel + '\n';
                         }
 
                     }// END FIRST IF
@@ -1741,12 +1787,13 @@ private filterRegionMulti() {
 
   ];
 
-   for (let propiedad in this.dataSource.data) {
-      array.push(this.dataSource.data[propiedad]);      
+   // tslint:disable-next-line:forin
+   for (const propiedad in this.dataSource.data) {
+      array.push(this.dataSource.data[propiedad]);
       rows[i] = array[i];
       projectname = array[i]['project_name'];
       servicename = array[i]['service_name'];
-      i = i+1;
+      i = i + 1;
     }
 
 /*
@@ -1832,3 +1879,7 @@ function imgToBase64(src, callback) {
 }
 
 
+export interface Single {
+  serviceid: number;
+  view: number;
+}

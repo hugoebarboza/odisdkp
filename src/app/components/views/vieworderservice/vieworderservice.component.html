@@ -1,3 +1,4 @@
+
 <div class="portalHost" *ngIf="portal !== 1">
    <ng-container [cdkPortalOutlet]="_portal" ></ng-container>
 </div>
@@ -950,9 +951,10 @@
   </div>
 </ng-template>
 
+
 <ng-template cdkPortal #myTemplate3="cdkPortal" >
   <div style="height: 100%">
-    <app-tablero [id]="id" (portalevent) = "toggleTemplate( $event )" [view]="portal"></app-tablero>
+    <app-tablero [id]="service_id" (portalevent) = "toggleTemplate( $event )" [view]="portal"></app-tablero>
   </div>
 </ng-template>
 

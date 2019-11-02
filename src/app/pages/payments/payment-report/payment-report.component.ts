@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
+import { Component, OnInit, Input, NgZone, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { TooltipPosition } from '@angular/material';
 import { Observable } from 'rxjs/Observable';
@@ -16,13 +16,13 @@ import { ToastrService } from 'ngx-toastr';
 // AMCHART
 import * as am4core from '@amcharts/amcharts4/core';
 import * as am4charts from '@amcharts/amcharts4/charts';
-import * as am4maps from '@amcharts/amcharts4/maps';
 import am4themes_animated from '@amcharts/amcharts4/themes/animated';
 
 
 @Component({
   selector: 'app-payment-report',
   templateUrl: './payment-report.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./payment-report.component.css'],
 })
 export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -102,6 +102,7 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
 
 
   constructor(
+    private cd: ChangeDetectorRef,
     private toasterService: ToastrService,
     private zone: NgZone,
     private _kpiPayment: PaymentService,
@@ -122,26 +123,25 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
       // servicetype: new FormControl (null),
       // status: new FormControl (null)
     });
-
+    this.id.subscribe( id => {
+      const projectid = id;
+      this.projectid = projectid;
+      this.cd.markForCheck();
+    });
   }
 
   ngAfterViewInit() {
-    // this.createamMapaChart();
-    this.id.subscribe( id => {
-      const projectid = id;
-      this.projectid = id;
-      if ( projectid && projectid > 0 ) {
+      if ( this.projectid && this.projectid > 0 ) {
         this.servicetype = [];
         this.serviceestatus = [];
         if (this.formulario.value.dateoptions) {
-          this.getData(projectid, this.formulario.value.dateoptions);
-          this.getDataPaymentProject(projectid, 'trimester');
-          this.getDataPaymentMonth(projectid, 'month');
-          this.getDataPaymentProjectLine(projectid, 'year');
-          this.getDataPaymentProjectStacked(projectid, 'service');
+          this.getData(this.projectid, this.formulario.value.dateoptions);
+          this.getDataPaymentProject(this.projectid, 'trimester');
+          this.getDataPaymentMonth(this.projectid, 'month');
+          this.getDataPaymentProjectLine(this.projectid, 'year');
+          this.getDataPaymentProjectStacked(this.projectid, 'service');
         }
       }
-    });
   }
 
 
@@ -181,14 +181,11 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
 
     const data: any = await this.getDataPayment(id, term);
 
-    if (data && data.datos) {
-
-
+    if (data && data.datos.length > 0) {
       const params: ArraySingle = {atribute: 'name', value: 'value_count'};
       this.kpipayment = await this.arraypush(data.datos, params);
       this.kpidatatable = await this.arraypushmulti(data.datos);
       this.isLoading = false;
-
 
       /*
       for (let i = 0; i < data.datos.length; i++) {
@@ -247,7 +244,7 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
       this.kpipayment = [];
       this.isLoading = false;
     }
-
+    this.cd.markForCheck();
   }
 
   async getDataPayment(id: number, term: string) {
@@ -272,6 +269,7 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
     if (id && id > 0) {
       return this._kpiPayment.getProjectPayment(this.token, id, term, datedesde.value, datehasta.value);
     }
+    this.cd.markForCheck();
   }
 
 
@@ -365,6 +363,7 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
       }
 
     }
+    this.cd.markForCheck();
   }
 
 
@@ -390,6 +389,7 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
       }
 
     }
+    this.cd.markForCheck();
   }
 
 
@@ -414,6 +414,7 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
         this.isLoadingPaymentMonth = false;
       }
     }
+    this.cd.markForCheck();
   }
 
 
@@ -446,8 +447,8 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
         this.kpipaymentproject = [];
         this.isLoadingPaymentStacked = false;
       }
-
     }
+    this.cd.markForCheck();
   }
 
 
@@ -768,176 +769,6 @@ export class PaymentReportComponent implements OnInit, AfterViewInit, OnDestroy 
     }
   }
 
-
-  createamMapaChart () {
-
-      this.zone.runOutsideAngular(() => {
-        Promise.all([
-        ])
-            .then(() => {
-            // Themes begin
-            am4core.useTheme(am4themes_animated);
-            // Themes end
-            const countryMaps = {
-              'AL': [ 'albaniaLow' ],
-              'DZ': [ 'algeriaLow' ],
-              'AD': [ 'andorraLow' ],
-              'AO': [ 'angolaLow' ],
-              'AR': [ 'argentinaLow' ],
-              'AM': [ 'armeniaLow' ],
-              'AU': [ 'australiaLow' ],
-              'AT': [ 'austriaLow' ],
-              'AZ': [ 'azerbaijanLow' ],
-              'BH': [ 'bahrainLow' ],
-              'BD': [ 'bangladeshLow' ],
-              'BY': [ 'belarusLow' ],
-              'BE': [ 'belgiumLow' ],
-              'BZ': [ 'belizeLow' ],
-              'BM': [ 'bermudaLow' ],
-              'BT': [ 'bhutanLow' ],
-              'BO': [ 'boliviaLow' ],
-              'BW': [ 'botswanaLow' ],
-              'BR': [ 'brazilLow' ],
-              'BN': [ 'bruneiDarussalamLow' ],
-              'BG': [ 'bulgariaLow' ],
-              'BF': [ 'burkinaFasoLow' ],
-              'BI': [ 'burundiLow' ],
-              'KH': [ 'cambodiaLow' ],
-              'CM': [ 'cameroonLow' ],
-              'CA': [ 'canandaLow' ],
-              'CV': [ 'capeVerdeLow' ],
-              'CF': [ 'centralAfricanRepublicLow' ],
-              'TD': [ 'chadLow' ],
-              'CL': [ 'chileLow' ],
-              'CN': [ 'chinaLow' ],
-              'CO': [ 'colombiaLow' ],
-              'CD': [ 'congoDRLow' ],
-              'CG': [ 'congoLow' ],
-              'CR': [ 'costaRicaLow' ],
-              'HR': [ 'croatiaLow' ],
-              'CZ': [ 'czechRepublicLow' ],
-              'DK': [ 'denmarkLow' ],
-              'DJ': [ 'djiboutiLow' ],
-              'DO': [ 'dominicanRepublicLow' ],
-              'EC': [ 'ecuadorLow' ],
-              'EG': [ 'egyptLow' ],
-              'SV': [ 'elSalvadorLow' ],
-              'EE': [ 'estoniaLow' ],
-              'SZ': [ 'eswatiniLow' ],
-              'FO': [ 'faroeIslandsLow' ],
-              'FI': [ 'finlandLow' ],
-              'FR': [ 'franceLow' ],
-              'GF': [ 'frenchGuianaLow' ],
-              'GE': [ 'georgiaLow' ],
-              'DE': [ 'germanyLow' ],
-              'GR': [ 'greeceLow' ],
-              'GL': [ 'greenlandLow' ],
-              'GN': [ 'guineaLow' ],
-              'HN': [ 'hondurasLow' ],
-              'HK': [ 'hongKongLow' ],
-              'HU': [ 'hungaryLow' ],
-              'IS': [ 'icelandLow' ],
-              'IN': [ 'indiaLow' ],
-              'GB': [ 'ukLow' ],
-              'IE': [ 'irelandLow' ],
-              'IL': [ 'israelLow' ],
-              'PS': [ 'palestineLow' ],
-              'MT': [ 'italyLow' ],
-              'SM': [ 'italyLow' ],
-              'VA': [ 'italyLow' ],
-              'IT': [ 'italyLow' ],
-              'JP': [ 'japanLow' ],
-              'MX': [ 'mexicoLow' ],
-              'RU': [ 'russiaCrimeaLow' ],
-              'KR': [ 'southKoreaLow' ],
-              'ES': [ 'spainLow' ],
-              'US': [ 'usaAlbersLow' ]
-            };
-
-            let currentMap: any;
-            const country_code = this.identity.country_code;
-            const title = 'CHILE';
-
-            if ( countryMaps[ country_code ] !== undefined ) {
-              currentMap = countryMaps[ country_code ][ 0 ];
-              console.log(currentMap);
-            }
-
-            const chart = am4core.create('chartdivmap', am4maps.MapChart);
-
-            chart.titles.create().text = title;
-
-
-            chart.geodataSource.url = 'https://www.amcharts.com/lib/4/geodata/json/' + currentMap + '.json';
-            chart.geodataSource.events.on('parseended', function(ev) {
-              const data = [];
-              for (let i = 0; i < ev.target.data.features.length; i++) {
-                console.log(ev.target.data.features[i].id);
-                data.push({
-                  id: ev.target.data.features[i].id,
-                  value: Math.round( Math.random() * 10000 )
-                });
-              }
-              console.log(data);
-              polygonSeries.data = data;
-            });
-
-            // Set projection
-            chart.projection = new am4maps.projections.Mercator();
-
-            // Create map polygon series
-            const polygonSeries = chart.series.push(new am4maps.MapPolygonSeries());
-
-            // Set min/max fill color for each area
-            polygonSeries.heatRules.push({
-              property: 'fill',
-              target: polygonSeries.mapPolygons.template,
-              min: chart.colors.getIndex(1).brighten(1),
-              max: chart.colors.getIndex(1).brighten(-0.3)
-            });
-
-            // Make map load polygon data (state shapes and names) from GeoJSON
-            polygonSeries.useGeodata = true;
-
-            // Set up heat legend
-            const heatLegend = chart.createChild(am4maps.HeatLegend);
-            heatLegend.series = polygonSeries;
-            heatLegend.align = 'right';
-            heatLegend.width = am4core.percent(25);
-            heatLegend.marginRight = am4core.percent(4);
-            heatLegend.minValue = 0;
-            heatLegend.maxValue = 40000000;
-            heatLegend.valign = 'bottom';
-
-            // Set up custom heat map legend labels using axis ranges
-            const minRange = heatLegend.valueAxis.axisRanges.create();
-            minRange.value = heatLegend.minValue;
-            minRange.label.text = 'Min.';
-            const maxRange = heatLegend.valueAxis.axisRanges.create();
-            maxRange.value = heatLegend.maxValue;
-            maxRange.label.text = 'Max.';
-
-            // Blank out internal heat legend value axis labels
-            heatLegend.valueAxis.renderer.labels.template.adapter.add('text', function() {
-              return '';
-            });
-
-            // Configure series tooltip
-            const polygonTemplate = polygonSeries.mapPolygons.template;
-            polygonTemplate.tooltipText = '{name}: {value}';
-            polygonTemplate.nonScalingStroke = true;
-            polygonTemplate.strokeWidth = 0.5;
-
-            // Create hover state and set alternative fill color
-            const hs = polygonTemplate.states.create('hover');
-            hs.properties.fill = chart.colors.getIndex(1).brighten(-0.5);
-            })
-            .catch(e => {
-                console.error('Error when creating chart', e);
-            });
-      });
-
-  }
 
 
 }

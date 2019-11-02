@@ -119,6 +119,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         KpiProjectHeatmapComponent,
         KpiProjectLocationComponent,
         LoadingComponent,
+        MaterialModule,
         MenuComponent,
         MynavComponent,
         NgxChartsModule,

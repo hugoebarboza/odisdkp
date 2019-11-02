@@ -2,24 +2,24 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-//COMPONENTS
+// COMPONENTS
 import { AddcaseComponent } from './dialog/addcase/addcase.component';
 import { ShowcaseComponent } from './dialog/showcase/showcase.component';
 import { SupportComponent } from './support-list/support.component';
 
-//MODULES
+// MODULES
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-import { MaterialModule } from '../../material-module';
+// import { MaterialModule } from '../../material-module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
-//ROUTING
+// ROUTING
 import { SupportRoutingModule } from './support.routing';
 
 
 
-//DIRECTIVES
+// DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
 import { SupportsettingsComponent } from './support-settings/supportsettings.component';
 import { TypesettingsComponent } from './support-settings/components/typesettings/typesettings.component';
@@ -27,15 +27,12 @@ import { CategorysettingsComponent } from './support-settings/components/categor
 import { StatussettingsComponent } from './support-settings/components/statussettings/statussettings.component';
 
 
-//DIRECTIVE
-
-
 @NgModule({
   imports: [
     CommonModule,
     DirectiveModule,
     FormsModule,
-    MaterialModule,
+    // MaterialModule,
     PipesModule,
     ReactiveFormsModule,
     SupportRoutingModule,

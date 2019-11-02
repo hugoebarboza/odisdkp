@@ -71,7 +71,7 @@ exports.fcmSend = functions.https.onRequest((req, res) => {
 
 function parseBody(req:any, userId:any, userIdTo:any) {
 
-  var payload = {
+  const payload = {
       notification: {
           title: req.title,
           body: req.message,

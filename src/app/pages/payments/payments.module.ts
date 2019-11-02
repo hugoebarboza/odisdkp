@@ -7,7 +7,7 @@ import { PaymentComponent } from './payment/payment.component';
 import { PaymentReportComponent } from './payment-report/payment-report.component';
 
 // MODULES
-import { MaterialModule } from '../../material-module';
+// import { MaterialModule } from '../../material-module';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
@@ -27,7 +27,7 @@ import { CalendarModule } from 'primeng/calendar';
     CalendarModule,
     DirectiveModule,
     FormsModule,
-    MaterialModule,
+    // MaterialModule,
     NgSelectModule,
     NgbTypeaheadModule,
     PaymentsRoutingModule,

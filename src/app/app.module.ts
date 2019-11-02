@@ -16,10 +16,10 @@ import { PagesComponent } from './pages/pages.component';
 import { RegisterComponent } from './register/register.component';
 
 // DIRECTIVE
-import { DirectiveModule } from 'src/app/directives/directive.module';
+// import { DirectiveModule } from 'src/app/directives/directive.module';
 
 // MATERIAL
-import {MaterialModule} from './material-module';
+// import {MaterialModule} from './material-module';
 
 // MODULES
 import { AppRoutingModule } from './app.routing';
@@ -53,7 +53,7 @@ import { MatProgressButtonsModule } from 'mat-progress-buttons';
 
 
 // PIPE MODULE
-import { PipesModule } from './pipes/pipes.module';
+// import { PipesModule } from './pipes/pipes.module';
 
 // SERVICES
 import { AuthguardService } from './services/authguard.service';
@@ -106,14 +106,14 @@ registerLocaleData(localeEs);
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     CommonModule,
-    DirectiveModule,
+    // DirectiveModule,
     FormsModule,
     HttpModule,
     HttpClientModule,
-    MaterialModule,
+    // MaterialModule,
     MatProgressButtonsModule,
     NgxCaptchaModule,
-    PipesModule,
+    // PipesModule,
     ReactiveFormsModule,
     SharedModule,
     ServiceModule,

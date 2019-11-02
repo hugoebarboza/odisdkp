@@ -36,7 +36,7 @@ import { UserComponent } from './dialog/user/user.component';
 // MODULES
 import { AngularSplitModule } from 'angular-split';
 import { CalendarModule } from 'primeng/calendar';
-import { MaterialModule } from '../../material-module';
+// import { MaterialModule } from '../../material-module';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -66,7 +66,7 @@ import { ServiceRoutingModule } from './service.routing';
     DirectiveModule,
     FormsModule,
     HttpClientModule,
-    MaterialModule,
+    // MaterialModule,
     MatProgressButtonsModule,
     NgSelectModule,
     NgxMatSelectSearchModule,

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormControl  } from '@angular/forms';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -22,6 +22,7 @@ export interface Item { id: any; comment: string; created: any; identity: string
 @Component({
   selector: 'app-vieworderdetail',
   templateUrl: './vieworderdetail.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./vieworderdetail.component.css']
 })
 
@@ -29,7 +30,7 @@ export interface Item { id: any; comment: string; created: any; identity: string
 
 export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
 
-  public show:boolean = false;
+  public show = false;
   public identity: any;
   private token: any;
   private path = '';
@@ -42,169 +43,125 @@ export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
   maxValue: any;
   options: Options;
   orderContent: Item[];
-  toggleContent: boolean = false;
-  projectid:number;
+  toggleContent = false;
+  projectid: number;
   created: FormControl;
   private itemsCollection: AngularFirestoreCollection<Item>;
   // private itemDoc: AngularFirestoreDocument<Item>;
   items: Observable<Item[]>;
 
   models: any[] = [
-        {id:0, name:'Detalles', description:'Detalles de OT', expand: true},
-        {id:1, name:'Usuarios', description:'Usuarios de OT', expand: true},
-        {id:2, name:'Descripción', description:'Descripcion de OT', expand: true},
-        {id:3, name:'Fechas', description:'Fechas de OT', expand: true},
-        {id:4, name:'Actividad', description:'Actividad de OT', expand: true},
-        {id:5, name:'Tiempos Atención', description:'Tiempo de OT', expand: true}
+        {id: 0, name: 'Detalles', description: 'Detalles de OT', expand: true},
+        {id: 1, name: 'Usuarios', description: 'Usuarios de OT', expand: true},
+        {id: 2, name: 'Descripción', description: 'Descripcion de OT', expand: true},
+        {id: 3, name: 'Fechas', description: 'Fechas de OT', expand: true},
+        {id: 4, name: 'Actividad', description: 'Actividad de OT', expand: true},
+        {id: 5, name: 'Tiempos Atención', description: 'Tiempo de OT', expand: true}
   ];
 
-  /*
-  editorConfig: AngularEditorConfig = {
-    editable: true,
-    spellcheck: true,
-    height: '15rem',
-    minHeight: '5rem',
-    placeholder: 'Escriba aqui...',
-    translate: 'no',
-    uploadUrl: 'v1/images', // if needed
-    customClasses: [ // optional
-      {
-        name: "quote",
-        class: "quote",
-      },
-      {
-        name: 'redText',
-        class: 'redText'
-      },
-      {
-        name: "titleText",
-        class: "titleText",
-        tag: "h1",
-      },
-    ]
-  };  */
+  row: any = {expand: false};
 
-	row: any = {expand: false};
-
-  @Input() orderid : number;
+  @Input() orderid: number;
 
   constructor(
+    private cd: ChangeDetectorRef,
     private _afs: AngularFirestore,
     private _orderService: OrderserviceService,
     private _userService: UserService,
 
-    ) { 
+    ) {
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:MM:SS'));
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    
-    
   }
 
   ngOnInit() {
   }
 
   ngOnChanges(_changes: SimpleChanges) {
-    if(this.token.token != null && this.orderid > 0){
-       this.loadData();    
-    }else{
-       this.isRateLimitReached = true;        
-    } 
-
-    //console.log(this.orderid);
+    if (this.token.token != null && this.orderid > 0) {
+       this.loadData();
+    } else {
+       this.isRateLimitReached = true;
+    }
+    this.cd.markForCheck();
   }
 
   ngOnDestroy() {
   }
 
 
-	enableDiv(row:any){
-	   this.row.expand = !this.row.expand;
-	   this.models[row].expand = !this.models[row].expand;
-	}
+  enableDiv(row: any) {
+     this.row.expand = !this.row.expand;
+     this.models[row].expand = !this.models[row].expand;
+  }
 
-  loadData(){
+  loadData() {
     this.isLoadingResults = true;
     this._orderService.getOrderDetail(this.orderid, this.token.token)
       .then(response => {
-        this.getData(response)
+        this.getData(response);
       })
-      .catch(error => {                      
+      .catch(error => {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
-            console.log(<any>error);          
-      });    
+            console.log(<any>error);
+      });
+      this.cd.markForCheck();
   }
 
 
-  getData(response: any){
-    if(response){
+  getData(response: any) {
+    if (response) {
         response.subscribe(
-          (some:any) => 
-          {           
-            if(some.datos){
+          (some: any) => {
+            if (some.datos) {
             this.data = some.datos;
             this.projectid = this.data[0]['project_id'];
-            this.isRateLimitReached = false;          
+            this.isRateLimitReached = false;
             this.isLoadingResults = false;
-            //Determinar ruta de Firebase
-            this.getRouteFirebase(this.projectid)
-            //Determinar tiempo transcurrido
-            if(this.data[0].create_at && this.data[0].update_at){
+            this.getRouteFirebase(this.projectid);
+            if (this.data[0].create_at && this.data[0].update_at) {
               this.getSpentTime();
             }
 
-            }else{
-            this.isRateLimitReached = true;          
+            } else {
+            this.isRateLimitReached = true;
             }
           },
-          (error) => {                      
+          (error) => {
             console.log(<any>error);
           });
-    }else{
+    } else {
       return;
     }
+    this.cd.markForCheck();
   }
 
 
-  getSpentTime(){
-      let createat = moment(this.data[0].create_at); //todays date
-      let updateat = moment(this.data[0].update_at); // another date
-      let duration = moment.duration(updateat.diff(createat));
-      let timeminutes = duration.asMinutes();
-      let timehours = duration.asHours();
+  getSpentTime() {
+      const createat = moment(this.data[0].create_at); // todays date
+      const updateat = moment(this.data[0].update_at); // another date
+      const duration = moment.duration(updateat.diff(createat));
+      const timeminutes = duration.asMinutes();
+      const timehours = duration.asHours();
       this.spenttimeminutes = timeminutes;
       this.spenttimehours = timehours;
-      this.minValue = moment(this.data[0].create_at).format("YYYY-MM-DD HH:mm:ss");
-      this.maxValue = moment(this.data[0].update_at).format("YYYY-MM-DD HH:mm:ss");
-      //this.minValue = moment(this.data[0].create_at).format("HH:mm:ss");
-      //this.maxValue = moment(this.data[0].update_at).format("HH:mm:ss");
-
-    /*
-                  let one_day=1000*60*60*24;
-              let date1 = new Date(this.data[0].create_at).getTime();
-              let date2 = new Date(this.data[0].update_at).getTime();
-              let time = date2 - date1;  //msec
-              let hoursDiff = time / (3600 * 1000);
-              console.log(date1);
-              console.log(date2);
-              console.log(hoursDiff);
-              console.log(hoursDiff/one_day);
-
-    */
-
+      this.minValue = moment(this.data[0].create_at).format('YYYY-MM-DD HH:mm:ss');
+      this.maxValue = moment(this.data[0].update_at).format('YYYY-MM-DD HH:mm:ss');
   }
 
-  getRouteFirebase(id:number){
-    
-    if (this.orderid > 0 && id > 0){
-      this.path = 'comments/'+id+'/'+this.orderid;
-      this.itemsCollection = this._afs.collection<Item>(this.path, ref => ref.orderBy('created','desc'));      
+  getRouteFirebase(id: number) {
+
+    if (this.orderid > 0 && id > 0) {
+      this.path = 'comments/' + id + '/' + this.orderid;
+      this.itemsCollection = this._afs.collection<Item>(this.path, ref => ref.orderBy('created', 'desc'));
       this.items = this.itemsCollection.valueChanges();
-    }        
+    }
+    this.cd.markForCheck();
   }
 
-  addComment(value:any) { 
+  addComment(value: any) {
     const docid = this._afs.createId();
     this.itemsCollection.doc(docid).set(
       {
@@ -212,23 +169,26 @@ export class ViewOrderDetailComponent implements OnInit, OnDestroy, OnChanges {
         comment: value,
         created: this.created.value,
         identity: this.identity.name + ' ' + this.identity.surname
-      }      
+      }
     );
-    if(this.toggleContent){
-      this.toggleContent=false;
-    }   
+    if (this.toggleContent) {
+      this.toggleContent = false;
+    }
+    this.cd.markForCheck();
   }
 
-  deleteCommentDatabase(value$: any) {    
+  deleteCommentDatabase(value$: any) {
     this.itemsCollection.doc(value$).delete();
-    if(this.toggleContent){
-      this.toggleContent=false;
-    }   
-  }  
+    if (this.toggleContent) {
+      this.toggleContent = false;
+    }
+    this.cd.markForCheck();
+  }
 
   toggle() {
     this.toggleContent = !this.toggleContent;
     this.orderContent = null;
+    this.cd.markForCheck();
   }
 
 }

@@ -87,7 +87,7 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 // MODULES
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule} from 'agm-direction';
-import { MaterialModule } from '../../material-module';
+// import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -149,7 +149,7 @@ registerLocaleData(localeEs);
     FormsModule,
     HttpModule,
     HttpClientModule,
-    MaterialModule,
+    // MaterialModule,
     MatProgressButtonsModule,
     MarkdownModule.forRoot(),
     NgbModule,
