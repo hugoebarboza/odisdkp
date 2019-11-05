@@ -360,361 +360,322 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
 
 
 
-  public loaduserordeneskpigauge(id:number, termino:string, service:number){
+  public loaduserordeneskpigauge(id: number, termino: string, service: number) {
     this.isLoadingResultsKpiGauge = true;
-    if(id > 0 ){ 
+    if (id > 0 ) {
         this.kpidatagauge[0].value = 0;
         this.kpidatagauge[1].value = 0;
         this.kpitotalgaugeupdate = 0;
         this.kpitotalgauge = 0;
         this._kpiService.getProjectKpiServiceByDate(this.token.token, id, termino, 0, service).then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some:any) => 
-              {
-                //console.log(some);
-                if(some && some.datos && some.datos.length > 0){
-                    for (let i = 0; i < some.datos.length; i++) {              
+              (some: any) => {
+                if (some && some.datos && some.datos.length > 0) {
+                    for (let i = 0; i < some.datos.length; i++) {
                         this.kpitotalgauge = this.kpitotalgauge + some.datos[i]['user_count'];
                         this.kpidatagauge[0].value = this.kpitotalgauge;
-                        this.kpidatagauge[0].name = "Creadas: " + this.kpitotalgauge;
+                        this.kpidatagauge[0].name = 'Creadas: ' + this.kpitotalgauge;
                     }
                   this.isLoadingResultsKpiGauge = false;
-                }else{
+                } else {
                   this.isLoadingResultsKpiGauge = false;
                 }
 
-                if(some && some.datosupdate && some.datosupdate.length > 0){
+                if (some && some.datosupdate && some.datosupdate.length > 0) {
                   for (let i = 0; i < some.datosupdate.length; i++) {
                     this.kpitotalgaugeupdate = this.kpitotalgaugeupdate + some.datosupdate[i]['user_count'];
                     this.kpidatagauge[1].value = this.kpitotalgaugeupdate;
-                    this.kpidatagauge[1].name = "Editadas: " + this.kpitotalgaugeupdate;
+                    this.kpidatagauge[1].name = 'Editadas: ' + this.kpitotalgaugeupdate;
                   }
-                }else{
+                } else {
                   this.isLoadingResultsKpiGauge = false;
-                  this.kpidatagauge[1].name = "Editadas: " + this.kpitotalgaugeupdate;
+                  this.kpidatagauge[1].name = 'Editadas: ' + this.kpitotalgaugeupdate;
                 }
-                
-                if(this.kpidatagauge[0].value > 0){
-                  this.avancegauge = Math.round((this.kpitotalgaugeupdate*100)/this.kpitotalgauge);
-                  //console.log(this.kpidatagauge);
+
+                if (this.kpidatagauge[0].value > 0) {
+                  this.avancegauge = Math.round((this.kpitotalgaugeupdate * 100) / this.kpitotalgauge);
                 }
               },
-              (error:any) => { 
+              (error: any) => {
               this.kpidatagauge[0].value = 0;
-              this.kpidatagauge[1].value = 0;        
+              this.kpidatagauge[1].value = 0;
               this.isLoadingResultsKpiGauge = false;
               console.log(<any>error);
-              }  
-              )
-        })      
+              }
+              );
+        });
     }
-  }  
+  }
 
-  public getProjectKpiDate(id:number, termino:string, status:number, service:number){
+  public getProjectKpiDate(id: number, termino: string, status: number, service: number) {
     this.isLoadingResultsKpiDate = true;
-    if(id > 0 ){ 
+    if (id > 0 ) {
         this.kpitotaldate = 0;
         this.kpidatadate = [];
         this.multi[0].series.length = 0;
-        this.multi[0].name = "";
+        this.multi[0].name = '';
         this._kpiService.getProjectKpiServiceByDate(this.token.token, id, termino, status, service).then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some:any) => 
-              {
-                if(some && some.datos && some.datos.length > 0){
-                  //console.log(some.datos);
-                  //console.log(some.datos.length);                  
+              (some: any) => {
+                if (some && some.datos && some.datos.length > 0) {
                     for (let i = 0; i < some.datos.length; i++) {
-                      if(some.datos[i]['hora']){
-                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                      if (some.datos[i]['hora']) {
                         this.multi[0].series.push({ name: some.datos[i]['hora'] + ':00:00', value: some.datos[i]['user_count']});
                         this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
-                        this.multi[0].name = "N. Órdenes: " + this.kpitotaldate;
+                        this.multi[0].name = 'N. Órdenes: ' + this.kpitotaldate;
                       }
-                      if(some.datos[i]['fecha']){
-                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                      if (some.datos[i]['fecha']) {
                         this.multi[0].series.push({ name: some.datos[i]['fecha'], value: some.datos[i]['user_count']});
                         this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
-                        this.multi[0].name = "N. Órdenes: " + this.kpitotaldate;
+                        this.multi[0].name = 'N. Órdenes: ' + this.kpitotaldate;
                       }
 
-                      if(some.datos[i]['month']){
-                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                      if (some.datos[i]['month']) {
                         this.multi[0].series.push({ name: some.datos[i]['month'], value: some.datos[i]['user_count']});
                         this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
-                        this.multi[0].name = "N. Órdenes: " + this.kpitotaldate;
+                        this.multi[0].name = 'N. Órdenes: ' + this.kpitotaldate;
                       }
-                    }                
+                    }
                   this.isLoadingResultsKpiDate = false;
-                }else{
+                } else {
                   this.isLoadingResultsKpiDate = false;
                 }
               },
-              (error:any) => { 
+              (error: any) => {
               this.multi[0].series.length = 0;
               this.isLoadingResultsKpiDate = false;
               console.log(<any>error);
-              }  
-              )
-          })      
-    }    
+              }
+              );
+          });
+    }
   }
 
 
-  public getProjectKpiAllDate(id:number, termino:string, status:number, service:number, servicetype:number){
+  public getProjectKpiAllDate(id: number, termino: string, status: number, service: number, servicetype: number) {
     this.isLoadingResultsKpiDate = true;
-    if(id > 0 ){ 
+    if (id > 0 ) {
         this.kpitotaldate = 0;
         this.kpidatadate = [];
         this.multi[0].series.length = 0;
-        this.multi[0].name = "";
+        this.multi[0].name = '';
         this._kpiService.getProjectKpiServiceTypeByDate(this.token.token, id, termino, status, service, servicetype).then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some:any) => 
-              {
-                if(some && some.datos.length > 0){
-                  //console.log(some.datos);
-                  //console.log(some.datos.length);
-                  if(some.datos.length > 0){
+              (some: any) => {
+                if (some && some.datos.length > 0) {
+                  if (some.datos.length > 0) {
                     for (let i = 0; i < some.datos.length; i++) {
-                      if(some.datos[i]['hora']){
-                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                      if (some.datos[i]['hora']) {
                         this.multi[0].series.push({ name: some.datos[i]['hora'] + ':00:00', value: some.datos[i]['user_count']});
                         this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
-                        this.multi[0].name = "N. Órdenes: " + this.kpitotaldate;
+                        this.multi[0].name = 'N. Órdenes: ' + this.kpitotaldate;
                       }
-                      if(some.datos[i]['fecha']){
-                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                      if (some.datos[i]['fecha']) {
                         this.multi[0].series.push({ name: some.datos[i]['fecha'], value: some.datos[i]['user_count']});
                         this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
-                        this.multi[0].name = "N. Órdenes: " + this.kpitotaldate;
+                        this.multi[0].name = 'N. Órdenes: ' + this.kpitotaldate;
                       }
 
-                      if(some.datos[i]['month']){
-                        //this.kpidatadate[i] = { name: some.datos[i]['hora'], value: some.datos[i]['user_count']};
+                      if (some.datos[i]['month']) {
                         this.multi[0].series.push({ name: some.datos[i]['month'], value: some.datos[i]['user_count']});
                         this.kpitotaldate = this.kpitotaldate + some.datos[i]['user_count'];
-                        this.multi[0].name = "N. Órdenes: " + this.kpitotaldate;
+                        this.multi[0].name = 'N. Órdenes: ' + this.kpitotaldate;
                       }
 
                     }
                   }
                   this.isLoadingResultsKpiDate = false;
-                }else{
+                } else {
                   this.isLoadingResultsKpiDate = false;
                 }
               },
-              (error:any) => { 
+              (error: any) => {
               this.multi[0].series.length = 0;
               this.isLoadingResultsKpiDate = false;
               console.log(<any>error);
-              }  
-              )
-          })      
-        }    
+              }
+              );
+          });
+        }
   }
 
 
-  public getProjectKpiService(id:number, termino:string, status:number, service:number){
+  public getProjectKpiService(id: number, termino: string, status: number, service: number) {
     this.isLoadingResultsKpiST = true;
-    if(id > 0 ){ 
+    if (id > 0 ) {
         this.kpitotalST = 0;
-        this.kpidataST = [];            
+        this.kpidataST = [];
         this._kpiService.getProjectKpiService(this.token.token, id, termino, status, service)
         .then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some:any) => 
-              {
-                if(some && some.datos && some.datos.length > 0){
-                  //console.log(some.datos);
-                  this.isLoadingResultsKpiST = false;                  
+              (some: any) => {
+                if (some && some.datos && some.datos.length > 0) {
+                  this.isLoadingResultsKpiST = false;
                   for (let i = 0; i < some.datos.length; i++) {
-                    if(some.datos[i]['servicetype']){
+                    if (some.datos[i]['servicetype']) {
                       this.kpidataST[i] = { name: some.datos[i]['servicetypename'] + ': ' + some.datos[i]['user_count'], value: some.datos[i]['user_count']};
                       this.kpitotalST = this.kpitotalST + some.datos[i]['user_count'];
-                      //console.log(this.kpitotalST);
                     }
                   }
-                  if(some.datos.length === this.kpidataST.length){               
+                  if (some.datos.length === this.kpidataST.length) {
                     this.isLoadingResultsKpiST = false;
                   }
-                }else{
+                } else {
                   this.isLoadingResultsKpiST = false;
                 }
               },
-              (error:any) => { 
+              (error: any) => {
               this.kpidataST = [];
               this.isLoadingResultsKpiST = false;
               console.log(<any>error);
               }
-              )
-          })        
-        }    
+              );
+          });
+        }
   }
 
-  public getProjectKpiServiceType(id:number, termino:string, status:number, service:number, servicetype:number){
+  public getProjectKpiServiceType(id: number, termino: string, status: number, service: number, servicetype: number) {
     this.isLoadingResultsKpiST = true;
-    if(id > 0 ){ 
+    if (id > 0 ) {
         this.kpitotalST = 0;
-        this.kpidataST = [];            
+        this.kpidataST = [];
         this._kpiService.getProjectKpiServiceType(this.token.token, id, termino, status, service, servicetype).then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some:any) => 
-              {
-                if(some && some.datos.length > 0){
-                  //console.log(some.datos);
+              (some: any) => {
+                if (some && some.datos.length > 0) {
                   this.isLoadingResultsKpiST = false;
                   this.isLoadingResultsKpiST = false;
-                  if(some.datos.length > 0){
+                  if (some.datos.length > 0) {
                     for (let i = 0; i < some.datos.length; i++) {
-                      if(some.datos[i]['servicetype']){
+                      if (some.datos[i]['servicetype']) {
                         this.kpidataST[i] = { name: some.datos[i]['servicetypename'] + ': ' + some.datos[i]['user_count'], value: some.datos[i]['user_count']};
                         this.kpitotalST = this.kpitotalST + some.datos[i]['user_count'];
-                        //console.log(this.kpitotalST);
                       }
-                      if(some.datos[i]['name']){
+                      if (some.datos[i]['name']) {
                         this.kpidataST[i] = { name: some.datos[i]['name'] + ': ' + some.datos[i]['user_count'], value: some.datos[i]['user_count']};
                         this.kpitotalST = this.kpitotalST + some.datos[i]['user_count'];
-                        //console.log(this.kpitotalST);
                       }
                     }
                   }
                   this.isLoadingResultsKpiST = false;
-                }else{
+                } else {
                   this.isLoadingResultsKpiST = false;
                 }
               },
-              (error:any) => { 
+              (error: any) => {
               this.kpidataST = [];
               this.isLoadingResultsKpiST = false;
               console.log(<any>error);
-              }  
-              )
-          })      
-        }    
+              }
+              );
+          });
+        }
   }
 
 
-  public getProjectKpiServiceByUser(id:number, termino:string, status:number, service:number, userid:number){
+  public getProjectKpiServiceByUser(id: number, termino: string, status: number, service: number, userid: number) {
     this.isLoadingResultsKpiST = true;
-    if(id > 0 ){ 
+    if (id > 0 ) {
         this.kpitotalST = 0;
-        this.kpidataST = [];            
+        this.kpidataST = [];
         this._kpiService.getProjectKpiServiceByUser(this.token.token, id, termino, status, service, userid).then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some:any) => 
-              {
-                if(some && some.datos.length > 0){
-                  //console.log(some.datos);
+              (some: any) => {
+                if (some && some.datos.length > 0) {
                   this.isLoadingResultsKpiST = false;
                   this.isLoadingResultsKpiST = false;
-                  if(some.datos.length > 0){
+                  if (some.datos.length > 0) {
                     for (let i = 0; i < some.datos.length; i++) {
-                      if(some.datos[i]['servicetype']){
+                      if (some.datos[i]['servicetype']) {
                         this.kpidataST[i] = { name: some.datos[i]['servicetypename'] + ': ' + some.datos[i]['user_count'], value: some.datos[i]['user_count']};
                         this.kpitotalST = this.kpitotalST + some.datos[i]['user_count'];
-                        //console.log(this.kpitotalST);
                       }
-                      if(some.datos[i]['name']){
+                      if (some.datos[i]['name']) {
                         this.kpidataST[i] = { name: some.datos[i]['name'] + ': ' + some.datos[i]['user_count'], value: some.datos[i]['user_count']};
                         this.kpitotalST = this.kpitotalST + some.datos[i]['user_count'];
-                        //console.log(this.kpitotalST);
                       }
                     }
                   }
                   this.isLoadingResultsKpiST = false;
-                }else{
+                } else {
                   this.isLoadingResultsKpiST = false;
                 }
               },
-              (error:any) => { 
+              (error: any) => {
               this.kpidataST = [];
               this.isLoadingResultsKpiST = false;
               console.log(<any>error);
-              }  
-              )
-          })      
-        }    
+              }
+              );
+          });
+        }
   }
 
-  public getServiceEstatus(id:number){
-    if(id > 0){
+  public getServiceEstatus(id: number) {
+    if (id > 0) {
       this.subscription = this._orderService.getServiceEstatus(this.token.token, id).subscribe(
         response => {
-                  if(!response){
+                  if (!response) {
                     return;
                   }
-                  if(response.status == 'success'){                  
+                  if (response.status === 'success') {
                     this.serviceestatus = response.datos;
-                    if(this.serviceestatus.length > 0){
-                      //console.log(this.serviceestatus);
+                    if (this.serviceestatus.length > 0) {
                       this.kpiselectstatus = this.serviceestatus[0]['id'];
                       this.kpiselectstatusdate = this.serviceestatus[0]['id'];
-                      //console.log(this.kpiselectstatus);
-                      if(this.project.id > 0 && this.kpiselectedoptionST && this.kpiselectstatus > 0 && this.id > 0 && this.kpiselecttiposervicio > 0){
+                      if (this.project.id > 0 && this.kpiselectedoptionST && this.kpiselectstatus > 0 && this.id > 0 && this.kpiselecttiposervicio > 0) {
                         this.getProjectKpiService(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id);
                         this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id);
                       }
-                      
-                    }              
+                    }
                   }
-                  });    
+                  });
     }
-  }  
+  }
 
 
   valueFormatting(_value: number): string {
     return;
-      //return `${Math.round((this.kpitotalgaugeupdate*100)/this.kpitotalgauge).toLocaleString()} %`;    
+      // return `${Math.round((this.kpitotalgaugeupdate*100)/this.kpitotalgauge).toLocaleString()} %`;
   }
 
 
-  selectChangeKpiDateST(event:any){
-    //console.log(event.value);
-    if(this.kpiselectedoption == 0){
+  selectChangeKpiDateST(event: any) {
+    if (this.kpiselectedoption === 0) {
       this.getProjectKpiService(this.project.id, event.value, this.kpiselectstatus, this.id);
       return;
     }
-    if(this.kpiselectedoption == 1){
+    if (this.kpiselectedoption === 1) {
       this.getProjectKpiServiceType(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id, this.kpiselecttiposervicio);
       return;
     }
-    if(this.kpiselectedoption == 2){
+    if (this.kpiselectedoption === 2) {
       this.getProjectKpiServiceByUser(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id, this.kpiselectuser);
       return;
     }
-    //console.log(event.value);
   }
 
-  selectChangeKpiStatusST(event:any){
-    //console.log(event);
+  selectChangeKpiStatusST(event: any) {
     this.getProjectKpiService(this.project.id, this.kpiselectedoptionST, event.id, this.id);
   }
 
 
-  selectChangeKpi(event:any){
-    //console.log(event.value);
-    if(event.value == 0){
+  selectChangeKpi(event: any) {
+    if (event.value === 0) {
       this.getProjectKpiService(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id);
       return;
     }
-    if(event.value == 1){
+    if (event.value === 1) {
       this.getProjectKpiServiceType(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id, this.kpiselecttiposervicio);
       return;
     }
-    if(event.value == 2){
+    if (event.value === 2) {
       this.getProjectKpiServiceByUser(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id, this.kpiselectuser);
       return;
     }
@@ -722,78 +683,73 @@ export class KpiProjectDetailComponent implements OnInit, OnChanges, OnDestroy {
   }
 
 
-  selectChangeKpiTipoServicio(event:any){
-    //console.log(event);
+  selectChangeKpiTipoServicio(event: any) {
     this.getProjectKpiServiceType(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id, event.id);
   }
 
-  selectChangeKpiUser(event:any){
-    //console.log(event);
+  selectChangeKpiUser(event: any) {
     this.getProjectKpiServiceByUser(this.project.id, this.kpiselectedoptionST, this.kpiselectstatus, this.id, event.id);
   }
 
-  selectChangeKpiDate(){
-    if(this.kpidateallselectedoption == 0){
+  selectChangeKpiDate() {
+    if (this.kpidateallselectedoption === 0) {
       this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id);
       return;
     }
 
-    if(this.kpidateallselectedoption == 1){
+    if (this.kpidateallselectedoption === 1) {
       this.getProjectKpiAllDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id, this.kpidateselecttiposervicio);
       return;
     }
   }
 
-  selectChangeKpiStatusDate(){
-    if(this.kpidateallselectedoption == 0){
+  selectChangeKpiStatusDate() {
+    if (this.kpidateallselectedoption === 0) {
       this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id);
       return;
     }
-    
 
-    if(this.kpidateallselectedoption == 1){
+
+    if (this.kpidateallselectedoption === 1) {
       this.getProjectKpiAllDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id, this.kpidateselecttiposervicio);
       return;
     }
   }
 
-  selectChangeKpiAllDate(event:any){
-    //console.log(event);
-    if(event.value === 0){
-      this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatus, this.id);      
+  selectChangeKpiAllDate(event: any) {
+    if (event.value === 0) {
+      this.getProjectKpiDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatus, this.id);
       return;
     }
-    if(event.value === 1){
+    if (event.value === 1) {
       this.getProjectKpiAllDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id, this.kpidateselecttiposervicio);
       return;
     }
   }
 
-  selectChangeKpiTipoServicioByDate(){
-    //console.log(event);
+  selectChangeKpiTipoServicioByDate() {
     this.getProjectKpiAllDate(this.project.id, this.kpidatelineselectedoption, this.kpiselectstatusdate, this.id, this.kpidateselecttiposervicio);
   }
 
-  selectChangeKpiGauge(){
-    //console.log(event);
+  selectChangeKpiGauge() {
     this.loaduserordeneskpigauge(this.project.id, this.kpiselectedoptiongauge, this.id );
   }
 
-  selectChangeKpiLine(){
+  selectChangeKpiLine() {
     this.loaduserordeneskpiline(this.project.id, this.kpiselectedoptionline, this.id );
     this.ngxcharttype = 1;
   }
 
-  toggle(event:any){    
-    if(event.currentTarget.checked){
+  toggle(event: any) {
+    if (event.currentTarget.checked) {
       this.isShow = true;
-    }else{
-      this.isShow = false;  
+    } else {
+      this.isShow = false;
     }
   }
 
-  togglengxcharttype(event:number){
-    if(!event){
+  togglengxcharttype(event: number) {
+    if (!event) {
       return;
     }
     this.ngxcharttype = event;

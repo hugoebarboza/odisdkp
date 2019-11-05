@@ -266,37 +266,37 @@ selectedColumnnEstatus = {
     Swal.fire({
       title: '¿Esta seguro?',
       text: 'Esta a punto de cambiar las órdenes seleccionadas ',
-      type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
       cancelButtonText: 'No'
     })
 
     .then( commit => {
-
       if (commit.value) {
         if (commit) {
 
 
           if (this.selection.selected) {
-
             if (this.form5.value) {
-              if (this.form5.value.action5 === 1 && this.form5.value.estatus > 0) {
+              // tslint:disable-next-line:triple-equals
+              if (this.form5.value.action5 == 1 && this.form5.value.estatus > 0) {
                 this.paramset = 'status_id';
                 this.paramvalue = this.form5.value.estatus;
               }
-              if (this.form5.value.action5 === 2 && this.form5.value.asignado > 0) {
+              // tslint:disable-next-line:triple-equals
+              if (this.form5.value.action5 == 2 && this.form5.value.asignado > 0) {
                 this.paramset = 'assigned_to';
                 this.paramvalue = this.form5.value.asignado;
               }
-              if (this.form5.value.action5 === 3 && this.form5.value.vencimiento) {
+              // tslint:disable-next-line:triple-equals
+              if (this.form5.value.action5 == 3 && this.form5.value.vencimiento) {
                 this.paramset = 'vencimiento_date';
                 this.paramvalue = this.form5.value.vencimiento;
               }
             }
 
-            if (this.selection.selected && this.id && this.paramset && this.paramvalue && this.form4.value.action4 === 1) {
-
+            // tslint:disable-next-line:triple-equals
+            if (this.selection.selected && this.id && this.paramset && this.paramvalue && this.form4.value.action4 == 1) {
               this.isLoadingResults = true;
               this.subscription = this.dataService.updateMass(this.token.token, this.selection.selected, this.id, this.paramset, this.paramvalue)
               .subscribe( response => {
@@ -311,15 +311,18 @@ selectedColumnnEstatus = {
                   this.isLoadingResults = false;
                   Swal.fire('Importante', response.message, 'error');
                 }
+                this.cd.markForCheck();
               },
                 error => {
                   this.isLoadingResults = false;
                   Swal.fire('Importante', error, 'error');
                 }
               );
+              this.cd.markForCheck();
             }
 
-            if (this.selection.selected && this.id && this.form4.value.action4 === 2) {
+            // tslint:disable-next-line:triple-equals
+            if (this.selection.selected && this.id && this.form4.value.action4 == 2) {
               this.isLoadingResults = true;
               this.subscription = this.dataService.deleteMass(this.token.token, this.selection.selected, this.id)
               .subscribe( response => {
@@ -334,12 +337,14 @@ selectedColumnnEstatus = {
                   this.isLoadingResults = false;
                   Swal.fire('Importante', response.message, 'error');
                 }
+                this.cd.markForCheck();
               },
                 error => {
                   this.isLoadingResults = false;
                   Swal.fire('Importante', error, 'error');
                 }
               );
+              this.cd.markForCheck();
             }
 
 

@@ -451,7 +451,6 @@ deleteCommentDatabase(item: any) {
   Swal.fire({
     title: '¿Esta seguro?',
     text: 'Esta seguro de borrar registro de trabajo ' + item.comment,
-    type: 'warning',
     showCancelButton: true,
     confirmButtonText: 'Si',
     cancelButtonText: 'No'

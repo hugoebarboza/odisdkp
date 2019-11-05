@@ -134,7 +134,6 @@ export class StatussettingsComponent implements OnInit, OnChanges {
       Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar el estatus',
-        type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
         cancelButtonText: 'No'

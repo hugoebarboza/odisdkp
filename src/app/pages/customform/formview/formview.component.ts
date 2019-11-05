@@ -46,7 +46,7 @@ export class FormviewComponent implements OnInit {
   archivos: FileItem[] = [];
   ncase: any;
   urgencia: any;
-  type: any;    
+  type: any;
   selectstatus: {id: any; name: any; label: any};
   token: any;
   userFirebase: UserFirebase;
@@ -62,7 +62,7 @@ export class FormviewComponent implements OnInit {
   snapshot: Observable<any>;
 
   supportcase = '';
-  showlist: boolean = false;
+  showlist = false;
 
   public departamento$: Observable<any[]>;
   private departamentosCollection: AngularFirestoreCollection<any>;
@@ -146,7 +146,6 @@ export class FormviewComponent implements OnInit {
           return actions.map(a => {
             const data = a.payload.doc.data();
             const id = a.payload.doc.id;
-            //console.log({id, ...data});
             return { id, ...data };
           });
         })
@@ -192,11 +191,11 @@ export class FormviewComponent implements OnInit {
 
   public getListuser(term: string) {
 
-    if(term == null){
+    if (term == null) {
       this.userLoading = false;
       return new Observable;
     }
-  
+
 
     // tslint:disable-next-line:max-line-length
     this.usersCollection = this._afs.collection('users', ref => ref.where('country', 'array-contains', this.idPais).where('email', '>=', term));
@@ -481,7 +480,7 @@ export class FormviewComponent implements OnInit {
       category_desc: this.forma.value.categoria.name,
       important: important,
       important_id: important_id,
-      //etiquetados: array_usersNew,
+      // etiquetados: array_usersNew,
       asuntoIndex: indexasunto.split(' ')
     })
     .then(function(docRef) {
@@ -506,7 +505,7 @@ export class FormviewComponent implements OnInit {
           });
         }*/
 
-        if(that.arrayResponsables && that.arrayResponsables.length > 0 && docRef){
+        if (that.arrayResponsables && that.arrayResponsables.length > 0 && docRef) {
           that.arrayResponsables.forEach(res => {
             that.sendCdfTag(res, docRef, 'Creada');
           });
@@ -533,7 +532,7 @@ export class FormviewComponent implements OnInit {
     }
 
     const body = content + '. El número de solicitud es #' + this.ncase + '. Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
-    //const body = content + ' nueva solicitud #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    // const body = content + ' nueva solicitud #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (data && this.userFirebase.uid) {
@@ -616,7 +615,7 @@ export class FormviewComponent implements OnInit {
 
     // tslint:disable-next-line:max-line-length
     const body = 'El número de solicitud es #' + this.ncase + '. Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
-    //const body = content + '. El número de solicitud es #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
+    // const body = content + '. El número de solicitud es #' + this.ncase + ' Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (data && this.userFirebase.uid) {
@@ -685,7 +684,7 @@ export class FormviewComponent implements OnInit {
             );*/
     }
 
-  }  
+  }
 
 }
 

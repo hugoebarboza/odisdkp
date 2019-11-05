@@ -211,7 +211,6 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
       Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar el departamento',
-        type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
         cancelButtonText: 'No'

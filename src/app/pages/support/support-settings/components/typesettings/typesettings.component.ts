@@ -87,7 +87,6 @@ export class TypesettingsComponent implements OnInit {
       Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar Tipo de solicitud',
-        type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
         cancelButtonText: 'No'

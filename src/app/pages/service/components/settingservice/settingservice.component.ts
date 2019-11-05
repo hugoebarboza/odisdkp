@@ -259,7 +259,6 @@ export class SettingServiceComponent implements OnInit, OnDestroy {
       Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta a punto de desactivar proyecto ' + this.forma.value.project_name,
-        type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
         cancelButtonText: 'No'

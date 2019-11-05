@@ -420,7 +420,6 @@ export class SupportComponent implements OnInit, OnDestroy  {
       Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar registro de solicitud ',
-        type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
         cancelButtonText: 'No'

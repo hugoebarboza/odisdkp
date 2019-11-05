@@ -898,10 +898,10 @@ export class CdfService  {
             <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:2px;">Imágenes adjunta</p>
             <div>
             <table border="0" cellpadding="0" cellspacing="0" width="100%" align="left" style="border:none;border-collapse:collapse;border-spacing:0;table-layout:fixed;width:100%">
-            <tbody>                                                          
+            <tbody>
                 <tr>
                   <td style="direction:ltr;text-align:left">
-                  <div  lang="x-btn" style="font-family:'Uber18-Text-Bold',Helvetica,Arial,sans-serif!important;font-size:14px;line-height:20px;text-transform:uppercase">                            
+                  <div  lang="x-btn" style="font-family:'Uber18-Text-Bold',Helvetica,Arial,sans-serif!important;font-size:14px;line-height:20px;text-transform:uppercase">
                     <a href="https://odisdkp.firebaseapp.com/#/formview/orderview/${project.id}/${project.orderid}" style="background-color:#276ef1;border-color:#276ef1;border-radius:0px;border-style:solid;border-width:13px 16px;color:#ffffff;display:inline-block;letter-spacing:1px;max-width:300px;min-width:100px;text-align:center;text-decoration:none;text-transform:uppercase" target="_blank" >
                       <span style="float:left;text-align:left">Ver imágenes</span>
                       <span style="padding-top:2px;display:inline-block"> 

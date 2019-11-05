@@ -59,16 +59,16 @@ export class ServiceComponent  implements OnInit, OnDestroy {
 
   id: number;
   identity: any;
-  isRateLimitReached: boolean = false;
-  isLoadingRefresh: boolean = false;
-  loading: boolean = true;
+  isRateLimitReached = false;
+  isLoadingRefresh = false;
+  loading = true;
   order: Order[] = [];
-  portal: number=0;
+  portal = 0;
   project: any;
   proyectos: Array<Proyecto> = [];
   project_name: string;
   selected: any;
-  selectedRow: number = 0;
+  selectedRow = 0;
   selectedElement: number;
   services: any = [];
   subscription: Subscription;
@@ -106,8 +106,6 @@ export class ServiceComponent  implements OnInit, OnDestroy {
   ) {
 
     this._userService.handleAuthentication(this.identity, this.token);
-    //this.columns = columns;
-    //this.configuration = SettingsNgxEasyTableService.config;
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
@@ -178,23 +176,22 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     }
   }
 
-  addDoc(service_id:number) {
+  addDoc(service_id: number) {
     const dialogRef = this.dialog.open(AddDocComponent, {
       width: '1000px',
-      disableClose: true,                 
+      disableClose: true,
       data: { project_id: this.id,
               service_id: service_id
             }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) { 
+      if (result === 1) {
 
       }
     });
   }
 
-  
 
 
   addNew(id: number) {
@@ -207,9 +204,9 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(
           result => {
              if (result === 1) {
-             // After dialog is closed we're doing frontend updates 
+             // After dialog is closed we're doing frontend updates
              // For add we're just pushing a new row inside DataService
-             // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());  
+             // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());
              this.refresh();
              }
            });
@@ -222,17 +219,17 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     }
   }
 
-  cloneService(service_id:number) {
+  cloneService(service_id: number) {
     const dialogRef = this.dialog.open(CloneServiceComponent, {
       width: '1000px',
-      disableClose: true,                 
+      disableClose: true,
       data: { project_id: this.id,
               service_id: service_id
             }
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) { 
+      if (result === 1) {
 
       }
     });
@@ -436,7 +433,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
 
   setClickedRow(index: number) {
     this.selectedRow = index;
-    //console.log(this.selectedRow);
+    // console.log(this.selectedRow);
   }
 
   /**

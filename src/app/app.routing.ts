@@ -58,6 +58,12 @@ const appRoute: Routes = [
       data: { preload: false, delay: false }
     },
     {
+      path: 'formview/createform/:id',
+      canLoad: [ LoginGuardGuard ],
+      loadChildren : () => import('./pages/customform/customform.module').then(m => m.CustomformModule),
+      data: { preload: false, delay: false }
+    },
+    {
       path: 'formview/orderview/:serviceid/:orderid',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/customform/customform.module').then(m => m.CustomformModule),

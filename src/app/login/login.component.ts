@@ -297,7 +297,6 @@ export class LoginComponent implements OnInit, OnDestroy {
           Swal.fire({
             title: 'Error en credencial firebase',
             text: 'Favor actualizar contraseña de acceso, de lo contrario algunas funcionalidades se desactivaran.',
-            type: 'error',
             showCancelButton: true,
             confirmButtonText: 'Si',
             cancelButtonText: 'No'

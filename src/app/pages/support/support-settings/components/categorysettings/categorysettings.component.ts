@@ -128,7 +128,6 @@ export class CategorysettingsComponent implements OnInit, OnChanges {
       Swal.fire({
         title: '¿Esta seguro?',
         text: 'Esta seguro de borrar la categoria',
-        type: 'warning',
         showCancelButton: true,
         confirmButtonText: 'Si',
         cancelButtonText: 'No'

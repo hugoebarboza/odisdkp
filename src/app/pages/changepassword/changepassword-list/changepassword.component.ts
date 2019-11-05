@@ -143,7 +143,6 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
     Swal.fire({
       title: 'Error en actulización credencial firebase',
       text: 'Favor actualizar contraseña de acceso, de lo contrario algunas funcionalidades se desactivaran.',
-      type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
       cancelButtonText: 'No'

@@ -9,6 +9,7 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 // COMPONENTS
+import { CreateFormComponent } from './create-form/create-form.component';
 import { FormviewComponent } from './formview/formview.component';
 import { OrderViewComponent } from './order-view/order-view.component';
 
@@ -34,6 +35,7 @@ import { CustomformRoutingModule } from './customform.routing';
 import { SupportModule } from '../support/support.module';
 
 
+
 @NgModule({
   imports: [
     CommonModule,
@@ -52,6 +54,7 @@ import { SupportModule } from '../support/support.module';
   [
     FormviewComponent,
     OrderViewComponent,
+    CreateFormComponent,
   ],
   entryComponents: [
   ],

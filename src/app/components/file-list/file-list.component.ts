@@ -322,7 +322,6 @@ export class FileListComponent implements OnInit {
     Swal.fire({
       title: '¿Esta seguro?',
       text: 'Esta seguro de borrar documento con nombre ' + item.nombre,
-      type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
       cancelButtonText: 'No'

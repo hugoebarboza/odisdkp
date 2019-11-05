@@ -262,7 +262,6 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: '¿Esta seguro?',
       text: 'Está seguro de enviar por correo la Orden de Trabajo ? ',
-      type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
       cancelButtonText: 'No'

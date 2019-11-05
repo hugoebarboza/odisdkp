@@ -162,10 +162,10 @@ import { GLOBAL } from '../global';
 		return this.getQuery('service/' + id + '/order', token);
 	}
 
-	@Cacheable({		
-		maxCacheCount: 2,		
+	@Cacheable({
+		maxCacheCount: 2,
 		maxAge: 30000,
-	  })	
+	  })
 	getShowOrderService(token: any, id: number, orderid: number): Observable<any> {
 		return this.getQuery('service/' + id + '/order/' + orderid, token);
 	}

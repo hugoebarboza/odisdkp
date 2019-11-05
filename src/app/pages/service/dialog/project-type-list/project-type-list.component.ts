@@ -176,7 +176,6 @@ export class ProjectTypeListComponent implements OnInit, OnDestroy {
     Swal.fire({
       title: '¿Esta seguro?',
       text: 'Esta seguro de borrar información ',
-      type: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Si',
       cancelButtonText: 'No'

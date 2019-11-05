@@ -10,6 +10,18 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 //sgMail.setApiKey(process.env.SENDGRID_API_KEY);
 
 
+exports.hello = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+      res.send("Hello from a New Severless Database!")
+  });
+});
+
+exports.helloWorld = functions.https.onRequest((req, res) => {
+  return cors(req, res, () => {
+      res.send("Hello from a Old Severless Database!")
+  });
+});
+
 
 
 exports.fcmSend = functions.https.onRequest((req, res) => {
@@ -135,12 +147,6 @@ function addUserNotificationSend(data:any) {
     });
 }
 
-
-exports.helloWorld = functions.https.onRequest((req, res) => {
-  return cors(req, res, () => {
-      res.send("Hello from a Severless Database!")
-  });
-});
 
 exports.httpEmail = functions.https.onRequest((req, res) => {
 

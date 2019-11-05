@@ -346,6 +346,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.error = '';
     this.role = 5; // USUARIOS INSPECTORES
     this.open = false;
+    this.cd.markForCheck();
   }
 
   hoverIn(index: number) {
@@ -606,6 +607,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
               this.isactiveSearch = true;
             }
             this.isLoadingResults = false;
+            this.cd.markForCheck();
     } else {
       // console.log('No Response');
       this.dataSource = new MatTableDataSource();
@@ -657,6 +659,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         trace.unsubscribe();
         this.snackBar.open('Órdenes de Trabajo de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
       } else {
+        this.getData(data);
         this.dataSource = new MatTableDataSource();
         this.isLoadingResults = false;
         this.isRateLimitReached = true;
