@@ -2,7 +2,7 @@ import {NgModule} from '@angular/core';
 import { MatDatepickerModule} from '@angular/material/datepicker';
 import { MatExpansionModule} from '@angular/material/expansion';
 
-//CDK MATERIAL
+// CDK MATERIAL
 import { PortalModule } from '@angular/cdk/portal';
 import {ScrollingModule} from '@angular/cdk/scrolling';
 
@@ -18,6 +18,7 @@ import {
   MatChipsModule,
   MatDialogModule,
   MatDividerModule,
+  MatFormFieldModule,
   MatGridListModule,
   MatIconModule,
   MatInputModule,
@@ -41,7 +42,6 @@ import {
   MatToolbarModule,
   MatTooltipModule,
   MatTreeModule,
-  
 } from '@angular/material';
 
 @NgModule({
@@ -59,6 +59,7 @@ import {
     MatDialogModule,
     MatDividerModule,
     MatExpansionModule,
+    MatFormFieldModule,
     MatGridListModule,
     MatIconModule,
     MatInputModule,

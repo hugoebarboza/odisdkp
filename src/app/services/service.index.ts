@@ -3,6 +3,7 @@ export { CargaImagenesService } from './firebase/carga-imagenes.service';
 export { CdfService } from 'src/app/services/firebase/cdf.service';
 export { CountriesService } from './country/countries.service';
 export { CustomerService } from './customer/customer.service';
+export { CustomformService } from './data/customform.service';
 export { DataService } from './data/data.service';
 export { DashboardService } from './data/dashboard.service';
 export { ExcelService } from './utility/excel.service';

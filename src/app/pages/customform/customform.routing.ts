@@ -17,7 +17,7 @@ const routes: Routes = [
     data: { path: 'formview', titulo: 'OCA Global - ODIS Soporte de usuario', subtitle: 'Soporte del Usuario', descripcion: 'OCA Global - ODIS Support Managment'}
   },
   {
-    path: 'createform/:id',
+    path: 'form/:id/settings/:formid',
     component: CreateFormComponent,
     canActivate: [AuthguardService],
     data: { path: 'orderview', titulo: 'OCA Global - ODIS Crear Formulario', subtitle: 'Configuración de Formularios', descripcion: 'OCA Global - ODIS Form Managment'}

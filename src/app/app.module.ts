@@ -82,6 +82,7 @@ import { StoreModule } from '@ngrx/store';
 import { appReducers } from './app.reducers';
 
 
+
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -92,7 +93,7 @@ registerLocaleData(localeEs);
     LoginComponent,
     LogoutComponent,
     PagesComponent,
-    RegisterComponent,
+    RegisterComponent
   ],
   imports: [
     AppRoutingModule,

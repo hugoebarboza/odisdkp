@@ -1,0 +1,98 @@
+import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
+import { throwError } from 'rxjs';
+import { MatSnackBar } from '@angular/material';
+
+import { GLOBAL } from '../global';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class CustomformService {
+
+  error: boolean;
+  url: string;
+  errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
+  errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
+
+  constructor(
+    private _snackBar: MatSnackBar,
+    public _http: HttpClient,
+  ) {
+    this.url = GLOBAL.url;
+    this.error = false;
+  }
+
+
+  async getQuery(query: string, token: any) {
+    if (!token) {
+      return;
+    }
+
+    try {
+
+      const url = this.url;
+      const href = url + query;
+      const requestUrl = href;
+      const headers = new HttpHeaders({'Content-Type': 'application/json'});
+
+      if (!requestUrl) {
+        throw new Error(`Error HTTP ${requestUrl}`);
+      } else {
+        return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
+        .then()
+        .catch((error) => { this.handleError (error); }
+        );
+      }
+
+    } catch (err) {
+        throw new Error(`Error HTTP `);
+        // console.log(err);
+    }
+  }
+
+  getProjectForm(token: any, id: number) {
+    if (!token) {
+      return;
+    }
+
+    return this.getQuery('project/' + id + '/form', token);
+  }
+
+
+  getType(token: any) {
+    if (!token) {
+      return;
+    }
+
+    return this.getQuery('type', token);
+  }
+
+  private handleError( error: HttpErrorResponse ) {
+    if (!navigator.onLine) {
+      // Handle offline error
+      // console.error('Browser Offline!');
+    } else {
+      if (error instanceof HttpErrorResponse) {
+        // Server or connection error happened
+        if (!navigator.onLine) {
+            // console.error('Browser Offline!');
+        } else {
+            // Handle Http Error (4xx, 5xx, ect.)
+            if (error.status === 500) {
+              this._snackBar.open(this.errorMessage500, '', {duration: 7000, });
+            }
+
+            if (error.status === 0) {
+              this._snackBar.open(this.errorMessage, '', {duration: 7000, });
+            }
+        }
+      } else {
+          // Handle Client Error (Angular Error, ReferenceError...)
+          console.error('Client Error!');
+      }
+      return throwError(error.error);
+    }
+  }
+
+}

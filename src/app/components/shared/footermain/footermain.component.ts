@@ -7,10 +7,10 @@ import { Component } from '@angular/core';
 })
 export class FootermainComponent  {
 
-	year: number;
+    year: number;
 
-	constructor() {
-		this.year = new Date().getFullYear();
-	}
+    constructor() {
+      this.year = new Date().getFullYear();
+   }
 
 }

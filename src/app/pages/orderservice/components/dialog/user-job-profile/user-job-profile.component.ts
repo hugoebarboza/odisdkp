@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 //SERVICES
@@ -7,6 +7,7 @@ import { ModalManageService, UserService } from 'src/app/services/service.index'
 @Component({
   selector: 'app-user-job-profile',
   templateUrl: './user-job-profile.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./user-job-profile.component.css']
 })
 export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
@@ -20,6 +21,7 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
   @Input() id: number;
 
   constructor(
+    private cd: ChangeDetectorRef,
     public _userService: UserService,
     public _modalManage: ModalManageService,
   ) {
@@ -37,19 +39,22 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
 
 
   ngOnChanges(_changes: SimpleChanges) {
+    console.log('viene modal');
     this.user = null;
     if(this.id > 0){
+      console.log(this.id);
       this.isLoading = true;
       this.subscription = this._userService.getUserShowInfo(this.token.token, this.id).subscribe(
         response => {
           this.isLoading = false;
-          //console.log(response);
+          this.cd.markForCheck();
+          console.log(response);
           if(!response){
             return;
           }
           if(response.status == 'success'){
             this.user = response.data[0];
-            //console.log(this.user);
+            console.log(this.user);
             //this.user_informador = response.data[0];
             //console.log(this.user_informador);
           }

@@ -21,11 +21,13 @@
 }
 .not-scroll {
     height: 100%;
-    overflow: hidden !important; 
+    background-color: rgb(244, 245, 247);
+    overflow: hidden !important;
+    overflow-x: hidden !important;
 }
 .drawer-header {
-    border-left: 1px solid #DDD;
-    overflow: auto; 
+    background-color: rgb(244, 245, 247);
+    overflow: hidden !important;
     height: calc(100% - 180px);
     min-width: 250px;
     max-width: 250px;
@@ -125,4 +127,307 @@
     -webkit-box-flex: 1;
     flex-grow: 1;
     overflow-x: hidden;
+}
+.mat-icon-button {
+    outline: 0;
+    border: none;
+}
+.overflow{
+    overflow-x: hidden;
+}
+.center-support {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 1.2em;
+    font-style: inherit;
+    color: #172b4d;
+    font-weight: 500;
+    text-transform: uppercase;
+    line-height: 0px;
+    overflow: hidden;
+}
+.blriGc {
+    color: rgb(107, 119, 140);
+    font-size: 12px;
+    margin-top: 4px;
+
+}
+.bGTkQd {
+    display: flex;
+    flex-direction: column;
+}
+.bSMwgc {
+    padding: 12px 16px;
+}
+.css-424011 {
+    position: relative;
+    flex: 1 1 100%;
+    overflow-y: hidden;
+}
+.css-w9iq9p {
+    display: flex;
+    flex-direction: column;
+    flex-basis: 100%;
+    height: 100%;
+    -webkit-box-pack: start;
+    justify-content: flex-start;
+    position: relative;
+}
+.css-w9iq9p::before {
+    content: "";
+    display: none;
+    flex-shrink: 0;
+    height: 2px;
+    margin-left: 16px;
+    position: relative;
+    z-index: 2;
+    background-color: rgb(244, 245, 247);
+    border-radius: 1px;
+}
+.css-w9iq9p::after {
+    border-radius: 1px;
+    content: '';
+    display: block;
+    flex-shrink: 0;
+    height: 2px;
+    margin-left: 16px;
+    margin-top: auto;
+    position: relative;
+    z-index: 2;
+    background-color: #F4F5F7;
+}
+.css-1tw9lwf {
+    box-sizing: border-box;
+    padding-left: 16px;
+    padding-right: 16px;
+    padding-bottom: 12px;
+}
+.css-jz5571 {
+    -webkit-box-align: center;
+    align-items: center;
+    color: inherit;
+    display: flex;
+    flex-shrink: 0;
+    font-size: inherit;
+    font-weight: 600;
+    height: 44px;
+    padding-left: 12px;
+    padding-right: 12px;
+    margin-top: 8px;
+}
+.css-7xjigh {
+    width: 100%;
+    -webkit-box-align: center;
+     align-items: center;
+    display: flex;
+     flex-direction: column;
+    -webkit-box-pack: justify;
+    justify-content: space-between;
+}
+.css-1t5na7c.css-1t5na7c {
+    -webkit-box-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    font-size: inherit;
+    height: 40px;
+    text-align: left;
+    width: 100%;
+    padding-left: 2px;
+    padding-right: 12px;
+    background-color: rgb(244, 245, 247);
+    fill: rgb(244, 245, 247);
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 3px;
+    outline: none;
+    text-decoration: none;
+}
+.css-1wgdpuu {
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    flex-shrink: 0;
+    margin-right: 16px;
+    color: #42526E;
+}
+.css-t44v0r {
+    display: flex;
+    flex-direction: column;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    overflow-x: hidden;
+}
+a .iHthaF, button .iHthaF {
+    cursor: pointer;
+}
+
+.iHthaF {
+    height: 24px;
+    width: 24px;
+    -webkit-box-align: stretch;
+    align-items: stretch;
+    background-color: transparent;
+    box-sizing: content-box;
+    display: flex;
+    flex-direction: column;
+    -webkit-box-pack: center;
+    justify-content: center;
+    pointer-events: auto;
+    position: static;
+    transform: translateZ(0px);
+    border-width: 0px;
+    border-style: initial;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 4px;
+    padding: 2px;
+    outline: none;
+    overflow: hidden;
+    transition: background-color 0s ease-out 0s;
+}
+.iHthaF::after {
+    background-color: transparent;
+    bottom: 2px;
+    content: " ";
+    left: 2px;
+    opacity: 0;
+    pointer-events: none;
+    position: absolute;
+    right: 2px;
+    top: 2px;
+    border-radius: 2px;
+    transition: opacity 200ms ease 0s;
+}
+.css-t44v0r {
+    display: flex;
+    flex-direction: column;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    overflow-x: hidden;
+}
+.css-xuepxh {
+    flex: 1 1 auto;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    line-height: 1.1428571428571428;
+    color: #42526E;
+}
+.eEbvfo {
+    min-width: 412px;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    margin-top: 0px;
+
+}
+.SpMfU {
+    display: flex;
+    -webkit-box-pack: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 0px;
+}
+.hiqizm {
+    max-width: 544px;
+    min-width: 332px;
+    width: 100%;
+    padding: 0px 40px;
+    margin-top: 0px;
+}
+.kuiDTj {
+    flex-shrink: 0;
+    -webkit-box-flex: 0;
+    flex-grow: 0;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    margin-left: -4px;
+}
+.fsbIjq {
+    min-height: 24px;
+}
+.eiYreW {
+    color: rgb(94, 108, 132);
+    display: flex;
+    flex-wrap: wrap;
+}
+.eeutyO {
+    margin-left: 4px;
+}
+
+.fItpNE {
+    display: flex;
+    flex-direction: row;
+    height: 1.71429em;
+    line-height: 1.71429em;
+    box-sizing: border-box;
+    max-width: 100%;
+    padding: 0px;
+}
+
+.css-j8fq0c {
+    align-self: center;
+    display: inline-flex;
+    flex-wrap: nowrap;
+    max-width: 100%;
+    position: relative;
+}
+.css-eaycls {
+    -webkit-box-align: center;
+    align-items: center;
+    align-self: center;
+    max-width: 100%;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    opacity: 1;
+    flex: 1 1 auto;
+    margin: 2px;
+    overflow: hidden;
+    transition: opacity 0.3s ease 0s;
+}
+.kSIZGq {
+    color: rgb(122, 134, 154);
+    flex-shrink: 0;
+    text-align: center;
+    width: 8px;
+    padding: 0px 8px;
+}
+.css-1mx0g1y, a.css-1mx0g1y, .css-1mx0g1y:hover, .css-1mx0g1y:active, .css-1mx0g1y:focus {
+    -webkit-box-align: baseline;
+    align-items: baseline;
+    box-sizing: border-box;
+    display: inline-flex;
+    font-size: inherit;
+    font-style: normal;
+    font-weight: normal;
+    max-width: 100%;
+    text-align: center;
+    white-space: nowrap;
+    cursor: default;
+    height: auto;
+    line-height: inherit;
+    vertical-align: baseline;
+    width: auto;
+    flex-shrink: 1;
+    min-width: 0px;
+    color: rgb(107, 119, 140) !important;
+    border-width: 0px;
+    text-decoration: none;
+    background: none;
+    border-radius: 3px;
+    padding: 0px;
+    transition: background 0.1s ease-out 0s, box-shadow 0.15s cubic-bezier(0.47, 0.03, 0.49, 1.38) 0s;
+    outline: none !important;
+}
+.blriGcList {
+    color: rgb(107, 119, 140);
+    font-size: 14px;
+    margin-top: 4px;
 }

@@ -13,10 +13,10 @@ export class DropdownNotificationComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    if(this.notifications){
-      //console.log(this.notifications);
+    if (this.notifications) {
+      // console.log(this.notifications);
     }
-  
+
   }
 
 }

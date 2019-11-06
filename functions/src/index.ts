@@ -2,12 +2,13 @@ import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase);
 const cors = require("cors")({ origin: true });
+// const app = require("./app");
 
 //SEND GRID API KEY
 const SENDGRID_API_KEY = functions.config().sendgrid.key;
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(SENDGRID_API_KEY);
-//sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+
 
 
 exports.hello = functions.https.onRequest((req, res) => {

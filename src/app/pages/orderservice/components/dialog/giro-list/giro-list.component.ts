@@ -5,10 +5,10 @@ import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular
 
 import Swal from 'sweetalert2';
 
-//MODELS
+// MODELS
 import { Giro } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { UserService, ProjectsService } from 'src/app/services/service.index';
 
 
@@ -19,7 +19,7 @@ import { UserService, ProjectsService } from 'src/app/services/service.index';
 })
 export class GiroListComponent implements OnInit, OnDestroy {
 
-  @Input() id : number;
+  @Input() id: number;
   @Output() total: EventEmitter<number>;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -29,45 +29,45 @@ export class GiroListComponent implements OnInit, OnDestroy {
   data: Giro;
   displayedColumns: string[] = ['descripcion', 'order_by', 'status', 'actions'];
   dataSource = new MatTableDataSource() ;
-  editando: boolean = false;
+  editando = false;
   forma: FormGroup;
   datatype: Giro[] = [];
-  indexitem:number;
-  isLoading: boolean = true;
-  isLoadingSave: boolean = false;
-  isLoadingDelete: boolean = false;
-  label:number = 0;
+  indexitem: number;
+  isLoading = true;
+  isLoadingSave = false;
+  isLoadingDelete = false;
+  label = 0;
   pageSize = 5;
-  resultsLength:number = 0;
+  resultsLength = 0;
   status: string;
   subscription: Subscription;
-  show:boolean = false;
-  termino: string = '';
+  show = false;
+  termino = '';
   token: any;
 
 
 
-  constructor(    
+  constructor(
     public _userService: UserService,
     public dataService: ProjectsService,
     public snackBar: MatSnackBar,
-  ) { 
+  ) {
     this.token = this._userService.getToken();
     this.total = new EventEmitter();
   }
 
   ngOnInit() {
-    //console.log(this.id);
-    if(this.id > 0){
-      
+
+    if (this.id > 0) {
+
       this.forma = new FormGroup({
         descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
         order_by: new FormControl(0, [Validators.required]),
-        status: new FormControl(1, [Validators.required]),        
+        status: new FormControl(1, [Validators.required]),
       });
 
-      this.cargar();      
-    }  
+      this.cargar();
+    }
   }
 
 
@@ -77,25 +77,22 @@ export class GiroListComponent implements OnInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }  
+  }
 
-  cargar(){
+  cargar() {
     this.isLoading = true;
-    //console.log(this.id);
     this.subscription = this.dataService.getGiro(this.token.token, this.id)
     .subscribe(
     response => {
-      //console.log(response);      
-              if(!response){
+              if (!response) {
                 this.status = 'error';
                 this.isLoading = false;
                 return;
               }
-              if(response.status == 'success'){
-                //console.log(response.datos.giro);
+              if (response.status === 'success') {
                 this.dataSource = new MatTableDataSource(response.datos.giro);
                 this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort; 
+                this.dataSource.sort = this.sort;
                 this.datatype = response.datos.giro;
                 this.resultsLength = this.datatype.length;
                 this.total.emit(this.datatype.length);
@@ -108,15 +105,15 @@ export class GiroListComponent implements OnInit, OnDestroy {
                 console.log(<any>error);
               }
 
-              );        
+              );
   }
 
-  edit(i:number){
+  edit(i: number) {
     this.indexitem = i;
     this.editando = true;
   }
 
-  close(){
+  close() {
     this.indexitem = -1;
   }
 

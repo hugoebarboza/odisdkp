@@ -1,9 +1,9 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
 
 // SERVICES
-import { SettingsService, UserService } from 'src/app/services/service.index';
+import { CustomformService, SettingsService, UserService } from 'src/app/services/service.index';
 
 // MODELS
 import { Proyecto } from 'src/app/models/types';
@@ -17,20 +17,28 @@ import { Proyecto } from 'src/app/models/types';
 })
 export class CreateFormComponent implements OnInit, OnDestroy {
 
+  @ViewChild('sidenav', {static: false}) sidenav: any;
+
   id = 0;
   identity: any;
   loading = true;
+  isLoadingType = true;
+  isLoadingProjectForm = true;
+  opened: any = true;
   project: any;
   proyectos: Array<Proyecto> = [];
+  projectformdata = [];
   sub: any;
   title = '';
   token: any;
+  typedata = [];
 
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
 
   constructor(
+    public _customForm: CustomformService,
     private _route: ActivatedRoute,
     public _userService: UserService,
     private cd: ChangeDetectorRef,
@@ -49,7 +57,6 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
     this.label.getDataRoute().subscribe(data => {
       this.title = data.subtitle;
-      console.log(this.title);
     });
 
 
@@ -60,7 +67,6 @@ export class CreateFormComponent implements OnInit, OnDestroy {
         this.loading = true;
         this.project = this.filter();
         if (this.project !== 'Undefined' && this.project !== null && this.project) {
-          console.log(this.project);
         }
       }
       this.cd.markForCheck();
@@ -80,11 +86,62 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    if (this.id > 0) {
+      this.cargarProjectForm(this.id);
+      this.cargarType(this.id);
+    }
   }
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
   }
 
+  sideNavOnClick() {
+    this.sidenav.opened = !this.sidenav.opened;
+  }
+
+  async cargarType (id: number) {
+    if (id && id > 0) {
+      this.isLoadingType = true;
+      this.typedata = [];
+
+      const data: any = await this._customForm.getType(this.token.token);
+
+      if (data && data.datos.length > 0) {
+        this.isLoadingType = false;
+        this.typedata = data.datos;
+        this.cd.markForCheck();
+      } else {
+        this.isLoadingType = false;
+        this.typedata = [];
+        this.cd.markForCheck();
+      }
+    }
+  }
+
+
+  async cargarProjectForm (id: number) {
+    if (id && id > 0) {
+      this.isLoadingProjectForm = true;
+      this.projectformdata = [];
+
+      const data: any = await this._customForm.getProjectForm(this.token.token, id);
+
+      if (data && data.datos.length > 0) {
+        this.isLoadingProjectForm = false;
+        this.projectformdata = data.datos;
+        this.cd.markForCheck();
+      } else {
+        this.isLoadingProjectForm = false;
+        this.projectformdata = [];
+        this.cd.markForCheck();
+      }
+    }
+  }
+
+
+  addTypeForm (id: number) {
+    console.log(id);
+  }
 
 }

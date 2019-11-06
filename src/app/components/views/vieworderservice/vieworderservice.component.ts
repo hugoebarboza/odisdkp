@@ -409,9 +409,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     if (id > 0) {
       this._modalManage.showModal(id);
       this.assigned_to = id;
+      this.cd.markForCheck();
     } else {
       return;
-    }
+    }    
   }
 
   ngOnInit() {
