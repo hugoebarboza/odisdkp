@@ -3,6 +3,9 @@ import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http
 import { throwError } from 'rxjs';
 import { MatSnackBar } from '@angular/material';
 
+// MODELS
+import { Form } from 'src/app/models/types';
+
 import { GLOBAL } from '../global';
 
 @Injectable({
@@ -60,6 +63,14 @@ export class CustomformService {
   }
 
 
+  getProjectFormField(token: any, id: number, formid: number) {
+    if (!token) {
+      return;
+    }
+
+    return this.getQuery('project/' + id + '/form/' + formid, token);
+  }
+
   getType(token: any) {
     if (!token) {
       return;
@@ -67,6 +78,30 @@ export class CustomformService {
 
     return this.getQuery('type', token);
   }
+
+  async update(token: any, data: Form, id: number, formid: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'project/' + id + '/form/' + formid;
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.put(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+
+    } catch (err) {
+    throw new Error(`Error HTTP `);
+  }
+
+  }
+
 
   private handleError( error: HttpErrorResponse ) {
     if (!navigator.onLine) {

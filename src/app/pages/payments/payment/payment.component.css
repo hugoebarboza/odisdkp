@@ -50,3 +50,34 @@
     vertical-align: top;
     background-color: white;
 }
+.css-1wgdpuu {
+    -webkit-box-align: center;
+    align-items: center;
+    display: flex;
+    flex-shrink: 0;
+    margin-right: 16px;
+    color: #42526E;
+}
+.css-1t5na7c.css-1t5na7c {
+    -webkit-box-align: center;
+    align-items: center;
+    box-sizing: border-box;
+    color: inherit;
+    cursor: pointer;
+    display: flex;
+    flex-shrink: 0;
+    font-size: inherit;
+    height: 40px;
+    text-align: left;
+    width: 100%;
+    padding-left: 12px;
+    padding-right: 0px;
+    fill: rgb(244, 245, 247);
+    border-width: initial;
+    border-style: none;
+    border-color: initial;
+    border-image: initial;
+    border-radius: 0px;
+    outline: none;
+    text-decoration: none;
+}

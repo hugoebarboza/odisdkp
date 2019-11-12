@@ -2,7 +2,6 @@
     <div class="pagecontent">           
         <div class="example-container" ><!--[class.example-is-mobile]="mobileQuery.matches"-->
             <mat-sidenav-container class="example-sidenav-container"> <!--[style.marginTop.px]="mobileQuery.matches ? 56 : 0"-->
-
                 <mat-sidenav #sidenav opened [mode]="mobileQuery.matches ? 'over' : 'side'"
                             [fixedInViewport]="mobileQuery.matches" fixedTopGap="102" style="background-color: rgb(244, 245, 247);">
 
@@ -116,12 +115,11 @@
         
 
                         </div>
-                    </div>
-                                
+                    </div>                                
                 </mat-sidenav>
 
                 <mat-sidenav-content class="overflow">
-                <main>
+                <main >
                     <div class="container-fluid" *ngIf="project">
                     <div class="row">
                         <div class="col-1">
@@ -179,6 +177,315 @@
                         </div>
                     </div>
                     </div>
+                    <div class="row" style="margin-top: 17px;">
+                        <div class="col-2"></div>
+                        <div class="col-8">
+                            <div class="container-fluid">
+                                <div class="row justify-content-md-center">
+                                    <!----MAIN PRINCIPAL EN CASO EXISTAN FORMULARIOS PERO NO HA SIDO SELECCIONADO--->
+                                    <div class="col-md-auto" *ngIf="projectformdata && projectformdata.length > 0 && !isLoadingProjectForm && formid === 0">
+
+                                    <div class="ljhYu">
+                                    <div class="jfCYPT">
+                                        <div class="hEEDMy" data-test-selector="profile-work-list">
+                                            <div class="dQWNoB">
+                                                <div class="gtZlhk">
+
+                                                <div role="presentation" class="css-7xjigh" *ngIf="projectformdata && projectformdata.length > 0 && !isLoadingProjectForm">
+                                                <a class="css-1t5na7c" data-testid="NavigationItem" id="10004" title="Formulario">
+                                                <div class="css-1wgdpuu">
+                                                <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                                                <span class="styledCache__StyledSpan-zohhd2-3 iHthaF">
+                                                <img class="gXBZbl" src="https://odissoftware.atlassian.net/secure/viewavatar?size=medium&amp;avatarId=10307&amp;avatarType=issuetype">
+                                                </span>
+                                                </div>
+                                                </div>
+                                                <div class="css-t44v0r">
+                                                <div class="css-xuepxh">Formulario</div>
+                                                </div>
+                                                </a>
+                                                </div>
+                                
+                                                </div>
+                                            </div>
+                                            <div class="EacRc">
+                                                <span>
+                                                    Seleccione un formulario de la lista de <span style="font-weight: bold;">Tipos de Formularios</span>.                                                    
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    </div>
+
+                                    </div>
+                                    <!----END MAIN PRINCIPAL------------------------------------------------------------->
+
+
+                                    <!----MAIN PRINCIPAL EN CASO EXISTAN FORMULARIOS Y SE SELECCIONA UN FORMULARIO--->
+                                    <div class="col-md-auto" *ngIf="projectformdata && projectformdata.length > 0 && !isLoadingProjectForm && formid > 0">
+
+                                        <div class="ljhYu">
+                                        <div class="jfCYPT">
+                                            <div class="hEEDMy" data-test-selector="profile-work-list">
+                                                <div class="dQWNoB">
+                                                    <div class="gtZlhk">
+    
+                                                    <div role="presentation" class="css-7xjigh" *ngIf="projectformdata && projectformdata.length > 0 && !isLoadingProjectForm">
+                                                    <a class="css-1t5na7c" data-testid="NavigationItem" id="10004" title="Formulario">
+                                                    <div class="css-1wgdpuu">
+                                                    <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                                                    <span class="styledCache__StyledSpan-zohhd2-3 iHthaF">
+                                                    <img class="gXBZbl" src="https://odissoftware.atlassian.net/secure/viewavatar?size=medium&amp;avatarId=10307&amp;avatarType=issuetype">
+                                                    </span>
+                                                    </div>
+                                                    </div>
+                                                    <div class="css-t44v0r">
+                                                    <div class="css-xuepxh">Formulario</div>
+                                                    </div>
+                                                    </a>
+                                                    </div>
+                                    
+                                                    </div>
+                                                </div>
+                                                <div class="EacRc">
+                                                    <span>
+                                                        Estos campos describen el trabajo que hay que hacer. Se muestran de forma prominente en la mayoría de las vistas del formulario.
+                                                    </span>
+                                                </div>
+                                            </div>                                                                                      
+                                        </div>
+                                        
+                                        <div class="sc-iBfVdv iamyYC sc-eomEcv bGTkQd">
+                                        <div class="app animated fadeIn" *ngIf="!isLoading && forma">
+                                        <form class="mat-dialog-content" ngNativeValidate *ngIf="forma" [formGroup]="forma"  >
+                                            <div class="sc-csSMhA klJOKX sc-eomEcv bGTkQd">
+                                            <p class="sc-bscRGj jvTKTk">Campos de descripción</p>
+                                            </div>
+
+                                            <div class="hEEDMy" data-test-selector="profile-work-list">
+                                                <div class="sc-bkCOcH dslJrR">
+                                                    <div class="sc-kiXyGy cQFSfL">
+                                                    <div class="styled__Outer-sc-1a16ki5-0 ibOodI">
+                                                    <div class="styled__TitleWrapper-sc-1a16ki5-2 BcVQM">
+                                                    <div class="styled__TitleContainer-sc-1a16ki5-3 deGCMa">
+                                                    <span data-test-cypress="project-settings-apps.issue-type-page.main-header.name-inline-input">
+                                                    <div>
+                                                    <div class="sc-hdNmWC fCAzVG"><div style="position: absolute;">
+                                                    <label class="Label__LabelWrapper-sc-17towfw-0 keOXhT">
+                                                    <div class="Label__LabelInner-sc-17towfw-1 jbyPaz">
+                                                    <span>Nombre</span>
+                                                    </div>
+                                                    </label>
+                                                    </div>
+                                                    <div class="sc-fPEBxH aQljB">
+                                                    <div class="sc-gVZiCL fgnfCY">
+                                                    <div class="Content__ContentWrapper-ve26fj-2 feWTNh">
+                                                    <div class="Content__ChildWrapper-ve26fj-0 ilJUcG">
+                                                    <div class="Content-ve26fj-1 llCsQv">
+                                                    <input type="text" name="name" formControlName="name" class="dpbvNR" required  width="100%">
+                                                    <!--
+                                                    <h1 class="sc-sVRsr iksssH sc-bpubUI dpbvNR">Alcance del Mantenimiento</h1>                                                        
+                                                    <h1 class="sc-sVRsr iksssH sc-bpubUI dpbvNR">Alcance del Mantenimiento</h1>                                                        
+                                                    <button class="sc-FAiZp " aria-label="Edit" type="button" (click)="toggle($event)">                                                            
+                                                    </button>
+                                                    -->
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </span>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="hEEDMy" data-test-selector="profile-work-list" style="margin-top: 7px;">
+                                                <div class="sc-bkCOcH dslJrR">
+                                                    <div class="sc-kiXyGy cQFSfL">
+                                                    <div class="styled__Outer-sc-1a16ki5-0 ibOodI">
+                                                    <div class="styled__TitleWrapper-sc-1a16ki5-2 BcVQM">
+                                                    <div class="styled__TitleContainer-sc-1a16ki5-3 deGCMa">
+                                                    <span data-test-cypress="project-settings-apps.issue-type-page.main-header.name-inline-input">
+                                                    <div>
+                                                    <div class="sc-hdNmWC fCAzVG"><div style="position: absolute;">
+                                                    <label class="Label__LabelWrapper-sc-17towfw-0 keOXhT">
+                                                    <div class="Label__LabelInner-sc-17towfw-1 jbyPaz">
+                                                    <span>Descripción</span>
+                                                    </div>
+                                                    </label>
+                                                    </div>
+                                                    <div class="sc-fPEBxH aQljB">
+                                                    <div class="sc-gVZiCL fgnfCY">
+                                                    <div class="Content__ContentWrapper-ve26fj-2 feWTNh">
+                                                    <div class="Content__ChildWrapper-ve26fj-0 ilJUcG">
+                                                    <div class="Content-ve26fj-1 llCsQv">
+                                                    <input type="text" name="descripcion" formControlName="descripcion" class="dpbvNR" required width="100%">
+                                                    <!--
+                                                    <h1 class="sc-sVRsr iksssH sc-bpubUI dpbvNR">Alcance del Mantenimiento</h1>                                                        
+                                                    <h1 class="sc-sVRsr iksssH sc-bpubUI dpbvNR">Alcance del Mantenimiento</h1>                                                        
+                                                    <button class="sc-FAiZp " aria-label="Edit" type="button" (click)="toggle($event)">                                                            
+                                                    </button>
+                                                    -->
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </span>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                    </div>
+                                                </div>                
+                                            </div>
+
+                                        </form>
+                                        </div>
+                                        <div mat-dialog-actions >      
+                                            <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="saveForma(forma)">Guardar</button>
+                                        </div>
+                                        </div>
+
+                                        <pre *ngIf="forma">{{forma.value | json}}</pre>
+
+                                        <div class="sc-iBfVdv iamyYC sc-eomEcv bGTkQd">
+                                            <div class="sc-csSMhA klJOKX sc-eomEcv bGTkQd">
+                                            <p class="sc-bscRGj jvTKTk">Campos de contexto</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="sc-gcJTYu gMrJwo">
+                                        <div class="sc-iBfVdv VESiD">
+                                        </div>
+                                        <strong class="sc-cCbPEh CRvrQ">Campos a continuación</strong>
+                                        <div class="sc-iBfVdv VESiD">
+                                        </div>
+                                        </div>
+
+                                        <div class="container-fluid" *ngIf="isLoadingProjectFormField">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingProjectFormField" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+                                        <div cdkDropList class="example-list" *ngIf="form && form.get('items').value == '' && !isLoadingProjectFormField">
+                                        <div class="example-box" cdkDrag>El formulario no tiene campos de contexto. Seleccione un campo de la lista de (Campos ya creados).</div>
+                                        </div>                                        
+
+                                        <div *ngIf="form && form.get('items').value != '' && !isLoadingProjectFormField">
+                                        <div  >
+
+                                            <div [formGroup]="form" *ngIf="form" cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
+                                            <div class="example-box" formArrayName="items" *ngFor="let item of getItems.controls; let i = index;" cdkDrag>  
+                                            <mat-accordion  >
+                                                <mat-expansion-panel  >
+                                                    <mat-expansion-panel-header>
+                                                    <mat-panel-title>
+                                                    <span class="Icon__IconWrapper-dyhwwi-0 jdkWJB">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24">
+                                                    <path *ngIf="form.controls.items.controls[i].controls.type.value && form.controls.items.controls[i].controls.type.value === 'text'" d="M6.72 7.178l-2.93 8.627a.5.5 0 0 0 .473.661h.842a.75.75 0 0 0 .716-.53l.581-1.887h3.425l.58 1.887a.75.75 0 0 0 .717.53h.916a.5.5 0 0 0 .473-.66L9.578 7.177a1 1 0 0 0-.946-.678h-.966a1 1 0 0 0-.947.678zm1.37 1.228h.047l1.25 4.082H6.841l1.25-4.082zm10.187 1.872v-.23a.986.986 0 1 1 1.972 0v5.433a.986.986 0 0 1-1.972 0v-.217h-.08c-.36.802-1.13 1.32-2.217 1.32-1.81 0-2.952-1.479-2.952-3.834 0-2.334 1.149-3.805 2.952-3.805 1.075 0 1.858.546 2.216 1.333h.08zm-.04 2.486c0-1.347-.63-2.203-1.61-2.203-.978 0-1.58.843-1.58 2.203 0 1.368.602 2.196 1.58 2.196.988 0 1.61-.836 1.61-2.196z" fill="currentColor">
+                                                    </path>
+                                                    <path *ngIf="form.controls.items.controls[i].controls.type.value && form.controls.items.controls[i].controls.type.value === 'textarea'" d="M7 7h11a1 1 0 0 1 0 2H7a1 1 0 1 1 0-2zm0 4h11a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2zm0 4h6a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2z">                                                    
+                                                    </path>    
+                                                    <path *ngIf="form.controls.items.controls[i].controls.type.value && form.controls.items.controls[i].controls.type.value === 'date'" d="M8.667 6.167V7A.834.834 0 0 1 7 7V5.333a.834.834 0 0 1 1.667 0v.834zm6.666 0v-.834a.834.834 0 0 1 1.667 0V7a.834.834 0 0 1-1.667 0v-.833zm2.5 0h.005c.918 0 1.662.745 1.662 1.661v10.01c0 .918-.743 1.662-1.662 1.662H6.161A1.663 1.663 0 0 1 4.5 17.838V7.828c0-.917.743-1.661 1.662-1.661h.005V7c0 .927.746 1.667 1.666 1.667C8.76 8.667 9.5 7.92 9.5 7v-.833h5V7c0 .927.746 1.667 1.667 1.667.927 0 1.666-.747 1.666-1.667v-.833zm-10 6.667H9.5v-1.667H7.833v1.667zm0 3.334H9.5V14.5H7.833v1.668zm3.334-3.334h1.666v-1.667h-1.666v1.667zm0 3.334h1.666V14.5h-1.666v1.668zm3.333-3.334h1.667v-1.667H14.5v1.667zm0 3.334h1.667V14.5H14.5v1.668z" fill="currentColor" fill-rule="evenodd">
+                                                    </path>
+                                                    <path *ngIf="form.controls.items.controls[i].controls.type.value && form.controls.items.controls[i].controls.type.value === 'datepicker'" d="M17.476 9.067A6.552 6.552 0 0 1 19 13.263C19 16.983 15.866 20 12 20s-7-3.016-7-6.737c0-1.587.57-3.045 1.524-4.196l-.383-.402a.82.82 0 0 1 .054-1.19.9.9 0 0 1 1.237.052l.345.363a7.116 7.116 0 0 1 3.348-1.312v-.894h-.438a.43.43 0 0 1-.437-.42V4.42a.43.43 0 0 1 .438-.42h2.624a.43.43 0 0 1 .438.421v.842a.43.43 0 0 1-.438.421h-.437v.894a7.116 7.116 0 0 1 3.348 1.312l.345-.363a.9.9 0 0 1 1.237-.052.82.82 0 0 1 .054 1.19l-.383.402zM12 18.316c2.9 0 5.25-2.262 5.25-5.053 0-2.79-2.35-5.052-5.25-5.052s-5.25 2.262-5.25 5.052c0 2.79 2.35 5.053 5.25 5.053zm.645-4.562a.9.9 0 0 1-1.237-.02.82.82 0 0 1 .02-1.19l2.588-2.412a.9.9 0 0 1 1.238.02.82.82 0 0 1-.02 1.19l-2.589 2.412z" fill="currentColor">
+                                                    </path>    
+                                                    <path *ngIf="form.controls.items.controls[i].controls.type.value && form.controls.items.controls[i].controls.type.value === 'timepicker'" d="M12 20a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.787-7.674V8.944c0-.52-.402-.944-.893-.944-.492 0-.894.425-.894.944v3.777c0 .263.104.5.269.672l2.207 2.332a.862.862 0 0 0 1.263 0 .985.985 0 0 0 0-1.336l-1.952-2.063z" fill="currentColor" fill-rule="evenodd">
+                                                    </path>
+                                                    <path *ngIf="form.controls.items.controls[i].controls.type.value && form.controls.items.controls[i].controls.type.value === 'int'" d="M7 4h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zm.417 10.636h1.15V9.141H7.42L6 10.12v1.07l1.348-.93h.069v4.376zm1.923-3.85v.02h1.067v-.024c0-.506.365-.857.898-.857.503 0 .861.313.861.755 0 .357-.194.643-.967 1.397l-1.794 1.756v.803h3.964v-.955h-2.406v-.069l1.05-1.002c.953-.895 1.277-1.409 1.277-2.007 0-.944-.8-1.603-1.947-1.603-1.188 0-2.003.724-2.003 1.786zm5.811 1.466h.682c.617 0 .994.297.994.777 0 .469-.4.792-.975.792-.59 0-.983-.293-1.017-.757h-1.1c.05 1.035.88 1.713 2.106 1.713 1.253 0 2.159-.697 2.159-1.66 0-.724-.472-1.226-1.226-1.31v-.069c.613-.125 1.013-.62 1.013-1.257 0-.864-.811-1.481-1.939-1.481-1.2 0-1.972.655-2.01 1.695H14.9c.03-.476.385-.777.918-.777.537 0 .88.282.88.723 0 .45-.355.754-.876.754h-.67v.857z" fill="currentColor" fill-rule="evenodd">
+                                                    </path>
+                                                    </svg>
+                                                    </span>                                                                                            
+                                                    <div class="sc-eGXxtx blriGcList" *ngIf="!form.controls.items.controls[i].controls.name.value"> Introduce el nombre y descripción del campo</div>
+                                                    <div class="sc-eGXxtx blriGcList" *ngIf="form.controls.items.controls[i].controls.name.value"> {{form.controls.items.controls[i].controls.name.value}}</div>
+                                                    </mat-panel-title>
+                                                    </mat-expansion-panel-header>
+                                                    <div [formGroupName]="i">
+                                                        <mat-form-field appearance="outline">
+                                                        <input matInput formControlName="name" required>
+                                                        </mat-form-field>
+    
+    
+                                                        <mat-form-field appearance="outline">
+                                                        <input matInput formControlName="description" >
+                                                        </mat-form-field>            
+                                                    </div>
+                                                        
+                                                    <mat-action-row>
+                                                        <button mat-button color="warn" (click)="deleteCampo(i)">Eliminar</button>
+                                                    </mat-action-row>
+                                                </mat-expansion-panel>
+                                            </mat-accordion>
+                                            </div>
+                                            </div>
+                                            <br>
+                                            <div mat-dialog-actions>
+                                              <button mat-button color="primary" type="submit"  [disabled]="form.invalid" class="btnsave" (click)="saveForm(form)">Guardar</button>
+                                            </div>
+                                            
+
+                                        </div>
+                                        </div>
+                                        <pre *ngIf="form">{{form.value | json}}</pre>
+                                        <!----
+                                        <pre *ngIf="form">{{form.get('items').value | json}}</pre>
+                                        -->  
+                                        </div>
+    
+                                    </div>
+                                    <!----END MAIN PRINCIPAL------------------------------------------------------------->
+        
+                                    <!----MAIN PRINCIPAL EN CASO NO EXISTAN FORMULARIOS EN EL PROYECTO ------------------->
+                                    <div class="col-md-auto" *ngIf="projectformdata && projectformdata.length === 0 && !isLoadingProjectForm">
+                                        <div class="ljhYu">
+                                        <div class="jfCYPT">
+                                            <div class="hEEDMy" data-test-selector="profile-work-list">
+                                                <div class="EacRc">
+                                                    <span>
+                                                    <div role="presentation" class="css-7xjigh" *ngIf="projectformdata && projectformdata.length === 0 && !isLoadingProjectForm">
+                                                    <a class="css-1t5na7c" data-testid="NavigationItem" id="10004" title="Sin Formularios" >
+                                                    <div class="css-1wgdpuu">
+                                                    <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                                                    <span class="styledCache__StyledSpan-zohhd2-3 iHthaF">
+                                                    <svg width="24" height="24" viewBox="0 0 24 24">
+                                                    <path d="M11.433 5.428l-4.207.6a2 2 0 0 0-1.697 1.698l-.601 4.207a1 1 0 0 0 .283.849l6.894 6.894a1 1 0 0 0 1.414 0l5.657-5.657a1 1 0 0 0 0-1.414L12.282 5.71a1 1 0 0 0-.849-.283zm-.647 5.858a1.667 1.667 0 1 1-2.357-2.357 1.667 1.667 0 0 1 2.357 2.357z" fill="currentColor" fill-rule="evenodd">
+                                                    </path>
+                                                    </svg>
+                                                    </span>
+                                                    </div>
+                                                    </div>
+                                                    <div class="css-t44v0r">
+                                                    <div class="css-xuepxh">El Proyecto no tiene creado formularios.</div>
+                                                    </div>
+                                                    </a>
+                                                    </div>                                
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        </div>
+    
+                                    </div>
+                                    <!----END MAIN PRINCIPAL------------------------------------------------------------->
+    
+
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-2"></div>
+                    </div>
                 </main>
                 </mat-sidenav-content>
             </mat-sidenav-container>
@@ -209,58 +516,34 @@
                         <mat-divider></mat-divider>
 
                         <div *ngFor="let k of typedata | keys;">
-                        <mat-list-item class="pointer" (click)="addTypeForm(typedata[k].id)" *ngIf="typedata[k].type === 'text'" title="{{typedata[k].description}}">
+                        <mat-list-item class="pointer" (click)="addTypeForm(typedata[k])"  title="{{typedata[k].description}}">
                             <span class="Icon__IconWrapper-dyhwwi-0 jdkWJB">
                             <svg width="24" height="24" viewBox="0 0 24 24">
-                            <path d="M6.72 7.178l-2.93 8.627a.5.5 0 0 0 .473.661h.842a.75.75 0 0 0 .716-.53l.581-1.887h3.425l.58 1.887a.75.75 0 0 0 .717.53h.916a.5.5 0 0 0 .473-.66L9.578 7.177a1 1 0 0 0-.946-.678h-.966a1 1 0 0 0-.947.678zm1.37 1.228h.047l1.25 4.082H6.841l1.25-4.082zm10.187 1.872v-.23a.986.986 0 1 1 1.972 0v5.433a.986.986 0 0 1-1.972 0v-.217h-.08c-.36.802-1.13 1.32-2.217 1.32-1.81 0-2.952-1.479-2.952-3.834 0-2.334 1.149-3.805 2.952-3.805 1.075 0 1.858.546 2.216 1.333h.08zm-.04 2.486c0-1.347-.63-2.203-1.61-2.203-.978 0-1.58.843-1.58 2.203 0 1.368.602 2.196 1.58 2.196.988 0 1.61-.836 1.61-2.196z" fill="currentColor">
+                            <path *ngIf="typedata[k].type === 'text'" d="M6.72 7.178l-2.93 8.627a.5.5 0 0 0 .473.661h.842a.75.75 0 0 0 .716-.53l.581-1.887h3.425l.58 1.887a.75.75 0 0 0 .717.53h.916a.5.5 0 0 0 .473-.66L9.578 7.177a1 1 0 0 0-.946-.678h-.966a1 1 0 0 0-.947.678zm1.37 1.228h.047l1.25 4.082H6.841l1.25-4.082zm10.187 1.872v-.23a.986.986 0 1 1 1.972 0v5.433a.986.986 0 0 1-1.972 0v-.217h-.08c-.36.802-1.13 1.32-2.217 1.32-1.81 0-2.952-1.479-2.952-3.834 0-2.334 1.149-3.805 2.952-3.805 1.075 0 1.858.546 2.216 1.333h.08zm-.04 2.486c0-1.347-.63-2.203-1.61-2.203-.978 0-1.58.843-1.58 2.203 0 1.368.602 2.196 1.58 2.196.988 0 1.61-.836 1.61-2.196z" fill="currentColor">
                             </path>
+                            <path *ngIf="typedata[k].type === 'textarea'" d="M7 7h11a1 1 0 0 1 0 2H7a1 1 0 1 1 0-2zm0 4h11a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2zm0 4h6a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2z">
+                            </path>
+                            <path *ngIf="typedata[k].type === 'date'" d="M8.667 6.167V7A.834.834 0 0 1 7 7V5.333a.834.834 0 0 1 1.667 0v.834zm6.666 0v-.834a.834.834 0 0 1 1.667 0V7a.834.834 0 0 1-1.667 0v-.833zm2.5 0h.005c.918 0 1.662.745 1.662 1.661v10.01c0 .918-.743 1.662-1.662 1.662H6.161A1.663 1.663 0 0 1 4.5 17.838V7.828c0-.917.743-1.661 1.662-1.661h.005V7c0 .927.746 1.667 1.666 1.667C8.76 8.667 9.5 7.92 9.5 7v-.833h5V7c0 .927.746 1.667 1.667 1.667.927 0 1.666-.747 1.666-1.667v-.833zm-10 6.667H9.5v-1.667H7.833v1.667zm0 3.334H9.5V14.5H7.833v1.668zm3.334-3.334h1.666v-1.667h-1.666v1.667zm0 3.334h1.666V14.5h-1.666v1.668zm3.333-3.334h1.667v-1.667H14.5v1.667zm0 3.334h1.667V14.5H14.5v1.668z" fill="currentColor" fill-rule="evenodd">
+                            </path>
+                            <path *ngIf="typedata[k].type === 'datepicker'" d="M17.476 9.067A6.552 6.552 0 0 1 19 13.263C19 16.983 15.866 20 12 20s-7-3.016-7-6.737c0-1.587.57-3.045 1.524-4.196l-.383-.402a.82.82 0 0 1 .054-1.19.9.9 0 0 1 1.237.052l.345.363a7.116 7.116 0 0 1 3.348-1.312v-.894h-.438a.43.43 0 0 1-.437-.42V4.42a.43.43 0 0 1 .438-.42h2.624a.43.43 0 0 1 .438.421v.842a.43.43 0 0 1-.438.421h-.437v.894a7.116 7.116 0 0 1 3.348 1.312l.345-.363a.9.9 0 0 1 1.237-.052.82.82 0 0 1 .054 1.19l-.383.402zM12 18.316c2.9 0 5.25-2.262 5.25-5.053 0-2.79-2.35-5.052-5.25-5.052s-5.25 2.262-5.25 5.052c0 2.79 2.35 5.053 5.25 5.053zm.645-4.562a.9.9 0 0 1-1.237-.02.82.82 0 0 1 .02-1.19l2.588-2.412a.9.9 0 0 1 1.238.02.82.82 0 0 1-.02 1.19l-2.589 2.412z" fill="currentColor">
+                            </path>   
+                            <path *ngIf="typedata[k].type === 'timepicker'" d="M12 20a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.787-7.674V8.944c0-.52-.402-.944-.893-.944-.492 0-.894.425-.894.944v3.777c0 .263.104.5.269.672l2.207 2.332a.862.862 0 0 0 1.263 0 .985.985 0 0 0 0-1.336l-1.952-2.063z" fill="currentColor" fill-rule="evenodd">
+                             </path>
+                             <path *ngIf="typedata[k].type === 'int'" d="M7 4h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zm.417 10.636h1.15V9.141H7.42L6 10.12v1.07l1.348-.93h.069v4.376zm1.923-3.85v.02h1.067v-.024c0-.506.365-.857.898-.857.503 0 .861.313.861.755 0 .357-.194.643-.967 1.397l-1.794 1.756v.803h3.964v-.955h-2.406v-.069l1.05-1.002c.953-.895 1.277-1.409 1.277-2.007 0-.944-.8-1.603-1.947-1.603-1.188 0-2.003.724-2.003 1.786zm5.811 1.466h.682c.617 0 .994.297.994.777 0 .469-.4.792-.975.792-.59 0-.983-.293-1.017-.757h-1.1c.05 1.035.88 1.713 2.106 1.713 1.253 0 2.159-.697 2.159-1.66 0-.724-.472-1.226-1.226-1.31v-.069c.613-.125 1.013-.62 1.013-1.257 0-.864-.811-1.481-1.939-1.481-1.2 0-1.972.655-2.01 1.695H14.9c.03-.476.385-.777.918-.777.537 0 .88.282.88.723 0 .45-.355.754-.876.754h-.67v.857z" fill="currentColor" fill-rule="evenodd">
+                             </path>
                             </svg>
                             </span>
                             <div class="sc-eGXxtx blriGcList">{{typedata[k].description}}</div>
-                        </mat-list-item>
-                        <mat-list-item class="pointer" (click)="addTypeForm(typedata[k].id)" *ngIf="typedata[k].type === 'textarea'" title="{{typedata[k].description}}">
-                                <span class="Icon__IconWrapper-dyhwwi-0 jdkWJB">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M7 7h11a1 1 0 0 1 0 2H7a1 1 0 1 1 0-2zm0 4h11a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2zm0 4h6a1 1 0 0 1 0 2H7a1 1 0 0 1 0-2z">
-                                </path>
-                                </svg>
-                                </span>
-                                <div class="sc-eGXxtx blriGcList">{{typedata[k].description}}</div>
-                        </mat-list-item>
-
-                        <mat-list-item class="pointer" (click)="addTypeForm(typedata[k].id)" *ngIf="typedata[k].type === 'date'" title="{{typedata[k].description}}">
-                                <span class="Icon__IconWrapper-dyhwwi-0 jdkWJB">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M8.667 6.167V7A.834.834 0 0 1 7 7V5.333a.834.834 0 0 1 1.667 0v.834zm6.666 0v-.834a.834.834 0 0 1 1.667 0V7a.834.834 0 0 1-1.667 0v-.833zm2.5 0h.005c.918 0 1.662.745 1.662 1.661v10.01c0 .918-.743 1.662-1.662 1.662H6.161A1.663 1.663 0 0 1 4.5 17.838V7.828c0-.917.743-1.661 1.662-1.661h.005V7c0 .927.746 1.667 1.666 1.667C8.76 8.667 9.5 7.92 9.5 7v-.833h5V7c0 .927.746 1.667 1.667 1.667.927 0 1.666-.747 1.666-1.667v-.833zm-10 6.667H9.5v-1.667H7.833v1.667zm0 3.334H9.5V14.5H7.833v1.668zm3.334-3.334h1.666v-1.667h-1.666v1.667zm0 3.334h1.666V14.5h-1.666v1.668zm3.333-3.334h1.667v-1.667H14.5v1.667zm0 3.334h1.667V14.5H14.5v1.668z" fill="currentColor" fill-rule="evenodd">
-                                </path>
-                                </svg>
-                                </span>
-                                <div class="sc-eGXxtx blriGcList">{{typedata[k].description}}</div>
-                        </mat-list-item>
-
-                        <mat-list-item class="pointer" (click)="addTypeForm(typedata[k].id)" *ngIf="typedata[k].type === 'timepicker'" title="{{typedata[k].description}}">
-                                <span class="Icon__IconWrapper-dyhwwi-0 jdkWJB">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M12 20a8 8 0 1 1 0-16 8 8 0 0 1 0 16zm.787-7.674V8.944c0-.52-.402-.944-.893-.944-.492 0-.894.425-.894.944v3.777c0 .263.104.5.269.672l2.207 2.332a.862.862 0 0 0 1.263 0 .985.985 0 0 0 0-1.336l-1.952-2.063z" fill="currentColor" fill-rule="evenodd">
-                                </path>
-                                </svg>
-                                </span>
-                                <div class="sc-eGXxtx blriGcList">{{typedata[k].description}}</div>
-                        </mat-list-item>
-
-                        <mat-list-item class="pointer" (click)="addTypeForm(typedata[k].id)" *ngIf="typedata[k].type === 'int'" title="{{typedata[k].description}}">
-                                <span class="Icon__IconWrapper-dyhwwi-0 jdkWJB">
-                                <svg width="24" height="24" viewBox="0 0 24 24">
-                                <path d="M7 4h10a3 3 0 0 1 3 3v10a3 3 0 0 1-3 3H7a3 3 0 0 1-3-3V7a3 3 0 0 1 3-3zm.417 10.636h1.15V9.141H7.42L6 10.12v1.07l1.348-.93h.069v4.376zm1.923-3.85v.02h1.067v-.024c0-.506.365-.857.898-.857.503 0 .861.313.861.755 0 .357-.194.643-.967 1.397l-1.794 1.756v.803h3.964v-.955h-2.406v-.069l1.05-1.002c.953-.895 1.277-1.409 1.277-2.007 0-.944-.8-1.603-1.947-1.603-1.188 0-2.003.724-2.003 1.786zm5.811 1.466h.682c.617 0 .994.297.994.777 0 .469-.4.792-.975.792-.59 0-.983-.293-1.017-.757h-1.1c.05 1.035.88 1.713 2.106 1.713 1.253 0 2.159-.697 2.159-1.66 0-.724-.472-1.226-1.226-1.31v-.069c.613-.125 1.013-.62 1.013-1.257 0-.864-.811-1.481-1.939-1.481-1.2 0-1.972.655-2.01 1.695H14.9c.03-.476.385-.777.918-.777.537 0 .88.282.88.723 0 .45-.355.754-.876.754h-.67v.857z" fill="currentColor" fill-rule="evenodd">
-                                </path>
-                                </svg>
-                                </span>
-                                <div class="sc-eGXxtx blriGcList">{{typedata[k].description}}</div>
-                        </mat-list-item>
-                        
+                        </mat-list-item>                        
                         </div>
 
                     </mat-list>
+
+                    <div class="sc-cCbPEh bSMwgc sc-eomEcv bGTkQd">
+                        <p class="sc-erOsFi fZamFO">Campos ya creados</p>
+                        <p class="sc-eGXxtx blriGc">Puedes reutilizar los campos de otros formularios que haya sido creado.</p>
+                    </div>
+                    
                     </div>
 
                     <div class="drawer-header" *ngIf="typedata && typedata.length === 0 && !isLoadingType">

@@ -206,7 +206,6 @@ export class AddComponent implements OnInit, OnDestroy {
     }
 
     const objPila = {pila: pila };
-    //console.log(objPila);
     const obj = Object.assign(this.data, objPila);
     this.dataService.add(this.token.token, obj, this.category_id);
     // this.dataService.add(this.token.token, this.data, this.category_id);

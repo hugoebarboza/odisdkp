@@ -4,8 +4,8 @@ import { MatExpansionModule} from '@angular/material/expansion';
 
 // CDK MATERIAL
 import { PortalModule } from '@angular/cdk/portal';
-import {ScrollingModule} from '@angular/cdk/scrolling';
-
+import { ScrollingModule } from '@angular/cdk/scrolling';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 import {
   MatAutocompleteModule,
@@ -46,6 +46,7 @@ import {
 
 @NgModule({
   exports: [
+    DragDropModule,
     MatAutocompleteModule,
     MatBadgeModule,
     MatBottomSheetModule,

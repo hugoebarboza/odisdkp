@@ -262,7 +262,7 @@ import { GLOBAL } from '../global';
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');	
 		this._http.post(this.url+'project'+'/'+id+'/'+'order', params, {headers: headers}).subscribe(
     		(data: any) => { 
-    			  this.dialogData = order;    		      
+    			  this.dialogData = order;
 						//this.toasterService.success('Orden de Trabajo creada.', 'Exito', {timeOut: 6000,});
 						if(data.status === 'success'){
 							Swal.fire('Creada Orden de Trabajo: ', this.dialogData.order_number + ' exitosamente.', 'success' );
@@ -289,7 +289,7 @@ import { GLOBAL } from '../global';
 
 		let json = JSON.stringify(data);
 		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');	
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 										 
 		return this._http.post(this.url+'service/'+id+'/estatus/', params, {headers: headers})
 		.map( (resp: any) => {
@@ -297,7 +297,7 @@ import { GLOBAL } from '../global';
 		});				
 	}
 
-  update(token: any, orderid:number, order: Order, id:number): void {	
+  update(token: any, orderid:number, order: Order, id:number): void {
 		if (!token){
 			return;
 		}
@@ -306,7 +306,7 @@ import { GLOBAL } from '../global';
 		let params = 'json='+json;
 
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 		this._http.put(this.url+'project'+'/'+id+'/'+'order/'+orderid, params, {headers: headers}).subscribe(
     		(data: any) => { 
 							//console.log(data.status);

@@ -25,6 +25,9 @@ import { Order, Proyecto } from 'src/app/models/types';
 // SERVICES
 import { ProjectsService, SettingsService, UserService } from 'src/app/services/service.index';
 
+// RXJS
+import { isNumeric } from 'rxjs/util/isNumeric';
+
 
 /*
 export const columns: Columns[] = [
@@ -116,7 +119,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
     this.sub = this._route.params.subscribe(params => {
       const id = +params['id'];
       this.id = id;
-      if (this.id) {
+      if (this.id && isNumeric(this.id)) {
         this.loading = true;
         this.services = [];
         this.datasource = null;
@@ -146,6 +149,8 @@ export class ServiceComponent  implements OnInit, OnDestroy {
         } else {
           this._router.navigate(['/notfound']);
         }
+      } else {
+        this._router.navigate(['/notfound']);
       }
     });
   }

@@ -3,29 +3,54 @@
 
 
 
-<div class="container-fluid p-2" *ngIf="proyectos && identity">
-<div class="d-flex  mb-3">
-        <div class="p-2 "><a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'/project/'+id" ><i class="material-icons">keyboard_backspace</i></a></div>
-        <div class="p-2 w-100"><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1></div>
-        <div class="p-2 flex-shrink-1 ">
-        </div>        
-</div>
+<div class="container-fluid" *ngIf="proyectos && identity">
+<div class="row animated fadeIn">
+    <div class="col-12">        
+    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom ">
+        <div class="w-100 ">
+            <div class="d-flex">
+                <div >
+                <div role="presentation" class="css-7xjigh">
+                <a class="css-1t5na7c" data-testid="NavigationItem" id="back-item" [routerLink]="['/project', id]" target="_self">
+                    <div class="css-1wgdpuu">
+                        <span class="sc-hqyNC hItagX">
+                            <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                <circle fill="currentColor" cx="12" cy="12" r="10">
+                                </circle>
+                                <path d="M16 10.995h-5.586l1.272-1.279a1.01 1.01 0 0 0 0-1.421.996.996 0 0 0-1.415 0l-2.978 2.994a1.01 1.01 0 0 0 0 1.423l2.978 2.993a.999.999 0 0 0 1.415 0 1.01 1.01 0 0 0 0-1.421l-1.272-1.279H16c.552 0 1-.45 1-1.005 0-.555-.448-1.005-1-1.005" fill="inherit">
+                                </path>
+                            </svg>
+                        </span>
+                    </div>
+                </a>
+                </div>    
+                </div>
 
+                <div class="w-100"><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1></div>
+            </div>                  
+        </div>
+        <div class="flex-shrink-1 ">
+        </div>
+    </div>
+    </div>
+</div>
+            
 
 
 <div class="row animated fadeIn">
   <div class="col-12">
-  <div class="container" *ngIf="loading">
-      <div class="row justify-content-md-center">
-        <div class="col col-lg-2">
-            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
-        </div>
-      </div>
-  </div>
+    <div class="row animated fadeIn justify-content-md-center" *ngIf="loading">
+    <div class="col col-lg-2">
+        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loading" ></mat-spinner>
+    </div>
+    </div>
 
 
-
-  <mat-card  [ngStyle]="{'padding':'0px'}">
+    <div class="animated fadeIn">
+    <div class="container-fluid">
+    <div class="row" style="margin-top: 7px;">                                
+    <div class="col-md-12">
+    <mat-card  [ngStyle]="{'padding':'0px'}">
       <mat-card-header [ngClass]="{'custom-card':true, 'padding':'0px'}">     
     
         <div class="mat-card-header-text">
@@ -345,6 +370,10 @@
       </div>
       </mat-card-content>
     </mat-card>
+    </div>
+    </div>
+    </div>
+    </div>
     
       
   </div>

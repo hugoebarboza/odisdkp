@@ -31,6 +31,7 @@ import { AngularFirePerformance } from '@angular/fire/performance';
 export class UserService  {
 
     public url:string;
+    formularios: [];
     public departamentos: Array<Departamento>;
     public idaccount;
     public identity;
@@ -648,6 +649,17 @@ export class UserService  {
 		return this.departamentos;
 
 	}
+
+    getFormularios() {
+        let formularios = JSON.parse(localStorage.getItem('formularios'));
+        if (formularios != "Undefined" && formularios != null){
+          this.formularios = formularios;
+        } else {
+            this.formularios= null;
+        }
+        return this.formularios;
+
+    }
 
 
 

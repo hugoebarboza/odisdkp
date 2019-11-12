@@ -35,7 +35,7 @@ const moment = _moment;
 export class AddJobComponent implements OnInit, OnDestroy {
 
   archivos: FileItem[] = [];
-  CARPETA_ARCHIVOS:string = '';
+  CARPETA_ARCHIVOS = '';
   comentarios$: Observable<any[]>;
   private comentariosCollection: AngularFirestoreCollection<any>;
   destinatarios = [];

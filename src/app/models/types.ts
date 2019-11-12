@@ -182,7 +182,7 @@ export class Estatus  {
 	public id:number,
 	public description:string,
 	public status:number,	
-	public create_at:any,	
+	public create_at:any,
 	public update_at:any
 	){}
 }
@@ -211,6 +211,20 @@ export class FileItem {
 
 }
 
+export class Form {
+   constructor(
+   public id: number,
+   public project_id: number,
+   public servicetype_id: number,
+   public name: string,
+   public descripcion: string,
+   public status: number,
+   public create_by: any,
+   public create_at: any,
+   public update_by: any,
+   public update_at:any
+   ){}
+}
 
 export class Giro  {
 	
