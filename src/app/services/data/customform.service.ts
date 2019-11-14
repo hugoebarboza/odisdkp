@@ -79,6 +79,48 @@ export class CustomformService {
     return this.getQuery('type', token);
   }
 
+
+  async delete(token: any, id: number, formid: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const href = this.url + 'project/' + id + '/form/' + formid;
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.delete(requestUrl, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); });
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
+  async deleteFormField(token: any, id: number, formid: number, formfieldid: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const href = this.url + 'project/' + id + '/form/' + formid + '/formfield/' + formfieldid;
+      const requestUrl = href;
+
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.delete(requestUrl, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); });
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
   async update(token: any, data: Form, id: number, formid: number) {
     if (!token) {
      return;
@@ -97,10 +139,37 @@ export class CustomformService {
       );
 
     } catch (err) {
-    throw new Error(`Error HTTP `);
-  }
+      throw new Error(`Error HTTP `);
+    }
 
   }
+
+
+  async updateFormField(token: any, data: Form, id: number, formid: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+
+      const href = this.url + 'project/' + id + '/form/' + formid + '/formfield';
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.put(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
 
 
   private handleError( error: HttpErrorResponse ) {

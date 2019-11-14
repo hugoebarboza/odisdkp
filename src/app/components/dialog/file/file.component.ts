@@ -55,7 +55,7 @@ export class FileComponent implements OnInit, OnChanges {
       this.service_id = newdialogdata.servicio;
       this.tiposervicio_id = newdialogdata.tiposervicio;
       this.order_id = newdialogdata.orderid;
-      this.cdr.detectChanges();
+      this.cdr.markForCheck();
     }
   }
 

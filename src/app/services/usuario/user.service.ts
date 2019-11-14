@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-import {  HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 import { Observable } from 'rxjs/Observable';
 
@@ -86,9 +85,9 @@ export class UserService  {
 		}
 
 		const url = this.url+query;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							  							 
+		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		return this._http.get(url, {headers: headers});  			
+		return this._http.get(url, {headers: headers});
   }
 
 
@@ -115,7 +114,7 @@ export class UserService  {
 		return this._http.post(this.url+'registeruseremployee', params, {headers: headers})
 						 .map( (resp: any) => {
 							   return resp;
-						 });				
+						 });
 	}
 
 
@@ -130,7 +129,7 @@ export class UserService  {
 		return this._http.delete(this.url+'user/'+id, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
-						 });				
+						 });
 	}
 
 	adduser(token: any, userid:number, id:number): Observable<any>{
@@ -151,14 +150,14 @@ export class UserService  {
     if(!token){
      return;
     }
-	   
+
 
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
 		return this._http.post(this.url+'removeruser/'+userid+'/project/'+id, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
-						 });				
+						 });
 	}
 
 
@@ -183,7 +182,7 @@ export class UserService  {
 							}
 
 							 return resp;
-						 });				
+						 });
 	}
 
 	updateProfile(token: any, user:User, id:number): Observable<any>{

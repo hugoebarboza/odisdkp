@@ -75,25 +75,21 @@ export class MessagingService {
     this.afAuth.authState.take(1).subscribe(user => {
       if (!user) { return; }
       const data = { [user.uid]: token }
-      this.db.object('fcmTokens/').update(data)
-    })
+      this.db.object('fcmTokens/').update(data);
+    });
   }
 
-  updateToken(token:string) {
+  updateToken(token: string) {
     this.afAuth.authState.take(1).subscribe(user => {
       if (!user) { return; }
-      //console.log(user.uid);      
-      //console.log(data);
       this.afs.collection('users').doc(user.uid)
       .get()
-      .subscribe((data) => 
-      { if(data) {
-        //console.log(data.data());
+      .subscribe((data) => {
+        if (data) {
         this.afs.collection('users')
         .doc(user.uid)
         .update({fcmTokens: token})
         .then(() => {
-          //console.log('done token user update');
         })
         .catch(function(error) {
           console.error('Error writing document: ', error);
@@ -101,8 +97,8 @@ export class MessagingService {
       }
       }
     );
-      //this.db.object('fcmTokens/').update(data)
-    })
+      // this.db.object('fcmTokens/').update(data)
+    });
   }
 
 
@@ -131,7 +127,7 @@ export class MessagingService {
 
   receiveMessage() {
        this.messaging.onMessage((payload) => {
-        //console.log("Message received. ", payload);
+        // console.log("Message received. ", payload);
         this.currentMessage.next(payload);
       });
   }

@@ -458,6 +458,19 @@ a .iHthaF, button .iHthaF {
     font-size: 14px;
     line-height: 1.16667;
 }
+.EacRcN {
+    display: flex;
+    -webkit-box-align: center;
+    align-items: center;
+    width: 100%;
+    margin-top: 0px;
+    margin-left: 14px;
+    margin-bottom: 25px;
+    color: rgb(107, 119, 140);
+    font-size: 14px;
+    line-height: 1.16667;
+}
+
 .iamyYC {
     margin-bottom: 7px;
     flex-shrink: 0;
@@ -731,4 +744,28 @@ mat-form-field {
     border: solid 1px #ccc !important;
     opacity: 1;
 }
-
+.mat-icon-button {
+    outline: 0;
+    border: none;
+}
+.mat-menu-item {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    outline: 0;
+    border: none;
+    -webkit-tap-highlight-color: transparent;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    line-height: 48px;
+    height: 48px;
+    padding: 0 16px;
+    text-align: left;
+    text-decoration: none;
+    max-width: 100%;
+    position: relative;
+}

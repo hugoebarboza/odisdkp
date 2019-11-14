@@ -47,7 +47,7 @@ export class AddcaseComponent implements OnInit {
   archivos: FileItem[] = [];
   ncase: any;
   urgencia: any;
-  type: any;    
+  type: any;
   selectstatus: {id: any; name: any; label: any};
   token: any;
   userFirebase: UserFirebase;
@@ -63,7 +63,7 @@ export class AddcaseComponent implements OnInit {
   snapshot: Observable<any>;
 
   supportcase = '';
-  showlist: boolean = false;
+  showlist = false;
 
   idPais = null;
 
@@ -139,7 +139,6 @@ export class AddcaseComponent implements OnInit {
           return actions.map(a => {
             const data = a.payload.doc.data();
             const id = a.payload.doc.id;
-            //console.log({id, ...data});
             return { id, ...data };
           });
         })
@@ -188,11 +187,10 @@ export class AddcaseComponent implements OnInit {
 
   public getListuser(term: string) {
 
-    if(term == null){
+    if (term == null) {
       this.userLoading = false;
       return new Observable;
     }
-  
 
     // tslint:disable-next-line:max-line-length
     this.usersCollection = this._afs.collection('users', ref => ref.where('country', 'array-contains', this.idPais).where('email', '>=', term));
@@ -247,7 +245,6 @@ export class AddcaseComponent implements OnInit {
           // res.data();
           // console.log(res.data());
           if (res.data().admins && res.data().admins.length > 0) {
-            //console.log(res.data().admins);
             this.arrayResponsables = this.getUserResponsables(res.data().admins);
           }
          } else {
@@ -256,7 +253,6 @@ export class AddcaseComponent implements OnInit {
           this.selectstatus  = null;
           this.forma.controls['categoria'].setValue('');
           this.arrayResponsables = [];
-          //console.log('Document does not exist');
          }
       });
 
@@ -282,7 +278,6 @@ export class AddcaseComponent implements OnInit {
       this._afs.doc('users/' + to[ii]).get()
       .subscribe(res => {
         if (res.exists) {
-          //console.log(res.data());
           arr.push(res.data());
          }
       });
@@ -433,7 +428,7 @@ export class AddcaseComponent implements OnInit {
       return;
     }
 
-    /** 
+    /**
     const array_users: [] = this.forma.value.etiquetado;
     const array_usersNew: Array<Object> = [];
     const array_usersInfo = [];
@@ -497,7 +492,7 @@ export class AddcaseComponent implements OnInit {
         that.onNoClick();
         Swal.fire('Solicitud registrada', '', 'success');
 
-        /** 
+        /**
         if (array_usersInfo && array_usersInfo.length > 0 && docRef) {
           array_usersInfo.forEach(res => {
             that.sendCdfTag(res, docRef, 'Etiquetado(a) en');
@@ -505,7 +500,7 @@ export class AddcaseComponent implements OnInit {
         }
         */
 
-        if (that.arrayResponsables && that.arrayResponsables.length > 0 && docRef){
+        if (that.arrayResponsables && that.arrayResponsables.length > 0 && docRef) {
           that.arrayResponsables.forEach(res => {
             that.sendCdfTag(res, docRef, 'Nueva solicitud');
           });
@@ -648,7 +643,7 @@ export class AddcaseComponent implements OnInit {
 
     }
 
-  }  
+  }
 
 }
 

@@ -22,13 +22,12 @@
     </mat-tab>
   </mat-tab-group>
   </mat-card-header>
-
   <mat-card-content style="max-width:777px;max-height:650px; " *ngIf="selected.value==0">
-         <app-filelist [projectid]="project_id" [serviceid]="service_id" [orderid]="order_id" *ngIf="project_id && project_id > 0 && service_id && service_id > 0 && order_id && order_id > 0"></app-filelist>
+         <app-filelist [projectid]="project_id" [serviceid]="service_id" [orderid]="order_id" *ngIf="project_id && project_id > 0 && service_id && service_id > 0 "></app-filelist>
   </mat-card-content>
 
   <mat-card-content style="max-width:777px;max-height:650px; " *ngIf="selected.value==1">
-          <app-carga [projectid]="project_id" [serviceid]="service_id" [orderid]="order_id" *ngIf="project_id && project_id > 0 && service_id && service_id > 0 && order_id && order_id > 0"></app-carga>
+          <app-carga [projectid]="project_id" [serviceid]="service_id" [orderid]="order_id" *ngIf="project_id && project_id > 0 && service_id && service_id > 0 "></app-carga>
   </mat-card-content>
 
 </mat-card>
