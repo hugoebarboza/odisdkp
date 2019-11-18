@@ -12,7 +12,6 @@ import { MyInterceptor } from '../providers/interceptor/my.interceptor';
 // MODULES
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule} from 'agm-direction';
-// import { MaterialModule } from '../material-module';
 import { PipesModule } from '../pipes/pipes.module';
 import { SharedModule } from '../components/shared/shared.module';
 import { ServiceModule } from '../services/service.module';
@@ -87,7 +86,6 @@ registerLocaleData(localeEs);
     VerticalTimelineModule,
   ],
   declarations: [
-
   ],
   exports: [
   ],

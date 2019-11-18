@@ -3,8 +3,12 @@ import { ActivatedRoute } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
-import { TooltipPosition } from '@angular/material';
+import { TooltipPosition, MatDialog } from '@angular/material';
 import Swal from 'sweetalert2';
+
+// COMPONENTS
+import { EditFormComponent } from '../dialog/edit-form/edit-form.component';
+import { MakeFormComponent } from '../dialog/make-form/make-form.component';
 
 // SERVICES
 import { CustomformService, SettingsService, UserService } from 'src/app/services/service.index';
@@ -75,9 +79,9 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     private _route: ActivatedRoute,
     public _userService: UserService,
     private cd: ChangeDetectorRef,
+    public dialog: MatDialog,
     private fb: FormBuilder,
     public label: SettingsService,
-    changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
     public toasterService: ToastrService,
   ) {
@@ -86,7 +90,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     this.token = this._userService.getToken();
 
     this.mobileQuery = media.matchMedia('(max-width: 600px)');
-    this._mobileQueryListener = () => changeDetectorRef.detectChanges();
+    this._mobileQueryListener = () => cd.detectChanges();
     this.mobileQuery.addListener(this._mobileQueryListener);
 
 
@@ -114,7 +118,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
           this.projectformfield = [];
           this.resetForm(this.forma);
           this.resetForm(this.form);
-          this.makeForma(this.formulario);
+          // this.makeForma(this.formulario);
           this.cargarProjectFormField(this.id, this.formid); // Obtener los campos de un formulario
         } else {
           this.formid = 0; // Inicializa ID del formulario a 0, ya que, pudo haber sido eliminado o no esta asociado algún formulario
@@ -154,18 +158,6 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     if (this.id > 0 && this.project !== 'Undefined' && this.project !== null && this.project) {
       this.cargarProjectForm(this.id); // Obtenes los formularios del proyecto
       this.cargarType(this.id); // Obtner los campos tipo para un formulario
-
-      /*
-      this.forma = new FormGroup({
-        name: new FormControl(null, [Validators.required, Validators.minLength(2)]),
-        description: new FormControl(null, [Validators.required, Validators.minLength(2)]),
-      });
-
-      this.forma.setValue({
-        'name': '',
-        'description': '',
-      });*/
-
     }
   }
 
@@ -178,19 +170,14 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     return this.form.get('items') as FormArray;
   }
 
-  /*
-  createForm() {
-    this.form = this.fb.group({
-      items: this.fb.array([this.buildForm()])
-    });
-  }*/
-
 
   makeForma(data: any) {
+    this.isLoading = true;
     this.forma = new FormGroup({
       id: new FormControl(0, [Validators.required, Validators.minLength(2)]),
       name: new FormControl('', [Validators.required, Validators.minLength(2)]),
       descripcion: new FormControl('', [Validators.required, Validators.minLength(2)]),
+      service_id: new FormControl(0, [Validators.required, Validators.minLength(1)]),
       servicetype_id: new FormControl(0, [Validators.required, Validators.minLength(1)]),
       status: new FormControl(0),
     });
@@ -199,11 +186,13 @@ export class CreateFormComponent implements OnInit, OnDestroy {
       'id': data.id,
       'name': data.name,
       'descripcion': data.descripcion,
+      'service_id': data.service_id,
       'servicetype_id': data.servicetype_id,
       'status': data.status
     });
 
     this.isLoading = false;
+    this.cd.markForCheck();
   }
 
   makeForm(data: any) {
@@ -322,11 +311,16 @@ export class CreateFormComponent implements OnInit, OnDestroy {
   }
 
   async cargarProjectFormField (id: number, formid: number) {
+
     if (id && id > 0 && formid && formid > 0) {
       this.isLoadingProjectFormField = true;
       this.projectformfield = [];
 
       const data: any = await this._customForm.getProjectFormField(this.token.token, id, formid);
+
+      if  (data && data.datos_forma) {
+        this.makeForma(data.datos_forma);
+      }
 
       if (data && data.datos.length > 0) {
         this.projectformfield = data.datos;
@@ -340,18 +334,9 @@ export class CreateFormComponent implements OnInit, OnDestroy {
         this.isLoadingProjectFormField = false;
         this.cd.markForCheck();
       }
+
     }
   }
-
-
-  /*
-  addItem(): void {
-    if (this.form) {
-      this.items = this.form.get('items') as FormArray;
-      this.items.push(this.buildForm());
-    }
-  }*/
-
 
 
   drop(event: CdkDragDrop<string[]>) {
@@ -359,9 +344,27 @@ export class CreateFormComponent implements OnInit, OnDestroy {
       moveItemInArray(this.projectformfield, event.previousIndex, event.currentIndex);
       this.makeForm(this.projectformfield);
     }
-
     // console.log(this.projectformfield);
     // console.log(this.form.value.items);
+  }
+
+
+  addForma(data: any) {
+    if (!data) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(MakeFormComponent, {
+      width: '477px',
+      disableClose: true,
+      data: { data: data,
+            }
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result === 1) {
+      }
+    });
   }
 
   async saveForma(forma: any) {
@@ -379,7 +382,9 @@ export class CreateFormComponent implements OnInit, OnDestroy {
       status = 1;
     }
 
-    const formulario: Form = new Form(this.formid, this.id, forma.value.servicetype_id, forma.value.name, forma.value.descripcion, status, '', '', '', '');
+    const formulario: Form = new Form(this.formid, this.id, forma.value.service_id, forma.value.servicetype_id, forma.value.name, forma.value.descripcion, status, '', '', '', '');
+
+
     if (formulario && this.id > 0 && this.formid > 0) {
       const update: any = await this._customForm.update(this.token.token, formulario, this.id, this.formid);
       if (update && update.status === 'success') {
@@ -395,6 +400,25 @@ export class CreateFormComponent implements OnInit, OnDestroy {
       return;
     }
 
+  }
+
+
+  updateForma(forma) {
+    if (!forma) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(EditFormComponent, {
+      width: '477px',
+      disableClose: true,
+      data: forma.value
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
+      if (result === 1) {
+
+      }
+    });
   }
 
   async deleteForma(forma) {
@@ -449,21 +473,19 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     }
 
     const formulario = forma.value;
-    // console.log(formulario);
 
     if (formulario && this.id > 0 && this.formid > 0) {
       const update: any = await this._customForm.updateFormField(this.token.token, formulario, this.id, this.formid);
-      // console.log(update);
       if (update && update.status === 'success') {
         this.cargarProjectFormField(this.id, this.formid);
-        this.toasterService.success('Formulario actualizado exitosamente', 'Exito', {timeOut: 4000, closeButton: true, });
+        this.toasterService.success('Formulario actualizado exitosamente.', 'Exito', {timeOut: 4000, closeButton: true, });
         return;
       } else {
-        Swal.fire('Importante', 'A ocurrido un error en la actualización de campos del formulario', 'error');
+        Swal.fire('Importante', 'A ocurrido un error en la actualización de campos del formulario.', 'error');
         return;
       }
     } else {
-      Swal.fire('Importante', 'A ocurrido un error en la actualización de campos del formulario', 'error');
+      Swal.fire('Importante', 'A ocurrido un error en la actualización de campos del formulario.', 'error');
       return;
     }
 
@@ -497,7 +519,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
                     this.toasterService.success('Formulario actualizado exitosamente', 'Exito', {timeOut: 4000, closeButton: true, });
                     return;
                   } else {
-                    Swal.fire('Importante', 'A ocurrido un error en la eliminación del campo del formulario.' + deleteformfield.message, 'error');
+                    Swal.fire('Importante', 'A ocurrido un error en la eliminación del campo del formulario. ' + deleteformfield.message, 'error');
                     return;
                   }
                 }

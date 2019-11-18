@@ -154,7 +154,6 @@ export class CustomformService {
       const json = JSON.stringify(data);
       const params = 'json=' + json;
 
-
       const href = this.url + 'project/' + id + '/form/' + formid + '/formfield';
       const requestUrl = href;
 
@@ -169,6 +168,31 @@ export class CustomformService {
     }
 
   }
+
+
+  async store(token: any, data: Form, id: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'project/' + id + '/form';
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.post(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
 
 
 

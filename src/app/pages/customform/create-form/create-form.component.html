@@ -89,11 +89,11 @@
 
                         <mat-divider></mat-divider>
 
-                        <div class="css-424011">
+                        <div class="css-424011" style="margin-top: 7px;">
                         <div class="css-w9iq9p">
                         <div class="css-1tw9lwf">
                                 <div role="presentation" class="css-7xjigh">
-                                <a class="css-1t5na7c" data-testid="NavigationItem" id="10004" title="Epic" href="/projects/ODIS/settings/issuetypes/10004" target="_self">
+                                <a class="css-1t5na7c" data-testid="NavigationItem" id="10004" title="Añadir formulario al Proyecto." (click)="addForma(project)">
                                 <div class="css-1wgdpuu">
                                 <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
                                 <span class="styledCache__StyledSpan-zohhd2-3 iHthaF">
@@ -105,7 +105,9 @@
                                 </div>
                                 </div>
                                 <div class="css-t44v0r">
-                                <div class="css-xuepxh">Crear Formulario</div>
+                                <div class="css-xuepxh">                                    
+                                Crear Formulario
+                                </div>
                                 </div>
                                 </a>
                                 </div>                                
@@ -254,7 +256,7 @@
                                                 </div>
                                             </div>                                                                                      
                                         </div>
-                                        
+
                                         <div class="sc-iBfVdv iamyYC sc-eomEcv bGTkQd">
                                         <div class="app animated fadeIn" *ngIf="!isLoading && forma">
                                         <form class="mat-dialog-content" ngNativeValidate *ngIf="forma" [formGroup]="forma"  >
@@ -366,6 +368,9 @@
                                                     </button>
                                                     
                                                     <mat-menu #menuviewselectorder="matMenu" [overlapTrigger]="false">
+                                                        <button mat-menu-item (click)="updateForma(forma)" *ngIf="_userService.isRole(7)">
+                                                            <span >Editar Formulario</span>
+                                                        </button>        
                                                         <button mat-menu-item (click)="deleteForma(forma)" *ngIf="_userService.isRole(7)">
                                                             <span >Eliminar Formulario</span>
                                                         </button>
@@ -376,11 +381,15 @@
 
 
                                         </form>
-                                        </div>
                                         <div mat-dialog-actions >      
                                             <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="saveForma(forma)">Guardar</button>
+                                        </div>    
                                         </div>
                                         </div>
+
+                                        <!----
+                                        <pre *ngIf="forma">{{forma.value | json}}</pre>
+                                        -->
 
                                         <div class="sc-iBfVdv iamyYC sc-eomEcv bGTkQd">
                                             <div class="sc-csSMhA klJOKX sc-eomEcv bGTkQd">
@@ -417,7 +426,7 @@
                                             <div [formGroup]="form" *ngIf="form" >
                                             <div cdkDropList class="example-list" (cdkDropListDropped)="drop($event)">
                                             <div class="example-box" formArrayName="items" *ngFor="let item of getItems.controls; let i = index;" cdkDrag>  
-                                                <mat-accordion  >
+                                                <mat-accordion  class="full-width">
                                                     <mat-expansion-panel  >
                                                         <mat-expansion-panel-header>
                                                         <mat-panel-title>
@@ -443,13 +452,16 @@
                                                         </mat-expansion-panel-header>
                                                         <div [formGroupName]="i">
                                                             <mat-form-field appearance="outline">
-                                                            <input matInput formControlName="name" required placeholder="Nombre">
+                                                            <input matInput formControlName="name" required placeholder="Nombre">                                                            
                                                             </mat-form-field>
-        
         
                                                             <mat-form-field appearance="outline">
                                                             <input matInput formControlName="description" placeholder="Descripción">
-                                                            </mat-form-field>            
+                                                            </mat-form-field>
+                                                            
+                                                            <mat-slide-toggle formControlName="required" color="primary" (change)="onChange($event)">
+                                                                <span *ngIf="form.controls.items.controls[i].controls.required.value">Requerido</span><span *ngIf="!form.controls.items.controls[i].controls.required.value">No Requerido</span>
+                                                            </mat-slide-toggle>                                                            
                                                         </div>
                                                             
                                                         <mat-action-row>

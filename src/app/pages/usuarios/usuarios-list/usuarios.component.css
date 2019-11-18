@@ -20,3 +20,7 @@
 .material-icons.md-color { color: #FB8C00;}
 .material-icons.md-20-color-green { color: green;}
 .material-icons.md-20-color-red { color:red;}
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}

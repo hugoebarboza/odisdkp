@@ -10,7 +10,9 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 // COMPONENTS
 import { CreateFormComponent } from './create-form/create-form.component';
+import { EditFormComponent } from './dialog/edit-form/edit-form.component';
 import { FormviewComponent } from './formview/formview.component';
+import { MakeFormComponent } from './dialog/make-form/make-form.component';
 import { OrderViewComponent } from './order-view/order-view.component';
 
 // DIALOG
@@ -41,7 +43,6 @@ import { SupportModule } from '../support/support.module';
     CommonModule,
     DirectiveModule,
     FormsModule,
-    // MaterialModule,
     PipesModule,
     ReactiveFormsModule,
     CustomformRoutingModule,
@@ -52,11 +53,15 @@ import { SupportModule } from '../support/support.module';
   ],
   declarations:
   [
-    FormviewComponent,
-    OrderViewComponent,
     CreateFormComponent,
+    EditFormComponent,
+    FormviewComponent,
+    MakeFormComponent,
+    OrderViewComponent,
   ],
   entryComponents: [
+    EditFormComponent,
+    MakeFormComponent,
   ],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

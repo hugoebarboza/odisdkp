@@ -1,3 +1,6 @@
+.full-width {
+    width: 97%;
+}
 .container-drawer {
     display: flex;
     flex-direction: column;
@@ -529,12 +532,15 @@ a .iHthaF, button .iHthaF {
 .example-list {
     width: 100%;
     max-width: 100%;
-    border: solid 1px #ccc;
+    border: solid 2px #ccc;
     display: block;
     background: white;
     border-radius: 4px;
     overflow: hidden;
+    padding: 4px;
   }
+
+
   
   .example-box {
     width: 100%;
@@ -572,7 +578,7 @@ a .iHthaF, button .iHthaF {
   }
   
   .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
-    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);    
   }
   
 .example-headers-align .mat-expansion-panel-header-title,
@@ -768,4 +774,20 @@ mat-form-field {
     text-decoration: none;
     max-width: 100%;
     position: relative;
+}
+.example-box:active {
+    background-color: cornsilk;
+}
+
+.example-box:hover {
+    background-color: cornsilk;    
+}
+
+.example-box:focus {
+    background-color: cornsilk;
+}
+
+.example-list:active {
+    background-color: cornflowerblue !important;
+    border: dashed 3px rgb(0, 60, 255);
 }

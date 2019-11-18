@@ -45,7 +45,7 @@
               <button mat-icon-button color="primary" matTooltip="Adjuntar archivo" (click)="fileInput.click()" style="margin-bottom: 4px;">
                 <mat-icon>attachment</mat-icon>
                 <input hidden type="file" #fileInput class="none" appNgDropFiles [archivos]="archivos"  (change)="selectFiles($event)"  (click)="$event.target.value = null; archivos = []"  multiple >              
-                <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos selecionado {{archivos.length}} de 7, Max. 7 </strong></span>
+                <span style="margin-top: 5px;" *ngIf="archivos" ><strong> Archivos seleccionado {{archivos.length}} de 7, Max. 7 </strong></span>
               </button>
               
               <div *ngIf="archivos" >

@@ -28,11 +28,11 @@ export class ShowProfileSecurityComponent implements OnInit {
   identity: any;
   showEmail = false;
   showReset = false;
-  title = "Perfil del Usuario - Seguridad";
+  title = 'Perfil del Usuario - Seguridad';
   token: any;
-  usuario:any;
+  usuario: any;
   username: string;
-  user : User;
+  user: User;
 
   constructor(
     public _userService: UserService,
@@ -44,45 +44,45 @@ export class ShowProfileSecurityComponent implements OnInit {
     this.token = this._userService.getToken();
     this._userService.handleAuthentication(this.identity, this.token);
     this.usuario = this.data.usuario;
-    this.username = this.data.usuario.name + ' '+this.data.usuario.surname;
+    this.username = this.data.usuario.name + ' ' + this.data.usuario.surname;
     this.changeForm = new FormGroup({
-      'newpassword' : new FormControl('',[Validators.required, Validators.minLength(6)]),      
-      'password_confirmation' : new FormControl('',[Validators.required, Validators.minLength(6)]),    
+      'newpassword' : new FormControl('', [Validators.required, Validators.minLength(6)]),
+      'password_confirmation' : new FormControl('', [Validators.required, Validators.minLength(6)]),
     },
-    { validators: MustMatch('newpassword','password_confirmation') }    
+    { validators: MustMatch('newpassword', 'password_confirmation') }
     );
 
   }
 
-  ngOnInit() {    
-    //console.log(this.usuario);
+  ngOnInit() {
+    // console.log(this.usuario);
   }
 
 
 
-  noIgual( control:FormControl ) :  { [s:string]: boolean }  {
-    var changeForm:any = this; 
+  noIgual( control: FormControl ):  { [s: string]: boolean }  {
+    const changeForm: any = this;
 
-    if(control.value !== changeForm.controls['newpassword'].value){
-      return{
-        noiguales:true
-      }
+    if (control.value !== changeForm.controls['newpassword'].value) {
+      return {
+        noiguales: true
+      };
 
     }
     return null;
   }
 
 
-  forgotpassword(data:any){
+  forgotpassword(data: any) {
 
     this.dialogRef.close();
 
-		if(!data) {
-			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
-			return;
-		}
+    if (!data) {
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      return;
+    }
 
-  this.user = new User('', '', '', '','', data.email, '', 1, '', '', 1,'','',1,1,1);
+  this.user = new User('', '', '', '', '', data.email, '', 1, '', '', 1, '', '', 1, 1, 1);
 
 
    this._userService.forgotpassword(this.user).subscribe(
@@ -106,11 +106,11 @@ export class ShowProfileSecurityComponent implements OnInit {
 
     this.dialogRef.close();
 
-    if(!formValue){
+    if (!formValue) {
       return;
     }
-    
-    
+
+
     this._userService.changepasswordprofile(this.token.token, this.usuario.id, formValue).subscribe(
      response => {
        if (response.status !== 'error' ) {
@@ -128,15 +128,15 @@ export class ShowProfileSecurityComponent implements OnInit {
 
 
   onChangeEmail(_event: any) {
-    if(this.showReset === true){
+    if (this.showReset === true) {
       this.showReset = false;
-    }   
+    }
   }
-  
+
   onChangeReset(_event: any) {
-    if(this.showEmail === true){
+    if (this.showEmail === true) {
       this.showEmail = false;
-    }   
+    }
   }
 
 

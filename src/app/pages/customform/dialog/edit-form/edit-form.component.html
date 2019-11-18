@@ -1,0 +1,80 @@
+<meta name="Description" content="User Profile Security.">
+<div class="container-fluid" *ngIf="isLoading">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row d-flex justify-content-center">
+                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+            </div>                        
+        </div>
+    </div>
+</div>
+
+<h1 mat-dialog-title>{{title}} <span *ngIf="project">{{project.project_name}}</span></h1>
+
+<div class="mat-app-background" >
+    <div class="card-body">
+    <form class="mat-dialog-content" ngNativeValidate *ngIf="forma" [formGroup]="forma"  >        
+
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="nombre">Nombre</label>
+                <input type="text" name="name" formControlName="name"   class="form-control" required>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="nombre">Descripción</label>
+                <input type="text" name="descripcion" formControlName="descripcion"   class="form-control" required>
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="dni">Servicio</label>
+                <ng-select
+                *ngIf="services && services.length > 0"
+                [items]="services"
+                [clearable]="false"
+                bindLabel="service_name"
+                bindValue="id"
+                (change)="selectChangeServicio($event)"
+                class="width-100percentage" name="service_id" formControlName="service_id">
+               </ng-select>
+
+            </div>
+        </div>
+
+        <br>
+        <div class="row">
+            <div class="col-sm-12">
+                <label for="dni">Tipo de Servicio</label>
+                <ng-select
+                *ngIf="servicestype && servicestype.length > 0"
+                [items]="servicestype"
+                [clearable]="false"
+                bindLabel="name"
+                bindValue="id"
+                class="width-100percentage" name="servicetype_id" formControlName="servicetype_id">
+               </ng-select>
+            </div>
+        </div>
+
+        <br>
+        <br>
+    
+    </form>
+
+    
+    </div>
+</div>
+
+<!---
+<pre *ngIf="forma">{{forma.value | json}}</pre>
+-->
+<br>
+<div mat-dialog-actions *ngIf="forma">      
+    <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="saveForma(forma)">Guardar</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+</div>

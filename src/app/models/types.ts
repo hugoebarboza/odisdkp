@@ -215,6 +215,7 @@ export class Form {
    constructor(
    public id: number,
    public project_id: number,
+   public service_id: number,
    public servicetype_id: number,
    public name: string,
    public descripcion: string,
@@ -228,12 +229,12 @@ export class Form {
 
 export class Giro  {
 	
-	constructor(	
+	constructor(
 	public id:number,
 	public descripcion:string,
 	public order_by:number,
-	public status:number,	
-	public create_at:any,	
+	public status:number,
+	public create_at:any,
 	public update_at:any
 	){}
 }
@@ -242,24 +243,24 @@ export interface Item { id: any, nombre: string; type: string; url: any; created
 
 export class Marca  {
 	
-	constructor(	
+	constructor(
 	public id:number,
 	public descripcion:string,
 	public order_by:number,
-	public status:number,	
-	public create_at:any,	
+	public status:number,
+	public create_at:any,
 	public update_at:any
 	){}
 }
 
 export class Mercado  {
 	
-	constructor(	
+	constructor(
 	public id:number,
 	public descripcion:string,
 	public order_by:number,
-	public status:number,	
-	public create_at:any,	
+	public status:number,
+	public create_at:any,
 	public update_at:any
 	){}
 }
