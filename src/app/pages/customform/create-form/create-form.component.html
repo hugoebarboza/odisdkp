@@ -387,7 +387,7 @@
                                         </div>
                                         </div>
 
-                                        <!----
+                                        <!---
                                         <pre *ngIf="forma">{{forma.value | json}}</pre>
                                         -->
 
@@ -451,19 +451,26 @@
                                                         </mat-panel-title>
                                                         </mat-expansion-panel-header>
                                                         <div [formGroupName]="i">
-                                                            <mat-form-field appearance="outline">
+                                                            
+                                                            <mat-form-field >
                                                             <input matInput formControlName="name" required placeholder="Nombre">                                                            
-                                                            </mat-form-field>
-        
-                                                            <mat-form-field appearance="outline">
+                                                            </mat-form-field>                    
+                                                            
+                                                            <mat-form-field >
                                                             <input matInput formControlName="description" placeholder="Descripción">
                                                             </mat-form-field>
-                                                            
-                                                            <mat-slide-toggle formControlName="required" color="primary" (change)="onChange($event)">
-                                                                <span *ngIf="form.controls.items.controls[i].controls.required.value">Requerido</span><span *ngIf="!form.controls.items.controls[i].controls.required.value">No Requerido</span>
-                                                            </mat-slide-toggle>                                                            
-                                                        </div>
-                                                            
+
+                                                            <mat-form-field *ngIf="roles">
+                                                                    <mat-label>Rol</mat-label>
+                                                                    <mat-select disableRipple formControlName="rol" name="rol" >
+                                                                      <mat-option *ngFor="let rol of roles" [value]="rol.id">{{rol.title}}</mat-option>
+                                                                    </mat-select>
+                                                            </mat-form-field>                                                       
+                                                                                                      
+                                                           <mat-slide-toggle formControlName="required" color="primary" >
+                                                            <span *ngIf="form.controls.items.controls[i].controls.required.value">Requerido</span><span *ngIf="!form.controls.items.controls[i].controls.required.value">No Requerido</span>
+                                                            </mat-slide-toggle>               
+                                                        </div>                                                            
                                                         <mat-action-row>
                                                             <button mat-button color="warn" (click)="deleteFormField(i)">Eliminar</button>
                                                         </mat-action-row>
@@ -480,7 +487,9 @@
 
                                         </div>
                                         </div>
+                                        <!---
                                         <pre *ngIf="form">{{form.value | json}}</pre>
+                                        -->
                                         <!----
                                         <pre *ngIf="form">{{form.get('items').value | json}}</pre>
                                         -->  

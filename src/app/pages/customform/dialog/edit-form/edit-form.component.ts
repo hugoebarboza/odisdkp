@@ -150,10 +150,12 @@ export class EditFormComponent implements OnInit, OnDestroy {
     }
 
     const formulario: Form = new Form(this.data.id, this.project.id, forma.value.service_id, forma.value.servicetype_id, forma.value.name, forma.value.descripcion, status, '', '', '', '');
+
+
     if (formulario && this.project.id > 0 && this.data.id > 0) {
       const update: any = await this._customForm.update(this.token.token, formulario, this.project.id, this.data.id);
       if (update && update.status === 'success') {
-        this.dialogRef.close(1);
+        this.dialogRef.close(formulario);
         this.toasterService.success('Formulario actualizado exitosamente', 'Exito', {timeOut: 4000, closeButton: true, });
         return;
       } else {

@@ -72,7 +72,7 @@ export class AddUserComponent implements OnInit {
       project_id: new FormControl({value: this.project_id, disabled: true}, [Validators.required]),
       departamento_id: new FormControl({value: this.departamento_id, disabled: true}, [Validators.required])
     }, {
-      validators: [this.verifyEqual('password', 'password2'), MustMatch('email','email2')]
+      validators: [this.verifyEqual('password', 'password2'), MustMatch('email', 'email2')]
     });
 
     this.forma.setValue({

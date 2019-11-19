@@ -4,6 +4,7 @@ import { MediaMatcher } from '@angular/cdk/layout';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
 import { TooltipPosition, MatDialog } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 import Swal from 'sweetalert2';
 
 // COMPONENTS
@@ -51,21 +52,12 @@ export class CreateFormComponent implements OnInit, OnDestroy {
   proyectos: Array<Proyecto> = [];
   projectformdata = [];
   projectformfield = [];
+  roles = [];
   sub: any;
+  subscription: Subscription;
   title = '';
   token: any;
   typedata = [];
-
-  movies = [
-    'Episode I - The Phantom Menace',
-    'Episode II - Attack of the Clones',
-    'Episode III - Revenge of the Sith',
-    'Episode IV - A New Hope',
-    'Episode V - The Empire Strikes Back',
-    'Episode VI - Return of the Jedi',
-    'Episode VII - The Force Awakens',
-    'Episode VIII - The Last Jedi'
-  ];
 
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
@@ -158,6 +150,7 @@ export class CreateFormComponent implements OnInit, OnDestroy {
     if (this.id > 0 && this.project !== 'Undefined' && this.project !== null && this.project) {
       this.cargarProjectForm(this.id); // Obtenes los formularios del proyecto
       this.cargarType(this.id); // Obtner los campos tipo para un formulario
+      this.getRoleUser();
     }
   }
 
@@ -263,6 +256,9 @@ export class CreateFormComponent implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.mobileQuery.removeListener(this._mobileQueryListener);
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   sideNavOnClick() {
@@ -414,9 +410,9 @@ export class CreateFormComponent implements OnInit, OnDestroy {
       data: forma.value
     });
     dialogRef.afterClosed().subscribe(result => {
-      console.log(result);
-      if (result === 1) {
-
+      if (result) {
+        this.makeForma(result);
+        this.cargarProjectForm(this.id);
       }
     });
   }
@@ -532,6 +528,27 @@ export class CreateFormComponent implements OnInit, OnDestroy {
           });
         }
   }
+
+  getRoleUser() {
+    if (this.token.token) {
+      this.subscription = this._userService.getRoleUser(this.token.token, this.identity.role)
+      .subscribe(
+        response => {
+          if (!response) {
+            return false;
+          }
+            if (response.status === 'success') {
+              this.roles = response.datos;
+              // console.log(this.roles);
+            }
+        },
+            error => {
+            console.log(<any>error);
+            }
+        );
+    }
+  }
+
 
 
   async findWithAttr(array, attr, value, index) {
