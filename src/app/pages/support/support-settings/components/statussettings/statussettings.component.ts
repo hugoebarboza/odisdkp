@@ -52,12 +52,14 @@ export class StatussettingsComponent implements OnInit, OnChanges {
     this.forma = new FormGroup({
       name: new FormControl (null, [Validators.required, Validators.minLength(1)]),
       label: new FormControl ('0', [Validators.required]),
+      dispatcher: new FormControl (null),
       order_by: new FormControl (null, [Validators.required, Validators.minLength(1)])
     });
 
     this.forma.setValue({
       'name': null,
       'label': '0',
+      'dispatcher': null,
       'order_by': null
     });
 
@@ -191,7 +193,8 @@ export class StatussettingsComponent implements OnInit, OnChanges {
       order_by: data.order_by,
       stype_id: this.data.id,
       create_to: this.userFirebase.uid,
-      create_at: date
+      create_at: date,
+      dispatcher: data.dispatcher
     })
     .then(function(_docRef) {
         // console.log('Document written with ID: ', docRef.id);

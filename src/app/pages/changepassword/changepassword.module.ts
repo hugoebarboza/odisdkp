@@ -8,7 +8,6 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 // MODULES
-// import { MaterialModule } from '../../material-module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 // PIPE MODULE
@@ -27,7 +26,6 @@ import { ServiceModule } from 'src/app/services/service.module';
     ChangePasswordRoutingModule,
     FormsModule,
     HttpClientModule,
-    // MaterialModule,
     PipesModule,
     ReactiveFormsModule,
     ServiceModule,

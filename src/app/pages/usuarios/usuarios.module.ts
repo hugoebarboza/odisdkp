@@ -8,7 +8,6 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 // MODULES
-// import { MaterialModule } from '../../material-module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
@@ -36,7 +35,6 @@ import { ServiceModule } from 'src/app/services/service.module';
     CommonModule,
     FormsModule,
     HttpClientModule,
-    // MaterialModule,
     NgSelectModule,
     ReactiveFormsModule,
     PipesModule,

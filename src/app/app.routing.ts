@@ -124,6 +124,18 @@ const appRoute: Routes = [
       data: { preload: false, delay: false }
     },
     {
+      path: 'support/settings',
+      canLoad: [ LoginGuardGuard ],
+      loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
+      data: { preload: false, delay: false }
+    },
+    {
+      path: 'support/users',
+      canLoad: [ LoginGuardGuard ],
+      loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
+      data: { preload: false, delay: false }
+    },
+    {
       path: 'users',
       canLoad: [LoginGuardGuard],
       loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),

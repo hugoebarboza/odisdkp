@@ -10,7 +10,6 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 import { ProfileComponent } from './profile-list/profile.component';
 
 // MODULES
-// import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -26,7 +25,6 @@ import { ServiceModule } from 'src/app/services/service.module';
     CommonModule,
     FormsModule,
     HttpClientModule,
-    // MaterialModule,
     PipesModule,
     ProfileRoutingModule,
     ServiceModule,

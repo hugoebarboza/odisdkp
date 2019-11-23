@@ -15,11 +15,6 @@ import { LogoutComponent } from './components/dialog/logout/logout.component';
 import { PagesComponent } from './pages/pages.component';
 import { RegisterComponent } from './register/register.component';
 
-// DIRECTIVE
-// import { DirectiveModule } from 'src/app/directives/directive.module';
-
-// MATERIAL
-// import {MaterialModule} from './material-module';
 
 // MODULES
 import { AppRoutingModule } from './app.routing';
@@ -111,7 +106,6 @@ registerLocaleData(localeEs);
     FormsModule,
     HttpModule,
     HttpClientModule,
-    // MaterialModule,
     MatProgressButtonsModule,
     NgxCaptchaModule,
     // PipesModule,

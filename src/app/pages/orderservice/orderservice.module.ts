@@ -25,10 +25,11 @@ import { ViewModule } from '../../components/views/view.module';
 // DIALOG
 import { AddComponent } from '../../components/dialog/add/add.component';
 import { AddcustomerComponent } from '../../components/dialog/addcustomer/addcustomer.component';
-import { AddJobComponent } from './components/dialog/add-job/add-job.component';
 import { AddConstanteComponent } from './components/dialog/add-constante/add-constante.component';
 import { AddColorComponent } from './components/dialog/add-color/add-color.component';
+import { AddFormComponent } from './components/dialog/add-form/add-form.component';
 import { AddGiroComponent } from './components/dialog/add-giro/add-giro.component';
+import { AddJobComponent } from './components/dialog/add-job/add-job.component';
 import { AddMercadoComponent } from './components/dialog/add-mercado/add-mercado.component';
 import { AddMarcaComponent } from './components/dialog/add-marca/add-marca.component';
 import { AddModeloComponent } from './components/dialog/add-modelo/add-modelo.component';
@@ -87,7 +88,6 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 // MODULES
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule} from 'agm-direction';
-// import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -149,7 +149,6 @@ registerLocaleData(localeEs);
     FormsModule,
     HttpModule,
     HttpClientModule,
-    // MaterialModule,
     MatProgressButtonsModule,
     MarkdownModule.forRoot(),
     NgbModule,
@@ -174,6 +173,7 @@ registerLocaleData(localeEs);
     AddConstanteComponent,
     AddColorComponent,
     AddcustomerComponent,
+    AddFormComponent,
     AddGiroComponent,
     AddJobComponent,
     AddMarcaComponent,
@@ -245,6 +245,7 @@ registerLocaleData(localeEs);
     AddConstanteComponent,
     AddColorComponent,
     AddcustomerComponent,
+    AddFormComponent,
     AddGiroComponent,
     AddJobComponent,
     AddMarcaComponent,

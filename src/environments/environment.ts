@@ -5,7 +5,7 @@
 export const environment = {
   production: false,
   firebase: {
-    apiKey: 'AIzaSyAPQLUrBXk-5ld5NlCf_s0lmP3yIS1RtjM',
+    apiKey: 'AIzaSyBPUJBehQOjnzd9S3iVkHk8drGUR-AXDKk',
     authDomain: 'odisdkp.firebaseapp.com',
     databaseURL: 'https://odisdkp.firebaseio.com',
     projectId: 'odisdkp',

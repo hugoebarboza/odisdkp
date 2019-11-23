@@ -16,7 +16,6 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule } from 'primeng/calendar';
 import { CalendarModule as AngularCalendar, DateAdapter as AngularDateAdapter } from 'angular-calendar';
-// import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -42,7 +41,6 @@ import { ServiceModule } from 'src/app/services/service.module';
     CalendarRoutingModule,
     FormsModule,
     HttpClientModule,
-    // MaterialModule,
     PipesModule,
     ReactiveFormsModule,
     ServiceModule,

@@ -15,10 +15,12 @@
                             <div class="btn-group mr-2">
                             </div>
                         </div>
-                        <div class="p-2 flex-shrink-1 " *ngIf="identity && identity.role === 8">
-                            <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'" >
-                            <i class="material-icons"
-                              matTooltip="Configuración de soporte">settings</i>
+                        <div class="p-2 flex-shrink-1 " style="display: flex;">
+                            <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'users'" >
+                                <i class="material-icons" matTooltip="Listado de Usuarios">supervisor_account</i>
+                            </a>
+                            <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'"  *ngIf="identity && identity.role === 8">
+                                <i class="material-icons" matTooltip="Configuración de soporte">settings</i>
                             </a>
                         </div>
                 </div>            

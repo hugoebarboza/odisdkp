@@ -18,7 +18,6 @@ import { OrderViewComponent } from './order-view/order-view.component';
 // DIALOG
 
 // MODULES
-// import { MaterialModule } from '../../material-module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';

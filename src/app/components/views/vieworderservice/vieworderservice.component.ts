@@ -33,6 +33,7 @@ import { Order, ServiceType, ServiceEstatus } from 'src/app/models/types';
 // DIALOG
 import { AddComponent } from '../../dialog/add/add.component';
 import { AddDocComponent } from '../../../components/shared/dialog/add-doc/add-doc.component';
+import { AddFormComponent } from 'src/app/pages/orderservice/components/dialog/add-form/add-form.component';
 import { AddJobComponent } from '../../../pages/orderservice/components/dialog/add-job/add-job.component';
 import { FileComponent } from '../../dialog/file/file.component';
 import { CsvComponent } from '../../dialog/csv/csv.component';
@@ -412,7 +413,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.cd.markForCheck();
     } else {
       return;
-    }    
+    }
   }
 
   ngOnInit() {
@@ -1200,6 +1201,26 @@ private filterRegionMulti() {
   }
 
 
+  addForm(order_id: any, order_number: any, estatus: any, servicetype_id: number) {
+    const dialogRef = this.dialog.open(AddFormComponent, {
+      width: '1000px',
+      disableClose: true,
+      data: { project: this.project_id,
+              service_id: this.id,
+              tiposervicio: servicetype_id,
+              orderid: order_id,
+              order_number: order_number,
+              estatus: estatus
+            }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+
+      }
+    });
+  }
+
 
   addJob(order_id: any, order_number: any, estatus: any, servicetype_id: number) {
     const dialogRef = this.dialog.open(AddJobComponent, {
@@ -1493,7 +1514,7 @@ private filterRegionMulti() {
 
                          const obs = String(this.exportDataSource.data[j]['observation']).replace(/(\r\n|\n|\r)/gm, ' ');
 
-                         valuearrayexcel = valuearrayexcel + obs + ';' + ';' + this.exportDataSource.data[j]['cc_number'] + ';' + ubicacion
+                         valuearrayexcel = valuearrayexcel + obs + ';' + this.exportDataSource.data[j]['cc_number'] + ';' + ubicacion
                          + ';' + this.exportDataSource.data[j]['ruta'] + ';' + this.exportDataSource.data[j]['comuna'] + ';' + this.exportDataSource.data[j]['calle'] + ';' + this.exportDataSource.data[j]['numero'] + ';' + this.exportDataSource.data[j]['block'] + ';' + this.exportDataSource.data[j]['depto']
                          + ';' + this.exportDataSource.data[j]['transformador'] + ';' + this.exportDataSource.data[j]['medidor'] + ';' + this.exportDataSource.data[j]['tarifa'] + ';' + this.exportDataSource.data[j]['constante']
                          + ';' + this.exportDataSource.data[j]['giro'] + ';' + this.exportDataSource.data[j]['sector'] + ';' + this.exportDataSource.data[j]['zona'] + ';' + this.exportDataSource.data[j]['mercado']
@@ -1517,14 +1538,17 @@ private filterRegionMulti() {
            const blob = new Blob([valuearrayexcel], {type: FILE_TYPE});
            FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + FILE_EXTENSION);
            this.isLoadingResults = false;
+           this.cd.markForCheck();
            } else {
            this.isLoadingResults = false;
+           this.cd.markForCheck();
            }
          },
          (_error) => {
            this.isLoadingResults = false;
            this.error = 'No se encontraron actividades en el día.';
            this.toasterService.error('Error: ' + this.error, '', {timeOut: 6000, });
+           this.cd.markForCheck();
          }
          );
    });

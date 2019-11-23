@@ -49,13 +49,13 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
   // displayedColumns: string[] = ['servicetype', 'assigned_to', 'ccnumber', 'status', 'date_end', 'observation', 'cantidad', 'actions'];
   dataSource = new MatTableDataSource() ;
   forTime = 1000;
-  role: number = 0;
-  total: number = 0;
+  role = 0;
+  total = 0;
 
   indexitem: number;
-  editando: boolean = false;
-  show: boolean = false;
-  upload: boolean = false;
+  editando = false;
+  show = false;
+  upload = false;
 
   arrayPost: Array<Object> = [];
 
@@ -184,7 +184,6 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
   getList(term: string): Observable<any> {
 
     if (term && term.length > 0) {
-       //console.log(term);
       return this._customer.getCustomer(this.token.token, term, this.project_id).map((res: any) => {
         if (!res) {
            return [];
@@ -266,8 +265,6 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
 
   addOrdenes (data: any): void {
 
-    //console.log(data);
-
     if (data.enableiItervalo) {
       for (let i = 0; i < data.multidate.length; i++) {
         const obj = {
@@ -346,7 +343,7 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
         'multidate': null
       });
 
-      this.toasterService.success('Edición activada, Editar formulario', 'Exito',  {timeOut: 6000,});
+      this.toasterService.success('Edición activada, Editar formulario', 'Exito',  {timeOut: 6000, });
 
       this.delete(i);
     }
@@ -359,7 +356,6 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   calendarmultiple(event: any) {
-    //console.log(event);
     if (event !== null && event.length > 0) {
       this.forma.controls['cantidad'].setValue(event.length);
     } else {
@@ -368,7 +364,6 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   slide(event: MatSlideToggleChange) {
-    //console.log(event);
 
     if (event.checked) {
       this.forma.controls['multidate'].clearValidators();
@@ -408,7 +403,7 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
 
             if (that.listOrdenes[i]['enableintervalo'] && that.listOrdenes[i]['intervalo'] !== '' && that.listOrdenes[i]['intervalo'] > 0) {
               // const dateFrom = moment(new Date (that.listOrdenes[i]['date_end']), 'YYYY-MM-DD HH:mm:ss').add('days', 3);
-                           //console.log(moment(dateFrom.format('YYYY-MM-DD HH:mm:ss')));
+                           // console.log(moment(dateFrom.format('YYYY-MM-DD HH:mm:ss')));
             }
 
             if (that.listOrdenes[i]['assigned_to'] !== null && that.listOrdenes[i]['assigned_to']['id'] ) {
@@ -428,12 +423,11 @@ export class MakeinspectionComponent implements OnInit, OnChanges, OnDestroy {
 
             that.listOrdenes[i]['countupload'] = ii + 1;
 
-   
+
             that.dataService.postOrder(objectJson, that.project_id, that.token.token).then(
               (res: any) => {
                 res.subscribe(
                   (some) => {
-                    //console.log(some);
                     if (that.listOrdenes[i]['estado'].length === 0 || that.listOrdenes[i]['estado'] !== 'error') {
                       that.listOrdenes[i]['estado'] = 'success';
                     }

@@ -1,0 +1,149 @@
+<meta name="Description" content="Settings Cases">
+<!--CONTENT-->
+<div class="loading" *ngIf="!identity">
+    <app-loading></app-loading>  
+</div>
+        
+<div *ngIf="identity">
+
+    <div id="page-content-wrapper" >
+        
+        <div class="container-fluid p-2">
+
+            <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+                <div class="p-2 "><a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'/support/'" ><i class="material-icons">keyboard_backspace</i></a></div>
+                <div class="p-2 "><h1 class="h4"><!--{{title}}--></h1></div>
+                <div class="btn-toolbar mb-2 mb-md-0">
+                    <div class="btn-group mr-2">
+                    </div>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="row animated fadeIn" *ngIf="!isLoading">
+                <div class="col-sm-12">
+                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                </div>
+            </div>
+
+            <div class="row animated fadeIn" >
+                
+                    <div class="col-12">
+        
+                        <div class="card">
+        
+                            <div class="card-body">
+        
+                                <div class="row">
+                                    <div class="col-10"> 
+                                        <h3 class="card-title"><mat-icon>list_alt</mat-icon> Personal a cargo </h3>
+                                    </div>
+                                </div>
+        
+                                <div class="row">
+                                    <div class="col-md-6" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+                                        <h2 class="jeEmY">Listado de personal ({{countuser}})</h2>
+                                        <div class="row animated fadeIn" *ngIf="isLoading">
+                                            <div class="col-12">
+                                                
+                                                <div class="alert alert-danger" *ngIf="isLoading && listusers$ == null">
+                                                    No se encontraron registros que coincidan con su búsqueda. 
+                                                </div>
+                                        
+                                                <div style="max-height: 400px; overflow-y: scroll; overflow-x: hidden;">   
+                                                    <table class="table table-hover" >
+                                                        <thead>
+                                                            <tr>                       
+                                                                <th>Nombre</th>
+                                                                <th>Email</th>
+                                                                <th>Acción</th>
+                                                            </tr>
+                                                        </thead>
+                                        
+                                                        <tbody>
+                                                            <tr *ngFor="let usuarios of listusers$ | async; let i = index " [class.activetr]="i == selectedRow">
+                                                                <td>
+                                                                    <label *ngIf="i !== indexitem || isLoadingDelete">{{usuarios.name}} {{usuarios.surname}}</label>
+                                                                </td>
+                                                                <td>
+                                                                    <label *ngIf="i !== indexitem || isLoadingDelete">{{usuarios.email}}</label>
+                                                                </td>
+                                                                <td>
+                                                                    <button mat-icon-button color="primary" *ngIf="usuarios.uid.length > 1 && i != indexitem" (click)="selectedRow =  i; startEdit(usuarios)">
+                                                                        <mat-icon aria-label="Edit">delete</mat-icon>          
+                                                                    </button>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                        
+                                                </div>
+                    
+                                            </div>
+                    
+                                        </div>
+                                    </div>
+                    
+                                    <div class="col-md-6" style="padding-left: 20px; padding-right: 20px; padding-bottom: 20px;">
+                                        
+                                        <form class="mat-dialog-content" *ngIf="forma" [formGroup]="forma">
+                                            <div class="row card" style="margin-left: 0px; margin-right: 0px;">
+                                                <div class="col-md-12">
+                                                    <h2 class="jeEmY">Agregar Personal</h2>
+                                                    <!--
+                                                    <mat-form-field class="example-full-width">
+                                                        <input matInput [matAutocomplete]="auto" (keyup)="searchCustomer($event.target.value)" >        
+
+                                                        <mat-autocomplete #auto="matAutocomplete" >
+                                                          <mat-option *ngFor="let result of users$ | async" [(value)]="result.email" >        
+                                                            <span>{{result.email}}</span>       
+                                                          </mat-option>
+                                                        </mat-autocomplete>
+
+                                                      </mat-form-field>
+-->
+                                                    <ng-select
+                                                            [items]="users$ | async"
+                                                            [multiple]="false"
+                                                            [clearable]="true" 
+                                                            [closeOnSelect]="true"
+                                                            [loading]="userLoading"
+                                                            [typeahead]="userinput"
+                                                            [virtualScroll]="false"
+                                                            bindLabel="email"
+                                                            formControlName="etiquetado"
+                                                            class="full-width"
+                                                            >
+                                                        </ng-select>   
+                                                    <div class="float-right" style="margin-top: 4px;">
+                                                        <button mat-stroked-button color="warn" (click)="forma.reset()"><mat-icon>close</mat-icon></button>
+                                                        <button mat-stroked-button color="primary" [disabled]="forma.invalid" (click)="confirmAdd()"><mat-icon>check</mat-icon></button>
+                                                    </div>
+                                                </div>
+                                                <br>
+                                            </div>
+
+                                        </form>
+                                        <br><br><br><br>
+                                    </div>
+                    
+                                </div>
+                                
+                            </div>
+        
+                        </div>
+        
+                    </div>
+        
+                </div>
+
+        </div>
+
+        <br>
+        <br>
+  
+    </div>
+        
+</div>
+  

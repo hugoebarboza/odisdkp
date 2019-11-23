@@ -853,11 +853,15 @@
             <button mat-menu-item (click)="publishOrder(order.order_id)" *ngIf="_userService.isRole(8)">
               <span >Documentos</span>
             </button>
-            <button mat-menu-item (click)="addJob(order.order_id, order.order_number, order.estatus, order.servicetype_id)">
-              <span >Registrar trabajo</span>
-            </button>
             <button mat-menu-item (click)="SendOrderByEmail(order.order_id, order.order_number, order.estatus, order.servicetype_id)">
               <span >Enviar por correo</span>
+            </button>
+            <button mat-menu-item (click)="addForm(order.order_id, order.order_number, order.estatus, order.servicetype_id)">
+              <span >Registrar formulario</span>
+            </button>
+
+            <button mat-menu-item (click)="addJob(order.order_id, order.order_number, order.estatus, order.servicetype_id)">
+              <span >Registrar trabajo</span>
             </button>
           </mat-menu>        
 

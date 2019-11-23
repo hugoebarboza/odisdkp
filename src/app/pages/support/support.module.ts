@@ -6,6 +6,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { AddcaseComponent } from './dialog/addcase/addcase.component';
 import { ShowcaseComponent } from './dialog/showcase/showcase.component';
 import { SupportComponent } from './support-list/support.component';
+import { SupportUsersComponent } from './support-users/supportusers.component';
+import { SupportsettingsComponent } from './support-settings/supportsettings.component';
 
 // MODULES
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
@@ -21,7 +23,6 @@ import { SupportRoutingModule } from './support.routing';
 
 // DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
-import { SupportsettingsComponent } from './support-settings/supportsettings.component';
 import { TypesettingsComponent } from './support-settings/components/typesettings/typesettings.component';
 import { CategorysettingsComponent } from './support-settings/components/categorysettings/categorysettings.component';
 import { StatussettingsComponent } from './support-settings/components/statussettings/statussettings.component';
@@ -39,7 +40,6 @@ import { StatussettingsComponent } from './support-settings/components/statusset
     NgSelectModule,
     SharedModule,
     NgbTypeaheadModule,
-    
   ],
   exports: [CommonModule],
   // tslint:disable-next-line:max-line-length
@@ -49,7 +49,8 @@ import { StatussettingsComponent } from './support-settings/components/statusset
     SupportsettingsComponent,
     TypesettingsComponent,
     CategorysettingsComponent,
-    StatussettingsComponent],
+    StatussettingsComponent,
+    SupportUsersComponent],
   entryComponents: [
     AddcaseComponent, ShowcaseComponent
   ],

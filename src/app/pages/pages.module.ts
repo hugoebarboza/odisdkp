@@ -66,7 +66,6 @@ registerLocaleData(localeEs);
     FormsModule,
     HttpModule,
     HttpClientModule,
-    // MaterialModule,
     MatProgressButtonsModule,
     MarkdownModule.forRoot(),
     NgbModule,

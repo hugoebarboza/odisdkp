@@ -55,8 +55,8 @@ export class AuthService {
         console.log('Success!', value);
       })
       .catch(err => {
-        console.log('Something went wrong:',err.message);
-      });    
+        console.log('Something went wrong:', err.message);
+      });
   }
 
 
@@ -90,13 +90,13 @@ export class AuthService {
           // console.log(this.authState.user.uid);
           const key = 'uid';
           this.saveStorage(key, this.authState.user.uid);
-          this.afp.trace('LoginFiresabe Init', { metrics: { something: 1 }, attributes: { app: 'odisdkp', user: this.authState.user.uid }, incrementMetric$: { },});
+          this.afp.trace('LoginFiresabe Init', { metrics: { something: 1 }, attributes: { app: 'odisdkp', user: this.authState.user.uid }, incrementMetric$: { }, });
           trace.unsubscribe();
           // this.updateUserData()
           // trace.putAttribute('verified', `${this.authState.user.uid}`);
           // trace.stop();
           resolve(user);
-        }, err => reject(err))
+        }, err => reject(err));
       });
     } catch (err) {
       // trace.putAttribute('errorCode', err.code);
@@ -117,7 +117,7 @@ export class AuthService {
   }
 
 
-  addUser(identity: any){
+  addUser(identity: any) {
 
     const userFirebase = {
       uid: this.authState.user.uid,
@@ -127,22 +127,21 @@ export class AuthService {
       surname: identity.surname,
       timezone: identity.timezone,
       create_at: this.created.value,
-      country: [identity.country]
+      country: identity.country
     };
 
 
     return new Promise<any>((resolve, reject) => {
       this.afs.collection('users').doc(this.authState.user.uid).set(userFirebase)
       .then(res => {
-        //console.log('paso add');
         resolve(res);
-      }, err => reject(err))
+      }, err => reject(err));
     });
 
   }
 
 
-  doRegister(value:User, identity: any){
+  doRegister(value: User, identity: any) {
     return new Promise<any>((resolve, reject) => {
       firebase.auth().createUserWithEmailAndPassword(value.email, value.password)
       .then(res => {
@@ -161,13 +160,13 @@ export class AuthService {
         .then( () => {  });
 
         resolve(res);
-      }, err => reject(err))
-    })
+      }, err => reject(err));
+    });
   }
 
 
-  doUpdate(identity: any){
-    let path = `users/${this.authState.user.uid}`; // Endpoint on firebase
+  doUpdate(identity: any) {
+    const path = `users/${this.authState.user.uid}`; // Endpoint on firebase
     const userFirebase = {
       uid: this.authState.user.uid,
       name: identity.name,
@@ -176,11 +175,11 @@ export class AuthService {
       surname: identity.surname,
       timezone: identity.timezone,
       update_at: this.created.value,
-      country: [identity.country]
+      country: identity.country
     };
-    //console.log(userFirebase);
 
-    let userDocument = this.afs.collection('users').doc(this.authState.user.uid);
+
+    const userDocument = this.afs.collection('users').doc(this.authState.user.uid);
 
     return new Promise<any>((resolve, reject) => {
 
@@ -190,10 +189,9 @@ export class AuthService {
                   this.afs.doc(path).update(userFirebase)
                   .then(res => {
                     resolve(res);
-                  }, err => reject(err))
+                  }, err => reject(err));
                 } else {
                   this.addUser(identity);
-                  //console.log('Error: Getting document exist:');
                 }
               })
           .catch(error => {
@@ -205,26 +203,26 @@ export class AuthService {
               default: {
                   return console.log('Error: Getting document:');
               }
-            }      
-  
+            }
+
           });
 
-    })
+    });
 
   }
 
-  
 
 
-  updateUser(value:User){
+
+  updateUser(value: User) {
     return new Promise<any>((resolve, reject) => {
       firebase.auth().sendPasswordResetEmail(value.email)
       .then(res => {
         resolve(res);
-      }, err => reject(err))
-    })
-    
-    //return firebase.auth().sendPasswordResetEmail(value.email);
+      }, err => reject(err));
+    });
+
+    // return firebase.auth().sendPasswordResetEmail(value.email);
     /*
     var auth = firebase.auth().currentUser.updatePassword(value.password)
     .then(function(res) {
@@ -242,7 +240,7 @@ export class AuthService {
     user.reauthenticateWithCredential(credentials)
     .then(() => console.log('reauth ok'));*/
 
-    /*    
+    /*
     const currentUser = firebase.auth().currentUser;
     const credentials = firebase.auth.EmailAuthProvider.credential(value.email, value.password);
 
@@ -262,7 +260,7 @@ export class AuthService {
       });
     });*/
 
-    
+
     /*
     const credentials = firebase.auth.EmailAuthProvider.credential(user.email, 'password');
     user.reauthenticateWithCredential(credentials)
@@ -274,7 +272,7 @@ export class AuthService {
       .then(res => {
         resolve(res);
       }, err => reject(err))
-    })*/    
+    })*/
 
     /*
     user.updatePassword(value.password).then(function(res) {
@@ -288,21 +286,21 @@ export class AuthService {
 
 
 
-  loginByEmail(token:string, email: string, password: string) {
-    if(!token){
+  loginByEmail(token: string, email: string, password: string) {
+    if (!token) {
       return;
     }
-    var credential = firebase.auth.EmailAuthProvider.credential(email, password);
+    const credential = firebase.auth.EmailAuthProvider.credential(email, password);
     firebase.auth().currentUser.linkAndRetrieveDataWithCredential(credential).then(function(usercred) {
-      var user = usercred.user;
-      console.log("Anonymous account successfully upgraded", user);
+      const user = usercred.user;
+      console.log('Anonymous account successfully upgraded', user);
     }, function(error) {
-      console.log("Error upgrading anonymous account", error);
+      console.log('Error upgrading anonymous account', error);
     });
   }
 
-  logintoken(token:string) {
-    if(!token){
+  logintoken(token: string) {
+    if (!token) {
       return;
     }
 
@@ -321,7 +319,7 @@ export class AuthService {
 
     })
     .catch(err => {
-        console.log('Something went wrong:',err.message);
+        console.log('Something went wrong:', err.message);
     });
 
   }
@@ -329,7 +327,7 @@ export class AuthService {
 
   async logout() {
     await firebase.auth().signOut();
-    
+
     /*
     this.firebaseAuth
       .auth
@@ -356,8 +354,8 @@ export class AuthService {
  private updateUserData(): void {
   // Writes user name and email to realtime db
   // useful if your app displays information about users or for admin features
-  let path = `users/${this.currentUserId}`; // Endpoint on firebase
-  let data = {
+  const path = `users/${this.currentUserId}`; // Endpoint on firebase
+  const data = {
     email: this.authState.email,
     name: this.authState.displayName
   }
@@ -366,14 +364,14 @@ export class AuthService {
     .catch(error => console.log(error));
   }
 
-	saveStorage( key:any, data: any ) {
+  saveStorage( key: any, data: any ) {
 
-		if (key && data){
-			let value = JSON.stringify(data);
-			localStorage.setItem(key, value);
-		}else{
-			return;
-		}
+    if (key && data) {
+      const value = JSON.stringify(data);
+      localStorage.setItem(key, value);
+    } else {
+       return;
+    }
   }
 
 

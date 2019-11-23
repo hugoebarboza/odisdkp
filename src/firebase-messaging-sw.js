@@ -9,7 +9,7 @@
 
 importScripts('https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js');
 importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
-importScripts('https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js');
+// importScripts('https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js');
 
 
 
@@ -29,7 +29,7 @@ var firebaseConfig = {
 
 
 firebase.initializeApp(firebaseConfig);
-firebase.analytics();
+// firebase.analytics();
 const messaging = firebase.messaging();
 //const perf = firebase.performance();
 

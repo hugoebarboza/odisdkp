@@ -130,9 +130,16 @@
                         <span >Valor de Servicio</span>
                       </button>
 
+                      <button mat-menu-item [matMenuTriggerFor]="vertebrates"  *ngIf="tipoServicio && tipoServicio.length > 0">
+                        <span >Valor de T. Serv.</span>
+                      </button>                      
+              </mat-menu>
 
-                      
-              </mat-menu>              
+              <mat-menu #vertebrates="matMenu">
+                <button mat-menu-item *ngFor="let ts of tipoServicio" (click)="servicetypevalue(id, ts.id)">{{ts.name}}</button>                    
+              </mat-menu>
+
+
           </div>
 
         </div>          

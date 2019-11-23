@@ -147,7 +147,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
     if (this.identity.role === 8) { // VE TODO
       this.radioOpciones = [
         {value: 1, descripcion: 'Mís Solicitudes'},
-        {value: 2, descripcion: 'Etiquetado'},
+        {value: 2, descripcion: 'Reportado'},
         {value: 3, descripcion: 'Departamento'}
       ];
       this.getdatacases();
@@ -158,7 +158,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
           if (data.size > 0) { // VALIDA SI ES ENCARGADO DE DEPARTEMENTO
             this.radioOpciones = [
               {value: 1, descripcion: 'Mís Solicitudes'},
-              {value: 2,  descripcion: 'Etiquetado'},
+              {value: 2,  descripcion: 'Reportado'},
               {value: 3, descripcion: 'Departamento'}
             ];
             this.getdatacases();

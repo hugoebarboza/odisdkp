@@ -2,9 +2,9 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { FileItem } from 'src/app/models/types';
-import { Observable, of, Subject, concat, defer } from 'rxjs';
+import { Observable, Subject, defer } from 'rxjs';
 import { FormGroup, Validators, FormControl} from '@angular/forms';
-import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map, combineLatest } from 'rxjs/operators';
+import { switchMap, map, combineLatest } from 'rxjs/operators';
 
 // FIREBASE
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -64,6 +64,7 @@ export class AddcaseComponent implements OnInit {
 
   supportcase = '';
   showlist = false;
+  booReport = false;
 
   idPais = null;
 
@@ -71,7 +72,7 @@ export class AddcaseComponent implements OnInit {
   private departamentosCollection: AngularFirestoreCollection<any>;
 
   public users$: Observable<any[]>;
-  private usersCollection: AngularFirestoreCollection<any>;
+  // private usersCollection: AngularFirestoreCollection<any>;
 
   public tagImportant$: Observable<any[]>;
   private tagImportantCollection: AngularFirestoreCollection<any>;
@@ -103,13 +104,13 @@ export class AddcaseComponent implements OnInit {
     private toasterService: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
-
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.firebaseAuth.authState.subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;
+          this.getUserReport(this.userFirebase.uid);
         }
     });
   }
@@ -125,7 +126,7 @@ export class AddcaseComponent implements OnInit {
       departamento: new FormControl (null, [Validators.required]),
       tipo: new FormControl ('', [Validators.required]),
       categoria: new FormControl ('', [Validators.required]),
-      etiquetado: new FormControl (null),
+      etiquetado: new FormControl ({value: [], disabled: true}),
       asunto: new FormControl (null, [Validators.required, Validators.minLength(1)]),
       descripcion: new FormControl (null, [Validators.required, Validators.minLength(1)]),
       tagImportant: new FormControl ({}),
@@ -148,10 +149,12 @@ export class AddcaseComponent implements OnInit {
       this.getRouteFirebase();
 
     } else {
+
       this.changepais(this.idPais);
+
     }
 
-    this.loadusers();
+    // this.loadusers();
 
   }
 
@@ -165,7 +168,7 @@ export class AddcaseComponent implements OnInit {
     }
   }
 
-
+  /**
   public loadusers() {
 
     this.users$ = concat(
@@ -183,8 +186,6 @@ export class AddcaseComponent implements OnInit {
 
   }
 
-
-
   public getListuser(term: string) {
 
     if (term == null) {
@@ -193,7 +194,7 @@ export class AddcaseComponent implements OnInit {
     }
 
     // tslint:disable-next-line:max-line-length
-    this.usersCollection = this._afs.collection('users', ref => ref.where('country', 'array-contains', this.idPais).where('email', '>=', term));
+    this.usersCollection = this._afs.collection('users', ref => ref.where('country', '==', this.idPais).where('email', '>=', term));
     return this.usersCollection.snapshotChanges().pipe(
               map(actions => {
                 return actions.map(a => {
@@ -203,7 +204,7 @@ export class AddcaseComponent implements OnInit {
                 });
               })
             );
-  }
+  }*/
 
   selectChangedepto(value) {
 
@@ -237,15 +238,12 @@ export class AddcaseComponent implements OnInit {
         })
       );
 
-      // arrayResponsables
       this._afs.doc('countries/' + this.idPais + '/departments/' + value.id).get()
-      .subscribe(res => {
+      .subscribe(async res => {
         if (res.exists) {
           this.arrayResponsables = [];
-          // res.data();
-          // console.log(res.data());
           if (res.data().admins && res.data().admins.length > 0) {
-            this.arrayResponsables = this.getUserResponsables(res.data().admins);
+            this.arrayResponsables = await this.getUserResponsables(res.data().admins);
           }
          } else {
           this.categoria$ = null;
@@ -269,20 +267,49 @@ export class AddcaseComponent implements OnInit {
 
   }
 
+  getUserReport(id: any) {
 
-  getUserResponsables(to): Array<any> {
+    this._afs.doc('users/' + id).get()
+    .subscribe(async res => {
+      if (res.exists) {
+        const data: any = res.data();
+        console.log('Inicio');
+        console.log(data.report);
+        if (data.report) {
+          const report: any = data.report;
+          const response: any = await this.getUserResponsables(report);
+          console.log('response');
+          console.log(response);
+          console.log('FIN');
+
+          if (response && response.length > 0) {
+            this.booReport = true;
+            this.forma.controls['etiquetado'].setValue(response);
+          }
+        }
+        }
+    });
+
+  }
+
+  async getUserResponsables(uidArray: Array<String>) {
 
     const arr: any = [];
-    for (let ii = 0; ii < to.length; ii++) {
-
-      this._afs.doc('users/' + to[ii]).get()
-      .subscribe(res => {
-        if (res.exists) {
-          arr.push(res.data());
-         }
-      });
+    for (let i = 0; i < uidArray.length; i++) {
+      const user: any = await this.getuser(uidArray[i]);
+      if (user && user.exists) {
+        console.log('user');
+        console.log(user.data());
+        arr.push(user.data());
+       }
     }
+    console.log('return arr');
     return arr;
+
+  }
+
+  async getuser(uid: String) {
+     return await this._afs.doc('users/' + uid).get().toPromise().then();
   }
 
 
@@ -442,6 +469,19 @@ export class AddcaseComponent implements OnInit {
     }
     */
 
+   const arrayEtiquetados = [];
+   const arrayReportar: [] = this.forma.getRawValue().etiquetado;
+   console.log(this.forma.value);
+   console.log('arrayReportar');
+   console.log(arrayReportar);
+
+   for (let i = 0; i < arrayReportar.length; i++) {
+    arrayEtiquetados.push(arrayReportar[i]['uid']);
+    console.log(arrayReportar[i]);
+   }
+
+   console.log(arrayEtiquetados);
+
     let important = '';
     let important_id = '';
 
@@ -473,7 +513,7 @@ export class AddcaseComponent implements OnInit {
       category_desc: this.forma.value.categoria.name,
       important: important,
       important_id: important_id,
-      // etiquetados: array_usersNew,
+      etiquetados: arrayEtiquetados,
       asuntoIndex: indexasunto.split(' ')
     })
     .then(function(docRef) {
@@ -492,13 +532,14 @@ export class AddcaseComponent implements OnInit {
         that.onNoClick();
         Swal.fire('Solicitud registrada', '', 'success');
 
-        /**
-        if (array_usersInfo && array_usersInfo.length > 0 && docRef) {
-          array_usersInfo.forEach(res => {
+
+        if (arrayReportar && arrayReportar.length > 0 && docRef) {
+          arrayReportar.forEach(res => {
+            console.log('PASOOOOOO -> ');
+            console.log(res);
             that.sendCdfTag(res, docRef, 'Etiquetado(a) en');
           });
         }
-        */
 
         if (that.arrayResponsables && that.arrayResponsables.length > 0 && docRef) {
           that.arrayResponsables.forEach(res => {
@@ -531,6 +572,8 @@ export class AddcaseComponent implements OnInit {
     }
 
     // console.log(data);
+
+    console.log(content);
 
     // tslint:disable-next-line:max-line-length
     const body = content + '. El número de solicitud es #' + this.ncase + '. Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
@@ -637,9 +680,6 @@ export class AddcaseComponent implements OnInit {
               console.log(<any>error);
               }
             );
-
-
-
 
     }
 

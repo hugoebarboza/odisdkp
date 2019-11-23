@@ -192,7 +192,7 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
       return new Observable;
     }
     // tslint:disable-next-line:max-line-length
-    this.usersCollection = this._afs.collection('users', ref => ref.where('country', 'array-contains', this.identity.country).where('email', '>=', term));
+    this.usersCollection = this._afs.collection('users', ref => ref.where('country', '==', this.identity.country).where('email', '>=', term));
     return this.usersCollection.snapshotChanges().pipe(
               map(actions => {
                 return actions.map(a => {

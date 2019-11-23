@@ -40,17 +40,17 @@ export class AddJobComponent implements OnInit, OnDestroy {
   private comentariosCollection: AngularFirestoreCollection<any>;
   destinatarios = [];
 
-  kpi:number = 0;
-  serviceid:number = 0;
-  servicetype_id:number = 0;
-  
+  kpi = 0;
+  serviceid = 0;
+  servicetype_id = 0;
+
   listimageorder = [];
   imageRows = [];
-  emailaddress: string = '';
-  emailbody:string ='';
-  emailcompany: string = '';
-  emaildescription:string ='';
-  emailorder_number: string = '';
+  emailaddress = '';
+  emailbody = '';
+  emailcompany = '';
+  emaildescription = '';
+  emailorder_number = '';
   emailpila = [];
   emailfiles = [];
   emailimages = [];
@@ -59,9 +59,9 @@ export class AddJobComponent implements OnInit, OnDestroy {
   items: FormArray;
 
   formComentar: FormGroup;
-  id:number;
+  id: number;
   identity: any;
-  isLoading: boolean = true;
+  isLoading = true;
   project: any;
   project_id: number;
   proyectos: Array<Proyecto> = [];
@@ -72,12 +72,12 @@ export class AddJobComponent implements OnInit, OnDestroy {
   path = 'allfiles/projects/';
   source = 'allfiles/projects/';
   tipoServicio: any;
-  title:string = "Registrar trabajo";
+  title = 'Registrar trabajo';
   token: any;
-  toggleContent: boolean = false;
+  toggleContent = false;
   user_informador: User;
-	user_responsable:User;
-	user_itocivil_assigned_to: User;
+  user_responsable: User;
+  user_itocivil_assigned_to: User;
   user_itoelec_assigned_to: User;
   user_responsable_obra: User;
   userFirebase: UserFirebase;
@@ -98,7 +98,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
     public zipService: ZipService,
     @Inject(MAT_DIALOG_DATA) public data: any
 
-  ) { 
+  ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
@@ -106,8 +106,8 @@ export class AddJobComponent implements OnInit, OnDestroy {
     this.source = this.source + this.data.project + '/' + this.data.service_id + '/files';
     this.servicetype_id = this.data.tiposervicio;
     this.serviceid = this.data.service_id;
-    //console.log(this.data);
-    //console.log(this.path);
+    // console.log(this.data);
+    // console.log(this.path);
     this.firebaseAuth.authState.subscribe(
       (auth) => {
         if (auth) {
@@ -119,12 +119,12 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
-    if(this.data.project > 0){
+    if (this.data.project > 0) {
       this.project_id = this.data.project;
       this.id = this.data.service_id;
       this.project = this.filter();
       this.service = this.filterService();
-      if(this.id){
+      if (this.id) {
         this.getTipoServicio(this.id);
       }
       this.isLoading = false;
@@ -133,105 +133,100 @@ export class AddJobComponent implements OnInit, OnDestroy {
         comentario: new FormControl ('', [Validators.required]),
         observacion: new FormControl ('', ),
       });
-  
+
       this.formComentar.setValue({
         'comentario': '',
         'observacion': ''
-      });  
+      });
 
       this.formJob = this.formBuilder.group({
         items: this.formBuilder.array([ this.createItem() ])
-      });      
+      });
     }
 
-    if(this.data.orderid){
+    if (this.data.orderid) {
       this.getListImage();
     }
 
 
-    if(this.data.service_id > 0){
-      //console.log(this.data.service_id);
-      this.subscription = this.dataservice.getService(this.token.token, this.data.service_id).subscribe(
-        response => {
-                  if(!response){
+    if (this.data.service_id > 0) {
+      this.subscription = this.dataservice.getService(this.token.token, this.data.service_id)
+                  .subscribe( response => {
+                  if (!response) {
                     return;
                   }
-                  if(response.status == 'success'){
-                    //console.log(response.datos);
+                  if (response.status === 'success') {
                     this.services = response.datos;
                     this.kpi = response.datos.kpi;
-                    //console.log(this.kpi);
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_informador){                      
-                      this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_informador).subscribe(
-                        response => {
-                          if(!response){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_informador) {
+                      this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_informador)
+                      .subscribe( res => {
+                          if (!res) {
                             return;
                           }
-                          if(response.status == 'success'){
-                            this.user_informador = response.data[0];
-                            //console.log(this.user_informador);
+                          if (res.status === 'success') {
+                            this.user_informador = res.data[0];
                           }
                         }
-                      )
+                      );
                     }
 
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_responsable){                      
-                      this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_responsable).subscribe(
-                        response => {
-                          if(!response){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_responsable) {
+                      this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_responsable)
+                      .subscribe( re => {
+                          if (!re) {
                             return;
                           }
-                          if(response.status == 'success'){
+                          if (re.status === 'success') {
                             this.user_responsable = response.data[0];
-                            //console.log(this.user_responsable);
                           }
                         }
-                      )
+                      );
                     }
 
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_itocivil_assigned_to){
-                      this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_itocivil_assigned_to).subscribe(
-                        response => {
-                          if(!response){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_itocivil_assigned_to) {
+                      this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_itocivil_assigned_to)
+                      .subscribe( r => {
+                          if (!r) {
                             return;
                           }
-                          if(response.status == 'success'){
-                            this.user_itocivil_assigned_to = response.data[0];
+                          if (r.status === 'success') {
+                            this.user_itocivil_assigned_to = r.data[0];
                           }
                         }
-                      )
+                      );
                     }
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_itoelec_assigned_to){
-                      this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_itoelec_assigned_to).subscribe(
-                        response => {
-                          if(!response){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_itoelec_assigned_to) {
+                      this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_itoelec_assigned_to)
+                      .subscribe( responses => {
+                          if (!responses) {
                             return;
                           }
-                          if(response.status == 'success'){
-                            this.user_itoelec_assigned_to = response.data[0];
+                          if (responses.status === 'success') {
+                            this.user_itoelec_assigned_to = responses.data[0];
                           }
                         }
-                      )
+                      );
                     }
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_obra){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_obra) {
                       this.user_responsable_obra = this.services['servicedetail'][0].responsable_obra;
                     }
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_email){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_email) {
                       this.email_responsable_obra = this.services['servicedetail'][0].responsable_email;
                     }
                   }
        });
     }
 
-    
 
 
-    //SELECT DE COMMENTS FIREBASE
+
+    // SELECT DE COMMENTS FIREBASE
     this.comentariosCollection = this._afs.collection(this.path + 'comments', ref => ref.orderBy('create_at', 'desc'));
     this.comentariosCollection.snapshotChanges().pipe(
       map(actions => {
@@ -255,15 +250,13 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
 
 
-  addComentario(event:number) {
-    //console.log(this.formJob.controls.items.controls);
-    if(this.formJob.controls.items){
+  addComentario(event: number) {
+    if (this.formJob.controls.items) {
       this.formJob.controls.items['controls'].forEach(res => {
-        if(res.value.name !== ''){
+        if (res.value.name !== '') {
           this.emailpila.push(res.value);
         }
-        
-      });  
+      });
     }
 
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
@@ -284,7 +277,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
       observacion: this.formComentar.value.observacion,
       pila: this.emailpila
     })
-    .then(function(docRef) {      
+    .then(function(docRef) {
       if (that.archivos.length > 0) {
         that.toasterService.success('Solicitud actualizada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
         const storage = that.path + 'commentsFiles';
@@ -293,27 +286,27 @@ export class AddJobComponent implements OnInit, OnDestroy {
           response => {
             that.emailfiles = response;
             that.archivos = [];
-            if(event == 1){
+            if (event == 1) {
               that.afterAddComentario();
-            }            
-            that.formComentar.reset();   
+            }
+            that.formComentar.reset();
             that.toggleContent = false;
             that.resetForm();
           }
         )
         .catch(
           error => {
-            console.log(<any>error);          
-          }          
+            console.log(<any>error);
+          }
         );
-      }else{
-        if(event == 1){
+      } else {
+        if (event == 1) {
           that.afterAddComentario();
         }
-        that.formComentar.reset();   
+        that.formComentar.reset();
         that.toggleContent = false;
-        that.resetForm();  
-      }      
+        that.resetForm();
+      }
 
     })
     .catch(function(error) {
@@ -322,76 +315,67 @@ export class AddJobComponent implements OnInit, OnDestroy {
   }
 
 
-  private afterAddComentario(){
+  private afterAddComentario() {
     if (!this.data || !this.services || !this.formComentar) {
-      //console.log('paso return');
       return;
     }
 
 
-    if(this.user_informador && this.user_informador.email){
+    if (this.user_informador && this.user_informador.email) {
       this.destinatarios.push(this.user_informador.email);
     }
 
-    if(this.user_responsable && this.user_responsable.email){
+    if (this.user_responsable && this.user_responsable.email) {
       this.destinatarios.push(this.user_responsable.email);
     }
 
-    if(this.user_itocivil_assigned_to && this.user_itocivil_assigned_to.email){
+    if (this.user_itocivil_assigned_to && this.user_itocivil_assigned_to.email) {
       this.destinatarios.push(this.user_itocivil_assigned_to.email);
     }
 
 
-    if(this.user_itoelec_assigned_to && this.user_itoelec_assigned_to.email){
+    if (this.user_itoelec_assigned_to && this.user_itoelec_assigned_to.email) {
       this.destinatarios.push(this.user_itoelec_assigned_to.email);
     }
 
 
-    if(this.user_responsable_obra && this.email_responsable_obra){
+    if (this.user_responsable_obra && this.email_responsable_obra) {
       this.destinatarios.push(this.email_responsable_obra);
     }
 
-    
-    if(this.project.project_name){
-      //this.emailbody = 'Nombre del Proyecto: ' + this.project.project_name;
+
+    if (this.project.project_name) {
+      // this.emailbody = 'Nombre del Proyecto: ' + this.project.project_name;
     }
 
-    if(this.service.service_name){
-      //this.emailbody = this.emailbody + ' / ' + this.service.service_name + '.';
-    }
-    
-    if(this.service.service_name){
-      //this.emailbody = this.emailbody + ' Tipo de Servicio: (' + this.service_type.name + ')';
+    if (this.service.service_name) {
+      // this.emailbody = this.emailbody + ' / ' + this.service.service_name + '.';
     }
 
-    
+    if (this.service.service_name) {
+      // this.emailbody = this.emailbody + ' Tipo de Servicio: (' + this.service_type.name + ')';
+    }
+
+
     this.emailbody = this.formComentar.value.comentario;
-    
-    if(this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].address){
+
+    if (this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].address) {
       this.emailaddress = this.services['servicedetail'][0].address;
     }
 
-    if(this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].contratista){
+    if (this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].contratista) {
       this.emailcompany = this.services['servicedetail'][0].contratista;
     }
 
-    if(this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].description){
+    if (this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].description) {
       this.emaildescription = this.services['servicedetail'][0].description;
     }
-    
 
-    if(this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].order_number){
-      this.emailorder_number = this.services['servicedetail'][0].order_number;      
+
+    if (this.services['servicedetail'][0] !== undefined && this.services['servicedetail'][0].order_number) {
+      this.emailorder_number = this.services['servicedetail'][0].order_number;
     }
 
-    //console.log(this.destinatarios);
-    //console.log(this.emailbody);
-    //console.log(this.emailaddress);
-    //console.log(this.emailcompany);
-    //console.log(this.emaildescription);
-    //console.log(this.emailorder_number);
-    //console.log(this.formComentar.value.comentario);
-    //console.log(this.formComentar.value.observacion);
 
     if (this.data && this.userFirebase.uid && this.destinatarios.length > 0) {
       this.destinatarios.forEach(res => {
@@ -419,72 +403,67 @@ export class AddJobComponent implements OnInit, OnDestroy {
   }
 
 
-  public getListImage(){     
+  public getListImage() {
     this.subscription = this.dataservice.getImageOrder(this.token.token, this.data.orderid).subscribe(
-    response => {        
-      if(!response){
-        return;        
+    response => {
+      if (!response) {
+        return;
       }
-        if(response.status == 'success'){ 
+        if (response.status === 'success') {
           this.listimageorder = response.datos;
-          //console.log(this.listimageorder);
-          if(this.listimageorder.length>0){
-            //this.getSplitArray(this.listimageorder, 2);
+          if (this.listimageorder.length > 0) {
           }
         }
     },
         error => {
         console.log(<any>error);
-        }   
+        }
     );
   }
 
 
   public getSplitArray (list, columns) {
-    let array = list;
+    const array = list;
     if (array.length <= columns) {
       array.length = 2;
-    };
+    }
 
-       var rowsNum = Math.ceil(array.length / columns);
-       var rowsArray = new Array(rowsNum);
+       const rowsNum = Math.ceil(array.length / columns);
+       const rowsArray = new Array(rowsNum);
 
-       for (var i = 0; i < rowsNum; i++) {
-           var columnsArray = new Array(columns);
-           for (var j = 0; j < columns; j++) {
-               var index = i * columns + j;
+       for (let i = 0; i < rowsNum; i++) {
+           const columnsArray = new Array(columns);
+           for (let j = 0; j < columns; j++) {
+               const index = i * columns + j;
 
                if (index < array.length) {
-                   columnsArray[j] = array[index];                   
+                   columnsArray[j] = array[index];
                } else {
                    break;
                }
            }
            rowsArray[i] = columnsArray;
        }
-       this.imageRows = rowsArray
-       console.log(this.imageRows)
-   }    
+       this.imageRows = rowsArray;
+       // console.log(this.imageRows)
+   }
 
 
-  sendCdfUser(to:string, body: string){
+  sendCdfUser(to: string, body: string) {
 
-    if(!to || !body){
+    if (!to || !body) {
       return;
     }
 
-    //console.log(to);
-    //console.log(this.data);
-    //return;
 
     const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
     const project = {
       address: this.emailaddress,
       company : this.emailcompany,
       comentario: this.formComentar.value.comentario,
-      name: this.project.project_name,      
+      name: this.project.project_name,
       observacion: this.formComentar.value.observacion,
-      description : this.emaildescription, 
+      description : this.emaildescription,
       order_number: this.emailorder_number,
       service_name: this.service.service_name,
       service_type_name: this.service_type.name,
@@ -496,7 +475,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
     };
 
 
-    if (to && body && project && this.emailfiles.length > 0){
+    if (to && body && project && this.emailfiles.length > 0) {
       const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + '. OT: ' + this.data.order_number;
       this._cdf.httpEmailAddCommentFile(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
         response => {
@@ -508,7 +487,6 @@ export class AddJobComponent implements OnInit, OnDestroy {
           if (response.status === 200) {
             this.emailfiles = [];
             this.destinatarios = [];
-            //console.log(response);
           }
         },
           error => {
@@ -520,7 +498,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
     }
 
 
-    if (to && body && project && this.emailfiles.length == 0){
+    if (to && body && project && this.emailfiles.length == 0) {
       const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + '. OT: ' + this.data.order_number;
       this._cdf.httpEmailAddComment(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
         response => {
@@ -530,7 +508,6 @@ export class AddJobComponent implements OnInit, OnDestroy {
           }
           if (response.status === 200) {
             this.destinatarios = [];
-            //console.log(response);
           }
         },
           error => {
@@ -539,28 +516,26 @@ export class AddJobComponent implements OnInit, OnDestroy {
           }
         );
     }
-  }  
+  }
 
   toggle() {
     this.toggleContent = !this.toggleContent;
   }
 
-  resetValue(){
+  resetValue() {
     this.listimageorder = [];
     this.imageRows = [];
     this.emailaddress = '';
-    this.emailbody ='';
+    this.emailbody = '';
     this.emailcompany = '';
-    this.emaildescription ='';
+    this.emaildescription = '';
     this.emailorder_number = '';
     this.emailpila = [];
     this.emailfiles = [];
     this.emailimages = [];
-  
   }
 
-  resetForm(){
-    //this.formJob.reset();
+  resetForm() {
     this.emailpila = [];
     this.formJob = this.formBuilder.group({
       items: this.formBuilder.array([ this.createItem() ])
@@ -578,61 +553,58 @@ export class AddJobComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
-    }    
+    }
   }
 
 
 
 
 
-  filter(){
-    if(this.proyectos && this.project_id){
-      for(var i = 0; i < this.proyectos.length; i += 1){
-        var result = this.proyectos[i];
-        if(result.id === this.project_id){
+  filter() {
+    if (this.proyectos && this.project_id) {
+      for (let i = 0; i < this.proyectos.length; i += 1) {
+        const result = this.proyectos[i];
+        if (result.id === this.project_id) {
             return result;
         }
       }
-    }    
+    }
   }
 
-  filterService(){
-    if(this.project.service && this.id){
-      for(var i = 0; i < this.project.service.length; i += 1){
-        var result = this.project.service[i];
-        if(result.id === this.id){
+  filterService() {
+    if (this.project.service && this.id) {
+      for (let i = 0; i < this.project.service.length; i += 1) {
+        const result = this.project.service[i];
+        if (result.id === this.id) {
             return result;
         }
       }
-    }    
+    }
   }
 
-  filterServiceType(){
-    if(this.tipoServicio && this.data.tiposervicio){
-      //console.log(this.tipoServicio);
-      //console.log(this.data.tiposervicio);
-      for(var i = 0; i < this.tipoServicio.length; i += 1){
-        var result = this.tipoServicio[i];
-        if(result.id === this.data.tiposervicio){
+  filterServiceType() {
+    if (this.tipoServicio && this.data.tiposervicio) {
+      for (let i = 0; i < this.tipoServicio.length; i += 1) {
+        const result = this.tipoServicio[i];
+        if (result.id === this.data.tiposervicio) {
             return result;
         }
       }
-    }    
+    }
   }
 
 
-  getTipoServicio(id:number) {
+  getTipoServicio(id: number) {
     this.zipService.getTipoServicio(id, this.token.token).then(
       (res: any) => {
         res.subscribe(
           (some: any) => {
             this.tipoServicio = some['datos'];
-            if(this.tipoServicio){
-              this.service_type = this.filterServiceType()
-              //console.log(this.service_type);
-            }      
+            if (this.tipoServicio) {
+              this.service_type = this.filterServiceType();
+            }
           },
           (error: any) => {
             console.log(<any>error);

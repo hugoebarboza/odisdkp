@@ -21,12 +21,12 @@ const routes: Routes = [
   { path: ':id/settings',
   component: UsuariosDetailComponent,
   canActivate: [AuthguardService],
-  data: { path: 'project', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Configuración de Usuario', descripcion: 'OCA Global - ODIS Project Users Managment' }
+  data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Configuración de Usuario', descripcion: 'OCA Global - ODIS Project Users Managment' }
   },
   { path: ':id/work',
   component: UsuarioWorkComponent,
   canActivate: [AuthguardService],
-  data: { path: 'project', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Órdenes de Trabajo del Usuario', descripcion: 'OCA Global - ODIS Project Users Managment' }
+  data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Órdenes de Trabajo del Usuario', descripcion: 'OCA Global - ODIS Project Users Managment' }
   },
   { path: '**', pathMatch: 'full', redirectTo: '/notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
 ];

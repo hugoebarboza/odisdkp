@@ -8,7 +8,6 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
 // MODULES
-// import { MaterialModule } from '../../material-module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -23,7 +22,6 @@ import {
     CommonModule,
     DirectiveModule,
     FormsModule,
-    // MaterialModule,
     PipesModule,
     ReactiveFormsModule,
     SharedModule,
