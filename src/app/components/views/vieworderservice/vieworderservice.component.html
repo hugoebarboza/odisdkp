@@ -835,14 +835,19 @@
             <mat-icon aria-label="Delete" *ngIf="i == indexitem">delete</mat-icon>
           </button>
 
-          <button mat-icon-button color="" (click)="showItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.estatus, order.order_date, order.required_date, order.vencimiento_date, order.observation, order.create_at, order.user, order.project_name, order.service_name, order.servicetype, order.update_at, order.userupdate, order.region, order.provincia, order.comuna, order.direccion)"
-          matTooltip="Ver orden."
-          [matTooltipPosition]="positiondatasourceaction.value"
-          >
-            <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
-            <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
-          </button>
+          <button mat-icon-button [matMenuTriggerFor]="menuviewshoworder"  matTooltip="Acciones (Presiona para acceder a la visualización de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
+              <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
+              <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
+            </button>
 
+          <mat-menu #menuviewshoworder="matMenu" [overlapTrigger]="false">
+              <button mat-menu-item (click)="showItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.estatus, order.order_date, order.required_date, order.vencimiento_date, order.observation, order.create_at, order.user, order.project_name, order.service_name, order.servicetype, order.update_at, order.userupdate, order.region, order.provincia, order.comuna, order.direccion)">
+                <span >Ver orden</span>
+              </button>
+              <a mat-menu-item [routerLink]="['/formview/orderview/', order.service_id, order.order_id]" target="_blank" style="color: rgba(0, 0, 0, 0.87) !important">
+                <span >Ver orden y formularios</span>
+              </a>
+          </mat-menu> 
 
           <button mat-icon-button [matMenuTriggerFor]="menuviewselectorder" *ngIf="_userService.isRole(7)"  matTooltip="Acciones (Presiona para acceder a las acciones de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
             <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">more_horiz</mat-icon>

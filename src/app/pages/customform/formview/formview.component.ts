@@ -83,6 +83,7 @@ export class FormviewComponent implements OnInit {
   day = 0;
   nota = null;
   categoriaPlazo = null;
+  booReport = false;
 
   public  categoriaDocumentos$: Observable<any[]>;
   private categoriaDocCollection: AngularFirestoreCollection<any>;
@@ -107,6 +108,7 @@ export class FormviewComponent implements OnInit {
       (auth) => {
         if (auth) {
           this.userFirebase = auth;
+          this.getUserReport(this.userFirebase.uid);
         }
     });
   }
@@ -120,7 +122,7 @@ export class FormviewComponent implements OnInit {
       departamento: new FormControl (null, [Validators.required]),
       tipo: new FormControl ('', [Validators.required]),
       categoria: new FormControl ('', [Validators.required]),
-      etiquetado: new FormControl (null),
+      etiquetado: new FormControl ({value: [], disabled: true}),
       asunto: new FormControl (null, [Validators.required, Validators.minLength(1)]),
       descripcion: new FormControl (null, [Validators.required, Validators.minLength(1)]),
       tagImportant: new FormControl ({}),
@@ -139,7 +141,7 @@ export class FormviewComponent implements OnInit {
     });
     */
 
-    if (this.identity.role >= 8) {
+    if (this.identity.role >= 9) {
       this.tagPaisCollection = this._afs.collection('countries');
       this.tagPais$ = this.tagPaisCollection.snapshotChanges().pipe(
         map(actions => {
@@ -158,6 +160,25 @@ export class FormviewComponent implements OnInit {
       this.changepais(this.idPais);
     }
     this.loadusers();
+  }
+
+  getUserReport(id: any) {
+
+    this._afs.doc('users/' + id).get()
+    .subscribe(async res => {
+      if (res.exists) {
+        const data: any = res.data();
+        if (data.report) {
+          const report: any = data.report;
+          const response: any = await this.getUserResponsables(report);
+          if (response && response.length > 0) {
+            this.booReport = true;
+            this.forma.controls['etiquetado'].setValue(response);
+          }
+        }
+        }
+    });
+
   }
 
   changepais(id) {
@@ -187,8 +208,6 @@ export class FormviewComponent implements OnInit {
 
   }
 
-
-
   public getListuser(term: string) {
 
     if (term == null) {
@@ -196,9 +215,10 @@ export class FormviewComponent implements OnInit {
       return new Observable;
     }
 
-
     // tslint:disable-next-line:max-line-length
-    this.usersCollection = this._afs.collection('users', ref => ref.where('country', 'array-contains', this.idPais).where('email', '>=', term));
+    this.usersCollection = this._afs.collection('users', ref => ref
+    // .where('country', '==', this.idPais)
+    .where('email', '>=', term));
     return this.usersCollection.snapshotChanges().pipe(
               map(actions => {
                 return actions.map(a => {
@@ -244,14 +264,14 @@ export class FormviewComponent implements OnInit {
 
       // arrayResponsables
       this._afs.doc('countries/' + this.idPais + '/departments/' + value.id).get()
-      .subscribe(res => {
+      .subscribe(async res => {
         if (res.exists) {
           this.arrayResponsables = [];
           // res.data();
           // console.log(res.data());
           if (res.data().admins && res.data().admins.length > 0) {
             // console.log(res.data().admins);
-            this.arrayResponsables = this.getUserResponsables(res.data().admins);
+            this.arrayResponsables = await this.getUserResponsables(res.data().admins);
           }
          } else {
           this.categoria$ = null;
@@ -276,22 +296,23 @@ export class FormviewComponent implements OnInit {
 
   }
 
-
-  getUserResponsables(to): Array<any> {
+  async getUserResponsables(uidArray: Array<String>) {
 
     const arr: any = [];
-    for (let ii = 0; ii < to.length; ii++) {
-
-      this._afs.doc('users/' + to[ii]).get()
-      .subscribe(res => {
-        if (res.exists) {
-          // console.log(res.data());
-          arr.push(res.data());
-         }
-      });
+    for (let i = 0; i < uidArray.length; i++) {
+      const user: any = await this.getuser(uidArray[i]);
+      if (user && user.exists) {
+        arr.push(user.data());
+       }
     }
     return arr;
+
   }
+
+  async getuser(uid: String) {
+     return await this._afs.doc('users/' + uid).get().toPromise().then();
+  }
+
 
 
   selectChangetype(value) {
@@ -448,6 +469,12 @@ export class FormviewComponent implements OnInit {
       array_usersInfo.push(array_users[ii]);
     }*/
 
+    const arrayEtiquetados = [];
+    const arrayReportar: [] = this.forma.getRawValue().etiquetado;
+
+    for (let i = 0; i < arrayReportar.length; i++) {
+      arrayEtiquetados.push(arrayReportar[i]['uid']);
+    }
 
     let important = '';
     let important_id = '';
@@ -480,7 +507,7 @@ export class FormviewComponent implements OnInit {
       category_desc: this.forma.value.categoria.name,
       important: important,
       important_id: important_id,
-      // etiquetados: array_usersNew,
+      etiquetados: arrayEtiquetados,
       asuntoIndex: indexasunto.split(' ')
     })
     .then(function(docRef) {
@@ -498,7 +525,13 @@ export class FormviewComponent implements OnInit {
 
         Swal.fire('Solicitud registrada', '', 'success');
 
-        /*
+        if (arrayReportar && arrayReportar.length > 0 && docRef) {
+          arrayReportar.forEach(res => {
+            that.sendCdfTag(res, docRef, 'Etiquetado(a) en');
+          });
+        }
+
+        /**
         if (array_usersInfo && array_usersInfo.length > 0 && docRef) {
           array_usersInfo.forEach(res => {
             that.sendCdfTag(res, docRef, 'Etiquetado(a) en');

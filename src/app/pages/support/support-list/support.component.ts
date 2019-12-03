@@ -120,7 +120,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
         this.userFirebase = auth;
         this.idPais = this.identity.country;
 
-        if (this.identity.role >= 8) {
+        if (this.identity.role >= 9) {
           this.tagPaisCollection = this._afs.collection('countries');
           this.tagPais$ = this.tagPaisCollection.snapshotChanges().pipe(
             map(actions => {
@@ -144,7 +144,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
   startData() {
 
     this.supportcase = 'supportcase/' + this.idPais + '/cases';
-    if (this.identity.role === 8) { // VE TODO
+    if (this.identity.role >= 9) { // VE TODO
       this.radioOpciones = [
         {value: 1, descripcion: 'Mís Solicitudes'},
         {value: 2, descripcion: 'Reportado'},
@@ -177,7 +177,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
           } else {
               this.radioOpciones = [
                 {value: 1, descripcion: 'Mís Solicitudes'},
-                {value: 2,  descripcion: 'Etiquetado'}
+                {value: 2,  descripcion: 'Reportado'}
               ];
               this.getdatacases();
           }
@@ -206,11 +206,11 @@ export class SupportComponent implements OnInit, OnDestroy  {
                 depto.id = doc.id;
 
                 this.allDepartamentos.push(depto);
-                if (this.identity.role === 8) {
+                if (this.identity.role >= 9) {
                   this.departamentos.push(depto);
                 }
                 if (count === 1) {
-                  if (this.identity.role === 8) {
+                  if (this.identity.role >= 9) {
                     this.selectedDepto = 0;
                   }
                   this.selectedDeptoAll = 0;
@@ -312,7 +312,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
     }
 
     if (this.radioselect === 3) {
-      if (this.identity.role === 8) {
+      if (this.identity.role >= 9) {
         if (this.selectedDepto !== 0) {
           this.casosCollection  = this._afs.collection(this.supportcase, ref => ref
           .where('depto_id', '==', this.selectedDepto)

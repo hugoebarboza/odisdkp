@@ -1,4 +1,23 @@
+.example-headers-align .mat-expansion-panel-header-title,
+.example-headers-align .mat-expansion-panel-header-description {
+  flex-basis: 0;
+}
 
+.example-headers-align .mat-expansion-panel-header-description {
+  justify-content: space-between;
+  align-items: center;
+}
+
+mat-form-field {
+  margin-right: 12px;
+}
+
+.form {
+  display: flex;
+  padding-top: 2px;
+  padding-bottom: 2px;
+  z-index: 10000 !important; 
+}
 .mat-toolbar {
     margin: -24px;
     margin-bottom: 0;

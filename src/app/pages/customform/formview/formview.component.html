@@ -156,6 +156,19 @@
                                 </li>
                             </ul>
                         </div>
+
+                        <div *ngIf="booReport">
+                            <h2 class="jeEmY">Reportado a</h2>
+                            <ng-select name="etiquetado"
+                                  [items]="users$ | async"
+                                  [multiple]="true"
+                                  [clearable]="false" 
+                                  [closeOnSelect]="false"
+                                  bindLabel="email"
+                                  class="example-full-width"
+                                  formControlName="etiquetado">
+                              </ng-select>
+                        </div>
                         <!----
                         <div>
                             <h2 class="jeEmY">Etiquetar</h2>

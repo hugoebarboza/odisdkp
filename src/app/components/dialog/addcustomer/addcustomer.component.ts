@@ -3,6 +3,11 @@ import { FormControl, Validators} from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { Subscription } from 'rxjs/Subscription';
 
+// MOMENT
+import * as _moment from 'moment';
+const moment = _moment;
+
+
 // MODELS
 import {
   Color,
@@ -39,14 +44,24 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
     private _customerService: CustomerService,
     public dialogRef: MatDialogRef<AddcustomerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Customer
-    //public data: Order
-  )
-  {
-    this.title = "Agregar Cliente.";
+  ) {
+    this.title = 'Agregar Cliente.';
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.customer = new Customer('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
+    this.customer = new Customer('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
     this.id = this.data['service_id'];
+    this.en = {
+      firstDayOfWeek: 0,
+      dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      dayNamesMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+      // tslint:disable-next-line:max-line-length
+      monthNames: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+      monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+      today: 'Hoy',
+      clear: 'Borrar'
+    };
+
   }
   public title: string;
   public identity: any;
@@ -86,6 +101,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
   id: number;
   category_id: number;
   step = 0;
+  en: any;
 
   subscription: Subscription;
 
@@ -100,19 +116,19 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    //console.log('La página se va a cerrar');
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
 
   onGenerarCliente() {
-  const client =this.identity.sub+''+this.day+''+this.month+''+this.year+''+this.hour+''+this.minutes+''+this.seconds+''+Math.round(Math.random()*100+1);
+  const client = this.identity.sub + '' + this.day + '' + this.month + '' + this.year + '' + this.hour + '' + this.minutes + '' + this.seconds + '' + Math.round(Math.random() * 100 + 1);
   this.customer.cc_number = client;
-  //console.log(client);
   }
 
 
-  public loadInfo(){
+  public loadInfo() {
                     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                     response => {
                        if (response.status === 'success') {
@@ -122,7 +138,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                             }
                      });
 
-                    //GET SERVICE AND CATEGORY CLIENT
+                    // GET SERVICE AND CATEGORY CLIENT
                     this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
                     response => {
                       if (response.status === 'success') {
@@ -135,19 +151,18 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                     });
 
 
-                    //GET TARIFA
+                    // GET TARIFA
                     this.subscription = this._customerService.getTarifa(this.token.token, this.id).subscribe(
                     response => {
                             if (response.status === 'success') {
                               this.tarifas = response.datos.tarifa;
-                              //console.log(this.tarifas);
                             } else {
                               this.tarifas = null;
                              // console.log(this.tarifa);
                             }
                             });
 
-                    //GET CONSTANTE
+                    // GET CONSTANTE
                     this.subscription = this._customerService.getConstante(this.token.token, this.id).subscribe(
                     response => {
                             if (response.status === 'success') {
@@ -157,7 +172,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                             }
                             });
 
-                    //GET GIRO
+                    // GET GIRO
                     this.subscription = this._customerService.getGiro(this.token.token, this.id).subscribe(
                     response => {
                             if (response.status === 'success') {
@@ -167,7 +182,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                             }
                             });
 
-                    //GET SECTOR
+                    // GET SECTOR
                     this.subscription = this._customerService.getSector(this.token.token, this.id).subscribe(
                     response => {
                     if ( response.status === 'success') {
@@ -177,7 +192,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                     }
                     });
 
-                    //GET ZONA
+                    // GET ZONA
                     this.subscription = this._customerService.getZona(this.token.token, this.id).subscribe(
                     response => {
                     if (response.status === 'success') {
@@ -187,39 +202,39 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                     }
                     });
 
-                    //GET MERCADO
+                    // GET MERCADO
                    this.subscription = this._customerService.getMercado(this.token.token, this.id).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
+                            if (response.status === 'success') {
                               this.mercados = response.datos.mercado;
-                            }else{
+                            } else {
                               this.mercados = null;
 
                             }
-                            });       
+                            });
 
-                    //GET MARCA DE VEHICULOS
+                    // GET MARCA DE VEHICULOS
                    this.subscription = this._customerService.getMarca(this.token.token).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
+                            if (response.status === 'success') {
                               this.marcas = response.marca;
-                            }else{
+                            } else {
                               this.marcas = null;
 
                             }
-                            });       
+                            });
 
 
-                    //GET COLORES DE VEHICULOS
+                    // GET COLORES DE VEHICULOS
                    this.subscription = this._customerService.getColor(this.token.token).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
+                            if (response.status === 'success') {
                               this.colors = response.color;
-                            }else{
+                            } else {
                               this.colors = null;
 
                             }
-                            });       
+                            });
 
   }
 
@@ -240,8 +255,18 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
   }
 
 
-  confirmAdd(_form: any){
-    //console.log(this.category_id);
+  confirmAdd(_form: any) {
+
+    if (this.customer.fecha_ultima_lectura) {
+      const fecha_ultima_lectura = new FormControl(moment(this.customer.fecha_ultima_lectura).format('YYYY[-]MM[-]DD'));
+      this.customer.fecha_ultima_lectura = fecha_ultima_lectura.value;
+    }
+
+    if (this.customer.fecha_ultima_deteccion) {
+      const fecha_ultima_deteccion = new FormControl(moment(this.customer.fecha_ultima_deteccion).format('YYYY[-]MM[-]DD'));
+      this.customer.fecha_ultima_deteccion = fecha_ultima_deteccion.value;
+    }
+
     this._customerService.add(this.token.token, this.customer, this.category_id);
     this.dialogRef.close();
   }
@@ -287,7 +312,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
      if (provinciaid > 0) {
        this.subscription = this._regionService.getComuna(this.token.token, provinciaid).subscribe(
         response => {
-              if(!response){
+              if (!response) {
                 return;
               }
               if (response.status === 'success') {
@@ -305,7 +330,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
    // this.states = this._dataService.getStates().filter((item)=> item.countryid == countryid);
    }
 
-  public loadSector(){
+  public loadSector() {
       this.subscription = this._customerService.getSector(this.token.token, this.id).subscribe(
       response => {
               if (response.status === 'success') {

@@ -63,6 +63,38 @@ export class CustomformService {
   }
 
 
+  getFormResource(token: any, id: number, formid: any) {
+    if (!token) {
+      return;
+    }
+    return this.getQuery('order/' + id + '/form/' + formid, token);
+  }
+
+  async storepostFormResource(token: any, data: any, id: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'order/' + id + '/form';
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.post(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
+
+
   getProjectFormField(token: any, id: number, formid: number) {
     if (!token) {
       return;

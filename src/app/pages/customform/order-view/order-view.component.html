@@ -142,6 +142,33 @@
                 </div>
             </div>
 
+            <div *ngFor="let recursosForm of projectformfield; let i = index;">
+                <div class="row" style="margin-top: 14px">
+                    <div class="col-md-12 order-first" >
+                        <div class="full-width" style="text-align:left;background-color:#313131;">
+                            <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px; text-transform: uppercase;" class="subtitulo">{{recursosForm['description']['name']}}</h5>
+                        </div>
+                        <table style="width:100%; table-layout: fixed; overflow-wrap: break-word;">
+                            <tbody *ngFor="let form of recursosForm['form']; let x = index;">
+                                <tr *ngIf="x == 0">
+                                    <th class="col-md-auto" *ngFor="let items of form;">
+                                        <h2 class="jeEmYB" style="text-transform: uppercase;">
+                                            <strong>{{items['name']}}</strong>
+                                        </h2>
+                                    </th>
+                                </tr>
+                                <tr >
+                                    <th class="col-md-auto" *ngFor="let items of form;">
+                                        <h2 class="jeEmYB" style="text-transform: uppercase;">{{items['value']}}</h2>
+                                    </th>   
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            
+
             <div class="row" style="margin-top: 14px">
                 <div class="col-md-12 order-first" >
                     <div class="full-width" style="text-align:left;background-color:#313131;">

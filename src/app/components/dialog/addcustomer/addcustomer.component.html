@@ -1,15 +1,15 @@
-    <mat-toolbar color="primary">
-    <h3>{{title}} Proyecto: {{this.project}}</h3>            
-     <span class="mat-spacer"></span>
-     <button mat-icon-button (click)="onNoClick()" tabindex="-1">
-     <mat-icon class="mat-icon">close</mat-icon>       
-     </button>
-     </mat-toolbar>
-    <P></P>
+<mat-toolbar color="primary">
+<h3>{{title}} Proyecto: {{this.project}}</h3>            
+<span class="mat-spacer"></span>
+<button mat-icon-button (click)="onNoClick()" tabindex="-1">
+<mat-icon class="mat-icon">close</mat-icon>       
+</button>
+</mat-toolbar>
+<P></P>
 
 <div class="app animated fadeIn" >
 <form  ngNativeValidate name="customerForm" #customerForm="ngForm" class="col-md-12"  id="customerForm">
-  <mat-accordion class="mat-dialog-content">
+  <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)" hideToggle>
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -41,7 +41,7 @@
   </p>
   <div class="example-container">
       <mat-form-field appearance="legacy">
-        <input matInput type="text" placeholder="Descripcion Cliente" name="nombrecc" [(ngModel)]="customer.nombrecc" class="form-control" maxlength="177">
+        <input matInput type="text" placeholder="Descripcion Cliente" name="nombrecc" [(ngModel)]="customer.nombrecc" class="form-control" maxlength="177" required>
       </mat-form-field>
     </div>
 
@@ -286,21 +286,79 @@
         </mat-panel-description>
       </mat-expansion-panel-header>
 
-  <div class="example-container">
-      <mat-form-field>
-        <textarea matInput placeholder="Observación" type="text" name="observacion" [(ngModel)]="customer.observacion" class="form-control" maxlength="177"></textarea>
-      </mat-form-field>   
-    </div>
+      <div class="example-container">
+        <mat-form-field>
+          <textarea matInput placeholder="Observación" type="text" name="observacion" [(ngModel)]="customer.observacion" class="form-control" maxlength="177"></textarea>
+        </mat-form-field>   
+      </div>
+
+      <mat-action-row>
+        <button mat-button color="warn" (click)="prevStep()">Anterior</button>
+        <button mat-button color="primary" (click)="nextStep()">Siguiente</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+
+
+
+    <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)" hideToggle>
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Datos adicionales del Cliente
+        </mat-panel-title>
+        <mat-panel-description>
+          Ingrese datos adicionales del cliente
+          <mat-icon>message</mat-icon>
+        </mat-panel-description>
+      </mat-expansion-panel-header>
+
+
+      <div class="form">
+          <mat-form-field appearance="legacy" class="margin">
+            <input matInput type="text" placeholder="Llave por Circuito" name="llave_circuito" [(ngModel)]="customer.llave_circuito" class="form-control" >
+          </mat-form-field>
+    
+          <mat-form-field appearance="legacy" class="margin">
+            <input matInput type="text" placeholder="Fase" name="fase" [(ngModel)]="customer.fase" class="form-control" >
+          </mat-form-field>
+    
+   
+          <mat-form-field appearance="legacy" class="margin">
+            <input matInput type="text" placeholder="Clave última lectura" name="clave_lectura" [(ngModel)]="customer.clave_lectura" class="form-control" >
+          </mat-form-field>
+    
+          <mat-form-field appearance="legacy" class="margin">
+            <input matInput type="text" placeholder="Factor" name="factor" [(ngModel)]="customer.factor" class="form-control" >
+          </mat-form-field>
+      </div>    
+
+
+      <div class="form" >
+          <mat-form-field class="margin">
+              <input matInput [matDatepicker]="picker" placeholder="Fecha última Lectura" [(ngModel)]="customer.fecha_ultima_lectura" name="fecha_ultima_lectura" >
+              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+              <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+
+          <mat-form-field class="margin">
+              <input matInput [matDatepicker]="picker1" placeholder="Fecha última Detección" [(ngModel)]="customer.fecha_ultima_deteccion" name="fecha_ultima_deteccion" >
+              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
+              <mat-datepicker #picker1></mat-datepicker>
+          </mat-form-field>
+      </div>
 
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Anterior</button>
       </mat-action-row>
     </mat-expansion-panel>
-  </mat-accordion>
+
+
+
+  </mat-accordion>  
+  
 </form>
+
 </div>
 
-<br>
 <br>
 <div mat-dialog-actions>
   <button mat-button color="primary" mat-raised-button  [(disabled)]="!customerForm.form.valid" (click)="confirmAdd(customerForm)">Guardar</button>

@@ -133,7 +133,7 @@ export class AddcaseComponent implements OnInit {
       tagPais: new FormControl (this.idPais)
     });
 
-    if (this.identity.role >= 8) {
+    if (this.identity.role >= 9) {
       this.tagPaisCollection = this._afs.collection('countries');
       this.tagPais$ = this.tagPaisCollection.snapshotChanges().pipe(
         map(actions => {
@@ -273,14 +273,14 @@ export class AddcaseComponent implements OnInit {
     .subscribe(async res => {
       if (res.exists) {
         const data: any = res.data();
-        console.log('Inicio');
-        console.log(data.report);
+        // console.log('Inicio');
+        // console.log(data.report);
         if (data.report) {
           const report: any = data.report;
           const response: any = await this.getUserResponsables(report);
-          console.log('response');
-          console.log(response);
-          console.log('FIN');
+          // console.log('response');
+          // console.log(response);
+          // console.log('FIN');
 
           if (response && response.length > 0) {
             this.booReport = true;
@@ -298,12 +298,12 @@ export class AddcaseComponent implements OnInit {
     for (let i = 0; i < uidArray.length; i++) {
       const user: any = await this.getuser(uidArray[i]);
       if (user && user.exists) {
-        console.log('user');
-        console.log(user.data());
+        // console.log('user');
+        // console.log(user.data());
         arr.push(user.data());
        }
     }
-    console.log('return arr');
+    // console.log('return arr');
     return arr;
 
   }
@@ -471,16 +471,16 @@ export class AddcaseComponent implements OnInit {
 
    const arrayEtiquetados = [];
    const arrayReportar: [] = this.forma.getRawValue().etiquetado;
-   console.log(this.forma.value);
-   console.log('arrayReportar');
-   console.log(arrayReportar);
+   // console.log(this.forma.value);
+   // console.log('arrayReportar');
+   // console.log(arrayReportar);
 
    for (let i = 0; i < arrayReportar.length; i++) {
     arrayEtiquetados.push(arrayReportar[i]['uid']);
-    console.log(arrayReportar[i]);
+    // console.log(arrayReportar[i]);
    }
 
-   console.log(arrayEtiquetados);
+   // console.log(arrayEtiquetados);
 
     let important = '';
     let important_id = '';
@@ -535,8 +535,8 @@ export class AddcaseComponent implements OnInit {
 
         if (arrayReportar && arrayReportar.length > 0 && docRef) {
           arrayReportar.forEach(res => {
-            console.log('PASOOOOOO -> ');
-            console.log(res);
+            // console.log('PASOOOOOO -> ');
+            // console.log(res);
             that.sendCdfTag(res, docRef, 'Etiquetado(a) en');
           });
         }
@@ -573,7 +573,7 @@ export class AddcaseComponent implements OnInit {
 
     // console.log(data);
 
-    console.log(content);
+    // console.log(content);
 
     // tslint:disable-next-line:max-line-length
     const body = content + '. El número de solicitud es #' + this.ncase + '. Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;

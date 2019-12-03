@@ -104,7 +104,7 @@ export class MakeFormComponent implements OnInit, OnDestroy {
 
     if (formulario) {
       const store: any = await this._customForm.store(this.token.token, formulario, id);
-console.log(store);
+      // console.log(store);
       if (store && store.status === 'success') {
         this.dialogRef.close();
         this.toasterService.success('Formulario creado exitosamente', 'Exito', {timeOut: 4000, closeButton: true, });

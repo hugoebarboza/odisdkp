@@ -19,7 +19,7 @@
                             <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'users'" >
                                 <i class="material-icons" matTooltip="Listado de Usuarios">supervisor_account</i>
                             </a>
-                            <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'"  *ngIf="identity && identity.role === 8">
+                            <a class="nav-link pointer" href="javascript:;" routerLinkActive="active" [routerLink]="'settings'"  *ngIf="identity && identity.role >= 9">
                                 <i class="material-icons" matTooltip="Configuración de soporte">settings</i>
                             </a>
                         </div>
@@ -272,7 +272,7 @@
                                     <mat-cell *matCellDef="let element"> 
                                         <div class="row" align="right">
                                             <div class="col-md-12">
-                                                    <button mat-icon-button color="warn" matTooltip="Eliminar Solicitud." (click)="deleteItem(element.id)" *ngIf="userFirebase.uid === element.create_to || identity.role === 8"> <!-- -->
+                                                    <button mat-icon-button color="warn" matTooltip="Eliminar Solicitud." (click)="deleteItem(element.id)" *ngIf="userFirebase.uid === element.create_to || identity.role >= 9"> <!-- -->
                                                         <mat-icon aria-label="Delete">delete</mat-icon>
                                                     </button>
                                                     <button mat-icon-button color="primary"  (click)="abrirCaso(element)" matTooltip="Abrir Solicitud.">

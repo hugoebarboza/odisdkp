@@ -138,7 +138,10 @@ export class ShowcaseComponent implements OnInit {
           const docData = res.data();
           // console.log(docData.etiquetados);
           // console.log(this.datacase);
-          docData.etiquetados = this.getUserInfo(docData.etiquetados);
+          // docData.etiquetados = this.getUserInfo(docData.etiquetados);
+          if (docData.etiquetados) {
+            docData.etiquetados = this.getUserInfo(docData.etiquetados);
+          }
           this.collectionJoin(of(docData));
           // Do something with doc data
          } else {

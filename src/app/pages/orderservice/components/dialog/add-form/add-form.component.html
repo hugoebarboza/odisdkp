@@ -1,1 +1,109 @@
-<p>add-form works!</p>
+<div style="width: 100%;">
+    <button mat-icon-button (click)="onNoClick()" matTooltip="Cerrar Registro de Formulario " tabindex="-1" style="float: right">
+        <mat-icon class="mat-icon">close</mat-icon>       
+    </button>
+</div>
+<h2 class="h2class">Resgistro de Formulario</h2>
+<br>
+<div class="row">
+    <div class="col-md-12">
+        <div>
+        <form [formGroup]="formFormularios">
+            <h2 class="labelclass">Formularios</h2>
+            <ng-select  
+                        [items]="projectformdata"
+                        formControlName="formularios"
+                        [clearable]="false" 
+                        bindLabel="name"
+                        (change)="changeprojectformdata($event)"
+                        name="formularios"
+                        class="full-width">
+            </ng-select>
+        </form>
+        </div>
+    </div>
+</div>
+<br>
+<div class="VESiD">
+</div>
+<br>
+<div class="example-list" *ngIf="projectformfield.length === 0 && !isLoadingProjectFormField">
+    <div class="example-box" >Debe seleccionar un formulario de la lista desplegable para continuar</div>
+</div>   
+<div class="row">
+    <div class="col-md-12" style="display: flex;" *ngIf="nameForm.length > 0">
+        <h2 class="h2class">{{nameForm}}</h2>
+        <h3 class="h3class" style="margin-left: 8px;">({{descripcionForm}})</h3>
+        <span matBadge="{{projectformfield.length}}" matBadgeOverlap="true" style="margin-top: 14px; margin-left: 14px;"></span>
+    </div>
+</div>
+<br>
+<form class="mat-dialog-content" #recursosForm="ngForm">
+    <div *ngIf="projectformfield && projectformfield.length > 0 && !isLoadingProjectFormField">
+        <div class="example-box" *ngFor="let item of projectformfield; let i = index;" style="margin-bottom: 6px;">  
+            <mat-accordion  class="full-width" >
+                <mat-expansion-panel>
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>                                                                     
+                            <div class="blriGcList" *ngIf="item.length > 0"> {{nameForm}} N°{{i+1}}</div>
+                        </mat-panel-title>
+                    </mat-expansion-panel-header>
+                    <mat-grid-list cols="2" rowHeight="4:1">
+                        <mat-grid-tile *ngFor="let formfield of item; let in = index;">
+
+                            <mat-form-field class="full-width" style="margin-right: 5px; margin-left: 5px;" *ngIf="formfield.type === 'text'">
+                                <input matInput type="text" class="form-control" *ngIf="formfield.required == 1" required name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                                <input matInput type="text" class="form-control" *ngIf="formfield.required == 0" name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" style="margin-right: 5px; margin-left: 5px;" *ngIf="formfield.type === 'int'">
+                                <input matInput type="number" class="form-control" *ngIf="formfield.required == 1" required name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                                <input matInput type="number" class="form-control" *ngIf="formfield.required == 0" name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" style="margin-right: 5px; margin-left: 5px;" *ngIf="formfield.type === 'datepicker'">
+                                <input matInput type="datetime-local" class="form-control" *ngIf="formfield.required == 1" required name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                                <input matInput type="datetime-local" class="form-control" *ngIf="formfield.required == 0" name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" style="margin-right: 5px; margin-left: 5px;" *ngIf="formfield.type === 'date'">
+                                <input matInput type="date" class="form-control" *ngIf="formfield.required == 1" required name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                                <input matInput type="date" class="form-control" *ngIf="formfield.required == 0" name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                            </mat-form-field>
+
+                            <mat-form-field class="full-width" style="margin-right: 5px; margin-left: 5px;" *ngIf="formfield.type === 'timepicker'">
+                                <input matInput type="time" class="form-control" *ngIf="formfield.required == 1" required name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                                <input matInput type="time" class="form-control" *ngIf="formfield.required == 0" name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value">                                                            
+                            </mat-form-field>
+                            
+                            <mat-form-field class="full-width" style="margin-right: 5px; margin-left: 5px;" *ngIf="formfield.type === 'textarea'">
+                                <textarea matInput class="form-control" *ngIf="formfield.required == 1" required name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value" maxlength="277" rows="3"></textarea>
+                                <textarea matInput class="form-control" *ngIf="formfield.required == 0" name="{{i}}_{{in}}_{{formfield.id}}" id="{{i}}_{{in}}_{{formfield.id}}" placeholder="{{formfield.name}}" [(ngModel)]="projectformfield[i][in].value" maxlength="277" rows="3"></textarea>
+                            </mat-form-field>
+
+                        </mat-grid-tile> 
+                    </mat-grid-list>                                                      
+                    <mat-action-row>
+                        <button mat-button color="warn" (click)="deleteFormField(projectformfield[i])">Eliminar</button>
+                    </mat-action-row>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </div>
+        <br>
+    </div>     
+</form>  
+
+<div class="mat-dialog-actions" *ngIf="projectformfield && projectformfield.length > 0 && !isLoadingProjectFormField">
+    <div style="width: 100%;">
+        <button mat-stroked-button color="warn" type="button"  class="btnsave" (click)="cancelFormField()">Cancelar</button>
+        <button mat-raised-button color="primary" type="submit"  class="btnsave" [disabled]="!recursosForm.form.valid " (click)="saveFormField(projectformfield)">Guardar</button>
+        <button mat-stroked-button color="accent" (click)="agregarForm()" class="btnsave"> <mat-icon>add</mat-icon> Agregar</button>
+    </div>
+    <!--
+    <br>
+    <div style="width: 100%;">
+        <button mat-stroked-button color="primary" type="submit"  class="btnsave" [disabled]="!recursosForm.form.valid " (click)="saveFormField(projectformfield)">Guardar</button>
+        <button mat-stroked-button color="warn" type="button"  class="btnsave"  (click)="cancelFormField()">Cancelar</button>
+    </div>-->
+</div>
+<!--{{projectformfield | json}}-->

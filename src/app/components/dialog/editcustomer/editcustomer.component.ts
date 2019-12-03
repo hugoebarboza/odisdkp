@@ -1,6 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, Validators  } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Subscription } from 'rxjs/Subscription';
 
 
 // MODELS
@@ -24,15 +25,20 @@ import {
 // SERVICES
 import { CountriesService, CustomerService, OrderserviceService, UserService } from 'src/app/services/service.index';
 
+// MOMENT
+import * as _moment from 'moment';
+const moment = _moment;
+
 
 @Component({
   selector: 'app-editcustomer',
   templateUrl: './editcustomer.component.html',
   styleUrls: ['./editcustomer.component.css']
 })
-export class EditcustomerComponent implements OnInit {
+export class EditcustomerComponent implements OnInit, OnDestroy {
 
   public identity: any;
+  formControl: any;
   public provincia: Provincia;
   project_type: number;
   public results: Object = [];
@@ -60,62 +66,73 @@ export class EditcustomerComponent implements OnInit {
 
   public project: string;
   project_id: number;
-  id:number;
-  cc_id:number;
-  category_id:number;
-  step = 0;  	
+  id: number;
+  cc_id: number;
+  category_id: number;
+  step = 0;
+  subscription: Subscription;
 
   constructor(
     // private _route: ActivatedRoute,
-    // private _router: Router,            
+    // private _router: Router,
     private _userService: UserService,
     private _orderService: OrderserviceService,
     private _regionService: CountriesService,
     private _customerService: CustomerService,
     public dialogRef: MatDialogRef<EditcustomerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Customer
-  	) 
-  { 
-    this.title = "Editar Cliente.";
+    ) {
+    this.title = 'Editar Cliente.';
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    //this.customer = new Customer('','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');        
+    // this.customer = new Customer('','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','');
     this.id = this.data['service_id'];
     this.category_id = this.data['category_id'];
     this.cc_id = this.data['cc_id'];
-    //this.loadData();   
+    // this.loadData();
   }
 
   ngOnInit() {
-  	//console.log(this.data);
-  	//console.log(this.cc_id);
-  	this.loadInfo(this.id);
+    this.formControl = new FormControl('', [Validators.required]);
+    this.loadInfo(this.id);
   }
 
-  formControl = new FormControl('', [Validators.required]);
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
 
   getErrorMessage() {
     return this.formControl.hasError('required') ? 'Dato Requerido' : '';
   }
 
 
-  confirmUpdate(_form){
-    //console.log(this.cc_id);
-    //console.log(this.category_id);
+  confirmUpdate(_form) {
+    if (this.data.fecha_ultima_lectura) {
+      const fecha_ultima_lectura = new FormControl(moment(this.data.fecha_ultima_lectura).format('YYYY[-]MM[-]DD'));
+      this.data.fecha_ultima_lectura = fecha_ultima_lectura.value;
+    }
+
+    if (this.data.fecha_ultima_deteccion) {
+      const fecha_ultima_deteccion = new FormControl(moment(this.data.fecha_ultima_deteccion).format('YYYY[-]MM[-]DD'));
+      this.data.fecha_ultima_deteccion = fecha_ultima_deteccion.value;
+    }
+
     this._customerService.update(this.token.token, this.data, this.category_id, this.cc_id);
     this.dialogRef.close();
   }
 
 
-  public loadData(projectid:number){
-    if(projectid > 0){                                    
-      this._customerService.getProjectCustomerDetail(this.token.token, projectid, this.cc_id).subscribe(
+  public loadData(projectid: number) {
+    if (projectid > 0) {
+      this.subscription = this._customerService.getProjectCustomerDetail(this.token.token, projectid, this.cc_id).subscribe(
       response => {
-         if(response.status == 'success'){                  
-         	this.customer = response.datos;
-         	//console.log(this.customer);
-              for (var i=0; i<this.customer.length; i++){
-                 if (this.customer){
+         if (response.status === 'success') {
+            this.customer = response.datos;
+              for (let i = 0; i < this.customer.length; i++) {
+                 if (this.customer) {
                    this.data['nombrecc'] = this.customer[i]['nombrecc'];
                    this.data['ruta'] = this.customer[i]['ruta'];
                    this.data['calle'] = this.customer[i]['calle'];
@@ -133,161 +150,163 @@ export class EditcustomerComponent implements OnInit {
                    this.data['id_sector'] = this.customer[i]['id_sector'];
                    this.data['id_zona'] = this.customer[i]['id_zona'];
                    this.data['id_mercado'] = this.customer[i]['id_mercado'];
-        				   this.data['id_region'] = this.customer[i]['id_region'];                   	
-        				   this.data['id_provincia'] = this.customer[i]['id_provincia'];
-        				   this.data['id_comuna'] = this.customer[i]['id_comuna'];
+                   this.data['id_region'] = this.customer[i]['id_region'];
+                   this.data['id_provincia'] = this.customer[i]['id_provincia'];
+                   this.data['id_comuna'] = this.customer[i]['id_comuna'];
                    this.data['observacion'] = this.customer[i]['observacion'];
 
-                   if (this.data['id_region'] > 0){
-					          this.onSelectRegion(this.data['id_region']);   
+                   this.data['llave_circuito'] = this.customer[i]['llave_circuito'];
+                   this.data['fase'] = this.customer[i]['fase'];
+                   this.data['factor'] = this.customer[i]['factor'];
+
+                   this.data['fecha_ultima_lectura'] = this.customer[i]['fecha_ultima_lectura'];
+                   this.data['fecha_ultima_deteccion'] = this.customer[i]['fecha_ultima_deteccion'];
+                   if (this.data['id_region'] > 0) {
+                    this.onSelectRegion(this.data['id_region']);
                    }
-                   if (this.data['id_provincia'] > 0){
-                   	this.onSelectProvincia(this.data['id_provincia']);   
+                   if (this.data['id_provincia'] > 0) {
+                    this.onSelectProvincia(this.data['id_provincia']);
                    }
 
                    this.data['marca_id'] = this.customer[i]['marca_id'];
-                   if (this.data['marca_id'] > 0){
-                   	this.onSelectMarca(this.data['marca_id']);   
+                   if (this.data['marca_id'] > 0) {
+                    this.onSelectMarca(this.data['marca_id']);
                    }
                    this.data['modelo_id'] = this.customer[i]['modelo_id'];
                    this.data['color_id'] = this.customer[i]['color_id'];
                    this.data['patio'] = this.customer[i]['patio'];
                    this.data['espiga'] = this.customer[i]['espiga'];
-                   this.data['posicion'] = this.customer[i]['posicion'];                   
-                   this.data['embarque_id'] = this.customer[i]['embarque_id'];                                      
+                   this.data['posicion'] = this.customer[i]['posicion'];
+                   this.data['embarque_id'] = this.customer[i]['embarque_id'];
 
 
-                   break;             
-                 }               
+                   break;
+                 }
               }
 
-         }else{
-         	if(response.status == 'error'){                  
-			//console.log(response);         		
-        	}
-	     }     
+         } else {
+          if (response.status === 'error') {
+          }
+       }
       },
-          error => { 
+          error => {
           console.log(<any>error);
-          }        
-      ); 
+          }
+      );
     }
   }
 
 
-  public loadInfo(_id:number){
-  					//GET REGIONES
-                    this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
+  public loadInfo(_id: number) {
+                    // GET REGIONES
+                    this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                     response => {
-                       if(response.status == 'success'){                  
+                       if (response.status === 'success') {
                               this.region = response.datos.region;
-                              //console.log(this.region);
-                            }else{
+                            } else {
                               this.region = null;
                             }
                      });
 
 
-                    //GET SERVICE AND CATEGORY CLIENT
-                    this._orderService.getService(this.token.token, this.id).subscribe(
+                    // GET SERVICE AND CATEGORY CLIENT
+                    this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(
                     response => {
-                      if (response.status == 'success'){         
-                        this.services = response.datos;                
+                      if (response.status === 'success') {
+                        this.services = response.datos;
                         this.category_id = this.services['projects_categories_customers']['id'];
                         this.project = this.services['project']['project_name'];
                         this.project_id = this.services['project']['id'];
                         this.project_type = response.datos.project.project_type;
-                        //console.log(this.project_type);
                         this.loadData(this.project_id);
                       }
-                    });   
-                    
+                    });
 
-                    //GET TARIFA
-                    this._customerService.getTarifa(this.token.token, this.id).subscribe(
+                    // GET TARIFA
+                    this.subscription = this._customerService.getTarifa(this.token.token, this.id).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
+                            if (response.status === 'success') {
                               this.tarifas = response.datos.tarifa;
-                              //console.log(this.tarifas);
-                            }else{
+                              // console.log(this.tarifas);
+                            } else {
                               this.tarifas = null;
                              // console.log(this.tarifa);
                             }
-                            }); 
-                    
-                    //GET CONSTANTE
-                    this._customerService.getConstante(this.token.token, this.id).subscribe(
+                            });
+
+                    // GET CONSTANTE
+                    this.subscription = this._customerService.getConstante(this.token.token, this.id).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
+                            if (response.status === 'success') {
                               this.constantes = response.datos.constante;
-                            }else{
+                            } else {
                               this.constantes = null;
                             }
                             });
-                    
-                    //GET GIRO
-                    this._customerService.getGiro(this.token.token, this.id).subscribe(
+
+                    // GET GIRO
+                    this.subscription = this._customerService.getGiro(this.token.token, this.id).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
-                              this.giros = response.datos.giro;                              
-                            }else{
+                            if (response.status === 'success') {
+                              this.giros = response.datos.giro;
+                            } else {
                               this.giros = null;
                             }
                             });
 
-                    //GET SECTOR
-                    this._customerService.getSector(this.token.token, this.id).subscribe(
+                    // GET SECTOR
+                    this.subscription = this._customerService.getSector(this.token.token, this.id).subscribe(
                     response => {
-                    if(response.status == 'success'){                  
+                    if (response.status === 'success') {
                       this.sectores = response.datos.sector;
-                    }else{
+                    } else {
                       this.sectores = null;
                     }
                     });
 
-                    //GET ZONA
-                    this._customerService.getZona(this.token.token, this.id).subscribe(
+                    // GET ZONA
+                    this.subscription = this._customerService.getZona(this.token.token, this.id).subscribe(
                     response => {
-                    if(response.status == 'success'){                  
+                    if (response.status === 'success') {
                       this.zonas = response.datos.zona;
-                    }else{
+                    } else {
                       this.zonas = null;
                     }
                     });
 
-                    //GET MERCADO
-                   this._customerService.getMercado(this.token.token, this.id).subscribe(
+                    // GET MERCADO
+                    this.subscription = this._customerService.getMercado(this.token.token, this.id).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
+                            if (response.status === 'success') {
                               this.mercados = response.datos.mercado;
-                            }else{
+                            } else {
                               this.mercados = null;
 
                             }
-                            });       
+                            });
 
-                    //GET MARCA DE VEHICULOS
-                   this._customerService.getMarca(this.token.token).subscribe(
+                    // GET MARCA DE VEHICULOS
+                    this.subscription = this._customerService.getMarca(this.token.token).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
+                            if (response.status === 'success') {
                               this.marcas = response.marca;
-                            }else{
+                            } else {
                               this.marcas = null;
 
                             }
-                            });       
+                            });
 
 
-                    //GET COLORES DE VEHICULOS
-                   this._customerService.getColor(this.token.token).subscribe(
+                    // GET COLORES DE VEHICULOS
+                    this.subscription = this._customerService.getColor(this.token.token).subscribe(
                     response => {
-                            if(response.status == 'success'){                  
+                            if (response.status === 'success') {
                               this.colors = response.color;
-                            }else{
+                            } else {
                               this.colors = null;
 
                             }
-                            });       
+                            });
 
   }
 
@@ -308,93 +327,93 @@ export class EditcustomerComponent implements OnInit {
   }
 
 
-  confirmAdd(_form){
-    //console.log(this.category_id);
-    //this._customerService.edit(this.token.token, this.customer, this.category_id);
+  confirmAdd(_form) {
+    // console.log(this.category_id);
+    // this._customerService.edit(this.token.token, this.customer, this.category_id);
     this.dialogRef.close();
   }
 
 
-  public searchCustomer(termino: string){
-     this.termino = termino;     
-     if(this.termino.length > 2){       
-       this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
+  public searchCustomer(termino: string) {
+     this.termino = termino;
+     if (this.termino.length > 2) {
+      this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
         response => {
-              if(!response){
+              if (!response) {
                 return;
               }
-              if(response.status == 'success'){
-                this.results = response.datos;                
+              if (response.status === 'success') {
+                this.results = response.datos;
               }
-              }); 
-      }else{
+              });
+      } else {
         this.results = null;
       }
    }
 
-   public onSelectRegion(regionid:number) {      
-     if(regionid > 0){
+   public onSelectRegion(regionid: number) {
+     if (regionid > 0) {
        this.resultscomunas = null;
-       this._regionService.getProvincia(this.token.token, regionid).subscribe(
+       this.subscription = this._regionService.getProvincia(this.token.token, regionid).subscribe(
         response => {
-              if(!response){
+              if (!response) {
                 return;
               }
-              if(response.status == 'success'){  
+              if (response.status === 'success') {
                 this.resultsprovincias = response.datos.provincia;
               }
-              }); 
-      }else{
+              });
+      } else {
         this.resultsprovincias = null;
       }
    }
 
-   public onSelectProvincia(provinciaid:number) {
-     if(provinciaid > 0){
-       this._regionService.getComuna(this.token.token, provinciaid).subscribe(
+   public onSelectProvincia(provinciaid: number) {
+     if (provinciaid > 0) {
+      this.subscription = this._regionService.getComuna(this.token.token, provinciaid).subscribe(
         response => {
-              if(!response){
+              if (!response) {
                 return;
               }
-              if(response.status == 'success'){  
+              if (response.status === 'success') {
                 this.resultscomunas = response.datos.comuna;
               }
-              }); 
-      }else{
+              });
+      } else {
         this.resultscomunas = null;
       }
 
    }
 
-   onSelectComuna(_comunaid:number) {
+   onSelectComuna(_comunaid: number) {
    // this.states = this._dataService.getStates().filter((item)=> item.countryid == countryid);
    }
 
-  public loadSector(){
-      this._customerService.getSector(this.token.token, this.id).subscribe(
+  public loadSector() {
+    this.subscription = this._customerService.getSector(this.token.token, this.id).subscribe(
       response => {
-              if(response.status == 'success'){                  
+              if (response.status === 'success') {
                 this.sectores = response.datos.sector;
-              }else{
+              } else {
                 this.sectores = null;
               }
               });
     }
 
-   public onSelectMarca(marcaid:number) {      
-     if(marcaid > 0){
-       this._customerService.getModelo(this.token.token, marcaid).subscribe(       
-        response => {              
-              if(!response){
+   public onSelectMarca(marcaid: number) {
+     if (marcaid > 0) {
+      this.subscription = this._customerService.getModelo(this.token.token, marcaid).subscribe(
+        response => {
+              if (!response) {
                 return;
               }
-              if(response.status == 'success'){  
+              if (response.status === 'success') {
                 this.modelos = response.datos;
-              }else{
+              } else {
                 this.modelos = null;
               }
-              }); 
-      }else{
+              });
+      } else {
         this.modelos = null;
       }
    }
