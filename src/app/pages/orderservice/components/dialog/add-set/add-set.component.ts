@@ -2,19 +2,16 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
-// MODELS
-import { Proyecto } from 'src/app/models/types';
-
 // SERVICES
 import { UserService } from 'src/app/services/service.index';
 
-@Component({
-  selector: 'app-add-service-type',
-  templateUrl: './add-service-type.component.html',
-  styleUrls: ['./add-service-type.component.css']
-})
 
-export class AddServiceTypeComponent implements OnInit {
+@Component({
+  selector: 'app-add-set',
+  templateUrl: './add-set.component.html',
+  styleUrls: ['./add-set.component.css']
+})
+export class AddSetComponent implements OnInit {
 
   id: number;
   identity: any;
@@ -22,23 +19,22 @@ export class AddServiceTypeComponent implements OnInit {
   project: any;
   project_id: number;
   project_name: string;
-  proyectos: Array<Proyecto> = [];
+  proyectos = [];
   selected = new FormControl(0);
   subtitle = 'Seleccione cualquiera de las siguientes opciones.';
-  title = 'Tipos de servicio';
+  title = 'Tipos de SET';
   totalRegistros = 0;
   token: any;
 
   constructor(
     public _userService: UserService,
-    public dialogRef: MatDialogRef<AddServiceTypeComponent>,
+    public dialogRef: MatDialogRef<AddSetComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
-   }
-
+  }
 
   ngOnInit() {
     if (this.data.project_id > 0) {

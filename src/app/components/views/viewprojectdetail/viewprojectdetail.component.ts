@@ -16,9 +16,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 
 
 // DIALOG
-import { EditServiceComponent } from '../../../components/shared/shared.index';
-import { ShowcustomerComponent } from '../../../components/dialog/showcustomer/showcustomer.component';
-import { StatusComponent } from '../../../pages/orderservice/components/dialog/status/status.component';
+import { AddAlimentadorComponent } from 'src/app/pages/orderservice/components/dialog/add-alimentador/add-alimentador.component';
 import { AddColorComponent } from '../../../pages/orderservice/components/dialog/add-color/add-color.component';
 import { AddConstanteComponent } from '../../../pages/orderservice/components/dialog/add-constante/add-constante.component';
 import { AddGiroComponent } from '../../../pages/orderservice/components/dialog/add-giro/add-giro.component';
@@ -26,11 +24,16 @@ import { AddMarcaComponent } from '../../../pages/orderservice/components/dialog
 import { AddMercadoComponent } from '../../../pages/orderservice/components/dialog/add-mercado/add-mercado.component';
 import { AddModeloComponent } from '../../../pages/orderservice/components/dialog/add-modelo/add-modelo.component';
 import { AddSectorComponent } from '../../../pages/orderservice/components/dialog/add-sector/add-sector.component';
+import { AddSedComponent } from 'src/app/pages/orderservice/components/dialog/add-sed/add-sed.component';
+import { AddSetComponent } from 'src/app/pages/orderservice/components/dialog/add-set/add-set.component';
 import { AddServiceTypeComponent } from '../../../pages/orderservice/components/dialog/add-service-type/add-service-type.component';
 import { AddServiceTypeValueComponent } from '../../../pages/orderservice/components/dialog/add-service-type-value/add-service-type-value.component';
 import { AddServiceValueComponent } from '../../../pages/orderservice/components/dialog/add-service-value/add-service-value.component';
 import { AddTarifaComponent } from '../../../pages/orderservice/components/dialog/add-tarifa/add-tarifa.component';
 import { AddZonaComponent } from '../../../pages/orderservice/components/dialog/add-zona/add-zona.component';
+import { EditServiceComponent } from '../../../components/shared/shared.index';
+import { ShowcustomerComponent } from '../../../components/dialog/showcustomer/showcustomer.component';
+import { StatusComponent } from '../../../pages/orderservice/components/dialog/status/status.component';
 
 
 // MATERIAL
@@ -60,7 +63,6 @@ import { CargaImagenesService, CdfService, CountriesService, OrderserviceService
 // UTILITY
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
-
 export interface Item { id: any; comment: string; created: any; identity: string; }
 
 export interface Users {
@@ -81,18 +83,18 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   @Output() Users: EventEmitter<any>;
 
   @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
-  
+
   archivos: FileItem[] = [];
-  public cc_id:number;
-  public category_id:number;
-  CARPETA_ARCHIVOS:string = '';
+  public cc_id: number;
+  public category_id: number;
+  CARPETA_ARCHIVOS = '';
   public comunas: Comuna[] = [];
   public country_id: number;
   comentarios$: Observable<any[]>;
   private comentariosCollection: AngularFirestoreCollection<any>;
   public created: FormControl;
   public customer: Customer[] = [];
-  public descriptionidUx: string = ''
+  public descriptionidUx = '';
   formComentar: FormGroup;
   public idUx: any;
   public identity: any;
@@ -110,10 +112,10 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public projectservicetype: ProjectServiceType[] = [];
   public provincias: Provincia[] = [];
   public projectContent: Item[];
-  public regiones: Region[] = [];  
+  public regiones: Region[] = [];
   public row: any = {expand: false};
-  public route: string = '';
-  role:number = 0;
+  public route = '';
+  role = 0;
   public service_id: number;
   public services: Service;
   public service_detail: Service;
@@ -122,12 +124,12 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public subscription: Subscription;
   tipoServicio = [];
   private token: any;
-  public toggleContent: boolean = false;
-  public toggleContentMain: boolean = false;
+  public toggleContent = false;
+  public toggleContentMain = false;
   public users: User[] = [];
   public users_ito: User[] = [];
   userFirebase: UserFirebase;
-  
+
 
   /*
   editorConfig: AngularEditorConfig = {
@@ -153,20 +155,20 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
         tag: "h1",
       },
     ]
-  };*/  
+  };*/
 
 
   models: any[] = [
-    {id:0, name:'General', description:'Información General del Proyecto', expand: false},
-    {id:1, name:'Usuarios', description:'Usuarios de Proyecto', expand: false},
-    {id:5, name:'Administrativo', description:'Administrativo de Proyecto', expand: false},
-    {id:3, name:'Fechas', description:'Fechas de Proyecto', expand: false},
-    {id:4, name:'Detalles', description:'Descripción de Proyecto', expand: false},
-    {id:2, name:'Dirección', description:'Ubicación de Proyecto', expand: false}  
+    {id: 0, name: 'General', description: 'Información General del Proyecto', expand: false},
+    {id: 1, name: 'Usuarios', description: 'Usuarios de Proyecto', expand: false},
+    {id: 5, name: 'Administrativo', description: 'Administrativo de Proyecto', expand: false},
+    {id: 3, name: 'Fechas', description: 'Fechas de Proyecto', expand: false},
+    {id: 4, name: 'Detalles', description: 'Descripción de Proyecto', expand: false},
+    {id: 2, name: 'Dirección', description: 'Ubicación de Proyecto', expand: false}
   ];
-  
 
-  @Input() id : number;
+
+  @Input() id: number;
 
   constructor(
     private _afs: AngularFirestore,
@@ -181,33 +183,33 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
     public snackBar: MatSnackBar,
     private toasterService: ToastrService,
     public zipService: ZipService,
-  ) { 
+  ) {
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.TiposServicio = new EventEmitter();
     this.Users = new EventEmitter();
-    this.role = 5; //USUARIOS INSPECTORES
-    
+    this.role = 5; // USUARIOS INSPECTORES
+
 
     this.firebaseAuth.authState.subscribe(
       (auth) => {
-        if(auth){
+        if (auth) {
           this.userFirebase = auth;
-          //console.log(this.userFirebase);
+          // console.log(this.userFirebase);
         }
     });
 
   }
 
   ngOnInit() {
-  
+
   }
 
   ngOnDestroy() {
   }
 
-  
+
   ngOnChanges(_changes: SimpleChanges) {
 
     this.newpath = 'allfiles/projects/';
@@ -220,19 +222,19 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
       'comentario': ''
     });
 
-    if(this.token.token != null && this.id > 0){
+    if (this.token.token != null && this.id > 0) {
       this.isRateLimitReached = false;
       this.service_id = this.id;
        this.loadInfo();
        this.getTipoServicio(this.id);
-    }else{
-       this.isRateLimitReached = true;        
+    } else {
+       this.isRateLimitReached = true;
     }
 
 
   }
 
-  collectionJoinUser(document, path:string): Observable<any> {
+  collectionJoinUser(document, path: string): Observable<any> {
     return this.comentarios$ = document.pipe(
       leftJoin(this._afs, 'create_to', 'users', 0, '', '', 'usercomment'),
       leftJoin(this._afs, 'id', path + 'files', 1, 'id', '==', 'adjuntos')
@@ -240,35 +242,35 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   }
 
 
-	enableDiv(row:any){
+  enableDiv(row: any) {
     this.row.expand = !this.row.expand;
     this.models[row].expand = !this.models[row].expand;
  }
 
- getRouteFirebase(id:number){
-    
-  if (this.id > 0 && id > 0){
-    this.path = 'comments/'+id+'/'+this.service_id;
+ getRouteFirebase(id: number) {
+
+  if (this.id > 0 && id > 0) {
+    this.path = 'comments/' + id + '/' + this.service_id;
     this.route = this.path;
 
-    this.itemsCollection = this._afs.collection<Item>(this.path, ref => ref.orderBy('created','desc'));      
+    this.itemsCollection = this._afs.collection<Item>(this.path, ref => ref.orderBy('created', 'desc'));
     this.items = this.itemsCollection.valueChanges();
-    
-  }        
+
+  }
 }
 
-getTipoServicio(id:number) {
+getTipoServicio(id: number) {
   this.tipoServicio = [];
   this.zipService.getTipoServicio(id, this.token.token).then(
     (res: any) => {
       res.subscribe(
         (some: any) => {
           this.tipoServicio = some['datos'];
-          if(this.tipoServicio.length > 0){
+          if (this.tipoServicio.length > 0) {
             this.TiposServicio.emit(this.tipoServicio);
           }
-          //console.log(this.tipoServicio);
-          //console.log(this.tipoServicio.length);
+          // console.log(this.tipoServicio);
+          // console.log(this.tipoServicio.length);
         },
         (error: any) => {
           console.log(<any>error);
@@ -279,8 +281,8 @@ getTipoServicio(id:number) {
 }
 
 /*
-addComment(value:any) { 
-  
+addComment(value:any) {
+
   //value = `${value}`;
   //value = String(value).replace(/(\n)/gm,' ');
   value = value.replace(/[\s\n]/g,' ');
@@ -294,7 +296,7 @@ addComment(value:any) {
       comment: value,
       created: this.created.value,
       identity: this.identity.name + ' ' + this.identity.surname
-    }      
+    }
   );
 
 
@@ -309,11 +311,11 @@ addComment(value:any) {
   }
   if(this.toggleContentMain){
     this.toggleContentMain=false;
-  }   
+  }
 }*/
 
-loadcomentario(path:string){
-    //SELECT DE COMMENTS FIREBASE
+loadcomentario(path: string) {
+    // SELECT DE COMMENTS FIREBASE
     this.comentariosCollection = this._afs.collection(path + 'comments', ref => ref.orderBy('create_at', 'desc'));
     this.comentariosCollection.snapshotChanges().pipe(
       map(actions => {
@@ -324,11 +326,11 @@ loadcomentario(path:string){
         });
       })
     ).subscribe( (collection: any[]) => {
-        const count = Object.keys(collection).length;        
+        const count = Object.keys(collection).length;
         if (count === 0) {
           this.comentarios$ = null;
         } else {
-            this.collectionJoinUser(of(collection), path);          
+            this.collectionJoinUser(of(collection), path);
         }
       }
     );
@@ -339,7 +341,7 @@ loadcomentario(path:string){
 
 addComentario() {
 
-  if(!this.newpath){
+  if (!this.newpath) {
     return;
   }
 
@@ -360,7 +362,7 @@ addComentario() {
   })
   .then(function(docRef) {
 
-    //const comment = that.formComentar.value.comentario;
+    // const comment = that.formComentar.value.comentario;
     if (that.archivos.length > 0) {
       that.toasterService.success('Solicitud actualizada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
       const storage = that.newpath + 'files';
@@ -368,7 +370,7 @@ addComentario() {
     }
 
     that.formComentar.reset();
-    //that.toggleContent = false;
+    // that.toggleContent = false;
 
   })
   .catch(function(error) {
@@ -378,19 +380,19 @@ addComentario() {
 
 
 
-sendCdf(data, message){
-  if(!data){
+sendCdf(data, message) {
+  if (!data) {
     return;
   }
 
-  const body = 'Registro de trabajo en Proyecto: '+this.project+', Servicio: '+this.servicename+', con el siguiente Comentario: ' + message;
-  
-  if(this.destinatario.length > 0 && this.userFirebase.uid){
+  const body = 'Registro de trabajo en Proyecto: ' + this.project + ', Servicio: ' + this.servicename + ', con el siguiente Comentario: ' + message;
+
+  if (this.destinatario.length > 0 && this.userFirebase.uid) {
     for (let d of data) {
-      
+
       const notification = {
         userId: this.userFirebase.uid,
-        userIdTo: d.id,			
+        userIdTo: d.id,
         title: 'Registro de Trabajo',
         message: body,
         create_at: this.created.value,
@@ -398,23 +400,23 @@ sendCdf(data, message){
         idUx: this.idUx,
         descriptionidUx: 'collection',
         routeidUx: `${this.route}`
-      };  
+      };
 
-      
+
       this._cdf.fcmsend(this.token.token, notification).subscribe(
-        response => {        
-          if(!response){
-          return false;        
+        response => {
+          if (!response) {
+          return false;
           }
-          if(response.status == 200){ 
-            //console.log(response);
+          if (response.status == 200) {
+            // console.log(response);
           }
         },
           error => {
           console.log(<any>error);
-          }   
-        );			
-          
+          }
+        );
+
 
 
         const msg = {
@@ -425,29 +427,25 @@ sendCdf(data, message){
         };
 
         this._cdf.httpEmail(this.token.token, msg).subscribe(
-          response => {        
-            if(!response){
-            return false;        
+          response => {
+            if (!response) {
+            return false;
             }
-            if(response.status == 200){ 
-              //console.log(response);
+            if (response.status == 200) {
+              // console.log(response);
             }
           },
             error => {
             console.log(<any>error);
-            }   
-          );			
-          
-
-      
+            }
+          );
     }
-  
   }
 
 }
 
 deleteCommentDatabase(item: any) {
-  
+
   Swal.fire({
     title: '¿Esta seguro?',
     text: 'Esta seguro de borrar registro de trabajo ' + item.comment,
@@ -472,123 +470,120 @@ deleteCommentDatabase(item: any) {
   });
 }
 
-  public loadInfo(){
+  public loadInfo() {
     this.isLoadingResults = true;
     this._dataService.getService(this.token.token, this.id).subscribe(
-                response => 
-                      {
-                        if(response.status == 'success'){                          
+                response => {
+                        if (response.status === 'success') {
                           this.services = response.datos;
                           this.project = response.datos.project.project_name;
                           this.project_type = response.datos.project.project_type;
                           this.project_id = Number (response.datos.project.id);
                           this.country_id = Number (response.datos.project.country_id);
                           this.servicename = String (response.datos.service_name);
-                          if(this.project_id >0){
+                          if (this.project_id > 0) {
                             this.getRouteFirebase(this.project_id);
                             this.newpath = this.newpath + this.project_id + '/' + this.id + '/';
-                            //console.log(this.newpath);
+                            // console.log(this.newpath);
                             this.loadcomentario(this.newpath);
                           }
-                          
 
-                          if(this.services['servicedetail'][0]){
+                            if (this.services['servicedetail'][0]) {
                             this.service_detail = response.datos.servicedetail;
                             this.service_data = response.datos.servicedetail[0];
-                            if(this.service_data.region_id > 0){
+                            if (this.service_data.region_id > 0) {
                               this.loadRegion();
                               this.onSelectRegion(this.service_data.region_id);
                             }
-                            if(this.service_data.provincia_id > 0){
+                            if (this.service_data.provincia_id > 0) {
                               this.onSelectProvincia(this.service_data.provincia_id);
                             }
-                            if(this.service_data.category_id > 0){
+                            if (this.service_data.category_id > 0) {
                               this.category_id = this.service_data.category_id;
                             }
 
-                          }else{
+                          } else {
                             this.service_detail = response.datos.servicedetail;
                             this.service_data = response.datos.servicedetail[0];
                           }
                           this.customer = response.customer;
-                          if(this.customer && this.customer.length > 0){
+                          if (this.customer && this.customer.length > 0) {
                             this.cc_id = this.customer[0]['cc_id'];
                           }
-                          if(this.project_id >0){
+                          if (this.project_id > 0) {
                           this.loadProjectServiceType(this.project_id);
                           this.loadProjectServiceCategorie(this.project_id);
                           this.loadUserProject(this.project_id);
-                          }                
+                          }
                           this.isLoadingResults = false;
-                        }else{
+                        } else {
                         this.country_id = 0;
                         this.isLoadingResults = false;
                         }
                     },
                     (error) => {
                       this.isLoadingResults = false;
-                      //localStorage.removeItem('identity');
-                      //localStorage.removeItem('token');
-                      //localStorage.removeItem('proyectos');
-                      //localStorage.removeItem('expires_at');
-                      //this._router.navigate(["/login"]);          
+                      // localStorage.removeItem('identity');
+                      // localStorage.removeItem('token');
+                      // localStorage.removeItem('proyectos');
+                      // localStorage.removeItem('expires_at');
+                      // this._router.navigate(["/login"]);
                       console.log(<any>error);
-                    }  
-                    );    
-    }   
+                    }
+                    );
+    }
 
-    loadProjectServiceCategorie(id:number){
-      this.projectservicecategorie = null;    
+    loadProjectServiceCategorie(id: number) {
+      this.projectservicecategorie = null;
       this.subscription = this._project.getProjectServiceCategorie(this.token.token, id).subscribe(
       response => {
-                if(!response){
+                if (!response) {
                   return;
                 }
-                if(response.status == 'success'){                  
+                if (response.status === 'success') {
                   this.projectservicecategorie = response.datos;
-                  //console.log(this.projectservicecategorie);
+                  // console.log(this.projectservicecategorie);
                 }
                 });
     }
 
-    
-    loadProjectServiceType(id:number){
-      this.projectservicetype = null;    
+
+    loadProjectServiceType(id: number) {
+      this.projectservicetype = null;
       this.subscription = this._project.getProjectServiceType(this.token.token, id).subscribe(
       response => {
-                if(!response){
+                if (!response) {
                   return;
                 }
-                if(response.status == 'success'){                  
+                if (response.status === 'success') {
                   this.projectservicetype = response.datos;
-                  //console.log(this.projectservicetype.length);
-                  //console.log(this.projectservicetype);
+                  // console.log(this.projectservicetype.length);
+                  // console.log(this.projectservicetype);
                 }
-                });        
-  
+                });
     }
 
-    loadUserProject(id:number){
+    loadUserProject(id: number) {
       this.subscription = this._project.getUserProject(this.token.token, id, 8).subscribe(
       response => {
-                if(!response){
+                if (!response) {
                   return;
                 }
-                if(response.status == 'success'){    
+                if (response.status === 'success') {
                   this.users = response.datos;
-                  if(this.users.length > 0){
+                  if (this.users.length > 0) {
                     this.Users.emit(this.users);
                   }
-                  //console.log(this.users);
+                  // console.log(this.users);
                 }
-                });        
-  
+                });
+
       this.subscription = this._project.getUserProject(this.token.token, id, 8).subscribe(
       response => {
-                if(!response){
+                if (!response) {
                   return;
                 }
-                if(response.status == 'success'){    
+                if (response.status === 'success') {
                   this.users_ito = response.datos;
                 }
                 });
@@ -674,6 +669,29 @@ deleteCommentDatabase(item: any) {
     }
 
 
+    alimentador(id: number) {
+      const dialogRef = this.dialog.open(AddAlimentadorComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          // const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+
     constante(id: number) {
       const dialogRef = this.dialog.open(AddConstanteComponent, {
         width: '777px',
@@ -741,6 +759,50 @@ deleteCommentDatabase(item: any) {
 
     sector(id: number) {
       const dialogRef = this.dialog.open(AddSectorComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          // const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    sed(id: number) {
+      const dialogRef = this.dialog.open(AddSedComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          // const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
+
+
+    set(id: number) {
+      const dialogRef = this.dialog.open(AddSetComponent, {
         width: '777px',
         disableClose: true,
         data: {

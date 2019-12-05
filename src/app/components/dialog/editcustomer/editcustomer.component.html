@@ -313,6 +313,41 @@
       </mat-expansion-panel-header>
 
 
+      <div class="form"  class="margin">
+          <mat-form-field appearance="legacy">
+          <mat-select class="form-control" placeholder="SET" [(ngModel)]="data.id_set" name="id_set"  (selectionChange)="onSelectSet(data.id_set)">
+            <mat-option *ngIf='data.id_set == 0' [value]=0>No informa</mat-option>
+            <mat-option *ngFor="let s of set" [value]="s.id">
+                {{s.descripcion}}
+            </mat-option>
+          </mat-select>      
+          </mat-form-field>
+      
+      
+          <mat-form-field appearance="legacy" class="margin">
+           <mat-select class="form-control" placeholder="Alimentador" [(ngModel)]="data.id_alimentador" name="id_alimentador"  (selectionChange)="onSelectAlimentador(data.id_alimentador)">
+            <mat-option *ngIf='data.id_alimentador == 0'  [value]=0>No informa</mat-option>
+            <mat-option *ngFor="let a of alimentador" [value]="a.id">
+                {{a.descripcion}}
+            </mat-option>          
+          </mat-select>      
+          </mat-form-field>
+      
+      
+      
+          <mat-form-field appearance="legacy" class="margin">
+           <mat-select class="form-control" placeholder="SED" [(ngModel)]="data.id_sed" name="id_sed"  >
+            <mat-option *ngIf='data.id_sed == 0' [value]=0>No informa</mat-option>
+            <mat-option *ngFor="let se of sed" [value]="se.id">
+                {{se.descripcion}}
+            </mat-option>          
+          </mat-select>      
+          </mat-form-field>
+          
+      </div>
+      
+
+
       <div class="form">
           <mat-form-field appearance="legacy" class="margin">
             <input matInput type="text" placeholder="Llave por Circuito" name="llave_circuito" [(ngModel)]="data.llave_circuito" class="form-control" >
@@ -324,7 +359,12 @@
     
    
           <mat-form-field appearance="legacy" class="margin">
-            <input matInput type="text" placeholder="Clave última lectura" name="clave_lectura" [(ngModel)]="data.clave_lectura" class="form-control" >
+              <mat-select class="form-control" placeholder="Clave Lectura" [(ngModel)]="data.id_clavelectura" name="id_clavelectura" >
+                <mat-option *ngIf='data.id_clavelectura == 0' [value]=0>No informa</mat-option>
+                <mat-option *ngFor="let clave of clavelectura" [value]="clave.id">
+                  {{clave.descripcion}}
+                </mat-option>
+              </mat-select>          
           </mat-form-field>
     
           <mat-form-field appearance="legacy" class="margin">

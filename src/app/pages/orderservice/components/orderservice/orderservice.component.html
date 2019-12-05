@@ -94,17 +94,36 @@
   
               <!-- /#page-content -->
               <div  style="width: 100%;" *ngIf="selected.value==1 && table != null">
-                <mat-tab-group mat-align-tabs="center">
-                  <mat-tab label="Carga Masiva"> 
-                    <app-excel  [id]="id" [table]="table" *ngIf="table == 'address' "></app-excel>
-                    <app-excel-vehiculo  [id]="id" [table]="table" *ngIf="table == 'vehiculos'"></app-excel-vehiculo> 
-                  </mat-tab>
-                  <mat-tab label="Carga de Inspecciones"> 
-                    <app-makeinspection  [id]="id"></app-makeinspection> 
-                  </mat-tab>
-                </mat-tab-group>  
-              </div>
-  
+                  <mat-tab-group mat-align-tabs="center"
+                  backgroundColor="primary" 
+                  [selectedIndex]="selectedCarga.value"
+                  (selectedIndexChange)="selectedCarga.setValue($event)"
+                  animationDuration="0ms"
+                  >
+                    <mat-tab label="Carga Masiva"> 
+                      <div *ngIf="selectedCarga.value==0">
+                          <app-excel  [id]="id" [table]="table" *ngIf="table == 'address' "></app-excel>
+                          <app-excel-vehiculo  [id]="id" [table]="table" *ngIf="table == 'vehiculos'"></app-excel-vehiculo> 
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Carga de Inspecciones">
+                      <div *ngIf="selectedCarga.value==1">
+                        <app-makeinspection  [id]="id"></app-makeinspection>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Carga por clientes">
+                      <div *ngIf="selectedCarga.value==2">
+                        <app-client-order  [id]="id"></app-client-order>
+                      </div>
+                    </mat-tab>
+  <!--
+                    <mat-tab label="Carga por datos del cliente">
+                      <div *ngIf="selectedCarga.value==3">
+                        <app-table-order  [id]="id"></app-table-order>
+                      </div>
+                    </mat-tab>-->
+                  </mat-tab-group>  
+                </div>  
               <!-- /#end page-content -->
             </mat-tab>
   

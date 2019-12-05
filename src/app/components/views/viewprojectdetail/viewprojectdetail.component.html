@@ -54,6 +54,11 @@
 
                 <mat-menu #menuviewselect="matMenu" [overlapTrigger]="false">
 
+                        <button mat-menu-item (click)="alimentador(id)">
+                          <span >Alimentador</span>
+                        </button>
+
+
                         <button mat-menu-item (click)="constante(id)">
                             <span >Constante</span>
                         </button>
@@ -74,6 +79,16 @@
                         <button mat-menu-item (click)="sector(id)">
                             <span >Sector</span>
                         </button>
+
+
+                        <button mat-menu-item (click)="sed(id)">
+                          <span >SED</span>
+                        </button>
+
+                        <button mat-menu-item (click)="set(id)">
+                          <span >SET</span>
+                        </button>
+
 
                         <button mat-menu-item (click)="tarifa(id)">
                             <span >Tarifa</span>

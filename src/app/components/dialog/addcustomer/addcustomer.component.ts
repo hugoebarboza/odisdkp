@@ -37,33 +37,8 @@ import { CountriesService, CustomerService, OrderserviceService, UserService } f
 
 export class AddcustomerComponent implements OnInit, OnDestroy {
 
-  constructor(
-    private _userService: UserService,
-    private _orderService: OrderserviceService,
-    private _regionService: CountriesService,
-    private _customerService: CustomerService,
-    public dialogRef: MatDialogRef<AddcustomerComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Customer
-  ) {
-    this.title = 'Agregar Cliente.';
-    this.identity = this._userService.getIdentity();
-    this.token = this._userService.getToken();
-    this.customer = new Customer('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '');
-    this.id = this.data['service_id'];
-    this.en = {
-      firstDayOfWeek: 0,
-      dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
-      dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-      dayNamesMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
-      // tslint:disable-next-line:max-line-length
-      monthNames: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
-      monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
-      today: 'Hoy',
-      clear: 'Borrar'
-    };
-
-  }
   public title: string;
+  clavelectura = [];
   public identity: any;
   public token: any;
   public customer: Customer;
@@ -76,6 +51,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
   public provincia: Provincia;
   public comuna: Comuna;
 
+  proyectos: any;
   public tarifas: Tarifa;
   public constantes: Constante;
   public giros: Giro;
@@ -89,7 +65,12 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
 
   project_type: number;
   public project: string;
+  proyecto: any;
   project_id: number;
+
+  set = [];
+  alimentador = [];
+  sed = [];
 
   day = new Date().getDate();
   month = new Date().getMonth();
@@ -107,8 +88,45 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
 
   formControl = new FormControl('', [Validators.required]);
 
+  constructor(
+    private _userService: UserService,
+    private _orderService: OrderserviceService,
+    private _regionService: CountriesService,
+    private _customerService: CustomerService,
+    public dialogRef: MatDialogRef<AddcustomerComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: Customer
+  ) {
+    this.proyectos = this._userService.getProyectos();
+    this.title = 'Agregar Cliente.';
+    this.identity = this._userService.getIdentity();
+    this.token = this._userService.getToken();
+    this.customer = new Customer('', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', 0, 0, 0, '', '', 0, '', '', '', '', '', '', '');
+    this.id = this.data['service_id'];
+    this.en = {
+      firstDayOfWeek: 0,
+      dayNames: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+      dayNamesShort: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+      dayNamesMin: ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'],
+      // tslint:disable-next-line:max-line-length
+      monthNames: [ 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December' ],
+      monthNamesShort: [ 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec' ],
+      today: 'Hoy',
+      clear: 'Borrar'
+    };
+  }
+
+
+
   ngOnInit() {
-    this.loadInfo();
+    if (this.id && this.id > 0) {
+      this.proyecto = this.filterProjectByService(this.id);
+      // console.log(this.proyecto);
+    }
+
+    if (this.proyecto && this.proyecto.id > 0) {
+      this.loadInfo(this.proyecto.id);
+    }
+
   }
 
   getErrorMessage() {
@@ -127,8 +145,23 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
   this.customer.cc_number = client;
   }
 
+  filterProjectByService(id: number) {
+    for (let i = 0; i < this.proyectos.length; i += 1) {
+      const result = this.proyectos[i];
+      if (result && result.service) {
+        for (let y = 0; y < result.service.length; y += 1) {
+          const response = result.service[y];
+          if (response && response.id === id) {
+            return result;
+          }
+        }
+      }
+    }
+  }
 
-  public loadInfo() {
+
+
+  public loadInfo(id: number) {
                     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                     response => {
                        if (response.status === 'success') {
@@ -149,6 +182,29 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                         this.project_type = response.datos.project.project_type;
                       }
                     });
+
+                    // GET CLAVE LECTURA
+                    this.subscription = this._customerService.getProjectClaveLectura(this.token.token, id).subscribe(
+                      response => {
+                              if (response.status === 'success') {
+                                this.clavelectura = response.datos.clavelectura;
+                              } else {
+                                this.clavelectura = [];
+                               // console.log(this.tarifa);
+                              }
+                            });
+
+
+                    // GET SET
+                    this.subscription = this._customerService.getProjectSet(this.token.token, id).subscribe(
+                      response => {
+                              if (response.status === 'success') {
+                                this.set = response.datos.set;
+                              } else {
+                                this.set = [];
+                               // console.log(this.tarifa);
+                              }
+                            });
 
 
                     // GET TARIFA
@@ -329,6 +385,43 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
    onSelectComuna(_event: any) {
    // this.states = this._dataService.getStates().filter((item)=> item.countryid == countryid);
    }
+
+
+   onSelectSet(id: number) {
+    if (id > 0) {
+      this.alimentador = [];
+      this.subscription = this._customerService.getSetAlimentador(this.token.token, id).subscribe(
+       response => {
+             if (!response) {
+               return;
+             }
+             if (response.status === 'success') {
+               this.alimentador = response.datos.alimentador;
+             }
+             });
+     } else {
+       this.alimentador = [];
+     }
+  }
+
+
+  onSelectAlimentador(id: number) {
+    if (id > 0) {
+      this.sed = [];
+      this.subscription = this._customerService.getAlimentadorSed(this.token.token, id).subscribe(
+       response => {
+             if (!response) {
+               return;
+             }
+             if (response.status === 'success') {
+               this.sed = response.datos.sed;
+             }
+             });
+     } else {
+       this.sed = [];
+     }
+  }
+
 
   public loadSector() {
       this.subscription = this._customerService.getSector(this.token.token, this.id).subscribe(

@@ -228,6 +228,43 @@
                         <td mat-cell *matCellDef="let element"> {{element.observation}} </td>
                     </ng-container>
 
+                    <ng-container matColumnDef="set">
+                      <th mat-header-cell *matHeaderCellDef> Set </th>
+                      <td mat-cell *matCellDef="let element"> {{element.set}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="alimentador">
+                      <th mat-header-cell *matHeaderCellDef> Alimentador </th>
+                      <td mat-cell *matCellDef="let element"> {{element.alimentador}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="sed">
+                      <th mat-header-cell *matHeaderCellDef> Sed </th>
+                      <td mat-cell *matCellDef="let element"> {{element.sed}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="clave_lectura">
+                      <th mat-header-cell *matHeaderCellDef> Clave de lecturan </th>
+                      <td mat-cell *matCellDef="let element"> {{element.clave_lectura}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="llave_circuito">
+                      <th mat-header-cell *matHeaderCellDef> Llave de circuito </th>
+                      <td mat-cell *matCellDef="let element"> {{element.llave_circuito}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fase">
+                      <th mat-header-cell *matHeaderCellDef> Fase </th>
+                      <td mat-cell *matCellDef="let element"> {{element.fase}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="factor">
+                      <th mat-header-cell *matHeaderCellDef> Factor </th>
+                      <td mat-cell *matCellDef="let element"> {{element.factor}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fecha_ultima_lectura">
+                      <th mat-header-cell *matHeaderCellDef> Fecha ultima lectura </th>
+                      <td mat-cell *matCellDef="let element"> {{element.fecha_ultima_lectura}} </td>
+                    </ng-container>
+                    <ng-container matColumnDef="fecha_ultima_deteccion">
+                      <th mat-header-cell *matHeaderCellDef> Fecha ultima detección </th>
+                      <td mat-cell *matCellDef="let element"> {{element.fecha_ultima_deteccion}} </td>
+                    </ng-container>
+
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="estatus" stickyEnd>
                         <th mat-header-cell *matHeaderCellDef> Estatus </th>
@@ -453,6 +490,43 @@
                   <ng-container matColumnDef="observation">
                       <th mat-header-cell *matHeaderCellDef> Observación de orden </th>
                       <td mat-cell *matCellDef="let element"> {{element.observation}} </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="set">
+                    <th mat-header-cell *matHeaderCellDef> Set </th>
+                    <td mat-cell *matCellDef="let element"> {{element.set}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="alimentador">
+                    <th mat-header-cell *matHeaderCellDef> Alimentador </th>
+                    <td mat-cell *matCellDef="let element"> {{element.alimentador}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="sed">
+                    <th mat-header-cell *matHeaderCellDef> Sed </th>
+                    <td mat-cell *matCellDef="let element"> {{element.sed}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="clave_lectura">
+                    <th mat-header-cell *matHeaderCellDef> Clave de lecturan </th>
+                    <td mat-cell *matCellDef="let element"> {{element.clave_lectura}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="llave_circuito">
+                    <th mat-header-cell *matHeaderCellDef> Llave de circuito </th>
+                    <td mat-cell *matCellDef="let element"> {{element.llave_circuito}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="fase">
+                    <th mat-header-cell *matHeaderCellDef> Fase </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fase}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="factor">
+                    <th mat-header-cell *matHeaderCellDef> Factor </th>
+                    <td mat-cell *matCellDef="let element"> {{element.factor}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="fecha_ultima_lectura">
+                    <th mat-header-cell *matHeaderCellDef> Fecha ultima lectura </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fecha_ultima_lectura}} </td>
+                  </ng-container>
+                  <ng-container matColumnDef="fecha_ultima_deteccion">
+                    <th mat-header-cell *matHeaderCellDef> Fecha ultima detección </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fecha_ultima_deteccion}} </td>
                   </ng-container>
 
                   <!-- Symbol Column -->
@@ -684,6 +758,44 @@
                     <th mat-header-cell *matHeaderCellDef> Observación de orden </th>
                     <td mat-cell *matCellDef="let element"> {{element.observation}} </td>
                 </ng-container>
+
+                <ng-container matColumnDef="set">
+                  <th mat-header-cell *matHeaderCellDef> Set </th>
+                  <td mat-cell *matCellDef="let element"> {{element.set}} </td>
+                </ng-container>
+                <ng-container matColumnDef="alimentador">
+                  <th mat-header-cell *matHeaderCellDef> Alimentador </th>
+                  <td mat-cell *matCellDef="let element"> {{element.alimentador}} </td>
+                </ng-container>
+                <ng-container matColumnDef="sed">
+                  <th mat-header-cell *matHeaderCellDef> Sed </th>
+                  <td mat-cell *matCellDef="let element"> {{element.sed}} </td>
+                </ng-container>
+                <ng-container matColumnDef="clave_lectura">
+                  <th mat-header-cell *matHeaderCellDef> Clave de lecturan </th>
+                  <td mat-cell *matCellDef="let element"> {{element.clave_lectura}} </td>
+                </ng-container>
+                <ng-container matColumnDef="llave_circuito">
+                  <th mat-header-cell *matHeaderCellDef> Llave de circuito </th>
+                  <td mat-cell *matCellDef="let element"> {{element.llave_circuito}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fase">
+                  <th mat-header-cell *matHeaderCellDef> Fase </th>
+                  <td mat-cell *matCellDef="let element"> {{element.fase}} </td>
+                </ng-container>
+                <ng-container matColumnDef="factor">
+                  <th mat-header-cell *matHeaderCellDef> Factor </th>
+                  <td mat-cell *matCellDef="let element"> {{element.factor}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fecha_ultima_lectura">
+                  <th mat-header-cell *matHeaderCellDef> Fecha ultima lectura </th>
+                  <td mat-cell *matCellDef="let element"> {{element.fecha_ultima_lectura}} </td>
+                </ng-container>
+                <ng-container matColumnDef="fecha_ultima_deteccion">
+                  <th mat-header-cell *matHeaderCellDef> Fecha ultima detección </th>
+                  <td mat-cell *matCellDef="let element"> {{element.fecha_ultima_deteccion}} </td>
+                </ng-container>
+  
 
                 <!-- Symbol Column -->
                 <ng-container matColumnDef="estatus" stickyEnd>

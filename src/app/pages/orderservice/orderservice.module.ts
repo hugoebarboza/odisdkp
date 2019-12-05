@@ -23,6 +23,7 @@ import { ViewprojectorderComponent } from '../../components/views/viewprojectord
 import { ViewModule } from '../../components/views/view.module';
 
 // DIALOG
+import { AddAlimentadorComponent } from './components/dialog/add-alimentador/add-alimentador.component';
 import { AddComponent } from '../../components/dialog/add/add.component';
 import { AddcustomerComponent } from '../../components/dialog/addcustomer/addcustomer.component';
 import { AddConstanteComponent } from './components/dialog/add-constante/add-constante.component';
@@ -37,8 +38,12 @@ import { AddSectorComponent } from './components/dialog/add-sector/add-sector.co
 import { AddServiceTypeComponent } from './components/dialog/add-service-type/add-service-type.component';
 import { AddServiceValueComponent } from './components/dialog/add-service-value/add-service-value.component';
 import { AddServiceTypeValueComponent } from './components/dialog/add-service-type-value/add-service-type-value.component';
+import { AddSetComponent } from './components/dialog/add-set/add-set.component';
+import { AddSedComponent } from './components/dialog/add-sed/add-sed.component';
 import { AddTarifaComponent } from './components/dialog/add-tarifa/add-tarifa.component';
 import { AddZonaComponent } from './components/dialog/add-zona/add-zona.component';
+import { AlimentadorListComponent } from './components/dialog/alimentador-list/alimentador-list.component';
+import { ClientOrderComponent } from './components/client-order/client-order.component';
 import { ColorListComponent } from './components/dialog/color-list/color-list.component';
 import { ConstanteListComponent } from './components/dialog/constante-list/constante-list.component';
 import { CargaComponent } from '../../components/dialog/carga/carga.component';
@@ -62,6 +67,8 @@ import { ShowcustomerComponent } from '../../components/dialog/showcustomer/show
 import { ShowProfileComponent } from '../../components/dialog/showprofile/showprofile.component';
 import { SettingsComponent } from '../../components/dialog/settings/settings.component';
 import { SettingscustomerComponent } from '../../components/dialog/settingscustomer/settingscustomer.component';
+import { SetListComponent } from './components/dialog/set-list/set-list.component';
+import { SedListComponent } from './components/dialog/sed-list/sed-list.component';
 import { StatusComponent } from './components/dialog/status/status.component';
 import { StatusListComponent, SnackErrorComponent, SnackSuccessComponent } from './components/dialog/status-list/status-list.component';
 import { StatusCrudComponent } from './components/dialog/status-crud/status-crud.component';
@@ -132,6 +139,7 @@ import { OrderserviceComponent } from './components/orderservice/orderservice.co
 // Global vars
 import { environment } from '../../../environments/environment';
 
+
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -176,6 +184,7 @@ registerLocaleData(localeEs);
     AddFormComponent,
     AddGiroComponent,
     AddJobComponent,
+    AddAlimentadorComponent,
     AddMarcaComponent,
     AddMercadoComponent,
     AddModeloComponent,
@@ -183,9 +192,13 @@ registerLocaleData(localeEs);
     AddServiceTypeValueComponent,
     AddServiceValueComponent,
     AddSectorComponent,
+    AddSetComponent,
+    AddSedComponent,
     AddTarifaComponent,
     AddZonaComponent,
+    AlimentadorListComponent,
     CargaComponent,
+    ClientOrderComponent,
     ConstanteListComponent,
     ColorListComponent,
     CsvComponent,
@@ -237,6 +250,8 @@ registerLocaleData(localeEs);
     ViewprojectcustomerComponent,
     VieworderserviceComponent,
     ViewOrderServiceSelectComponent,
+    SetListComponent,
+    SedListComponent,
   ],
   exports: [
   ],
@@ -248,6 +263,7 @@ registerLocaleData(localeEs);
     AddFormComponent,
     AddGiroComponent,
     AddJobComponent,
+    AddAlimentadorComponent,
     AddMarcaComponent,
     AddMercadoComponent,
     AddModeloComponent,
@@ -255,8 +271,11 @@ registerLocaleData(localeEs);
     AddServiceTypeComponent,
     AddServiceTypeValueComponent,
     AddServiceValueComponent,
+    AddSetComponent,
+    AddSedComponent,
     AddTarifaComponent,
     AddZonaComponent,
+    ClientOrderComponent,
     CsvComponent,
     CsvCustomerComponentComponent,
     ColorListComponent,

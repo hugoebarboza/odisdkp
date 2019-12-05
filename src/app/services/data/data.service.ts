@@ -103,6 +103,18 @@ export class DataService {
     return this.getDataBD(this.url + 'service/' + id + '/estatus' , token);
   }
 
+
+  getSetAlimentadorSed(project_id, token) {
+    return this.getDataBD(this.url + 'project/' + project_id + '/setalimentadorsed', token);
+  }
+
+  getRegionProvinciaComuna(country_id, token) {
+    return this.getDataBD(this.url + 'country/' + country_id + '/regionprovinciacomuna', token);
+  }
+
+  getClaveLectura(project_id, token) {
+    return this.getDataBD(this.url + 'project/' + project_id + '/clavelectura', token);
+  }
   /*
   getValidateExisteCLiente(id_service, cc_number, medidor, zona, b_medidor, b_zona, token) {
     if (b_medidor && b_zona) {

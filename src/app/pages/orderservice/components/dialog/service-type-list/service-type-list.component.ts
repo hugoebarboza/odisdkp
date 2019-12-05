@@ -28,22 +28,22 @@ export class ServiceTypeListComponent implements OnInit, OnDestroy {
 
   data: ServiceType;
   displayedColumns: string[] = ['descripcion', 'shortname', 'ndocumento', 'ddocumento', 'observation', 'status', 'sign', 'actions'];
-  dataSource = new MatTableDataSource() ;
-  editando: boolean = false;
+  dataSource = new MatTableDataSource();
+  editando = false;
   forma: FormGroup;
   datatype: ServiceType[] = [];
   indexitem: number;
-  isLoading: boolean = true;
-  isLoadingSave: boolean = false;
-  isLoadingDelete: boolean = false;
-  label: number = 0;
+  isLoading = true;
+  isLoadingSave = false;
+  isLoadingDelete = false;
+  label = 0;
   pageSize = 5;
-  resultsLength: number = 0;
+  resultsLength = 0;
   status: string;
   subscription: Subscription;
   subscriptionServiceType: Subscription;
-  show: boolean = false;
-  termino: string = '';
+  show = false;
+  termino = '';
   token: any;
   checkedToggle = false;
   allFormularios: any;
@@ -92,7 +92,7 @@ export class ServiceTypeListComponent implements OnInit, OnDestroy {
               }
               if (response.status === 'success') {
 
-                //console.log(response);
+                // console.log(response);
                 this.dataSource = new MatTableDataSource(response.datos);
                 this.dataSource.paginator = this.paginator;
                 this.dataSource.sort = this.sort;
@@ -114,7 +114,7 @@ export class ServiceTypeListComponent implements OnInit, OnDestroy {
     .subscribe(
     response => {
 
-        //console.log(response);
+        // console.log(response);
 
         if (response && response.length > 0) {
 
@@ -207,7 +207,7 @@ export class ServiceTypeListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    //console.log(this.forma.value);
+    // console.log(this.forma.value);
     // tslint:disable-next-line:max-line-length
 
     if (this.checkedToggle && this.forma.value.formulario.id) {
@@ -253,7 +253,7 @@ export class ServiceTypeListComponent implements OnInit, OnDestroy {
     this.indexitem = i;
     this.editando = false;
     this.isLoadingSave = true;
-    //console.log(element);
+    // console.log(element);
 
     this.dataService.updateServiceType(this.token.token, this.id, element, element.id)
             .subscribe( (resp: any) => {

@@ -5,10 +5,10 @@ import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular
 
 import Swal from 'sweetalert2';
 
-//MODELS
+// MODELS
 import { Constante } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { UserService, ProjectsService } from 'src/app/services/service.index';
 
 
@@ -20,7 +20,7 @@ import { UserService, ProjectsService } from 'src/app/services/service.index';
 export class ConstanteListComponent implements OnInit, OnDestroy {
 
 
-  @Input() id : number;
+  @Input() id: number;
   @Output() total: EventEmitter<number>;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;

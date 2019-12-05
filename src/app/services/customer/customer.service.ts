@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 // MODELS
-import { Customer } from 'src/app/models/types';
+import { Alimentador, Customer, Set, Sed } from 'src/app/models/types';
 
 import Swal from 'sweetalert2';
 
@@ -25,7 +25,7 @@ export class CustomerService {
 
 
 
-    getQuery( query: string, token: any ) {
+   getQuery( query: string, token: any ) {
     if (!token) {
        return;
     }
@@ -34,7 +34,7 @@ export class CustomerService {
     return this._http.get(url, {headers: headers}).map((res: any) => {
            return res;
            });
-    }
+   }
 
 
 
@@ -55,7 +55,7 @@ export class CustomerService {
     }
 
 
-    getCustomerShare(patio: string, sort: string, order: string, pageSize: number, idservice: number, token: any) {
+   getCustomerShare(patio: string, sort: string, order: string, pageSize: number, idservice: number, token: any) {
     // console.log(sort);
     if (!order) {
       order = 'asc';
@@ -86,17 +86,33 @@ export class CustomerService {
       if (query === '') { reject(); }
       resolve(this._http.get<Customer>(requestUrl, {headers: headers}));
       });
-    }
+   }
 
 
-    getProjectCustomer(token, id: number): Observable<any> {
+
+   getProjectClaveLectura(token, id): Observable<any> {
+       return this.getQuery('project/' + id + '/clavelectura', token);
+   }
+
+
+   getProjectCustomer(token, id: number): Observable<any> {
        return this.getQuery('project/' + id + '/customer', token);
-    }
+   }
 
 
-    getProjectCustomerDetail(token, id: number, customerid: number): Observable<any> {
+   getProjectCustomerDetail(token, id: number, customerid: number): Observable<any> {
        return this.getQuery('project/' + id + '/customer/' + customerid, token);
-    }
+   }
+
+
+   getProjectSet(token, id): Observable<any> {
+       return this.getQuery('project/' + id + '/set', token);
+   }
+
+   getProjectSetAlimentadorSed(token, id): Observable<any> {
+      return this.getQuery('project/' + id + '/setalimentadorsed', token);
+   }
+
 
     getTarifa(token, id): Observable<any> {
        return this.getQuery('service/' + id + '/tarifa', token);
@@ -112,6 +128,14 @@ export class CustomerService {
 
     getSector(token, id): Observable<any> {
        return this.getQuery('service/' + id + '/sector', token);
+    }
+
+    getSetAlimentador(token, id): Observable<any> {
+       return this.getQuery('set/' + id + '/alimentador', token);
+    }
+
+    getAlimentadorSed(token, id): Observable<any> {
+       return this.getQuery('alimentador/' + id + '/sed', token);
     }
 
     getZona(token, id): Observable<any> {
@@ -132,12 +156,12 @@ export class CustomerService {
     }
 
 
-    getColor(token): Observable<any> {
+   getColor(token): Observable<any> {
        return this.getQuery('colors', token);
-    }
+   }
 
 
-    add(token, customer: Customer, id: number): void {
+   add(token, customer: Customer, id: number): void {
     if (!token) {
        return;
     }
@@ -163,9 +187,55 @@ export class CustomerService {
          // console.log(err.error.message);
          // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
         });
-    }
+   }
 
-    update(token: any, customer: Customer, id: number, customerid: number): void {
+
+   addAlimentador(token: any, id: number, data: Alimentador): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.post(this.url + 'set/' + id + '/alimentador', params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+   addSed(token: any, id: number, data: Sed): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.post(this.url + 'alimentador/' + id + '/sed', params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+   addSet(token: any, id: number, data: Set): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.post(this.url + 'project/' + id + '/set', params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+   update(token: any, customer: Customer, id: number, customerid: number): void {
 
     if (!token) {
        return;
@@ -184,10 +254,54 @@ export class CustomerService {
         this.error = err.error.message;
         Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
         });
-    }
+   }
+
+   updateAlimentador(token: any, id: number, data: Alimentador, data_id: number): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.put(this.url + 'set/' + id + '/alimentador/' + data_id, params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+   updateSet(token: any, id: number, data: Set, data_id: number): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.put(this.url + 'project/' + id + '/set/' + data_id, params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
 
 
-    delete(token: any, id: number, customerid: number): void {
+   updateSed(token: any, id: number, data: Sed, data_id: number): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.put(this.url + 'alimentador/' + id + '/sed/' + data_id, params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+
+   delete(token: any, id: number, customerid: number): void {
     if (!token) {
        return;
     }
@@ -200,10 +314,40 @@ export class CustomerService {
             this.error = err.error.message;
             Swal.fire('No fue posible procesar su solicitud', '', 'error');
       });
-    }
+   }
 
 
+   deleteAlimentador(token: any, id: number, data_id: number): Observable<any> {
+      if (!token) {
+          return;
+      }
 
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this._http.delete(this.url + 'set/' + id + '/alimentador/' + data_id, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+   deleteSet(token: any, id: number, data_id: number): Observable<any> {
+      if (!token) {
+          return;
+      }
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this._http.delete(this.url + 'project/' + id + '/set/' + data_id, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+   deleteSed(token: any, id: number, data_id: number): Observable<any> {
+      if (!token) {
+          return;
+      }
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this._http.delete(this.url + 'alimentador/' + id + '/sed/' + data_id, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
 
 
 }

@@ -1,0 +1,52 @@
+<meta name="Description" content="Project Profile.">
+<div class="app">
+<form class="mat-dialog-content" novalidate="novalidate">
+  
+  <h1 mat-dialog-title>{{title}} - {{project_name}}</h1>
+  <div class="mat-app-background" >
+    <div class="card-body">
+        <p class="card-text"><mat-icon mat-list-icon>folder_open</mat-icon> {{subtitle}}</p>        
+        <mat-list>
+          <mat-divider></mat-divider>
+        </mat-list>
+
+        <main class="content">        
+            <div >    
+              <mat-tab-group 
+              [selectedIndex]="selected.value"
+              (selectedIndexChange)="selected.setValue($event)"
+              animationDuration="0ms"
+              mat-align-tabs="center"
+              >
+
+                <mat-tab label="Tipos">
+                  <ng-template mat-tab-label>
+                      <h6>Total <span class="badge badge-secondary">{{totalRegistros}}</span></h6>
+                  </ng-template>
+                  <ng-template matTabContent>
+                  <div class="p-2" style="width: 100%;" *ngIf="selected.value==0 && id > 0 && project_id > 0" >
+                    <app-set-list [id] = "id" [project_id]="project_id" (total) = "loadDataTotal( $event )"></app-set-list>
+                  </div>
+                  </ng-template>
+                </mat-tab>
+              </mat-tab-group>      
+            </div>
+        </main>
+        
+    </div>
+  </div>
+
+</form>
+</div>
+
+
+<div mat-dialog-actions>
+  <div class="container">      
+    <div class="row justify-content-center">
+    <div class="footer-button-row">      
+    <button mat-button (click)="onNoClick()" >Cancelar</button>
+    </div>
+
+    </div>
+  </div>
+</div>

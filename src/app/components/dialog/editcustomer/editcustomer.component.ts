@@ -38,6 +38,7 @@ const moment = _moment;
 export class EditcustomerComponent implements OnInit, OnDestroy {
 
   public identity: any;
+  clavelectura = [];
   formControl: any;
   public provincia: Provincia;
   project_type: number;
@@ -64,6 +65,8 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
   public modelos: Modelo;
   public colors: Color;
 
+  proyecto: any;
+  proyectos: any;
   public project: string;
   project_id: number;
   id: number;
@@ -71,6 +74,11 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
   category_id: number;
   step = 0;
   subscription: Subscription;
+
+  set = [];
+  alimentador = [];
+  sed = [];
+
 
   constructor(
     // private _route: ActivatedRoute,
@@ -82,6 +90,7 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<EditcustomerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: Customer
     ) {
+    this.proyectos = this._userService.getProyectos();
     this.title = 'Editar Cliente.';
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -94,12 +103,33 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.formControl = new FormControl('', [Validators.required]);
-    this.loadInfo(this.id);
+    if (this.id && this.id > 0) {
+      this.proyecto = this.filterProjectByService(this.id);
+    }
+
+    if (this.proyecto && this.proyecto.id > 0) {
+      this.loadInfo(this.proyecto.id);
+    }
+
   }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
+    }
+  }
+
+  filterProjectByService(id: number) {
+    for (let i = 0; i < this.proyectos.length; i += 1) {
+      const result = this.proyectos[i];
+      if (result && result.service) {
+        for (let y = 0; y < result.service.length; y += 1) {
+          const response = result.service[y];
+          if (response && response.id === id) {
+            return result;
+          }
+        }
+      }
     }
   }
 
@@ -154,13 +184,26 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
                    this.data['id_provincia'] = this.customer[i]['id_provincia'];
                    this.data['id_comuna'] = this.customer[i]['id_comuna'];
                    this.data['observacion'] = this.customer[i]['observacion'];
-
+                   this.data['id_set'] = this.customer[i]['id_set'];
+                   this.data['id_alimentador'] = this.customer[i]['id_alimentador'];
+                   this.data['id_sed'] = this.customer[i]['id_sed'];
                    this.data['llave_circuito'] = this.customer[i]['llave_circuito'];
                    this.data['fase'] = this.customer[i]['fase'];
+                   this.data['id_clavelectura'] = this.customer[i]['id_clavelectura'];
                    this.data['factor'] = this.customer[i]['factor'];
 
                    this.data['fecha_ultima_lectura'] = this.customer[i]['fecha_ultima_lectura'];
                    this.data['fecha_ultima_deteccion'] = this.customer[i]['fecha_ultima_deteccion'];
+
+                   if (this.data['id_set'] > 0) {
+                    this.onSelectSet(this.data['id_set']);
+                   }
+
+                   if (this.data['id_alimentador'] > 0) {
+                    this.onSelectAlimentador(this.data['id_alimentador']);
+                   }
+
+
                    if (this.data['id_region'] > 0) {
                     this.onSelectRegion(this.data['id_region']);
                    }
@@ -197,7 +240,7 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
   }
 
 
-  public loadInfo(_id: number) {
+  public loadInfo(id: number) {
                     // GET REGIONES
                     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                     response => {
@@ -221,6 +264,29 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
                         this.loadData(this.project_id);
                       }
                     });
+
+                    // GET CLAVE LECTURA
+                    this.subscription = this._customerService.getProjectClaveLectura(this.token.token, id).subscribe(
+                      response => {
+                              if (response.status === 'success') {
+                                this.clavelectura = response.datos.clavelectura;
+                              } else {
+                                this.clavelectura = [];
+                               // console.log(this.tarifa);
+                              }
+                            });
+
+                    // GET SET
+                    this.subscription = this._customerService.getProjectSet(this.token.token, id).subscribe(
+                      response => {
+                              if (response.status === 'success') {
+                                this.set = response.datos.set;
+                              } else {
+                                this.set = [];
+                               // console.log(this.tarifa);
+                              }
+                            });
+
 
                     // GET TARIFA
                     this.subscription = this._customerService.getTarifa(this.token.token, this.id).subscribe(
@@ -388,6 +454,44 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
    onSelectComuna(_comunaid: number) {
    // this.states = this._dataService.getStates().filter((item)=> item.countryid == countryid);
    }
+
+
+   onSelectSet(id: number) {
+    if (id > 0) {
+      this.alimentador = [];
+      this.subscription = this._customerService.getSetAlimentador(this.token.token, id).subscribe(
+       response => {
+             if (!response) {
+               return;
+             }
+             if (response.status === 'success') {
+               this.alimentador = response.datos.alimentador;
+             }
+             });
+     } else {
+       this.alimentador = [];
+     }
+  }
+
+
+  onSelectAlimentador(id: number) {
+    if (id > 0) {
+      this.sed = [];
+      this.subscription = this._customerService.getAlimentadorSed(this.token.token, id).subscribe(
+       response => {
+             if (!response) {
+               return;
+             }
+             if (response.status === 'success') {
+               this.sed = response.datos.sed;
+             }
+             });
+     } else {
+       this.sed = [];
+     }
+  }
+
+
 
   public loadSector() {
     this.subscription = this._customerService.getSector(this.token.token, this.id).subscribe(

@@ -34,8 +34,8 @@ const EXCEL_EXTENSION = '.xlsx';
 
 export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
-  forTime = 1000;
-
+  forTime = 800;
+  identity: any;
   public token;
   public services: Service[] = [];
   public project: string;
@@ -72,6 +72,15 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   zona: Array<Object> = [];
   mercado: Array<Object> = [];
 
+  set: Array<Object> = [];
+  alimentador: Array<Object> = [];
+  sed: Array<Object> = [];
+  clavelectura: Array<Object> = [];
+
+  region: Array<Object> = [];
+  provincia: Array<Object> = [];
+  comuna: Array<Object> = [];
+
   arrayCarga: Array<String> = [];
   arrayExcel: Array<Object> = [];
   arrayExcelSuccess: Array<Object> = [];
@@ -102,7 +111,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   displayedColumns: string[] = ['cc_number', 'nombrecc', 'ruta', 'calle', 'numero',
   'block', 'depto', 'region', 'provincia', 'comuna', 'latitud', 'longitud', 'medidor',
   'modelo_medidor', 'transformador', 'tarifa', 'constante', 'giro', 'zona', 'sector', 'mercado', 'observacion',
-  'order_number', 'tipo_servicio', 'asignado_a', 'required_date', 'observation', 'estatus'];
+  'order_number', 'tipo_servicio', 'asignado_a', 'required_date', 'observation', 'set', 'alimentador', 'sed', 'clave_lectura', 'llave_circuito', 'fase', 'factor', 'fecha_ultima_lectura', 'fecha_ultima_deteccion', 'estatus'];
 
   dataSource = new MatTableDataSource();
   dataSourceClientes = new MatTableDataSource();
@@ -127,6 +136,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     private _orderService: OrderserviceService
   ) {
 
+    this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.ServicioSeleccionado = new EventEmitter();
 
@@ -145,33 +155,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   ngOnInit() {
-    /*
-    this.dataSource.paginator = this.paginator;
-    this.dataSourceClientes.paginator = this.paginatorClientes;
-    this.dataSourceOrdenes.paginator = this.paginatorOrdenes;
-    this.firtsFormGroup = this._formBuilder.group({
-      confirmarCtrl: ['', Validators.required],
-      inputCtrl: ['', Validators.required]
-    });
-
-    this.secondFormGroup = this._formBuilder.group({
-      confirmarCli: ['', Validators.required]
-    });
-
-    this.getTarifa(this.service_id);
-    this.getConstante(this.service_id);
-    this.getSector(this.service_id);
-    this.getGiro(this.service_id);
-    this.getZona(this.service_id);
-    this.getMercado(this.service_id);
-    this.getTipoServicio(this.service_id);
-    this.getInspectores();
-    */
-
-
-
   }
-
 
   ngOnChanges(_changes: SimpleChanges) {
     // console.log('onchange exceladdress');
@@ -190,15 +174,12 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     this.getMercado(this.service_id);
     this.getTipoServicio(this.service_id);
 
-
   }
 
 
   ngOnDestroy() {
-    // console.log('La página se va a cerrar');
     this.subscription.unsubscribe();
   }
-
 
   checkConfirmacion(event) {
     if (!event.checked) {
@@ -234,8 +215,6 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       this.openDialogDate();
     }
   }
-
-
 
   openDialogDate(): void {
 
@@ -348,8 +327,11 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             let block: String = '' + that.arrayCarga[ii]['block'];
             let depto: String = '' + that.arrayCarga[ii]['depto'];
             let region: String = '' + that.arrayCarga[ii]['region'];
+            let id_region: Number = 0;
             let provincia: String = '' + that.arrayCarga[ii]['provincia'];
+            let id_provincia: Number = 0;
             let comuna: String = '' + that.arrayCarga[ii]['comuna'];
+            let id_comuna: Number = 0;
             let medidor: String = '' + that.arrayCarga[ii]['medidor'];
             let modelo_medidor: String = '' + that.arrayCarga[ii]['modelo_medidor'];
             let transformador: String = '' + that.arrayCarga[ii]['transformador'];
@@ -378,6 +360,131 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             let required_date: String = '' + that.arrayCarga[ii]['required_date'];
             let observation: String = '' + that.arrayCarga[ii]['observation'];
             let lectura: string = '' + that.arrayCarga[ii]['lectura'];
+
+            // Campos Adicionales del Cliente
+            let set: string = '' + that.arrayCarga[ii]['set'];
+            let id_set: Number = 0;
+            let alimentador: string = '' + that.arrayCarga[ii]['alimentador'];
+            let id_alimentador: Number = 0;
+            let sed: string = '' + that.arrayCarga[ii]['sed'];
+            let id_sed: Number = 0;
+            let clave_lectura: string = '' + that.arrayCarga[ii]['clave_lectura'];
+            let id_clavelectura: Number = 0;
+            let llave_circuito: string = '' + that.arrayCarga[ii]['llave_circuito'];
+            let fase: string = '' + that.arrayCarga[ii]['fase'];
+            let factor: string = '' + that.arrayCarga[ii]['factor'];
+            let fecha_ultima_lectura: string = '' + that.arrayCarga[ii]['fecha_ultima_lectura'];
+            let fecha_ultima_deteccion: string = '' + that.arrayCarga[ii]['fecha_ultima_deteccion'];
+
+            if (set === 'undefined' || set.trim().length === 0) {
+              set = '';
+              alimentador = '';
+              sed = '';
+            } else {
+              set = set.trim();
+              const responseSet: any = that.validarSelectSedALimnetadorSed(set, that.set, 'descripcion');
+              if (responseSet) {
+                id_set = responseSet.id;
+
+                if (alimentador === 'undefined' || alimentador.trim().length === 0) {
+                  alimentador = '';
+                  sed = '';
+                } else {
+                  alimentador = alimentador.trim();
+                  const resAlimnetador: any = that.validarSelectSedALimnetadorSed(alimentador, that.alimentador, 'descripcion');
+                  if (resAlimnetador) {
+                    if (resAlimnetador.id_set === id_set) {
+                      id_alimentador = resAlimnetador.id;
+
+                      if (sed === 'undefined' || sed.trim().length === 0) {
+                        sed = '';
+                      } else {
+                        sed = sed.trim();
+                        const resSed: any = that.validarSelectSedALimnetadorSed(sed, that.sed, 'descripcion');
+                        if (resSed) {
+                          if (resSed.id_alimentador === id_alimentador) {
+                            id_sed = resSed.id;
+                          } else {
+                            banderaJson = true;
+                            concatError = concatError + 'Sed no pertenece a Alimnetador ' + alimentador + '; ';
+                          }
+                        } else {
+                          banderaJson = true;
+                          concatError = concatError + 'Sed; ';
+                        }
+                      }
+
+                    } else {
+                      banderaJson = true;
+                      concatError = concatError + 'Alimentador no pertenece a Set ' + set + '; ';
+                    }
+
+                  } else {
+                    banderaJson = true;
+                    concatError = concatError + 'Alimentador; ';
+                  }
+                }
+
+              } else {
+                banderaJson = true;
+                concatError = concatError + 'Set; ';
+              }
+            }
+
+            if (clave_lectura === 'undefined' || clave_lectura.trim().length === 0) {
+              clave_lectura = '';
+              } else {
+                clave_lectura = clave_lectura.trim();
+                const response: number = that.validarSelect(clave_lectura, that.clavelectura);
+                if (response > 0) {
+                  id_clavelectura = response;
+                } else {
+                  banderaJson = true;
+                  concatError = concatError + 'Clave lectura; ';
+                }
+            }
+
+            if (llave_circuito === 'undefined' || llave_circuito.trim().length === 0) {
+              llave_circuito = '';
+            } else {
+              llave_circuito = llave_circuito.trim();
+            }
+
+            if (fase === 'undefined' || fase.trim().length === 0) {
+              fase = '';
+            } else {
+              fase = fase.trim();
+            }
+
+            if (factor === 'undefined' || factor.trim().length === 0) {
+              factor = '';
+            } else {
+              factor = factor.trim();
+            }
+
+            if (fecha_ultima_lectura === 'undefined' || fecha_ultima_lectura.trim().length === 0) {
+              fecha_ultima_lectura = '';
+            } else {
+              fecha_ultima_lectura = fecha_ultima_lectura.replace(/ /g, '');
+              fecha_ultima_lectura = fecha_ultima_lectura.substring(0, 10) + ' ' + fecha_ultima_lectura.substring(10, fecha_ultima_lectura.length);
+              if (fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/)) {
+              } else {
+                concatError = concatError + 'Fecha ultima lectura error en formato 0000-00-00 00:00:00; ' ;
+                banderaJson = true;
+              }
+            }
+
+            if (fecha_ultima_deteccion === 'undefined' || fecha_ultima_deteccion.trim().length === 0) {
+              fecha_ultima_deteccion = '';
+            } else {
+              fecha_ultima_deteccion = fecha_ultima_deteccion.replace(/ /g, '');
+              fecha_ultima_deteccion = fecha_ultima_deteccion.substring(0, 10) + ' ' + fecha_ultima_deteccion.substring(10, fecha_ultima_deteccion.length);
+              if (fecha_ultima_deteccion.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/)) {
+              } else {
+                concatError = concatError + 'Fecha ultima detección error en formato 0000-00-00 00:00:00; ' ;
+                banderaJson = true;
+              }
+            }
 
             // Validar campos
 
@@ -445,32 +552,73 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               depto = depto.trim();
             }
 
-            if (region === 'undefined' || region.trim().length === 0) {
+            if (region === 'undefined' || region.trim().length === 0 || provincia === 'undefined' || provincia.trim().length === 0 || comuna === 'undefined' || comuna.trim().length === 0) {
               region = '';
               banderaJson = true;
-              concatError = concatError + 'Region; ';
+              concatError = concatError + 'Campos Región, Provincia o Comuna vacíos; ';
             } else {
-              region = region.trim();
+              if (region === 'undefined' || region.trim().length === 0) {
+                region = '';
+                banderaJson = true;
+                concatError = concatError + 'Region; ';
+              } else {
+                region = region.trim();
+                const resRegion: any = that.validarSelectSedALimnetadorSed(region, that.region, 'region_name');
+                if (resRegion) {
+                  id_region = resRegion.id;
+
+                  if (provincia === 'undefined' || provincia.trim().length === 0) {
+                    provincia = '';
+                    banderaJson = true;
+                    concatError = concatError + 'Provincia; ';
+                  } else {
+                    provincia = provincia.trim();
+                    const resProvincia: any = that.validarSelectSedALimnetadorSed(provincia, that.provincia, 'province_name');
+                    if (resProvincia) {
+                      if (resProvincia.region_id === id_region) {
+                        id_provincia = resProvincia.id;
+
+                        if (comuna === 'undefined' || comuna.trim().length === 0) {
+                          comuna = '';
+                          banderaJson = true;
+                          concatError = concatError + 'Comuna; ';
+                        } else {
+                          comuna = comuna.trim();
+                          const resComuna: any = that.validarSelectSedALimnetadorSed(comuna, that.comuna, 'commune_name');
+                          if (resComuna) {
+                            if (resComuna.province_id === id_provincia) {
+                              id_comuna = resComuna.id;
+                            } else {
+                              banderaJson = true;
+                              concatError = concatError + 'Comuna no pertenece a provincia ' + provincia + '; ';
+                            }
+                          } else {
+                            banderaJson = true;
+                            concatError = concatError + 'Comuna; ';
+                          }
+                        }
+
+                      } else {
+                        banderaJson = true;
+                        concatError = concatError + 'Provincia no pertenece a región ' + region + '; ';
+                      }
+
+                    } else {
+                      banderaJson = true;
+                      concatError = concatError + 'Provincia; ';
+                    }
+                  }
+
+                } else {
+                  banderaJson = true;
+                  concatError = concatError + 'Región; ';
+                }
+              }
             }
 
-            if (provincia === 'undefined' || provincia.trim().length === 0) {
-              provincia = '';
-              banderaJson = true;
-              concatError = concatError + 'Provincia; ';
-            } else {
-              provincia = provincia.trim();
-            }
 
-            if (comuna === 'undefined' || comuna.trim().length === 0) {
-              comuna = '';
-              banderaJson = true;
-              concatError = concatError + 'Comuna; ';
-            } else {
-              comuna = comuna.trim();
-            }
 
             // Medidor validación
-
             /**
             let checkboxMedidor = false;
             let checkboxZona = false;
@@ -734,11 +882,11 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'leido_por': leido_por,
               'observacion': observacion,
               'region': region,
-              'id_region': 0,
+              'id_region': id_region,
               'provincia': provincia,
-              'id_provincia': 0,
+              'id_provincia': id_provincia,
               'comuna': comuna,
-              'id_comuna': 0,
+              'id_comuna': id_comuna,
               'tarifa': tarifa,
               'id_tarifa': id_tarifa,
               'constante': constante,
@@ -761,6 +909,21 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'required_date': required_date,
               'observation': observation,
               'vencimiento_date': '',
+
+              'set': set,
+              'id_set': id_set,
+              'alimentador': alimentador,
+              'id_alimentador': id_alimentador,
+              'sed': sed,
+              'id_sed': id_sed,
+              'clave_lectura': clave_lectura,
+              'id_clavelectura': id_clavelectura,
+              'llave_circuito': llave_circuito,
+              'fase': fase,
+              'factor': factor,
+              'fecha_ultima_lectura': fecha_ultima_lectura,
+              'fecha_ultima_deteccion': fecha_ultima_deteccion,
+
               'label': '',
               'cc_id': '',
               'orden_id': '',
@@ -794,8 +957,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               banderaJson = true;
               concatError = concatError + ' Caracter especial [&] No permitido';
             }
-          
-            
+
             if (banderaJson) {
               const success: Object = {
                 'estatus' : 'Error en registro: ' + concatError,
@@ -811,8 +973,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
               await delay(that.forTime);
 
-              const link: String = 'searchcustomer/project/service/' +
-              that.service_id + '?region=' + region + '&provincia=' + provincia + '&comuna=' + comuna;
+              /* const link: String = 'searchcustomer/project/service/' +
+              that.service_id + '?region=' + region + '&provincia=' + provincia + '&comuna=' + comuna; */
 
                // tslint:disable-next-line:max-line-length
                that.dataService.getValidateExisteCLiente(that.service_id, cc_number, that.token.token, objectJson ).then(
@@ -851,44 +1013,16 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                     (error) => {
                       console.log(<any>error);
                       if (error['error']['mensaje'] === 'no se encuentra cliente') {
-                        that.dataService.getSearchcustomer(link, that.token.token).then(
-                          (respuesta: any) => {
-                            respuesta.subscribe(
-                              (resSome) => {
-                                const localidad: Object = {
-                                  'id_region' : resSome['datos']['region_id'],
-                                  'id_provincia' : resSome['datos']['provincia_id'],
-                                  'id_comuna' : resSome['datos']['comuna_id'],
-                                  'region' : resSome['datos']['region_name'],
-                                  'provincia' : resSome['datos']['province_name'],
-                                  'comuna' : resSome['datos']['commune_name'],
-                                  'estatus' : 'Registro valido',
-                                  'parametro': 2,
-                                  'label': 'green'
-                                  };
-                                objectJson = Object.assign(objectJson, localidad);
-                                that.countSuccess = that.countSuccess + 1;
-                                that.arrayExcel.push(objectJson);
-                                that.arrayExcelSuccess.push(objectJson);
-                                that.refreshTable();
-                              },
-                              (_resError) => {
-                                // console.log(resError);
-                                // console.log(<any>resError);
-                                const estatus: Object = {
-                                  'estatus' : 'Error: Campos Localidad',
-                                  'label': 'red',
-                                  'parametro': 0,
-                                  };
-                                objectJson = Object.assign(objectJson, estatus);
-                                that.arrayExcel.push(objectJson);
-                                that.arrayExcelError.push(objectJson);
-                                that.countError = that.countError + 1;
-                                that.refreshTable();
-                              }
-                            );
-                          }
-                        );
+                        const localidad: Object = {
+                          'estatus' : 'Registro valido',
+                          'parametro': 2,
+                          'label': 'green'
+                          };
+                        objectJson = Object.assign(objectJson, localidad);
+                        that.countSuccess = that.countSuccess + 1;
+                        that.arrayExcel.push(objectJson);
+                        that.arrayExcelSuccess.push(objectJson);
+                        that.refreshTable();
                       }
                     }
                   );
@@ -904,7 +1038,6 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       fileReader.readAsArrayBuffer(this.file);
     }
   }
-
 
   checkAutoGenerar(event) {
     if (!event.checked) {
@@ -942,7 +1075,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       (res: any) => {
         res.subscribe(
           (some) => {
-            //console.log(some);
+            // console.log(some);
             this.usuarios = some['datos'];
           },
           (error) => {
@@ -952,6 +1085,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       }
     );
   }
+
+
   getTarifa(id) {
     this.dataService.getTarifa(id, this.token.token).then(
       (res: any) => {
@@ -968,8 +1103,60 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-   getServices(id) {
-   this.subscription = this._orderService.getService(this.token.token, id).subscribe(
+  getSetAlimentadorSed(project_id: number) {
+    this.dataService.getSetAlimentadorSed(project_id, this.token.token).then(
+      (res: any) => {
+        res.subscribe(
+          (some) => {
+            // console.log(some);
+            this.set = some['set'];
+            this.alimentador = some['alimentador'];
+            this.sed = some['sed'];
+          },
+          (_error) => {
+            // console.log(<any>error);
+          }
+        );
+      }
+    );
+  }
+
+  getRegionProvinciaComuna(country_id: number) {
+    this.dataService.getRegionProvinciaComuna(country_id, this.token.token).then(
+      (res: any) => {
+        res.subscribe(
+          (some) => {
+            // console.log(some);
+            this.region = some['region'];
+            this.provincia = some['provincia'];
+            this.comuna = some['comuna'];
+          },
+          (_error) => {
+            // console.log(<any>error);
+          }
+        );
+      }
+    );
+  }
+
+  getClaveLectura(project_id: number) {
+    this.dataService.getClaveLectura(project_id, this.token.token).then(
+      (res: any) => {
+        res.subscribe(
+          (some) => {
+            // console.log(some);
+            this.clavelectura = some['datos']['clavelectura'];
+          },
+          (_error) => {
+            // console.log(<any>error);
+          }
+        );
+      }
+    );
+  }
+
+  getServices(id) {
+    this.subscription = this._orderService.getService(this.token.token, id).subscribe(
     response => {
               if (!response) {
                 return;
@@ -982,11 +1169,14 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                 this.ServicioSeleccionado.emit(this.servicename);
                 if (this.project_id > 0) {
                   this.getInspectores();
+                  this.getRegionProvinciaComuna(this.services['project']['country_id']);
+                  this.getSetAlimentadorSed(this.project_id);
+                  this.getClaveLectura(this.project_id);
                 }
 
               }
-              });
-    }
+    });
+  }
 
   getConstante(id) {
     this.dataService.getConstante(id, this.token.token).then(
@@ -1110,6 +1300,21 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     return id;
   }
 
+  validarSelectSedALimnetadorSed(termino: any, arrayObject: Array<object>, value: string) {
+    if (!termino) {
+      return false;
+    }
+    let element: any;
+    if (arrayObject.length > 0) {
+      arrayObject.forEach(function(valor, _indice, _array) {
+       if (valor[value].toLowerCase() === (termino).toLowerCase()) {
+        element = valor;
+       }
+      }, this);
+    }
+    return element;
+  }
+
   applyFilter(filterValue: string) {
     this.dataSource.filter = filterValue.trim().toLowerCase();
     if (this.dataSource.paginator) {
@@ -1137,7 +1342,7 @@ applyFilterCliente(filterValue: string) {
     if (this.arrayExcel.length === this.arrayCarga.length) {
         this.isLoadingResults = false;
         this.isRateLimitReached = false;
-        //console.log(this.arrayExcel);
+        // console.log(this.arrayExcel);
 
         if (this.countExiste === this.arrayExcelSuccess.length) {
           this.checkPost = true;
@@ -1184,7 +1389,7 @@ applyFilterCliente(filterValue: string) {
     }
   }
 
-  uploadExcelPost() {
+  uploadExcelPost() { /// cluentes
 
     this.countErrorPost = 0;
     this.countSuccessPost = 0;
@@ -1214,7 +1419,7 @@ applyFilterCliente(filterValue: string) {
             (res: any) => {
               res.subscribe(
                 (some) => {
-                  console.log(some);
+                  // console.log(some);
                   that.countSuccessPost = that.countSuccessPost + 1;
                   that.arrayExcelSuccess[ii]['estatus'] = some['message'];
                   that.arrayExcelSuccess[ii]['label'] = 'green';
@@ -1275,7 +1480,7 @@ applyFilterCliente(filterValue: string) {
             (res: any) => {
               res.subscribe(
                 (some) => {
-                  console.log(some);
+                  // console.log(some);
                   that.countSuccessOrdenes = that.countSuccessOrdenes + 1;
                   that.arrayExcelSuccess[ii]['estatus'] = some['message'];
                   that.arrayExcelSuccess[ii]['label'] = 'green';
@@ -1294,6 +1499,9 @@ applyFilterCliente(filterValue: string) {
               );
             }
           );
+        } else {
+          that.countErrorOrdenes = that.countErrorOrdenes + 1;
+          that.refreshTableOdernes();
         }
       }
     }
@@ -1353,7 +1561,7 @@ applyFilterCliente(filterValue: string) {
             (res: any) => {
               res.subscribe(
                 (some) => {
-                  console.log(some);
+                  // console.log(some);
                   that.countSuccessPost = that.countSuccessPost + 1;
                   that.arrayExcelSuccess[ii]['estatus'] = some['message'];
                   that.arrayExcelSuccess[ii]['label'] = 'green';
@@ -1388,7 +1596,7 @@ applyFilterCliente(filterValue: string) {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('The dialog was closed ' + result);
+      // console.log('The dialog was closed ' + result);
 
       if ( result === true ) {
 
@@ -1427,7 +1635,7 @@ applyFilterCliente(filterValue: string) {
             (res: any) => {
               res.subscribe(
                 (some) => {
-                  console.log(some);
+                  // console.log(some);
                   that.countSuccessOrdenes = that.countSuccessOrdenes + 1;
                   that.arrayExcelSuccess[ii]['estatus'] = some['message'];
                   that.arrayExcelSuccess[ii]['label'] = 'green';

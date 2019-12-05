@@ -68,6 +68,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   region: Region;
   sectores: Sector;
   selected = new FormControl(0);
+  selectedCarga = new FormControl(0);
   services: Service[] = [];
   service: string;
   subscription: Subscription;
