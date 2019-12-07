@@ -1658,7 +1658,7 @@ private filterRegionMulti() {
             this.exportDataSource = new MatTableDataSource(some.datos);
             this.isLoadingResults = false;
             this.isRateLimitReached = false;
-
+            this.cd.markForCheck();
                 for (let i = 0; i < this.exportDataSource.data.length; i++) {
                   let bandera = false;
                   for (let j = 0; j < arraydata.length; j++) {
@@ -1776,11 +1776,13 @@ private filterRegionMulti() {
             } else {
             this.isLoadingResults = false;
             this.isRateLimitReached = false;
+            this.cd.markForCheck();
             }
           },
           (error) => {
             this.isLoadingResults = false;
             this.isRateLimitReached = false; // YA QUE EL API DEVUELVE 401 CUANDO NO EXISTEN DATOS
+            this.cd.markForCheck();
             this.error = 'No se encontraron registros que coincidan con su búsqueda';
             this.toasterService.error('Error: ' + this.error, '', {timeOut: 6000, });
             console.log(<any>error);

@@ -27,6 +27,25 @@ export interface AtributoFirma {
 }
 
 
+export class ClaveLectura  {
+
+    constructor(
+    public id: number,
+    public project_id: number,
+    public order_by: number,
+    public descripcion: string,
+    public observacion: string,
+    public status: number,
+    public create_by: number,
+    public create_at: any,
+    public update_by: number,
+    public update_at: any
+    ) {}
+  }
+
+
+
+
 export class Color  {
 
     constructor(

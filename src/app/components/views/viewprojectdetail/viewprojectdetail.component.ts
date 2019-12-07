@@ -17,6 +17,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 
 // DIALOG
 import { AddAlimentadorComponent } from 'src/app/pages/orderservice/components/dialog/add-alimentador/add-alimentador.component';
+import { AddClavelecturaComponent } from 'src/app/pages/orderservice/components/dialog/add-clavelectura/add-clavelectura.component';
 import { AddColorComponent } from '../../../pages/orderservice/components/dialog/add-color/add-color.component';
 import { AddConstanteComponent } from '../../../pages/orderservice/components/dialog/add-constante/add-constante.component';
 import { AddGiroComponent } from '../../../pages/orderservice/components/dialog/add-giro/add-giro.component';
@@ -690,6 +691,27 @@ deleteCommentDatabase(item: any) {
       });
     }
 
+
+    clavedelectura(id: number) {
+      const dialogRef = this.dialog.open(AddClavelecturaComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+          // When using an edit things are little different, firstly we find record inside DataService by id
+          // const foundIndex = this.exampleDatabase.dataChange.value.findIndex(x => x.id === this.id);
+          // Then you update that record using data from dialogData (values you enetered)
+        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
+          // And lastly refresh table
+        }
+      });
+    }
 
 
     constante(id: number) {

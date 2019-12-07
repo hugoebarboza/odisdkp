@@ -249,6 +249,13 @@ export class SetListComponent implements OnInit, OnDestroy {
     }
   }
 
+  datalengh(params: any = []) {
+    if (params && params.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 
   toggle() {

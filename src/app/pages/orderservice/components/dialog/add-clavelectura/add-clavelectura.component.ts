@@ -5,13 +5,12 @@ import { FormControl } from '@angular/forms';
 // SERVICES
 import { UserService } from 'src/app/services/service.index';
 
-
 @Component({
-  selector: 'app-add-sed',
-  templateUrl: './add-sed.component.html',
-  styleUrls: ['./add-sed.component.css']
+  selector: 'app-add-clavelectura',
+  templateUrl: './add-clavelectura.component.html',
+  styleUrls: ['./add-clavelectura.component.css']
 })
-export class AddSedComponent implements OnInit {
+export class AddClavelecturaComponent implements OnInit {
 
   id: number;
   identity: any;
@@ -22,13 +21,14 @@ export class AddSedComponent implements OnInit {
   proyectos = [];
   selected = new FormControl(0);
   subtitle = 'Seleccione cualquiera de las siguientes opciones.';
-  title = 'Tipos de SED';
+  title = 'Claves de Lectura';
   totalRegistros = 0;
   token: any;
 
+
   constructor(
     public _userService: UserService,
-    public dialogRef: MatDialogRef<AddSedComponent>,
+    public dialogRef: MatDialogRef<AddClavelecturaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
     this.identity = this._userService.getIdentity();

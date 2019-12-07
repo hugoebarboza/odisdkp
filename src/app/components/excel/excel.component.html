@@ -52,7 +52,7 @@
                 
             </div>
 
-            <div class="example-container " *ngIf="show_table">
+            <div class="example-container " [hidden]="!show_table">
                   
                 <mat-form-field appearance="legacy" class="mat-form-field-custom">
                     <mat-label>Buscar</mat-label>
@@ -317,7 +317,7 @@
         <mat-step [stepControl]="secondFormGroup">
           <form [formGroup]="secondFormGroup">
           <ng-template matStepLabel>Clientes</ng-template>
-          <div class="example-container " *ngIf="show_table">
+          <div class="example-container " [hidden]="!show_table">
               <mat-form-field appearance="legacy" class="mat-form-field-custom">
                   <mat-label>Buscar</mat-label>
                   <input matInput (keyup)="applyFilterCliente($event.target.value)" placeholder="Buscar">
@@ -584,7 +584,7 @@
     <mat-step>
         <form>
         <ng-template matStepLabel>Ordenes</ng-template>
-        <div class="example-container " *ngIf="show_table">
+        <div class="example-container " [hidden]="!show_table">
             <mat-form-field appearance="legacy" class="mat-form-field-custom">
                 <mat-label>Buscar</mat-label>
                 <input matInput (keyup)="applyFilterOrdenes($event.target.value)" placeholder="Buscar">

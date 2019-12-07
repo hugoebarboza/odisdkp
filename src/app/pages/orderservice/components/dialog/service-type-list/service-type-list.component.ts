@@ -319,4 +319,14 @@ export class ServiceTypeListComponent implements OnInit, OnDestroy {
             );
   }
 
+
+  datalengh(params: ServiceType[] = []) {
+    if (params && params.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+
 }

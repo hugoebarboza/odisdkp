@@ -5,16 +5,16 @@ import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular
 
 // SERVICES
 import { CustomerService, UserService } from 'src/app/services/service.index';
-import { Sed } from 'src/app/models/types';
+import { ClaveLectura } from 'src/app/models/types';
 
 import Swal from 'sweetalert2';
 
 @Component({
-  selector: 'app-sed-list',
-  templateUrl: './sed-list.component.html',
-  styleUrls: ['./sed-list.component.css']
+  selector: 'app-clavelectura-list',
+  templateUrl: './clavelectura-list.component.html',
+  styleUrls: ['./clavelectura-list.component.css']
 })
-export class SedListComponent implements OnInit, OnDestroy {
+export class ClavelecturaListComponent implements OnInit, OnDestroy {
 
   @Input() id: number;
   @Input() project_id: number;
@@ -25,7 +25,7 @@ export class SedListComponent implements OnInit, OnDestroy {
   @ViewChild(MatSort, {static: false}) sort: MatSort;
 
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ['alimentador', 'descripcion', 'order_by', 'status', 'actions'];
+  displayedColumns: string[] = ['descripcion', 'observacion', 'order_by', 'status', 'actions'];
   editando = false;
   forma: FormGroup;
   indexitem: number;
@@ -36,10 +36,9 @@ export class SedListComponent implements OnInit, OnDestroy {
   proyecto: any;
   proyectos = [];
   show = false;
-  alimentador = [];
+  clavelectura = [];
   subscription: Subscription;
   token: any;
-
 
   constructor(
     private _customerService: CustomerService,
@@ -56,8 +55,8 @@ export class SedListComponent implements OnInit, OnDestroy {
       this.proyecto = this.filterProjectByService(this.id);
       if (this.proyecto && this.proyecto.id > 0) {
         this.forma = new FormGroup({
-          id_alimentador: new FormControl(0, [Validators.required, Validators.minLength(1)]),
           descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+          observacion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
           order_by: new FormControl(0, [Validators.required]),
           status: new FormControl(1, [Validators.required]),
         });
@@ -86,6 +85,42 @@ export class SedListComponent implements OnInit, OnDestroy {
     }
   }
 
+  applyFilter(filterValue: string) {
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+
+    if (this.dataSource.paginator) {
+      this.dataSource.paginator.firstPage();
+    }
+  }
+
+
+  cargar(id: number) {
+    if (id && id > 0) {
+      this.isLoading = true;
+      this.subscription = this._customerService.getClaveDeLectura(this.token.token, id).subscribe(
+        response => {
+                if (response.status === 'success') {
+                  this.dataSource = new MatTableDataSource(response.datos.clavelectura);
+                  this.dataSource.paginator = this.paginator;
+                  this.dataSource.sort = this.sort;
+                  this.total.emit(response.datos.clavelectura.length);
+                  this.clavelectura = response.datos.clavelectura;
+                  this.isLoading = false;
+                } else {
+                  this.dataSource = null;
+                  this.clavelectura = [];
+                  this.isLoading = false;
+                }
+              },
+              error => {
+                this.dataSource = null;
+                this.clavelectura = [];
+                this.isLoading = false;
+                console.log(<any>error);
+              });
+      }
+  }
+
 
   onSubmit() {
 
@@ -94,10 +129,10 @@ export class SedListComponent implements OnInit, OnDestroy {
        return;
     }
 
-    const data = new Sed (0, this.forma.value.id_alimentador, this.forma.value.order_by, this.forma.value.descripcion, '', this.forma.value.status, 0, '', 0, '');
+    const data = new ClaveLectura (0, this.proyecto.id, this.forma.value.order_by, this.forma.value.descripcion, this.forma.value.observacion, this.forma.value.status, 0, '', 0, '');
 
     if (this.proyecto && this.proyecto.id > 0) {
-      this._customerService.addSed(this.token.token, data.id_alimentador, data)
+      this._customerService.addClaveDeLectura(this.token.token, this.proyecto.id, data)
       .subscribe( (resp: any) => {
         if (!resp) {
           this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
@@ -129,54 +164,13 @@ export class SedListComponent implements OnInit, OnDestroy {
   }
 
 
-
-  cargar(id: number) {
-    if (id && id > 0) {
-      this.isLoading = true;
-
-      this.subscription = this._customerService.getProjectSetAlimentadorSed(this.token.token, id).subscribe(
-        response => {
-                if (response.status === 'success') {
-                  this.dataSource = new MatTableDataSource(response.sed);
-                  this.dataSource.paginator = this.paginator;
-                  this.dataSource.sort = this.sort;
-                  this.total.emit(response.alimentador.length);
-                  this.alimentador = response.alimentador;
-                  this.isLoading = false;
-                } else {
-                  this.dataSource = null;
-                  this.alimentador = [];
-                  this.isLoading = false;
-                }
-              },
-              error => {
-                this.dataSource = null;
-                this.alimentador = [];
-                this.isLoading = false;
-                console.log(<any>error);
-              });
-
-    }
-  }
-
-
-  applyFilter(filterValue: string) {
-    this.dataSource.filter = filterValue.trim().toLowerCase();
-
-    if (this.dataSource.paginator) {
-      this.dataSource.paginator.firstPage();
-    }
-  }
-
-
-
-  update(i: number, element: Sed) {
+  update(i: number, element: ClaveLectura) {
     this.indexitem = i;
     this.editando = false;
     this.isLoadingSave = true;
 
     if (element && this.proyecto && this.proyecto.id > 0) {
-      this._customerService.updateSed(this.token.token, element.id_alimentador, element, element.id)
+      this._customerService.updateClaveDeLectura(this.token.token, this.proyecto.id, element, element.id)
       .subscribe( (resp: any) => {
         if (!resp) {
           this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000});
@@ -202,17 +196,18 @@ export class SedListComponent implements OnInit, OnDestroy {
         }
       );
     }
+
   }
 
 
 
-  delete(i: number, element: Sed) {
+  delete(i: number, element: ClaveLectura) {
     this.indexitem = i;
     this.isLoadingDelete = true;
     this.show = false;
 
     if (element && this.proyecto && this.proyecto.id > 0) {
-      this._customerService.deleteSed(this.token.token, element.id_alimentador, element.id)
+      this._customerService.deleteClaveDeLectura(this.token.token, this.proyecto.id, element.id)
       .subscribe( (resp: any) => {
         if (!resp) {
           this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000});
@@ -257,15 +252,6 @@ export class SedListComponent implements OnInit, OnDestroy {
 
   toggle() {
     this.show = !this.show;
-  }
-
-
-  datalengh(params: any = []) {
-    if (params && params.length > 0) {
-      return true;
-    } else {
-      return false;
-    }
   }
 
 

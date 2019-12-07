@@ -375,15 +375,11 @@
 
       <div class="form" >
           <mat-form-field class="margin">
-              <input matInput [matDatepicker]="picker" placeholder="Fecha última Lectura" [(ngModel)]="data.fecha_ultima_lectura" name="fecha_ultima_lectura" >
-              <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-              <mat-datepicker #picker></mat-datepicker>
+              <input matInput type="datetime" placeholder="Fecha última Lectura" [(ngModel)]="data.fecha_ultima_lectura" name="fecha_ultima_lectura">
           </mat-form-field>
 
           <mat-form-field class="margin">
-              <input matInput [matDatepicker]="picker1" placeholder="Fecha última Detección" [(ngModel)]="data.fecha_ultima_deteccion" name="fecha_ultima_deteccion" >
-              <mat-datepicker-toggle matSuffix [for]="picker1"></mat-datepicker-toggle>
-              <mat-datepicker #picker1></mat-datepicker>
+              <input matInput type="datetime" placeholder="Fecha última Detección" [(ngModel)]="data.fecha_ultima_deteccion" name="fecha_ultima_deteccion">
           </mat-form-field>
       </div>
 

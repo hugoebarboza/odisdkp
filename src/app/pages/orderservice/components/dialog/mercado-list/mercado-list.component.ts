@@ -5,10 +5,10 @@ import { MatSnackBar, MatTableDataSource, MatPaginator, MatSort } from '@angular
 
 import Swal from 'sweetalert2';
 
-//MODELS
+// MODELS
 import { Mercado } from 'src/app/models/types';
 
-//SERVICES
+// SERVICES
 import { UserService, ProjectsService } from 'src/app/services/service.index';
 
 @Component({
@@ -18,7 +18,7 @@ import { UserService, ProjectsService } from 'src/app/services/service.index';
 })
 export class MercadoListComponent implements OnInit, OnDestroy {
 
-  @Input() id : number;
+  @Input() id: number;
   @Output() total: EventEmitter<number>;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -28,45 +28,44 @@ export class MercadoListComponent implements OnInit, OnDestroy {
   data: Mercado;
   displayedColumns: string[] = ['descripcion', 'order_by', 'status', 'actions'];
   dataSource = new MatTableDataSource() ;
-  editando: boolean = false;
+  editando = false;
   forma: FormGroup;
   datatype: Mercado[] = [];
-  indexitem:number;
-  isLoading: boolean = true;
-  isLoadingSave: boolean = false;
-  isLoadingDelete: boolean = false;
-  label:number = 0;
+  indexitem: number;
+  isLoading = true;
+  isLoadingSave = false;
+  isLoadingDelete = false;
+  label = 0;
   pageSize = 5;
-  resultsLength:number = 0;
+  resultsLength = 0;
   status: string;
   subscription: Subscription;
-  show:boolean = false;
-  termino: string = '';
+  show = false;
+  termino = '';
   token: any;
 
 
 
-  constructor(    
+  constructor(
     public _userService: UserService,
     public dataService: ProjectsService,
     public snackBar: MatSnackBar,
-  ) { 
+  ) {
     this.token = this._userService.getToken();
     this.total = new EventEmitter();
   }
 
   ngOnInit() {
-    //console.log(this.id);
-    if(this.id > 0){
-      
+    if (this.id > 0) {
+
       this.forma = new FormGroup({
         descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
         order_by: new FormControl(0, [Validators.required]),
-        status: new FormControl(1, [Validators.required]),        
+        status: new FormControl(1, [Validators.required]),
       });
 
-      this.cargar();      
-    }  
+      this.cargar();
+    }
   }
 
 
@@ -76,24 +75,22 @@ export class MercadoListComponent implements OnInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }  
+  }
 
-  cargar(){
+  cargar() {
     this.isLoading = true;
-    //console.log(this.id);
     this.subscription = this.dataService.getMercado(this.token.token, this.id)
     .subscribe(
     response => {
-      //console.log(response);      
-              if(!response){
+              if (!response) {
                 this.status = 'error';
                 this.isLoading = false;
                 return;
               }
-              if(response.status == 'success'){
+              if (response.status === 'success') {
                 this.dataSource = new MatTableDataSource(response.datos.mercado);
                 this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort; 
+                this.dataSource.sort = this.sort;
                 this.resultsLength = this.datatype.length;
                 this.datatype = response.datos.mercado;
                 this.total.emit(this.datatype.length);
@@ -106,52 +103,51 @@ export class MercadoListComponent implements OnInit, OnDestroy {
                 console.log(<any>error);
               }
 
-              );        
+              );
   }
 
-  edit(i:number){
+  edit(i: number) {
     this.indexitem = i;
     this.editando = true;
   }
 
-  close(){
+  close() {
     this.indexitem = -1;
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();      
-      //console.log("ngOnDestroy unsuscribe");
-		}
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   toggle() {
     this.show = !this.show;
-  }  
+  }
 
 
 
-  onSubmit(){
-  
+  onSubmit() {
 
-		if(this.forma.invalid){
-			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
-			return;
-		}
- 
+
+    if (this.forma.invalid) {
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      return;
+    }
+
 
     this.data = new Mercado (0, this.forma.value.descripcion, this.forma.value.order_by, this.forma.value.status, '', '');
 
-    
+
     this.dataService.addServiceMercado(this.token.token, this.id, this.data)
-            .subscribe( (resp: any) => {              
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+            .subscribe( (resp: any) => {
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 this.label = 0;
@@ -160,40 +156,38 @@ export class MercadoListComponent implements OnInit, OnDestroy {
                   this.cargar();
                   this.show = false;
                 }, 1000);
-            
-              }else{
+              } else {
                 this.show = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
-            );  
+              }
+            );
   }
 
 
-  save(i:number, element:Mercado){
+  save(i: number, element: Mercado) {
     this.indexitem = i;
     this.editando = false;
     this.isLoadingSave = true;
-    //console.log(element);
-    
+
     this.dataService.updateServiceMercado(this.token.token, this.id, element, element.id)
             .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-              }else{
+              } else {
                 this.isLoadingSave = false;
                 this.indexitem = -1;
               }
@@ -203,44 +197,49 @@ export class MercadoListComponent implements OnInit, OnDestroy {
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
+              }
             );
-  }  
-  
-  delete(i:number, element:Mercado){
+  }
+
+  delete(i: number, element: Mercado) {
     this.indexitem = i;
     this.isLoadingDelete = true;
-    
+
     this.dataService.deleteServiceMercado(this.token.token, this.id, element.id)
             .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
                 setTimeout( () => {
                   this.cargar();
                 }, 2000);
-                
-              }else{
+              } else {
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                //console.log(<any>error.error);
-                //this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
-                this.snackBar.open(error.error.message, '', {duration:3000, });
+                // console.log(<any>error.error);
+                this.snackBar.open(error.error.message, '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-              }       
+              }
             );
-  }  
+  }
 
+  datalengh(params: Mercado[] = []) {
+    if (params && params.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 }

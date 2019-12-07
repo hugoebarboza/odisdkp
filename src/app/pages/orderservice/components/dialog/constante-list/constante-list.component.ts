@@ -30,45 +30,43 @@ export class ConstanteListComponent implements OnInit, OnDestroy {
   data: Constante;
   displayedColumns: string[] = ['descripcion', 'order_by', 'status', 'actions'];
   dataSource = new MatTableDataSource() ;
-  editando: boolean = false;
+  editando = false;
   forma: FormGroup;
   datatype: Constante[] = [];
-  indexitem:number;
-  isLoading: boolean = true;
-  isLoadingSave: boolean = false;
-  isLoadingDelete: boolean = false;
-  label:number = 0;
+  indexitem: number;
+  isLoading = true;
+  isLoadingSave = false;
+  isLoadingDelete = false;
+  label = 0;
   pageSize = 5;
-  resultsLength:number = 0;
+  resultsLength = 0;
   status: string;
   subscription: Subscription;
-  show:boolean = false;
-  termino: string = '';
+  show = false;
+  termino = '';
   token: any;
 
 
 
-  constructor(    
+  constructor(
     public _userService: UserService,
     public dataService: ProjectsService,
     public snackBar: MatSnackBar,
-  ) { 
+  ) {
     this.token = this._userService.getToken();
     this.total = new EventEmitter();
   }
 
   ngOnInit() {
-    //console.log(this.id);
-    if(this.id > 0){
-      
+    if (this.id > 0) {
       this.forma = new FormGroup({
         descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
         order_by: new FormControl(0, [Validators.required]),
-        status: new FormControl(1, [Validators.required]),        
+        status: new FormControl(1, [Validators.required]),
       });
 
-      this.cargar();      
-    }  
+      this.cargar();
+    }
   }
 
 
@@ -78,27 +76,23 @@ export class ConstanteListComponent implements OnInit, OnDestroy {
     if (this.dataSource.paginator) {
       this.dataSource.paginator.firstPage();
     }
-  }  
+  }
 
-  cargar(){
+  cargar() {
     this.isLoading = true;
-    //console.log(this.id);
     this.subscription = this.dataService.getConstante(this.token.token, this.id)
     .subscribe(
     response => {
-      //console.log(response);      
-              if(!response){
+              if (!response) {
                 this.status = 'error';
                 this.isLoading = false;
                 return;
               }
-              if(response.status == 'success'){
-                //console.log(response.datos.constante);
+              if(response.status === 'success') {
                 this.dataSource = new MatTableDataSource(response.datos.constante);
                 this.dataSource.paginator = this.paginator;
-                this.dataSource.sort = this.sort; 
+                this.dataSource.sort = this.sort;
                 this.resultsLength = this.datatype.length;
-                //console.log(this.resultsLength);
                 this.datatype = response.datos.constante;
                 this.total.emit(this.datatype.length);
                 this.isLoading = false;
@@ -110,52 +104,50 @@ export class ConstanteListComponent implements OnInit, OnDestroy {
                 console.log(<any>error);
               }
 
-              );        
+              );
   }
 
-  edit(i:number){
+  edit(i: number) {
     this.indexitem = i;
     this.editando = true;
   }
 
-  close(){
+  close() {
     this.indexitem = -1;
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();      
-      //console.log("ngOnDestroy unsuscribe");
-		}
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      // console.log("ngOnDestroy unsuscribe");
+    }
   }
 
   toggle() {
     this.show = !this.show;
-  }  
+  }
 
 
 
-  onSubmit(){
-  
+  onSubmit() {
 
-		if(this.forma.invalid){
-			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
-			return;
-		}
- 
+    if (this.forma.invalid) {
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      return;
+    }
+
 
     this.data = new Constante (0, this.forma.value.descripcion, this.forma.value.order_by, this.forma.value.status, '', '');
 
-    
     this.dataService.addServiceConstante(this.token.token, this.id, this.data)
-            .subscribe( (resp: any) => {              
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+            .subscribe( (resp: any) => {
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 this.label = 0;
@@ -164,87 +156,84 @@ export class ConstanteListComponent implements OnInit, OnDestroy {
                   this.cargar();
                   this.show = false;
                 }, 1000);
-            
-              }else{
+
+              } else {
                 this.show = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
-            );  
+              }
+            );
   }
 
 
-  save(i:number, element:Constante){
+  save(i: number, element: Constante) {
     this.indexitem = i;
     this.editando = false;
     this.isLoadingSave = true;
-    //console.log(element);
-    
+
     this.dataService.updateServiceConstante(this.token.token, this.id, element, element.id)
             .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-              }else{
+              } else {
                 this.isLoadingSave = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
+              }
             );
-  }  
-  
-  delete(i:number, element:Constante){
+  }
+
+  delete(i: number, element: Constante) {
     this.indexitem = i;
     this.isLoadingDelete = true;
-    
+
     this.dataService.deleteServiceConstante(this.token.token, this.id, element.id)
             .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
                 setTimeout( () => {
                   this.cargar();
                 }, 2000);
-                
-              }else{
+              } else {
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                //console.log(<any>error.error);
-                //this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
-                this.snackBar.open(error.error.message, '', {duration:3000, });
+                // console.log(<any>error.error);
+                this.snackBar.open(error.error.message, '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-              }       
+              }
             );
-  }  
+  }
 
 
 }

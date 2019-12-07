@@ -24,6 +24,7 @@ import { ViewModule } from '../../components/views/view.module';
 
 // DIALOG
 import { AddAlimentadorComponent } from './components/dialog/add-alimentador/add-alimentador.component';
+import { AddClavelecturaComponent } from './components/dialog/add-clavelectura/add-clavelectura.component';
 import { AddComponent } from '../../components/dialog/add/add.component';
 import { AddcustomerComponent } from '../../components/dialog/addcustomer/addcustomer.component';
 import { AddConstanteComponent } from './components/dialog/add-constante/add-constante.component';
@@ -43,6 +44,7 @@ import { AddSedComponent } from './components/dialog/add-sed/add-sed.component';
 import { AddTarifaComponent } from './components/dialog/add-tarifa/add-tarifa.component';
 import { AddZonaComponent } from './components/dialog/add-zona/add-zona.component';
 import { AlimentadorListComponent } from './components/dialog/alimentador-list/alimentador-list.component';
+import { ClavelecturaListComponent } from './components/dialog/clavelectura-list/clavelectura-list.component';
 import { ClientOrderComponent } from './components/client-order/client-order.component';
 import { ColorListComponent } from './components/dialog/color-list/color-list.component';
 import { ConstanteListComponent } from './components/dialog/constante-list/constante-list.component';
@@ -177,6 +179,7 @@ registerLocaleData(localeEs);
     ViewModule
   ],
   declarations: [
+    AddClavelecturaComponent,
     AddComponent,
     AddConstanteComponent,
     AddColorComponent,
@@ -198,6 +201,7 @@ registerLocaleData(localeEs);
     AddZonaComponent,
     AlimentadorListComponent,
     CargaComponent,
+    ClavelecturaListComponent,
     ClientOrderComponent,
     ConstanteListComponent,
     ColorListComponent,
@@ -256,6 +260,7 @@ registerLocaleData(localeEs);
   exports: [
   ],
   entryComponents: [
+    AddClavelecturaComponent,
     AddComponent,
     AddConstanteComponent,
     AddColorComponent,

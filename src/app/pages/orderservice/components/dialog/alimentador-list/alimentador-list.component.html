@@ -5,7 +5,7 @@
         </div>
     </div>
   
-    <div class="row animated fadeIn" *ngIf="!isLoading">
+    <div class="row animated fadeIn" [hidden]="isLoading">
         <div class="col-12">    
               <div class="animated fadeIn" *ngIf="isLoading">
                   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
@@ -15,7 +15,7 @@
                         No se encontraron registros.
              </div>
           
-            <div *ngIf="set.length > 0">
+            <div >
   
                 <mat-form-field class="full-width">
                     <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
@@ -123,8 +123,8 @@
                         <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;">                    
                         </tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
   
-
                 </div>
   
             </div>

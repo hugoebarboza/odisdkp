@@ -117,40 +117,37 @@ export class GiroListComponent implements OnInit, OnDestroy {
     this.indexitem = -1;
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();      
-      //console.log("ngOnDestroy unsuscribe");
-		}
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   toggle() {
     this.show = !this.show;
-  }  
+  }
 
 
 
-  onSubmit(){
-  
+  onSubmit() {
 
-		if(this.forma.invalid){
-			Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
-			return;
-		}
- 
+    if (this.forma.invalid) {
+      Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
+      return;
+    }
+
 
     this.data = new Giro (0, this.forma.value.descripcion, this.forma.value.order_by, this.forma.value.status, '', '');
 
-    
     this.dataService.addServiceGiro(this.token.token, this.id, this.data)
-            .subscribe( (resp: any) => {              
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+            .subscribe( (resp: any) => {
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 this.label = 0;
@@ -159,86 +156,91 @@ export class GiroListComponent implements OnInit, OnDestroy {
                   this.cargar();
                   this.show = false;
                 }, 1000);
-            
-              }else{
+              } else {
                 this.show = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
-            );  
+              }
+            );
   }
 
 
-  save(i:number, element:Giro){
+  save(i: number, element: Giro) {
     this.indexitem = i;
     this.editando = false;
     this.isLoadingSave = true;
-    //console.log(element);
-    
+
     this.dataService.updateServiceGiro(this.token.token, this.id, element, element.id)
             .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-              }else{
+              } else {
                 this.isLoadingSave = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
+              }
             );
-  }  
-  
-  delete(i:number, element:Giro){
+  }
+
+  delete(i: number, element: Giro) {
     this.indexitem = i;
     this.isLoadingDelete = true;
-    
+
     this.dataService.deleteServiceGiro(this.token.token, this.id, element.id)
             .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+              if (!resp) {
+                this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000,});
+              if (resp.status === 'success') {
+                this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
                 setTimeout( () => {
                   this.cargar();
                 }, 2000);
-                
-              }else{
+
+              } else {
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                //console.log(<any>error.error);
-                //this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
-                this.snackBar.open(error.error.message, '', {duration:3000, });
+                // console.log(<any>error.error);
+                this.snackBar.open(error.error.message, '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-              }       
+              }
             );
-  }  
+  }
+
+  datalengh(params: Giro[] = []) {
+    if (params && params.length > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 
 }

@@ -77,6 +77,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   sed: Array<Object> = [];
   clavelectura: Array<Object> = [];
 
+  country_id = 0;
   region: Array<Object> = [];
   provincia: Array<Object> = [];
   comuna: Array<Object> = [];
@@ -250,8 +251,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     this.countExiste = 0;
     this.dataSource = null;
     this.dataSourceClientes = null;
-    this.paginator = null;
-    this.paginatorClientes = null;
+    // this.paginator = null;
+    // this.paginatorClientes = null;
 
     if (this.file != null) {
 
@@ -327,11 +328,11 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             let block: String = '' + that.arrayCarga[ii]['block'];
             let depto: String = '' + that.arrayCarga[ii]['depto'];
             let region: String = '' + that.arrayCarga[ii]['region'];
-            let id_region: Number = 0;
+            let id_region = 0;
             let provincia: String = '' + that.arrayCarga[ii]['provincia'];
-            let id_provincia: Number = 0;
+            let id_provincia = 0;
             let comuna: String = '' + that.arrayCarga[ii]['comuna'];
-            let id_comuna: Number = 0;
+            let id_comuna = 0;
             let medidor: String = '' + that.arrayCarga[ii]['medidor'];
             let modelo_medidor: String = '' + that.arrayCarga[ii]['modelo_medidor'];
             let transformador: String = '' + that.arrayCarga[ii]['transformador'];
@@ -563,7 +564,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                 concatError = concatError + 'Region; ';
               } else {
                 region = region.trim();
-                const resRegion: any = that.validarSelectSedALimnetadorSed(region, that.region, 'region_name');
+                region = that.eliminarDiacriticosEs(region);
+                const resRegion: any = that.validarRegionProvinciaComuna(region, that.region, 'region_name', that.country_id, 'country_id');
                 if (resRegion) {
                   id_region = resRegion.id;
 
@@ -573,7 +575,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                     concatError = concatError + 'Provincia; ';
                   } else {
                     provincia = provincia.trim();
-                    const resProvincia: any = that.validarSelectSedALimnetadorSed(provincia, that.provincia, 'province_name');
+                    provincia = that.eliminarDiacriticosEs(provincia);
+                    const resProvincia: any = that.validarRegionProvinciaComuna(provincia, that.provincia, 'province_name', id_region, 'region_id');
                     if (resProvincia) {
                       if (resProvincia.region_id === id_region) {
                         id_provincia = resProvincia.id;
@@ -584,7 +587,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                           concatError = concatError + 'Comuna; ';
                         } else {
                           comuna = comuna.trim();
-                          const resComuna: any = that.validarSelectSedALimnetadorSed(comuna, that.comuna, 'commune_name');
+                          comuna = that.eliminarDiacriticosEs(comuna);
+                          const resComuna: any = that.validarRegionProvinciaComuna(comuna, that.comuna, 'commune_name', id_provincia, 'province_id');
                           if (resComuna) {
                             if (resComuna.province_id === id_provincia) {
                               id_comuna = resComuna.id;
@@ -938,6 +942,17 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               objectJson['vencimiento_date'] = that.dateend;
             }
 
+
+            let carcaterespecial =  JSON.stringify(objectJson);
+
+            carcaterespecial = carcaterespecial.replace(/#/g, '');
+            carcaterespecial = carcaterespecial.replace(/¥/g, '');
+            carcaterespecial = carcaterespecial.replace(/—/g, '');
+            carcaterespecial = carcaterespecial.replace(/&/g, '');
+
+            objectJson = JSON.parse(carcaterespecial);
+
+            /**
             if (JSON.stringify(objectJson).search('#') !== -1 ) {
               banderaJson = true;
               concatError = concatError + ' Caracter especial [#] No permitido';
@@ -957,6 +972,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               banderaJson = true;
               concatError = concatError + ' Caracter especial [&] No permitido';
             }
+            */
 
             if (banderaJson) {
               const success: Object = {
@@ -1037,6 +1053,17 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       };
       fileReader.readAsArrayBuffer(this.file);
     }
+  }
+
+  eliminarDiacriticosEs(texto) {
+    texto = texto.toLowerCase();
+    texto = texto.replace(/á/g, 'a');
+    texto = texto.replace(/é/g, 'e');
+    texto = texto.replace(/í/g, 'i');
+    texto = texto.replace(/ó/g, 'o');
+    texto = texto.replace(/ú/g, 'u');
+    texto = texto.replace(/ñ/g, 'n');
+    return texto;
   }
 
   checkAutoGenerar(event) {
@@ -1127,9 +1154,12 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
         res.subscribe(
           (some) => {
             // console.log(some);
-            this.region = some['region'];
-            this.provincia = some['provincia'];
-            this.comuna = some['comuna'];
+            const regiontem =  JSON.stringify(some['region']);
+            this.region = JSON.parse(this.eliminarDiacriticosEs(regiontem));
+            const provinciatem =  JSON.stringify(some['provincia']);
+            this.provincia = JSON.parse(this.eliminarDiacriticosEs(provinciatem));
+            const comunatem =  JSON.stringify(some['comuna']);
+            this.comuna = JSON.parse(this.eliminarDiacriticosEs(comunatem));
           },
           (_error) => {
             // console.log(<any>error);
@@ -1167,6 +1197,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                 this.project = this.services['project']['project_name'];
                 this.project_id = this.services['project']['id'];
                 this.ServicioSeleccionado.emit(this.servicename);
+                this.country_id = this.services['project']['country_id'];
                 if (this.project_id > 0) {
                   this.getInspectores();
                   this.getRegionProvinciaComuna(this.services['project']['country_id']);
@@ -1308,6 +1339,22 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     if (arrayObject.length > 0) {
       arrayObject.forEach(function(valor, _indice, _array) {
        if (valor[value].toLowerCase() === (termino).toLowerCase()) {
+        element = valor;
+       }
+      }, this);
+    }
+    return element;
+  }
+
+  validarRegionProvinciaComuna(termino: any, arrayObject: Array<object>, value: string, id: number, descId: string) {
+    if (!termino) {
+      return false;
+    }
+    let element: any;
+    if (arrayObject.length > 0) {
+      arrayObject.forEach(function(valor, _indice, _array) {
+       if (valor[descId] === id && valor[value].toLowerCase() === (termino).toLowerCase()) {
+        // console.log('------------------------------- ' + valor[value].toLowerCase() + ' - ' + (termino).toLowerCase());
         element = valor;
        }
       }, this);

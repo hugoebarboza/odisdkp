@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 // MODELS
-import { Alimentador, Customer, Set, Sed } from 'src/app/models/types';
+import { Alimentador, ClaveLectura, Customer, Set, Sed } from 'src/app/models/types';
 
 import Swal from 'sweetalert2';
 
@@ -118,6 +118,12 @@ export class CustomerService {
        return this.getQuery('service/' + id + '/tarifa', token);
     }
 
+
+    getClaveDeLectura(token, id): Observable<any> {
+      return this.getQuery('project/' + id + '/clavelectura', token);
+   }
+
+
     getConstante(token, id): Observable<any> {
        return this.getQuery('service/' + id + '/constante', token);
     }
@@ -205,6 +211,22 @@ export class CustomerService {
    }
 
 
+   addClaveDeLectura(token: any, id: number, data: ClaveLectura): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.post(this.url + 'project/' + id + '/clavelectura', params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+
    addSed(token: any, id: number, data: Sed): Observable<any> {
       if (!token) {
          return;
@@ -270,6 +292,23 @@ export class CustomerService {
                        .map( (resp: any) => resp);
    }
 
+
+
+   updateClaveDeLectura(token: any, id: number, data: ClaveLectura, data_id: number): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.put(this.url + 'project/' + id + '/clavelectura/' + data_id, params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
    updateSet(token: any, id: number, data: Set, data_id: number): Observable<any> {
       if (!token) {
          return;
@@ -324,6 +363,16 @@ export class CustomerService {
 
       const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this._http.delete(this.url + 'set/' + id + '/alimentador/' + data_id, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+   deleteClaveDeLectura(token: any, id: number, data_id: number): Observable<any> {
+      if (!token) {
+          return;
+      }
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this._http.delete(this.url + 'project/' + id + '/clavelectura/' + data_id, {headers: headers})
                        .map( (resp: any) => resp);
    }
 

@@ -10,18 +10,18 @@
       
   
   
-    <div class="row animated fadeIn" *ngIf="!isLoading">
+    <div class="row animated fadeIn" [hidden]="isLoading">
       <div class="col-12">    
             <div class="animated fadeIn" *ngIf="isLoading">
                 <mat-progress-bar mode="indeterminate"></mat-progress-bar>
             </div>
 
            <div class="alert alert-danger" *ngIf="datatype.length == 0">
-                      No se encontraron registros.
+                No se encontraron registros.
            </div>
         
   
-          <div *ngIf="datatype.length > 0">
+          <div [hidden]="!datalengh(datatype)">
 
               <mat-form-field class="full-width">
                   <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
@@ -97,83 +97,9 @@
                       <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;">                    
                       </tr>
                     </table>
+                    <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
     
               </div>
-              
-                <!---
-                <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" [pageSize]="pageSize"  [length]="resultsLength" [showFirstLastButtons]="true"></mat-paginator>            
-                -->
-                  <!---
-                  <table class="table table-hover" >
-                      <thead>
-                          <tr>
-                              <th></th>                        
-                              <th>Descripción</th>
-                              <th>Posición</th>
-                              <th>Estatus</th>
-                              <th *ngIf="_userService.isRole(7)"></th>
-                          </tr>
-                      </thead>
-  
-                      <tbody>
-                          <tr *ngFor="let element of datatype; let i = index">
-                            <td class="w10">
-                                <div class="circle" [style.color]="element.status? 'green' : 'red'"></div>
-                            </td>
-                            <td>
-                              <label *ngIf="i !== indexitem || isLoadingDelete">{{element.descripcion}}</label>
-                              <input type="text" class="form-control" id="{{element.descripcion}}" [(ngModel)]="element.descripcion" *ngIf="i == indexitem && !isLoadingDelete"  required>
-                            </td>
-  
-                            <td>
-                              <label *ngIf="i !== indexitem || isLoadingDelete">{{element.order_by}}</label>
-                              <input type="number" class="form-control"  [(ngModel)]="element.order_by" *ngIf="i == indexitem && !isLoadingDelete"  required>
-                            </td>
-        
-                            <td>
-                              <label *ngIf="i !== indexitem || isLoadingDelete">{{element.status}}</label>
-                              <input type="text" class="form-control" id="{{element.status}}" [(ngModel)]="element.status" *ngIf="i == indexitem && !isLoadingDelete">
-
-                          </td>
-
-
-                            <td *ngIf="_userService.isRole(7)">
-  
-        
-                              <button mat-icon-button color="primary" *ngIf="element.descripcion.length > 1 && i != indexitem" (click)="edit(i)">
-                              <mat-icon aria-label="Edit" >edit</mat-icon>
-                              </button>            
-        
-  
-                              <button mat-icon-button color="primary" *ngIf="element.descripcion.length > 1 && i == indexitem && editando && !isLoadingDelete" (click)="save(i, element)" >
-                              <mat-icon aria-label="Edit"  >done</mat-icon>                            
-                              </button>
-  
-                              <button mat-icon-button color="primary" *ngIf="element.descripcion.length > 1 && i == indexitem && editando && !isLoadingDelete" (click)="close()" >
-                                  <mat-icon aria-label="Edit"  >close</mat-icon>                            
-                              </button>
-      
-  
-                              <button mat-icon-button color="primary" *ngIf="isLoadingSave && i == indexitem && !editando">
-                              <app-progress-spinner ></app-progress-spinner>
-                              </button>
-  
-  
-                              <button mat-icon-button color="warn" (click)="delete(i, element)" *ngIf="i != indexitem">
-                                  <mat-icon aria-label="Edit" >delete</mat-icon>                             
-                              </button>
-  
-                              <button mat-icon-button color="primary" *ngIf="isLoadingDelete && i == indexitem && !editando">
-                              <app-progress-spinner ></app-progress-spinner>
-                              </button>
-  
-  
-                            </td>
-                          </tr>
-                      </tbody>
-                  </table>--->
-
-
           </div>
 
           <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="form p-t-20" >
