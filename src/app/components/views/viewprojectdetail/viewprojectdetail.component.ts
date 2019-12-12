@@ -458,7 +458,7 @@ deleteCommentDatabase(item: any) {
     if (borrar.value) {
       if (borrar) {
         this.itemsCollection.doc(item.id).delete();
-        this.snackBar.open('Eliminando Registro de Trabajo.', '', {duration: 2000,});  
+        this.snackBar.open('Eliminando Registro de Trabajo.', '', {duration: 2000, });
         if (this.toggleContent) {
           this.toggleContent = false;
         }
@@ -1045,8 +1045,9 @@ deleteCommentDatabase(item: any) {
 
 
     taguser(data) {
-      if (data.length == 0) {
+      if (data.length === 0) {
         data = '';
+        this.destinatario = [];
         return;
       }
 

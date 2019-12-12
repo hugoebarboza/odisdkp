@@ -8,8 +8,7 @@ import { debounceTime, distinctUntilChanged, tap, switchMap, catchError } from '
 
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
-
-//MODELS
+// MODELS
 import { UserFirebase } from 'src/app/models/types';
 
 export interface Users {
@@ -26,7 +25,7 @@ export interface Users {
 })
 export class TagUserComponent implements OnInit {
 
-  activationTag: boolean = false;
+  activationTag = false;
   disableSelect = new FormControl(false);
   disableTagUser =  true;
   userinput = new Subject<string>();
@@ -36,12 +35,12 @@ export class TagUserComponent implements OnInit {
   public usersFt: Observable<Users[]>;
   private usersCollection: AngularFirestoreCollection<Users>;
 
-  @Input() userFirebase : UserFirebase;
+  @Input() userFirebase: UserFirebase;
   @Output() tagUser: EventEmitter<Users[]>;
 
   constructor(
-    private _afs: AngularFirestore,    
-  ) { 
+    private _afs: AngularFirestore,
+  ) {
     this.tagUser = new EventEmitter();
   }
 
@@ -50,10 +49,8 @@ export class TagUserComponent implements OnInit {
     this._afs.firestore.doc(`users/${ this.userFirebase.uid }`).get()
     .then(docSnapshot => {
       if (docSnapshot.exists) {
-        //console.log('exist')
         this.activationTag = true;
-      }else{
-        //console.log('user no exist')
+      } else {
       }
     });
 
@@ -92,12 +89,11 @@ public loadusers() {
          ))
       )
     );
-}  
-  
+}
 
 public getListuser(term: string) {
 
-  if(term == null){
+  if (term == null) {
     this.userLoading = false;
     return new Observable;
   }
@@ -108,7 +104,6 @@ public getListuser(term: string) {
                 return actions.map(a => {
                   const data = a.payload.doc.data() as Users;
                   const id = a.payload.doc.id;
-                  //console.log(data);
                   return { id, ...data };
                 });
               });
@@ -118,13 +113,13 @@ public getListuser(term: string) {
  toggleDisable() {
   this.forma.get('select').valueChanges
   .subscribe(response => {
-    if(response == true){
+    if (response == true) {
       this.forma.get('destinatario').enable();
-    }else{
+    } else {
       this.forma.get('destinatario').disable();
     }
   });
- } 
- 
+ }
+
 
 }

@@ -56,27 +56,28 @@
 
                     <div class="mat-card-header-text">
                       <mat-card-title >
-                        <div class="d-flex justify-content-end" >
-
-                            <div class="p-2">
-                              <button type="button" class="btn btn-success btn-sm" [routerLink]="['/payments', id]"><mat-icon class="material-icons md-14">credit_card</mat-icon>EDP</button>
+                        <div class="d-flex bd-highlight">
+                            <div class="p-2 flex-grow-1 bd-highlight"></div>
+                            <div class="p-2 bd-highlight">
+                                <div class="btn-group mr-2" role="group" aria-label="First group">
+                                  <button type="button" class="btn btn-success btn-sm" [routerLink]="['/payments', id]"><mat-icon class="material-icons md-14">credit_card</mat-icon>EDP</button>    
+                                </div>
+                                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                  <button type="button" class="btn btn-light btn-sm" (click)="openDialogKpi()"><mat-icon class="material-icons md-14">insert_chart_outlined</mat-icon>KPI</button>
+                                </div>
+                                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                  <button type="button" class="btn btn-light btn-sm" (click)="openDialogCsv()"><mat-icon class="material-icons md-14">save_alt</mat-icon>CSV</button>
+                                </div>
+                                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                  <button type="button" class="btn btn-light btn-sm" (click)="openDialogUser(id)"><mat-icon class="material-icons md-14">people</mat-icon>Usuarios</button>
+                                </div>
+                                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                  <button type="button" class="btn btn-light btn-sm" [routerLink]="['/formview/form/', id, 'settings', 0]"><mat-icon class="material-icons md-14">receipt</mat-icon>Formularios</button>
+                                </div>
+                                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                  <button type="button" class="btn btn-primary btn-sm" (click)="addNew(id)"><mat-icon class="material-icons md-14">folder_open</mat-icon>Proyectos</button>
+                                </div>
                             </div>
-                            <div class="p-2">
-                              <button type="button" class="btn btn-light btn-sm" (click)="openDialogKpi()"><mat-icon class="material-icons md-14">insert_chart_outlined</mat-icon>KPI</button>
-                            </div>  
-                            <div class="p-2">
-                              <button type="button" class="btn btn-light btn-sm" (click)="openDialogCsv()"><mat-icon class="material-icons md-14">save_alt</mat-icon>CSV</button>
-                            </div>
-                            <div class="p-2">
-                              <button type="button" class="btn btn-light btn-sm" (click)="openDialogUser(id)"><mat-icon class="material-icons md-14">people</mat-icon>Usuarios</button>
-                            </div>
-                            <div class="p-2">
-                                <button type="button" class="btn btn-light btn-sm" [routerLink]="['/formview/form/', id, 'settings', 0]"><mat-icon class="material-icons md-14">receipt</mat-icon>Formularios</button>
-                            </div>  
-                            <div class="p-2">
-                              <button type="button" class="btn btn-primary btn-sm" (click)="addNew(id)"><mat-icon class="material-icons md-14">folder_open</mat-icon>Proyectos</button>
-                            </div>
-                              
                         </div>
                       </mat-card-title>
                     </div>

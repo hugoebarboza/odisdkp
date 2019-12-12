@@ -88,8 +88,8 @@
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['usercreate']"><strong>CREADA POR: </strong>{{order[0]['usercreate']}}</h2></div>
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['create_at']"><strong>CREADA EL: </strong>{{order[0]['create_at']}}</h2></div>
                                 <div class="w-100"></div>
-                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['order_date']"><strong>FECHA SOLICITUD: </strong>{{order[0]['order_date']}}</h2></div>
-                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['required_date']"><strong>FECHA REQUERIDA: </strong>{{order[0]['required_date']}}</h2></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['order_date'] && order[0]['order_date'] !== '0000-00-00 00:00:00'"><strong>FECHA SOLICITUD: </strong>{{order[0]['order_date']}}</h2></div>
+                                <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['required_date'] && order[0]['required_date'] !== '0000-00-00 00:00:00'"><strong>FECHA REQUERIDA: </strong>{{order[0]['required_date']}}</h2></div>                                
                                 <div class="w-100"></div>
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['vencimiento_date']"><strong>FECHA VENCIMIENTO: </strong>{{order[0]['vencimiento_date']}}</h2></div>
                             </div>
@@ -167,7 +167,7 @@
                     </div>
                 </div>
             </div>
-            
+
 
             <div class="row" style="margin-top: 14px">
                 <div class="col-md-12 order-first" >
@@ -193,10 +193,22 @@
                         </div>
                         <div class="col-2" *ngIf="detailorderatributo.atributo_id == detailatributo.id"><h2 class="jeEmYB" style="text-align:center;">{{detailatributo.id}}</h2></div>
                         <div class="col-4" *ngIf="detailorderatributo.atributo_id == detailatributo.id"><h2 class="jeEmYB" >{{detailatributo.descripcion}}</h2></div>
-                        <div class="col-4" *ngIf="detailorderatributo.atributo_id == detailatributo.id"><h2 class="jeEmYB" >{{detailorderatributo.valor}}</h2></div>            
+
+                        <div class="col-4" *ngIf="detailorderatributo.atributo_id == detailatributo.id">
+                            <div *ngIf="detailatributo.type == 'chip' ">
+                                <div *ngFor="let itemschip of detailorderatributo.valor | split" style="display: flex;">
+                                    <mat-icon *ngIf="itemschip.value"  class="material-icons md-18" style="margin-right: 4px;">done</mat-icon>
+                                    <p class="jeEmYB" *ngIf="itemschip.value">{{itemschip.descripcion}}</p>
+                                </div>
+                            </div>
+                            <div style="min-height: 2px;" *ngIf="detailatributo.type != 'chip' ">
+                                    <h2 class="jeEmYB" >{{detailorderatributo.valor}}</h2>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
-            </div>
+            </div>            
                 
             <div class="row" style="margin-top: 14px" *ngIf="show && imageRows.length > 0">
                 <div class="col-md-12 order-first" >

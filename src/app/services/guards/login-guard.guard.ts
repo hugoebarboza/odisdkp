@@ -34,10 +34,10 @@ export class LoginGuardGuard implements CanLoad  {
     // console.log('Url:'+ url);
 
     if ( this.auth.isAuthenticated() ) {
-      console.log( 'Paso Guard' );
+      // console.log( 'Paso Guard' );
       return true;
     } else {
-      console.log( 'Bloqueado por Guard' );
+      // console.log( 'Bloqueado por Guard' );
       // this.auth.resetAction();
       this.auth.logout();
       this.authService.logout();

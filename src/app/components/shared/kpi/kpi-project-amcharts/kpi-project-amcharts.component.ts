@@ -68,6 +68,7 @@ export class KpiProjectAmchartsComponent implements OnInit, AfterViewInit, OnDes
 
   constructor(
     private zone: NgZone,
+    private zone2: NgZone,
     private _kpiService: KpiService,
     private _userService: UserService,
     private toasterService: ToastrService,
@@ -96,10 +97,14 @@ export class KpiProjectAmchartsComponent implements OnInit, AfterViewInit, OnDes
       if (this.chartxy) {
           this.chartxy.dispose();
       }
+    });
+
+    this.zone2.runOutsideAngular(() => {
       if (this.chartserpentine) {
         this.chartserpentine.dispose();
       }
     });
+
   }
 
 
@@ -206,10 +211,15 @@ export class KpiProjectAmchartsComponent implements OnInit, AfterViewInit, OnDes
     // console.log(datasource);
     if (datasource && datasource.length > 0) {
 
-        this.zone.runOutsideAngular(() => {
+        this.zone2.runOutsideAngular(() => {
           Promise.all([
           ])
           .then(() => {
+
+            am4core.useTheme(am4themes_animated);
+            // Themes end
+
+
             // Themes begin
             am4core.useTheme(am4themes_animated);
             // Themes end

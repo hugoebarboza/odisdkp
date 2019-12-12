@@ -956,6 +956,14 @@ export class ProjectsService {
 		return this.getQuery('service/' + id + '/servicetype' , token);
 	}
 
+	getTipoVehiculo(token:any): Observable<any>{
+		if(!token){
+			return;
+		}
+		return this.getQuery('tipovehiculo', token);
+	}
+
+
 	getAllTiposervicioProyecto(token:any, id:number){
 		if(!token){
 			return;

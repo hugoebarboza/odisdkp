@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
 
 // MODELS
-import { Alimentador, ClaveLectura, Customer, Set, Sed } from 'src/app/models/types';
+import { Alimentador, ClaveLectura, Customer, Marca, Modelo, Set, Sed, Team } from 'src/app/models/types';
 
 import Swal from 'sweetalert2';
 
@@ -161,11 +161,17 @@ export class CustomerService {
        return this.getQuery('marca/' + id + '/modelo', token);
     }
 
+    getModelos(token): Observable<any> {
+      return this.getQuery('modelos', token);
+   }
 
    getColor(token): Observable<any> {
        return this.getQuery('colors', token);
    }
 
+   getRepresentative(token): Observable<any> {
+      return this.getQuery('representative', token);
+   }
 
    add(token, customer: Customer, id: number): void {
     if (!token) {
@@ -225,7 +231,33 @@ export class CustomerService {
                        .map( (resp: any) => resp);
    }
 
+   addMarca(token: any, data: Marca): Observable<any> {
+      if (!token) {
+         return;
+      }
 
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.post(this.url + 'marca', params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+   addModelo(token: any, data: Modelo): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.post(this.url + 'modelos', params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
 
    addSed(token: any, id: number, data: Sed): Observable<any> {
       if (!token) {
@@ -255,6 +287,22 @@ export class CustomerService {
       return this._http.post(this.url + 'project/' + id + '/set', params, {headers: headers})
                        .map( (resp: any) => resp);
    }
+
+
+   addTeam(token: any, id: number, data: Team): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.post(this.url + 'project/' + id + '/team', params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
 
 
    update(token: any, customer: Customer, id: number, customerid: number): void {
@@ -305,6 +353,35 @@ export class CustomerService {
       const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
       return this._http.put(this.url + 'project/' + id + '/clavelectura/' + data_id, params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+   updateMarca(token: any, id: number, data: Marca): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.put(this.url + 'marca/' + id, params, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+   updateModelo(token: any, id: number, data: Modelo): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      return this._http.put(this.url + 'modelos/' + id, params, {headers: headers})
                        .map( (resp: any) => resp);
    }
 
@@ -373,6 +450,27 @@ export class CustomerService {
 
       const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this._http.delete(this.url + 'project/' + id + '/clavelectura/' + data_id, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+
+   deleteMarca(token: any, id: number): Observable<any> {
+      if (!token) {
+          return;
+      }
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this._http.delete(this.url + 'marca/' + id, {headers: headers})
+                       .map( (resp: any) => resp);
+   }
+
+   deleteModelo(token: any, id: number): Observable<any> {
+      if (!token) {
+          return;
+      }
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this._http.delete(this.url + 'modelos/' + id, {headers: headers})
                        .map( (resp: any) => resp);
    }
 

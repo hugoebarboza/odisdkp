@@ -8,6 +8,7 @@ import Swal from 'sweetalert2';
 
 // DIALOG
 import { AddUserComponent } from '../dialog/adduser/adduser.component';
+import { AddTeamComponent } from '../dialog/add-team/add-team.component';
 import { EditUserComponent } from '../dialog/edituser/edituser.component';
 import { ModalUploadImageComponent } from '../dialog/modaluploadimage/modaluploadimage.component';
 import { ShowProfileSecurityComponent } from '../dialog/showprofilesecurity/showprofilesecurity.component';
@@ -23,7 +24,6 @@ import { Proyecto } from 'src/app/models/types';
 
 // SERVICES
 import { SettingsService, UserService } from 'src/app/services/service.index';
-
 
 
 @Component({
@@ -46,7 +46,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   proyectos: Array<Proyecto> = [];
   project: any;
   project_name = '';
-  roles:  any[] = [];
+  roles = [];
   status: string;
   sub: any;
   subscription: Subscription;
@@ -54,7 +54,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   termino = '';
   token: any;
   totalRegistros = 0;
-  usuarios: any[] = [];
+  usuarios = [];
   verify: number;
 
 
@@ -163,6 +163,26 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     }
  }
 
+ addTeam(id: number) {
+  if (id > 0) {
+    const dialogRef = this.dialog.open(AddTeamComponent, {
+      width: '777px',
+      disableClose: true,
+      data: { project_id: id
+      }
+      });
+
+      dialogRef.afterClosed().subscribe(
+            result => {
+               if (result === 1) {
+               // After dialog is closed we're doing frontend updates
+               // For add we're just pushing a new row inside DataService
+               // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());
+               // this.refresh();
+               }
+             });
+  }
+}
 
   cargarUsuarios() {
 
@@ -264,6 +284,15 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     this.indexitem = i;
     this.isLoadingDownload = true;
 
+
+    if (!usuario || !usuario.role_id) {
+      Swal.fire('Importante', 'A ocurrido un error en la actualización del usuario.', 'error');
+      this.isLoadingDownload = false;
+      this.indexitem = -1;
+      return;
+   }
+
+
     this._userService.update(this.token.token, usuario, usuario.id)
             .subscribe( (resp: any) => {
               if (!resp) {
@@ -288,6 +317,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   }
 
   getRoleUser() {
+    // const role = 9;
     if (this.token.token) {
       this._userService.getRoleUser(this.token.token, this.identity.role).subscribe(
         response => {
@@ -296,6 +326,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
           }
             if (response.status === 'success') {
               this.roles = response.datos;
+              // console.log(this.roles);
             }
         },
             error => {

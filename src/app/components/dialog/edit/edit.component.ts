@@ -155,10 +155,9 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // console.log('La página se va a cerrar');
-    if(this.subscription){
+    if (this.subscription){
       this.subscription.unsubscribe();
     }
-    
   }
 
   confirmEdit(form: NgForm): void {
@@ -251,8 +250,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
     const objPila = {pila: this.pila };
     const obj = Object.assign(this.data, objPila);
-
-    //console.log(objPila);
 
     this.dataService.update(this.token.token, this.data['order_id'], obj, this.category_id);
 
@@ -452,8 +449,6 @@ export class EditComponent implements OnInit, OnDestroy {
 
             this.atributo = atributotem;
             this.orderatributo = orderatributotem;
-            //console.log(this.orderatributo);
-            //console.log(this.atributo);
 
           } else if (atributotem.length > 0) {
             atributotem.forEach(element => {
@@ -473,7 +468,6 @@ export class EditComponent implements OnInit, OnDestroy {
             });
 
             this.atributo = atributotem;
-            //console.log(this.atributo);
 
           }
 
@@ -625,6 +619,7 @@ export class EditComponent implements OnInit, OnDestroy {
   taguser(data) {
     if (data.length === 0) {
       data = '';
+      this.destinatario = [];
       return;
     }
 
@@ -635,11 +630,9 @@ export class EditComponent implements OnInit, OnDestroy {
   }
 
   onSelectMethod(event): any {
-    //console.log(event);
     const d = new Date(Date.parse(event));
     const datecalendar = `${d.getDate()}/${d.getMonth() + 1}/${d.getFullYear()}`;
     return datecalendar;
-    // console.log(this.myDate);
   }
 
 }

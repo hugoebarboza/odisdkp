@@ -19,6 +19,7 @@ import { UsuarioWorkComponent } from './usuario-work/usuario-work.component';
 
 // DIALOG
 import { AddUserComponent } from './dialog/adduser/adduser.component';
+import { AddTeamComponent } from './dialog/add-team/add-team.component';
 import { EditUserComponent } from './dialog/edituser/edituser.component';
 import { ModalUploadImageComponent } from './dialog/modaluploadimage/modaluploadimage.component';
 import { ShowProfileSecurityComponent } from './dialog/showprofilesecurity/showprofilesecurity.component';
@@ -29,6 +30,7 @@ import { UsuariosRoutingModule } from './usuarios.routing';
 
 // SERVICES
 import { ServiceModule } from 'src/app/services/service.module';
+
 
 @NgModule({
   imports: [
@@ -44,15 +46,17 @@ import { ServiceModule } from 'src/app/services/service.module';
   ],
   declarations: [
     AddUserComponent,
+    AddTeamComponent,
     EditUserComponent,
     ModalUploadImageComponent,
     ShowProfileSecurityComponent,
     UsuariosComponent,
     UsuariosDetailComponent,
-    UsuarioWorkComponent
+    UsuarioWorkComponent,
   ],
   entryComponents: [
     AddUserComponent,
+    AddTeamComponent,
     EditUserComponent,
     ModalUploadImageComponent,
     ShowProfileSecurityComponent,

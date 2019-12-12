@@ -1,5 +1,6 @@
 <meta name="Description" content="Project Profile.">
-<div class="app">
+
+<div class="app" *ngIf="!isLoading">
 <form class="mat-dialog-content" novalidate="novalidate">
   
   <h1 mat-dialog-title>{{title}} - {{project_name}}</h1>

@@ -194,6 +194,7 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
 
                    this.data['fecha_ultima_lectura'] = this.customer[i]['fecha_ultima_lectura'];
                    this.data['fecha_ultima_deteccion'] = this.customer[i]['fecha_ultima_deteccion'];
+                   this.data['falta_ultimo_cnr'] = this.customer[i]['falta_ultimo_cnr'];
 
                    if (this.data['id_set'] > 0) {
                     this.onSelectSet(this.data['id_set']);

@@ -704,7 +704,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.datedesde = new FormControl('');
     this.datehasta = new FormControl('');
     this.regionMultiCtrl = new FormControl('');
-    // console.log('paso111');
+     // console.log('paso111');
    }
 
 
@@ -763,7 +763,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.datedesde = new FormControl('');
     this.datehasta = new FormControl('');
     this.regionMultiCtrl = new FormControl('');
-    // console.log('paso555');
+     // console.log('paso555');
     }
 
 
@@ -786,7 +786,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       // console.log('paso7777');
+        // console.log('paso7777');
     }
 
     if (this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)) {
@@ -800,7 +800,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.datedesde = new FormControl('');
        this.datehasta = new FormControl('');
        this.filtersregion.fieldValue = 'regions.region_name';
-       // console.log('paso8888');
+        // console.log('paso8888');
     }
 
     if (this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedoption === 0 && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
@@ -813,7 +813,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
        this.filtersregion.fieldValue = 'regions.region_name';
-       // console.log('paso999');
+        // console.log('paso999');
     }
 
     if (!this.regionMultiCtrl.value && this.selectedColumnnUsuario.fieldValue && this.selectedColumnnUsuario.columnValue && this.selectedoption === 0 && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
@@ -824,7 +824,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-       // console.log('paso000');
+        // console.log('paso000');
     }
     this.cd.markForCheck();
     // console.log(this.filterValue);
@@ -1340,6 +1340,7 @@ private filterRegionMulti() {
 
   resetFilters() {
     this.filterValue = '';
+    this.selectedoption = 0;
     this.selectedColumnn.fieldValue = '';
     this.selectedColumnn.columnValue = '';
     this.selectedColumnnDate.fieldValue = '';
@@ -1350,6 +1351,10 @@ private filterRegionMulti() {
     this.filtersregion.fieldValue = '';
     this.regionMultiCtrl.reset();
     this.step = 0;
+
+    this.fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
+    this.date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
+
   }
 
 

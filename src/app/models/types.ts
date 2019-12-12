@@ -138,6 +138,7 @@ constructor(
 
     public fecha_ultima_lectura: any,
     public fecha_ultima_deteccion: any,
+    public falta_ultimo_cnr: string,
     public create_at: any,
     public create_by: any,
     public update_at: any,
@@ -284,14 +285,19 @@ public update_at: any
 
 export interface Item { id: any; nombre: string; type: string; url: any; created: any; }
 
+
 export class Marca  {
 
 constructor(
 public id: number,
-public descripcion: string,
-public order_by: number,
+public tipodevehiculo_id: number,
+public representative_id: number,
+public title: string,
+public description: string,
 public status: number,
+public create_by: number,
 public create_at: any,
+public update_by: number,
 public update_at: any
 ) {}
 }
@@ -312,10 +318,12 @@ export class Modelo  {
 
 constructor(
 public id: number,
-public descripcion: string,
-public order_by: number,
+public marca_id: number,
+public description: string,
 public status: number,
+public create_by: number,
 public create_at: any,
+public update_by: number,
 public update_at: any
 ) {}
 }
@@ -660,6 +668,23 @@ public create_at: any,
 public update_at: any
 ) {}
 }
+
+
+export class Team  {
+    constructor(
+    public id: number,
+    public project_id: number,
+    public descripcion: string,
+    public observacion: string,
+    public equipo: [],
+    public status: number,
+    public create_by: number,
+    public create_at: any,
+    public update_by: number,
+    public update_at: any
+    ) {}
+}
+
 
 export class User {
 constructor(

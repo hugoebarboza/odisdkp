@@ -57,7 +57,8 @@ export class SupportComponent implements OnInit, OnDestroy  {
   {value: '09', mes: 'Septiembre 2019'},
   {value: '10', mes: 'Octubre 2019'},
   {value: '11', mes: 'Noviembre 2019'},
-  {value: '12', mes: 'Diciembre 2019'}];
+  {value: '12', mes: 'Diciembre 2019'},
+  {value: '01', mes: 'Enero 2020'}];
 
   startOfMonth = '';
   endOfMonth =  '';
