@@ -376,6 +376,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             let factor: string = '' + that.arrayCarga[ii]['factor'];
             let fecha_ultima_lectura: string = '' + that.arrayCarga[ii]['fecha_ultima_lectura'];
             let fecha_ultima_deteccion: string = '' + that.arrayCarga[ii]['fecha_ultima_deteccion'];
+            let falta_ultimo_cnr: string = '' + that.arrayCarga[ii]['falta_ultimo_cnr'];
 
             if (set === 'undefined' || set.trim().length === 0) {
               set = '';
@@ -485,6 +486,12 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                 concatError = concatError + 'Fecha ultima detección error en formato 0000-00-00 00:00:00; ' ;
                 banderaJson = true;
               }
+            }
+
+            if (falta_ultimo_cnr === 'undefined' || falta_ultimo_cnr.trim().length === 0) {
+              falta_ultimo_cnr = '';
+            } else {
+              falta_ultimo_cnr = falta_ultimo_cnr.trim();
             }
 
             // Validar campos

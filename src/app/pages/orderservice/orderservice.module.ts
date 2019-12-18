@@ -140,6 +140,7 @@ import { OrderserviceComponent } from './components/orderservice/orderservice.co
 
 // Global vars
 import { environment } from '../../../environments/environment';
+import { TableOrderComponent } from './components/table-order/table-order.component';
 
 
 registerLocaleData(localeEs);
@@ -242,20 +243,21 @@ registerLocaleData(localeEs);
     SnackErrorComponent,
     SnackSuccessComponent,
     StatusCrudComponent,
+    SetListComponent,
+    SedListComponent,
     TableroComponent,
     TarifaListComponent,
+    TableOrderComponent,
     UserJobProfileComponent,
     UsertableComponent,
-    ZonaListComponent,
-    ZipComponent,
     VehiculoOverviewDialog,
     ViewOrderDetailComponent,
     ViewprojectorderComponent,
     ViewprojectcustomerComponent,
     VieworderserviceComponent,
     ViewOrderServiceSelectComponent,
-    SetListComponent,
-    SedListComponent,
+    ZonaListComponent,
+    ZipComponent,
   ],
   exports: [
   ],

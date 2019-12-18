@@ -849,7 +849,7 @@
               </a>
           </mat-menu> 
 
-          <button mat-icon-button [matMenuTriggerFor]="menuviewselectorder" *ngIf="_userService.isRole(7)"  matTooltip="Acciones (Presiona para acceder a las acciones de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
+          <button mat-icon-button [matMenuTriggerFor]="menuviewselectorder" *ngIf="_userService.isRole(6)"  matTooltip="Acciones (Presiona para acceder a las acciones de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
             <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">more_horiz</mat-icon>
             <mat-icon aria-label="launch" *ngIf="i == indexitem">more_horiz</mat-icon>
           </button>

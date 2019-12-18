@@ -149,6 +149,12 @@ export class DataService {
       return this.getDataBD(this.url + 'searchcustomer/project/service/' + id_service + '/search/' + cc_number, token);
   }
 
+  getClientesPorTablas(project_id, token, json) {
+    if (json) {
+      // tslint:disable-next-line:max-line-length
+      return this.getDataBD(this.url + 'searchcustomermass/project/' + project_id + '?json=' + JSON.stringify(json) , token);
+    }
+  }
 
   getDataBD(href: string, token) {
     // console.log(href);

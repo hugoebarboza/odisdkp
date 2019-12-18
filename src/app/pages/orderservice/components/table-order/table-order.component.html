@@ -1,0 +1,210 @@
+<div class="p-2">
+    <mat-card [ngStyle]="{'padding':'0px'}">
+        <mat-card-header [ngClass]="{'custom-card':true}">
+            <mat-card-title>Carga por datos del cliente</mat-card-title>
+            <mat-card-subtitle>Permite crear ordenes de trabajo a clientes usando los campos generales</mat-card-subtitle>
+        </mat-card-header>        
+        <mat-card-content style="height: auto;">
+            <div class="p-2">
+                <form ngNativeValidate [formGroup]="forma">
+                    <div class="row" style="margin-bottom: 10px;">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                        <h2 class="jeEmY"> Región </h2>
+                                        <ng-select  
+                                            [items]="region"
+                                            [clearable]="false" 
+                                            bindLabel="region_name"
+                                            bindValue="id"
+                                            class="full-width"
+                                            (change)="selectRegion($event.id)"
+                                            name="id_region" formControlName="id_region">
+                                        </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Provincia </h2>
+                                    <ng-select  
+                                        [items]="provincia"
+                                        [clearable]="false" 
+                                        bindLabel="province_name"
+                                        bindValue="id"
+                                        class="full-width"
+                                        (change)="selectProvincia($event.id)"
+                                        name="id_provincia" formControlName="id_provincia">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Comuna </h2>
+                                    <ng-select  
+                                        [items]="comuna"
+                                        [clearable]="false" 
+                                        bindLabel="commune_name"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_comuna" formControlName="id_comuna">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                </div>
+                            </div>
+                        </div>
+                    </div> 
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Constante </h2>
+                                    <ng-select  
+                                        [items]="constante"
+                                        [clearable]="true" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_constante" formControlName="id_constante">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Giro </h2>
+                                    <ng-select  
+                                        [items]="giro"
+                                        [clearable]="true" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_giro" formControlName="id_giro">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Mercado </h2>
+                                    <ng-select  
+                                        [items]="mercado"
+                                        [clearable]="true" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_mercado" formControlName="id_mercado">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Sector </h2>
+                                    <ng-select  
+                                        [items]="sector"
+                                        [clearable]="true" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_sector" formControlName="id_sector">
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY">Tarifa</h2>
+                                    <ng-select  
+                                        [items]="tarifa"
+                                        [clearable]="true" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_tarifa" formControlName="id_tarifa">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Zona </h2>
+                                    <ng-select  
+                                        [items]="zona"
+                                        [clearable]="true" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_zona" formControlName="id_zona">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                </div>
+                                <div class="col-md-3">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Set </h2>
+                                    <ng-select  
+                                        [items]="set"
+                                        [clearable]="false" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        (change)="selectSet($event.id)"
+                                        name="id_set" formControlName="id_set">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Alimentador </h2>
+                                    <ng-select  
+                                        [items]="set"
+                                        [clearable]="false" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        (change)="selectAlimentador($event.id)"
+                                        name="id_alimentador" formControlName="id_alimentador">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Sed </h2>
+                                    <ng-select  
+                                        [items]="sed"
+                                        [clearable]="false" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_sed" formControlName="id_sed">
+                                    </ng-select>
+                                </div>
+                                <div class="col-md-3">
+                                    <h2 class="jeEmY"> Clave de lectura </h2>
+                                    <ng-select  
+                                        [items]="clavelectura"
+                                        [clearable]="true" 
+                                        bindLabel="descripcion"
+                                        bindValue="id"
+                                        class="full-width"
+                                        name="id_clavelectura" formControlName="id_clavelectura">
+                                    </ng-select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                
+                    <div class="row" style="margin-top: 14px; margin-bottom: 10px;">
+                            <div class="col-md-12">
+                                <div class="text-center">
+                                    <button  mat-raised-button color="primary" [disabled]="forma.invalid" (click)="searchClient(forma.value)" style="margin-right: 8px;">
+                                        <mat-icon aria-label="Edit">done</mat-icon> Buscar                      
+                                    </button>  
+                                    <button mat-raised-button color="warn" (click)="forma.reset()" style="margin-left: 8px;">
+                                        <mat-icon aria-label="Close">close</mat-icon> Limpiar Formulario
+                                    </button>
+                                    <button mat-raised-button color="default" (click)="downloadExcel()" style="margin-left: 8px;" *ngIf="ccnumber_obj && ccnumber_obj.length > 0">
+                                        <mat-icon>archive</mat-icon> Descargar Listado {{ccnumber_obj.length}}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                </form>
+                <app-client-order  [ccnumber_s]="ccnumber_s" [id]="id" *ngIf="ccnumber_s && ccnumber_s.length > 0"></app-client-order>
+            </div>
+        </mat-card-content>
+    </mat-card>
+</div>
+
+        

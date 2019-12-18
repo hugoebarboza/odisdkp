@@ -25,6 +25,7 @@ const moment = _moment;
 export class ClientOrderComponent implements OnInit, OnChanges {
 
   @Input() id: number;
+  @Input() ccnumber_s: Array<string>;
   @Output() ServicioSeleccionado: EventEmitter<string>;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -99,6 +100,18 @@ export class ClientOrderComponent implements OnInit, OnChanges {
       observation: new FormControl (''),
       date_end: new FormControl (null)
     });
+
+    if (this.ccnumber_s && this.ccnumber_s.length > 0) {
+        let list = '';
+        for (let i = 0; i < this.ccnumber_s.length; i++) {
+          list = list + this.ccnumber_s[i] + '\n';
+        }
+        this.forma.controls['listccnumber'].setValue(list);
+        this.total = this.ccnumber_s.length;
+        if (this.total > 500) {
+          Swal.fire('Importante', 'Supero limite de 500 registros máximos', 'error');
+        }
+    }
 
     this.service_id = this.id;
     this.getTipoServicio(this.service_id);

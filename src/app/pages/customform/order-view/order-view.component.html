@@ -1,10 +1,9 @@
-
 <div class="row" class="marginrlcero">
 
     <div class="bKpvDg">
     </div>
     
-    <div class="col-md-7 offset-md-2">
+    <div class="col-md-8 offset-md-2">
         <div class="app" *ngIf="isloading">                    
         <div class="d-flex justify-content-center" *ngIf="isloading">
             <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isloading" ></mat-spinner>
@@ -116,8 +115,6 @@
                             </div>
                         </div>
                     </div>
-        
-
 
                     <div class="row" style="margin-top: 14px">
                         <div class="col-md-12 order-first" >
@@ -133,6 +130,20 @@
                                 <div class="w-100"></div>
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['client_name']"><strong>DESCRIPCIÓN: </strong>{{order[0]['client_name']}}</h2></div>
                             </div>    
+                        </div>
+                    </div>
+                    <div class="row" style="margin-top: 14px" *ngIf="order && order[0] && order[0]['observation'] && order[0]['observation'].length > 0">
+                        <div class="col-md-12 order-first" >
+                            <div class="full-width" style="text-align:left;background-color:#313131;">
+                                <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">OBSERVACIÓN DE LA ORDEN</h5>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+                                    <h2 class="jeEmYB">
+                                        {{order[0]['observation']}}
+                                    </h2>
+                                </div>
+                            </div>
                         </div>
                     </div>
                                 

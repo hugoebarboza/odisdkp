@@ -68,3 +68,6 @@ main {
 .material-icons.md-24 { font-size: 24px; color: #FFFFFF;}
 .material-icons.md-dark.md-inactive { font-size: 24px; color: #F3E5F5; }
 
+.custom-card {
+  background-color: #f2f4f7;
+}

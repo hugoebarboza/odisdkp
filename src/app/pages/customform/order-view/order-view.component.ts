@@ -256,7 +256,6 @@ export class OrderViewComponent implements OnInit, OnDestroy {
     }
   }
 
-
   rotateImage(direction, image) {
     this.rotationAmount += direction === 'left' ? -45 : 45;
     document.getElementById(image).style.transform = `rotate(${this.rotationAmount}deg)`;
@@ -330,7 +329,8 @@ export class OrderViewComponent implements OnInit, OnDestroy {
         }
         rowsArray[i] = columnsArray;
     }
-    this.imageRows = rowsArray;
+
+    this.imageRows = rowsArray.reverse();
 
     // return rowsArray;
     // console.log(this.imageRows)
