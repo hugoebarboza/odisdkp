@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "ng s",
+    "start": "http-server dist/odisdkp/",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -12,7 +12,9 @@
     "fix-memory-limit": "cross-env LIMIT=12192 increase-memory-limit",
     "source": "node --max-old-space-size=12192 ./node_modules/@angular/cli/bin/ng build --prod --source-map",
     "analyze": "webpack-bundle-analyzer dist/odisdkp/stats.json",
-    "sanalyze": "source-map-explorer dist/odisdkp/main*js"
+    "sanalyze": "source-map-explorer dist/odisdkp/main*js",
+    "preinstall": "npm install -g http-server",
+    "postinstall": "npm build --aot --prod --buildOptimizer"
   },
   "private": true,
   "dependencies": {
