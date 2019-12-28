@@ -13,6 +13,7 @@ import { GestionComponent } from '../../components/gestion/gestion.component';
 import { MakeinspectionComponent } from './components/makeinspection/makeinspection.component';
 import { MapaComponent } from '../../components/mapa/mapa/mapa.component';
 import { MapaFullWidthComponent } from '../../components/mapa/mapafullwidth/mapafullwidth.component';
+import { TableOrderComponent } from './components/table-order/table-order.component';
 import { TableroComponent } from '../../components/tablero/tablero.component';
 import { UsertableComponent } from '../../components/usertable/usertable.component';
 import { ViewOrderDetailComponent } from '../../components/views/vieworderdetail/vieworderdetail.component';
@@ -49,6 +50,7 @@ import { ClientOrderComponent } from './components/client-order/client-order.com
 import { ColorListComponent } from './components/dialog/color-list/color-list.component';
 import { ConstanteListComponent } from './components/dialog/constante-list/constante-list.component';
 import { CargaComponent } from '../../components/dialog/carga/carga.component';
+import { CsvAddressComponent } from '../../components/dialog/csv-address/csv-address.component';
 import { CsvComponent } from '../../components/dialog/csv/csv.component';
 import { CsvCustomerComponentComponent } from '../../components/dialog/csvcustomercomponent/csvcustomercomponent.component';
 import { DeleteComponent } from '../../components/dialog/delete/delete.component';
@@ -140,7 +142,6 @@ import { OrderserviceComponent } from './components/orderservice/orderservice.co
 
 // Global vars
 import { environment } from '../../../environments/environment';
-import { TableOrderComponent } from './components/table-order/table-order.component';
 
 
 registerLocaleData(localeEs);
@@ -208,6 +209,7 @@ registerLocaleData(localeEs);
     ColorListComponent,
     CsvComponent,
     CsvCustomerComponentComponent,
+    CsvAddressComponent,
     DeletecustomerComponent,
     DeleteComponent,
     DownloadComponent,
@@ -285,6 +287,7 @@ registerLocaleData(localeEs);
     ClientOrderComponent,
     CsvComponent,
     CsvCustomerComponentComponent,
+    CsvAddressComponent,
     ColorListComponent,
     DateDialogComponent,
     DeleteComponent,

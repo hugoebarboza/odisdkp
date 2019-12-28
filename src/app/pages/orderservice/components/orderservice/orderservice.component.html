@@ -1,245 +1,245 @@
 <!--CONTENT-->
 <div [class]="theme" >
 
-    <div id="wrapper" *ngIf="proyectos">
-        <!-- Sidebar <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>-->
-        
-        <!-- /#sidebar-wrapper -->
+  <div id="wrapper" *ngIf="proyectos">
+      <!-- Sidebar <app-menu  (RefreshMenu) = "refreshMenu( $event )"></app-menu>-->
+      
+      <!-- /#sidebar-wrapper -->
 
-        <!-- Page Content -->        
-        <div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()" >
-        <!-- TAB Content ------------------------------------------------------------------------------------------>
+      <!-- Page Content -->        
+      <div id="page-content-wrapper" *ngIf="_userService.isAuthenticated()" >
+      <!-- TAB Content ------------------------------------------------------------------------------------------>
 
 
-        <mat-sidenav-container class="all-wrap" >        
-  <div class="page-wrap">
-    <header role="banner">
-            <mat-toolbar color="primary">
+      <mat-sidenav-container class="all-wrap" >        
+<div class="page-wrap">
+  <header role="banner">
+          <mat-toolbar color="primary">
 
-              <main class="limgtX">
-                <div class="jBwVQr">
-                  <div class="eANzas">
-                    {{project_name}} / {{service}}
-                    <button mat-icon-button [matMenuTriggerFor]="menu">
-                    <mat-icon class="material-icons md-15">format_color_fill</mat-icon>
-                    </button>
-                  </div>
-                </div>
-                <div class="fFIwAW">
-                  <span *ngIf="since">
-                  {{country}}, desde {{since}}.
-                  </span>
-                </div>
-              </main>
-              
-              
-              <mat-menu #menu="matMenu" [overlapTrigger]="false">
-                <button mat-menu-item (click)="changeTheme(0)">
-                <mat-icon class="material-icons md-15-colorblue">format_color_fill</mat-icon>
-                  <span>Primario</span>
-                </button>
-                <button mat-menu-item (click)="changeTheme(1)">
-                  <mat-icon class="material-icons md-15-colorgreen">format_color_fill</mat-icon>
-                  <span>Verde</span>
-                </button>
-                <button mat-menu-item (click)="changeTheme(2)">
-                  <mat-icon class="material-icons md-15-colordark">format_color_fill</mat-icon>
-                  <span>Oscuro</span>
-                </button>
-                <button mat-menu-item (click)="changeTheme(3)">
-                    <mat-icon class="material-icons md-15-colordark">format_color_fill</mat-icon>
-                    <span>Dark</span>
+            <main class="limgtX">
+              <div class="jBwVQr">
+                <div class="eANzas">
+                  {{project_name}} / {{service}}
+                  <button mat-icon-button [matMenuTriggerFor]="menu">
+                  <mat-icon class="material-icons md-15">format_color_fill</mat-icon>
                   </button>
-              </mat-menu>
-
-            </mat-toolbar>      
-      </header>
-
-
-
-      <main class="content">        
-        <div >
-
-          <mat-tab-group backgroundColor="primary" 
-          [selectedIndex]="selected.value"
-          (selectedIndexChange)="selected.setValue($event)"
-          animationDuration="0ms"
-          >
-            <mat-tab label="Ordenes">
-              <ng-template mat-tab-label *ngIf="selected.value==0">
-                <mat-icon  class="material-icons md-24">move_to_inbox</mat-icon> Órdenes 
-              </ng-template>
-              
-              <ng-template mat-tab-label *ngIf="selected.value!=0">
-                <mat-icon *ngIf="selected.value!=0" class="material-icons md-dark md-inactive">inbox</mat-icon> Órdenes
-              </ng-template>
-  
-              <!-- /#page-content -->
-              <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >
-                <app-vieworderservice  [id]="id"></app-vieworderservice>  
-              </div>            
-              <!-- /#end page-content -->
-            </mat-tab>
-  
-  
-  
-            <mat-tab >
-              <ng-template mat-tab-label *ngIf="selected.value != 1">
-                <mat-icon>description</mat-icon> Registro 
-              </ng-template>
-              <ng-template mat-tab-label *ngIf="selected.value == 1">
-                <mat-icon>archive</mat-icon> Registro 
-              </ng-template>
-
-  
-              <!-- /#page-content -->
-              <div  style="width: 100%;" *ngIf="selected.value==1 && table != null">
-                  <mat-tab-group mat-align-tabs="center"
-                  backgroundColor="primary" 
-                  [selectedIndex]="selectedCarga.value"
-                  (selectedIndexChange)="selectedCarga.setValue($event)"
-                  animationDuration="0ms"
-                  >
-                    <mat-tab label="Carga Masiva"> 
-                      <div *ngIf="selectedCarga.value==0">
-                          <app-excel  [id]="id" [table]="table" *ngIf="table == 'address' "></app-excel>
-                          <app-excel-vehiculo  [id]="id" [table]="table" *ngIf="table == 'vehiculos'"></app-excel-vehiculo> 
-                      </div>
-                    </mat-tab>
-                    <mat-tab label="Carga de Inspecciones">
-                      <div *ngIf="selectedCarga.value==1">
-                        <app-makeinspection  [id]="id"></app-makeinspection>
-                      </div>
-                    </mat-tab>
-                    <mat-tab label="Carga por clientes">
-                      <div *ngIf="selectedCarga.value==2">
-                          <div class="p-2">
-                              <mat-card [ngStyle]="{'padding':'0px'}">
-                                  <mat-card-header [ngClass]="{'custom-card':true}">
-                                      <mat-card-title>Carga de ordenes por cliente</mat-card-title>
-                                      <mat-card-subtitle>Permite crear multiples ordenes de trabajo a clientes</mat-card-subtitle>
-                                  </mat-card-header>        
-                                  <mat-card-content style="height: auto;">
-                                    <div class="p-2">
-                                        <app-client-order  [id]="id"></app-client-order>
-                                    </div>
-                                  </mat-card-content>
-                              </mat-card>
-                          </div>
-                      </div>
-                    </mat-tab>
-                    <mat-tab label="Carga por datos del cliente">
-                      <div *ngIf="selectedCarga.value==3">
-                        <app-table-order  [id]="id"></app-table-order>
-                      </div>
-                    </mat-tab>
-                  </mat-tab-group>  
-                </div>  
-              <!-- /#end page-content -->
-            </mat-tab>
-  
-            <mat-tab>
-              <ng-template mat-tab-label *ngIf="selected.value==2">            
-                <mat-icon>group_add</mat-icon> Clientes
-              </ng-template>
-  
-              <ng-template mat-tab-label *ngIf="selected.value!=2">
-                <mat-icon *ngIf="selected.value!=2" class="material-icons md-dark md-inactive">group</mat-icon> Clientes
-              </ng-template>
-  
-              <!-- /#page-content -->
-              <div class="p-2" style="width: 100%;" *ngIf="selected.value==2">
-                <app-viewprojectcustomer  [id]="id"></app-viewprojectcustomer>  
+                </div>
               </div>
-  
-              <!-- /#end page-content -->
-            </mat-tab>
-  
-  
-  
-            <mat-tab>
-              <ng-template mat-tab-label *ngIf="selected.value!=3">
-                <mat-icon>place</mat-icon> Georeferencias
-              </ng-template>
-              <!-- /#page-content -->
-              <ng-template mat-tab-label *ngIf="selected.value==3">
-                <mat-icon>person_pin_circle</mat-icon> Georeferencias
-              </ng-template>
-  
-              <div class="p-2" style="width: 100%;" *ngIf="selected.value==3">
-              <app-mapa  [id]="id"></app-mapa>
+              <div class="fFIwAW">
+                <span *ngIf="since">
+                {{country}}, desde {{since}}.
+                </span>
               </div>
-              <!-- /#end page-content -->
-            </mat-tab>
-  
-  
-            <mat-tab *ngIf="identity.role > 4">
-              <ng-template mat-tab-label *ngIf="selected.value!=4">
-                <mat-icon svgIcon="icongestion"></mat-icon> Gestión
-              </ng-template>
-              <ng-template mat-tab-label *ngIf="selected.value==4">
-                <mat-icon svgIcon="icongestion"></mat-icon> Gestión
-              </ng-template>
-  
-              <!-- /#page-content -->
-              <div class="p-2" style="width: 100%;" *ngIf="selected.value==4">
-              <app-gestion  [id]="id"> </app-gestion>
-              </div>
-              <!-- /#end page-content -->
-            </mat-tab>
-  
-            <mat-tab *ngIf="identity.role > 4">
-              <ng-template mat-tab-label *ngIf="selected.value!=5">
-                <mat-icon>insert_chart_outlined</mat-icon> Indicadores
-              </ng-template>
-              <ng-template mat-tab-label *ngIf="selected.value==5">
-                  <mat-icon>insert_chart</mat-icon> Indicadores
-              </ng-template>
-  
-              <!-- /#page-content -->
-              <div class="p-2" style="width: 100%;" *ngIf="selected.value==5">
-              <app-kpi-project [id]="id" [route]=1></app-kpi-project>
-              </div>
-              <!-- /#end page-content -->
-            </mat-tab>
-  
+            </main>
+            
+            
+            <mat-menu #menu="matMenu" [overlapTrigger]="false">
+              <button mat-menu-item (click)="changeTheme(0)">
+              <mat-icon class="material-icons md-15-colorblue">format_color_fill</mat-icon>
+                <span>Primario</span>
+              </button>
+              <button mat-menu-item (click)="changeTheme(1)">
+                <mat-icon class="material-icons md-15-colorgreen">format_color_fill</mat-icon>
+                <span>Verde</span>
+              </button>
+              <button mat-menu-item (click)="changeTheme(2)">
+                <mat-icon class="material-icons md-15-colordark">format_color_fill</mat-icon>
+                <span>Oscuro</span>
+              </button>
+              <button mat-menu-item (click)="changeTheme(3)">
+                  <mat-icon class="material-icons md-15-colordark">format_color_fill</mat-icon>
+                  <span>Dark</span>
+                </button>
+            </mat-menu>
 
-            <mat-tab *ngIf="identity.role > 5">
-              <ng-template mat-tab-label *ngIf="selected.value!=6">
+          </mat-toolbar>      
+    </header>
+
+
+
+    <main class="content">        
+      <div >
+
+        <mat-tab-group backgroundColor="primary" 
+        [selectedIndex]="selected.value"
+        (selectedIndexChange)="selected.setValue($event)"
+        animationDuration="0ms"
+        >
+          <mat-tab label="Ordenes">
+            <ng-template mat-tab-label *ngIf="selected.value==0">
+              <mat-icon  class="material-icons md-24">move_to_inbox</mat-icon> Órdenes 
+            </ng-template>
+            
+            <ng-template mat-tab-label *ngIf="selected.value!=0">
+              <mat-icon *ngIf="selected.value!=0" class="material-icons md-dark md-inactive">inbox</mat-icon> Órdenes
+            </ng-template>
+
+            <!-- /#page-content -->
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >
+              <app-vieworderservice  [id]="id"></app-vieworderservice>  
+            </div>            
+            <!-- /#end page-content -->
+          </mat-tab>
+
+
+
+          <mat-tab >
+            <ng-template mat-tab-label *ngIf="selected.value != 1">
+              <mat-icon>description</mat-icon> Registro 
+            </ng-template>
+            <ng-template mat-tab-label *ngIf="selected.value == 1">
+              <mat-icon>archive</mat-icon> Registro 
+            </ng-template>
+
+
+            <!-- /#page-content -->
+            <div  style="width: 100%;" *ngIf="selected.value==1 && table != null">
+                <mat-tab-group mat-align-tabs="center"
+                backgroundColor="primary" 
+                [selectedIndex]="selectedCarga.value"
+                (selectedIndexChange)="selectedCarga.setValue($event)"
+                animationDuration="0ms"
+                >
+                  <mat-tab label="Carga Masiva"> 
+                    <div *ngIf="selectedCarga.value==0">
+                        <app-excel  [id]="id" [table]="table" *ngIf="table == 'address' "></app-excel>
+                        <app-excel-vehiculo  [id]="id" [table]="table" *ngIf="table == 'vehiculos'"></app-excel-vehiculo> 
+                    </div>
+                  </mat-tab>
+                  <mat-tab label="Carga de Inspecciones">
+                    <div *ngIf="selectedCarga.value==1">
+                      <app-makeinspection  [id]="id"></app-makeinspection>
+                    </div>
+                  </mat-tab>
+                  <mat-tab label="Carga por clientes">
+                    <div *ngIf="selectedCarga.value==2">
+                        <div class="p-2">
+                            <mat-card [ngStyle]="{'padding':'0px'}">
+                                <mat-card-header [ngClass]="{'custom-card':true}">
+                                    <mat-card-title>Carga de ordenes por cliente</mat-card-title>
+                                    <mat-card-subtitle>Permite crear multiples ordenes de trabajo a clientes</mat-card-subtitle>
+                                </mat-card-header>        
+                                <mat-card-content style="height: auto;">
+                                  <div class="p-2">
+                                      <app-client-order  [id]="id"></app-client-order>
+                                  </div>
+                                </mat-card-content>
+                            </mat-card>
+                        </div>
+                    </div>
+                  </mat-tab>
+                  <mat-tab label="Carga por datos del cliente"  *ngIf="table=='address'">
+                    <div *ngIf="selectedCarga.value==3">
+                      <app-table-order  [id]="id"></app-table-order>
+                    </div>
+                  </mat-tab>
+                </mat-tab-group>  
+              </div>  
+            <!-- /#end page-content -->
+          </mat-tab>
+
+          <mat-tab>
+            <ng-template mat-tab-label *ngIf="selected.value==2">            
+              <mat-icon>group_add</mat-icon> Clientes
+            </ng-template>
+
+            <ng-template mat-tab-label *ngIf="selected.value!=2">
+              <mat-icon *ngIf="selected.value!=2" class="material-icons md-dark md-inactive">group</mat-icon> Clientes
+            </ng-template>
+
+            <!-- /#page-content -->
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==2">
+              <app-viewprojectcustomer  [id]="id"></app-viewprojectcustomer>  
+            </div>
+
+            <!-- /#end page-content -->
+          </mat-tab>
+
+
+
+          <mat-tab>
+            <ng-template mat-tab-label *ngIf="selected.value!=3">
+              <mat-icon>place</mat-icon> Georeferencias
+            </ng-template>
+            <!-- /#page-content -->
+            <ng-template mat-tab-label *ngIf="selected.value==3">
+              <mat-icon>person_pin_circle</mat-icon> Georeferencias
+            </ng-template>
+
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==3">
+            <app-mapa  [id]="id"></app-mapa>
+            </div>
+            <!-- /#end page-content -->
+          </mat-tab>
+
+
+          <mat-tab *ngIf="identity.role > 4">
+            <ng-template mat-tab-label *ngIf="selected.value!=4">
+              <mat-icon svgIcon="icongestion"></mat-icon> Gestión
+            </ng-template>
+            <ng-template mat-tab-label *ngIf="selected.value==4">
+              <mat-icon svgIcon="icongestion"></mat-icon> Gestión
+            </ng-template>
+
+            <!-- /#page-content -->
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==4">
+            <app-gestion  [id]="id"> </app-gestion>
+            </div>
+            <!-- /#end page-content -->
+          </mat-tab>
+
+          <mat-tab *ngIf="identity.role > 4">
+            <ng-template mat-tab-label *ngIf="selected.value!=5">
+              <mat-icon>insert_chart_outlined</mat-icon> Indicadores
+            </ng-template>
+            <ng-template mat-tab-label *ngIf="selected.value==5">
+                <mat-icon>insert_chart</mat-icon> Indicadores
+            </ng-template>
+
+            <!-- /#page-content -->
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==5">
+            <app-kpi-project [id]="id" [route]=1></app-kpi-project>
+            </div>
+            <!-- /#end page-content -->
+          </mat-tab>
+
+
+          <mat-tab *ngIf="identity.role > 5">
+            <ng-template mat-tab-label *ngIf="selected.value!=6">
+              <mat-icon>timeline </mat-icon> Producción
+            </ng-template>
+            <ng-template mat-tab-label *ngIf="selected.value==6">
                 <mat-icon>timeline </mat-icon> Producción
-              </ng-template>
-              <ng-template mat-tab-label *ngIf="selected.value==6">
-                  <mat-icon>timeline </mat-icon> Producción
-              </ng-template>
-  
-              <!-- /#page-content -->
-              <div class="p-2" style="width: 100%;" *ngIf="selected.value==6">
-              <app-kpi-project [id]="id" [route]=2></app-kpi-project>
-              </div>
-              <!-- /#end page-content -->
-            </mat-tab>
-            
+            </ng-template>
+
+            <!-- /#page-content -->
+            <div class="p-2" style="width: 100%;" *ngIf="selected.value==6">
+            <app-kpi-project [id]="id" [route]=2></app-kpi-project>
+            </div>
+            <!-- /#end page-content -->
+          </mat-tab>
+          
 
 
-  
-          </mat-tab-group>
-  
-        </div>
-        
 
-      <!-- END TAB Content ------------------------------------------------------------------------------------------>
-      </main>
+        </mat-tab-group>
+
+      </div>
+      
+
+    <!-- END TAB Content ------------------------------------------------------------------------------------------>
+    </main>
 
 
-        </div>
+      </div>
 
-        </mat-sidenav-container>         
-        
+      </mat-sidenav-container>         
+      
 
 
 
 
-        </div>
-            
-    </div>
+      </div>
+          
+  </div>
 </div>

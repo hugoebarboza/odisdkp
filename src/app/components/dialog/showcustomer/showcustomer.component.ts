@@ -32,12 +32,12 @@ import { CustomerService, OrderserviceService, UserService } from 'src/app/servi
 export class ShowcustomerComponent implements OnInit {
   public title: string;
   public identity: any;
-  isLoading:boolean = true;
-  public token: any;  
+  isLoading = true;
+  public token: any;
   public termino: string;
   public results: Object = [];
   public resultsprovincias: Object = [];
-  public resultscomunas: Object = [];   
+  public resultscomunas: Object = [];
   private services: Service[] = [];
   public region: Region;
   public provincia: Provincia;
@@ -56,10 +56,10 @@ export class ShowcustomerComponent implements OnInit {
 
   public project: string;
   project_id: number;
-  id:number;
-  cc_id:number;
-  category_id:number;
-  step = 0;  	
+  id: number;
+  cc_id: number;
+  category_id: number;
+  step = 0;
 
   constructor(
     private _userService: UserService,
@@ -67,9 +67,8 @@ export class ShowcustomerComponent implements OnInit {
     private _customerService: CustomerService,
     public dialogRef: MatDialogRef<ShowcustomerComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
-  	) 
-  { 
-    this.title = "Ver Cliente.";
+    ) {
+    this.title = 'Ver Cliente.';
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.id = this.data['service_id'];
@@ -78,20 +77,20 @@ export class ShowcustomerComponent implements OnInit {
   }
 
   ngOnInit() {
-  	//console.log(this.data);
-  	//console.log(this.cc_id);
-  	this.loadInfo(this.id);
+    // console.log(this.data);
+    // console.log(this.cc_id);
+    this.loadInfo(this.id);
   }
 
-  public loadData(projectid:number){
-    if(projectid > 0){                                
+  public loadData(projectid: number) {
+    if (projectid > 0) {
       this._customerService.getProjectCustomerDetail(this.token.token, projectid, this.cc_id).subscribe(
       response => {
-         if(response.status == 'success'){    
+         if (response.status === 'success') {
            this.customer = response.datos;
 
-              for (var i=0; i<this.customer.length; i++){
-                 if (this.customer){
+              for (let i = 0; i < this.customer.length; i++) {
+                 if (this.customer) {
 
                    this.data['name_table'] = this.customer[i]['name_table'];
                    this.data['cc_number'] = this.customer[i]['cc_number'];
@@ -119,13 +118,13 @@ export class ShowcustomerComponent implements OnInit {
                    this.data['zona'] = this.customer[i]['zona'];
                    this.data['mercado'] = this.customer[i]['mercado'];
 
-                   this.data['id_region'] = this.customer[i]['id_region'];                   	
+                   this.data['id_region'] = this.customer[i]['id_region'];
                    this.data['id_provincia'] = this.customer[i]['id_provincia'];
                    this.data['id_comuna'] = this.customer[i]['id_comuna'];
-                   this.data['region'] = this.customer[i]['region'];                   	
+                   this.data['region'] = this.customer[i]['region'];
                    this.data['provincia'] = this.customer[i]['province'];
                    this.data['comuna'] = this.customer[i]['comuna'];
-                          
+
                    this.data['observacion'] = this.customer[i]['observacion'];
                    this.data['marca_id'] = this.customer[i]['marca_id'];
                    this.data['modelo_id'] = this.customer[i]['modelo_id'];
@@ -137,46 +136,55 @@ export class ShowcustomerComponent implements OnInit {
                    this.data['patio'] = this.customer[i]['patio'];
                    this.data['espiga'] = this.customer[i]['espiga'];
                    this.data['posicion'] = this.customer[i]['posicion'];
-                   this.isLoading = false;                 
-                   break;             
-                 }               
+
+                   this.data['set'] = this.customer[i]['set'];
+                   this.data['alimentador'] = this.customer[i]['alimentador'];
+                   this.data['sed'] = this.customer[i]['sed'];
+                   this.data['llave_circuito'] = this.customer[i]['llave_circuito'];
+                   this.data['fase'] = this.customer[i]['fase'];
+                   this.data['clavelectura'] = this.customer[i]['clavelectura'];
+                   this.data['factor'] = this.customer[i]['factor'];
+                   this.data['fecha_ultima_lectura'] = this.customer[i]['fecha_ultima_lectura'];
+                   this.data['fecha_ultima_deteccion'] = this.customer[i]['fecha_ultima_deteccion'];
+                   this.data['falta_ultimo_cnr'] = this.customer[i]['falta_ultimo_cnr'];
+
+                   this.isLoading = false;
+                   break;
+                 }
               }
 
-         }else{
-         	if(response.status == 'error'){
-            this.isLoading = false;                  
-			//console.log(response);         		
-        	}
-	     }     
-      },
-          error => { 
+         } else {
+          if (response.status === 'error') {
             this.isLoading = false;
-          console.log(<any>error);
-          }        
-      ); 
+            // console.log(response);
+          }
+        }
+      },
+          error => {
+            this.isLoading = false;
+            console.log(<any>error);
+          }
+      );
     }
 
   }
 
-  public loadInfo(_id:number){
-                    //GET SERVICE AND CATEGORY CLIENT
+  public loadInfo(_id: number) {
+                    // GET SERVICE AND CATEGORY CLIENT
                     this._orderService.getService(this.token.token, this.id).subscribe(
                     response => {
-                      if (response.status == 'success'){         
-                        this.services = response.datos;                
+                      if (response.status === 'success') {
+                        this.services = response.datos;
                         this.category_id = this.services['projects_categories_customers']['id'];
                         this.project = this.services['project']['project_name'];
                         this.project_id = this.services['project']['id'];
                         this.loadData(this.project_id);
                       }
-                    });                       
+                    });
   }
 
   onNoClick(): void {
     this.dialogRef.close();
   }
-
-
-
 
 }

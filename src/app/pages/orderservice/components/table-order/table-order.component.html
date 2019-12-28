@@ -3,7 +3,12 @@
         <mat-card-header [ngClass]="{'custom-card':true}">
             <mat-card-title>Carga por datos del cliente</mat-card-title>
             <mat-card-subtitle>Permite crear ordenes de trabajo a clientes usando los campos generales</mat-card-subtitle>
-        </mat-card-header>        
+        </mat-card-header>
+        <div class="row animated fadeIn" *ngIf="loading">
+            <div class="col-sm-12">
+              <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+            </div>
+        </div>         
         <mat-card-content style="height: auto;">
             <div class="p-2">
                 <form ngNativeValidate [formGroup]="forma">

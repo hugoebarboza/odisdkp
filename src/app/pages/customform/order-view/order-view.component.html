@@ -129,7 +129,46 @@
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['comuna']"><strong>COMUNA: </strong>{{order[0]['comuna']}}</h2></div>
                                 <div class="w-100"></div>
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['client_name']"><strong>DESCRIPCIÓN: </strong>{{order[0]['client_name']}}</h2></div>
-                            </div>    
+                                <div class="col"  *ngIf="clientInfo == null"><h2 class="jeEmYB" style="color: #007ad9; cursor: pointer;"><a (click)="moreClient(order[0]['cc_id'])"><strong>VER MÁS</strong></a></h2></div>
+                                <div class="col"  *ngIf="clientInfo != null"><h2 class="jeEmYB" style="color: #007ad9; cursor: pointer;"><a (click)="moreClient(order[0]['cc_id'])"><strong>VER MENOS</strong></a></h2></div>
+                            </div>
+                            <div class="row animated fadeIn" *ngIf="client_loading">
+                                <div class="col-sm-12">
+                                  <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                </div>
+                            </div>
+                            <div class="row animated fadeIn" *ngIf="clientInfo != null">
+                                <div class="col-6" *ngIf="clientInfo['calle']"><h2 class="jeEmYB"><strong>DIRECCIÓN: </strong>{{clientInfo['calle']}} {{clientInfo['numero']}} {{clientInfo['block']}} {{clientInfo['depto']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['ruta']"><h2 class="jeEmYB"><strong>RUTA: </strong>{{clientInfo['ruta']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['medidor']"><h2 class="jeEmYB"><strong>MEDIDOR: </strong>{{clientInfo['medidor']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['modelo_medidor']"><h2 class="jeEmYB"><strong>MODELO MEDIDOR: </strong>{{clientInfo['modelo_medidor']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['tarifa']"><h2 class="jeEmYB"><strong>TARIFA: </strong>{{clientInfo['tarifa']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['constante']"><h2 class="jeEmYB"><strong>CONSTANTE: </strong>{{clientInfo['constante']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['giro']"><h2 class="jeEmYB"><strong>GIRO: </strong>{{clientInfo['giro']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['sector']"><h2 class="jeEmYB"><strong>SECTOR: </strong>{{clientInfo['sector']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['mercado']"><h2 class="jeEmYB"><strong>MERCADO: </strong>{{clientInfo['mercado']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['zona']"><h2 class="jeEmYB"><strong>ZONA: </strong>{{clientInfo['zona']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['set']"><h2 class="jeEmYB"><strong>SET: </strong>{{clientInfo['set']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['alimentador']"><h2 class="jeEmYB"><strong>ALIMENTADOR: </strong>{{clientInfo['alimentador']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['sed']"><h2 class="jeEmYB"><strong>SED: </strong>{{clientInfo['sed']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['llave_circuito']"><h2 class="jeEmYB"><strong>LLAVE DE CIRCUITO: </strong>{{clientInfo['llave_circuito']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['fase']"><h2 class="jeEmYB"><strong>FASE: </strong>{{clientInfo['fase']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['clavelectura']"><h2 class="jeEmYB"><strong>CLAVE DE LECTURA: </strong>{{clientInfo['clavelectura']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['factor']"><h2 class="jeEmYB"><strong>FACTOR: </strong>{{clientInfo['factor']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['fecha_ultima_lectura'] && clientInfo['fecha_ultima_lectura'] !== '0000-00-00 00:00:00'"><h2 class="jeEmYB"><strong>FECHA ULTIMA LECTURA: </strong>{{clientInfo['fecha_ultima_lectura']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['fecha_ultima_deteccion'] && clientInfo['fecha_ultima_deteccion'] !== '0000-00-00 00:00:00'"><h2 class="jeEmYB"><strong>FECHA ULTIMA DETECCIÓN: </strong>{{clientInfo['fecha_ultima_deteccion']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['falta_ultimo_cnr']"><h2 class="jeEmYB"><strong>FALTA ULTIMO CNR: </strong>{{clientInfo['falta_ultimo_cnr']}}</h2></div>
+                                
+                            </div> 
                         </div>
                     </div>
                     <div class="row" style="margin-top: 14px" *ngIf="order && order[0] && order[0]['observation'] && order[0]['observation'].length > 0">

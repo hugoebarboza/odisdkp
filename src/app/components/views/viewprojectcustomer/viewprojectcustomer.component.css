@@ -104,3 +104,7 @@ table {
   outline: 0;
   border: none;
 }
+
+::ng-deep .swal2-container {
+  z-index: 99999 !important;
+}

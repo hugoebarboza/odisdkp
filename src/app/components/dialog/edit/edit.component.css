@@ -117,3 +117,25 @@ hr.size {
 ::ng-deep .mat-status .mat-form-field-flex .mat-form-field-infix {
 border-top-width: 0px !important;
 }
+
+.jeEmYB {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 0.857143em;
+  font-style: inherit;
+  color: #313131;
+  font-weight: 600;
+  margin-top: 7px;
+  text-transform: uppercase;
+  line-height: 12px;
+  overflow: hidden;
+}
+.infocliente {
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: rgb(244, 245, 247);
+  border-radius: 5px;
+  padding: 10px;
+  margin-left: 0px;
+  margin-right: 0px;
+}

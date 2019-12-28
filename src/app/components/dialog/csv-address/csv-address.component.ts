@@ -1,6 +1,6 @@
-import { Component, OnInit, Input, Output, OnChanges, EventEmitter, SimpleChanges } from '@angular/core';
+import { Component, OnInit, Inject } from '@angular/core';
 import { DataService, UserService } from 'src/app/services/service.index';
-import { FormGroup, FormControl } from '@angular/forms';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
@@ -10,23 +10,21 @@ const EXCEL_EXTENSION = '.xlsx';
 
 import Swal from 'sweetalert2';
 
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { Limit, Formato } from 'src/app/pages/service/dialog/csvservice/csvservice.component';
+
 @Component({
-  selector: 'app-table-order',
-  templateUrl: './table-order.component.html',
-  styleUrls: ['./table-order.component.css']
+  selector: 'app-csv-address',
+  templateUrl: './csv-address.component.html',
+  styleUrls: ['./csv-address.component.css']
 })
-
-export class TableOrderComponent implements OnInit, OnChanges {
-
-  @Input() id: number;
-  @Output() ServicioSeleccionado: EventEmitter<string>;
+export class CsvAddressComponent implements OnInit {
 
   token: any;
   service_id: number;
   proyectos: any;
   project_id: number;
   country_id: number;
-  loading = false;
 
   ccnumber_s: Array<string>;
   ccnumber_obj: Array<object>;
@@ -53,21 +51,39 @@ export class TableOrderComponent implements OnInit, OnChanges {
   provincia: Array<Object> = [];
   comuna: Array<Object> = [];
 
+  fecha_creatEdit: Array<Object> = [
+    {value: 'create_at', name: 'Creado el'},
+    {value: 'update_at', name: 'Editado el'}
+  ];
+
+  limite: Limit[] = [
+    {value: '500', name: '< 500'},
+    {value: '1000', name: '< 1000'},
+    {value: '2000', name: '< 2000'},
+    {value: '0', name: 'Todo (No Recomendado)'}
+  ];
+
+ formatos: Formato[] = [
+    {value: '0', name: 'Formato original'},
+    {value: '1', name: 'Formato mayúscula'}
+  ];
+
   forma: FormGroup;
 
+  loading = false;
+
   constructor(
+    public dialogRef: MatDialogRef<CsvAddressComponent>,
     public dataService: DataService,
     private _userService: UserService,
+    @Inject(MAT_DIALOG_DATA) public data
   ) {
+    this.service_id = this.data['servicio'];
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
   }
 
   ngOnInit() {
-  }
-
-  ngOnChanges(_changes: SimpleChanges) {
-    this.service_id = this.id;
     const proyecto = this.filterProjectByService();
     if (proyecto && proyecto.id) {
       this.project_id = proyecto.id;
@@ -84,6 +100,13 @@ export class TableOrderComponent implements OnInit, OnChanges {
       this.getMercado(this.service_id);
 
       this.forma = new FormGroup({
+        fecha_creatEdit: new FormControl (null),
+        limite: new FormControl (null, [Validators.required]),
+        fecha_desde: new FormControl ({value: null, disabled: true}),
+        hora_desde: new FormControl (null),
+        fecha_hasta: new FormControl ({value: null, disabled: true}),
+        hora_hasta: new FormControl (null),
+        formato: new FormControl (null, [Validators.required]),
         id_tarifa: new FormControl (null),
         id_constante: new FormControl (null),
         id_zona: new FormControl (null),
@@ -99,6 +122,10 @@ export class TableOrderComponent implements OnInit, OnChanges {
         id_comuna: new FormControl (null),
       });
     }
+  }
+
+  onNoClick(): void {
+    this.dialogRef.close();
   }
 
   downloadExcel() {
@@ -143,8 +170,8 @@ export class TableOrderComponent implements OnInit, OnChanges {
           },
           (error) => {
             console.log(<any>error);
-            this.loading = false;
             Swal.fire('Importante', 'Busqueda sin resultados', 'error');
+            this.loading = false;
           }
         );
       }

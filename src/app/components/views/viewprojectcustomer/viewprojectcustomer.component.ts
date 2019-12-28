@@ -11,7 +11,6 @@ import { FormControl, Validators} from '@angular/forms';
 import { MatSelect } from '@angular/material';
 import {TooltipPosition} from '@angular/material';
 
-
 import {
   Customer,
   Proyecto,
@@ -21,16 +20,15 @@ import {
 // DIALOG
 import { AddcustomerComponent } from '../../dialog/addcustomer/addcustomer.component';
 import { CsvCustomerComponentComponent } from '../../dialog/csvcustomercomponent/csvcustomercomponent.component';
+import { CsvAddressComponent } from '../../dialog/csv-address/csv-address.component';
+
 import { EditcustomerComponent } from '../../dialog/editcustomer/editcustomer.component';
 import { DeletecustomerComponent } from '../../dialog/deletecustomer/deletecustomer.component';
 import { ShowcustomerComponent } from '../../dialog/showcustomer/showcustomer.component';
 import { SettingscustomerComponent } from '../../dialog/settingscustomer/settingscustomer.component';
 
-
 // SERVICES
 import { CountriesService, CustomerService, ExcelService, UserService } from 'src/app/services/service.index';
-
-
 
 // MOMENT
 import * as _moment from 'moment';
@@ -48,7 +46,6 @@ export interface Column {
   columnValue: string;
 }
 
-
 /**
  * @title Table retrieving data through HTTP
  */
@@ -57,7 +54,6 @@ export interface Column {
   templateUrl: './viewprojectcustomer.component.html',
   styleUrls: ['./viewprojectcustomer.component.css']
 })
-
 
 export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChanges {
 
@@ -83,7 +79,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   tarifas: Tarifa;
   token;
 
-
   termino = '';
 
   // SORT
@@ -92,14 +87,12 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     direction: 'desc',
   };
 
-
   // FILTERS
   selectedColumnn = {
     fieldValue: '',
     criteria: '',
     columnValue: ''
   };
-
 
   selectedColumnnDate = {
     fieldValue: '',
@@ -108,23 +101,20 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     columnValueHasta: ''
   };
 
-
   filtersregion = {
     fieldValue: '',
     criteria: '',
     filtervalue: ''
   };
 
-
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionheaderaction = new FormControl(this.positionOptions[2]);
   positiondatasourceaction = new FormControl(this.positionOptions[3]);
 
-/** control for the selected region for multi-selection */
+  /** control for the selected region for multi-selection */
   public regionMultiCtrl: FormControl = new FormControl('', Validators.required );
   public regionMultiFilterCtrl: FormControl = new FormControl('', Validators.required);
   private region = new Array();
-
 
   /** list of banks filtered by search keyword */
   public filteredRegion: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
@@ -132,7 +122,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   @ViewChild('multiSelect', { static: true }) multiSelect: MatSelect;
   private _onDestroy = new Subject<void>();
   // private unsubscribe= new Subject<void>();
-
 
   displayedColumns: string[] = ['cc_number', 'region', 'provincia', 'comuna', 'direccion', 'user', 'create_at', , 'userupdate', 'update_at', 'actions'];
   columnsToDisplay: string[] = ['cc_number', 'region', 'provincia', 'comuna', 'direccion', 'user', 'create_at', 'actions'];
@@ -147,6 +136,8 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   public show = false;
   public buttonName = 'Show';
 
+  table: string;
+
   // MatPaginator Inputs
   pageSize = 15;
   pageSizeOptions: number[] = [15, 30, 100, 200];
@@ -158,7 +149,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   @Output() ServicioSeleccionado: EventEmitter<string>;
   @Input() id: number;
 
-
   constructor(
     public _userService: UserService,
     private _proyectoService: UserService,
@@ -167,8 +157,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     private _regionService: CountriesService,
     private excelService: ExcelService,
     public dataCustomerService: CustomerService
-    ) {
-
+  ) {
     this.identity = this._userService.getIdentity();
     this.proyectos = this._proyectoService.getProyectos();
     this._userService.handleAuthentication(this.identity, this.token);
@@ -177,47 +166,65 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
 
     this._route.params.subscribe(params => {
-    const pid = +params['id'];
-    this.id = pid;
-    if (this.id > 0 && this.token.token != null) {
-      if (typeof this.sort !== 'undefined') {
-
+      const pid = +params['id'];
+      this.id = pid;
+      if (this.id > 0 && this.token.token != null) {
+        if (typeof this.sort !== 'undefined') {
+        }
       }
-    }
     });
 
+  }
+
+  filterProject() {
+    if (this.proyectos && this.id) {
+      for (let i = 0; i < this.proyectos.length; i += 1) {
+        const result: any = this.proyectos[i];
+        if (result.service) {
+          for (let j = 0; j < result.service.length; j += 1) {
+            const data = result.service[j];
+            if (data.id === this.id) {
+              return result;
+            }
+          }
+        }
+      }
     }
-
-
-
+  }
 
   ngOnInit() {
    this.setupSearchDebouncer();
    this.loadInfo();
   }
 
-
   ngOnChanges(_changes: SimpleChanges) {
     this.refreshTableCustomer();
+    const paramp: any = this.filterProject();
+    if (paramp) {
+      if (paramp.project_type === 0) {
+        this.table = 'address';
+      }
+      if (paramp.project_type === 1) {
+        this.table = 'vehiculos';
+      }
+    }
   }
 
-
   private refreshTableCustomer() {
-  this.termino = '';
-  this.regionMultiCtrl.reset();
-  this.filterValue = '';
-  this.selectedColumnn.fieldValue = '';
-  this.selectedColumnn.columnValue = '';
-  this.selectedColumnnDate.fieldValue = '';
-  this.selectedColumnnDate.columnValueDesde = '';
-  this.selectedColumnnDate.columnValueHasta = '';
-  this.filtersregion.fieldValue = '';
-  this.pageSize = 15;
-  this.paginator.pageIndex = 0;
-  this.isLoadingResults = true;
-  this.sort.active = 'create_at';
-  this.sort.direction = 'desc';
-
+    this.termino = '';
+    this.regionMultiCtrl.reset();
+    this.filterValue = '';
+    this.selectedColumnn.fieldValue = '';
+    this.selectedColumnn.columnValue = '';
+    this.selectedColumnnDate.fieldValue = '';
+    this.selectedColumnnDate.columnValueDesde = '';
+    this.selectedColumnnDate.columnValueHasta = '';
+    this.filtersregion.fieldValue = '';
+    this.pageSize = 15;
+    this.paginator.pageIndex = 0;
+    this.isLoadingResults = true;
+    this.sort.active = 'create_at';
+    this.sort.direction = 'desc';
 
     this.dataCustomerService.getCustomerProject(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
@@ -251,16 +258,13 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
           }
           );
     });
-   }
-
+  }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-
   }
-
 
   hoverIn(index) {
     this.indexitem = index;
@@ -268,7 +272,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
   hoverOut(_index) {
     this.indexitem = -1;
-
   }
 
   public loadInfo() {
@@ -297,7 +300,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
                     });
   }
 
-
   getParams() {
 
     if (this.filterValue) {
@@ -310,9 +312,9 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
       this.datedesde = new FormControl('');
       this.datehasta = new FormControl('');
       this.regionMultiCtrl = new FormControl('');
-   }
+    }
 
-   if (this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue) {
+    if (this.selectedColumnn.fieldValue && this.selectedColumnn.columnValue) {
       this.selectedColumnnDate.fieldValue = '';
       this.selectedColumnnDate.columnValueDesde = '';
       this.selectedColumnnDate.columnValueHasta = '';
@@ -320,9 +322,9 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
       this.datedesde = new FormControl('');
       this.datehasta = new FormControl('');
       this.regionMultiCtrl = new FormControl('');
-   }
+    }
 
-   if (!this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
+    if (!this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
       this.selectedColumnn.fieldValue = '';
       this.selectedColumnn.columnValue = '';
       this.filtersregion.fieldValue = '';
@@ -330,9 +332,9 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
       this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-   }
+    }
 
-   if (this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)) {
+    if (this.regionMultiCtrl.value && (!this.selectedColumnnDate.fieldValue || !this.selectedColumnnDate.columnValueDesde || !this.selectedColumnnDate.columnValueHasta)) {
       this.selectedColumnn.fieldValue = '';
       this.selectedColumnn.columnValue = '';
       this.selectedColumnnDate.fieldValue = '';
@@ -341,9 +343,9 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
       this.datedesde = new FormControl('');
       this.datehasta = new FormControl('');
       this.filtersregion.fieldValue = 'regions.region_name';
-   }
+    }
 
-   if (this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
+    if (this.regionMultiCtrl.value && this.selectedColumnnDate.fieldValue && this.selectedColumnnDate.columnValueDesde && this.selectedColumnnDate.columnValueHasta) {
       this.selectedColumnn.fieldValue = '';
       this.selectedColumnn.columnValue = '';
       this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
@@ -351,7 +353,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
       this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
       this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
       this.filtersregion.fieldValue = 'regions.region_name';
-   }
+    }
 
   }
 
@@ -406,7 +408,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
       // Do the actual search
     });
   }
-
 
   onPaginateChange(event) {
    this.isLoadingResults = true;
@@ -564,7 +565,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
     this.getParams();
 
-
     this.dataCustomerService.getCustomerProject(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
@@ -638,8 +638,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     });
   }
 
-
-deleteItem(id: number, cc_id: number, cc_number: string, category_id: number) {
+  deleteItem(id: number, cc_id: number, cc_number: string, category_id: number) {
     // let service_id = this.id;
     const dialogRef = this.dialog.open(DeletecustomerComponent, {
       width: '1000px',
@@ -656,7 +655,6 @@ deleteItem(id: number, cc_id: number, cc_number: string, category_id: number) {
       }
     });
   }
-
 
   showItem(id: number, cc_id: number, cc_number: string, category_id: number) {
     // let service_id = this.id;
@@ -676,9 +674,6 @@ deleteItem(id: number, cc_id: number, cc_number: string, category_id: number) {
     });
   }
 
-
-
-
   private filterRegionMulti() {
     if (!this.region) {
       return;
@@ -697,16 +692,12 @@ deleteItem(id: number, cc_id: number, cc_number: string, category_id: number) {
     );
   }
 
-
-
-
   settings(columns: string) {
     const dialogRef = this.dialog.open(SettingscustomerComponent, {
       height: '650px',
       width: '777px',
       data: {columnsToDisplay: columns}
     });
-
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
@@ -776,13 +767,9 @@ deleteItem(id: number, cc_id: number, cc_number: string, category_id: number) {
     }
   }
 
-
-
-
   resetRegionFilters() {
     this.regionMultiCtrl.reset();
   }
-
 
   resetFilters() {
     this.filterValue = '';
@@ -795,28 +782,43 @@ deleteItem(id: number, cc_id: number, cc_number: string, category_id: number) {
     this.regionMultiCtrl.reset();
   }
 
-
- ExportTOExcel(): void {
+  ExportTOExcel(): void {
     this.excelService.exportAsExcelFile(this.dataSource.data, 'Clientes');
   }
 
   openDialogCsv(): void {
 
-    const dialogRef = this.dialog.open(CsvCustomerComponentComponent, {
-      width: '777px',
-      disableClose: true,
-      data: {
-        servicio: this.id,
-        token: this.token.token,
-      }
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result === 1) {
+    if (this.table === 'vehiculos') {
 
-      }
-    });
+      const dialogRef = this.dialog.open(CsvCustomerComponentComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          servicio: this.id,
+          token: this.token.token,
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+
+        }
+      });
+    } else {
+      const dialogRef = this.dialog.open(CsvAddressComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          servicio: this.id,
+          token: this.token.token,
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+
+        }
+      });
+    }
   }
-
 
 }
 

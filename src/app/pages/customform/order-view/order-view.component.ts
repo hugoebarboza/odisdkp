@@ -6,11 +6,12 @@ import { Subscription } from 'rxjs/Subscription';
 import { AtributoFirma, Order, OrderAtributoFirma, User } from 'src/app/models/types';
 
 // SERVICES
-import { OrderserviceService, SettingsService,  UserService, CustomformService} from 'src/app/services/service.index';
+import { OrderserviceService, SettingsService,  UserService, CustomformService, CustomerService} from 'src/app/services/service.index';
 
 // PDF
 import * as jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
+
 
 
 @Component({
@@ -48,11 +49,14 @@ export class OrderViewComponent implements OnInit, OnDestroy {
 
   proyectos: any;
   project_id = 0;
+  clientInfo: object;
+  client_loading = false;
 
   constructor(
     private _orderService: OrderserviceService,
     private _route: ActivatedRoute,
     public _userService: UserService,
+    private _customerService: CustomerService,
     public _customForm: CustomformService,
     public label: SettingsService,
   ) {
@@ -81,6 +85,101 @@ export class OrderViewComponent implements OnInit, OnDestroy {
     }
   }
 
+
+  moreClient(cc_id: number) {
+    if (this.clientInfo == null) {
+      this.client_loading = true;
+
+      if (this.project_id > 0) {
+        this._customerService.getProjectCustomerDetail(this.token.token, this.project_id, cc_id).subscribe(
+          response => {
+            if (response.status === 'success') {
+              const customer: any = response.datos;
+
+              // console.log(response);
+
+                  for (let i = 0; i < customer.length; i++) {
+                     if (customer) {
+                       this.clientInfo = {
+                        name_table: customer[i]['name_table'],
+                        cc_number: customer[i]['cc_number'],
+                        nombrecc: customer[i]['nombrecc'],
+                        ruta: customer[i]['ruta'],
+                        calle: customer[i]['calle'],
+                        numero: customer[i]['numero'],
+                        block: customer[i]['block'],
+                        depto: customer[i]['depto'],
+                        latitud: customer[i]['latitud'],
+                        longitud: customer[i]['longitud'],
+                        medidor: customer[i]['medidor'],
+                        modelo_medidor: customer[i]['modelo_medidor'],
+                        id_tarifa: customer[i]['id_tarifa'],
+                        id_constante: customer[i]['id_constante'],
+                        id_giro: customer[i]['id_giro'],
+                        id_sector: customer[i]['id_sector'],
+                        id_zona: customer[i]['id_zona'],
+                        id_mercado: customer[i]['id_mercado'],
+                        tarifa: customer[i]['tarifa'],
+                        constante: customer[i]['constante'],
+                        giro: customer[i]['giro'],
+                        sector: customer[i]['sector'],
+                        zona: customer[i]['zona'],
+                        mercado: customer[i]['mercado'],
+                        id_region: customer[i]['id_region'],
+                        id_provincia: customer[i]['id_provincia'],
+                        id_comuna: customer[i]['id_comuna'],
+                        region: customer[i]['region'],
+                        provincia: customer[i]['province'],
+                        comuna: customer[i]['comuna'],
+                        observacion: customer[i]['observacion'],
+                        marca_id: customer[i]['marca_id'],
+                        modelo_id: customer[i]['modelo_id'],
+                        description: customer[i]['description'],
+                        color_id: customer[i]['color_id'],
+                        marca: customer[i]['marca'],
+                        modelo: customer[i]['modelo'],
+                        color: customer[i]['color'],
+                        patio: customer[i]['patio'],
+                        espiga: customer[i]['espiga'],
+                        posicion: customer[i]['posicion'],
+                        set: customer[i]['set'],
+                        alimentador: customer[i]['alimentador'],
+                        sed: customer[i]['sed'],
+                        llave_circuito: customer[i]['llave_circuito'],
+                        fase: customer[i]['fase'],
+                        clavelectura: customer[i]['clavelectura'],
+                        factor: customer[i]['factor'],
+                        fecha_ultima_lectura: customer[i]['fecha_ultima_lectura'],
+                        fecha_ultima_deteccion: customer[i]['fecha_ultima_deteccion'],
+                        falta_ultimo_cnr: customer[i]['falta_ultimo_cnr'],
+                       };
+
+                       // console.log(this.clientInfo);
+
+                       this.client_loading = false;
+                       break;
+                     }
+                  }
+
+             } else {
+              if (response.status === 'error') {
+                this.client_loading = false;
+                // console.log(response);
+              }
+            }
+          },
+              error => {
+                this.client_loading = false;
+                console.log(<any>error);
+              }
+          );
+        }
+
+    } else {
+      this.clientInfo = null;
+    }
+  }
+
   public loadData() {
     if (this.service_id > 0 && this.order_id > 0) {
       this.isloading = true;
@@ -94,6 +193,7 @@ export class OrderViewComponent implements OnInit, OnDestroy {
           return;
         }
           this.order = response.datos;
+          // console.log(this.order);
         if (this.order.length > 0) {
               this.atributo = response.atributo;
               this.orderatributo = response.orderatributo;
@@ -361,7 +461,7 @@ export class OrderViewComponent implements OnInit, OnDestroy {
       // pdfConf = { pagesplit: false, background: '#fff' };
 
       let position = 4;
-      pdf.addImage(contentDataURL, 'PNG', 4, position, imgWidth, imgHeight)
+      pdf.addImage(contentDataURL, 'PNG', 4, position, imgWidth, imgHeight);
       heightLeft -= pageHeight;
 
 
