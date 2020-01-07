@@ -1,0 +1,29 @@
+
+.mat-toolbar {
+    margin: -24px;
+    margin-bottom: 0;
+    width: auto;
+}
+
+.mat-toolbar-row, .mat-toolbar-single-row {
+    height: 70px !important;
+}
+.mat-icon {
+  padding: 0 14px;
+}
+.mat-spacer {
+  flex: 1 1 auto;
+}
+
+.jeEmYB {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.857143em;
+    font-style: inherit;
+    color: #313131;
+    font-weight: 600;
+    margin-top: 7px;
+    text-transform: uppercase;
+    line-height: 12px;
+    overflow: hidden;
+}

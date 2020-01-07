@@ -59,6 +59,8 @@ import { DownloadComponent } from '../../components/dialog/download/download.com
 import { EditComponent } from '../../components/dialog/edit/edit.component';
 import { EditcustomerComponent } from '../../components/dialog/editcustomer/editcustomer.component';
 import { GiroListComponent } from './components/dialog/giro-list/giro-list.component';
+import { LogLecturaComponent } from '../../components/dialog/log-lectura/log-lectura.component';
+import { LogUbicacionesComponent } from '../../components/dialog/log-ubicaciones/log-ubicaciones.component';
 import { MarcaListComponent } from './components/dialog/marca-list/marca-list.component';
 import { MercadoListComponent } from './components/dialog/mercado-list/mercado-list.component';
 import { ModeloListComponent } from './components/dialog/modelo-list/modelo-list.component';
@@ -222,6 +224,8 @@ registerLocaleData(localeEs);
     FileComponent,
     GestionComponent,
     GiroListComponent,
+    LogLecturaComponent,
+    LogUbicacionesComponent,
     MapaComponent,
     MarcaListComponent,
     MapaFullWidthComponent,
@@ -297,6 +301,8 @@ registerLocaleData(localeEs);
     EditComponent,
     EditcustomerComponent,
     FileComponent,
+    LogLecturaComponent,
+    LogUbicacionesComponent,
     MarcaListComponent,
     ModalMapaComponent,
     ModalImageComponent,

@@ -46,19 +46,20 @@ export class SupportComponent implements OnInit, OnDestroy  {
   tiempopromedio = null;
   timeArray = [];
 
-  allMeses = [{value: '01', mes: 'Enero 2019'},
-  {value: '02', mes: 'Febrero 2019'},
-  {value: '03', mes: 'Marzo 2019'},
-  {value: '04', mes: 'Abril 2019'},
-  {value: '05', mes: 'Mayo 2019'},
-  {value: '06', mes: 'Junio 2019'},
-  {value: '07', mes: 'Julio 2019'},
-  {value: '08', mes: 'Agosto 2019'},
-  {value: '09', mes: 'Septiembre 2019'},
-  {value: '10', mes: 'Octubre 2019'},
-  {value: '11', mes: 'Noviembre 2019'},
-  {value: '12', mes: 'Diciembre 2019'},
-  {value: '01', mes: 'Enero 2020'}];
+  meses = [{value: '01', mes: 'Enero'},
+  {value: '02', mes: 'Febrero'},
+  {value: '03', mes: 'Marzo'},
+  {value: '04', mes: 'Abril'},
+  {value: '05', mes: 'Mayo'},
+  {value: '06', mes: 'Junio'},
+  {value: '07', mes: 'Julio'},
+  {value: '08', mes: 'Agosto'},
+  {value: '09', mes: 'Septiembre'},
+  {value: '10', mes: 'Octubre'},
+  {value: '11', mes: 'Noviembre'},
+  {value: '12', mes: 'Diciembre'}];
+
+  allMeses = [];
 
   startOfMonth = '';
   endOfMonth =  '';
@@ -110,10 +111,25 @@ export class SupportComponent implements OnInit, OnDestroy  {
 
   ngOnInit() {
 
-    const date = moment(new Date()).format('MM');
+    const anoActual: number = Number(moment(new Date()).format('YYYY'));
+    const anoMesActual: String = moment(new Date()).format('YYYY-MM');
+
+    for (let i = 2019; i <= anoActual; i++) {
+      for (let x = 0; x < this.meses.length; x++) {
+        const yyyymm = i + '-' + this.meses[x]['value'];
+        const mmyyyy = this.meses[x]['mes'] + ' ' + i;
+        this.allMeses.push({value: yyyymm, mes: mmyyyy});
+        if (yyyymm === anoMesActual) {
+          // console.log(JSON.stringify(this.allMeses));
+          break;
+        }
+      }
+    }
+
+    const date = moment(new Date()).format('YYYY-MM');
     this.selectedMes = date;
-    this.startOfMonth = moment(date, 'MM').startOf('month').format('YYYY-MM-DD HH:mm:ss');
-    this.endOfMonth   = moment(date, 'MM').endOf('month').format('YYYY-MM-DD HH:mm:ss');
+    this.startOfMonth = moment(date, 'YYYY-MM').startOf('month').format('YYYY-MM-DD HH:mm:ss');
+    this.endOfMonth   = moment(date, 'YYYY-MM').endOf('month').format('YYYY-MM-DD HH:mm:ss');
 
     this.firebaseAuth.authState.subscribe((auth) => {
       if (auth) {
@@ -273,8 +289,8 @@ export class SupportComponent implements OnInit, OnDestroy  {
 
     this.supportcase = 'supportcase/' + this.idPais + '/cases';
 
-    this.startOfMonth = moment(this.selectedMes, 'MM').startOf('month').format('YYYY-MM-DD HH:mm:ss');
-    this.endOfMonth   = moment(this.selectedMes, 'MM').endOf('month').format('YYYY-MM-DD HH:mm:ss');
+    this.startOfMonth = moment(this.selectedMes, 'YYYY-MM').startOf('month').format('YYYY-MM-DD HH:mm:ss');
+    this.endOfMonth   = moment(this.selectedMes, 'YYYY-MM').endOf('month').format('YYYY-MM-DD HH:mm:ss');
 
     this.joined$  = null;
 

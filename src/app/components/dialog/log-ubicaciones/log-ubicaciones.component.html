@@ -1,0 +1,61 @@
+<mat-toolbar color="primary" >
+    <h3>Historico de ubicaciones VIN: {{cc_number}}</h3>            
+    <span class="mat-spacer"></span>
+    <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+    <mat-icon class="mat-icon">close</mat-icon>       
+    </button>
+  </mat-toolbar>
+              
+  <P></P>
+  <div class="row animated fadeIn">
+  <div class="col-12">
+  
+  <div class="container-fluid" *ngIf="isLoading">
+      <div class="row d-flex justify-content-center">
+          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+      </div>
+  </div>
+  
+    <div *ngIf="!isLoading">
+  
+        <div mat-dialog-content>
+            <div class="row animated fadeIn" *ngIf="!isLoading && logUbicaciones == null">
+                <div class="col-12" style="text-align: center; margin-top: 5px">
+                    <h2 class="jeEmYB"><strong>NO REGISTRA INFORMACIÓN</strong></h2>
+                </div>
+            </div>
+            <div class="row animated fadeIn" *ngIf="!isLoading && logUbicaciones !== null">
+                <div class="col-12" style="text-align: center; margin-top: 5px">
+                    <mat-list>
+                        <mat-list-item>
+                            <div class="row" style="width: 100%;">
+                                <div class="col-md-1"><mat-icon mat-list-icon>check_circle_outline</mat-icon></div>
+                                <div class="col-md-3"><h2 class="jeEmYB"><strong>Ubicación: </strong></h2></div>
+                                <div class="col-md-4"><h2 class="jeEmYB"><strong>Realizada por: </strong></h2></div>
+                                <div class="col-md-4"><h2 class="jeEmYB"><strong>Relizada el: </strong></h2></div>
+                            </div>                            
+                            <mat-divider [inset]="true"></mat-divider>
+                        </mat-list-item>
+                        <mat-list-item  *ngFor="let log of logUbicaciones">
+                            <div class="row" style="width: 100%;">
+                                <div class="col-md-1"><mat-icon mat-list-icon>check_circle_outline</mat-icon></div>
+                                <div class="col-md-3">{{log['patio']}}-{{log['espiga']}}-{{log['posicion']}}</div>
+                                <div class="col-md-4">{{log['usuario']}}</div>
+                                <div class="col-md-4">{{log['create_at']}}</div>
+                            </div>
+                            <mat-divider [inset]="true"></mat-divider>
+                        </mat-list-item>
+                    </mat-list>
+                </div>
+            </div>
+        </div>
+
+        <div mat-dialog-actions class="justify-content-center" style="margin-top: 10px;">
+            <button mat-stroked-button (click)="onNoClick()" tabindex="-1">Salir</button>
+        </div>
+    
+    </div>
+  
+  
+  </div>
+  </div>

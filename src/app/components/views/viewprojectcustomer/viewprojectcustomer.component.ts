@@ -32,6 +32,8 @@ import { CountriesService, CustomerService, ExcelService, UserService } from 'sr
 
 // MOMENT
 import * as _moment from 'moment';
+import { LogLecturaComponent } from '../../dialog/log-lectura/log-lectura.component';
+import { LogUbicacionesComponent } from '../../dialog/log-ubicaciones/log-ubicaciones.component';
 const moment = _moment;
 
 interface Region {
@@ -58,6 +60,7 @@ export interface Column {
 export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChanges {
 
   title: string;
+  termHist: string;
 
   category_id: number;
   columnselect: string[] = new Array();
@@ -164,7 +167,6 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     this.token = this._userService.getToken();
     this.ServicioSeleccionado = new EventEmitter();
 
-
     this._route.params.subscribe(params => {
       const pid = +params['id'];
       this.id = pid;
@@ -203,9 +205,11 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     if (paramp) {
       if (paramp.project_type === 0) {
         this.table = 'address';
+        this.termHist = 'lectura';
       }
       if (paramp.project_type === 1) {
         this.table = 'vehiculos';
+        this.termHist = 'ubicaciones';
       }
     }
   }
@@ -597,8 +601,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
           }
           );
     });
- }
-
+  }
 
   addNew(id: number, _customer: Customer[]) {
      const dialogRef = this.dialog.open(AddcustomerComponent, {
@@ -786,6 +789,44 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     this.excelService.exportAsExcelFile(this.dataSource.data, 'Clientes');
   }
 
+  showLog(data: any): void {
+
+    // console.log(data);
+    if (this.table === 'address') {
+
+      const dialogRef = this.dialog.open(LogLecturaComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          cc_id: data.id,
+          cc_number: data.cc_number,
+          token: this.token.token,
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+
+        }
+      });
+    } else {
+      const dialogRef = this.dialog.open(LogUbicacionesComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          cc_id: data.id,
+          cc_number: data.cc_number,
+          token: this.token.token,
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+
+        }
+      });
+    }
+
+  }
+
   openDialogCsv(): void {
 
     if (this.table === 'vehiculos') {
@@ -821,4 +862,3 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   }
 
 }
-

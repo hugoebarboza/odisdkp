@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { GLOBAL } from '../global';
 
-
-
-
 @Injectable({
   providedIn: 'root'
 })
@@ -73,6 +70,14 @@ export class DataService {
 
   getTarifa(id, token) {
     return this.getDataBD(this.url + 'service/' + id + '/tarifa', token);
+  }
+
+  getLogLectura(cc_id, token) {
+    return this.getDataBD(this.url + 'customer/' + cc_id + '/lectura', token);
+  }
+
+  getLogUbicaciones(customerid, token) {
+    return this.getDataBD(this.url + 'vehiculo/' + customerid + '/tracker', token);
   }
 
   getConstante(id, token) {

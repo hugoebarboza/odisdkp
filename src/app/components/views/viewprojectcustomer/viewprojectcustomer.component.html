@@ -261,7 +261,6 @@
         matTooltip="Editar cliente."
         [matTooltipPosition]="positiondatasourceaction.value"
         >
-
           <mat-icon class="material-icons md-color" aria-label="Edit" *ngIf="i != indexitem">edit</mat-icon>          
           <mat-icon aria-label="Edit" *ngIf="i == indexitem">edit</mat-icon>          
 
@@ -275,13 +274,19 @@
           <mat-icon aria-label="Delete" *ngIf="i == indexitem">delete</mat-icon>
         </button>
 
-        <button mat-icon-button color="" (click)="showItem(id, row.cc_id, row.cc_number, row.category_id)"
-        matTooltip="Ver cliente."
-        [matTooltipPosition]="positiondatasourceaction.value"
-        >
+        <button mat-icon-button [matMenuTriggerFor]="menuviewclient"  matTooltip="Presiona para desplegar opcciones" [matTooltipPosition]="positiondatasourceaction.value">
           <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
           <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
         </button>
+
+      <mat-menu #menuviewclient="matMenu" [overlapTrigger]="false">
+          <button mat-menu-item (click)="showItem(id, row.cc_id, row.cc_number, row.category_id)">
+            <span >Ver detalle del cliente</span>
+          </button>
+          <a mat-menu-item (click)="showLog(row)">
+            <span >Ver historico de {{termHist}}</span>
+          </a>
+      </mat-menu> 
           
       </mat-cell>
     </ng-container>

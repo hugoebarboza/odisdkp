@@ -122,6 +122,7 @@
                                 <h5 style="margin-left: 4px; margin-top: 4px; margin-bottom: 4px; padding: 4px;" class="subtitulo">DATOS DEL CLIENTE</h5>
                             </div>
                             <div class="row">
+                                
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['cc_number']"><strong>N. CLIENTE: </strong>{{order[0]['cc_number']}}</h2></div>
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['region']"><strong>REGION: </strong>{{order[0]['region']}}</h2></div>
                                 <div class="w-100"></div>
@@ -138,6 +139,7 @@
                                 </div>
                             </div>
                             <div class="row animated fadeIn" *ngIf="clientInfo != null">
+                                <div class="col-12" *ngIf="!clientInfo['calle'] && !clientInfo['ruta'] && !clientInfo['medidor'] && !clientInfo['modelo_medidor'] && !clientInfo['tarifa'] && !clientInfo['constante'] && !clientInfo['giro'] && !clientInfo['sector'] && !clientInfo['mercado'] && !clientInfo['zona'] && !clientInfo['set'] && !clientInfo['alimentador'] && !clientInfo['sed'] && !clientInfo['llave_circuito'] && !clientInfo['fase'] && !clientInfo['clavelectura'] && !clientInfo['factor'] && clientInfo['fecha_ultima_lectura'] == '0000-00-00 00:00:00' && clientInfo['fecha_ultima_deteccion'] == '0000-00-00 00:00:00' && !clientInfo['falta_ultimo_cnr'] " style="text-align: center; margin-top: 5px"><h2 class="jeEmYB"><strong>CLIENTE NO REGISTRA MÁS INFORMACION</strong></h2></div>
                                 <div class="col-6" *ngIf="clientInfo['calle']"><h2 class="jeEmYB"><strong>DIRECCIÓN: </strong>{{clientInfo['calle']}} {{clientInfo['numero']}} {{clientInfo['block']}} {{clientInfo['depto']}}</h2></div>
                                 <div class="col-6" *ngIf="clientInfo['ruta']"><h2 class="jeEmYB"><strong>RUTA: </strong>{{clientInfo['ruta']}}</h2></div>
                                 
