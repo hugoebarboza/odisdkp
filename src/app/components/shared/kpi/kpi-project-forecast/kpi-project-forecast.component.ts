@@ -172,24 +172,34 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
     });
 
     const mm = moment().month('month').format('MM');
-    this.displayedColumns = [];
+
     this.displayedColumns = ['status'];
 
-    let count = 1;
+    if (Number(mm) === 1) {
+      this.displayedColumns[1] = this.months[10]['name'];
+      this.displayedColumns[2] = this.months[11]['name'];
+      this.displayedColumns[3] = this.months[0]['name'];
+    } else if (Number(mm) === 2) {
+      this.displayedColumns[1] = this.months[11]['name'];
+      this.displayedColumns[2] = this.months[0]['name'];
+      this.displayedColumns[3] = this.months[1]['name'];
+    }
     for (let e = 0; e < this.months.length; e++) {
         // tslint:disable-next-line:radix
         if ( parseInt(mm) === this.months[e]['value']) {
           this.mesactual = this.months[e]['name'];
         }
         // tslint:disable-next-line:radix
-        if ( e >= (parseInt(mm) - 3) && e <= (parseInt(mm) - 1)) {
-          this.displayedColumns[count] = this.months[e]['name'];
-          count = count + 1;
+
+        if (Number(mm)  > 2 ) {
+          if ( e >= (Number(mm) - 3) && e <= (Number(mm) - 1)) {
+            this.displayedColumns.push(this.months[e]['name']);
+          }
         }
+
     }
 
     this.displayedColumns[4] = 'Previsión';
-
 
     if (this.id > 0) {
       this.project = this.filterProjectByService();
@@ -300,7 +310,15 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
           const forecast = [];
           for (let i = 1; i < (this.displayedColumns.length - 1); i++) {
 
-              this._kpiService.getProjectKpiServiceByStatusAndDate(this.token.token, this.project.id, this.displayedColumns[i], year, status[x].id, this.id)
+            let year_tem = year;
+
+            if ((i === 1 && this.displayedColumns[i] === 'November')
+            || (i === 1 && this.displayedColumns[i] === 'December')
+            || (i === 2 && this.displayedColumns[i] === 'December')) {
+              year_tem = year - 1;
+            }
+
+              this._kpiService.getProjectKpiServiceByStatusAndDate(this.token.token, this.project.id, this.displayedColumns[i], year_tem, status[x].id, this.id)
               .then(
                 (res: any) => {
                   res.subscribe(
@@ -328,7 +346,6 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
                           }
 
                         }
-
 
                         estatus[this.displayedColumns[i]] = object;
                         forecast.push(object.produccion);
@@ -471,20 +488,54 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
 
   GroupedVertical(data: any) {
     this.kpidataforecast = [];
-    for (let i = 0; i < data.length; i++) {
-      if (data[i] && data[i].series.length > 1) {
-        this.kpidataforecast.push(data[i]);
+
+    const mm = moment().month('month').format('MM');
+
+    if (Number(mm) === 1) {
+
+      for (let e = 0; e < this.months.length; e++) {
+        for (let i = 0; i < data.length; i++) {
+          if (Number(mm) === 1 && data[i]['name'] === this.months[e]['name'] && i === 10) {
+            this.kpidataforecast[0] = data[i];
+          }
+          if (Number(mm) === 1 && data[i]['name'] === this.months[e]['name'] && i === 11) {
+            this.kpidataforecast[1] = data[i];
+          }
+          if (Number(mm) === 1 && data[i]['name'] === this.months[e]['name'] && i === 0) {
+            this.kpidataforecast[2] = data[i];
+          }
+          if (Number(mm) === 2 && data[i]['name'] === this.months[e]['name'] && i === 11) {
+            this.kpidataforecast[0] = data[i];
+          }
+          if (Number(mm) === 2 && data[i]['name'] === this.months[e]['name'] && i === 0) {
+            this.kpidataforecast[1] = data[i];
+          }
+          if (Number(mm) === 2 && data[i]['name'] === this.months[e]['name'] && i === 1) {
+            this.kpidataforecast[2] = data[i];
+          }
+          if (data[i]['name'] === 'Previsión') {
+            this.kpidataforecast[3] = data[i];
+          }
+        }
       }
+
+    } else {
+
+      for (let i = 0; i < data.length; i++) {
+        // data = data.reverse();
+        if (data[i] && data[i].series.length > 1) {
+          this.kpidataforecast.push(data[i]);
+        }
+      }
+
     }
 
     if (this.kpidataforecast.length === 4) {
       this.isLoadingchart = false;
       this.isLoadingchartsingle = false;
     }
+
   }
-
-
-
 
   async getDataPayment(project_id: number, service_id: number, term: string) {
     this.kpipaymentprojectservice = [];
@@ -581,7 +632,7 @@ export class KpiProjectForecastComponent implements OnChanges, OnDestroy {
     const data: any = await this._kpiPayment.getProjectServicePaymentDate(this.token.token, project_id, service_id, term, year);
 
     if (data && data.datos.length > 0) {
-      // console.log(data.datos);
+
       for (let x = 0; x < data.datos.length; x++) {
         if (x === 0) {
           const object: Single = {

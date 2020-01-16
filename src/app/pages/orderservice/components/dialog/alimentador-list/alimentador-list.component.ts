@@ -57,7 +57,7 @@ export class AlimentadorListComponent implements OnInit, OnDestroy {
       if (this.proyecto && this.proyecto.id > 0) {
         this.forma = new FormGroup({
           id_set: new FormControl(0, [Validators.required, Validators.minLength(1)]),
-          descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+          descripcion: new FormControl(null, [Validators.required, Validators.minLength(1)]),
           order_by: new FormControl(0, [Validators.required]),
           status: new FormControl(1, [Validators.required]),
         });

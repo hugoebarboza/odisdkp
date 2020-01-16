@@ -34,7 +34,7 @@ const EXCEL_EXTENSION = '.xlsx';
 
 export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
-  forTime = 800;
+  forTime = 1200;
   identity: any;
   public token;
   public services: Service[] = [];
@@ -384,7 +384,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               sed = '';
             } else {
               set = set.trim();
-              const responseSet: any = that.validarSelectSedALimnetadorSed(set, that.set, 'descripcion');
+              const responseSet: any = that.validarSelectSed(set, that.set);
               if (responseSet) {
                 id_set = responseSet.id;
 
@@ -393,7 +393,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                   sed = '';
                 } else {
                   alimentador = alimentador.trim();
-                  const resAlimnetador: any = that.validarSelectSedALimnetadorSed(alimentador, that.alimentador, 'descripcion');
+                  const resAlimnetador: any = that.validarSelectALimnetadorSed(alimentador, that.alimentador, id_set, 'id_set');
                   if (resAlimnetador) {
                     if (resAlimnetador.id_set === id_set) {
                       id_alimentador = resAlimnetador.id;
@@ -402,7 +402,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                         sed = '';
                       } else {
                         sed = sed.trim();
-                        const resSed: any = that.validarSelectSedALimnetadorSed(sed, that.sed, 'descripcion');
+                        const resSed: any = that.validarSelectALimnetadorSed(sed, that.sed, id_alimentador, 'id_alimentador');
                         if (resSed) {
                           if (resSed.id_alimentador === id_alimentador) {
                             id_sed = resSed.id;
@@ -467,11 +467,23 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             if (fecha_ultima_lectura === 'undefined' || fecha_ultima_lectura.trim().length === 0) {
               fecha_ultima_lectura = '';
             } else {
-              fecha_ultima_lectura = fecha_ultima_lectura.replace(/ /g, '');
-              fecha_ultima_lectura = fecha_ultima_lectura.substring(0, 10) + ' ' + fecha_ultima_lectura.substring(10, fecha_ultima_lectura.length);
-              if (fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/)) {
+              // fecha_ultima_lectura = fecha_ultima_lectura.replace(/ /g, '');
+              // fecha_ultima_lectura = fecha_ultima_lectura.substring(0, 10) + ' ' + fecha_ultima_lectura.substring(10, fecha_ultima_lectura.length);
+              fecha_ultima_lectura = fecha_ultima_lectura.trim();
+              if (fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/) 
+              || fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)
+              || fecha_ultima_lectura.match(/^[0-3][0-9]\-[0-1][0-9]\-[0-2][0-9][0-9][0-9]$/)) {
+
+                if (fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)) {
+                  fecha_ultima_lectura = fecha_ultima_lectura + ' 00:00:00';
+                }
+                if (fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)) {
+                  let date = fecha_ultima_lectura;
+                  date = date.substring(0, 1) + date.substring(4, 7) + date.substring(8, 10);
+                  fecha_ultima_lectura = date + ' 00:00:00';
+                }
               } else {
-                concatError = concatError + 'Fecha ultima lectura error en formato 0000-00-00 00:00:00; ' ;
+                concatError = concatError + 'Fecha ultima lectura error en formato (YYYY-MM-DD HH:MM:SS o YYYY-MM-DD o DD-MM-YYYY); ' ;
                 banderaJson = true;
               }
             }
@@ -479,11 +491,22 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             if (fecha_ultima_deteccion === 'undefined' || fecha_ultima_deteccion.trim().length === 0) {
               fecha_ultima_deteccion = '';
             } else {
-              fecha_ultima_deteccion = fecha_ultima_deteccion.replace(/ /g, '');
-              fecha_ultima_deteccion = fecha_ultima_deteccion.substring(0, 10) + ' ' + fecha_ultima_deteccion.substring(10, fecha_ultima_deteccion.length);
-              if (fecha_ultima_deteccion.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/)) {
+              // fecha_ultima_deteccion = fecha_ultima_deteccion.replace(/ /g, '');
+              // fecha_ultima_deteccion = fecha_ultima_deteccion.substring(0, 10) + ' ' + fecha_ultima_deteccion.substring(10, fecha_ultima_deteccion.length);
+              fecha_ultima_deteccion = fecha_ultima_deteccion.trim();
+              if (fecha_ultima_deteccion.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/)
+              || fecha_ultima_deteccion.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)
+              || fecha_ultima_deteccion.match(/^[0-3][0-9]\-[0-1][0-9]\-[0-2][0-9][0-9][0-9]$/)) {
+                if (fecha_ultima_deteccion.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)) {
+                  fecha_ultima_deteccion = fecha_ultima_deteccion + ' 00:00:00';
+                }
+                if (fecha_ultima_deteccion.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)) {
+                  let date = fecha_ultima_deteccion;
+                  date = date.substring(0, 1) + date.substring(4, 7) + date.substring(8, 10);
+                  fecha_ultima_deteccion = date + ' 00:00:00';
+                }
               } else {
-                concatError = concatError + 'Fecha ultima detección error en formato 0000-00-00 00:00:00; ' ;
+                concatError = concatError + 'Fecha ultima detección error en formato (YYYY-MM-DD HH:MM:SS o YYYY-MM-DD o DD-MM-YYYY); ' ;
                 banderaJson = true;
               }
             }
@@ -853,11 +876,23 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             if (required_date === 'undefined' || required_date.trim().length === 0) {
               required_date = '';
             } else {
-              required_date = required_date.replace(/ /g, '');
-              required_date = required_date.substring(0, 10) + ' ' + required_date.substring(10, required_date.length);
-              if (required_date.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/)) {
+              // required_date = required_date.replace(/ /g, '');
+              // required_date = required_date.substring(0, 10) + ' ' + required_date.substring(10, required_date.length);
+              required_date = required_date.trim();
+              if (required_date.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/)
+                  || required_date.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)
+                  || required_date.match(/^[0-3][0-9]\-[0-1][0-9]\-[0-2][0-9][0-9][0-9]$/)) {
+
+                if (required_date.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)) {
+                  required_date = required_date + ' 00:00:00';
+                }
+                if (required_date.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)) {
+                  let date = required_date;
+                  date = date.substring(0, 1) + date.substring(4, 7) + date.substring(8, 10);
+                  required_date = date + ' 00:00:00';
+                }
               } else {
-                concatError = concatError + 'Fecha requerida [0000-00-00 00:00:00]; ' ;
+                concatError = concatError + 'Fecha requerida error en formato (YYYY-MM-DD HH:MM:SS o YYYY-MM-DD o DD-MM-YYYY); ' ;
                 banderaJson = true;
               }
             }
@@ -1338,17 +1373,33 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     return id;
   }
 
-  validarSelectSedALimnetadorSed(termino: any, arrayObject: Array<object>, value: string) {
+  validarSelectSed(termino: any, arrayObject: Array<object>) {
     if (!termino) {
       return false;
     }
     let element: any;
     if (arrayObject.length > 0) {
       arrayObject.forEach(function(valor, _indice, _array) {
-       if (valor[value].toLowerCase() === (termino).toLowerCase()) {
+       if (valor['descripcion'].toLowerCase() === (termino).toLowerCase()) {
         element = valor;
        }
       }, this);
+    }
+    return element;
+  }
+
+  validarSelectALimnetadorSed(termino: any, arrayObject: Array<object>, id: Number, id_descripcion: string) {
+    if (!termino) {
+      return false;
+    }
+    let element: any;
+    if (arrayObject.length > 0) {
+      for (let i = 0; i < arrayObject.length; i++) {
+        if (arrayObject[i][id_descripcion] === id && arrayObject[i]['descripcion'].toLowerCase() === (termino).toLowerCase()) {
+          element = arrayObject[i];
+          break;
+        }
+      }
     }
     return element;
   }

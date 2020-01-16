@@ -43,7 +43,7 @@ export class KpiService {
           return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
           .then()
           .catch((error) => { this.handleError (error); }
-          );  
+          );
         }
       } catch (err) {
           console.log(err);
@@ -267,7 +267,7 @@ export class KpiService {
               if (error.status === 500) {
                 this._snackBar.open(this.errorMessage500, '', {duration: 7000, });
               }
-  
+
               if (error.status === 0) {
                 this._snackBar.open(this.errorMessage, '', {duration: 7000, });
               }
@@ -279,7 +279,7 @@ export class KpiService {
         return throwError(error.error);
       }
     }
-  
-  
+
+
 
 }

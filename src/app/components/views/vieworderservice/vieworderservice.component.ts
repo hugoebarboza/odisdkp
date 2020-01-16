@@ -407,10 +407,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showModal(id: number) {
+    // console.log(id);
     if (id > 0) {
+      this.cd.markForCheck();
       this._modalManage.showModal(id);
       this.assigned_to = id;
-      this.cd.markForCheck();
     } else {
       return;
     }

@@ -1,20 +1,19 @@
 import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
-// import { Router } from '@angular/router';
-import { Router, RouteConfigLoadStart, RouteConfigLoadEnd, RouterEvent } from '@angular/router';
+import { Router } from '@angular/router';
+import { RouteConfigLoadStart, RouteConfigLoadEnd, RouterEvent } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
-import { ActivationEnd } from '@angular/router';
-import { filter, map } from 'rxjs/operators';
+// import { ActivationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 import { MediaMatcher } from '@angular/cdk/layout';
 
-
+// MODELS
 import { Proyecto } from './models/types';
 
-
+// SERVICES
 import { SettingsService, SidenavService, UserService } from 'src/app/services/service.index';
 
-
+// REDUX
 import { AppState } from './app.reducers';
 import { Store } from '@ngrx/store';
 import { MatSidenav } from '@angular/material';
@@ -28,6 +27,7 @@ import { MatSidenav } from '@angular/material';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
+  id: number;
   titulo: string;
   description: string;
   departamentos: Array<any> = [];
@@ -70,7 +70,7 @@ export class AppComponent implements OnInit, OnDestroy {
     this.mobileQuery.addListener(this._mobileQueryListener);
 
 
-    this.getDataRoute().subscribe( data => {
+    this._ajustes.getDataRoute().subscribe( data => {
       this.titulo = data.titulo;
       this.description = data.descripcion;
       this._title.setTitle( this.titulo );
@@ -82,7 +82,7 @@ export class AppComponent implements OnInit, OnDestroy {
       this._meta.updateTag( metaTag );
     });
 
-    _router.events.subscribe(
+    this._router.events.subscribe(
       (event: RouterEvent): void => {
         if (event instanceof RouteConfigLoadStart) {
           // console.log('trueeee');
@@ -94,6 +94,15 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     );
 
+    /*
+     this._router.events.pipe(
+      filter(event => event instanceof NavigationEnd)
+      ).subscribe(() => {
+          const url = this._router.url.split('/');
+          const urlid = url[2];
+          this.id = Number(urlid);
+          console.log(this.id);
+      });*/
 
   }
 
@@ -127,14 +136,14 @@ export class AppComponent implements OnInit, OnDestroy {
     this.sidenavService.setSidenav(this.supportDrawer);
   }
 
-
+  /*
   getDataRoute() {
     return this._router.events.pipe(
       filter( evento => evento instanceof ActivationEnd ),
       filter( (evento: ActivationEnd) => evento.snapshot.firstChild === null ),
       map( (evento: ActivationEnd ) => evento.snapshot.data )
     );
-  }
+  }*/
 
   refreshMenu(event: number) {
   if ( event === 1 ) {

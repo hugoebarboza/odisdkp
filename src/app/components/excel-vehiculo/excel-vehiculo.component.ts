@@ -28,7 +28,7 @@ const EXCEL_EXTENSION = '.xlsx';
 })
 export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
-  forTime = 500;
+  forTime = 1200;
 
   private token;
 
@@ -832,7 +832,11 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
                 await delay(that.forTime);
 
-                that.dataService.getValidateExisteCLiente(that.service_id, cc_number, that.token.token, false).then(
+                const picking: Object = {
+                  'picking': true
+                };
+
+                that.dataService.getValidateExisteCLiente(that.service_id, cc_number, that.token.token, picking).then(
                   (res: any) => {
                     res.subscribe(
                       (some) => {

@@ -57,7 +57,7 @@ export class SetListComponent implements OnInit, OnDestroy {
       if (this.proyecto && this.proyecto.id > 0) {
         // console.log(this.proyecto);
         this.forma = new FormGroup({
-          descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),
+          descripcion: new FormControl(null, [Validators.required, Validators.minLength(1)]),
           order_by: new FormControl(0, [Validators.required]),
           status: new FormControl(1, [Validators.required]),
         });

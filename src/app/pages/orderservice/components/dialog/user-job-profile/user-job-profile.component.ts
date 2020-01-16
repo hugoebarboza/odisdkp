@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 // SERVICES
@@ -17,6 +17,7 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
   title = 'Perfil del Usuario';
   token: any;
   user: any;
+  userid = 0;
 
   @Input() id: number;
 
@@ -26,23 +27,33 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
     public _modalManage: ModalManageService,
   ) {
     this.token = this._userService.getToken();
+    this.cd.markForCheck();
   }
 
   ngOnInit() {
+    // console.log('oninit');
+    // this.cd.markForCheck();
   }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
+      // this.cd.markForCheck();
     }
   }
 
 
   ngOnChanges(_changes: SimpleChanges) {
     this.user = null;
+    this.userid = 0;
+    this.cd.markForCheck();
+    // console.log(this.userid);
     if (this.id > 0) {
+      const userid = this.id;
+      this.userid = userid;
+      // console.log(this.userid);
       this.isLoading = true;
-      this.subscription = this._userService.getUserShowInfo(this.token.token, this.id).subscribe(
+      this.subscription = this._userService.getUserShowInfo(this.token.token, this.userid).subscribe(
         response => {
           this.isLoading = false;
           this.cd.markForCheck();
@@ -51,10 +62,13 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
           }
           if (response.status === 'success') {
             this.user = response.data[0];
+            this.isLoading = false;
+            // console.log(this.user);
           }
         },
         (error: any) => {
           this.isLoading = false;
+          this.cd.markForCheck();
           console.log(<any>error);
         }
       );
@@ -64,6 +78,7 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
 
   hideModal() {
     this._modalManage.hideModal();
+    // this.cd.markForCheck();
   }
 
 }

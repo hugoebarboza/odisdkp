@@ -1,0 +1,71 @@
+<meta name="Description" content="Users">
+<!--CONTENT-->
+<div class="loading" *ngIf="!proyectos && identity">
+<app-loading></app-loading>  
+</div>
+
+<div *ngIf="proyectos && identity">
+<div>
+    <div class="container-fluid">
+          
+        <div class="row animated fadeIn">
+        <div class="col-12">
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center  border-bottom">
+            <div class="w-100 ">
+            <div class="d-flex">
+                <div ><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1></div>
+                <div >
+                  <a class="nav-link pointer" href="javascript:;" (click)="loadTeam()" >
+                    <i class="material-icons" matTooltip="Refrescar" [matTooltipPosition]="positionrightaction.value">sync</i>
+                  </a>
+                </div>
+            </div>
+            </div>          
+        </div>
+        </div>
+        </div>
+
+        <div class="container-fluid p-2">
+            <div class="row animated fadeIn">
+            <div class="col-12">
+                  <div class="row animated fadeIn" *ngIf="isLoading">
+                      <div class="col-sm-12">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                      </div>
+                  </div>
+            
+                  <div class="row animated fadeIn" *ngIf="!isLoading && status !== 'error'">
+                    <div class="col-12">
+                        <div class="card custom-card">
+                            <div class="card-body">
+          
+                                <input #input [(ngModel)]="termino" (keyup)="searchTeam(termino)" type="text" class="form-control" placeholder="Buscar equipo por Nombre...">
+          
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+          
+          
+                  <div class="row animated fadeIn" *ngIf="!isLoading && status == 'error'">
+                      <div class="col-sm-12">
+                          <div class="alert alert-danger" *ngIf="status == 'error'">
+                              No se encontraron registros que coincidan con su búsqueda. 
+                              <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                          </div>
+                      </div>
+                  </div>
+
+
+               
+  
+                  
+                  
+            </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+</div>

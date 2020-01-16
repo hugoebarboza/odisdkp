@@ -136,6 +136,12 @@ const appRoute: Routes = [
       data: { preload: false, delay: false }
     },
     {
+      path: 'team',
+      canLoad: [LoginGuardGuard],
+      loadChildren : () => import('./pages/team/team.module').then(m => m.TeamModule),
+      data: { preload: false, delay: false }
+    },
+    {
       path: 'users',
       canLoad: [LoginGuardGuard],
       loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),

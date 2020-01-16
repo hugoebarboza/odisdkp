@@ -128,7 +128,7 @@
                                 <div class="w-100"></div>
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['provincia']"><strong>PROVINCIA: </strong>{{order[0]['provincia']}}</h2></div>
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['comuna']"><strong>COMUNA: </strong>{{order[0]['comuna']}}</h2></div>
-                                <div class="w-100"></div>
+                                <div class="w-100"></div> 
                                 <div class="col"><h2 class="jeEmYB" *ngIf="order[0]['client_name']"><strong>DESCRIPCIÓN: </strong>{{order[0]['client_name']}}</h2></div>
                                 <div class="col"  *ngIf="clientInfo == null"><h2 class="jeEmYB" style="color: #007ad9; cursor: pointer;"><a (click)="moreClient(order[0]['cc_id'])"><strong>VER MÁS</strong></a></h2></div>
                                 <div class="col"  *ngIf="clientInfo != null"><h2 class="jeEmYB" style="color: #007ad9; cursor: pointer;"><a (click)="moreClient(order[0]['cc_id'])"><strong>VER MENOS</strong></a></h2></div>
@@ -138,8 +138,8 @@
                                   <mat-progress-bar mode="indeterminate"></mat-progress-bar>
                                 </div>
                             </div>
-                            <div class="row animated fadeIn" *ngIf="clientInfo != null">
-                                <div class="col-12" *ngIf="!clientInfo['calle'] && !clientInfo['ruta'] && !clientInfo['medidor'] && !clientInfo['modelo_medidor'] && !clientInfo['tarifa'] && !clientInfo['constante'] && !clientInfo['giro'] && !clientInfo['sector'] && !clientInfo['mercado'] && !clientInfo['zona'] && !clientInfo['set'] && !clientInfo['alimentador'] && !clientInfo['sed'] && !clientInfo['llave_circuito'] && !clientInfo['fase'] && !clientInfo['clavelectura'] && !clientInfo['factor'] && clientInfo['fecha_ultima_lectura'] == '0000-00-00 00:00:00' && clientInfo['fecha_ultima_deteccion'] == '0000-00-00 00:00:00' && !clientInfo['falta_ultimo_cnr'] " style="text-align: center; margin-top: 5px"><h2 class="jeEmYB"><strong>CLIENTE NO REGISTRA MÁS INFORMACION</strong></h2></div>
+                            <div class="row animated fadeIn" *ngIf="clientInfo != null && clientInfo['name_table'] == 'address'">
+                                <div class="col-12" *ngIf="!clientInfo['calle'] && !clientInfo['ruta'] && !clientInfo['medidor'] && !clientInfo['modelo_medidor'] && !clientInfo['tarifa'] && !clientInfo['constante'] && !clientInfo['giro'] && !clientInfo['sector'] && !clientInfo['mercado'] && !clientInfo['zona'] && !clientInfo['set'] && !clientInfo['alimentador'] && !clientInfo['sed'] && !clientInfo['llave_circuito'] && !clientInfo['fase'] && !clientInfo['clavelectura'] && !clientInfo['factor'] && clientInfo['fecha_ultima_lectura'] == '0000-00-00 00:00:00' && clientInfo['fecha_ultima_deteccion'] == '0000-00-00 00:00:00' && !clientInfo['falta_ultimo_cnr'] " style="text-align: center; margin-top: 5px"><h2 class="jeEmYB"><strong>CLIENTE NO REGISTRA MÁS INFORMACIÓN</strong></h2></div>
                                 <div class="col-6" *ngIf="clientInfo['calle']"><h2 class="jeEmYB"><strong>DIRECCIÓN: </strong>{{clientInfo['calle']}} {{clientInfo['numero']}} {{clientInfo['block']}} {{clientInfo['depto']}}</h2></div>
                                 <div class="col-6" *ngIf="clientInfo['ruta']"><h2 class="jeEmYB"><strong>RUTA: </strong>{{clientInfo['ruta']}}</h2></div>
                                 
@@ -170,6 +170,16 @@
                                 <div class="col-6" *ngIf="clientInfo['fecha_ultima_deteccion'] && clientInfo['fecha_ultima_deteccion'] !== '0000-00-00 00:00:00'"><h2 class="jeEmYB"><strong>FECHA ULTIMA DETECCIÓN: </strong>{{clientInfo['fecha_ultima_deteccion']}}</h2></div>
                                 <div class="col-6" *ngIf="clientInfo['falta_ultimo_cnr']"><h2 class="jeEmYB"><strong>FALTA ULTIMO CNR: </strong>{{clientInfo['falta_ultimo_cnr']}}</h2></div>
                                 
+                            </div>
+                            <div class="row animated fadeIn" *ngIf="clientInfo != null && clientInfo['name_table'] == 'vehiculos'">
+                                <div class="col-12" *ngIf="!clientInfo['marca'] && !clientInfo['description'] && !clientInfo['color'] && (!clientInfo['patio'] && !clientInfo['espiga'] && !clientInfo['posicion']) " style="text-align: center; margin-top: 5px"><h2 class="jeEmYB"><strong>CLIENTE NO REGISTRA MÁS INFORMACIÓN</strong></h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['marca']"><h2 class="jeEmYB"><strong>MARCA: </strong>{{clientInfo['marca']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['description']"><h2 class="jeEmYB"><strong>MODELO: </strong>{{clientInfo['description']}}</h2></div>
+                                
+                                <div class="col-6" *ngIf="clientInfo['color']"><h2 class="jeEmYB"><strong>COLOR: </strong>{{clientInfo['color']}}</h2></div>
+                                <div class="col-6" *ngIf="clientInfo['patio'] && clientInfo['espiga'] && clientInfo['posicion']"><h2 class="jeEmYB"><strong>UBICACIÓN: </strong>{{clientInfo['patio']}}-{{clientInfo['espiga']}}-{{clientInfo['posicion']}}</h2></div>
+                            
                             </div> 
                         </div>
                     </div>

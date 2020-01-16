@@ -6,19 +6,19 @@ import { Injectable } from '@angular/core';
 export class ModalManageService {
 
   data: any;
-  hide: string = 'hide';
+  hide = 'hide';
 
   constructor() { }
 
 
-  hideModal(){
+  hideModal() {
     this.hide = 'hide';
     this.data = null;
   }
 
-  showModal(data:any){
+  showModal(data: any) {
     this.hide = '';
     this.data = data;
-    //console.log(this.data);
+    // console.log(this.data);
   }
 }

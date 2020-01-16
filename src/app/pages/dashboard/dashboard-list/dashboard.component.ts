@@ -23,83 +23,82 @@ import * as _moment from 'moment';
 })
 export class DashboardComponent implements OnInit, OnDestroy {
 
-	title: string;
-	created: FormControl;
-	departamentos: Array<any> = [];
-	event: number = 0;
-	identity;
-	message;
-	proyectos: Array<Proyecto>;
-	servicios: Array<Service>;
-	subscription: Subscription;
-	options: FormGroup;
-	token:any;	
-	
-
-	constructor(
-		// private _cdf: CdfService,
-		private _proyectoService: ProjectsService,
-		public _userService: UserService,
-		public label: SettingsService,
-		private msgService: MessagingService,
-		fb: FormBuilder
-	){
-		this.identity = this._userService.getIdentity();
-		this.proyectos = this._userService.getProyectos();
-  		this.token = this._userService.getToken();
-		this._userService.handleAuthentication(this.identity, this.token);	  
-		this.options = fb.group({
-		      bottom: 0,
-		      fixed: false,
-		      top: 0
-			});
-		this.label.getDataRoute().subscribe(data => {
-			this.title = data.subtitle;
-		});					
-	}
- 
-	ngOnInit(){
-
-		this.msgService.getPermission();
-		this.msgService.receiveMessage();
-		this.message = this.msgService.currentMessage;
-
-		if(this.identity && this.token){			
-			this.subscription = this._proyectoService.getDepartamentos(this.token.token).subscribe( 
-				(response:any) => {
-						if (response.status == 'success'){
-							this.departamentos = response.datos;
-							let key = 'departamentos';
-							this._userService.saveStorage(key, this.departamentos);
-						}
-					},
-				(_error: any) => {
-					this._userService.logout();
-					   },
-				);
-		}		
-	}
-
-	ngOnDestroy() {
-		if (this.subscription) {
-			this.subscription.unsubscribe();
-		}
-	}
+    title: string;
+    created: FormControl;
+    departamentos: Array<any> = [];
+    event = 0;
+    identity;
+    message;
+    proyectos: Array<Proyecto>;
+    servicios: Array<Service>;
+    subscription: Subscription;
+    options: FormGroup;
+    token: any;
 
 
-	refreshMenu(event: number) {
-		if (event === 1) {
-		}
-	}
-	
-	/*
+    constructor(
+        // private _cdf: CdfService,
+        private _proyectoService: ProjectsService,
+        public _userService: UserService,
+        public label: SettingsService,
+        private msgService: MessagingService,
+        fb: FormBuilder
+    ) {
+        this.identity = this._userService.getIdentity();
+        this.proyectos = this._userService.getProyectos();
+        this.token = this._userService.getToken();
+        this._userService.handleAuthentication(this.identity, this.token);
+        this.options = fb.group({
+            bottom: 0,
+            fixed: false,
+            top: 0
+        });
+        this.label.getDataRoute().subscribe(data => {
+            this.title = data.subtitle;
+        });
+    }
+
+    ngOnInit() {
+        this.msgService.getPermission();
+        this.msgService.receiveMessage();
+        this.message = this.msgService.currentMessage;
+
+        if (this.identity && this.token) {
+            this.subscription = this._proyectoService.getDepartamentos(this.token.token).subscribe(
+            (response: any) => {
+             if (response.status === 'success') {
+                this.departamentos = response.datos;
+                const key = 'departamentos';
+                this._userService.saveStorage(key, this.departamentos);
+             }
+            },
+            (_error: any) => {
+                this._userService.logout();
+                },
+            );
+        }
+    }
+
+    ngOnDestroy() {
+        if (this.subscription) {
+         this.subscription.unsubscribe();
+        }
+    }
+
+
+    refreshMenu(event: number) {
+        if (event === 1) {
+        }
+    }
+
+    /*
 	sendMsj() {
 
 		this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:MM'));
-		
+
 		let data = {
 			userId: 'ghsMwBtcYLXKxd2boAuQc8encSk1',
-			userIdTo: 'otsLY91D66WnFul0UvMLxlL1dhF3',			
+			userIdTo: 'otsLY91D66WnFul0UvMLxlL1dhF3',
 			title: 'Titulo de Mensaje',
 			message: 'Test Cuerpo de Mensaje',
 			create_at: this.created.value,
@@ -176,7 +175,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 										<div style="margin-top:25px">
 										  <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
 											<tbody>
-											  <tr>    
+											  <tr>
 											  <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
 												<table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
 												  <tbody>
@@ -222,12 +221,12 @@ export class DashboardComponent implements OnInit, OnDestroy {
 				</tbody>
 				</table>
 
-				
+
 				</body>
 				</html>
 				`,
 			  };
-	
+
 			  this._cdf.httpEmail(this.token.token, msg).subscribe(
 				response => {
 				  if (!response) {
@@ -240,7 +239,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
 				  error => {
 				   console.log(<any>error);
 				  }
-				);			
+				);
 	  }	*/
 
 }

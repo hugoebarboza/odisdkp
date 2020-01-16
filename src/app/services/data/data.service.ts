@@ -47,7 +47,7 @@ export class DataService {
   }
 
   deleteCustomer(cc_id: string, projectid: number, token) {
-    console.log('dataservice customer');
+    // console.log('dataservice customer');
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return new Promise((resolve, reject) => {
       if (token === '') {
@@ -58,7 +58,7 @@ export class DataService {
   }
 
   deleteOrdenBD(order_id: string, projectid: number, token) {
-    console.log('dataservice orden');
+    // console.log('dataservice orden');
     const headers = new HttpHeaders({'Content-Type': 'application/x-www-form-urlencoded'});
     return new Promise((resolve, reject) => {
       if (token === '') {
