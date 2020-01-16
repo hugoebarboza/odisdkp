@@ -34,7 +34,7 @@ const EXCEL_EXTENSION = '.xlsx';
 
 export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
-  forTime = 1200;
+  forTime = 1000;
   identity: any;
   public token;
   public services: Service[] = [];
@@ -54,7 +54,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   checkValidationPost = false;
   checkboxAuto = false;
   checkOrdenes = false;
-  checkboxDupOt = false;
+  checkboxDupOt = true;
 
   project_id: number;
   servicename: string;
@@ -975,7 +975,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'orden_id': '',
               'parametro': 0,
               'estatus': '',
-              'duplicar_ot': that.checkboxDupOt
+              'duplicar_ot': !that.checkboxDupOt
             };
 
             if (that.dateend !== undefined) {
@@ -1111,8 +1111,10 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   checkAutoGenerar(event) {
     if (!event.checked) {
       this.checkboxAuto = false;
+      this.checkboxDupOt = true;
     } else {
       this.checkboxAuto = true;
+      this.checkboxDupOt = false;
     }
   }
 
@@ -1177,7 +1179,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       (res: any) => {
         res.subscribe(
           (some) => {
-            // console.log(some);
+            console.log(some);
             this.set = some['set'];
             this.alimentador = some['alimentador'];
             this.sed = some['sed'];

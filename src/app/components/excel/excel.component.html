@@ -41,8 +41,8 @@
                 <mat-slide-toggle class="marginLeftX2" (change)="checkAutoGenerar($event)">
                     Generar N°Orden
                 </mat-slide-toggle>
-                <mat-slide-toggle class="marginLeftX2" (change)="checkduplicatOt($event)">
-                  Duplicar N°OT
+                <mat-slide-toggle class="marginLeftX2" (change)="checkduplicatOt($event)"  [checked]="checkboxDupOt">
+                  N°OT Unico
                 </mat-slide-toggle>
                 <div class="floatIzq">
                   <a mat-mini-fab target="_self" color="primary" href="../../assets/ModuloCarga.xlsx" download="ModuloCarga.xlsx">
@@ -275,7 +275,7 @@
                   </table>
                 </div>
               
-                <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                <mat-paginator #paginator [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
                 <div>
                 <table width="100%">
                   <tbody>
@@ -539,7 +539,7 @@
                 </table>
               </div>
             
-              <mat-paginator #paginatorClientes [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+              <mat-paginator #paginatorClientes [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
           </div>
           <div>
               <table width="100%">
@@ -807,7 +807,7 @@
               </table>
             </div>
           
-            <mat-paginator #paginatorOrdenes [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            <mat-paginator #paginatorOrdenes [pageSizeOptions]="[10, 20, 30]" showFirstLastButtons></mat-paginator>
         </div>
         <div>
             <table width="100%">
