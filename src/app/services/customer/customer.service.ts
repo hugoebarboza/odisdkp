@@ -416,6 +416,22 @@ export class CustomerService {
    }
 
 
+   updateTeam(token: any, id: number, data: Team, data_id: number): Observable<any> {
+      if (!token) {
+       return;
+      }
+
+        const json = JSON.stringify(data);
+        const params = 'json=' + json;
+
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+        return this._http.put(this.url + 'project/' + id + '/team/' + data_id, params, {headers: headers})
+                         .map( (resp: any) => resp );
+     }
+
+
+
 
    delete(token: any, id: number, customerid: number): void {
     if (!token) {
@@ -494,6 +510,17 @@ export class CustomerService {
       const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return this._http.delete(this.url + 'alimentador/' + id + '/sed/' + data_id, {headers: headers})
                        .map( (resp: any) => resp);
+   }
+
+   deleteTeam(token: any, id: number, data_id: number): Observable<any> {
+      if (!token) {
+       return;
+      }
+
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+        return this._http.delete(this.url + 'project/' + id + '/team/' + data_id, {headers: headers})
+                     .map( (resp: any) => resp);
    }
 
 

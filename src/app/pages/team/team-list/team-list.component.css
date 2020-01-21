@@ -1,0 +1,60 @@
+.example-button-row button,
+.example-button-row a {
+  margin-right: 0px;
+}
+.button-row button,
+.button-row a {
+  margin-right: 8px;
+}
+.circle:before {
+  content: ' \25CF';
+  font-size: 20px;
+}
+.custom-card {
+  background-color: #f2f4f7;
+}
+.material-icons.md-14 { font-size: 14px; }
+.material-icons.md-17 { font-size: 17px; }
+.material-icons.md-13-color { font-size: 13px; color: #809c13; padding: 1px;}
+.material-icons.md-13-nocolor { font-size: 13px; color: #CFCFCF; padding: 1px;}
+.material-icons.md-color { color: #FB8C00;}
+.material-icons.md-20-color-green { color: green;}
+.material-icons.md-20-color-red { color:red;}
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}
+
+.dpbvNR {
+  outline: none !important;
+  outline-style: none !important;
+  box-shadow: none !important;
+  display: inline-block;
+  line-height: 1;
+  opacity: 1;
+  border-color: transparent !important;
+  background: transparent;
+  border-radius: 4px;
+  border-width: 1px;
+  padding: 2px;
+  width: 50%;
+  font-size: 1.11429em;
+  font-style: inherit;
+  color: rgb(23, 43, 77);
+  font-weight: 500;
+  letter-spacing: -0.01em;
+  line-height: 0px;
+  /*border-style: initial;
+  border-image: initial;*/
+}
+.dpbvNR:focus {
+  background: white;
+  border: solid 1px #ccc !important;
+  opacity: 1;
+}
+.dpbvNR:hover {
+  background: white;
+  border: solid 1px #ccc !important;
+  opacity: 1;
+}
+

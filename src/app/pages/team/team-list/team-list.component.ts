@@ -4,14 +4,18 @@ import { Subscription } from 'rxjs/Subscription';
 import { MatDialog, TooltipPosition } from '@angular/material';
 import { FormControl } from '@angular/forms';
 
-// import Swal from 'sweetalert2';
+import Swal from 'sweetalert2';
+
+// DIALOG
+import { AddTeamComponent } from '../../usuarios/dialog/add-team/add-team.component';
 
 // MODEL
-import { Proyecto } from 'src/app/models/types';
+import { Proyecto, Team } from 'src/app/models/types';
 
 
 // SERVICES
-import { SettingsService, UserService } from 'src/app/services/service.index';
+import { SettingsService, UserService, CustomerService } from 'src/app/services/service.index';
+
 
 @Component({
   selector: 'app-team-list',
@@ -24,7 +28,11 @@ export class TeamListComponent implements OnInit, OnDestroy {
   departamento_id: number;
   identity: any;
   id: number;
+  indexitem: number;
   isLoading = true;
+  isLoadingDelete = false;
+  isLoadingSave = false;
+  indexitemdelete: number;
   page = 1;
   pageSize = 0;
   project: any;
@@ -33,7 +41,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
   sub: any;
   subscription: Subscription;
   status: string;
-  team = [];
+  teams = [];
   termino = '';
   title: string;
   token: any;
@@ -44,6 +52,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
 
   constructor(
+    private _customerService: CustomerService,
     private _route: ActivatedRoute,
     public _router: Router,
     public _userService: UserService,
@@ -71,7 +80,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
         if (this.project !== 'Undefined' && this.project !== null && this.project) {
         this.departamento_id = this.project.department_id;
         this.project_name = this.project.project_name;
-        this.loadTeam();
+        this.load();
         } else {
           this._router.navigate(['/notfound']);
         }
@@ -81,6 +90,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.cd.markForCheck();
+    this.load();
   }
 
   ngOnDestroy() {
@@ -101,16 +111,16 @@ export class TeamListComponent implements OnInit, OnDestroy {
     }
   }
 
-  loadTeam() {
+  load() {
 
     this.isLoading = true;
 
     this.subscription = this._userService.getTeamPaginate( this.token.token, this.id, this.page )
               .subscribe( (resp: any) => {
-                console.log(resp);
+                // console.log(resp);
                 this.totalRegistros = resp.datos.total;
-                console.log(this.totalRegistros);
-                this.team = resp.datos.data;
+                // console.log(this.totalRegistros);
+                this.teams = resp.datos.data;
                 this.isLoading = false;
                 this.status = 'success';
                 this.cd.markForCheck();
@@ -125,9 +135,115 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   }
 
+  save( team: Team, i: number ) {
+
+
+    this.indexitem = i;
+    this.isLoadingSave = true;
+
+    const data = new Team (team.id, team.project_id, team.descripcion, '', [], team.status, 0, '', 0, '');
+
+
+    if (!data || !data.project_id) {
+      Swal.fire('Importante', 'A ocurrido un error en la actualización del usuario.', 'error');
+      this.isLoadingSave = false;
+      this.indexitem = -1;
+   }
+
+
+    this._customerService.updateTeam(this.token.token, this.id, data, data.id)
+            .subscribe( (resp: any) => {
+              // console.log(resp);
+              if (!resp) {
+                return;
+              }
+              if (resp.status === 'success') {
+                Swal.fire('Información actualizada', data.descripcion, 'success' );
+                this.isLoadingSave = false;
+                this.indexitem = -1;
+                this.cd.markForCheck();
+              } else {
+                Swal.fire('Importante', 'A ocurrido un error en el procesamiento de información', 'error');
+                this.isLoadingSave = false;
+                this.indexitem = -1;
+                this.cd.markForCheck();
+              }
+            },
+              error => {
+                Swal.fire('Importante', error, 'error');
+                this.isLoadingSave = false;
+                this.indexitem = -1;
+                this.cd.markForCheck();
+              }
+            );
+  }
+
+
+  delete( team: Team, i: number ) {
+
+    this.isLoadingDelete = true;
+    this.indexitemdelete = i;
+
+    const data = new Team (team.id, team.project_id, team.descripcion, '', [], team.status, 0, '', 0, '');
+
+    if (!data || !data.project_id || !this.id) {
+      Swal.fire('Importante', 'A ocurrido un error en la actualización del usuario.', 'error');
+      this.isLoadingDelete = false;
+      this.indexitem = -1;
+   }
+
+    Swal.fire({
+      title: '¿Esta seguro?',
+      text: 'Esta a punto de borrar a ' + data.descripcion,
+      showCancelButton: true,
+      confirmButtonText: 'Si',
+      cancelButtonText: 'No'
+    })
+    .then( borrar => {
+      if (borrar.value) {
+        if (borrar) {
+          this.indexitemdelete = i;
+          this.isLoadingDelete = true;
+          this._customerService.deleteTeam(this.token.token, this.id, data.id )
+                    .subscribe( response => {
+                      if (!response) {
+                        return;
+                      }
+                      if (response.status === 'success') {
+                        Swal.fire('Información eliminada', data.descripcion, 'success' );
+                        this.isLoadingDelete = false;
+                        this.indexitemdelete = -1;
+                        this.cd.markForCheck();
+                        this.load();
+                      } else {
+                        Swal.fire('Importante', response.message, 'error');
+                        this.isLoadingDelete = false;
+                        this.indexitemdelete = -1;
+                        this.cd.markForCheck();
+                      }
+                    },
+                      error => {
+                        Swal.fire('Importante', error, 'error');
+                        this.isLoadingDelete = false;
+                        this.indexitemdelete = -1;
+                        this.cd.markForCheck();
+                      }
+                    );
+        }
+      } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire('Cancelado');
+        this.isLoadingDelete = false;
+        this.indexitemdelete = -1;
+        this.cd.markForCheck();
+      }
+    });
+  }
+
+
+
   searchTeam( termino: string ) {
     if ( termino.length <= 0 || !termino) {
-      this.loadTeam();
+      this.load();
       return;
     }
   }
@@ -153,9 +269,35 @@ export class TeamListComponent implements OnInit, OnDestroy {
       return;
     }
 
-    this.loadTeam();
+    this.load();
   }
 
+
+
+
+  addTeam(id: number) {
+    if (id > 0) {
+      const dialogRef = this.dialog.open(AddTeamComponent, {
+        width: '777px',
+        disableClose: true,
+        data: { project_id: id
+        }
+        });
+
+        dialogRef.afterClosed().subscribe(
+              result => {
+                this.cd.markForCheck();
+                 if (result === 1) {
+                   this.load();
+                 // After dialog is closed we're doing frontend updates
+                 // For add we're just pushing a new row inside DataService
+                 // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());
+                 // this.refresh();
+                 } else {
+                 }
+               });
+    }
+  }
 
 
 }

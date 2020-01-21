@@ -20,6 +20,7 @@ import { QuicklinkModule } from 'ngx-quicklink';
 // COMPONENTS
 import {
     AddDocComponent,
+    AddTeamComponent,
     DropdownNotificationComponent,
     EditServiceComponent,
     FilelistComponent,
@@ -70,6 +71,7 @@ import { PipesModule } from '../../pipes/pipes.module';
     ],
     declarations: [
         AddDocComponent,
+        AddTeamComponent,
         DropdownNotificationComponent,
         DropdownNotificationComponent,
         EditServiceComponent,
@@ -102,6 +104,7 @@ import { PipesModule } from '../../pipes/pipes.module';
     ],
     exports: [
         AddDocComponent,
+        AddTeamComponent,
         DropdownNotificationComponent,
         EditServiceComponent,
         FilelistComponent,
@@ -136,6 +139,7 @@ import { PipesModule } from '../../pipes/pipes.module';
     providers: [  ],
     entryComponents: [
         AddDocComponent,
+        AddTeamComponent,
         EditServiceComponent,
         ShowComponent,
       ],

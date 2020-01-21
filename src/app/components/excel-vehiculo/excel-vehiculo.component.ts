@@ -833,7 +833,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
                 await delay(that.forTime);
 
                 const picking: Object = {
-                  'picking': true
+                  'picking': 1
                 };
 
                 that.dataService.getValidateExisteCLiente(that.service_id, cc_number, that.token.token, picking).then(

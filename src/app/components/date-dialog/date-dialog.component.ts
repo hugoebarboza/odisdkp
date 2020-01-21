@@ -23,7 +23,7 @@ export class DateDialogComponent implements OnInit {
   }
 
   addEvent(_change: any, _event: any) {
-    //console.log(event);
+    // console.log(event);
     this.showTime = true;
   }
 

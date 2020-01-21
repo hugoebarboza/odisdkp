@@ -143,7 +143,7 @@ export class AddTeamComponent implements OnInit, OnDestroy {
           this.snackBar.open('Solicitud procesada satisfactoriamente!!!', '', {duration: 3000, });
           this.forma.reset();
           setTimeout( () => {
-            this.dialogRef.close();
+            this.dialogRef.close(1);
           }, 1000);
         } else {
           this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });

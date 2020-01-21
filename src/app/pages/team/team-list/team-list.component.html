@@ -15,7 +15,7 @@
             <div class="d-flex">
                 <div ><h1 class="h4" *ngIf="project_name">{{title}} - {{project_name}}</h1></div>
                 <div >
-                  <a class="nav-link pointer" href="javascript:;" (click)="loadTeam()" >
+                  <a class="nav-link pointer" href="javascript:;" (click)="load()" >
                     <i class="material-icons" matTooltip="Refrescar" [matTooltipPosition]="positionrightaction.value">sync</i>
                   </a>
                 </div>
@@ -52,12 +52,127 @@
                           <div class="alert alert-danger" *ngIf="status == 'error'">
                               No se encontraron registros que coincidan con su búsqueda. 
                               <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                              <button mat-button  (click)="addTeam(id)" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">people</mat-icon>Crear Equipo</button>
                           </div>
                       </div>
                   </div>
 
 
                
+
+                  <div class="row animated fadeIn" *ngIf="!isLoading && status == 'success'">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                
+                              <div class="d-flex bd-highlight">
+                                    <div class="p-2 flex-grow-1 bd-highlight"><h3 class="card-title"><mat-icon>account_circle</mat-icon> Equipos registrados ({{totalRegistros}})</h3></div>
+                                    <div class="p-2 bd-highlight">
+                                        <div class="btn-group mr-2" role="group" aria-label="First group">
+                                          <button type="button" class="btn btn-light btn-sm" (click)="addTeam(id)" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">people</mat-icon>Crear Equipo</button>
+                                        </div>                                      
+                                    </div>
+                              </div>                      
+                        
+                              <div style="overflow-x:auto;">
+                                <table class="table table-hover">
+                                  <thead>
+                                      <tr>
+                                          <th></th>
+                                          <th>Nombre</th>
+                                          <th>Proyecto</th>                                  
+                                          <th>Estatus</th>
+                                          <th>Creado El</th>
+                                          <th>Creado Por</th>  
+                                          <th *ngIf="_userService.isRole(7)"></th>
+                                      </tr>
+                                  </thead>
+          
+                                  <tbody>
+                                      <tr *ngFor="let team of teams; let i = index">
+                                        <td class="w10">
+                                            <div class="circle" [style.color]="team.status? 'green' : 'red'"></div>
+                                        </td>
+          
+          
+                                          <td>
+                                            <input type="text" name="descripcion" class="dpbvNR" required  width="50%"  [(ngModel)]="team.descripcion" >
+                                          </td>
+
+                                          <td>
+                                              <div class="form-group row" >
+                                                {{ team.project_name}} 
+                                              </div>
+                                          </td>
+          
+          
+                                          <td>
+                                            <select [(ngModel)]="team.status" name="status" class="form-control">
+                                                    <option value="1">Activo</option>
+                                                    <option value="0">Inactivo</option>
+                                            </select>                            
+                                          </td>
+          
+          
+                                          <td>
+                                            {{ team.create_at }}
+                                          </td>
+          
+                                          <td>
+                                            {{ team.user }}
+                                          </td>
+          
+                                          <td *ngIf="_userService.isRole(7)">
+          
+          
+          
+                                            <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="save(team, i)" >
+                                            <mat-icon aria-label="Edit" *ngIf="i != indexitem" >done</mat-icon>      
+                                            <app-progress-spinner *ngIf="isLoadingSave && i == indexitem"></app-progress-spinner>
+                                            </button>
+          
+          
+                                            <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="openDialogProfileSecurity(team)" >
+                                              <mat-icon aria-label="Edit"  class="material-icons md-color">lock</mat-icon>                              
+                                            </button>
+          
+                                            <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="startEdit(team)">
+                                                <mat-icon aria-label="Edit" >edit</mat-icon>          
+                                            </button>            
+                                
+          
+                                            <button mat-icon-button color="warn" *ngIf="_userService.isRole(7)" (click)="delete(team, i)">
+                                            <mat-icon aria-label="Edit" *ngIf="i != indexitemdelete" >delete</mat-icon>                             
+                                            <app-progress-spinner *ngIf="isLoadingDelete && i == indexitemdelete"></app-progress-spinner>
+                                            </button>
+          
+          
+          
+                                          </td>
+                                      </tr>
+          
+                                  </tbody>
+          
+                              </table>
+          
+                              </div>
+          
+                              <div class="button-row">
+                              <button (click)="paginate(-10, -1)" class="btn btn-secondary">
+                                Anterior
+                              </button>
+                              <button (click)="paginate(10, 1)" class="btn btn-secondary">
+                                  Siguiente
+                              </button>
+                              </div>
+          
+          
+          
+                            </div>
+                        </div>
+                    </div>
+                  </div>
+                    
   
                   
                   

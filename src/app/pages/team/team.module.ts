@@ -15,6 +15,7 @@ import { SharedModule } from '../../components/shared/shared.module';
 // COMPONENTS
 
 // DIALOG
+// import { AddTeamComponent } from '../usuarios/dialog/add-team/add-team.component';
 
 // ROUTING
 import { TeamRoutingModule } from './team.routing';
@@ -38,8 +39,10 @@ import { TeamListComponent } from './team-list/team-list.component';
     TeamRoutingModule,
   ],
   declarations: [
+    // AddTeamComponent,
   TeamListComponent],
   entryComponents: [
+    // AddTeamComponent
   ],
   providers: [
     { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },

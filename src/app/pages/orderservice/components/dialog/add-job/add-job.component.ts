@@ -179,7 +179,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
                             return;
                           }
                           if (re.status === 'success') {
-                            this.user_responsable = response.data[0];
+                            this.user_responsable = re.data[0];
                           }
                         }
                       );
@@ -498,7 +498,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
     }
 
 
-    if (to && body && project && this.emailfiles.length == 0) {
+    if (to && body && project && this.emailfiles.length === 0) {
       const asunto = 'OCA GLOBAL - Registro de Trabajo en Proyecto: ' + ' ' + this.service.service_name + '. OT: ' + this.data.order_number;
       this._cdf.httpEmailAddComment(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
         response => {

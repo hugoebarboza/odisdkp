@@ -19,7 +19,7 @@ import { UsuarioWorkComponent } from './usuario-work/usuario-work.component';
 
 // DIALOG
 import { AddUserComponent } from './dialog/adduser/adduser.component';
-import { AddTeamComponent } from './dialog/add-team/add-team.component';
+// import { AddTeamComponent } from './dialog/add-team/add-team.component';
 import { EditUserComponent } from './dialog/edituser/edituser.component';
 import { ModalUploadImageComponent } from './dialog/modaluploadimage/modaluploadimage.component';
 import { ShowProfileSecurityComponent } from './dialog/showprofilesecurity/showprofilesecurity.component';
@@ -46,7 +46,7 @@ import { ServiceModule } from 'src/app/services/service.module';
   ],
   declarations: [
     AddUserComponent,
-    AddTeamComponent,
+    // AddTeamComponent,
     EditUserComponent,
     ModalUploadImageComponent,
     ShowProfileSecurityComponent,
@@ -56,7 +56,7 @@ import { ServiceModule } from 'src/app/services/service.module';
   ],
   entryComponents: [
     AddUserComponent,
-    AddTeamComponent,
+    // AddTeamComponent,
     EditUserComponent,
     ModalUploadImageComponent,
     ShowProfileSecurityComponent,

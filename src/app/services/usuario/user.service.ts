@@ -117,12 +117,9 @@ export class UserService  {
      return;
     }
 
-	    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		return this._http.delete(this.url + 'user/' + id, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });
+        return this._http.delete(this.url + 'user/' + id, {headers: headers}).map( (resp: any) => resp);
     }
 
     adduser(token: any, userid: number, id: number): Observable<any> {
@@ -130,104 +127,90 @@ export class UserService  {
      return;
     }
 
-	    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+       const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		return this._http.post(this.url + 'adduser/' + userid + '/project/' + id, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });
-	}
+       return this._http.post(this.url + 'adduser/' + userid + '/project/' + id, {headers: headers}).map( (resp: any) => resp);
+    }
 
 
-	remover(token: any, userid: number, id: number): Observable<any> {
+    remover(token: any, userid: number, id: number): Observable<any> {
     if (!token) {
      return;
     }
 
 
-	    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		return this._http.post(this.url + 'removeruser/' + userid + '/project/' + id, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });
-	}
+        return this._http.post(this.url + 'removeruser/' + userid + '/project/' + id, {headers: headers}).map( (resp: any) => resp);
+    }
 
 
-	update(token: any, user: User, id: number): Observable<any> {
+    update(token: any, user: User, id: number): Observable<any> {
     if (!token) {
      return;
     }
-	   
-	    const json = JSON.stringify(user);
-		const params = 'json=' + json;
 
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        const json = JSON.stringify(user);
+        const params = 'json=' + json;
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		return this._http.post(this.url + 'updateuser/' + id, params, {headers: headers})
-						 .map( (resp: any) => {
-							if (resp.status === 'success') {
-								if (user.id === this.identity.sub) {
-									const usuarioDB: User = resp.usuario;
-									const key = 'identity';
-									this.saveStorageUser(key, usuarioDB);
-								}
-							}
-
-							 return resp;
-						 });
-	}
+        return this._http.post(this.url + 'updateuser/' + id, params, {headers: headers})
+                        .map( (resp: any) => {
+                        if (resp.status === 'success') {
+                            if (user.id === this.identity.sub) {
+                                const usuarioDB: User = resp.usuario;
+                                const key = 'identity';
+                                this.saveStorageUser(key, usuarioDB);
+                            }
+                        }
+                        return resp;
+                        });
+    }
 
     updateProfile(token: any, user: User, id: number): Observable<any> {
     if (!token) {
      return;
     }
 
-		const json = JSON.stringify(user);
-		const params = 'json=' + json;
+        const json = JSON.stringify(user);
+        const params = 'json=' + json;
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-		return this._http.post(this.url + 'updateuser/' + id, params, {headers: headers})
-						 .map( (resp: any) => {
-							 if(resp.status === 'success') {
-								const usuarioDB: User = resp.usuario;
-								const key = 'identity';
-								this.saveStorageUser(key, usuarioDB);
-							 }
-							 return resp;
-						 });
-	}
+        return this._http.post(this.url + 'updateuser/' + id, params, {headers: headers})
+                         .map( (resp: any) => {
+                         if (resp.status === 'success') {
+                                const usuarioDB: User = resp.usuario;
+                                const key = 'identity';
+                                this.saveStorageUser(key, usuarioDB);
+                          }
+                         return resp;
+                        });
+    }
 
 
     updateFotoProfile(token: any, archivo: any ): Observable<any> {
     if (!token) {
      return;
     }
-	    const params = new FormData();
-		params.append('image', archivo);
-		const headers = new HttpHeaders();
+        const params = new FormData();
+        params.append('image', archivo);
+        const headers = new HttpHeaders();
 
-		return this._http.post(this.url + 'uploadfileperfil', params, {headers: headers})
-						 .map( (resp: any) => {
-								return resp;
-						});
+        return this._http.post(this.url + 'uploadfileperfil', params, {headers: headers})
+                         .map( (resp: any) => resp);
     }
 
-    updateFotoProfileUser(token: any, archivo: any, id:number ): Observable<any> {
+    updateFotoProfileUser(token: any, archivo: any, id: number ): Observable<any> {
     if (!token) {
      return;
     }
-	   
-		const params = new FormData();
-		params.append('image', archivo);
-		const headers = new HttpHeaders();
 
-		return this._http.post(this.url + 'uploadfileperfiluser/' + id, params, {headers: headers})
-							.map( (resp: any) => {
-								return resp;
-						});
-	}
+        const params = new FormData();
+        params.append('image', archivo);
+        const headers = new HttpHeaders();
+
+        return this._http.post(this.url + 'uploadfileperfiluser/' + id, params, {headers: headers}).map( (resp: any) => resp);
+    }
 
     verifyStatusUser(token: any, userid: number, status: number): Observable<any> {
     if (!token) {
@@ -235,61 +218,53 @@ export class UserService  {
     }
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    // console.log(headers);
 
-		return this._http.post(this.url + 'user/' + userid + '/verify/' + status, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });
-	}
+    return this._http.post(this.url + 'user/' + userid + '/verify/' + status, {headers: headers}).map( (resp: any) => resp);
+    }
 
-	
 
-	async signup(user: any, getToken= null) {
-	
-		if (getToken != null) {
-			user.getToken = 'true';
-		}
 
-		const json = JSON.stringify(user);
-		const params = 'json=' + json;
-		const href = this.url + 'logindkp';
-		const requestUrl = href;
+    async signup(user: any, getToken= null) {
+
+        if (getToken != null) {
+            user.getToken = 'true';
+        }
+
+        const json = JSON.stringify(user);
+        const params = 'json=' + json;
+        const href = this.url + 'logindkp';
+        const requestUrl = href;
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		if (!requestUrl) {
-			return;
-		}
+        if (!requestUrl) {
+           return;
+        }
 
-		const trace = this.afp.trace$('LoginDkp').subscribe();
+        const trace = this.afp.trace$('LoginDkp').subscribe();
 
-		try {
+        try {
 
-			 return await this._http.post<any>(requestUrl, params, {headers: headers}).toPromise()
-			.then((resp) => {
-				if (resp && resp.token) {
-					this.token = resp;
-					const key = 'token';
-					this.saveStorage(key, resp);
-					trace.unsubscribe();
-					return resp;
-				}
-			})
-			.catch((_error) => {
-				trace.unsubscribe();
-				// console.log(error);
-				// return error;
-			});
+            return await this._http.post<any>(requestUrl, params, {headers: headers}).toPromise()
+                .then((resp) => {
+                if (resp && resp.token) {
+                    this.token = resp;
+                    const key = 'token';
+                    this.saveStorage(key, resp);
+                    trace.unsubscribe();
+                    return resp;
+                }
+            })
+            .catch((_error) => {
+                    trace.unsubscribe();
+            });
 
-		} catch (err) {
-			console.log(err);
-			// trace.putAttribute('errorCode', err.code);
-			// trace.stop();
-		}
-		
+        } catch (err) {
+            console.log(err);
+        }
 
 
-		/*
+
+        /*
 		return this._http.post(this.url+'logindkp', params, {headers: headers})
 			.map( (resp: any) => {
 				this.token = resp;
@@ -299,28 +274,26 @@ export class UserService  {
 			}).catch( err => {
 				return Observable.throw( err );
 			});*/
+    }
 
-	}
+    async signuptrue(user: any, getToken= null) {
+        if (getToken != null) {
+            user.getToken = 'true';
+        }
+        const json = JSON.stringify(user);
+        const params = 'json=' + json;
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-	async signuptrue(user: any, getToken= null) {
-		if (getToken != null) {
-			user.getToken = 'true';
-		}
-		const json = JSON.stringify(user);
-		const params = 'json=' + json;
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-
-		return await this._http.post(this.url + 'logindkptrue', params, {headers: headers}).toPromise()
-		.then((resp) => {
-			if (resp) {
-				this.identity = resp;
-				const key = 'identity';
-				this.saveStorage(key, resp);
-				return resp;
-			}
-		}
-		)
-		.catch((error) => { console.log(error); });
+        return await this._http.post(this.url + 'logindkptrue', params, {headers: headers}).toPromise()
+            .then((resp) => {
+                if (resp) {
+                this.identity = resp;
+                const key = 'identity';
+                this.saveStorage(key, resp);
+                return resp;
+            }
+        })
+        .catch((error) => { console.log(error); });
 
         /*
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -337,117 +310,115 @@ export class UserService  {
 
 
 
-	async getDptoProyectos(token: any, id: number) {
+    async getDptoProyectos(token: any, id: number) {
+        if (!token) {
+         return;
+        }
 
-		if (!token) {
-			return;
-		}
-	
-		const href = this.url + 'departamento/' + id + '/proyecto';
-		const requestUrl = href;
-		const headers = new HttpHeaders({'Content-Type': 'application/json',});
+        const href = this.url + 'departamento/' + id + '/proyecto';
+        const requestUrl = href;
+        const headers = new HttpHeaders({'Content-Type': 'application/json', });
 
-		if (!requestUrl) {
-			return;
-		}
+        if (!requestUrl) {
+           return;
+        }
 
         return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
         .then((resp) => {
-			if (resp) {
-				return resp;
-			}
-		})
+            if (resp) {
+                return resp;
+            }
+        })
         .catch((error) => { throw new Error('User does not have any Projects!' + error); });
-
-	}
-
-	
-	getIdaccount() {
-		const idaccount = JSON.parse(localStorage.getItem('idaccount'));
-		if (idaccount) {
-			this.idaccount = idaccount;
-		} else {
-			this.idaccount = null;
-		}
-		return this.idaccount;
-	}
-
-	public isIdaccount(): boolean {
-		const idaccount = JSON.parse(localStorage.getItem('idaccount'));
-		if (idaccount) {
-			return true;
-		} else {
-			return false;
-		}
-	}
+    }
 
 
-	getIdentity() {
-		const identity = JSON.parse(localStorage.getItem('identity'));
-		if (identity !== 'Undefined' && identity !== null) {
-			this.identity = identity;
-		} else {
-			this.logout();
-			this.identity = null;
-		}
-		return this.identity;
-	}
+    getIdaccount() {
+        const idaccount = JSON.parse(localStorage.getItem('idaccount'));
+        if (idaccount) {
+            this.idaccount = idaccount;
+        } else {
+            this.idaccount = null;
+        }
+        return this.idaccount;
+    }
+
+    public isIdaccount(): boolean {
+        const idaccount = JSON.parse(localStorage.getItem('idaccount'));
+        if (idaccount) {
+          return true;
+        } else {
+        return false;
+        }
+    }
 
 
-	getUid() {
-		const uid = JSON.parse(localStorage.getItem('uid'));
-		if (uid !== 'Undefined' && uid !== null){
-		} else {
-			// this.logout();
-		}
-		return uid;
-	}
+    getIdentity() {
+        const identity = JSON.parse(localStorage.getItem('identity'));
+        if (identity !== 'Undefined' && identity !== null) {
+          this.identity = identity;
+        } else {
+          this.logout();
+          this.identity = null;
+        }
+          return this.identity;
+    }
 
 
-	getFotoProfile() {
-		const identity = JSON.parse(localStorage.getItem('fotoprofile'));
-		if (identity !== 'Undefined' && identity !== null) {
-			this.identity = identity;
-		} else {
-			this.identity = null;
-		}
-		return this.identity;
-	}
+    getUid() {
+        const uid = JSON.parse(localStorage.getItem('uid'));
+        if (uid !== 'Undefined' && uid !== null) {
+        } else {
+        // this.logout();
+        }
+        return uid;
+    }
 
 
-	getToken() {
-		const token = JSON.parse(localStorage.getItem('token'));
-		if (token !== 'Undefined' && token !== null) {
-			this.token = token;
-		} else {
-			this.logout();
-			this.token = null;
-		}
-		return this.token;
-	}
+    getFotoProfile() {
+        const identity = JSON.parse(localStorage.getItem('fotoprofile'));
+        if (identity !== 'Undefined' && identity !== null) {
+        this.identity = identity;
+        } else {
+        this.identity = null;
+        }
+        return this.identity;
+    }
 
-	async getPerfilUser(token: any, id: number) {
-		if (!token) {
-			return;
-		}
-	
-		const href = this.url + 'user/' + id + '/perfil';
-		const requestUrl = href;
-		const headers = new HttpHeaders({'Content-Type': 'application/json',});
 
-		if (!requestUrl) {
-			return;
-		}
+    getToken() {
+        const token = JSON.parse(localStorage.getItem('token'));
+        if (token !== 'Undefined' && token !== null) {
+          this.token = token;
+        } else {
+          this.logout();
+          this.token = null;
+        }
+        return this.token;
+    }
+
+    async getPerfilUser(token: any, id: number) {
+        if (!token) {
+           return;
+        }
+
+        const href = this.url + 'user/' + id + '/perfil';
+        const requestUrl = href;
+        const headers = new HttpHeaders({'Content-Type': 'application/json', });
+
+        if (!requestUrl) {
+           return;
+        }
 
         return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
         .then((resp) => {
-			if (resp) {
-				return resp;
-			}
-		})
-        .catch((error) => { throw new Error('User does not have any Profile!'+error)});
+            if (resp) {
+               return resp;
+            }
+        })
+        .catch((error) => { throw new Error('User does not have any Profile!' + error); });
+    }
 
-	}
 
     getRoleUser(token: any, role: number): Observable<any> {
        return this.getQuery('usersroles/' + role, token);
@@ -502,94 +473,106 @@ export class UserService  {
 
 
 
-	saveStorage( key: any, data: any ) {
-
-		if (key && data) {
-			const value = JSON.stringify(data);
-			localStorage.setItem(key, value);
-		} else {
-			return;
-		}
-	  }
-	
-
-	saveStorageUser(key: any, data: any) {
-		const identity = JSON.parse(localStorage.getItem(key));
-		if (identity) {
-			const account = 'idaccount';
-			this.usuario = identity;
-			this.usuario.name = data.name;
-			this.usuario.surname = data.surname;
-			this.usuario.email = data.email;
-			this.usuario.dni = data.dni;
-			this.usuario.dv = data.dv;
-			this.usuario.telefono1 = data.telefono1;
-			this.usuario.telefono2 = data.telefono2;
-			this.usuario.role = data.role_id;
-			localStorage.setItem(key, JSON.stringify(this.usuario));
-			localStorage.setItem(account, JSON.stringify(this.usuario.email));
-		} else {
-			return;
-		}
-
-	}
-
-	searchUser(token: string, id: number, page: number = 0, termino: string) {
-		if (!token) {
-			return;
-		}
-
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		
-		const paginate = `?page=${page}`;
-
-		const Url = this.url + 'searchuser/' + id + '/termino/' + termino + paginate;
-		
-		return this._http.get<User[]>(Url, {headers: headers});
-	}
-
-	searchaddUser(token: string, id: number, page: number = 0, termino: string, customerid:number) {
-		if (!token) {
-			return;
-		}
-
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		
-		const paginate = `?page=${page}&customerid=${customerid}`;
-
-		const Url = this.url + 'searchadduser/' + id + '/termino/' + termino + paginate;
-		
-		return this._http.get<User[]>(Url, {headers: headers});
-	}
-
-	searchInviteUser(token: string, id: number, termino: string) {
-		if (!token) {
-			return;
-		}
-
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		
-		const Url = this.url + 'searchinviteuser/' + id + '/termino/' + termino;
-		
-		return this._http.get<User[]>(Url, {headers: headers});
-	}
-	
-	public handleAuthentication(identity: any, token: any): void {
-		if (identity && token) {
-			this.identity = identity;
-			this.setSession(identity);
-		}
-	}
-
-	private setSession(identity): void {
-		if (!identity && !identity.exp) {
-			return;
-		}
-		const expiresAt = JSON.stringify((identity.exp) + new Date().getTime());
-		localStorage.setItem('expires_at', expiresAt);
-	}
+    saveStorage( key: any, data: any ) {
+        if (key && data) {
+           const value = JSON.stringify(data);
+           localStorage.setItem(key, value);
+        } else {
+          return;
+        }
+    }
 
 
+    saveStorageUser(key: any, data: any) {
+        const identity = JSON.parse(localStorage.getItem(key));
+        if (identity) {
+            const account = 'idaccount';
+            this.usuario = identity;
+            this.usuario.name = data.name;
+            this.usuario.surname = data.surname;
+            this.usuario.email = data.email;
+            this.usuario.dni = data.dni;
+            this.usuario.dv = data.dv;
+            this.usuario.telefono1 = data.telefono1;
+            this.usuario.telefono2 = data.telefono2;
+            this.usuario.role = data.role_id;
+            localStorage.setItem(key, JSON.stringify(this.usuario));
+            localStorage.setItem(account, JSON.stringify(this.usuario.email));
+        } else {
+          return;
+        }
+    }
+
+    searchUser(token: string, id: number, page: number = 0, termino: string) {
+    if (!token) {
+       return;
+    }
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const paginate = `?page=${page}`;
+    const Url = this.url + 'searchuser/' + id + '/termino/' + termino + paginate;
+
+     return this._http.get<User[]>(Url, {headers: headers});
+    }
+
+
+    searchaddUser(token: string, id: number, page: number = 0, termino: string, customerid: number) {
+    if (!token) {
+       return;
+    }
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const paginate = `?page=${page}&customerid=${customerid}`;
+    const Url = this.url + 'searchadduser/' + id + '/termino/' + termino + paginate;
+
+    return this._http.get<User[]>(Url, {headers: headers});
+    }
+
+
+    searchInviteUser(token: string, id: number, termino: string) {
+    if (!token) {
+      return;
+    }
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const Url = this.url + 'searchinviteuser/' + id + '/termino/' + termino;
+
+    return this._http.get<User[]>(Url, {headers: headers});
+    }
+
+
+    public handleAuthentication(identity: any, token: any): void {
+     if (identity && token) {
+      this.identity = identity;
+      this.setSession(identity);
+     }
+    }
+
+
+    private setSession(identity): void {
+    if (!identity && !identity.exp) {
+     return;
+    }
+    const expiresAt = JSON.stringify((identity.exp) + new Date().getTime());
+    localStorage.setItem('expires_at', expiresAt);
+    }
+
+
+    public isTokenValidate(): boolean {
+    if (!JSON.parse(localStorage.getItem('token'))) {
+       return false;
+    }
+       const expiresAtToken = JSON.parse(localStorage.getItem('token'));
+       if (expiresAtToken.token) {
+           const payload = JSON.parse( atob( expiresAtToken.token.split('.')[1] ));
+           const ahora = new Date().getTime() / 1000;
+        if ( ahora < payload.exp) {
+           return true;
+        } else {
+           return false;
+        }
+        } else {
+          this.logout();
+        }
+    }
 
     public isAuthenticated(): boolean {
         const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
@@ -598,38 +581,18 @@ export class UserService  {
 
 
 
-	public isTokenValidate(): boolean {
-		if (!JSON.parse(localStorage.getItem('token'))) {
-			return false;
-		}
-		const expiresAtToken = JSON.parse(localStorage.getItem('token'));
-		if (expiresAtToken.token) {
-			const payload = JSON.parse( atob( expiresAtToken.token.split('.')[1] ));
-			const ahora = new Date().getTime() / 1000;
-			if ( ahora < payload.exp) {
-				return true;
-			} else {
-				return false;
-			}
-		} else {
-			this.logout();
-		}
-		// return new Date().getTime() < expiresAt;
-	}
-
-
-	public isRole(role: number): boolean {
-		if (!role) {
-			return;
-		}
-		const roleuser = JSON.parse(localStorage.getItem('identity'));
-		if (roleuser !== 'Undefined' && roleuser != null && role > 0) {
-			if (role <= roleuser.role) {
-				return true;
-			}
-		} else {
-			return false;
-		}
+    public isRole(role: number): boolean {
+        if (!role) {
+           return;
+        }
+        const roleuser = JSON.parse(localStorage.getItem('identity'));
+        if (roleuser !== 'Undefined' && roleuser != null && role > 0) {
+            if (role <= roleuser.role) {
+               return true;
+            }
+        } else {
+          return false;
+     }
     }
 
     getDepartamentos() {

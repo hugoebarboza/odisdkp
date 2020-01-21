@@ -1179,7 +1179,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
       (res: any) => {
         res.subscribe(
           (some) => {
-            console.log(some);
+            // console.log(some);
             this.set = some['set'];
             this.alimentador = some['alimentador'];
             this.sed = some['sed'];
