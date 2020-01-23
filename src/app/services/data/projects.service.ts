@@ -296,7 +296,7 @@ export class ProjectsService {
 
 	}
 
-	lectura(token: any, id:number, serviceid:number, label:number): void {
+    lectura(token: any, id:number, serviceid:number, label:number): void {
         if(!token){
             return;
         }
@@ -311,6 +311,24 @@ export class ProjectsService {
                         this.error = err.error.message;
                     });
     }	
+
+
+    moreimagen(token: any, id:number, serviceid:number, label:number): void {
+        if(!token){
+            return;
+        }
+        let json = JSON.stringify(label);
+        let params = 'json='+json;
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+        this._http.post(this.url+'project'+'/'+id+'/'+'service'+'/'+serviceid+'/'+'moreimagen'+'/'+label, params, {headers: headers}).subscribe(
+                _data => { 
+                        },
+                        (err: HttpErrorResponse) => {   
+                        this.error = err.error.message;
+                    });
+    }	
+
 
 
 	updateCurrencyValue(token: any, id:number, data:CurrencyValue): Observable<any>{
@@ -869,7 +887,7 @@ export class ProjectsService {
 			return;
 		}
 		const paginate = `/${termino}/date/${date}/status/${idstatus}/service/${serviceid}/servicetype/${servicetypeid}?limit=All`;			           
-	    //console.log(paginate);
+
 	    return this.getProjectOrderData('project/'+id+'/searchorder'+paginate, token);
 	}
 

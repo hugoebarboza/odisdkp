@@ -23,18 +23,18 @@ import { UserService } from 'src/app/services/service.index';
 })
 export class UserComponent implements OnInit, OnDestroy {
 
-  customerid:number
-  id:number;
+  customerid: number;
+  id: number;
   identity: any;
-  loading: boolean = false;
+  loading = false;
   project: any;
   project_name: string;
   proyectos: Array<Proyecto> = [];
-  title:string = "Usuarios de Proyecto";
-  totalRegistros: number = 0;
-  totalRegistrosNoActive: number = 0;
+  title = 'Usuarios de Proyecto';
+  totalRegistros = 0;
+  totalRegistrosNoActive = 0;
   selected = new FormControl(0);
-  subtitle:string = "Seleccione los usuarios de acuerdo a las siguientes opciones.";
+  subtitle = 'Seleccione los usuarios de acuerdo a las siguientes opciones.';
   subscription: Subscription;
   status: string;
   token: any;
@@ -42,9 +42,8 @@ export class UserComponent implements OnInit, OnDestroy {
   constructor(
     public _userService: UserService,
     public dialogRef: MatDialogRef<UserComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Service,    
-  ) { 
-    //this.loading = true;
+    @Inject(MAT_DIALOG_DATA) public data: Service,
+  ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
@@ -53,44 +52,40 @@ export class UserComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
-    if(this.data.project_id > 0){
+    if (this.data.project_id > 0) {
       this.id = this.data.project_id;
       this.project = this.filter();
       this.project_name = this.project.project_name;
       this.customerid = this.project.customer_id;
-      //this.loading = false;
     }
   }
 
   ngOnDestroy() {
-    //console.log('La página se va a cerrar');
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
 
 
-  loadDataUser(total:number){
+  loadDataUser(total: number) {
     this.totalRegistros = total;
   }
 
-  loadDataUserNoActive(total:number){
+  loadDataUserNoActive(total: number) {
     this.totalRegistrosNoActive = total;
   }
 
 
-  adduser(userid:number){
-    if(userid > 0) {
-      
-      this._userService.adduser(this.token.token, userid, this.id).subscribe(      
+  adduser(userid: number) {
+    if (userid > 0) {
+      this._userService.adduser(this.token.token, userid, this.id).subscribe(
         response => {
-         if(response.status == 'success'){
+         if (response.status === 'success') {
           this.dialogRef.close();
-          Swal.fire('Solicitud procesada ', 'exitosamente.', 'success' );  
-         }else{
-          //console.log(response);
+          Swal.fire('Solicitud procesada ', 'exitosamente.', 'success' );
+         } else {
           this.dialogRef.close();
-          Swal.fire('No fue posible procesar su solicitud', '', 'error');  
+          Swal.fire('No fue posible procesar su solicitud', '', 'error');
         }
         },
         error => {
@@ -103,20 +98,19 @@ export class UserComponent implements OnInit, OnDestroy {
 
 
 
-  remover(userid:number){
+  remover(userid: number) {
     if (userid === this.identity.sub ) {
       this.dialogRef.close();
       Swal.fire('No puede borrar usuario', 'No se puede borrar a si mismo', 'error');
       return;
     }
-    
-    this._userService.remover(this.token.token, userid, this.id).subscribe(      
+
+    this._userService.remover(this.token.token, userid, this.id).subscribe(
       response => {
-       if(response.status == 'success'){
+       if (response.status === 'success') {
         this.dialogRef.close();
         Swal.fire('Solicitud procesada ', 'exitosamente.', 'success' );
-        //this.cargarUsuarios();
-       }else{
+       } else {
         this.dialogRef.close();
         Swal.fire('No fue posible procesar su solicitud', '', 'error');
        }
@@ -129,15 +123,15 @@ export class UserComponent implements OnInit, OnDestroy {
 
   }
 
-  filter(){
-    if(this.proyectos && this.id){
-      for(var i = 0; i < this.proyectos.length; i += 1){
-        var result = this.proyectos[i];
-        if(result.id === this.id){
+  filter() {
+    if (this.proyectos && this.id) {
+      for (let i = 0; i < this.proyectos.length; i += 1) {
+        const result = this.proyectos[i];
+        if (result.id === this.id) {
             return result;
         }
       }
-    }    
+    }
   }
 
   onNoClick(): void {

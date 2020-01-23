@@ -674,6 +674,7 @@ export class Team  {
     constructor(
     public id: number,
     public project_id: number,
+    public owner_id: number,
     public descripcion: string,
     public observacion: string,
     public equipo: [],

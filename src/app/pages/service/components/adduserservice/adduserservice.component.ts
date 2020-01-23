@@ -13,23 +13,23 @@ import { Subscription } from 'rxjs/Subscription';
 export class AddUserServiceComponent implements OnInit, OnDestroy {
 
   identity: any;
-  isLoading: boolean = true;
-  page: number = 1;
-  pageSize: number = 0;
+  isLoading = true;
+  page = 1;
+  pageSize = 0;
   status: string;
   subscription: Subscription;
-  termino: string = '';
-  totalRegistros: number = 0;
+  termino = '';
+  totalRegistros = 0;
   token: any;
   usuarios: any[] = [];
 
-  @Input() id : number;
+  @Input() id: number;
   @Output() totalUsuarios: EventEmitter<number>;
   @Output() removerUsuario: EventEmitter<number>;
-  
+
   constructor(
     public _userService: UserService,
-  ) { 
+  ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.totalUsuarios = new EventEmitter();
@@ -37,17 +37,16 @@ export class AddUserServiceComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    if(this.id > 0){
+    if (this.id > 0) {
       this.cargarUsuarios();
     }
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();      
-      //console.log("ngOnDestroy unsuscribe");
-		}
-	}
+  ngOnDestroy() {
+    if (this.subscription) {
+       this.subscription.unsubscribe();
+    }
+  }
 
 
   cargarUsuarios() {
@@ -57,7 +56,6 @@ export class AddUserServiceComponent implements OnInit, OnDestroy {
                 this.totalRegistros = resp.datos.total;
                 this.usuarios = resp.datos.data;
                 this.totalUsuarios.emit(this.totalRegistros);
-                //console.log(this.usuarios);
                 this.isLoading = false;
                 this.status = 'success';
               },
@@ -90,11 +88,11 @@ export class AddUserServiceComponent implements OnInit, OnDestroy {
               console.log(<any>error);
             }
             );
-  }  
+  }
 
-  paginate( valor: number, increment:number ) {
+  paginate( valor: number, increment: number ) {
 
-    let desde = this.pageSize + valor;
+    const desde = this.pageSize + valor;
 
     if ( desde >= this.totalRegistros ) {
       return;
@@ -116,10 +114,10 @@ export class AddUserServiceComponent implements OnInit, OnDestroy {
     this.cargarUsuarios();
   }
 
-  remover(userid:number){
-    if(userid > 0){
+  remover(userid: number) {
+    if (userid > 0) {
       this.removerUsuario.emit(userid);
-      //this.cargarUsuarios();  
+      // this.cargarUsuarios();
     }
   }
 

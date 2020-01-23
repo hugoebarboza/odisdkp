@@ -175,3 +175,20 @@ h1.example-app-name {
   text-decoration: none;
   position: relative;
 }
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}
+.mat-button {
+  outline: 0;
+  border: none;
+}
+.mat-list-item {
+  outline: 0;
+  border: none;
+}
+.mat-line {
+  outline: 0;
+  border: none;
+}
+

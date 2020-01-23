@@ -8,13 +8,15 @@ import Swal from 'sweetalert2';
 
 // DIALOG
 import { AddTeamComponent } from '../../usuarios/dialog/add-team/add-team.component';
+import { AddUserTeamComponent } from '../dialog/add-user-team/add-user-team.component';
+import { EditTeamComponent } from '../dialog/edit-team/edit-team.component';
 
 // MODEL
-import { Proyecto, Team } from 'src/app/models/types';
+import { Proyecto, Team, User } from 'src/app/models/types';
 
 
 // SERVICES
-import { SettingsService, UserService, CustomerService } from 'src/app/services/service.index';
+import { CustomerService, ProjectsService, SettingsService, UserService } from 'src/app/services/service.index';
 
 
 @Component({
@@ -46,13 +48,16 @@ export class TeamListComponent implements OnInit, OnDestroy {
   title: string;
   token: any;
   totalRegistros = 0;
+  users: User[] = [];
 
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionrightaction = new FormControl(this.positionOptions[5]);
+  positionheaderaction = new FormControl(this.positionOptions[2]);
 
 
   constructor(
     private _customerService: CustomerService,
+    private _projectService: ProjectsService,
     private _route: ActivatedRoute,
     public _router: Router,
     public _userService: UserService,
@@ -81,6 +86,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
         this.departamento_id = this.project.department_id;
         this.project_name = this.project.project_name;
         this.load();
+        this.loadUserProject(this.id);
         } else {
           this._router.navigate(['/notfound']);
         }
@@ -135,13 +141,28 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
   }
 
-  save( team: Team, i: number ) {
+  loadUserProject(id: number) {
+    const role = 9;
+    this.subscription = this._projectService.getUserProject(this.token.token, id, role).subscribe(
+    response => {
+              if (!response) {
+                return;
+              }
+              if (response.status === 'success') {
+                this.users = response.datos;
+                // console.log(this.users);
+              }
+              });
+   }
 
+
+  save( team: Team, i: number ) {
 
     this.indexitem = i;
     this.isLoadingSave = true;
 
-    const data = new Team (team.id, team.project_id, team.descripcion, '', [], team.status, 0, '', 0, '');
+
+    const data = new Team (team.id, team.project_id, team.owner_id, team.descripcion, '', null, team.status, 0, '', 0, '');
 
 
     if (!data || !data.project_id) {
@@ -153,7 +174,6 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
     this._customerService.updateTeam(this.token.token, this.id, data, data.id)
             .subscribe( (resp: any) => {
-              // console.log(resp);
               if (!resp) {
                 return;
               }
@@ -184,7 +204,8 @@ export class TeamListComponent implements OnInit, OnDestroy {
     this.isLoadingDelete = true;
     this.indexitemdelete = i;
 
-    const data = new Team (team.id, team.project_id, team.descripcion, '', [], team.status, 0, '', 0, '');
+
+    const data = new Team (team.id, team.project_id, team.owner_id, team.descripcion, '', [], team.status, 0, '', 0, '');
 
     if (!data || !data.project_id || !this.id) {
       Swal.fire('Importante', 'A ocurrido un error en la actualización del usuario.', 'error');
@@ -241,11 +262,31 @@ export class TeamListComponent implements OnInit, OnDestroy {
 
 
 
-  searchTeam( termino: string ) {
+  search( termino: string ) {
     if ( termino.length <= 0 || !termino) {
       this.load();
       return;
     }
+
+    this.isLoading = true;
+
+    this._customerService.searchTeam(this.token.token, this.id, this.page, termino )
+            .subscribe( (resp: any) => {
+              this.totalRegistros = resp.datos.total;
+              this.teams = resp.datos.data;
+              this.isLoading = false;
+              this.status = 'success';
+              this.cd.markForCheck();
+            },
+            error => {
+              this.status = 'error';
+              this.isLoading = false;
+              console.log(<any>error);
+              this.cd.markForCheck();
+            }
+            );
+
+
   }
 
   paginate( valor: number, increment: number ) {
@@ -298,6 +339,39 @@ export class TeamListComponent implements OnInit, OnDestroy {
                });
     }
   }
+
+
+  add(data: Team) {
+    // console.log(data);
+    const dialogRef = this.dialog.open(AddUserTeamComponent, {
+      width: '777px',
+      disableClose: true,
+      data: {team: data}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+       // this.refresh();
+      }
+    });
+  }
+
+
+  edit(data: Team) {
+    // console.log(data);
+    const dialogRef = this.dialog.open(EditTeamComponent, {
+      width: '777px',
+      disableClose: true,
+      data: {team: data}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+       // this.refresh();
+      }
+    });
+  }
+
 
 
 }

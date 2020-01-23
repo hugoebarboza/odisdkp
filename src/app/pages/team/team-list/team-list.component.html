@@ -39,7 +39,7 @@
                         <div class="card custom-card">
                             <div class="card-body">
           
-                                <input #input [(ngModel)]="termino" (keyup)="searchTeam(termino)" type="text" class="form-control" placeholder="Buscar equipo por Nombre...">
+                                <input #input [(ngModel)]="termino" (keyup)="search(termino)" type="text" class="form-control" placeholder="Buscar equipo por Nombre...">
           
                             </div>
                         </div>
@@ -80,7 +80,8 @@
                                       <tr>
                                           <th></th>
                                           <th>Nombre</th>
-                                          <th>Proyecto</th>                                  
+                                          <th>Proyecto</th>
+                                          <th>Responsable</th>
                                           <th>Estatus</th>
                                           <th>Creado El</th>
                                           <th>Creado Por</th>  
@@ -93,7 +94,7 @@
                                         <td class="w10">
                                             <div class="circle" [style.color]="team.status? 'green' : 'red'"></div>
                                         </td>
-          
+
           
                                           <td>
                                             <input type="text" name="descripcion" class="dpbvNR" required  width="50%"  [(ngModel)]="team.descripcion" >
@@ -104,7 +105,17 @@
                                                 {{ team.project_name}} 
                                               </div>
                                           </td>
-          
+
+                                          <td>
+                                            <ng-select [items]="users"
+                                            bindLabel="usuario"
+                                            bindValue="id"
+                                            name="owner_id"
+                                            placeholder="Responsable"
+                                            [(ngModel)]="team.owner_id">
+                                           </ng-select>                 
+                                          </td>
+            
           
                                           <td>
                                             <select [(ngModel)]="team.status" name="status" class="form-control">
@@ -130,21 +141,27 @@
                                             <mat-icon aria-label="Edit" *ngIf="i != indexitem" >done</mat-icon>      
                                             <app-progress-spinner *ngIf="isLoadingSave && i == indexitem"></app-progress-spinner>
                                             </button>
-          
-          
-                                            <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="openDialogProfileSecurity(team)" >
-                                              <mat-icon aria-label="Edit"  class="material-icons md-color">lock</mat-icon>                              
-                                            </button>
-          
-                                            <button mat-icon-button color="primary" *ngIf="_userService.isRole(7)" (click)="startEdit(team)">
-                                                <mat-icon aria-label="Edit" >edit</mat-icon>          
-                                            </button>            
-                                
+                    
           
                                             <button mat-icon-button color="warn" *ngIf="_userService.isRole(7)" (click)="delete(team, i)">
                                             <mat-icon aria-label="Edit" *ngIf="i != indexitemdelete" >delete</mat-icon>                             
                                             <app-progress-spinner *ngIf="isLoadingDelete && i == indexitemdelete"></app-progress-spinner>
                                             </button>
+
+
+                                            <button mat-icon-button [matMenuTriggerFor]="menuviewselectorder" matTooltip="Acciones (Presiona para acceder a las acciones del equipo)" [matTooltipPosition]="positionheaderaction.value" *ngIf="_userService.isRole(7)">
+                                              <mat-icon aria-label="launch">more_horiz</mat-icon>
+                                            </button>
+                                          
+                                            <mat-menu #menuviewselectorder="matMenu" [overlapTrigger]="false">
+                                              <button mat-menu-item (click)="add(team)" >
+                                                <span >Agregar Miembros</span>
+                                              </button>
+                                              <button mat-menu-item (click)="edit(team)">
+                                                <span >Editar Miembros</span>
+                                              </button>                                  
+                                            </mat-menu>                                        
+
           
           
           

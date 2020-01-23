@@ -158,83 +158,84 @@ import { GLOBAL } from '../global';
        }
     }
 
-	getOrderService(token: any, id: string): Observable<any> {
-		return this.getQuery('service/' + id + '/order', token);
-	}
+    getOrderService(token: any, id: string): Observable<any> {
+       return this.getQuery('service/' + id + '/order', token);
+    }
 
-	@Cacheable({
-		maxCacheCount: 2,
-		maxAge: 30000,
-	  })
-	getShowOrderService(token: any, id: number, orderid: number): Observable<any> {
-		return this.getQuery('service/' + id + '/order/' + orderid, token);
-	}
+    @Cacheable({
+        maxCacheCount: 2,
+        maxAge: 30000,
+    })
+    getShowOrderService(token: any, id: number, orderid: number): Observable<any> {
+        return this.getQuery('service/' + id + '/order/' + orderid, token);
+    }
 
-	getFirmaImageOrder(token: any, id: string): Observable<any> {
-		return this.getQuery('order/'+id+'/firmaimage', token);
-	}
+    getFirmaImageOrder(token: any, id: string): Observable<any> {
+        return this.getQuery('order/' + id + '/firmaimage', token);
+    }
 
-	getListAudioOrder(token: any, id: number): Observable<any> {
-		return this.getQuery('order/'+id+'/audio', token);
-	}
-
-	
-	getListImageOrder(token: any, id: number): Observable<any> {
-		return this.getQuery('order/'+id+'/listimage', token);
-	}
-
-	getImageOrder(token: any, id: string): Observable<any> {
-		return this.getQuery('order/'+id+'/getimage', token);
-	}
+    getListAudioOrder(token: any, id: number): Observable<any> {
+        return this.getQuery('order/' + id + '/audio', token);
+    }
 
 
-	getShowImageOrder(token: any, id: string): Observable<any> {
-		return this.getQuery('image/'+id, token);
-	}
+    getListImageOrder(token: any, id: number): Observable<any> {
+        return this.getQuery('order/' + id + '/listimage', token);
+    }
+
+    getImageOrder(token: any, id: string): Observable<any> {
+        return this.getQuery('order/' + id + '/getimage', token);
+    }
 
 
-	getService(token: any, id: string | number): Observable <any> {
-		return this.getQuery('service/'+id, token);
-	}
-
-	getAtributoServiceType (token: any, id: string): Observable<any> {
-		return this.getQuery('servicetype/'+id+'/atributo', token);
-	}
+    getShowImageOrder(token: any, id: string): Observable<any> {
+        return this.getQuery('image/' + id, token);
+    }
 
 
-	getServiceType (token: any, id: string | number): Observable<any> {
-		return this.getQuery('service/'+id+'/servicetype', token);
-	}
+    getService(token: any, id: string | number): Observable <any> {
+        return this.getQuery('service/' + id, token);
+    }
 
-	getServiceEstatus (token: any, id: string | number): Observable<any> {
-		return this.getQuery('service/'+id+'/estatus', token);
-	}
-
-	getCustomer(token: any, termino:string, id:number): Observable<any> {
-		return this.getQuery('search/'+termino+'/'+id, token);
-	}
-
-	gettUserOrdenes(token:any, id:number, sort: string, order: string, pageSize: number, page: number,) {
-		if(!token) {
-			return;
-		}
-
-		if(!order) {
-			order = 'desc';
-		  }
-		  if(!sort) {
-			sort = 'create_at';
-		  }
-		  
-	    const paginate = `?sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
-	    return this.getProjectOrderData('user/' + id + '/order' + paginate, token);
-	}
+    getAtributoServiceType (token: any, id: string): Observable<any> {
+        return this.getQuery('servicetype/' + id + '/atributo', token);
+    }
 
 
+    getServiceType (token: any, id: string | number): Observable<any> {
+        return this.getQuery('service/' + id + '/servicetype', token);
+    }
+
+    getServiceEstatus (token: any, id: string | number): Observable<any> {
+        return this.getQuery('service/' + id + '/estatus', token);
+    }
+
+    getCustomer(token: any, termino: string, id: number): Observable<any> {
+        return this.getQuery('search/' + termino + '/' + id, token);
+    }
+
+    gettUserOrdenes(token: any, id: number, sort: string, order: string, pageSize: number, page: number) {
+        if (!token) {
+           return;
+        }
+
+        if (!order) {
+           order = 'desc';
+        }
+
+        if (!sort) {
+           sort = 'create_at';
+        }
+
+        const paginate = `?sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
+        return this.getProjectOrderData('user/' + id + '/order' + paginate, token);
+    }
 
 
-    getProjectOrderData(query:string, token:any) {
-		if(!token) {
+
+
+    getProjectOrderData(query: string, token: any) {
+		if (!token) {
 			return;
 		}
 	    const url = this.url;
@@ -248,42 +249,22 @@ import { GLOBAL } from '../global';
 	      if (query == '')
 	          reject();
 	      resolve(this._http.get<Order>(requestUrl, {headers: headers}));
-	      })
-    }	
+	      });
+    }
 
 
-  	add(token: any, order: Order, id:number): void {
-		if (!token) {
-			return;
-		}
-
-		let json = JSON.stringify(order);
-		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');	
-		this._http.post(this.url+'project'+'/'+id+'/'+'order', params, {headers: headers}).subscribe(
-    		(data: any) => { 
-    			  this.dialogData = order;
-						//this.toasterService.success('Orden de Trabajo creada.', 'Exito', {timeOut: 6000,});
-						if(data.status === 'success'){
-							Swal.fire('Creada Orden de Trabajo: ', this.dialogData.order_number + ' exitosamente.', 'success' );
-						}else{
-							Swal.fire('N. Orden de Trabajo: ', this.dialogData.order_number + ' no fue posible crearla.' , 'error');
-						}
-					
-			      },
-			      (err: HttpErrorResponse) => {	
-						this.error = err.error.message;
-						//console.log('viene');
-						//console.log(<any>err);
-						Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
-			      //console.log(err.error.message);
-			      //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-			    });
-	}
-
+    add(token: any, order: Order, id: number): Observable<any> {
+        if (!token) {
+            return;
+        }
+        const json = JSON.stringify(order);
+        const params = 'json=' + json;
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        return this._http.post(this.url + 'project' + '/' + id + '/' + 'order', params, {headers: headers}).map( (resp: any) => resp);
+    }
 
 	addEstatus(token: any, data: ServiceEstatus, id:number): Observable<any> {
-		if (!token){
+		if (!token) {
 			return;
 		}
 

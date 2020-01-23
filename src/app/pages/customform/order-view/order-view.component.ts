@@ -26,6 +26,7 @@ export class OrderViewComponent implements OnInit, OnDestroy {
   counter;
   identity: any;
   imageRows = [];
+  imageRowOne = [];
   isloading: boolean;
   isImageLoading: boolean;
   listimageorder = [];
@@ -392,7 +393,26 @@ export class OrderViewComponent implements OnInit, OnDestroy {
           if (response.status === 'success') {
             this.listimageorder = response.datos;
             if (this.listimageorder.length > 0) {
-              this.getSplitArray(this.listimageorder, 2);
+              const imageOne = [];
+              const imageCero = [];
+              for (let i = 0; i < this.listimageorder.length; i++) {
+                if (Number(this.listimageorder[i]['tipo']) === 1) {
+                  imageOne.push(this.listimageorder[i]);
+                }
+                if (this.listimageorder[i]['tipo'] === null || Number(this.listimageorder[i]['tipo']) === 0) {
+                  imageCero.push(this.listimageorder[i]);
+                }
+              }
+
+              if (imageCero.length > 0) {
+                this.imageRows = this.getSplitArray(imageCero, 2);
+                // console.log(this.imageRows);
+              }
+              if (imageOne.length > 0) {
+                this.imageRowOne = this.getSplitArray(imageOne, 2);
+                // console.log(this.imageRowOne);
+              }
+
             }
             this.counter = this.listimageorder.length;
           }
@@ -406,7 +426,7 @@ export class OrderViewComponent implements OnInit, OnDestroy {
     }
   }
 
-  public getSplitArray (list, columns) {
+  public getSplitArray (list, columns): Array<Object> {
     const array = list;
     if (array.length <= columns) {
       array.length = 2;
@@ -430,7 +450,7 @@ export class OrderViewComponent implements OnInit, OnDestroy {
         rowsArray[i] = columnsArray;
     }
 
-    this.imageRows = rowsArray.reverse();
+    return rowsArray.reverse();
 
     // return rowsArray;
     // console.log(this.imageRows)

@@ -16,10 +16,11 @@ import { CdfService, OrderserviceService, ProjectsService, UserService } from 's
 
 // MODELS
 import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
+import Swal from 'sweetalert2';
 
 interface ObjectServiceType {
-      id: number;
-      name: string;
+  id: number;
+  name: string;
 }
 
 @Component({
@@ -205,10 +206,26 @@ export class AddComponent implements OnInit, OnDestroy {
 
     }
 
-    const objPila = {pila: pila };
+    const objPila = {pila: pila};
     const obj = Object.assign(this.data, objPila);
-    this.dataService.add(this.token.token, obj, this.category_id);
-    // this.dataService.add(this.token.token, this.data, this.category_id);
+
+    this.dataService.add(this.token.token, obj, this.category_id).subscribe(
+      response => {
+        if (!response) {
+          this.isOrderLoading = false;
+          return;
+        }
+        if (response.status === 'success') {
+          Swal.fire('Creada Orden de Trabajo: ', this.data.order_number + ' exitosamente.', 'success' );
+        } else {
+          Swal.fire('N. Orden de Trabajo: ', this.data.order_number + ' no fue posible crearla.' , 'error');
+        }
+      },
+      error => {
+        console.log(<any>error);
+        Swal.fire('No fue posible procesar su solicitud', error.error.message, 'error');
+      }
+    );
 
     if (this.destinatario.length > 0)  {
       // SEND CDF MESSAGING AND NOTIFICATION
@@ -335,7 +352,6 @@ export class AddComponent implements OnInit, OnDestroy {
                 this.users = response.datos;
               }
               });
-
    }
 
    public noWhitespace(termino: string) {
@@ -404,7 +420,7 @@ export class AddComponent implements OnInit, OnDestroy {
                 }
 
                 this.atributo = atributotem;
-                //console.log(this.atributo);
+                // console.log(this.atributo);
 
                 this.isOrderLoading = false;
               }

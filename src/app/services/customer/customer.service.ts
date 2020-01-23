@@ -303,6 +303,44 @@ export class CustomerService {
                        .map( (resp: any) => resp);
    }
 
+   getDeTeam(token: string, id: number, ): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+      const Url = this.url + 'team/' + id + '/deteam';
+
+      return this._http.get<any>(Url, {headers: headers});
+   }
+
+   removerUserTeam(token: any, userid: number, id: number): Observable<any> {
+      if (!token) {
+         return;
+      }
+
+
+       const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+       return this._http.post(this.url + 'removeruser/' + userid + '/team/' + id, {headers: headers}).map( (resp: any) => resp);
+   }
+
+
+
+
+   searchTeam(token: string, id: number, page: number = 0, termino: string) {
+      if (!token) {
+         return;
+      }
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      const paginate = `?page=${page}`;
+      const Url = this.url + 'searchteam/' + id + '/termino/' + termino + paginate;
+
+       return this._http.get<Team[]>(Url, {headers: headers});
+      }
+
 
 
    update(token: any, customer: Customer, id: number, customerid: number): void {

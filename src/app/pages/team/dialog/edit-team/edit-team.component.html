@@ -1,0 +1,86 @@
+<mat-toolbar color="primary">
+  <h3 *ngIf="!isLoading">{{title}} - {{data.team.descripcion}}</h3> 
+  <span class="mat-spacer"></span>
+  <button mat-icon-button (click)="onNoClick()" tabindex="-1">
+  <mat-icon class="mat-icon">close</mat-icon>       
+  </button>
+  </mat-toolbar>
+  <p></p>
+        
+  <div class="container-fluid" *ngIf="isLoading">
+      <div class="row d-flex justify-content-center">
+          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+      </div>
+  </div>
+  
+  <div class="app animated fadeIn" *ngIf="!isLoading && forma">
+    <div class="mat-app-background" >
+        <div class="container-fluid" *ngIf="isLoadingData">
+          <div class="row d-flex justify-content-center">
+              <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingData" ></mat-spinner>
+          </div>
+        </div>
+  
+        <div class="card-body" *ngIf="!isLoadingData && status !== 'error'">
+            <h6 class="card-text">Miembros del equipo ({{totalRegistros}})</h6>
+
+            <div style="overflow-x:auto;">
+              <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Correo</th>                                  
+                        <th>Miembro desde</th>
+                        <th *ngIf="_userService.isRole(7)"></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    <tr *ngFor="let e of equipo; let i = index">
+                      <td >
+                        {{ e.user}} 
+                      </td>
+
+
+                        <td>
+                          {{e.email}}
+                        </td>
+
+
+                        <td>
+                          {{ e.create_at }}
+                        </td>
+
+
+                        <td *ngIf="_userService.isRole(7)">
+                          <button type="button" class="btn btn-outline-success btn-sm" (click)="remove(e)" >Remover</button>
+                        </td>
+                    </tr>
+
+                </tbody>
+
+            </table>
+            </div>
+        </div>
+
+        <div class="card-body" *ngIf="!isLoadingData && status === 'error'">
+          <div class="col-sm-12">
+            <div class="alert alert-danger" *ngIf="status == 'error'">
+                No se encontraron miembros en el equipo.
+            </div>
+        </div>
+        </div>
+
+
+
+    </div>
+
+  </div>
+    
+  
+  
+  <br>
+  <div mat-dialog-actions >
+      <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+  </div>
+  

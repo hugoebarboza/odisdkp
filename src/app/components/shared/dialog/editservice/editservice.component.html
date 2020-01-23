@@ -82,6 +82,25 @@
                 </div>            
             </div>
 
+            <div class="col-sm">
+              <div class="form">
+                  <label>
+                    <h6 class="status-h2">Más Imaganes</h6>
+                    <section class="status-section">
+                    <mat-slide-toggle
+                    name="moreimage" 
+                    [(ngModel)]="moreimage"
+                    (change)="onChangeMoreImage($event)"
+                    color="primary"
+                    >
+                    <div *ngIf="moreimage == 1">Activo</div><div *ngIf="moreimage == 0">Desactivo</div>
+                    </mat-slide-toggle>
+                    </section>
+                  </label>
+              </div>            
+          </div>
+
+
             </div>
         </div>        
 

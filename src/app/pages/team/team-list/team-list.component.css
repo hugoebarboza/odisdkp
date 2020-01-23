@@ -57,4 +57,21 @@
   border: solid 1px #ccc !important;
   opacity: 1;
 }
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}
+.mat-button {
+  outline: 0;
+  border: none;
+}
+.mat-menu {
+  outline: 0;
+  border: none;
+}
+.mat-menu-item {
+  outline: 0;
+  border: none;
+}
+
 
