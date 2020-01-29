@@ -25,16 +25,15 @@
     
                         <table mat-table [dataSource]="dataSource" matSort >
     
-    
                             <!-- ID Column -->
                             <ng-container matColumnDef="alimentador">
-                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Alimentador </th>
+                                <th mat-header-cell *matHeaderCellDef mat-sort-header> Set / Alimentador </th>
                                 <td mat-cell *matCellDef="let row; let i = index"> 
                                   <div *ngIf="i !== indexitem || isLoadingDelete">
                                     <mat-form-field *ngIf="alimentador && i !== indexitem || isLoadingDelete">
                                             <select [(ngModel)]="row.id_alimentador" name="alimentador" matNativeControl required [disabled]="true">
                                             <option *ngFor="let s of alimentador" [value]="s.id">
-                                                {{s.descripcion}}
+                                               {{getSet(s)}} / {{s.descripcion}}
                                             </option>
                                             </select>
                                     </mat-form-field>                                
@@ -43,13 +42,13 @@
                                           <mat-label>Valor</mat-label>
                                           <select [(ngModel)]="row.id_alimentador" name="alimentador" matNativeControl required>
                                           <option *ngFor="let s of alimentador" [value]="s.id">
-                                                {{s.descripcion}}
+                                            {{getSet(s)}} / {{s.descripcion}}
                                           </option>
                                           </select>
                                   </mat-form-field>                            
       
                                 </td>
-                              </ng-container>
+                            </ng-container>
       
     
                             <!-- ID Column -->
@@ -132,7 +131,7 @@
                 <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="form p-t-20" >
                         <table class="table table-hover" *ngIf="_userService.isRole(7)">                    
                             <tbody>
-                                <tr >
+                                <tr>
                                     <td class="w10">
                                         <button mat-icon-button (click)="toggle()" >
                                             <mat-icon class="material-icons md-20-color" >add</mat-icon> <span *ngIf="!show">Agregar</span>
@@ -140,10 +139,10 @@
                                     </td>
                                     <td>
                                     <mat-form-field *ngIf="alimentador && show">
-                                            <mat-label>ALIMENTADOR</mat-label>
+                                            <mat-label> Set / Alimentador </mat-label>
                                             <select formControlName="id_alimentador" name="id_alimentador" matNativeControl required>
                                             <option *ngFor="let s of alimentador" [value]="s.id">
-                                                {{s.descripcion}}
+                                              {{getSet(s)}} / {{s.descripcion}}
                                             </option>
                                             </select>
                                     </mat-form-field>        
@@ -164,7 +163,7 @@
             
                                     <td >
                                         <button  mat-icon-button color="primary" [disabled]="forma.invalid" *ngIf="show && !isLoadingSave && !isLoadingDelete && !forma.invalid" (click)="onSubmit()" >
-                                            <mat-icon aria-label="Edit"  >done</mat-icon>                            
+                                            <mat-icon aria-label="Edit">done</mat-icon>                            
                                         </button>      
                                     </td>
                                 </tr>

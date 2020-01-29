@@ -139,3 +139,7 @@ border-top-width: 0px !important;
   margin-left: 0px;
   margin-right: 0px;
 }
+.mat-button {
+  outline: 0;
+  border: none;
+}

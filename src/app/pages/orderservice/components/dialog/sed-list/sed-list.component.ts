@@ -37,6 +37,7 @@ export class SedListComponent implements OnInit, OnDestroy {
   proyectos = [];
   show = false;
   alimentador = [];
+  set = [];
   subscription: Subscription;
   token: any;
 
@@ -128,7 +129,19 @@ export class SedListComponent implements OnInit, OnDestroy {
     }
   }
 
+  getSet(alimentador: any): String {
 
+    if (alimentador && alimentador.id_set) {
+        for (let i = 0; i < this.set.length; i++) {
+          if (this.set[i]['id'] === alimentador.id_set) {
+            return this.set[i]['descripcion'];
+          }
+        }
+    } else {
+      return 'Error';
+    }
+
+  }
 
   cargar(id: number) {
     if (id && id > 0) {
@@ -137,21 +150,25 @@ export class SedListComponent implements OnInit, OnDestroy {
       this.subscription = this._customerService.getProjectSetAlimentadorSed(this.token.token, id).subscribe(
         response => {
                 if (response.status === 'success') {
+                  // console.log(response);
                   this.dataSource = new MatTableDataSource(response.sed);
                   this.dataSource.paginator = this.paginator;
                   this.dataSource.sort = this.sort;
-                  this.total.emit(response.alimentador.length);
+                  this.total.emit(response.sed.length);
                   this.alimentador = response.alimentador;
+                  this.set = response.set;
                   this.isLoading = false;
                 } else {
                   this.dataSource = null;
                   this.alimentador = [];
+                  this.set = [];
                   this.isLoading = false;
                 }
               },
               error => {
                 this.dataSource = null;
-                this.alimentador = [];
+                  this.alimentador = [];
+                  this.set = [];
                 this.isLoading = false;
                 console.log(<any>error);
               });

@@ -15,7 +15,8 @@ export const environment = {
     measurementId: 'G-2DDCSXRNXD'
   },
   global: {
-    url : 'https://odis.api.ocachile.cl/api/v1.0/',
+    // url : 'https://odis.api.ocachile.cl/api/v1.0/',
+    url : 'https://odissoftware.api.ocachile.cl/api/v2.0/',
     agmapikey: 'AIzaSyBPUJBehQOjnzd9S3iVkHk8drGUR-AXDKk',
     version: '267e00',
     urlcdf: `https://us-central1-odisdkp.cloudfunctions.net/`,

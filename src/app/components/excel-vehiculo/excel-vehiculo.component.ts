@@ -38,7 +38,6 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
   servicename: string;
   service_id: number;
 
-
   dateend: any = undefined;
 
   firtsFormGroup: FormGroup;
@@ -109,6 +108,8 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
   @Input() id: number;
   @Input() table: string;
 
+  identity: any;
+
   constructor(
     public dataService: DataService,
     private _formBuilder: FormBuilder,
@@ -117,6 +118,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
     private _orderService: OrderserviceService,
     private _userService: UserService,
   ) {
+    this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.ServicioSeleccionado = new EventEmitter();
   }
@@ -989,7 +991,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   getInspectores() {
-    this.dataService.getInspectores(this.project_id, this.token.token).then(
+    this.dataService.getInspectores(this.project_id, this.token.token, this.identity.role).then(
       (res: any) => {
         res.subscribe(
           (some) => {

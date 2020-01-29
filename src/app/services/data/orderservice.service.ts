@@ -7,7 +7,7 @@ import { throwError } from 'rxjs';
 import 'rxjs/add/operator/map';
 
 // CACHE
-import { Cacheable } from 'ngx-cacheable';
+// import { Cacheable } from 'ngx-cacheable';
 
 import Swal from 'sweetalert2';
 
@@ -162,10 +162,11 @@ import { GLOBAL } from '../global';
        return this.getQuery('service/' + id + '/order', token);
     }
 
+    /*
     @Cacheable({
         maxCacheCount: 2,
         maxAge: 30000,
-    })
+    })*/
     getShowOrderService(token: any, id: number, orderid: number): Observable<any> {
         return this.getQuery('service/' + id + '/order/' + orderid, token);
     }
@@ -234,22 +235,26 @@ import { GLOBAL } from '../global';
 
 
 
-    getProjectOrderData(query: string, token: any) {
-		if (!token) {
-			return;
-		}
-	    const url = this.url;
-	    const href = url + query;
-	    const requestUrl = href;
-	    const headers = new HttpHeaders({'Content-Type': 'application/json'});
+    async getProjectOrderData(query: string, token: any) {
+    if (!token) {
+       return;
+    }
+      const url = this.url;
+      const href = url + query;
+      const requestUrl = href;
+      const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-	    return new Promise((resolve, reject) => {
-	      if (token == '')
-	          reject();
-	      if (query == '')
-	          reject();
-	      resolve(this._http.get<Order>(requestUrl, {headers: headers}));
-	      });
+      return await new Promise((resolve, reject) => {
+        if (token === '') {
+          reject();
+        }
+
+        if (query === '') {
+          reject();
+        }
+
+        resolve(this._http.get<Order>(requestUrl, {headers: headers}));
+        });
     }
 
 
@@ -263,125 +268,111 @@ import { GLOBAL } from '../global';
         return this._http.post(this.url + 'project' + '/' + id + '/' + 'order', params, {headers: headers}).map( (resp: any) => resp);
     }
 
-	addEstatus(token: any, data: ServiceEstatus, id:number): Observable<any> {
-		if (!token) {
-			return;
-		}
+    addEstatus(token: any, data: ServiceEstatus, id: number): Observable<any> {
+    if (!token) {
+       return;
+    }
 
-		let json = JSON.stringify(data);
-		let params = 'json='+json;
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-										 
-		return this._http.post(this.url+'service/'+id+'/estatus/', params, {headers: headers})
-		.map( (resp: any) => {
-			return resp;
-		});				
-	}
+    const json = JSON.stringify(data);
+    const params = 'json=' + json;
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-  update(token: any, orderid:number, order: Order, id:number): void {
-		if (!token){
-			return;
-		}
+    return this._http.post(this.url + 'service/' + id + '/estatus/', params, {headers: headers}).map( (resp: any) => resp);
+  }
 
-		let json = JSON.stringify(order);
-		let params = 'json='+json;
+  update(token: any, orderid: number, order: Order, id: number): void {
+    if (!token) {
+      return;
+    }
 
+    const json = JSON.stringify(order);
+    const params = 'json=' + json;
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		this._http.put(this.url+'project'+'/'+id+'/'+'order/'+orderid, params, {headers: headers}).subscribe(
-    		(data: any) => { 
-							//console.log(data.status);
-							//this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
-    			    this.dialogData = order;   		      						
-							if(data.status === 'success'){
+    this._http.put(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, params, {headers: headers}).subscribe(
+    		(data: any) => {
+							// this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
+    			    this.dialogData = order;
+							if (data.status === 'success') {
 								Swal.fire('Actualizada Orden de Trabajo: ', this.dialogData.order_number +' exitosamente.', 'success' );
-							}else{
+							} else {
 								Swal.fire('N. Orden de Trabajo: ', this.dialogData.order_number +' no actualizada.' , 'error');
 							}
 			      },
 			      (err: HttpErrorResponse) => {
-						//this.error = err.error.message;							
-						//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+						// this.error = err.error.message;
+						// this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 						Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
 					})
 					;
 	}
 
 
-	updateEstatus(token: any, data:ServiceEstatus, id:number): Observable<any>{
-		if (!token){
+  updateEstatus(token: any, data: ServiceEstatus, id: number): Observable<any> {
+    if (!token) {
+      return;
+    }
+
+    const json = JSON.stringify(data);
+    const params = 'json=' + json;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this._http.post(this.url + 'estatus/' + id, params, {headers: headers}).map( (resp: any) => resp);
+  }
+
+	updateMass(token: any, data: any, id: number, paramset: string, paramvalue: number): Observable<any> {
+		if (!token) {
 			return;
 		}
 
-		let json = JSON.stringify(data);
-		let params = 'json='+json;
+		const json = JSON.stringify(data);
+		const params = 'json=' + json;
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		const Url = this.url + 'service/' + id + '/orderupdatemass/' + paramset + '/value/' + paramvalue;
 
-		return this._http.post(this.url+'estatus/'+id, params, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });				
-	}
 
-	updateMass(token: any, data:any, id:number, paramset: string, paramvalue: number): Observable<any>{
-		if (!token){
+    return this._http.post(Url, params, {headers: headers}).map( (resp: any) => resp );
+  }
+
+
+	deleteMass(token: any, data: any, id: number): Observable<any> {
+		if (!token) {
 			return;
 		}
 
-		let json = JSON.stringify(data);
-		let params = 'json='+json;
+		const json = JSON.stringify(data);
+		const params = 'json=' + json;
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		let Url = this.url+'service/'+id+'/orderupdatemass/'+paramset+'/value/'+paramvalue;
+		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		const Url = this.url + 'service/' + id + '/deletemass';
 	
 
-		return this._http.post(Url, params, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });				
+		return this._http.post(Url, params, {headers: headers}).map( (resp: any) => resp);
 	}
 
 
-	deleteMass(token: any, data:any, id:number): Observable<any>{
-		if (!token){
+  deleteEstatus(token: any, id: number): Observable<any> {
+
+		if (!token) {
 			return;
 		}
 
-		let json = JSON.stringify(data);
-		let params = 'json='+json;
-
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		let Url = this.url+'service/'+id+'/deletemass';
-	
-
-		return this._http.post(Url, params, {headers: headers})
+		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+		return this._http.delete(this.url + 'estatus/' + id, {headers: headers})
 						 .map( (resp: any) => {
 							 return resp;
-						 });				
+						 });
 	}
 
 
-	deleteEstatus(token: any, id:number): Observable<any>{
-
-		if (!token){
+ 	delete(token: any, orderid: number, id: number): void {
+		if (!token) {
 			return;
 		}
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.delete(this.url+'estatus/'+id, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });				
-	}
-
-
- 	delete(token: any, orderid:number, id: number): void { 	 	
-		if (!token){
-			return;
-		}
-
-	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');							      
+	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     
 		this._http.delete(this.url+'project'+'/'+id+'/'+'order/'+orderid, {headers: headers}).subscribe(
 			(data: any) => {
@@ -390,18 +381,18 @@ import { GLOBAL } from '../global';
 				}else{
 					Swal.fire('Orden de Trabajo con identificador: ', orderid +' no eliminada.' , 'error');
 				}
-      	//this.toasterService.success('Orden de Trabajo eliminada.', 'Exito', {timeOut: 6000,});
+      	// this.toasterService.success('Orden de Trabajo eliminada.', 'Exito', {timeOut: 6000,});
       },
       (err: HttpErrorResponse) => {
 				this.error = err.error.message;
 				Swal.fire('No fue posible procesar su solicitud', '', 'error');
-        //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+        // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
       });
-	}
+  }
 
-		
-  important(token: any, id:number, orderid:number, label:number): void {
-	  if (!token){
+
+  important(token: any, id: number, orderid: number, label: number): void {
+	  if (!token) {
 		  return;
 	  }
 			const json = JSON.stringify(label);
@@ -409,14 +400,14 @@ import { GLOBAL } from '../global';
 			const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 			this._http.post(this.url+'project'+'/'+id+'/'+'order/'+orderid+'/importantorder/'+label, params, {headers: headers}).subscribe(
 					_data => {
-							//console.log(data);
-							//this.dialogData = order;    		      
-							//this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});			      
+							// console.log(data);
+							// this.dialogData = order;
+							// this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
 							},
 							(err: HttpErrorResponse) => {
 							this.error = err.error.message;
-							//console.log(err.error.message);
-							//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+							// console.log(err.error.message);
+							// this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 						});
 		}
 
@@ -446,5 +437,5 @@ import { GLOBAL } from '../global';
 			return throwError(error.error);
 		}
 	}
-				
+
 }

@@ -9,6 +9,19 @@
   width: 100%;
 }
 
+.jeEmYB {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.857143em;
+    font-style: inherit;
+    color: #313131;
+    font-weight: 600;
+    margin-top: 7px;
+    text-transform: uppercase;
+    line-height: 12px;
+    overflow: hidden;
+  }
+
 .form {
   display: flex;
   padding-top: 7px;
@@ -150,6 +163,10 @@ table#t01 td {
     color: black;
 }
 
+.sinmagin {
+    margin-left: 0px;
+    margin-right: 0px;
+}
 
 
 table#t02 tr:nth-child(even) {

@@ -6,6 +6,25 @@ agm-map {
   height: 557px;  
 }
 
+.barra-map {
+  border-radius: 8px 8px 0 0;
+  background-color: #404040;
+  margin-right: 0px;
+  margin-left: 0px;
+}
+
+.search-map {
+  margin: 10px;
+}
+
+.icon-map {
+  color: white;
+}
+
+:host ng-deep .mat-tab-body-content {
+  overflow: hidden;
+}
+
 .drawer-container {
   width: 100%;
   height: auto;

@@ -12,7 +12,7 @@
           <form [formGroup]="firtsFormGroup">
             <ng-template matStepLabel>Validación</ng-template>
             <div class="excel-selector"  >
-                <button mat-mini-fab color="accent" (click)="fileInput.click()">
+                <button mat-mini-fab color="accent" (click)="fileInput.click()" class="sin-borde">
                     <mat-icon>attachment</mat-icon>
                     <input hidden type="file" #fileInput class="none" (change)="incomingfile($event)" (click)="$event.target.value = null " accept=".xlsx" required formControlName="inputCtrl" >                  
                 </button>
@@ -42,8 +42,9 @@
                     Generar N°Orden
                 </mat-slide-toggle>
                 <mat-slide-toggle class="marginLeftX2" (change)="checkduplicatOt($event)"  [checked]="checkboxDupOt">
-                  N°OT Unico
+                  N°OT Unico <p *ngIf="checkboxDupOt">(No se permite duplicar N° de OT)</p> <p *ngIf="!checkboxDupOt">(Se permite duplicar N° de OT)</p>
                 </mat-slide-toggle>
+
                 <div class="floatIzq">
                   <a mat-mini-fab target="_self" color="primary" href="../../assets/ModuloCarga.xlsx" download="ModuloCarga.xlsx">
                     <mat-icon>archive</mat-icon>
@@ -214,6 +215,12 @@
                     <ng-container matColumnDef="asignado_a">
                       <th mat-header-cell *matHeaderCellDef> Asignado</th>
                       <td mat-cell *matCellDef="let element"> {{element.asignado_a}} </td>
+                    </ng-container>
+
+                    <!-- Symbol Column -->
+                    <ng-container matColumnDef="equipo">
+                      <th mat-header-cell *matHeaderCellDef> Equipo</th>
+                      <td mat-cell *matCellDef="let element"> {{element.equipo}} </td>
                     </ng-container>
 
                     <!-- Symbol Column -->
@@ -475,8 +482,14 @@
               
                   <!-- Symbol Column -->
                   <ng-container matColumnDef="asignado_a">
-                    <th mat-header-cell *matHeaderCellDef> Asignado</th>
+                    <th mat-header-cell *matHeaderCellDef> Asignado </th>
                     <td mat-cell *matCellDef="let element"> {{element.asignado_a}} </td>
+                  </ng-container>
+
+                  <!-- Symbol Column -->
+                  <ng-container matColumnDef="equipo">
+                    <th mat-header-cell *matHeaderCellDef> Equipo </th>
+                    <td mat-cell *matCellDef="let element"> {{element.equipo}} </td>
                   </ng-container>
 
                   <!-- Symbol Column -->
@@ -744,6 +757,12 @@
                 <ng-container matColumnDef="asignado_a">
                   <th mat-header-cell *matHeaderCellDef> Asignado</th>
                   <td mat-cell *matCellDef="let element"> {{element.asignado_a}} </td>
+                </ng-container>
+
+                <!-- Symbol Column -->
+                <ng-container matColumnDef="equipo">
+                  <th mat-header-cell *matHeaderCellDef> Equipo </th>
+                  <td mat-cell *matCellDef="let element"> {{element.equipo}} </td>
                 </ng-container>
 
                 <!-- Symbol Column -->

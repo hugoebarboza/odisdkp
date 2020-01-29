@@ -171,13 +171,17 @@ export class DataService {
       resolve(this._http.get(href, {headers: headers}));
       });
   }
+  
+  getEquipos(id, token) {
+    return this.getDataBD(this.url + 'project/' + id + '/team' , token);
+  }
 
   getTipoServicio(id, token) {
     return this.getDataBD(this.url + 'service/' + id + '/servicetype' , token);
   }
 
-  getInspectores(projectid: number, token) {
-    return this.getDataBD(this.url + 'project/' + projectid + '/role/5' , token);
+  getInspectores(projectid: number, token, role: any) {
+    return this.getDataBD(this.url + 'project/' + projectid + '/role/' + role , token);
   }
 
   getMarca(token) {

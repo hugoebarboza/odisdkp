@@ -36,6 +36,7 @@ import { AddDocComponent } from '../../../components/shared/dialog/add-doc/add-d
 import { AddFormComponent } from 'src/app/pages/orderservice/components/dialog/add-form/add-form.component';
 import { AddJobComponent } from '../../../pages/orderservice/components/dialog/add-job/add-job.component';
 import { FileComponent } from '../../dialog/file/file.component';
+import { ClonarOtComponent } from 'src/app/pages/orderservice/components/dialog/clonar-ot/clonar-ot.component';
 import { CsvComponent } from '../../dialog/csv/csv.component';
 import { DeleteComponent } from '../../dialog/delete/delete.component';
 import { EditComponent } from '../../dialog/edit/edit.component';
@@ -57,6 +58,7 @@ import { ToastrService } from 'ngx-toastr';
 
 // FIREBASE
 import { AngularFirePerformance } from '@angular/fire/performance';
+
 
 
 interface Inspector {
@@ -1073,15 +1075,13 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  startEdit(order_id: number, order_number: string, category_id: number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, assigned_to: number, order_date: string, required_date: string, vencimiento_date: string, leido_por: string, observation: string, create_at: string) {
+  startEdit(order_id: number, category_id: number) {
     const service_id = this.id;
     const dialogRef = this.dialog.open(EditComponent, {
       width: '1000px',
       disableClose: true,
-      data: {order_id: order_id, order_number: order_number, service_id: service_id, category_id: category_id, customer_id: customer_id, cc_number: cc_number,
-        servicetype_id: servicetype_id, status_id: status_id,
-        assigned_to: assigned_to,
-        order_date: order_date, required_date: required_date, vencimiento_date: vencimiento_date, leido_por: leido_por, observation: observation, create_at: create_at}
+      data: {order_id: order_id, service_id: service_id, category_id: category_id
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -1091,6 +1091,21 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         // Then you update that record using data from dialogData (values you enetered)
        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
         // And lastly refresh table
+        this.refreshTable();
+      }
+    });
+  }
+
+  startClonar(order_id: number, category_id: number) {
+    const service_id = this.id;
+    const dialogRef = this.dialog.open(ClonarOtComponent, {
+      width: '1000px',
+      disableClose: true,
+      data: {order_id: order_id, service_id: service_id, category_id: category_id}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
         this.refreshTable();
       }
     });

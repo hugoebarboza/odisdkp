@@ -181,7 +181,7 @@ export class AddUserTeamComponent implements OnInit, OnDestroy {
         }
       },
         error => {
-          this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+          this.snackBar.open('Error procesando solicitud!!!', error.error.mensaje, {duration: 3000, });
           console.log(<any>error);
         }
       );

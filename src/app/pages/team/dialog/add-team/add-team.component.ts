@@ -128,7 +128,7 @@ export class AddTeamComponent implements OnInit, OnDestroy {
    }
 
 
-  taguser(data) {
+  taguser(data: any) {
     if (data.length === 0) {
       data = '';
       this.equipo = [];
@@ -138,6 +138,7 @@ export class AddTeamComponent implements OnInit, OnDestroy {
 
     if (data.length > 0) {
       this.equipo = data;
+
     }
 
   }
@@ -156,6 +157,7 @@ export class AddTeamComponent implements OnInit, OnDestroy {
     if (this.proyecto && this.proyecto.id > 0) {
       this._customerService.addTeam(this.token.token, this.proyecto.id, data)
       .subscribe( (resp: any) => {
+
         if (!resp) {
           this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
           return;
@@ -167,12 +169,13 @@ export class AddTeamComponent implements OnInit, OnDestroy {
             this.dialogRef.close(1);
           }, 1000);
         } else {
+          console.log('paso');
           this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000, });
           return;
         }
       },
         error => {
-          this.snackBar.open('Error procesando solicitud!!!', '', {duration:3000, });
+          this.snackBar.open('Error procesando solicitud!!!', error.error.mensaje, {duration: 3000, });
           console.log(<any>error);
         }
       );

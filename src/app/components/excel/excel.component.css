@@ -2,6 +2,11 @@
   background-color: #f2f4f7;
 }
 
+.sin-borde {
+  outline: 0;
+  border: none;
+}
+
 mat-form-field{
     margin-right: 20px;
 }

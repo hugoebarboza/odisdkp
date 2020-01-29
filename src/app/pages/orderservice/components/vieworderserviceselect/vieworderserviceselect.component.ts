@@ -531,6 +531,7 @@ selectedColumnnEstatus = {
   }
 
   public getData(response: any) {
+    this.selection.clear();
     if (response && response.status === 'success') {
       if (response.datos.data) {
       this.resultsLength = response.datos.total;

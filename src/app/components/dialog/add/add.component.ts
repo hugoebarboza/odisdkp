@@ -12,7 +12,7 @@ import * as _moment from 'moment';
 const moment = _moment;
 
 // SERVICES
-import { CdfService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
+import { CdfService, OrderserviceService, ProjectsService, UserService, DataService } from 'src/app/services/service.index';
 
 // MODELS
 import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
@@ -31,6 +31,7 @@ interface ObjectServiceType {
 
 export class AddComponent implements OnInit, OnDestroy {
 
+  equipos: Array<Object> = [];
   public title: string;
   active: Boolean = false;
   isvalid: Boolean = true;
@@ -70,6 +71,7 @@ export class AddComponent implements OnInit, OnDestroy {
   seconds = new Date().getSeconds();
   date = new FormControl(new Date());
   selectedUsers: any;
+  selectedTeam: any;
   userFirebase: UserFirebase;
 
   serializedDate = new FormControl((new Date()).toISOString());
@@ -87,6 +89,7 @@ export class AddComponent implements OnInit, OnDestroy {
     private _route: Router,
     public dialogRef: MatDialogRef<AddComponent>,
     public dataService: OrderserviceService,
+    public _dataService: DataService,
     private firebaseAuth: AngularFireAuth,
     @Inject(MAT_DIALOG_DATA) public data: Order
 
@@ -154,6 +157,22 @@ export class AddComponent implements OnInit, OnDestroy {
     this.isvalid = !isWhitespace;
   }
 
+  getEquipos(id) {
+    this._dataService.getEquipos(id, this.token.token).then(
+      (res: any) => {
+        res.subscribe(
+          (some) => {
+            // console.log(some);
+            this.equipos = some['datos'];
+          },
+          (error) => {
+            console.log(<any>error);
+          }
+        );
+      }
+    );
+  }
+
   public confirmAdd(_form: any): void {
 
     const pila = [];
@@ -163,9 +182,27 @@ export class AddComponent implements OnInit, OnDestroy {
       this.data.assigned_to = this.selectedUsers.id;
     }
 
+    if (this.selectedTeam) {
+      this.data.team_id = this.selectedTeam.id;
+    }
+
     if (this.data.observation) {
       this.data.observation = this.data.observation.replace(/[\s\n]/g, ' ');
     }
+
+    if (this.data.order_date) {
+      this.data.order_date = new FormControl(moment(this.data.order_date).format('YYYY[-]MM[-]DD HH:mm:ss')).value;
+    }
+
+    if (this.data.required_date) {
+      this.data.required_date = new FormControl(moment(this.data.required_date).format('YYYY[-]MM[-]DD HH:mm:ss')).value;
+    }
+
+    if (this.data.vencimiento_date) {
+      this.data.vencimiento_date = new FormControl(moment(this.data.vencimiento_date).format('YYYY[-]MM[-]DD HH:mm:ss')).value;
+    }
+
+
 
     for (let i = 0; i < this.atributo.length; i++) {
 
@@ -203,11 +240,12 @@ export class AddComponent implements OnInit, OnDestroy {
         }
 
       }
-
     }
+
 
     const objPila = {pila: pila};
     const obj = Object.assign(this.data, objPila);
+
 
     this.dataService.add(this.token.token, obj, this.category_id).subscribe(
       response => {
@@ -321,6 +359,7 @@ export class AddComponent implements OnInit, OnDestroy {
                 this.project_id = this.services['project']['id'];
                  if (this.project_id > 0) {
                    this.loadUserProject(this.project_id);
+                   this.getEquipos(this.project_id);
                  }
 
               }
@@ -379,7 +418,6 @@ export class AddComponent implements OnInit, OnDestroy {
               if (response.status === 'success') {
                 this.results = response.datos;
                 this.isLoading = false;
-                // console.log(response.datos);
               }
               });
       } else {

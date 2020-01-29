@@ -9,6 +9,7 @@
 .environments/*
 /src/environments
 /src/environments/*
+/environments
 
 # dependencies
 /node_modules

@@ -150,3 +150,7 @@ border-top-width: 0px !important;
   font-family: SegoeUI-SemiLight-final,"Segoe UI Semilight",SegoeUI-Regular-final,"Segoe UI","Segoe UI Web (West European)",Segoe,-apple-system,BlinkMacSystemFont,Roboto,"Helvetica Neue",Tahoma,Helvetica,Arial,sans-serif;
   line-height: 195%;
 }
+.mat-button {
+  outline: 0;
+  border: none;
+}

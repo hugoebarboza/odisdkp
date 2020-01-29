@@ -1,4 +1,5 @@
 export { AddDocComponent } from './dialog/add-doc/add-doc.component';
+export { AddTeamComponent } from 'src/app/pages/team/dialog/add-team/add-team.component';
 export { DropdownNotificationComponent } from './dropdown-notification/dropdown-notification.component';
 export { EditServiceComponent } from './dialog/editservice/editservice.component';
 export { FilelistComponent } from '../../components/dialog/filelist/filelist.component';
@@ -23,7 +24,7 @@ export { ProgressSpinnerComponent } from './progress-spinner/progress-spinner.co
 export { ReportkpiComponent } from './firebase/reportkpi/reportkpi.component';
 export { ShowComponent } from 'src/app/components/dialog/show/show.component';
 export { TagUserComponent } from './taguser/taguser.component';
-export { AddTeamComponent } from 'src/app/pages/usuarios/dialog/add-team/add-team.component';
+export { TagUserDbComponent } from './tag-user-db/tag-user-db.component';
 export { UploaderComponent  } from './uploader/uploader.component';
 export { UploadTaskComponent } from './upload-task/upload-task.component';
 export { ViewOrderTimeSpentComponent } from '../../components/views/viewordertimespent/viewordertimespent.component';

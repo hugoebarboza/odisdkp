@@ -47,6 +47,7 @@ import { AddZonaComponent } from './components/dialog/add-zona/add-zona.componen
 import { AlimentadorListComponent } from './components/dialog/alimentador-list/alimentador-list.component';
 import { ClavelecturaListComponent } from './components/dialog/clavelectura-list/clavelectura-list.component';
 import { ClientOrderComponent } from './components/client-order/client-order.component';
+import { ClonarOtComponent } from './components/dialog/clonar-ot/clonar-ot.component';
 import { ColorListComponent } from './components/dialog/color-list/color-list.component';
 import { ConstanteListComponent } from './components/dialog/constante-list/constante-list.component';
 import { CargaComponent } from '../../components/dialog/carga/carga.component';
@@ -207,6 +208,7 @@ registerLocaleData(localeEs);
     CargaComponent,
     ClavelecturaListComponent,
     ClientOrderComponent,
+    ClonarOtComponent,
     ConstanteListComponent,
     ColorListComponent,
     CsvComponent,
@@ -289,6 +291,7 @@ registerLocaleData(localeEs);
     AddTarifaComponent,
     AddZonaComponent,
     ClientOrderComponent,
+    ClonarOtComponent,
     CsvComponent,
     CsvCustomerComponentComponent,
     CsvAddressComponent,

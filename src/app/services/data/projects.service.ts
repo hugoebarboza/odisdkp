@@ -755,42 +755,33 @@ export class ProjectsService {
 	}	
 
 
-	deleteServiceValue(token: any, id:number, data_id:number): Observable<any>{
-		if (!token){
+    deleteServiceValue(token: any, id:number, data_id:number): Observable<any>{
+     if (!token){
+        return;
+     }
+
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        return this._http.delete(this.url+'service/'+id+'/value/'+data_id, {headers: headers}).map( (resp: any) => resp);				
+    }	
+
+
+    deleteServiceTypeValue(token: any, id:number, data_id:number): Observable<any>{
+        if (!token){
 			return;
 		}
 
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.delete(this.url+'service/'+id+'/value/'+data_id, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });				
-	}	
+        let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        return this._http.delete(this.url+'servicetype/'+id+'/value/'+data_id, {headers: headers}).map( (resp: any) => resp);				
+    }	
 
+    deleteColor(token: any, id:number): Observable<any>{
+      if (!token){
+        return;
+      }
 
-	deleteServiceTypeValue(token: any, id:number, data_id:number): Observable<any>{
-		if (!token){
-			return;
-		}
-
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.delete(this.url+'servicetype/'+id+'/value/'+data_id, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });				
-	}	
-
-	deleteColor(token: any, id:number): Observable<any>{
-		if (!token){
-			return;
-		}
-
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.delete(this.url+'colors/'+id, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });				
-	}	
+      let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return this._http.delete(this.url+'colors/'+id, {headers: headers}).map( (resp: any) => resp);				
+    }	
 
 
   	getQuery( query:string, token:any ): Observable<any>{
@@ -801,9 +792,7 @@ export class ProjectsService {
 	const headers = new HttpHeaders({
 		'Content-Type': 'application/json',
 	});
-		return this._http.get(url, {headers: headers}).map((res: any) => {
-      			return res;
-		});		
+		return this._http.get(url, {headers: headers}).map((res: any) => res );		
 	}
 
 	getColor(token:any): Observable<any>{
@@ -1013,21 +1002,25 @@ export class ProjectsService {
 	}
 
 
-    getProjectOrderData(query:string, token:any) {
+    async getProjectOrderData(query:string, token:any) {
 		if(!token){
 			return;
 		}
 	    const url = this.url;
 	    const href = url+query;
 	    const requestUrl = href;
-	    //console.log(requestUrl);
+	    // console.log(requestUrl);
 	    const headers = new HttpHeaders({'Content-Type': 'application/json'});
 
-	    return new Promise((resolve, reject) => {
-	      if (token == '')
-	          reject();
-	      if (query == '')
-	          reject();
+	    return await new Promise((resolve, reject) => {
+	      if (token == '') {
+			reject();
+		  }
+	          
+	      if (query == '') {
+			reject();
+		  }
+	          
 	      resolve(this._http.get<Order>(requestUrl, {headers: headers}));
 	      })
     }
@@ -1049,14 +1042,14 @@ export class ProjectsService {
 		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');		
 		this._http.post(this.url+'project'+'/'+id+'/'+'service/'+serviceid+'/'+'servicedetail/'+servicedetailid+'/status/'+label, params, {headers: headers}).subscribe(
 				_data => { 
-						//console.log(data);
-						//this.dialogData = order;    		      
-						//this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});			      
+						// console.log(data);
+						// this.dialogData = order;
+						// this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
 						},
 						(err: HttpErrorResponse) => {	
 						this.error = err.error.message;
-						//console.log(err.error.message);
-						//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+						// console.log(err.error.message);
+						// this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 					});
 	}
 
@@ -1071,14 +1064,14 @@ export class ProjectsService {
 
 		this._http.post(this.url+'project'+'/'+id+'/'+'service'+'/'+serviceid+'/'+'statuskpi'+'/'+label, params, {headers: headers}).subscribe(
 				_data => { 
-						//console.log(data);
-						//this.dialogData = order;    		      
-						//this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});			      
+						// console.log(data);
+						// this.dialogData = order;    		      
+						// this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});			      
 						},
 						(err: HttpErrorResponse) => {	
 						this.error = err.error.message;
-						//console.log(err.error.message);
-						//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+						// console.log(err.error.message);
+						// this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 					});
 	}
 

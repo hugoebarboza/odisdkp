@@ -242,6 +242,7 @@ export class LoginComponent implements OnInit, OnDestroy {
 
     const response: any = await this.getProyectos(identity, token);
     if (response && response.datos) {
+      console.log(response);
       const proyectos = response.datos;
       const key = 'proyectos';
       this._userService.saveStorage(key, proyectos);
@@ -267,7 +268,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-    return this._userService.getDptoProyectos(token.token, identity.dpto);
+    return await this._userService.getDptoProyectos(token.token, identity.dpto);
   }
 
 
@@ -276,7 +277,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       return;
     }
 
-    return this._userService.getPerfilUser(token.token, id);
+    return await this._userService.getPerfilUser(token.token, id);
   }
 
 

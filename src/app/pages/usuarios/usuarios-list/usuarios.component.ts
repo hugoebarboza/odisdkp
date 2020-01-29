@@ -8,7 +8,7 @@ import Swal from 'sweetalert2';
 
 // DIALOG
 import { AddUserComponent } from '../dialog/adduser/adduser.component';
-import { AddTeamComponent } from '../dialog/add-team/add-team.component';
+import { AddTeamComponent } from '../../team/dialog/add-team/add-team.component';
 import { EditUserComponent } from '../dialog/edituser/edituser.component';
 import { ModalUploadImageComponent } from '../dialog/modaluploadimage/modaluploadimage.component';
 import { ShowProfileSecurityComponent } from '../dialog/showprofilesecurity/showprofilesecurity.component';

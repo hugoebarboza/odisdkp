@@ -1,0 +1,141 @@
+.container {
+    background: transparent;  
+    display: flex;
+    flex-direction: column;
+    min-width: 750px;
+  }
+  
+  .container > * {
+    width: 100%;
+  }
+  
+  .form {
+    display: flex;
+    padding-top: 7px;
+  }
+  
+  .full-width {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 16px;
+    flex-grow: 1;
+  }
+  .mat-toolbar {
+      margin: -24px;
+      margin-bottom: 0;
+      width: auto;
+  }
+  
+  .mat-toolbar-row, .mat-toolbar-single-row {
+      height: 70px !important;
+  }
+  .mat-icon {
+    padding: 0 7px;
+  }
+  .mat-spacer {
+    flex: 1 1 auto;
+  }
+  .ng-valid[required], .ng-valid.required  {
+    border-left: 5px solid #42A948; /* green */
+  }
+  .example-radio-group {
+    display: inline-flex;
+    flex-direction: column;
+  }
+  
+  .example-radio-button {
+    margin: 5px;
+  }
+  .example-selected-value {
+    margin: 15px 0;
+  }
+  
+  
+  
+  .btnsave {
+    background-color: rgba( 48,  63, 159);
+    color: white;
+    border-radius: 7px 7px 7px 7px;
+    font-size: 16px;
+  }
+  
+  .btnsave:not([disabled]):hover {
+    background-color: rgba(107, 103, 91, 0.96);
+    color: white;
+    transition: 0.3s;
+  }
+  
+  .btnsave[disabled] {
+    color : rgb(187, 187, 187);
+    background-color: rgba(230, 230, 229, 0.96);
+  }
+  
+  .btnclose {
+    color: rgb(49, 46, 46);
+    background-color: rgba(224, 224, 224, 0.96);      
+    border-radius: 7px 7px 7px 7px;
+    font-size: 16px;
+  }
+  
+  .btnclose:not([disabled]):hover {
+    background-color: rgba(193, 193, 193, 0.96);
+    color: rgba(44, 65, 164, 0.96);  
+    transition: 0.3s;
+  }
+  
+  .mat-button-toggle {
+      background-color: rgba(193, 193, 193, 0.96);
+      color: rgba(44, 65, 164, 0.96);  
+  }
+  
+  .mat-button-toggle-checked {
+      background-color: rgba(193, 193, 193, 0.96);
+      color: rgba(44, 65, 164, 0.96);  
+  }
+  hr.size {
+    border: 3px solid rgba(44, 65, 164, 0.96);
+    border-radius: 3px;
+  }
+  .jeEmY {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.857143em;
+    font-style: inherit;
+    color: rgb(94, 108, 132);
+    font-weight: 600;
+    margin-top: 20px;
+    text-transform: uppercase;
+    line-height: 12px;
+    overflow: hidden;
+  }
+  ::ng-deep .mat-status .mat-form-field-wrapper {
+    padding-bottom: 0px !important;
+  }
+  
+  ::ng-deep .mat-status .mat-form-field-flex .mat-form-field-infix {
+  border-top-width: 0px !important;
+  }
+  
+  .jeEmYB {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.857143em;
+    font-style: inherit;
+    color: #313131;
+    font-weight: 600;
+    margin-top: 7px;
+    text-transform: uppercase;
+    line-height: 12px;
+    overflow: hidden;
+  }
+  .infocliente {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    background-color: rgb(244, 245, 247);
+    border-radius: 5px;
+    padding: 10px;
+    margin-left: 0px;
+    margin-right: 0px;
+  }

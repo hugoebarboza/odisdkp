@@ -72,6 +72,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   zona: Array<Object> = [];
   mercado: Array<Object> = [];
 
+  equipos: Array<Object> = [];
+
   set: Array<Object> = [];
   alimentador: Array<Object> = [];
   sed: Array<Object> = [];
@@ -112,7 +114,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   displayedColumns: string[] = ['cc_number', 'nombrecc', 'ruta', 'calle', 'numero',
   'block', 'depto', 'region', 'provincia', 'comuna', 'latitud', 'longitud', 'medidor',
   'modelo_medidor', 'transformador', 'tarifa', 'constante', 'giro', 'zona', 'sector', 'mercado', 'observacion',
-  'order_number', 'tipo_servicio', 'asignado_a', 'required_date', 'observation', 'set', 'alimentador', 'sed', 'clave_lectura', 'llave_circuito', 'fase', 'factor', 'fecha_ultima_lectura', 'fecha_ultima_deteccion', 'estatus'];
+  'order_number', 'tipo_servicio', 'asignado_a', 'equipo', 'required_date', 'observation', 'set', 'alimentador', 'sed', 'clave_lectura', 'llave_circuito', 'fase', 'factor', 'fecha_ultima_lectura', 'fecha_ultima_deteccion', 'estatus'];
 
   dataSource = new MatTableDataSource();
   dataSourceClientes = new MatTableDataSource();
@@ -358,6 +360,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             let servicetype_id: Number = 0;
             let asignado_a: String = '' + that.arrayCarga[ii]['asignado_a'];
             let assigned_to: Number = 0;
+            let equipo: String = '' + that.arrayCarga[ii]['equipo'];
+            let team_id: Number = 0;
             let required_date: String = '' + that.arrayCarga[ii]['required_date'];
             let observation: String = '' + that.arrayCarga[ii]['observation'];
             let lectura: string = '' + that.arrayCarga[ii]['lectura'];
@@ -860,6 +864,19 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               }
             }
 
+            if (equipo === 'undefined' || equipo.trim().length === 0) {
+              equipo = '';
+              } else {
+                equipo = equipo.trim();
+                const response: number = that.validarSelect(equipo, that.equipos);
+                if (response > 0) {
+                  team_id = response;
+                } else {
+                  banderaJson = true;
+                  concatError = concatError + 'Equipo; ';
+                }
+            }
+
             if (asignado_a === 'undefined' || asignado_a.trim().length === 0) {
               asignado_a = '';
             } else {
@@ -952,6 +969,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'servicetype_id': servicetype_id,
               'asignado_a': asignado_a,
               'assigned_to': assigned_to,
+              'equipo': equipo,
+              'team_id': team_id,
               'required_date': required_date,
               'observation': observation,
               'vencimiento_date': '',
@@ -1126,6 +1145,22 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+  getEquipos(id) {
+    this.dataService.getEquipos(id, this.token.token).then(
+      (res: any) => {
+        res.subscribe(
+          (some) => {
+            // console.log(some);
+            this.equipos = some['datos'];
+          },
+          (error) => {
+            console.log(<any>error);
+          }
+        );
+      }
+    );
+  }
+
   getTipoServicio(id) {
     this.dataService.getTipoServicio(id, this.token.token).then(
       (res: any) => {
@@ -1142,7 +1177,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
   getInspectores() {
-    this.dataService.getInspectores(this.project_id, this.token.token).then(
+    this.dataService.getInspectores(this.project_id, this.token.token, this.identity.role).then(
       (res: any) => {
         res.subscribe(
           (some) => {
@@ -1247,6 +1282,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                   this.getRegionProvinciaComuna(this.services['project']['country_id']);
                   this.getSetAlimentadorSed(this.project_id);
                   this.getClaveLectura(this.project_id);
+                  this.getEquipos(this.project_id);
                 }
 
               }

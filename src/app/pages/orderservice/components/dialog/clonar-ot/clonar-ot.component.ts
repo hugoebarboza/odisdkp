@@ -1,9 +1,11 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
+
 import { Router } from '@angular/router';
-import { FormControl, Validators, NgForm} from '@angular/forms';
+import { FormControl, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 
+import Swal from 'sweetalert2';
 // FIREBASE
 
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -19,22 +21,20 @@ import { CdfService, OrderserviceService, ProjectsService, UserService, Customer
 import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
 
 @Component({
-  selector: 'app-edit',
-  templateUrl: './edit.component.html',
-  styleUrls: ['./edit.component.css'],
-  providers: [
-  ],
+  selector: 'app-clonar-ot',
+  templateUrl: './clonar-ot.component.html',
+  styleUrls: ['./clonar-ot.component.css']
 })
-export class EditComponent implements OnInit, OnDestroy {
+export class ClonarOtComponent implements OnInit, OnDestroy  {
 
   active: Boolean = true;
   title: string;
   identity;
   created: FormControl;
   destinatario = [];
-  kpi = 0;
-  serviceid = 0;
-  servicetype_id = 0;
+  kpi: Number = 0;
+  serviceid: Number = 0;
+  servicetype_id: Number = 0;
   public token;
   public services: Service[] = [];
   public project: string;
@@ -91,14 +91,14 @@ export class EditComponent implements OnInit, OnDestroy {
     private _route: Router,
     private _userService: UserService,
     private _customerService: CustomerService,
-    public dialogRef: MatDialogRef<EditComponent>,
+    public dialogRef: MatDialogRef<ClonarOtComponent>,
     private firebaseAuth: AngularFireAuth,
     @Inject(MAT_DIALOG_DATA) public infodata: any
 
   ) {
 
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
-    this.title = 'Editar Orden N.';
+    this.title = 'Clonar Orden N.';
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this._userService.handleAuthentication(this.identity, this.token);
@@ -154,19 +154,14 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // console.log('La página se va a cerrar');
-    if (this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
 
-  confirmEdit(form: NgForm): void {
-    const editform = form;
-    let j = 0;
-    this.myArray = editform.value;
+  confirmClonar(): void {
 
-    // console.log(this.myArray);
-    // console.log(this.orderatributo);
-    // console.log(this.atributo);
+    let j = 0;
 
     if (this.data.observation) {
       this.data.observation = this.data.observation.replace(/[\s\n]/g, ' ');
@@ -247,24 +242,31 @@ export class EditComponent implements OnInit, OnDestroy {
 
     }
 
-    const objPila = {pila: this.pila };
+    const objPila = {
+      pila: this.pila,
+      duplicar_ot: true
+    };
     const obj = Object.assign(this.data, objPila);
     // console.log(obj);
-    this._orderService.update(this.token.token, this.infodata['order_id'], obj, this.category_id);
-
-    /*
-    for (var propiedad in this.pila) {
-      console.log(propiedad);
-      console.log(this.pila[propiedad]);
-    }*/
-
-    // console.log(obj);
-    // console.log(this.data);
-    // console.log(this.pila);
-   // this.dataService.update(this.token.token, this.infodata['order_id'], editform.value, this.category_id);
+    this._orderService.add(this.token.token, obj, this.category_id).subscribe(
+      response => {
+        if (!response) {
+          this.isOrderLoading = false;
+          return;
+        }
+        if (response.status === 'success') {
+          Swal.fire('Clonada Orden de Trabajo: ', this.data.order_number + ' exitosamente.', 'success' );
+        } else {
+          Swal.fire('N. Orden de Trabajo: ', this.data.order_number + ' no fue posible clonarla.' , 'error');
+        }
+      },
+      error => {
+        console.log(<any>error);
+        Swal.fire('No fue posible procesar su solicitud', error.error.message, 'error');
+      }
+    );
 
    if (this.destinatario.length > 0)  {
-    // SEND CDF MESSAGING AND NOTIFICATION
     this.sendCdf(this.destinatario);
    }
   }
@@ -275,8 +277,7 @@ export class EditComponent implements OnInit, OnDestroy {
     this.isOrderLoading = true;
     this.subscription = this._orderService.getAtributoServiceType(this.token.token, event).subscribe(
     response => {
-      // console.log('loadAtributo');
-      // console.log(response);
+
               if (!response) {
                 this.isOrderLoading = false;
                 return;

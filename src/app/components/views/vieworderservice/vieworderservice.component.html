@@ -818,14 +818,25 @@
 
         </mat-header-cell>
         <mat-cell *matCellDef="let order; let i = index" >
-          <button mat-icon-button color="primary" *ngIf="_userService.isRole(4)" (click)="startEdit(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.assigned_to, order.order_date, order.required_date, order.vencimiento_date, order.leido_por, order.observation, order.create_at)"
-          matTooltip="Editar orden."
-          [matTooltipPosition]="positiondatasourceaction.value"
-          
-          >
-            <mat-icon class="material-icons md-color" aria-label="Edit" *ngIf="i != indexitem">edit</mat-icon>          
-            <mat-icon aria-label="Edit" *ngIf="i == indexitem">edit</mat-icon>          
+
+
+
+          <button mat-icon-button [matMenuTriggerFor]="menueditorder"  *ngIf="_userService.isRole(4)"
+          matTooltip="Seleccione acción a tomar.">
+            <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">edit</mat-icon>
+            <mat-icon aria-label="launch" *ngIf="i == indexitem">edit</mat-icon>
           </button>
+
+        <mat-menu #menueditorder="matMenu" [overlapTrigger]="false">
+          <button mat-menu-item  *ngIf="_userService.isRole(4)" (click)="startEdit(order.order_id, order.category_id)"
+              matTooltip="Editar orden." [matTooltipPosition]="positiondatasourceaction.value">
+              <span>Editar orden</span>
+          </button>
+          <button mat-menu-item (click)="startClonar(order.order_id, order.category_id)" matTooltip="Clonar orden.">
+            <span>Clonar orden</span>
+          </button>
+        </mat-menu> 
+
 
           <button mat-icon-button color="warn" *ngIf="_userService.isRole(5)" (click)="deleteItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id,  order.estatus, order.order_date, order.required_date, order.observation, order.create_at, order.project_name, order.service_name, order.servicetype )"
           matTooltip="Eliminar orden."

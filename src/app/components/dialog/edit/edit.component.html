@@ -1,5 +1,5 @@
 <mat-toolbar color="primary">
-     <h3>{{title}} {{data.order_number}}</h3>            
+     <h3 *ngIf="data && data.order_number">{{title}} {{data.order_number}}</h3>            
      <span class="mat-spacer"></span>
      <button mat-icon-button (click)="onNoClick()" tabindex="-1">
      <mat-icon class="mat-icon">close</mat-icon>       
@@ -20,7 +20,7 @@
     </div>-->
 
  
-  <form class="mat-dialog-content" #formControl="ngForm"  novalidate="novalidate" >
+  <form class="mat-dialog-content" #formControl="ngForm"  novalidate="novalidate" [hidden]="loading">
 
       <div class="row">
           <div class="col-12">
@@ -58,8 +58,8 @@
                   <input matInput [(ngModel)]="data.cc_number" class="form-control" placeholder="Num. Cliente" [matAutocomplete]="auto" (keyup)="searchCustomer(cc_number.value)" name="cc_number" #cc_number required>
                   <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>                        
                   <mat-autocomplete #auto="matAutocomplete" >
-                    <mat-option *ngFor="let result of results" [value]="result.cc_number" >        
-                      <span>{{result.cc_number}}</span>       
+                    <mat-option *ngFor="let result of results" [value]="result.cc_number" >           
+                      <span>{{result.cc_number}} {{result.nombrecc}}</span>   
                     </mat-option>
                   </mat-autocomplete>
                 </mat-form-field>
@@ -148,7 +148,7 @@
                        
               <div class="form" *ngIf="servicetype_id && data.servicetype_id > 0 && servicetype && servicetype.length > 0">
               <mat-form-field>
-                <mat-select class="form-control" placeholder="Tipo de Servicio" [(ngModel)]="data.servicetype_id" name="servicetype_id" required>  
+                <mat-select class="form-control" placeholder="Tipo de Servicio" [(ngModel)]="data.servicetype_id" name="servicetype_id" (selectionChange)="loadAtributo($event.value)" required>  
             
                 <mat-option *ngFor="let servicestype of servicetype" [value]="servicestype.id">
                   {{servicestype.name}}
@@ -174,7 +174,7 @@
             
             
               <div >
-              <h2 class="jeEmY">Responsable</h2>
+              <h2 class="jeEmY" style="margin-top: 0px !important;">Responsable</h2>
               <ng-select [items]="users"
                          bindLabel="usuario"
                          bindValue="id"
@@ -183,6 +183,17 @@
                          [(ngModel)]="data.assigned_to">
               </ng-select>
               </div>
+
+              <div >
+                <h2 class="jeEmY">Equipo</h2>
+                <ng-select [items]="equipos"
+                           bindLabel="descripcion"
+                           name="equipos"
+                           bindValue="id"
+                           placeholder="Asignar orden"
+                           [(ngModel)]="data.team_id">
+                </ng-select>
+                </div>
               
               <div *ngIf="userFirebase">
                   <h2 class="jeEmY">Etiquetados</h2>
@@ -276,7 +287,7 @@
 
       <div class="row">
           <div class="col-12">
-              <div class="animated fadeIn" *ngIf="this.orderatributo.length > 0 && this.atributo.length > 0">   
+              <div class="animated fadeIn" *ngIf="orderatributo.length > 0 && atributo.length > 0">   
                   <div *ngFor="let detailatributo of atributo">
               
                   <div class="form" *ngIf="detailatributo.type == 'label' ">
@@ -451,7 +462,6 @@
                     </div>
                   </div>
               </div>
-              
           </div>
       </div>      
 

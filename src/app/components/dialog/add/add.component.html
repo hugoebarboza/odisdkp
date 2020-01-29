@@ -36,7 +36,7 @@
                        </button>
                      <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
                    </mat-form-field>
-                   <button mat-button (click)="onGenerarOrder()" tabindex="-1">Generar</button>
+                   <button mat-button (click)="onGenerarOrder()" tabindex="-1" style="outline: 0;">Generar</button>
               </div>
 
               <div class="form" *ngIf="data && category_id && token.token">
@@ -53,7 +53,7 @@
                         <mat-spinner style="margin:0 auto;" mode="indeterminate" [strokeWidth]="4" diameter="50"></mat-spinner>
                       </mat-option>          
                       <mat-option *ngFor="let result of results" [(value)]="result.cc_number" >        
-                        <span>{{result.cc_number}}</span>       
+                        <span>{{result.cc_number}} {{result.nombrecc}}</span>       
                       </mat-option>
                     </mat-autocomplete>
                   </mat-form-field>
@@ -123,11 +123,9 @@
                   <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
                   </mat-form-field>
                 </div>
-              
-              
-              
+            
                 <div >
-                <h2 class="jeEmY">Responsable</h2>
+                <h2 class="jeEmY" style="margin-top: 0px !important;">Responsable</h2>
                 <ng-select [items]="users"
                            bindLabel="usuario"
                            name="assigned_to"
@@ -135,6 +133,15 @@
                            [(ngModel)]="selectedUsers">
                 </ng-select>
                 </div>
+                <div >
+                  <h2 class="jeEmY">Equipo</h2>
+                  <ng-select [items]="equipos"
+                             bindLabel="descripcion"
+                             name="equipos"
+                             placeholder="Asignar orden"
+                             [(ngModel)]="selectedTeam">
+                  </ng-select>
+                  </div>
 
                 <div *ngIf="userFirebase">
                 <h2 class="jeEmY">Etiquetados</h2>
@@ -196,14 +203,6 @@
       </div>
       </div>
 
-      <div class="row" *ngIf="isOrderLoading && data.servicetype_id > 0">
-      <br>        
-          <div class="col-12">
-              <div class="example-loading-shade" >
-                  <app-loading *ngIf="isOrderLoading"></app-loading>  
-                </div>              
-          </div>
-      </div>
 
       <br>
       <div class="row" *ngIf="data.servicetype_id > 0 && atributo.length > 0">      
@@ -219,6 +218,19 @@
                 </div>              
           </div>
       </div>
+
+      <div class="row">
+        <div class="col-12">
+            <div class="container" *ngIf="isOrderLoading && data.servicetype_id > 0">
+                <div class="row justify-content-md-center">
+                  <div class="col col-lg-2">
+                      <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isOrderLoading" ></mat-spinner>
+                  </div>
+                </div>
+            </div>              
+        </div>
+    </div>      
+
       
       <div class="row" *ngIf="show &&  atributo.length > 0">      
           <div class="col-12">

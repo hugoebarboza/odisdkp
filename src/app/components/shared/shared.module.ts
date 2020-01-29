@@ -45,6 +45,7 @@ import {
     ReportkpiComponent,
     ShowComponent,
     TagUserComponent,
+    TagUserDbComponent,
     UploaderComponent,
     UploadTaskComponent,
     ViewOrderTimeSpentComponent,
@@ -52,6 +53,7 @@ import {
 
 // Pipes
 import { PipesModule } from '../../pipes/pipes.module';
+
 
 
 
@@ -97,9 +99,11 @@ import { PipesModule } from '../../pipes/pipes.module';
         ReportkpiComponent,
         ShowComponent,
         TagUserComponent,
+        TagUserDbComponent,
         UploaderComponent,
         UploadTaskComponent,
         ViewOrderTimeSpentComponent,
+        TagUserDbComponent,
 
     ],
     exports: [
@@ -132,6 +136,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         ReportkpiComponent,
         ShowComponent,
         TagUserComponent,
+        TagUserDbComponent,
         UploaderComponent,
         UploadTaskComponent,
         ViewOrderTimeSpentComponent

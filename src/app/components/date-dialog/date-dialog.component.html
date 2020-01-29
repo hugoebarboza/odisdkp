@@ -4,7 +4,7 @@
       <div class="mat-app-background basic-container">
         <mat-form-field>
           <input matInput [matDatepicker]="pickerEnd" [(ngModel)]="data.dateend" name="data.dateend" cdkFocusInitial placeholder="Fecha vencimiento"
-          (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)">
+          (dateInput)="addEvent('input', $event)" (dateChange)="addEvent('change', $event)" [min]="mindate">
           <mat-datepicker-toggle matSuffix [for]="pickerEnd"></mat-datepicker-toggle>
           <mat-datepicker #pickerEnd></mat-datepicker>
         </mat-form-field>

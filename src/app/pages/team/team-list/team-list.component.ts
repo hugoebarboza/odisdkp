@@ -7,7 +7,7 @@ import { FormControl } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 // DIALOG
-import { AddTeamComponent } from '../../usuarios/dialog/add-team/add-team.component';
+import { AddTeamComponent } from '../dialog/add-team/add-team.component';
 import { AddUserTeamComponent } from '../dialog/add-user-team/add-user-team.component';
 import { EditTeamComponent } from '../dialog/edit-team/edit-team.component';
 
@@ -190,7 +190,7 @@ export class TeamListComponent implements OnInit, OnDestroy {
               }
             },
               error => {
-                Swal.fire('Importante', error, 'error');
+                Swal.fire('Importante', error.error.mensaje, 'error');
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 this.cd.markForCheck();

@@ -56,7 +56,8 @@
     <div class="row" *ngIf="userFirebase">    
         <div class="col-12" >
             <h2 class="jeEmY">Miembros</h2>
-            <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>
+            <app-tag-user-db [userFirebase]="userFirebase" [id]="proyecto.id" (tagUser)="taguser($event)" *ngIf="proyecto.id > 0"> </app-tag-user-db>
+            <!--- <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser> -->
         </div>
     </div>                                                                      
     <br>

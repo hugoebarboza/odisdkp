@@ -8,6 +8,7 @@ import { MatDialogRef, MAT_DIALOG_DATA} from '@angular/material';
 })
 export class DateDialogComponent implements OnInit {
   showTime = false;
+  mindate = new Date();
 
   constructor(
     public dialogRef: MatDialogRef<DateDialogComponent>,
