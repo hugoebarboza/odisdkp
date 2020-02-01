@@ -107,6 +107,7 @@ export class MenuComponent implements OnInit, OnDestroy {
           this.identity = objNgrx.identificacion;
         }
       });
+      // console.log(this.proyectos);
   }
 
 
@@ -124,7 +125,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   refresh() {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.subscription = this._proyectoService.getProyectos(this.token.token, this.identity.dpto).subscribe(
+
+    this.subscription = this._proyectoService.getUserProjectService(this.token.token, this.identity.sub).subscribe(
       response => {
           if (response.status === 'success') {
             this.proyectos = response.datos;

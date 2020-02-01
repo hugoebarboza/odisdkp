@@ -9,12 +9,12 @@ import { Component, OnInit } from '@angular/core';
 export class NotfoundComponent implements OnInit {
 
   constructor(
-		// private _route: ActivatedRoute,
-		// private _router: Router,		
-  	) { }
+    // private _route: ActivatedRoute,
+    // private _router: Router,
+  ) { }
 
   ngOnInit() {
-  	console.log('notfound.component cargado correctamente');
+    // console.log('notfound.component cargado correctamente');
   }
 
 }

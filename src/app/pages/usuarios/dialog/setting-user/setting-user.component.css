@@ -49,4 +49,33 @@ input[type=password] {
   outline: 0;
   border: none;
 }
+.btnsave {
+  background-color: rgba( 48,  63, 159);
+  color: white;
+  border-radius: 7px 7px 7px 7px;
+  font-size: 16px;  
+}
 
+.btnsave:not([disabled]):hover {
+  background-color: rgba(107, 103, 91, 0.96);
+  color: white;
+  transition: 0.3s;
+}
+
+.btnsave[disabled] {
+  color : rgb(187, 187, 187);
+  background-color: rgba(230, 230, 229, 0.96);
+}
+
+.btnclose {
+  color: rgb(49, 46, 46);
+  background-color: rgba(224, 224, 224, 0.96);      
+  border-radius: 7px 7px 7px 7px;
+  font-size: 16px;
+}
+
+.btnclose:not([disabled]):hover {
+  background-color: rgba(193, 193, 193, 0.96);
+  color: rgba(44, 65, 164, 0.96);  
+  transition: 0.3s;
+}

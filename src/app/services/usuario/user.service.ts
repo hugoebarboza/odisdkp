@@ -333,6 +333,28 @@ export class UserService  {
     }
 
 
+    async getUserProjectService(token: any, id: number) {
+      if (!token) {
+       return;
+      }
+
+      const href = this.url + 'user/' + id + '/projectservice';
+      const requestUrl = href;
+      const headers = new HttpHeaders({'Content-Type': 'application/json', });
+
+      if (!requestUrl) {
+         return;
+      }
+
+      return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
+      .then((resp) => {
+          if (resp) {
+              return resp;
+          }
+      })
+      .catch((error) => { throw new Error('User does not have any Projects!' + error); });
+  }
+
     getIdaccount() {
         const idaccount = JSON.parse(localStorage.getItem('idaccount'));
         if (idaccount) {

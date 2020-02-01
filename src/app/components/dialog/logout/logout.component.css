@@ -7,4 +7,9 @@
 .box .selected {
     align-self: center;
 }
+.mat-raised-button {
+  outline: 0;
+  border: none;
+}
+
      

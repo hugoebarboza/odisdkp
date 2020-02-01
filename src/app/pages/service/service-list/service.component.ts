@@ -126,7 +126,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
         this.project = this.filter();
         if (this.project !== 'Undefined' && this.project !== null && this.project) {
           this.project_name = this.project.project_name;
-          this.subscription = this._proyectoService.getProjectServiceDetail(this.token.token, this.id).subscribe(
+          this.subscription = this._proyectoService.getUserProjectServiceDetail(this.token.token, this.identity.sub, this.id).subscribe(
             response => {
                 if (response.status === 'success') {
                   this.services = response.datos;
@@ -409,7 +409,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
       this.services = [];
       this.datasource = null;
       this.isLoadingRefresh = true;
-      this.subscription = this._proyectoService.getProjectServiceDetail(this.token.token, this.id).subscribe(
+      this.subscription = this._proyectoService.getUserProjectServiceDetail(this.token.token, this.identity.sub, this.id).subscribe(
         response => {
             if (response.status === 'success') {
               this.services = response.datos;

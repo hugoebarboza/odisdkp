@@ -22,6 +22,7 @@ import { AddUserComponent } from './dialog/adduser/adduser.component';
 // import { AddTeamComponent } from './dialog/add-team/add-team.component';
 import { EditUserComponent } from './dialog/edituser/edituser.component';
 import { ModalUploadImageComponent } from './dialog/modaluploadimage/modaluploadimage.component';
+import { SettingUserComponent } from './dialog/setting-user/setting-user.component';
 import { ShowProfileSecurityComponent } from './dialog/showprofilesecurity/showprofilesecurity.component';
 
 // ROUTING
@@ -30,6 +31,7 @@ import { UsuariosRoutingModule } from './usuarios.routing';
 
 // SERVICES
 import { ServiceModule } from 'src/app/services/service.module';
+
 
 
 @NgModule({
@@ -49,6 +51,7 @@ import { ServiceModule } from 'src/app/services/service.module';
     // AddTeamComponent,
     EditUserComponent,
     ModalUploadImageComponent,
+    SettingUserComponent,
     ShowProfileSecurityComponent,
     UsuariosComponent,
     UsuariosDetailComponent,
@@ -59,6 +62,7 @@ import { ServiceModule } from 'src/app/services/service.module';
     // AddTeamComponent,
     EditUserComponent,
     ModalUploadImageComponent,
+    SettingUserComponent,
     ShowProfileSecurityComponent,
   ],
   providers: [

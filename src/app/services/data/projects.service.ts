@@ -767,8 +767,8 @@ export class ProjectsService {
 
     deleteServiceTypeValue(token: any, id:number, data_id:number): Observable<any>{
         if (!token){
-			return;
-		}
+          return;
+        }
 
         let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         return this._http.delete(this.url+'servicetype/'+id+'/value/'+data_id, {headers: headers}).map( (resp: any) => resp);				
@@ -784,54 +784,51 @@ export class ProjectsService {
     }	
 
 
-  	getQuery( query:string, token:any ): Observable<any>{
-	if(!token){
-		return;
-	}
-	const url = this.url+query;
-	const headers = new HttpHeaders({
-		'Content-Type': 'application/json',
-	});
-		return this._http.get(url, {headers: headers}).map((res: any) => res );		
-	}
+    getQuery( query:string, token:any ): Observable<any>{
+    if(!token){
+      return;
+    }
+    const url = this.url+query;
+    const headers = new HttpHeaders({'Content-Type': 'application/json',});
+       return this._http.get(url, {headers: headers}).map((res: any) => res );		
+    }
 
-	getColor(token:any): Observable<any>{
-		if(!token){
-			return;
-		}
-		return this.getQuery('colors', token);
-	}
+    getColor(token:any): Observable<any>{
+        if(!token){
+           return;
+        }
+        return this.getQuery('colors', token);
+    }
 
+    getConstante(token:any, id:number): Observable<any>{
+        if(!token){
+          return;
+        }
+        return this.getQuery('service/'+id+'/constante', token);							  		
+    }
 
-	getConstante(token:any, id:number): Observable<any>{
-		if(!token){
-			return;
-		}
-		return this.getQuery('service/'+id+'/constante', token);							  		
-	}
-
-	getCurrency(token:any): Observable<any>{
-		if(!token){
-			return;
-		}
-		return this.getQuery('currency', token);
-	}
+    getCurrency(token:any): Observable<any>{
+       if(!token){
+          return;
+        }
+        return this.getQuery('currency', token);
+    }
 
 
-	getCurrencyValue(token:any): Observable<any>{
-		if(!token){
-			return;
-		}
-		return this.getQuery('currencyvalue', token);
-	}
+    getCurrencyValue(token:any): Observable<any>{
+        if(!token){
+          return;
+        }
+        return this.getQuery('currencyvalue', token);
+    }
 
 
     getDepartamentos(token:any): Observable<any> {
-		if(!token){
-			return;
-		}
-		return this.getQuery('departamento', token);
-	}
+        if(!token){
+          return;
+        }
+        return this.getQuery('departamento', token);
+    }
 
 	getGiro(token:any, id:number): Observable<any>{
 		if(!token){
@@ -1033,6 +1030,20 @@ export class ProjectsService {
 		return this.getQuery('project/'+id+'/role/'+role, token);
 	}
 
+	getUserProjectService(token:any, id:number): Observable<any> {
+		if(!token){
+			return;
+		}
+		return this.getQuery('user/'+id+'/projectservice', token);
+	}
+
+	getUserProjectServiceDetail(token: any, user_id: number, project_id: number): Observable<any> {
+		if(!token){
+			return;
+		}
+		return this.getQuery('user/' + user_id + '/projectservice/' + project_id, token);
+	}
+
     status(token: any, id:number, serviceid:number, servicedetailid:number, label:number): void {
 		if(!token){
 			return;
@@ -1074,7 +1085,5 @@ export class ProjectsService {
 						// this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
 					});
 	}
-
-
 
 }

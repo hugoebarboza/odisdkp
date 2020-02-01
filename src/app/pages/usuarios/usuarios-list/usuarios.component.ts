@@ -11,6 +11,7 @@ import { AddUserComponent } from '../dialog/adduser/adduser.component';
 import { AddTeamComponent } from '../../team/dialog/add-team/add-team.component';
 import { EditUserComponent } from '../dialog/edituser/edituser.component';
 import { ModalUploadImageComponent } from '../dialog/modaluploadimage/modaluploadimage.component';
+import { SettingUserComponent } from '../dialog/setting-user/setting-user.component';
 import { ShowProfileSecurityComponent } from '../dialog/showprofilesecurity/showprofilesecurity.component';
 
 // MODEL
@@ -24,6 +25,7 @@ import { Proyecto } from 'src/app/models/types';
 
 // SERVICES
 import { SettingsService, UserService } from 'src/app/services/service.index';
+
 
 
 @Component({
@@ -58,8 +60,11 @@ export class UsuariosComponent implements OnInit, OnDestroy {
   verify: number;
 
 
+
   positionOptions: TooltipPosition[] = ['after', 'before', 'above', 'below', 'left', 'right'];
   positionrightaction = new FormControl(this.positionOptions[5]);
+  positionheaderaction = new FormControl(this.positionOptions[2]);
+
 
 
   constructor(
@@ -414,6 +419,10 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
 
   startEdit(usuario: any) {
+    if (!usuario) {
+      return;
+    }
+
     const dialogRef = this.dialog.open(EditUserComponent, {
       width: '777px',
       disableClose: true,
@@ -425,6 +434,24 @@ export class UsuariosComponent implements OnInit, OnDestroy {
        // this.refresh();
       }
     });
+  }
+
+  setting(usuario: any) {
+    if (!usuario) {
+      return;
+    }
+    const dialogRef = this.dialog.open(SettingUserComponent, {
+      width: '777px',
+      disableClose: true,
+      data: {usuario: usuario}
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+       // this.refresh();
+      }
+    });
+
   }
 
   refreshMenu(event: number) {

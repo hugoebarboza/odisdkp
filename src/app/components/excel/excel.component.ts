@@ -409,7 +409,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                         const resSed: any = that.validarSelectALimnetadorSed(sed, that.sed, id_alimentador, 'id_alimentador');
                         if (resSed) {
                           if (resSed.id_alimentador === id_alimentador) {
-                            id_sed = resSed.id;
+                            id_sed = resSed.sed_id;
                           } else {
                             banderaJson = true;
                             concatError = concatError + 'Sed no pertenece a Alimnetador ' + alimentador + '; ';

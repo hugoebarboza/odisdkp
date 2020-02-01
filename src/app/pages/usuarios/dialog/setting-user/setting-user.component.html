@@ -1,0 +1,24 @@
+<meta name="Description" content="User Setting Security.">
+  <h1 mat-dialog-title>{{title}}</h1>
+
+  <div class="mat-app-background" >
+    <div class="card-body">
+
+        <h5 class="card-title">{{ usuario.name }} {{ usuario.surname }} </h5> 
+        <p class="card-text">{{ usuario.email }}</p>        
+        <h6 class="card-text"><mat-icon mat-list-icon>lock</mat-icon> Opciones de acceso.</h6>
+        <mat-list>
+          <mat-divider></mat-divider>
+        </mat-list>
+        <br>
+
+
+    </div>
+</div>
+
+
+<div mat-dialog-actions >      
+    <button mat-button color="primary" type="submit"  class="btnsave" (click)="update()">Actualizar</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+</div>
+

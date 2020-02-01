@@ -1,5 +1,6 @@
 import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
@@ -128,6 +129,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   identity: any;
   order: Order[] = [];
   order_id: number;
+  proyectos: any;
   projectname: string;
   private project_id: number;
   private searchDecouncer$: Subject<string> = new Subject();
@@ -326,13 +328,14 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   constructor(
-    private afp: AngularFirePerformance,
-    private cd: ChangeDetectorRef,
     public _modalManage: ModalManageService,
     private _regionService: CountriesService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
+    public _router: Router,
     public _userService: UserService,
+    private afp: AngularFirePerformance,
+    private cd: ChangeDetectorRef,
     public dialog: MatDialog,
     public snackBar: MatSnackBar,
     private excelService: ExcelService,
@@ -343,6 +346,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.loading = true;
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
+    this.proyectos = this._userService.getProyectos();
     this._userService.handleAuthentication(this.identity, this.token);
     this.ServicioSeleccionado = new EventEmitter();
     this.dataSource = new MatTableDataSource();
@@ -435,40 +439,74 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
   ngOnChanges(_changes: SimpleChanges) {
-    this.portal = 0;
-    this.selectedRow = -1;
-    this.order_id = 0;
-    this.dataSource = new MatTableDataSource();
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.matSort;
-    this._portal = this.myTemplate;
-    this._home = this.myTemplate;
-    this.showcell = true;
-    this.isactiveSearch = false;
-    this.datasourceLength = 0;
-    this.filterValue = '';
-    this.termino = '';
-    this.selectedoption = 0;
-    this.fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
-    this.date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
-    this.loadInfo();
-    this.getZona(this.id);
-    this.getProject(this.id);
-    this.getTipoServicio(this.id);
-    this.getEstatus(this.id);
-    this.refreshTable();
-    // this.cd.detectChanges();
-    const serviceid = this.id;
-    this.service_id = serviceid;
-    this.cd.markForCheck();
+    if (this.id && this.id > 0) {
+      this.afterChanges(this.id);
+    }
   }
 
+  async afterChanges(id: number) {
+    if (id && id > 0 && this.proyectos && this.proyectos.length > 0) {
+
+      const response: any = await this.filterService(this.proyectos, this.id);
+      if (response) {
+        this.portal = 0;
+        this.selectedRow = -1;
+        this.order_id = 0;
+        this.dataSource = new MatTableDataSource();
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.matSort;
+        this._portal = this.myTemplate;
+        this._home = this.myTemplate;
+        this.showcell = true;
+        this.isactiveSearch = false;
+        this.datasourceLength = 0;
+        this.filterValue = '';
+        this.termino = '';
+        this.selectedoption = 0;
+        this.fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
+        this.date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
+        this.loadInfo();
+        this.getZona(this.id);
+        this.getProject(this.id);
+        this.getTipoServicio(this.id);
+        this.getEstatus(this.id);
+        this.refreshTable();
+        // this.cd.detectChanges();
+        const serviceid = this.id;
+        this.service_id = serviceid;
+        this.cd.markForCheck();
+      } else {
+        this.cd.markForCheck();
+        this._router.navigate(['/notfound']);
+      }
+
+    }
+
+  }
 
   ngOnDestroy() {
     this._onDestroy.next();
     this._onDestroy.complete();
     if (this.subscription) {
     this.subscription.unsubscribe();
+    }
+  }
+
+  filterService(data: any, id: number) {
+    if (data && data.length > 0 && id && id > 0) {
+      for (let x = 0; x < data.length; x += 1) {
+        const project = data[x];
+        if (project && project.service && project.service.length > 0) {
+          const service = project.service;
+          for (let i = 0; i < service.length; i += 1) {
+            if (service[i].id === id) {
+              return true;
+            }
+          }
+
+        }
+      }
+      return false;
     }
   }
 

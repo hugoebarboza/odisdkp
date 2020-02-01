@@ -292,31 +292,29 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
 
   public loaduser(projectid:number){
 
-    if(projectid > 0){     
+    if(projectid > 0) {
         this._proyectoService.getProjectUser(this.token, projectid, this.role).then(
-          (res: any) => 
-          {
+          (res: any) => {
             res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
+              (some) => {
+                if(some.datos) {
                   this.user = some.datos;
-                  for (var i=0; i<this.user.length; i++){
+                  for (let i = 0; i < this.user.length; i++) {
                     const userid = this.user[i]['id'];
                     const username = this.user[i]['usuario'];
                     this.user[i] = { name: username, id: userid };
                   }
-                  //console.log(this.user);
-                  this.filteredUserMulti.next(this.user.slice());                  
-                }else{
+                  // console.log(this.user);
+                  this.filteredUserMulti.next(this.user.slice());
+                } else {
                 }
               },
-              (error) => { 
+              (error) => {
               this.user = [];
               console.log(<any>error);
-              }  
-              )
-        })
+              }
+              );
+        });
     }
   }
 
@@ -337,7 +335,7 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
                 console.log(<any>error);
                 }            
               );        
-    }  
+    }
 
   reset(){
     this.selectedValueOrdeno ='';

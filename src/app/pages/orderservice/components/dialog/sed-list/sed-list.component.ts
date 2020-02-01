@@ -187,13 +187,13 @@ export class SedListComponent implements OnInit, OnDestroy {
 
 
 
-  update(i: number, element: Sed) {
+  update(i: number, element: any) {
     this.indexitem = i;
     this.editando = false;
     this.isLoadingSave = true;
 
     if (element && this.proyecto && this.proyecto.id > 0) {
-      this._customerService.updateSed(this.token.token, element.id_alimentador, element, element.id)
+      this._customerService.updateSed(this.token.token, element.id_alimentador, element, element.sed_id)
       .subscribe( (resp: any) => {
         if (!resp) {
           this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000});

@@ -159,7 +159,9 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    this.trace.unsubscribe();
+    if (this.trace) {
+      this.trace.unsubscribe();
+    }
   }
 
   onChange(value) {
@@ -235,14 +237,15 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   async afterSignIn(identity: any, token: any) {
+
     if (!identity || !token) {
       return;
     }
 
 
     const response: any = await this.getProyectos(identity, token);
+
     if (response && response.datos) {
-      console.log(response);
       const proyectos = response.datos;
       const key = 'proyectos';
       this._userService.saveStorage(key, proyectos);
@@ -262,13 +265,51 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
 
+  /*
+  async storageProject (projects: any, services = []) {
+
+    if (!projects || !services || projects.length === 0 || services.length === 0) {
+      return;
+    }
+
+    // console.log(projects);
+
+      for (let i = 0; i < projects.length ; i++) {
+
+            const reproject = projects[i];
+            const dataservices = [];
+
+            for (let x = 0; x < services.length; x++) {
+
+              const reservice = services[x];
+
+
+              if (reproject.id === reservice.project_id) {
+                dataservices.push(reservice);
+
+              }
+
+            }
+            if (dataservices.length > 0) {
+              projects[i].service = dataservices;
+            } else {
+              projects[i].service = [];
+            }
+      }
+      console.log(projects);
+
+  }*/
+
+
+
   async getProyectos(identity: any, token: any) {
 
     if (!identity || !token) {
       return;
     }
 
-    return await this._userService.getDptoProyectos(token.token, identity.dpto);
+    // return await this._userService.getDptoProyectos(token.token, identity.dpto);
+    return await this._userService.getUserProjectService(token.token, identity.sub);
   }
 
 

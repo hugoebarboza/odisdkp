@@ -379,3 +379,8 @@ div.container {
 .spacer {
   flex: 1 1 auto;
 }
+.mat-icon-button {
+    outline: 0;
+    border: none;
+}
+  
