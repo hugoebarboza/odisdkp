@@ -90,6 +90,7 @@
     "selenium-webdriver": "^4.0.0-alpha.5",
     "source-map-explorer": "^2.2.2",
     "sweetalert2": "^9.7.1",
+    "typescript": "^3.5.3",
     "webpack-dev-server": "^3.10.2",
     "webpack-sources": "^1.4.3",
     "xlsx": "^0.15.5",
@@ -121,7 +122,7 @@
   },
   "peerDependencies": {
     "typescript": "^3.5.3"
-  },  
+  },
   "engines": {
     "node": "10.13.0",
     "npm": "6.10.2"
