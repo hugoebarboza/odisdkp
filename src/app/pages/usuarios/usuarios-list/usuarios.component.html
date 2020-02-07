@@ -180,7 +180,7 @@
                                               <mat-icon aria-label="Edit" >edit</mat-icon>          
                                           </button>            
                               
-                                          <button mat-icon-button color="primary" matTooltip="Configuración de acceso del Usuario." [matTooltipPosition]="positionheaderaction.value" *ngIf="_userService.isRole(7)" (click)="setting(usuario)">
+                                          <button mat-icon-button color="primary" matTooltip="Configuración de acceso del Usuario." [matTooltipPosition]="positionheaderaction.value" *ngIf="_userService.isRole(7) && usuario.status === 1" (click)="setting(usuario)">
                                               <mat-icon aria-label="Edit" >account_circle</mat-icon>          
                                           </button>            
         

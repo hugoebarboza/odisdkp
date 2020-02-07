@@ -619,7 +619,7 @@ export class UserService  {
 
     getDepartamentos() {
         const departamentos = JSON.parse(localStorage.getItem('departamentos'));
-        if (departamentos !== 'Undefined' && departamentos != null){
+        if (departamentos !== 'Undefined' && departamentos != null) {
         this.departamentos = departamentos;
         } else {
         this.logout();
@@ -728,6 +728,27 @@ export class UserService  {
     this.store.dispatch( useraccion );
     this.store.dispatch( accion );
   }
+
+
+  async updateUserProjectService(token: any, data: any, id: number, projectid: number) {
+
+    if (!token) {
+     return;
+    }
+
+    const json = JSON.stringify(data);
+    const params = 'json=' + json;
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+
+    if (!this.url ) {
+       return;
+    }
+
+    return await this._http.put<any>(this.url + 'user' + '/' + id + '/' + 'projectservice' + '/' + projectid, params, {headers: headers}).toPromise().then((resp) => resp)
+    .catch((error) => { throw new Error('User does not have any Profile!' + error); });
+  }
+
 
   /*
 	private prepareHeader(headers: HttpHeaders | null, token:any): HttpHeaders  {

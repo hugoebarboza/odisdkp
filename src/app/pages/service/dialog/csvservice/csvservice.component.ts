@@ -5,7 +5,7 @@ import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { takeUntil } from 'rxjs/operators';
-import { MatProgressButtonOptions } from 'mat-progress-buttons'
+import { MatProgressButtonOptions } from 'mat-progress-buttons';
 
 // MOMENT
 import * as _moment from 'moment';
@@ -57,24 +57,23 @@ export interface Sorter {
 })
 export class CsvServiceComponent implements OnInit, OnDestroy {
 
-  title = "Csv de Servicios";
-  
+  title = 'Csv de Servicios';
   date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
   estatus: Array<Object> = [];
-  error: string; 
-  exportDataSource: MatTableDataSource<Order[]>; 
+  error: string;
+  exportDataSource: MatTableDataSource<Order[]>;
   isLoadingResults = false;
   isRateLimitReached = false;
   project_id: number;
   role:number;
   services: Service;
   serviceid: number;
-  servicetypeid: number = 0;
+  servicetypeid = 0;
   servicetype: ServiceType[] = [];
   selectedValueOrdeno: string;
   service: Service[] = [];
   subscription: Subscription;
-  selectedValueFormat: number = 0;
+  selectedValueFormat = 0;
   tipoServicio_id = 0;
   tiposervicio: Array<Object> = [];
   token: any;
@@ -96,7 +95,7 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
 
   formControl = new FormControl('', [Validators.required]);
 
-  //ORIGINAL FILTERS
+  // ORIGINAL FILTERS
   /*
   sort: Sort = {
     active: 'create_at',
@@ -127,7 +126,7 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
     criteria: '',
     columnValueDesde: this.date.value,
     columnValueHasta: this.date.value
-  };  
+  };
 
   selectedColumnnUsuario = {
     fieldValue: '',
@@ -148,7 +147,7 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
   };
 
   /*
-  selectedValueFormat = {    
+  selectedValueFormat = {
     fieldValue: '1'
   };*/
 
@@ -201,7 +200,7 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
     mode: 'indeterminate',
     value: 0,
     disabled: true
-  }
+  };
 
 
   barButtonOptions: MatProgressButtonOptions = {
@@ -214,30 +213,30 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
     mode: 'indeterminate',
     value: 0,
     disabled: false
-  }
+  };
 
 
   constructor(
-  	public dialogRef: MatDialogRef<CsvServiceComponent>,
-  	public dataService: OrderserviceService,
+    public dialogRef: MatDialogRef<CsvServiceComponent>,
+    public dataService: OrderserviceService,
     private _proyectoService: ProjectsService,
-    private toasterService: ToastrService,    
+    private toasterService: ToastrService,
     @Inject(MAT_DIALOG_DATA) public data
 
     ) {
-  	  this.project_id = data['project_id'];
+      this.project_id = data['project_id'];
       this.token = data['token'];
       this.pageSize = -1;
-      this.role = 7; //USUARIOS INSPECTORES
+      this.role = 7; // USUARIOS INSPECTORES
     }
 
 
   ngOnInit() {
   this.user = [];
-  
-  if(this.project_id > 0){
+
+  if(this.project_id > 0) {
     this.loadService(this.project_id);
-    this.loaduser(this.project_id);  
+    this.loaduser(this.project_id);
   }
 
 
@@ -245,15 +244,15 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filterUsers();
-      });    
+      });
   }
 
 
   ngOnDestroy() {
-    if(this.subscription){
+    if(this.subscription) {
       this._onDestroy.next();
       this._onDestroy.complete();
-      this.subscription.unsubscribe();  
+      this.subscription.unsubscribe();
     }
   }
 
@@ -269,7 +268,7 @@ export class CsvServiceComponent implements OnInit, OnDestroy {
 
 
   private filterUsers() {
-    //console.log('filter');
+    // console.log('filter');
     if (!this.user) {
       return;
     }

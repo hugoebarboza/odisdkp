@@ -37,8 +37,8 @@
     "@angular/pwa": "^0.803.24",
     "@angular/router": "^8.2.14",
     "@angular/service-worker": "^8.2.14",
-    "@firebase/firestore": "^1.10.0",
-    "@firebase/messaging": "^0.6.3",
+    "@firebase/firestore": "^1.9.3",
+    "@firebase/messaging": "^0.6.2",
     "@ng-bootstrap/ng-bootstrap": "^5.2.1",
     "@ng-select/ng-select": "^3.7.2",
     "@ngrx/store": "^8.6.0",
@@ -53,7 +53,7 @@
     "angular-calendar": "^0.28.2",
     "angular-split": "^3.0.2",
     "angular-vertical-timeline": "^0.6.0",
-    "angularfire2": "^5.3.0",
+    "angularfire2": "^5.4.0",
     "bootstrap": "^4.4.1",
     "core-js": "^3.6.4",
     "date-fns": "^2.9.0",
@@ -115,13 +115,10 @@
     "karma-chrome-launcher": "~3.1.0",
     "karma-coverage-istanbul-reporter": "^2.1.1",
     "karma-jasmine": "~3.1.0",
-    "karma-jasmine-html-reporter": "^1.5.1",
+    "karma-jasmine-html-reporter": "^1.5.2",
     "protractor": "^6.0.0",
     "ts-node": "^8.6.2",
     "tslint": "^6.0.0"
-  },
-  "peerDependencies": {
-    "typescript": "^3.5.3"
   },
   "engines": {
     "node": "10.13.0",

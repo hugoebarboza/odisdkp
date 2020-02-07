@@ -1,0 +1,15 @@
+API endpoint: http://localhost:8080
+If you are using a library that supports the FIRESTORE_EMULATOR_HOST environment variable, run:
+
+   export FIRESTORE_EMULATOR_HOST=localhost:8080
+
+Dev App Server is now running.
+
+Feb 02, 2020 3:50:27 PM io.gapi.emulators.netty.HttpVersionRoutingHandler channelRead
+INFO: Detected non-HTTP/2 connection.
+Feb 02, 2020 3:50:27 PM io.gapi.emulators.netty.NotFoundHandler handleRequest
+INFO: Unknown request URI: /functions/
+Feb 02, 2020 3:50:46 PM io.gapi.emulators.netty.NotFoundHandler handleRequest
+INFO: Unknown request URI: /emulator/v1/odisdkp
+Feb 02, 2020 3:50:50 PM io.gapi.emulators.netty.NotFoundHandler handleRequest
+INFO: Unknown request URI: /emulator/v1/

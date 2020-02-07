@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { Http, Headers } from '@angular/http';
 import { AngularFirestore } from '@angular/fire/firestore';
-//import { AngularFirestore } from 'angularfire2/firestore';
+// import { AngularFirestore } from 'angularfire2/firestore';
 import { Observable } from 'rxjs/Observable';
 import { environment } from '../../../environments/environment';
 
@@ -10,10 +10,10 @@ import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
 
 export interface CdfMessage {
-	toEmail: string;
-	fromTo: string;
-	subject: string;
-	message: string;
+  toEmail: string;
+  fromTo: string;
+  subject: string;
+  message: string;
 }
 
 
@@ -22,81 +22,81 @@ export class CdfService  {
 
     public headers: Headers = undefined;
     public key: string;
-    public url:string;
+    public url: string;
     noreply = 'noreply@ocaglobal.com';
-	
 
-	constructor(		
-		private _http: Http,
-		private afs: AngularFirestore,
-	){
+
+  constructor(
+    private _http: Http,
+    private afs: AngularFirestore,
+  ) {
         this.url = environment.global.urlcdf;
         this.key = environment.global.cdfkey;
         this.headers = undefined;
-	}
+  }
 
 
-	addNotification(token=null, params:any){
-	if(!token){
-		return;
-	}
-	return new Promise<any>((resolve, reject) => {
-		this.afs.collection('fcmnotification').add({
-			body: params.message,
-			title: params.title,
-			create_at: params.create_at,
-			create_by: params.userId
-		})
-		.then(function(docRef) {
-			console.log('Document written with ID: ', docRef.id);
-			resolve(docRef);
-		}, err => reject(err))
-    	});
-	}
+  addNotification(token= null, params: any) {
+  if (!token) {
+     return;
+  }
+  return new Promise<any>((resolve, reject) => {
+    this.afs.collection('fcmnotification').add({
+      body: params.message,
+      title: params.title,
+      create_at: params.create_at,
+      create_by: params.userId
+    })
+    .then(function(docRef) {
+      console.log('Document written with ID: ', docRef.id);
+      resolve(docRef);
+    }, err => reject(err));
+    });
+  }
 
 
-	fcmsend(token=null, params:any): Observable<any>{
-		if(!token){
+  fcmsend(token= null, params: any): Observable<any> {
+    if (!token) {
             return;
-		}
+    }
 
-        let headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
-		
-		return this._http.post(this.url+'fcmSend', params, {headers: headers})
-			.map( (resp: any) => {
-				return resp;
-			}).catch( err => {
-				return Observable.throw( err );
-			});		
-	}
+      const headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
+
+    return this._http.post(this.url + 'fcmSend', params, {headers: headers})
+        .map( (resp: any) => {
+        return resp;
+        }).catch( err => {
+        return Observable.throw( err );
+    });
+  }
 
 
 
-	httpEmail(token=null, params:any): Observable<any>{
-		if(!token){
+  httpEmail(token= null, params: any): Observable<any> {
+    if (!token) {
             return;
-		}
+    }
 
-		let headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
+    const headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
 
-		const endpoint = 'https://us-central1-odisdkp.cloudfunctions.net/httpEmail';
+    const endpoint = 'https://us-central1-odisdkp.cloudfunctions.net/httpEmail';
 
-		return this._http.post(endpoint, params, {headers: headers})
-			.map( (resp: any) => {
-				return resp;
-			}).catch( err => {
-				return err ;
-			});		
-	}
+    return this._http.post(endpoint, params, {headers: headers})
+      .map( (resp: any) => {
+      return resp;
+      }).catch( err => {
+      return err ;
+      });
+  }
 
 
-	httpEmailToSupport(token=null, toEmail: string, fromTo: string, subject: string, created:any, body:string): Observable<any>{
-		if(!token){
+  httpEmailToSupport(token= null, toEmail: string, fromTo: string, subject: string, created: any, body: string): Observable<any> {
+    if (!token) {
             return;
-		}
+    }
 
 
-		const msg: CdfMessage = {
+    const msg: CdfMessage = {
             toEmail: toEmail,
             fromTo: this.noreply,
             subject: subject,
@@ -108,7 +108,7 @@ export class CdfService  {
             </style>
             </head>
             <body>
-    
+
             <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#F9F9F9">
             <tbody>
               <tr>
@@ -117,8 +117,8 @@ export class CdfService  {
                 <tbody>
                 <tr>
                 <td><p></p></td>
-                </tr>                        
-    
+                </tr>
+
                 <tr>
                   <td>
                   <table border="0" cellspacing="0" cellpadding="0" width="100%"  style="border-collapse:collapse;background:#fff;border:1px solid #ededed" bgcolor="#fff">
@@ -126,17 +126,17 @@ export class CdfService  {
                     <tr>
                     <td>
                     <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-    
+
                       <tbody>
 					  <tr>
 					  <td  style="border-bottom-width:1px;padding:12px 0px 12px 24px;background-color: #0b3357;">
 					  <div  style="font-size:0pt;line-height:0pt;background-color: #0b3357;" align="left">
-						<a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">                                                                                                    
+						<a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">
 						<img src="https://odisdkp.firebaseapp.com/assets/img/logo.png" alt="logo_oca" width="138" >
 					  </a>
 					  </div>
 					  </td>
-					  </tr>                                            
+					  </tr>
 
 
 					  <tr>
@@ -145,7 +145,7 @@ export class CdfService  {
                         <div style="margin-top:25px">
                           <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
                           <tbody>
-                            <tr>    
+                            <tr>
                             <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
                               <tbody>
@@ -160,17 +160,17 @@ export class CdfService  {
                                 <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:2px;">${created}</p>
                                 <div dir="auto" style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0">
                                 <p style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0" dir="auto">${body}</p>
-                                </div>                                  
-                              </td>        
-                              </tr>      
+                                </div>
+                              </td>
+                              </tr>
                               </tbody>
-                            </table>    
-                            </td>  
+                            </table>
+                            </td>
                             </tr>
                           </tbody>
                           </table>
                         </div>
-                        </h2>                                              
+                        </h2>
                         </td>
                       </tr>
                       </tbody>
@@ -180,7 +180,7 @@ export class CdfService  {
                   </tbody>
                 </table>
                 </td>
-              </tr>           
+              </tr>
               </tbody>
               </table>
               </td>
@@ -189,34 +189,34 @@ export class CdfService  {
             <td><p></p></td>
             </tr>
             </tbody>
-            </table>            
+            </table>
             </body>
             </html>
             `,
-		  };
-		  
-
-		let headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
-
-		const endpoint = 'https://us-central1-odisdkp.cloudfunctions.net/httpEmail';
-
-		return this._http.post(endpoint, msg, {headers: headers})
-			.map( (resp: any) => {
-				return resp;
-			}).catch( err => {
-				return err ;
-			});		
-	}
+      };
 
 
+    const headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
 
-	httpEmailFromOrigin(token=null, toEmail: string, fromTo: string, subject: string, created:any, body:string): Observable<any>{
-		if(!token){
+    const endpoint = 'https://us-central1-odisdkp.cloudfunctions.net/httpEmail';
+
+    return this._http.post(endpoint, msg, {headers: headers})
+      .map( (resp: any) => {
+      return resp;
+      }).catch( err => {
+      return err ;
+      });
+    }
+
+
+
+  httpEmailFromOrigin(token= null, toEmail: string, fromTo: string, subject: string, created: any, body: string): Observable<any> {
+    if (!token) {
             return;
     }
-    
 
-		const msg: CdfMessage = {
+
+    const msg: CdfMessage = {
             toEmail: toEmail,
             fromTo: this.noreply,
             subject: subject,
@@ -228,7 +228,7 @@ export class CdfService  {
             </style>
             </head>
             <body>
-    
+
             <table border="0" cellpadding="0" cellspacing="0" align="center" width="100%" bgcolor="#F9F9F9">
             <tbody>
               <tr>
@@ -237,8 +237,8 @@ export class CdfService  {
                 <tbody>
                 <tr>
                 <td><p></p></td>
-                </tr>                        
-    
+                </tr>
+
                 <tr>
                   <td>
                   <table border="0" cellspacing="0" cellpadding="0" width="100%"  style="border-collapse:collapse;background:#fff;border:1px solid #ededed" bgcolor="#fff">
@@ -246,17 +246,17 @@ export class CdfService  {
                     <tr>
                     <td>
                     <table align="left" border="0" cellpadding="0" cellspacing="0" width="100%" style="border-collapse:collapse">
-    
+
                       <tbody>
 					  <tr>
 					  <td  style="border-bottom-width:1px;padding:12px 0px 12px 24px;background-color: #0b3357;">
 					  <div  style="font-size:0pt;line-height:0pt;background-color: #0b3357;" align="left">
-						<a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">                                                                                                    
+						<a href="https://ocaglobal.com" style="color:#45abd9;text-decoration:none" target="_blank">
 						<img src="https://odisdkp.firebaseapp.com/assets/img/logo.png" alt="logo_oca" width="138" >
 					  </a>
 					  </div>
 					  </td>
-					  </tr>                                            
+					  </tr>
 
 
 					  <tr>
@@ -272,7 +272,7 @@ export class CdfService  {
                         <div style="margin-top:25px">
                           <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
                           <tbody>
-                            <tr>    
+                            <tr>
                             <td width="100%" style="padding:15px 0;border-top:1px dotted #c5c5c5">
                             <table width="100%" cellpadding="0" cellspacing="0" border="0" style="table-layout:fixed" role="presentation">
                               <tbody>
@@ -287,17 +287,17 @@ export class CdfService  {
                                 <p style="font-family:'Lucida Grande','Lucida Sans Unicode','Lucida Sans',Verdana,Tahoma,sans-serif;font-size:13px;line-height:25px;margin-bottom:15px;margin-top:0;padding:0;color:#bbbbbb;margin-left:2px;">${created}</p>
                                 <div dir="auto" style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0">
                                 <p style="color:#2b2e2f;font-family:'Lucida Sans Unicode','Lucida Grande','Tahoma',Verdana,sans-serif;font-size:14px;line-height:22px;margin:15px 0" dir="auto">${body}</p>
-                                </div>                                  
-                              </td>        
-                              </tr>      
+                                </div>
+                              </td>
+                              </tr>
                               </tbody>
-                            </table>    
-                            </td>  
+                            </table>
+                            </td>
                             </tr>
                           </tbody>
                           </table>
                         </div>
-                        </h2>                                              
+                        </h2>
                         </td>
                       </tr>
                       </tbody>
@@ -307,7 +307,7 @@ export class CdfService  {
                   </tbody>
                 </table>
                 </td>
-              </tr>           
+              </tr>
               </tbody>
               </table>
               </td>
@@ -316,10 +316,10 @@ export class CdfService  {
             <td><p></p></td>
             </tr>
             </tbody>
-            </table>            
+            </table>
             </body>
             </html>
-            `,            
+            `,
           };
 
 		let headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });

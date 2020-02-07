@@ -290,22 +290,21 @@ import { GLOBAL } from '../global';
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     this._http.put(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, params, {headers: headers}).subscribe(
-    		(data: any) => {
-							// this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
-    			    this.dialogData = order;
-							if (data.status === 'success') {
-								Swal.fire('Actualizada Orden de Trabajo: ', this.dialogData.order_number +' exitosamente.', 'success' );
-							} else {
-								Swal.fire('N. Orden de Trabajo: ', this.dialogData.order_number +' no actualizada.' , 'error');
-							}
-			      },
-			      (err: HttpErrorResponse) => {
-						// this.error = err.error.message;
-						// this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-						Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
-					})
-					;
-	}
+       (data: any) => {
+        // this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
+              this.dialogData = order;
+              if (data.status === 'success') {
+              Swal.fire('Actualizada Orden de Trabajo: ', this.dialogData.order_number + ' exitosamente.', 'success' );
+              } else {
+              Swal.fire('N. Orden de Trabajo: ', this.dialogData.order_number + ' no actualizada.' , 'error');
+              }
+            },
+            (err: HttpErrorResponse) => {
+            // this.error = err.error.message;
+            // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+            Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
+        });
+  }
 
 
   updateEstatus(token: any, data: ServiceEstatus, id: number): Observable<any> {
@@ -321,121 +320,113 @@ import { GLOBAL } from '../global';
     return this._http.post(this.url + 'estatus/' + id, params, {headers: headers}).map( (resp: any) => resp);
   }
 
-	updateMass(token: any, data: any, id: number, paramset: string, paramvalue: number): Observable<any> {
-		if (!token) {
-			return;
-		}
+  updateMass(token: any, data: any, id: number, paramset: string, paramvalue: number): Observable<any> {
+    if (!token) {
+      return;
+    }
 
-		const json = JSON.stringify(data);
-		const params = 'json=' + json;
+    const json = JSON.stringify(data);
+    const params = 'json=' + json;
 
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		const Url = this.url + 'service/' + id + '/orderupdatemass/' + paramset + '/value/' + paramvalue;
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const Url = this.url + 'service/' + id + '/orderupdatemass/' + paramset + '/value/' + paramvalue;
 
 
     return this._http.post(Url, params, {headers: headers}).map( (resp: any) => resp );
   }
 
 
-	deleteMass(token: any, data: any, id: number): Observable<any> {
-		if (!token) {
-			return;
-		}
+  deleteMass(token: any, data: any, id: number): Observable<any> {
+    if (!token) {
+      return;
+    }
 
-		const json = JSON.stringify(data);
-		const params = 'json=' + json;
+    const json = JSON.stringify(data);
+    const params = 'json=' + json;
 
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		const Url = this.url + 'service/' + id + '/deletemass';
-	
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    const Url = this.url + 'service/' + id + '/deletemass';
 
-		return this._http.post(Url, params, {headers: headers}).map( (resp: any) => resp);
-	}
+
+    return this._http.post(Url, params, {headers: headers}).map( (resp: any) => resp);
+  }
 
 
   deleteEstatus(token: any, id: number): Observable<any> {
 
-		if (!token) {
-			return;
-		}
+    if (!token) {
+       return;
+    }
 
-		const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.delete(this.url + 'estatus/' + id, {headers: headers})
-						 .map( (resp: any) => {
-							 return resp;
-						 });
-	}
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(this.url + 'estatus/' + id, {headers: headers}).map( (resp: any) => resp);
+  }
 
 
- 	delete(token: any, orderid: number, id: number): void {
-		if (!token) {
-			return;
-		}
+  delete(token: any, orderid: number, id: number): void {
+    if (!token) {
+       return;
+    }
 
-	let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    
-		this._http.delete(this.url+'project'+'/'+id+'/'+'order/'+orderid, {headers: headers}).subscribe(
-			(data: any) => {
-				if(data.status === 'success'){
-					Swal.fire('Eliminada Orden de Trabajo con identificador: ', orderid +' exitosamente.', 'success' );
-				}else{
-					Swal.fire('Orden de Trabajo con identificador: ', orderid +' no eliminada.' , 'error');
-				}
-      	// this.toasterService.success('Orden de Trabajo eliminada.', 'Exito', {timeOut: 6000,});
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers}).subscribe(
+    (data: any) => {
+      if (data.status === 'success') {
+        Swal.fire('Eliminada Orden de Trabajo con identificador: ', orderid + ' exitosamente.', 'success' );
+        } else {
+        Swal.fire('Orden de Trabajo con identificador: ', orderid + ' no eliminada.' , 'error');
+        }
+        // this.toasterService.success('Orden de Trabajo eliminada.', 'Exito', {timeOut: 6000,});
       },
       (err: HttpErrorResponse) => {
-				this.error = err.error.message;
-				Swal.fire('No fue posible procesar su solicitud', '', 'error');
+        this.error = err.error.message;
+        Swal.fire('No fue posible procesar su solicitud', '', 'error');
         // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
       });
   }
 
 
   important(token: any, id: number, orderid: number, label: number): void {
-	  if (!token) {
-		  return;
-	  }
-			const json = JSON.stringify(label);
-			const params = 'json='+json;
-			const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-			this._http.post(this.url+'project'+'/'+id+'/'+'order/'+orderid+'/importantorder/'+label, params, {headers: headers}).subscribe(
-					_data => {
-							// console.log(data);
-							// this.dialogData = order;
-							// this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
-							},
-							(err: HttpErrorResponse) => {
-							this.error = err.error.message;
-							// console.log(err.error.message);
-							// this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-						});
-		}
+    if (!token) {
+      return;
+    }
+      const json = JSON.stringify(label);
+      const params = 'json=' + json;
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      this._http.post(this.url + 'project' + '/' + id + '/' + 'order/' + orderid + '/importantorder/' + label, params, {headers: headers}).subscribe(
+            _data => {
+              },
+              (err: HttpErrorResponse) => {
+              this.error = err.error.message;
+      });
+  }
 
-	private handleError( error: HttpErrorResponse ) {
-		if (!navigator.onLine) {
-			// Handle offline error
-			console.error('Browser Offline!');
-		} else {
-			if (error instanceof HttpErrorResponse) {
-			// Server or connection error happened
-			if (!navigator.onLine) {
-				console.error('Browser Offline!');
-			} else {
-				// Handle Http Error (4xx, 5xx, ect.)
-				if (error.status === 500) {
-					this._snackBar.open(this.errorMessage500, '', {duration: 7000, });
-				}
-	
-				if (error.status === 0) {
-					this._snackBar.open(this.errorMessage, '', {duration: 7000, });
-				}
-			}
-			} else {
-				// Handle Client Error (Angular Error, ReferenceError...)
-				console.error('Client Error!');
-			}
-			return throwError(error.error);
-		}
-	}
+  private handleError( error: HttpErrorResponse ) {
+    if (!navigator.onLine) {
+      // Handle offline error
+      console.error('Browser Offline!');
+    } else {
+      if (error instanceof HttpErrorResponse) {
+       // Server or connection error happened
+      if (!navigator.onLine) {
+        console.error('Browser Offline!');
+      } else {
+        // Handle Http Error (4xx, 5xx, ect.)
+        if (error.status === 500) {
+          this._snackBar.open(this.errorMessage500, '', {duration: 7000, });
+        }
+
+        if (error.status === 0) {
+          this._snackBar.open(this.errorMessage, '', {duration: 7000, });
+        }
+      }
+      } else {
+        // Handle Client Error (Angular Error, ReferenceError...)
+        console.error('Client Error!');
+      }
+      return throwError(error.error);
+    }
+  }
 
 }

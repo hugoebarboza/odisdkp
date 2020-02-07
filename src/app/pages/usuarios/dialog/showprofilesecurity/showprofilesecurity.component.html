@@ -3,9 +3,7 @@
 
   <div class="mat-app-background" >
     <div class="card-body">
-
-        <h5 class="card-title">{{ usuario.name }} {{ usuario.surname }}</h5>
-        <p class="card-text">{{ usuario.email }}</p>        
+        <div class="text">{{ usuario.name }} {{ usuario.surname }}<span class="sub-text"> ({{ usuario.email }})</span></div>
         <h6 class="card-text"><mat-icon mat-list-icon>lock</mat-icon> Opciones de recuperación de contraseña.</h6>
         <mat-list>
           <mat-divider></mat-divider>

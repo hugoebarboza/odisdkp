@@ -49,4 +49,17 @@ input[type=password] {
   outline: 0;
   border: none;
 }
-
+.text {
+  display: block;
+  font-size: 1.25rem;
+  margin-block-start: 0.37em;
+  margin-block-end: 0.37em;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  font-weight: bold;
+  font-weight: 500;
+  line-height: 1.2;
+}
+.sub-text {
+font-size: 0.85rem;
+}

@@ -446,7 +446,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   async afterChanges(id: number) {
     if (id && id > 0 && this.proyectos && this.proyectos.length > 0) {
-
       const response: any = await this.filterService(this.proyectos, this.id);
       if (response) {
         this.portal = 0;
@@ -492,7 +491,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  filterService(data: any, id: number) {
+  async filterService(data: any, id: number) {
+
     if (data && data.length > 0 && id && id > 0) {
       for (let x = 0; x < data.length; x += 1) {
         const project = data[x];

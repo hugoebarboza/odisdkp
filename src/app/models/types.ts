@@ -721,6 +721,21 @@ public usuario: string,
 ) {}
 }
 
+export class UserRolService {
+    constructor(
+    public id: number,
+    public user_id: number,
+    public service_id: number,
+    public project_id: number,
+    public service_name: string,
+    public show: number,
+    public store: number,
+    public update: number,
+    public destroy: number,
+    public status: number,
+    ) {}
+}
+
 export class UserFirebase {
 
     public email: string;

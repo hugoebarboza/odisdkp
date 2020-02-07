@@ -1,8 +1,9 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase);
+import * as Hello from './app'
 const cors = require("cors")({ origin: true });
-// const app = require("./app");
+
 
 //SEND GRID API KEY
 const SENDGRID_API_KEY = functions.config().sendgrid.key;
@@ -10,13 +11,17 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(SENDGRID_API_KEY);
 
 
+// Function Hello
+export const hi = Hello.listener
 
+/*
 exports.hello = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
-      res.send("Hello from a New Severless Database!")
+      res.send("New Hello from a New Severless Database!")
   });
-});
+});*/
 
+// Function Hello World
 exports.helloWorld = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
       res.send("Hello from a Old Severless Database!")
@@ -24,7 +29,7 @@ exports.helloWorld = functions.https.onRequest((req, res) => {
 });
 
 
-
+// Function FCM Send
 exports.fcmSend = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     if(req.method !== 'POST') {
@@ -148,7 +153,7 @@ function addUserNotificationSend(data:any) {
     });
 }
 
-
+// Function HTTP Email
 exports.httpEmail = functions.https.onRequest((req, res) => {
 
   cors( req, res, () => { 

@@ -443,7 +443,7 @@ export class UsuariosComponent implements OnInit, OnDestroy {
     const dialogRef = this.dialog.open(SettingUserComponent, {
       width: '777px',
       disableClose: true,
-      data: {usuario: usuario}
+      data: {usuario: usuario, id: this.id}
     });
 
     dialogRef.afterClosed().subscribe(result => {

@@ -53,6 +53,7 @@ export class TagUserDbComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
 
+
     this._afs.firestore.doc(`users/${ this.userFirebase.uid }`).get()
     .then(docSnapshot => {
       if (docSnapshot.exists) {

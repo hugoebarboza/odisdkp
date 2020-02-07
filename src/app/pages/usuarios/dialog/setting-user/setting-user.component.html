@@ -3,14 +3,256 @@
 
   <div class="mat-app-background" >
     <div class="card-body">
-
-        <h5 class="card-title">{{ usuario.name }} {{ usuario.surname }} </h5> 
-        <p class="card-text">{{ usuario.email }}</p>        
+        <div class="text">{{ usuario.name }} {{ usuario.surname }}<span class="sub-text"> ({{ usuario.email }})</span></div>        
         <h6 class="card-text"><mat-icon mat-list-icon>lock</mat-icon> Opciones de acceso.</h6>
         <mat-list>
           <mat-divider></mat-divider>
         </mat-list>
-        <br>
+
+        <section class="mat-dialog-content" >
+          <div class="container-fluid" *ngIf="isLoading">
+            <div class="row">
+                <div class="col-sm">
+                    <div class="row d-flex justify-content-center">
+                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+                    </div>                        
+                </div>
+            </div>
+        </div>
+
+        <div class="row animated fadeIn" *ngIf="!isLoading && status === 'error'">
+          <div class="col-sm-12">
+              <div class="alert alert-danger" *ngIf="status == 'error'">
+                  No se encontraron registros que coincidan con su búsqueda. 
+              </div>
+          </div>
+        </div>
+
+        <div *ngIf="!isLoading && status === 'success'">
+
+          <div class="container">
+            <div class="row">
+              <div class="col-12">
+
+<!----
+                <form [formGroup]="form" (ngSubmit)="submit()">
+
+                  <div formArrayName="roles" *ngFor="let roles of form.get('roles').value | keyvalue; let i = index">
+{{ roles.value.service_name }}
+
+                  <label *ngIf="roles.value.status === 1">
+                    <input type="checkbox" [formControlName]="roles.key" [value]="roles.value.status" /> {{ roles.value.service_name }}
+                  </label>                  
+
+                  <label *ngIf="roles.value.status === 0">
+                    <input type="checkbox" [formControlName]="roles.key" [value]="roles.value.status"> {{ roles.value.service_name }}
+                  </label>                  
+                  
+
+                  </div>
+                </form>
+
+
+                  <div class="custom-control custom-checkbox" *ngIf="form.controls.roles.controls[i].value.status === 1">
+                      <input type="checkbox" [formControlName]="i" class="custom-control-input" checked /> 
+                      <label class="custom-control-label" >{{i}}</label>
+                     </div>
+
+                     <div class="custom-control custom-checkbox" *ngIf="form.controls.roles.controls[i].value.status === 0">
+                      <input type="checkbox" [formControlName]="i" class="custom-control-input" /> 
+                      <label class="custom-control-label" >{{i}}</label>
+                     </div>
+
+
+
+
+                    <form [formGroup]="form" (ngSubmit)="submit()">
+                    <div  formArrayName="roles" *ngFor="let roles of form.controls.roles.controls; let i = index">
+                    
+                    <div *ngIf="roles.value.status === 1">
+                      <div class="custom-control custom-checkbox" >
+                      <input type="checkbox" [formControlName]="i" class="custom-control-input" [value]="roles.value.status" /> 
+                      <label class="custom-control-label" >{{roles.value.service_name}}</label>
+                      </div>
+                    </div>
+
+                    <div *ngIf="roles.value.status === 0">
+                      
+                    </div>
+
+
+                    </div>
+                  </form>
+---->
+                
+                <div *ngIf="form && form.get('roles').value != '' && !isLoading">
+
+
+                  <!---
+                  <form [formGroup]="form" (ngSubmit)="submit()" *ngIf="form">
+                    <div formArrayName="roles"  >
+                      <div *ngFor="let roles of getItems?.controls; let i = index;" [formGroupName]="i">
+
+                        {{roles.value.service_name}}
+
+                        <label>
+                          <input type="checkbox" [formControl]="roles" /> 
+
+                        </label>          
+
+                        <div *ngFor="let k of roles.controls | keys;" >
+                          {{roles[k]}}
+                          {{k.value}}
+                        </div>
+
+
+                        
+                        <div *ngFor="let key of roles.controls | keyvalue" >
+                          {{key.service_name}}
+                          <input type="checkbox" formControlName="{{key.key}}">{{key.key}}
+                        </div>
+                    
+                        
+                      </div>
+                    </div>                    
+                  </form>
+                  --->
+
+                    <!---
+                    <div class="container-fluid" formArrayName="roles">
+                      <div class="row" *ngFor="let roles of getItems?.controls; let i = index;" [formGroupName]="i">
+                        <div class="col-4">{{roles.value.service_name}}</div>
+                        <div class="col-8">
+
+                          <div class="container-fluid">
+                            <div class="row">
+                              <div *ngFor="let key of roles.controls | keyvalue" >
+                                <div class="col-3" *ngIf="leerkey(key)">
+                                  <input type="checkbox" formControlName="{{key.key}}">
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    -->
+                  
+                  <form [formGroup]="form" (ngSubmit)="submit(form)" *ngIf="form">
+                  <div formArrayName="roles"  >
+
+                    <table class="table table-bordered" style="width: 100%; border-radius: 2px; border: 1px solid #dddddd;">
+
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 40%;">Servicio</th>
+                          <th scope="col" style="width: 15%;">Ver</th>
+                          <th scope="col" style="width: 15%;">Agregar</th>
+                          <th scope="col" style="width: 15%;">Editar</th>
+                          <th scope="col" style="width: 15%;">Eliminar</th>
+                        </tr>
+                      </thead>
+    
+                      
+                        <tbody >
+                        <tr *ngFor="let roles of getItems?.controls; let i = index;" [formGroupName]="i">
+
+                          <ng-container *ngFor="let key of roles.controls | keyvalue" >
+                          <td *ngIf="leerkey(key) && posicion === 1" style="width: 40%;">
+                              <label><input type="checkbox" formControlName="{{key.key}}"> {{roles.value.service_name}}: </label>
+                              <!---<input type="checkbox" formControlName="{{key.key}}"> {{key.key}}--->
+                          </td>
+                          </ng-container>
+
+                          <ng-container *ngFor="let key of roles.controls | keyvalue" >
+                            <td *ngIf="leerkey(key) && posicion === 2" style="width: 15%;" align="center" >
+                              <input type="checkbox" formControlName="{{key.key}}" >    
+                            </td>  
+                          </ng-container>
+
+                          <ng-container *ngFor="let key of roles.controls | keyvalue">
+                            <td *ngIf="leerkey(key) && posicion === 3" style="width: 15%;" align="center">
+                              <input type="checkbox" formControlName="{{key.key}}">
+                            </td>
+                          </ng-container>
+
+
+                          <ng-container *ngFor="let key of roles.controls | keyvalue">
+                            <td *ngIf="leerkey(key) && posicion === 4" style="width: 15%;" align="center">
+                              <input type="checkbox" formControlName="{{key.key}}">
+                            </td>  
+                          </ng-container>
+
+                          <ng-container *ngFor="let key of roles.controls | keyvalue" >
+                            <td *ngIf="leerkey(key) && posicion === 5" style="width: 15%;" align="center">
+                              <input type="checkbox" formControlName="{{key.key}}">
+                            </td>  
+                          </ng-container>
+
+                        </tr>
+                        </tbody>                                                                 
+                    </table>
+
+                  </div>
+                  </form>
+                  
+
+
+                </div>
+
+
+                <!---
+                {{form.value | json}}                  
+                  <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col"></th>
+                      <th scope="col">Servicio</th>
+                      <th scope="col">Ver</th>
+                      <th scope="col">Agregar</th>
+                      <th scope="col">Editar</th>
+                      <th scope="col">Eliminar</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr *ngFor="let usuario of userservicerol; let i = index" >
+                      <td>
+                        <div class="custom-control custom-checkbox" *ngIf="usuario.status === 1">
+                            <input type="checkbox" class="custom-control-input" id="customCheck{{i}}" checked>
+                            <label class="custom-control-label" for="customCheck{{i}}">{{i}}</label>
+                        </div>
+                        <div class="custom-control custom-checkbox" *ngIf="usuario.status === 0">
+                            <input type="checkbox" class="custom-control-input" id="customCheck{{i}}" >
+                            <label class="custom-control-label" for="customCheck{{i}}">{{i}}</label>
+                        </div>
+                      </td>
+                      <td>{{usuario.service_name}}</td>
+                      <td>
+                        <div class="custom-control custom-checkbox" *ngIf="usuario.show === 1">
+                            <input type="checkbox" class="custom-control-input" id="checkshow{{i}}" checked>
+                            <label class="custom-control-label" for="customCheckShow{{i}}"></label>
+                        </div>
+                        <div class="custom-control custom-checkbox" *ngIf="usuario.show === 0">
+                            <input type="checkbox" class="custom-control-input" id="checkshow{{i}}" >
+                            <label class="custom-control-label" for="customCheckShow{{i}}"></label>
+                        </div>                        
+                      </td>
+                      <td>913</td>
+                      <td>2.846</td>
+                      <td>2.846</td>
+                    </tr>
+                  </tbody>
+
+
+                </table>
+                -->
+              </div>
+            </div>
+          </div>
+        </div>
+        </section>
 
 
     </div>
@@ -18,7 +260,7 @@
 
 
 <div mat-dialog-actions >      
-    <button mat-button color="primary" type="submit"  class="btnsave" (click)="update()">Actualizar</button>
+    <button mat-button color="primary" type="submit"  class="btnsave" (click)="submit(form)">Actualizar</button>
     <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
 </div>
 
