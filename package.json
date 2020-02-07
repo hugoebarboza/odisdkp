@@ -60,7 +60,6 @@
     "file-saver": "^2.0.2",
     "firebase": "^7.8.0",
     "html2canvas": "^1.0.0-rc.5",
-    "jQuery": "^1.7.4",
     "jquery": "^3.4.1",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.11",
