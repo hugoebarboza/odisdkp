@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
 import { defer, combineLatest } from 'rxjs/';
 import { switchMap, map, tap } from 'rxjs/operators';
-import { TooltipPosition } from '@angular/material';
+import { TooltipPosition } from '@angular/material/tooltip';
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
 // FIREBASE

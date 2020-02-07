@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnDestroy, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, Validators, FormGroup} from '@angular/forms';
-import { MatTableDataSource, MatPaginator, MatSort, Sort } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort, Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
 import { ReplaySubject } from 'rxjs/ReplaySubject';

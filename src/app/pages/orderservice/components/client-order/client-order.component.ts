@@ -4,7 +4,10 @@ import { Service } from 'src/app/models/types';
 import { Subscription } from 'rxjs';
 // import { ToastrService } from 'ngx-toastr';
 import { OrderserviceService, ProjectsService, UserService, DataService } from 'src/app/services/service.index';
-import { MatDialog, MatTableDataSource, MatPaginator, MatSort } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';
 

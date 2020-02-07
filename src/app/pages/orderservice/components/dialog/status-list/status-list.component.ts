@@ -3,7 +3,7 @@ import { Subscription } from 'rxjs/Subscription';
 
 import { OrderserviceService, UserService } from 'src/app/services/service.index';
 import { ServiceEstatus } from 'src/app/models/types';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-status-list',

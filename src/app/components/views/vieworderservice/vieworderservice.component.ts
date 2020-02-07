@@ -1,15 +1,18 @@
 import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { Sort, MatDialog, MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { Sort, MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
 import { ReplaySubject } from 'rxjs/ReplaySubject';
 import { takeUntil } from 'rxjs/operators/takeUntil';
 import { FormControl, Validators} from '@angular/forms';
-import { TooltipPosition } from '@angular/material';
-import { PageEvent } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
-import { MatSelect } from '@angular/material';
+import { TooltipPosition } from '@angular/material/tooltip';
+import { PageEvent } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSelect } from '@angular/material/select';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 
 

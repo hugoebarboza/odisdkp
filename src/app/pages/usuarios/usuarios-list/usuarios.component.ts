@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
-import { MatDialog, TooltipPosition } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { TooltipPosition } from '@angular/material/tooltip';
 import { FormControl } from '@angular/forms';
 
 import Swal from 'sweetalert2';

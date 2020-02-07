@@ -13,7 +13,11 @@ import Swal from 'sweetalert2';
 import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/firestore';
 
 // MATERIAL
-import { MatPaginator, MatSnackBar, MatSort, MatTableDataSource, TooltipPosition } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 import * as FileSaver from 'file-saver';
 

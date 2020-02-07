@@ -1,5 +1,6 @@
 import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef, MatSlideToggleChange } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { UserService, CargaImagenesService, CdfService } from 'src/app/services/service.index';
 import { ToastrService } from 'ngx-toastr';
 import { Proyecto, FileItem, UserFirebase } from 'src/app/models/types';
@@ -360,11 +361,11 @@ export class ShowcaseComponent implements OnInit {
 
   getListuser(term: string) {
 
-    if(term == null){
+    if (term == null) {
       this.userLoading = false;
       return new Observable;
     }
-  
+
 
     this.usersCollection = this._afs.collection('users', ref => ref.where('email', '>=', term));
     return this.usersCollection.snapshotChanges().pipe(
@@ -764,7 +765,7 @@ export const docJoin = (
                   return actions.map(a => {
                     const datos = a.payload.doc.data();
                     const _iddoc = a.payload.doc.id;
-                    return { _iddoc, ...datos };
+                    return { _iddoc, ...datos as {}};
                   });
                 })
                 );
@@ -777,7 +778,7 @@ export const docJoin = (
                   return actions.map(a => {
                     const datos = a.payload.doc.data();
                     const _iddoc = a.payload.doc.id;
-                    return { _iddoc, ...datos };
+                    return { _iddoc, ...datos as {}};
                   });
                 })
                 );

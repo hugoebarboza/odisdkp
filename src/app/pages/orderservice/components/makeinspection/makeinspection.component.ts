@@ -7,7 +7,11 @@ import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, delay }
 // MOMENT
 import * as _moment from 'moment';
 import { DateDialogComponent } from 'src/app/components/date-dialog/date-dialog.component';
-import { MatDialog, MatTableDataSource, MatPaginator, MatSort, MatSlideToggleChange } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 const moment = _moment;
 import * as FileSaver from 'file-saver';
 import * as XLSX from 'xlsx';

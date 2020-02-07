@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
-import { MatTabChangeEvent } from '@angular/material';
+import { MatTabChangeEvent } from '@angular/material/tabs';
 import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { OnDestroy } from '@angular/core';

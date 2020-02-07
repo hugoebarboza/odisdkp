@@ -16,7 +16,7 @@ import { SettingsService, SidenavService, UserService } from 'src/app/services/s
 // REDUX
 import { AppState } from './app.reducers';
 import { Store } from '@ngrx/store';
-import { MatSidenav } from '@angular/material';
+import { MatSidenav } from '@angular/material/sidenav';
 
 
 @Component({

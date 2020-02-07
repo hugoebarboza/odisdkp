@@ -12,8 +12,8 @@ import {  AngularFirestoreCollection, AngularFirestoreDocument } from '@angular/
 import { AngularFireAuth } from '@angular/fire/auth';
 
 // MATERIAL
-import { MatDialog } from '@angular/material';
-import { TooltipPosition } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 // MODELS
 import { User, UserFirebase } from 'src/app/models/types';

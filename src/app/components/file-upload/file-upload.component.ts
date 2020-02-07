@@ -4,7 +4,7 @@ import { FormControl} from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 
 // MATERIAL
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // MODELS
 import { Item } from 'src/app/models/types';

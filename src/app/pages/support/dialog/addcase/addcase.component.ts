@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { FileItem } from 'src/app/models/types';
 import { Observable, Subject, defer } from 'rxjs';
@@ -721,7 +721,7 @@ export const docJoin = (
                   return actions.map(a => {
                     const datos = a.payload.doc.data();
                     const _iddoc = a.payload.doc.id;
-                    return { _iddoc, ...datos };
+                    return { _iddoc, ...datos as {} };
                   });
                 })
                 );

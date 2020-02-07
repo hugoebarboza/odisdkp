@@ -1,7 +1,9 @@
 import { Component, OnInit, Input, ViewChild, OnChanges, SimpleChanges } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 import { OrderserviceService, UserService, ProjectsService } from 'src/app/services/service.index';
-import { MatPaginator, MatSort, MatTableDataSource } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 // FIREBASE
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';

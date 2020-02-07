@@ -755,7 +755,7 @@ export const docJoin = (
                   return actions.map(a => {
                     const datos = a.payload.doc.data();
                     const _iddoc = a.payload.doc.id;
-                    return { _iddoc, ...datos };
+                    return { _iddoc, ...datos as {} };
                   });
                 })
                 );

@@ -25,9 +25,9 @@
               "src/firebase-messaging-sw.js",
               "src/manifest.json"
             ],
-            "styles": [              
+            "styles": [
               "src/styles.css",
-              "src/theme.scss",              
+              "src/theme.scss",
               "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "node_modules/ngx-toastr/toastr.css",
               "node_modules/primeicons/primeicons.css",
@@ -181,5 +181,8 @@
       }
     }
   },
-  "defaultProject": "odisdkp"
+  "defaultProject": "odisdkp",
+  "cli": {
+    "analytics": "ebcada59-4465-477b-a77e-b03662f7b2da"
+  }
 }

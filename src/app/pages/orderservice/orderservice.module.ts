@@ -116,9 +116,6 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 
 // ROUTER
 import { OrderServiceRoutingModule } from './orderservice.routes';
-
-// UTILITY
-import 'hammerjs';
 import { AngularSplitModule } from 'angular-split';
 import { CalendarModule } from 'primeng/calendar';
 import { FlexLayoutModule } from '@angular/flex-layout';

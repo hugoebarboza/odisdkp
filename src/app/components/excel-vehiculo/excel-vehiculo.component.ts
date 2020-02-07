@@ -1,10 +1,11 @@
 import { Component, OnInit , ViewChild, Input, OnDestroy, OnChanges, SimpleChanges, Output, EventEmitter} from '@angular/core';
 import * as XLSX from 'xlsx';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
-import { MatSnackBar } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import * as FileSaver from 'file-saver';
-import { MatDialog, MatDialogRef } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs/Subscription';
 
 // MODEL

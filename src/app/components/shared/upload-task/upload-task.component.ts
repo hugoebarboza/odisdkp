@@ -3,7 +3,7 @@ import { FormControl} from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // FIREBASE
 import { AngularFirestore } from '@angular/fire/firestore';

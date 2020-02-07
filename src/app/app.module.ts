@@ -106,7 +106,7 @@ registerLocaleData(localeEs);
     FormsModule,
     HttpModule,
     HttpClientModule,
-    MatProgressButtonsModule,
+    MatProgressButtonsModule.forRoot(),
     NgxCaptchaModule,
     // PipesModule,
     ReactiveFormsModule,

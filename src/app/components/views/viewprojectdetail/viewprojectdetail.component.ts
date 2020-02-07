@@ -38,7 +38,8 @@ import { StatusComponent } from '../../../pages/orderservice/components/dialog/s
 
 
 // MATERIAL
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 // MODELS
 import {

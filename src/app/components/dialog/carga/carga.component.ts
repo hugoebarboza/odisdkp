@@ -1,6 +1,6 @@
 import { Component, OnInit, Input,  } from '@angular/core';
 import { MatProgressButtonOptions } from 'mat-progress-buttons';
-import { MatSnackBar } from '@angular/material';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormControl} from '@angular/forms';
 
 import { FileItem } from 'src/app/models/types';

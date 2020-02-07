@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, NgZone, OnDestroy, AfterViewInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { TooltipPosition } from '@angular/material';
+import { TooltipPosition } from '@angular/material/tooltip';
 import { Observable } from 'rxjs/Observable';
 
 // SERVICES

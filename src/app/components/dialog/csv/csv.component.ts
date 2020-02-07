@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
-import { Sort, MatDialogRef, MAT_DIALOG_DATA, MatTableDataSource } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 import { FormControl, Validators } from '@angular/forms';
 import { ReplaySubject, Subject } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';

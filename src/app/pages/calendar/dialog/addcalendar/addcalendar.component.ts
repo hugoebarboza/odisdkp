@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, Validators, NgForm } from '@angular/forms';
 
 import { ToastrService } from 'ngx-toastr';
@@ -19,7 +19,7 @@ declare const gapi: any;
 export class AddCalendarComponent implements OnInit {
 
   public title: string = 'Agregar Evento';
-  formControl = new FormControl('', [Validators.required]);  
+  formControl = new FormControl('', [Validators.required]);
   en: any;
   
   
@@ -106,7 +106,7 @@ export class AddCalendarComponent implements OnInit {
       resource: event
     }).then(function(event) {
       //that.loadingResults = false;
-      jQuery('#form-modal').modal('toggle');
+      // jQuery('#form-modal').modal('toggle');
       if (event.error !== undefined) {
         that.toaster.warning('Error: Ha ocurrido error al agregar evento', 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
       } else {
@@ -114,7 +114,7 @@ export class AddCalendarComponent implements OnInit {
         //that.listUpcomingEvents();
       }
     }, function (_err){
-      jQuery('#form-modal').modal('toggle');
+      // jQuery('#form-modal').modal('toggle');
       that.toaster.warning('Error: Ha ocurrido error al agregar evento', 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
     });    
 
@@ -164,7 +164,7 @@ export class AddCalendarComponent implements OnInit {
       resource: event
     }).then(function(event) {
       //that.loadingResults = false;
-      jQuery('#form-modal').modal('toggle');
+      // jQuery('#form-modal').modal('toggle');
       if (event.error !== undefined) {
         that.toaster.warning('Error: Ha ocurrido error al editar evento', 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
       } else {
@@ -172,7 +172,7 @@ export class AddCalendarComponent implements OnInit {
         //that.listUpcomingEvents();
       }
     }, function (_err){
-      jQuery('#form-modal').modal('toggle');
+      // jQuery('#form-modal').modal('toggle');
       that.toaster.warning('Error: Ha ocurrido error al editar evento', 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
     });    
 

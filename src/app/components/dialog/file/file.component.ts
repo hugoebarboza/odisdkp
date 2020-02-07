@@ -1,5 +1,5 @@
 import { Component, OnInit, Inject, SimpleChanges, OnChanges, ChangeDetectorRef } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl} from '@angular/forms';
 import { BehaviorSubject } from 'rxjs';
 

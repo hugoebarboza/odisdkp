@@ -3,7 +3,8 @@ import { ActivatedRoute } from '@angular/router';
 import { MediaMatcher } from '@angular/cdk/layout';
 import { CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 import { FormGroup, FormBuilder, FormArray, FormControl, Validators } from '@angular/forms';
-import { TooltipPosition, MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { TooltipPosition } from '@angular/material/tooltip';
 import { Subscription } from 'rxjs/Subscription';
 import Swal from 'sweetalert2';
 

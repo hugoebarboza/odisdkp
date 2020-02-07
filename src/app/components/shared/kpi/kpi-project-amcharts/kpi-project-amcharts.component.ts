@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, NgZone, OnDestroy, AfterViewInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { TooltipPosition } from '@angular/material';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 // TOASTER MESSAGES
 import { ToastrService } from 'ngx-toastr';

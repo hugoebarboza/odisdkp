@@ -10,7 +10,7 @@ const EXCEL_EXTENSION = '.xlsx';
 
 import Swal from 'sweetalert2';
 
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Limit, Formato } from 'src/app/pages/service/dialog/csvservice/csvservice.component';
 
 @Component({

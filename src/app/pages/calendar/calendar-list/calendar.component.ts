@@ -3,7 +3,7 @@ import { Component, OnInit, NgZone, OnDestroy } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { Subject } from 'rxjs/Subject';
 import { Subscription } from 'rxjs/Subscription';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 
 // MODEL
@@ -442,21 +442,21 @@ export class CalendarComponent implements OnInit, OnDestroy
     }).then(function (event) {
       that.loadingResults = false;
       if (event.error !== undefined) {
-        that.toaster.warning('Error: '+this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
+        that.toaster.warning('Error: ' + this.error, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
       } else {
-        that.toaster.success('Exito: '+ that.updatesuccess , 'Exito' , {timeOut: 4000,});
-        if(!bandera){
-          jQuery('#form-modal').modal('hide');
+        that.toaster.success('Exito: ' + that.updatesuccess , 'Exito' , {timeOut: 4000,});
+        if (!bandera) {
+          // jQuery('#form-modal').modal('hide');
         }
         that.listUpcomingEvents();
       }
-    }, function (_err){
-      jQuery('#form-modal').modal('');
-      that.toaster.warning('Error: ' + that.updateerror, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
+    }, function (_err) {
+      // jQuery('#form-modal').modal('');
+      that.toaster.warning('Error: ' + that.updateerror, 'Error', {enableHtml: true, closeButton: true, timeOut: 6000 });
     });
   }
 
-  
+
   updateSigninStatus(isSignedIn) {
     if (isSignedIn) {
       this.listUpcomingEvents();
@@ -484,7 +484,7 @@ export class CalendarComponent implements OnInit, OnDestroy
     }, function (_err){
       that.toaster.warning('Error: Ha ocurrido un error al eliminar una tarea' + that.updateerror, 'Error', {enableHtml: true,closeButton: true, timeOut: 6000 });
     });
-  }  
+  }
 
 
   buildSimpleFilters(month, year, _reloadPage = false) {
@@ -494,21 +494,21 @@ export class CalendarComponent implements OnInit, OnDestroy
   }
 
 
-  filter(){
-    if(this.proyectos && this.id){
+  filter() {
+    if (this.proyectos && this.id) {
       for(var i = 0; i < this.proyectos.length; i += 1){
         var result = this.proyectos[i];
         if(result.id === this.id){
             return result;
         }
       }
-    }    
+    }
   }
 
   refreshMenu(event: number) {
-		if(event == 1){
+    if (event == 1) {
     }
-	}
+  }
 
 
 }

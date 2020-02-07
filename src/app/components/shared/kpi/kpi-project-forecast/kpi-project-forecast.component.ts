@@ -1,7 +1,10 @@
 import { Component, Input, ViewChild, OnChanges, SimpleChanges, OnDestroy, NgZone } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
-import { MatPaginator, MatSort, MatTableDataSource, TooltipPosition } from '@angular/material';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatSort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 // MODELS
 import { Month } from 'src/app/models/types';

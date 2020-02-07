@@ -3,7 +3,9 @@ import { FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 
 // MATERIAL
-import { MAT_DIALOG_DATA, MatDialogRef, Sort, MatTableDataSource } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { Sort } from '@angular/material/sort';
+import { MatTableDataSource } from '@angular/material/table';
 
 // MODELS
 import { Customer } from 'src/app/models/types';

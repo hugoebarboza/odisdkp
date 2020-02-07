@@ -2,7 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnDestro
 import { FormControl, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
-import { Sort, MatPaginator, TooltipPosition, MatDialog, PageEvent } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { Sort } from '@angular/material/sort';
+import { TooltipPosition } from '@angular/material/tooltip';
 
 // SERVICES
 import { OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';

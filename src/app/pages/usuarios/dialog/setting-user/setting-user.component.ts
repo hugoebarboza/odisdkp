@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit,  ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs/Subscription';
 import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
