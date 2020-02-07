@@ -10,7 +10,8 @@
           "/index.html",
           "/*.css",
           "/*.js",
-          "/manifest.json"
+          "/manifest.json",
+          "/manifest.webmanifest"
         ],
       "urls": [
         "https://fonts.googleapis.com/**",
