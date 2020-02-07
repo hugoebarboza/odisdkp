@@ -18,7 +18,7 @@
   "private": true,
   "dependencies": {
     "@agm/core": "^1.1.0",
-    "@amcharts/amcharts4": "^4.8.6",
+    "@amcharts/amcharts4": "^4.8.9",
     "@angular-devkit/schematics": "^9.0.1",
     "@angular/animations": "^9.0.0",
     "@angular/cdk": "^9.0.0",

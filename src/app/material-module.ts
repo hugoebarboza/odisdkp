@@ -1,6 +1,6 @@
 import {NgModule} from '@angular/core';
 import { MatDatepickerModule} from '@angular/material/datepicker';
-import { MatExpansionModule} from '@angular/material/expansion';
+import { MatExpansionModule } from '@angular/material/expansion';
 
 // CDK MATERIAL
 import { PortalModule } from '@angular/cdk/portal';
@@ -84,4 +84,4 @@ import { MatTreeModule } from '@angular/material/tree';
     ScrollingModule,
   ]
 })
-export class MaterialModule {}
+export class MaterialModule { }
