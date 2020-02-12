@@ -5,9 +5,6 @@
     <div class="card-body">
         <div class="text">{{ usuario.name }} {{ usuario.surname }}<span class="sub-text"> ({{ usuario.email }})</span></div>        
         <h6 class="card-text"><mat-icon mat-list-icon>lock</mat-icon> Opciones de acceso.</h6>
-        <mat-list>
-          <mat-divider></mat-divider>
-        </mat-list>
 
         <section class="mat-dialog-content" >
           <div class="container-fluid" *ngIf="isLoading">
@@ -145,9 +142,9 @@
                     <table class="table table-bordered" style="width: 100%; border-radius: 2px; border: 1px solid #dddddd;">
 
                       <thead>
-                        <tr>
+                        <tr align="center">
                           <th scope="col" style="width: 40%;">Servicio</th>
-                          <th scope="col" style="width: 15%;">Ver</th>
+                          <th scope="col" style="width: 15%;" >Ver</th>
                           <th scope="col" style="width: 15%;">Agregar</th>
                           <th scope="col" style="width: 15%;">Editar</th>
                           <th scope="col" style="width: 15%;">Eliminar</th>
@@ -157,36 +154,35 @@
                       
                         <tbody >
                         <tr *ngFor="let roles of getItems?.controls; let i = index;" [formGroupName]="i">
-
-                          <ng-container *ngFor="let key of roles.controls | keyvalue" >
+                          <ng-container *ngFor="let key of roles?.controls | keyvalue" >
                           <td *ngIf="leerkey(key) && posicion === 1" style="width: 40%;">
-                              <label><input type="checkbox" formControlName="{{key.key}}"> {{roles.value.service_name}}: </label>
-                              <!---<input type="checkbox" formControlName="{{key.key}}"> {{key.key}}--->
+                              <label><input type="checkbox" formControlName="{{key.key}}" (change)="checkValue($event, i, roles)"> {{roles.value.service_name}}: </label>
+                              <!---{{key.key}}--->
                           </td>
                           </ng-container>
 
-                          <ng-container *ngFor="let key of roles.controls | keyvalue" >
+                          <ng-container *ngFor="let key of roles?.controls | keyvalue" >
                             <td *ngIf="leerkey(key) && posicion === 2" style="width: 15%;" align="center" >
-                              <input type="checkbox" formControlName="{{key.key}}" >    
+                            <input type="checkbox" formControlName="{{key.key}}" id="myCheck{{ i + key.key + roles.value.id}}">
                             </td>  
                           </ng-container>
 
-                          <ng-container *ngFor="let key of roles.controls | keyvalue">
+                          <ng-container *ngFor="let key of roles?.controls | keyvalue">
                             <td *ngIf="leerkey(key) && posicion === 3" style="width: 15%;" align="center">
-                              <input type="checkbox" formControlName="{{key.key}}">
+                              <input type="checkbox" formControlName="{{key.key}}" id="myCheck{{ i + key.key + roles.value.id}}">
                             </td>
                           </ng-container>
 
 
-                          <ng-container *ngFor="let key of roles.controls | keyvalue">
+                          <ng-container *ngFor="let key of roles?.controls | keyvalue">
                             <td *ngIf="leerkey(key) && posicion === 4" style="width: 15%;" align="center">
-                              <input type="checkbox" formControlName="{{key.key}}">
+                              <input type="checkbox" formControlName="{{key.key}}" id="myCheck{{ i + key.key + roles.value.id}}">
                             </td>  
                           </ng-container>
 
-                          <ng-container *ngFor="let key of roles.controls | keyvalue" >
+                          <ng-container *ngFor="let key of roles?.controls | keyvalue" >
                             <td *ngIf="leerkey(key) && posicion === 5" style="width: 15%;" align="center">
-                              <input type="checkbox" formControlName="{{key.key}}">
+                              <input type="checkbox" formControlName="{{key.key}}" id="myCheck{{ i + key.key + roles.value.id}}">
                             </td>  
                           </ng-container>
 
@@ -200,7 +196,6 @@
 
 
                 </div>
-
 
                 <!---
                 {{form.value | json}}                  

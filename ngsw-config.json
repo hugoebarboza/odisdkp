@@ -36,7 +36,7 @@
     {
       "name": "odis-api",
       "urls": [
-        "https://odis.api.ocachile.cl/api/v1.0/**"
+        "https://odis.api.ocachile.cl/api/v2.0/**"
       ],
       "cacheConfig": {
         "strategy": "freshness",

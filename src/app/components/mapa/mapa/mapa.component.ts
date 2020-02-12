@@ -13,7 +13,7 @@ import { InfoWindow } from '@agm/core/services/google-maps-types'
 
 // MODAL
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { ModalMapaComponent } from '../../modal/modalmapa/modalmapa.component'; 
+import { ModalMapaComponent } from '../../modal/modalmapa/modalmapa.component';
 
 
 // MODELS
@@ -25,7 +25,7 @@ import {
 
 
 // SERVICES
-import { CountriesService, MapaService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
+import { MapaService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
 // CLASSES
 import { Marcador } from '../../../classes/marcador.class';
@@ -84,27 +84,27 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
            icon: '',
            infoWindow: '',
           },
-      ],    
+      ],
   };
 
-  //ICON USER TRACKIN
+  // ICON USER TRACKIN
   // private iconusertracking = { url: '../../../assets/img/marker-red-tod.png',   };
 
   private datadirections = {
     origin: '',
     destination: '',
-    waypoints: []  
-  }
+    waypoints: []
+  };
 
 
-  public optimizeWaypoints: boolean = false
+  public optimizeWaypoints = false;
 
-  //TIME PICKER
-  //timefrom = {hour: 9, minute: 0};
+  // TIME PICKER
+  // timefrom = {hour: 9, minute: 0};
   timefrom: Time = {hour: '', minute: ''};
   timeuntil: Time = {hour: '', minute: ''};
   meridian = true;
-  spinners = false;  
+  spinners = false;
   columnTimeFromValue: FormControl;
   columnTimeUntilValue: FormControl;
 
@@ -211,7 +211,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     private _dataService: OrderserviceService,    
     private _mapaService: MapaService,
     private _proyectoService: ProjectsService,
-    private _regionService: CountriesService,
+    // private _regionService: CountriesService,
     private _userService: UserService,
     private modalService: NgbModal,
 
@@ -408,41 +408,61 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
 
 
 
-  public loadInfo(){
+  public loadInfo() {
     this.isLoadingResults = true;
     this._dataService.getService(this.token.token, this.id).subscribe(
                 response => {
-                   if(response.status == 'success'){
+                   if(response.status === 'success') {
                      this.project_id = Number (response.datos.project.id);
                      this.country_id = Number (response.datos.project.country_id);
-                     this.servicename = String (response.datos.service_name);                     
-                     this.ServicioSeleccionado.emit(this.servicename);                     
+                     this.servicename = String (response.datos.service_name);
+                     this.ServicioSeleccionado.emit(this.servicename);
                      this.loadregion(this.country_id);
                      this.loadproject(this.project_id);
-                     this.loaduser(this.project_id);                     
+                     this.loaduser(this.project_id);
                      this.loadusergeoreference(this.project_id);
                      this.isLoadingResults = false;
-                    }else{
+                    } else {
                      this.country_id = 0;
                      this.isLoadingResults = false;
                      }
                     },
-                    (error) => {                      
+                    (error) => {
                       this.isLoadingResults = false;
                       this._userService.logout();
-                      //this._router.navigate(["/login"]);          
                       console.log(<any>error);
-                    }  
+                    }
 
-                    );    
+                    );
 
-    }//END IF
+    }// END IF
 
-  public loadregion(countryid:number){
-      if(countryid > 0){
+  async loadregion(countryid: number) {
+
+    const data = await this._userService.getRegion();
+
+    if (data && countryid > 0) {
+      this.latitude = Number (data.datos.latitud);
+      this.longitude = Number (data.datos.longitud);
+      this.titulo = data.datos.company_name;
+      this.subtitulo = data.datos.company_footer;
+      this.direccion = data.datos.company_footer;
+      this.create_at = '';
+      this.update_at = '';
+      this.create_by = '';
+      this.update_by = '';
+      this.estatus = '';
+      this.label = 0;
+      this.icon = 'https://img.icons8.com/color/25/000000/google-home.png';
+      const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+      this.homemarcador.push(nuevoMarcador);
+
+      this.renderMap = true;
+
+      /*
         this._regionService.getRegion(this.token.token, countryid).subscribe(
                 response => {
-                   if(response.status == 'success'){
+                   if(response.status === 'success') {
                     this.latitude = Number (response.datos.latitud);
                     this.longitude = Number (response.datos.longitud);
                     this.titulo = response.datos.company_name;
@@ -454,37 +474,41 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                     this.update_by = '';
                     this.estatus = '';
                     this.label = 0;
-                    //this.icon = 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png'
-                    //this.icon = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                    // this.icon = 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png'
+                    // this.icon = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
                     this.icon = 'https://img.icons8.com/color/25/000000/google-home.png';
-                    //this.lat = response.datos.latitud;
-                    //this.lng = response.datos.longitud;
+                    // this.lat = response.datos.latitud;
+                    // this.lng = response.datos.longitud;
                     const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
                     this.homemarcador.push(nuevoMarcador);
 
                     this.renderMap = true;
-                    }else{
+                    } else {
                       this.lat = 0;
                       this.lng = 0;
                          }
                     },
                       error => {
-                      this._userService.logout();   
-                      //this._router.navigate(["/login"]);
+                      this._userService.logout();
+                      // this._router.navigate(["/login"]);
                       console.log(<any>error);
-                      } 
-                    );    
-      //console.log(this.homemarcador);
+                      }
+                    );
+      // console.log(this.homemarcador);*/
+
+      } else {
+        this.lat = 0;
+        this.lng = 0;
       }
   }
 
-  public loadproject(projectid:number){
+  public loadproject(projectid:number) {
     this.termino = 0;
     this.date = 'day';
     this.status = 0;
     this.servicetype = 0;
 
-    if(projectid > 0){                                
+    if(projectid > 0) {
         this._proyectoService.getProjectOrder(this.token.token, projectid, this.termino, this.date, this.status, this.id, this.servicetype).then(
           (res: any) => 
           {

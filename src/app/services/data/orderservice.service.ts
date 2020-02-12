@@ -2,12 +2,15 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+// import { BehaviorSubject } from 'rxjs/BehaviorSubject';
+// import { of } from 'rxjs/observable/of';
 import { throwError } from 'rxjs';
 import 'rxjs/add/operator/map';
+import 'rxjs/add/operator/shareReplay';
+// import { Subject } from 'rxjs/Subject';
 
 // CACHE
-// import { Cacheable } from 'ngx-cacheable';
+import { Cacheable } from 'ngx-cacheable';
 
 import Swal from 'sweetalert2';
 
@@ -16,17 +19,18 @@ import {  Order, ServiceEstatus } from 'src/app/models/types';
 
 import { GLOBAL } from '../global';
 
+// const cacheBuster$ = new Subject<void>();
+
 @Injectable()
     export class OrderserviceService {
 
     url: string;
     dialogData: any;
+    // dataChange: BehaviorSubject<Order[]> = new BehaviorSubject<Order[]>([]);
     error: boolean;
     errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
     errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
-
-
-    dataChange: BehaviorSubject<Order[]> = new BehaviorSubject<Order[]>([]);
+    responseCache = new Map();
 
     constructor(
         private _snackBar: MatSnackBar,
@@ -81,14 +85,23 @@ import { GLOBAL } from '../global';
     const query = 'service/' + id + '/order' + paginate;
     const href = url + query;
     const requestUrl = href;
-    const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    // const headers = new HttpHeaders().set('Content-Type', 'application/json');
+
+
+    const httpOptions = {
+      headers: new HttpHeaders({
+        'Cache-Control': 'public, max-age=300, s-maxage=600',
+        'Content-Type':  'application/json'
+      })
+    };
+
 
     if (!requestUrl || !token) {
         return;
     }
 
     try {
-        return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
+        return await this._http.get<any>(requestUrl, {headers: httpOptions.headers}).shareReplay().toPromise()
         .then()
         .catch((error) => { this.handleError (error); }
         );
@@ -158,17 +171,55 @@ import { GLOBAL } from '../global';
        }
     }
 
+    /*
     getOrderService(token: any, id: string): Observable<any> {
        return this.getQuery('service/' + id + '/order', token);
-    }
+    }*/
 
-    /*
+
+
     @Cacheable({
         maxCacheCount: 2,
         maxAge: 30000,
+    })
+    /*
+    @Cacheable({
+      cacheBusterObserver: cacheBuster$
     })*/
     getShowOrderService(token: any, id: number, orderid: number): Observable<any> {
-        return this.getQuery('service/' + id + '/order/' + orderid, token);
+      if (!token) {
+        return;
+      }
+
+      /*
+      const query = 'service/' + id + '/order/' + orderid;
+      const url = this.url + query;
+      const urlFromCache = this.responseCache.get(url);
+      if (urlFromCache) {
+        return of(urlFromCache);
+      }
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Cache-Control': 'public, max-age=300, s-maxage=600',
+          'Content-Type':  'application/json'
+        })
+      };
+      const response = this._http.get(url, {headers: httpOptions.headers}).map((res: any) => res);
+      response.subscribe(res => this.responseCache.set(url, res));
+      return response;*/
+
+      const query = 'service/' + id + '/order/' + orderid;
+      const url = this.url + query;
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Cache-Control': 'public, max-age=300, s-maxage=600',
+          'Content-Type':  'application/json'
+        })
+      };
+      return this._http.get(url, {headers: httpOptions.headers}).map((res: any) => res).shareReplay();
+
+      /*const headers = new HttpHeaders({'Content-Type': 'application/json' });
+      return this.getQuery('service/' + id + '/order/' + orderid, token);*/
     }
 
     getFirmaImageOrder(token: any, id: string): Observable<any> {

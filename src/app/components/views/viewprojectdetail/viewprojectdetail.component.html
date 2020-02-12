@@ -48,7 +48,7 @@
 
             <div class="p-2" *ngIf="project_type == 0">
               
-                <button type="button" class="btn btn-primary btn-sm" [matMenuTriggerFor]="menuviewselect" >
+                <button type="button" class="btn btn-primary btn-sm" [matMenuTriggerFor]="menuviewselect" *ngIf="_userService.isRole(7)">
                   <mat-icon class="material-icons md-14">settings</mat-icon>Gestiona
                 </button>
 

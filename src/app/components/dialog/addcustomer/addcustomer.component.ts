@@ -161,7 +161,16 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
 
 
 
-  public loadInfo(id: number) {
+  async loadInfo(id: number) {
+
+                    const data = await this._userService.getRegion();
+                    if (data) {
+                      this.region = data.datos.region;
+                    } else {
+                      this.region = null;
+                    }
+
+                    /*
                     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                     response => {
                        if (response.status === 'success') {
@@ -169,7 +178,7 @@ export class AddcustomerComponent implements OnInit, OnDestroy {
                             } else {
                               this.region = null;
                             }
-                     });
+                     });*/
 
                     // GET SERVICE AND CATEGORY CLIENT
                     this.subscription = this._orderService.getService(this.token.token, this.id).subscribe(

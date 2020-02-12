@@ -12,14 +12,10 @@
     margin-top: 0px;
 }
 .example-sidenav-container {
-    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-       causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
     flex: 1;
   }
   
 .example-is-mobile .example-sidenav-container {
-    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-       `<body>` to be our scrolling element for mobile layouts. */
     flex: 1 0 auto;
 }
 .not-scroll {
@@ -51,14 +47,10 @@
     right: 0;
 }
 .example-sidenav-container {
-    /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
-       causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
     flex: 1;
   }
   
 .example-is-mobile .example-sidenav-container {
-    /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
-       `<body>` to be our scrolling element for mobile layouts. */
     flex: 1 0 auto;
 }
 .pagecontent {
@@ -99,14 +91,6 @@
     flex-shrink: 0;
     margin-right: 16px;
     color: #42526E;
-}
-
-.css-t44v0r {
-    display: flex;
-     flex-direction: column;
-    -webkit-box-flex: 1;
-    flex-grow: 1;
-    overflow-x: hidden;
 }
 .mat-icon-button {
     outline: 0;
@@ -228,13 +212,6 @@
     border-radius: 3px;
     outline: none;
     text-decoration: none;
-}
-.css-t44v0r {
-    display: flex;
-    flex-direction: column;
-    -webkit-box-flex: 1;
-    flex-grow: 1;
-    overflow-x: hidden;
 }
 a .iHthaF, button .iHthaF {
     cursor: pointer;
@@ -426,16 +403,6 @@ a .iHthaF, button .iHthaF {
     display: flex;
     flex-direction: row;
 }
-.gtZlhkn {
-    font-size: 16px;
-    font-style: inherit;
-    line-height: 1.25;
-    color: rgb(23, 43, 77);
-    font-weight: 600;
-    letter-spacing: -0.006em;
-    margin-top: 0px;
-}
-
 .gtZlhk {
     font-size: 1.14286em;
     font-style: inherit;
@@ -444,12 +411,6 @@ a .iHthaF, button .iHthaF {
     font-weight: 600;
     letter-spacing: -0.006em;
     margin-top: 0px;
-}
-.eZsjqh {
-    margin-left: 22px;
-}
-.hMxLTh {
-    color: rgb(0, 82, 204);
 }
 .EacRc {
     display: flex;
@@ -497,13 +458,6 @@ a .iHthaF, button .iHthaF {
     font-weight: 600;
     letter-spacing: -0.006em;
 }
-.fxEEZH {
-    white-space: pre-line;
-}
-.eGemEI {
-    color: rgb(165, 173, 186);
-}
-
 .gMrJwo {
     -webkit-box-align: center;
     align-items: center;
@@ -678,12 +632,6 @@ mat-form-field {
     border-width: 2px;
     padding: 6px;
 }
-.gtOfvw {
-    display: flex;
-    min-width: 0px;
-    width: 100%;
-    flex: 1 1 auto;
-}
 .dpbvNR {
     font-size: 1.71429em;
     font-style: inherit;
@@ -692,28 +640,6 @@ mat-form-field {
     letter-spacing: -0.01em;
     line-height: 32px;
     padding: 0px;
-}
-.cYFuds {
-    -webkit-appearance: none;
-    display: inline-block;
-    line-height: 1;
-    opacity: 0;
-    background: transparent;
-    border-width: 0px;
-    border-style: initial;
-    border-color: initial;
-    border-image: initial;
-}
-.dRcQmw:hover {
-    -webkit-appearance: none;
-    display: inline-block;
-    line-height: 1;
-    opacity: 1;
-    background: transparent;
-    border-width: 0px;
-    border-style: initial;
-    border-color: initial;
-    border-image: initial;
 }
 
 .dpbvNR:focus {
@@ -741,8 +667,6 @@ mat-form-field {
     font-weight: 500;
     letter-spacing: -0.01em;
     line-height: 32px;
-    /*border-style: initial;
-    border-image: initial;*/
 }
 
 .dpbvNR:hover {

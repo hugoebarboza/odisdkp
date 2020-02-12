@@ -393,20 +393,26 @@ export class AddServiceComponent implements OnInit, OnDestroy {
     }    
   }
 
-  loadInfo(){
+  async loadInfo() {
+    const data = await this._userService.getRegion();
+
+    if (data) {
+      this.regiones = data.datos.region;
+    } else {
+      this.regiones = null;
+    }
+    /*
     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
     response => {
-       if(response.status == 'success'){                  
+       if (response.status == 'success') {
               this.regiones = response.datos.region;
-              //console.log(this.regiones);
-              //console.log(this.regiones.length);
-            }else{
+            } else {
               this.regiones = null;
             }
-     });
+     });*/
   }
 
-  
+
   loadProjectServiceCategorie(){
     this.projectservicecategorie = null;    
     this.subscription = this._project.getProjectServiceCategorie(this.token.token, this.data.project_id).subscribe(

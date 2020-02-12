@@ -31,7 +31,7 @@ import { ShowcustomerComponent } from '../../dialog/showcustomer/showcustomer.co
 import { SettingscustomerComponent } from '../../dialog/settingscustomer/settingscustomer.component';
 
 // SERVICES
-import { CountriesService, CustomerService, ExcelService, UserService } from 'src/app/services/service.index';
+import { CustomerService, ExcelService, UserService } from 'src/app/services/service.index';
 
 // MOMENT
 import * as _moment from 'moment';
@@ -76,7 +76,8 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
   loading: boolean;
   identity;
   index: number;
-  indexitem: number;
+  indexitem: any;
+  profile: any;
   projectname;
   proyectos: Array<Proyecto>;
   subscription: ISubscription;
@@ -157,15 +158,14 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
   constructor(
     public _userService: UserService,
-    private _proyectoService: UserService,
     private _route: ActivatedRoute,
     public dialog: MatDialog,
-    private _regionService: CountriesService,
+    // private _regionService: CountriesService,
     private excelService: ExcelService,
     public dataCustomerService: CustomerService
   ) {
     this.identity = this._userService.getIdentity();
-    this.proyectos = this._proyectoService.getProyectos();
+    this.proyectos = this._userService.getProyectos();
     this._userService.handleAuthentication(this.identity, this.token);
     this.token = this._userService.getToken();
     this.ServicioSeleccionado = new EventEmitter();
@@ -204,8 +204,14 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
 
   ngOnChanges(_changes: SimpleChanges) {
     this.refreshTableCustomer();
-    const paramp: any = this.filterProject();
+  }
+
+  async refreshTableCustomer() {
+
+    const paramp: any = await this.filterProject();
+
     if (paramp) {
+
       if (paramp.project_type === 0) {
         this.table = 'address';
         this.termHist = 'lectura';
@@ -214,57 +220,64 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
         this.table = 'vehiculos';
         this.termHist = 'ubicaciones';
       }
+
+      this.proyectos = this._userService.getProyectos();
+
+      const response: any = await this._userService.getFilterService(this.proyectos, this.id);
+
+      if (response) {
+        this.profile = response;
+        this.termino = '';
+        this.regionMultiCtrl.reset();
+        this.filterValue = '';
+        this.selectedColumnn.fieldValue = '';
+        this.selectedColumnn.columnValue = '';
+        this.selectedColumnnDate.fieldValue = '';
+        this.selectedColumnnDate.columnValueDesde = '';
+        this.selectedColumnnDate.columnValueHasta = '';
+        this.filtersregion.fieldValue = '';
+        this.pageSize = 15;
+        this.paginator.pageIndex = 0;
+        this.isLoadingResults = true;
+        this.sort.active = 'create_at';
+        this.sort.direction = 'desc';
+
+        this.dataCustomerService.getCustomerProject(
+          this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+          this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
+          this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+          this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token).then(
+          (res: any) => {
+            res.subscribe(
+              (some: any) => {
+                if (some.datos.data) {
+                this.resultsLength = some.datos.total;
+                this.servicename = some.datos.data[0]['service_name'];
+                this.nametable = some.datos.data[0]['name_table'];
+                this.isRateLimitReached = false;
+                } else {
+                this.resultsLength = 0;
+                this.servicename = some.datos['service_name'];
+                this.nametable = some.datos['name_table'];
+                this.isRateLimitReached = true;
+                }
+
+                this.ServicioSeleccionado.emit(this.servicename);
+                this.dataSource = new MatTableDataSource(some.datos.data);
+                this.isLoadingResults = false;
+              },
+              (error) => {
+                this.isLoadingResults = false;
+                this.isRateLimitReached = true;
+                this._userService.logout();
+                console.log(<any>error);
+              }
+              );
+        });
+
+      }
+
     }
-  }
-
-  private refreshTableCustomer() {
-    this.termino = '';
-    this.regionMultiCtrl.reset();
-    this.filterValue = '';
-    this.selectedColumnn.fieldValue = '';
-    this.selectedColumnn.columnValue = '';
-    this.selectedColumnnDate.fieldValue = '';
-    this.selectedColumnnDate.columnValueDesde = '';
-    this.selectedColumnnDate.columnValueHasta = '';
-    this.filtersregion.fieldValue = '';
-    this.pageSize = 15;
-    this.paginator.pageIndex = 0;
-    this.isLoadingResults = true;
-    this.sort.active = 'create_at';
-    this.sort.direction = 'desc';
-
-    this.dataCustomerService.getCustomerProject(
-      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
-      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
-      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token).then(
-      (res: any) => {
-        res.subscribe(
-          (some: any) => {
-            if (some.datos.data) {
-            this.resultsLength = some.datos.total;
-            this.servicename = some.datos.data[0]['service_name'];
-            this.nametable = some.datos.data[0]['name_table'];
-            this.isRateLimitReached = false;
-            } else {
-            this.resultsLength = 0;
-            this.servicename = some.datos['service_name'];
-            this.nametable = some.datos['name_table'];
-            this.isRateLimitReached = true;
-            }
-
-            this.ServicioSeleccionado.emit(this.servicename);
-            this.dataSource = new MatTableDataSource(some.datos.data);
-            this.isLoadingResults = false;
-          },
-          (error) => {
-            this.isLoadingResults = false;
-            this.isRateLimitReached = true;
-            this._userService.logout();
-            console.log(<any>error);
-          }
-          );
-    });
   }
 
   ngOnDestroy() {
@@ -281,7 +294,30 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
     this.indexitem = -1;
   }
 
-  public loadInfo() {
+  async loadInfo() {
+    const data = await this._userService.getRegion();
+
+    if (data) {
+      for (let i = 0; i < data.datos.region.length; i++) {
+        const regionname = data.datos.region[i]['region_name'];
+        const regionid = data.datos.region[i]['id'];
+        this.region[i] = { name: regionname, id: regionid };
+        this.filteredRegion.next(this.region.slice());
+        this.filteredRegionMulti.next(this.region.slice());
+
+        // listen for search field value changes
+        this.regionMultiFilterCtrl.valueChanges
+          .pipe(takeUntil(this._onDestroy))
+          .subscribe(() => {
+            this.filterRegionMulti();
+          });
+
+      }
+
+    } else {
+      this.region = null;
+    }
+    /*
     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                 response => {
                    if (response.status === 'success') {
@@ -304,7 +340,7 @@ export class ViewprojectcustomerComponent implements OnInit, OnDestroy, OnChange
                     } else {
                       this.region = null;
                          }
-                    });
+                    });*/
   }
 
   getParams() {

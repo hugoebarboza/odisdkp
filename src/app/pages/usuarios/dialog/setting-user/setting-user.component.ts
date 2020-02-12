@@ -34,7 +34,7 @@ export class SettingUserComponent implements OnInit {
   // userservice: any[] = [];
   userservicerol: any[] = [];
   // header = ['status', 'destroy', 'show', 'store', 'update'];
-  label = ['service_name', 'show', 'store', 'update', 'delete'];
+  // label = ['service_name', 'show', 'store', 'update', 'delete'];
   columns: Array<any> = [
     { name: 'status', posicion: 1 },
     { name: 'show', posicion: 2 },
@@ -175,9 +175,9 @@ export class SettingUserComponent implements OnInit {
     return bandera;
   }
 
-
+  /*
   leerkeytr (data: any) {
-    console.log(data);
+    // console.log(data);
     // let bandera = false;
     // tslint:disable-next-line:forin
     for (const k in data) {
@@ -194,6 +194,38 @@ export class SettingUserComponent implements OnInit {
         }
     }
     // return bandera;
+  }*/
+
+  checkValue(event: any, index: number, key: any) {
+    const status = event.target.checked;
+    // console.log(key);
+    // console.log(this.form.value);
+    // this.form.get('roles').valueChanges.subscribe(value => console.log(value));
+
+
+    if (!status) {
+      const element = <HTMLInputElement> document.getElementById('myCheck' + index + 'show' + key.value.id);
+      element.disabled = true;
+      const element2 = <HTMLInputElement> document.getElementById('myCheck' + index + 'store' + key.value.id);
+      element2.disabled = true;
+      const element3 = <HTMLInputElement> document.getElementById('myCheck' + index + 'update' + key.value.id);
+      element3.disabled = true;
+      const element4 = <HTMLInputElement> document.getElementById('myCheck' + index + 'destroy' + key.value.id);
+      element4.disabled = true;
+
+    }
+    if (status) {
+      const element = <HTMLInputElement> document.getElementById('myCheck' + index + 'show' + key.value.id);
+      element.disabled = false;
+      const element2 = <HTMLInputElement> document.getElementById('myCheck' + index + 'store' + key.value.id);
+      element2.disabled = false;
+      const element3 = <HTMLInputElement> document.getElementById('myCheck' + index + 'update' + key.value.id);
+      element3.disabled = false;
+      const element4 = <HTMLInputElement> document.getElementById('myCheck' + index + 'destroy' + key.value.id);
+      element4.disabled = false;
+    }
+
+    // console.log(index);
   }
 
 

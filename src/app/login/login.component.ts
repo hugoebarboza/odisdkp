@@ -1,13 +1,14 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { FormControl, Validators, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
+import { Subscription } from 'rxjs/Subscription';
 
 // MODELS
 import { Proyecto, User } from 'src/app/models/types';
 
 
 // SERVICES
-import { AuthService, DashboardService, SettingsService, UserService } from 'src/app/services/service.index';
+import { AuthService, CountriesService, DashboardService, SettingsService, UserService } from 'src/app/services/service.index';
 
 // SETTINGS
 import { GLOBAL } from '../services/global';
@@ -53,6 +54,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   success: string;
   show = false;
   status: string;
+  subscription: Subscription;
   title: string;
   token: any;
   trace: any;
@@ -114,6 +116,7 @@ export class LoginComponent implements OnInit, OnDestroy {
   constructor(
     private afp: AngularFirePerformance,
     public _proyectoService: DashboardService,
+    public _regionService: CountriesService,
     public _route: ActivatedRoute,
     public _router: Router,
     public _userService: UserService,
@@ -162,6 +165,9 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (this.trace) {
       this.trace.unsubscribe();
     }
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+      }
   }
 
   onChange(value) {
@@ -255,6 +261,7 @@ export class LoginComponent implements OnInit, OnDestroy {
       this._router.navigate(['dashboard']);
       this.loginAction(proyectos, identity);
       this.loginFirebase(token, this.usuario, identity);
+      this.getRegion(token, identity);
     } else {
       this.spinnerButtonOptions.active = false;
       this.spinnerButtonOptions.text = 'Iniciar sesión';
@@ -319,6 +326,20 @@ export class LoginComponent implements OnInit, OnDestroy {
     }
 
     return await this._userService.getPerfilUser(token.token, id);
+  }
+
+  getRegion(token: any, identity: any) {
+    if (!token || !identity) {
+      return;
+    }
+
+    this.subscription = this._regionService.getRegion(token.token, identity.country).subscribe(
+      response => {
+         if (response.status === 'success') {
+          const key = 'region';
+          this._userService.saveStorage(key, response);
+          }
+      });
   }
 
 

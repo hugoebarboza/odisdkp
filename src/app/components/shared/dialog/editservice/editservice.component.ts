@@ -505,6 +505,11 @@ export class EditServiceComponent implements OnInit, OnDestroy {
 
 
   loadInfo() {
+    const data = this._userService.getRegion();
+    if (data) {
+      this.regiones = data.datos.region;
+    }
+    /*
     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
     response => {
        if (response.status === 'success') {
@@ -514,7 +519,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
             } else {
               this.regiones = null;
             }
-     });
+     });*/
   }
 
 

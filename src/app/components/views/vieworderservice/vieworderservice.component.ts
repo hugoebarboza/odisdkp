@@ -25,7 +25,7 @@ import * as FileSaver from 'file-saver';
 import { GLOBAL } from '../../../services/global';
 
 // SERVICES
-import { CountriesService, ExcelService, ModalManageService, OrderserviceService, ProjectsService, UserService, ZipService } from 'src/app/services/service.index';
+import { ExcelService, ModalManageService, OrderserviceService, ProjectsService, UserService, ZipService } from 'src/app/services/service.index';
 
 
 // MODELS
@@ -87,7 +87,7 @@ interface Time {
   templateUrl: './vieworderservice.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./vieworderservice.component.css'],
-  providers: [CountriesService, ExcelService, OrderserviceService, UserService]
+  providers: [ExcelService, OrderserviceService, UserService]
 })
 
 export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
@@ -132,6 +132,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   identity: any;
   order: Order[] = [];
   order_id: number;
+  profile: any;
   proyectos: any;
   projectname: string;
   private project_id: number;
@@ -156,7 +157,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   label: boolean;
   row: number;
   index: number;
-  indexitem: number;
+  indexitem: any;
   category_id: number;
   order_date: string;
   required_date: string;
@@ -166,7 +167,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   role: number;
 
 
-  selectedRow: number;
+  selectedRow: any;
   public _portal: Portal<any>;
   public _home: Portal<any>;
 
@@ -332,7 +333,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
   constructor(
     public _modalManage: ModalManageService,
-    private _regionService: CountriesService,
+    // private _regionService: CountriesService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
     public _router: Router,
@@ -448,9 +449,12 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   async afterChanges(id: number) {
+    // this._userService.isRoleService('store', this.id);
     if (id && id > 0 && this.proyectos && this.proyectos.length > 0) {
-      const response: any = await this.filterService(this.proyectos, this.id);
+      this.proyectos = this._userService.getProyectos();
+      const response: any = await this._userService.getFilterService(this.proyectos, this.id);
       if (response) {
+        this.profile = response;
         this.portal = 0;
         this.selectedRow = -1;
         this.order_id = 0;
@@ -493,26 +497,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this.subscription.unsubscribe();
     }
   }
-
-  async filterService(data: any, id: number) {
-
-    if (data && data.length > 0 && id && id > 0) {
-      for (let x = 0; x < data.length; x += 1) {
-        const project = data[x];
-        if (project && project.service && project.service.length > 0) {
-          const service = project.service;
-          for (let i = 0; i < service.length; i += 1) {
-            if (service[i].id === id) {
-              return true;
-            }
-          }
-
-        }
-      }
-      return false;
-    }
-  }
-
 
 
   getDateFormar(date: Date) {
@@ -992,9 +976,30 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
 
-  public loadInfo() {
+  async loadInfo() {
+    const data = await this._userService.getRegion();
+    if (data) {
+      for (let i = 0; i < data.datos.region.length; i++) {
+        const regionname = data.datos.region[i]['region_name'];
+        const regionid = data.datos.region[i]['id'];
+        this.region[i] = { name: regionname, id: regionid };
+      }
+        this.filteredRegion.next(this.region.slice());
+        this.filteredRegionMulti.next(this.region.slice());
+
+        // listen for search field value changes
+        this.regionMultiFilterCtrl.valueChanges
+          .pipe(takeUntil(this._onDestroy))
+          .subscribe(() => {
+            this.filterRegionMulti();
+          });
+    } else {
+      this.region = null;
+    }
+    /*
    this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                 response => {
+                  console.log(response);
                    if (response.status === 'success') {
                     for (let i = 0; i < response.datos.region.length; i++) {
                       const regionname = response.datos.region[i]['region_name'];
@@ -1014,7 +1019,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
                     } else {
                       this.region = null;
                          }
-                    });
+                    }); */
     this.cd.markForCheck();
   }
 
@@ -1770,7 +1775,7 @@ private filterRegionMulti() {
                         }
 
                         valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] + ';' + this.exportDataSource.data[j]['order_number'] + ';' + this.exportDataSource.data[j]['user'] + ';' + this.exportDataSource.data[j]['userupdate']
-                                              + ';' + this.exportDataSource.data[j]['userassigned'] + ';' + this.exportDataSource.data[j]['service_name'] + ';' + this.exportDataSource.data[j]['servicetype'] + ';' + this.exportDataSource.data[j]['estatus'];
+                                              + ';' + this.exportDataSource.data[j]['userassigned'] + ';' + this.exportDataSource.data[j]['service_name'] + ';' + this.exportDataSource.data[j]['servicetype'] + ';' + this.exportDataSource.data[j]['estatus'] + ';';
 
                                               const obs = String(this.exportDataSource.data[j]['observation']).replace(/(\r\n|\n|\r)/gm, ' ');
 

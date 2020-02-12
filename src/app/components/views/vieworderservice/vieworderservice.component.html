@@ -777,9 +777,9 @@
   </ng-container>
 
   <!-- actions -->
-      <ng-container matColumnDef="actions" >
+      <ng-container matColumnDef="actions" *ngIf="profile">
         <mat-header-cell *matHeaderCellDef >        
-          <button mat-icon-button color="primary" (click)="addNew(id, category_id)" *ngIf="_userService.isRole(4) && id && category_id"
+          <button mat-icon-button color="primary" (click)="addNew(id, category_id)" *ngIf="_userService.isRole(4) && id && category_id && profile.store === 1"
           matTooltip="Agregar orden."
           [matTooltipPosition]="positionheaderaction.value"
           >
@@ -802,7 +802,7 @@
 
 
 
-          <button mat-icon-button color="primary" [matMenuTriggerFor]="menuviewselectaction"  *ngIf="_userService.isRole(4) && id && category_id">
+          <button mat-icon-button color="primary" [matMenuTriggerFor]="menuviewselectaction"  *ngIf="_userService.isRole(4) && id && category_id && profile.store === 1">
           <mat-icon class="material-icons">publish</mat-icon>
           </button>
 
@@ -821,7 +821,7 @@
 
 
 
-          <button mat-icon-button [matMenuTriggerFor]="menueditorder"  *ngIf="_userService.isRole(4)"
+          <button mat-icon-button [matMenuTriggerFor]="menueditorder"  *ngIf="_userService.isRole(4) && profile.update === 1"
           matTooltip="Seleccione acción a tomar.">
             <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">edit</mat-icon>
             <mat-icon aria-label="launch" *ngIf="i == indexitem">edit</mat-icon>
@@ -838,7 +838,7 @@
         </mat-menu> 
 
 
-          <button mat-icon-button color="warn" *ngIf="_userService.isRole(5)" (click)="deleteItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id,  order.estatus, order.order_date, order.required_date, order.observation, order.create_at, order.project_name, order.service_name, order.servicetype )"
+          <button mat-icon-button color="warn" *ngIf="_userService.isRole(5) && profile.delete === 1" (click)="deleteItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id,  order.estatus, order.order_date, order.required_date, order.observation, order.create_at, order.project_name, order.service_name, order.servicetype )"
           matTooltip="Eliminar orden."
           [matTooltipPosition]="positiondatasourceaction.value"
           >
@@ -846,7 +846,7 @@
             <mat-icon aria-label="Delete" *ngIf="i == indexitem">delete</mat-icon>
           </button>
 
-          <button mat-icon-button [matMenuTriggerFor]="menuviewshoworder"  matTooltip="Acciones (Presiona para acceder a la visualización de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
+          <button mat-icon-button *ngIf="profile.show === 1" [matMenuTriggerFor]="menuviewshoworder"  matTooltip="Acciones (Presiona para acceder a la visualización de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
               <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
               <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
             </button>
@@ -860,7 +860,7 @@
               </a>
           </mat-menu> 
 
-          <button mat-icon-button [matMenuTriggerFor]="menuviewselectorder" *ngIf="_userService.isRole(6)"  matTooltip="Acciones (Presiona para acceder a las acciones de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
+          <button mat-icon-button [matMenuTriggerFor]="menuviewselectorder" *ngIf="_userService.isRole(6) && profile.store === 1"  matTooltip="Acciones (Presiona para acceder a las acciones de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
             <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">more_horiz</mat-icon>
             <mat-icon aria-label="launch" *ngIf="i == indexitem">more_horiz</mat-icon>
           </button>

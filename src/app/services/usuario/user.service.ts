@@ -32,10 +32,11 @@ export class UserService  {
     public url: string;
     formularios: [];
     public departamentos: Array<Departamento>;
-    public idaccount;
-    public identity;
-    public token;
+    public idaccount: any;
+    public identity: any;
+    public token: any;
     public proyectos: Array<Proyecto>;
+    public region: any;
     public usuario: any;
     public headers: HttpHeaders = undefined;
 
@@ -53,13 +54,15 @@ export class UserService  {
 
     cargarStorage() {
     if ( localStorage.getItem('token')) {
-      this.token = JSON.parse( localStorage.getItem('token') );
       this.identity = JSON.parse( localStorage.getItem('identity') );
       this.proyectos = JSON.parse( localStorage.getItem('proyectos'));
+      this.region = JSON.parse( localStorage.getItem('region') );
+      this.token = JSON.parse( localStorage.getItem('token') );
     } else {
-      this.token = '';
       this.identity = null;
       this.proyectos = [];
+      this.region = '';
+      this.token = '';
     }
   }
 
@@ -407,6 +410,25 @@ export class UserService  {
         return this.identity;
     }
 
+    async getFilterService(data: any, id: number) {
+
+      if (data && data.length > 0 && id && id > 0) {
+        for (let x = 0; x < data.length; x += 1) {
+          const project = data[x];
+          if (project && project.service && project.service.length > 0) {
+            const service = project.service;
+            for (let i = 0; i < service.length; i += 1) {
+              if (service[i].id === id) {
+                // return true;
+                return service[i];
+              }
+            }
+          }
+        }
+        return false;
+      }
+    }
+
 
     getToken() {
         const token = JSON.parse(localStorage.getItem('token'));
@@ -440,6 +462,18 @@ export class UserService  {
         })
         .catch((error) => { throw new Error('User does not have any Profile!' + error); });
     }
+
+    getRegion() {
+      const region = JSON.parse(localStorage.getItem('region'));
+      if (region !== 'Undefined' && region !== null) {
+        this.region = region;
+      } else {
+        this.logout();
+        this.region = null;
+      }
+        return this.region;
+    }
+
 
 
     getRoleUser(token: any, role: number): Observable<any> {
@@ -617,6 +651,46 @@ export class UserService  {
      }
     }
 
+    /*
+    public isRoleService(role: string, id: number): boolean {
+
+      if (!role || id === 0) {
+         return;
+      }
+
+      const proyectos = JSON.parse(localStorage.getItem('proyectos'));
+
+      if (proyectos !== 'Undefined' && proyectos != null && role && id && id > 0) {
+
+          for (let x = 0; x < proyectos.length; x += 1) {
+            const project = proyectos[x];
+
+            if (project && project.service && project.service.length > 0) {
+              const service = project.service;
+
+              for (let i = 0; i < service.length; i += 1) {
+                if (service[i].id === id) {
+                  const userrol: UserRolService = service[i];
+                  // console.log(userrol);
+                  // console.log(userrol[role]);
+                  if (userrol && userrol[role] === 1) {
+                    console.log('true');
+                    return true;
+                  } else {
+                    console.log('false');
+                    return false;
+                  }
+                }
+              }
+            }
+          }
+          return false;
+      } else {
+        return false;
+   }
+  }*/
+
+
     getDepartamentos() {
         const departamentos = JSON.parse(localStorage.getItem('departamentos'));
         if (departamentos !== 'Undefined' && departamentos != null) {
@@ -714,8 +788,10 @@ export class UserService  {
     localStorage.removeItem('departamentos');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('fotoprofile');
+    localStorage.removeItem('formularios');
     localStorage.removeItem('identity');
     localStorage.removeItem('proyectos');
+    localStorage.removeItem('region');
     localStorage.removeItem('token');
     localStorage.removeItem('uid');
     this.resetAction();

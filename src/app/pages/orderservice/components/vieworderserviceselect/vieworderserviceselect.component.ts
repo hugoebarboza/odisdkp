@@ -21,7 +21,7 @@ import * as _moment from 'moment';
 const moment = _moment;
 
 // SERVICES
-import { CountriesService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
+import { OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
 import Swal from 'sweetalert2';
 
@@ -186,7 +186,6 @@ selectedColumnnEstatus = {
     public dataService: OrderserviceService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
-    private _regionService: CountriesService,
     public _userService: UserService,
   ) {
     this.identity = this._userService.getIdentity();
@@ -630,8 +629,31 @@ selectedColumnnEstatus = {
   }
 
 
-  public loadInfo() {
+  async loadInfo() {
 
+    const data = await this._userService.getRegion();
+
+    if (data) {
+      for (let i = 0; i < data.datos.region.length; i++) {
+        const regionname = data.datos.region[i]['region_name'];
+        const regionid = data.datos.region[i]['id'];
+        this.region[i] = { name: regionname, id: regionid };
+      }
+        this.filteredRegion.next(this.region.slice());
+        this.filteredRegionMulti.next(this.region.slice());
+
+        // listen for search field value changes
+        this.regionMultiFilterCtrl.valueChanges
+          .pipe(takeUntil(this._onDestroy))
+          .subscribe(() => {
+            this.filterRegionMulti();
+          });
+
+    } else {
+      this.region = null;
+    }
+
+/*
    this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                 response => {
 
@@ -654,7 +676,7 @@ selectedColumnnEstatus = {
                     } else {
                       this.region = null;
                          }
-                    });
+                    });*/
   }
 
 

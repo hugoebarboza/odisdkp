@@ -241,8 +241,16 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
   }
 
 
-  public loadInfo(id: number) {
+  async loadInfo(id: number) {
                     // GET REGIONES
+                    const data = await this._userService.getRegion();
+                    if (data) {
+                      this.region = data.datos.region;
+                    } else {
+                      this.region = null;
+                    }
+
+                    /*
                     this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
                     response => {
                        if (response.status === 'success') {
@@ -250,7 +258,7 @@ export class EditcustomerComponent implements OnInit, OnDestroy {
                             } else {
                               this.region = null;
                             }
-                     });
+                     });*/
 
 
                     // GET SERVICE AND CATEGORY CLIENT

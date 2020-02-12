@@ -591,7 +591,16 @@ deleteCommentDatabase(item: any) {
                 });
       }
 
-      loadRegion() {
+    async loadRegion() {
+      const data = await this._userService.getRegion();
+
+      if (data) {
+        this.regiones = data.datos.region;
+      } else {
+        this.regiones = null;
+      }
+
+      /*
       this.subscription = this._regionService.getRegion(this.token.token, this.identity.country).subscribe(
       response => {
          if (response.status === 'success') {
@@ -599,7 +608,7 @@ deleteCommentDatabase(item: any) {
               } else {
                 this.regiones = null;
               }
-       });
+       });*/
     }
 
     onSelectRegion(regionid: number) {
