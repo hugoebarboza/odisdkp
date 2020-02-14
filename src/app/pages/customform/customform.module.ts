@@ -9,10 +9,14 @@ import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
 // COMPONENTS
+import { AtributoAlertComponent } from './atributo-alert/atributo-alert.component';
 import { CreateFormComponent } from './create-form/create-form.component';
 import { EditFormComponent } from './dialog/edit-form/edit-form.component';
+import { EditNotificationComponent } from './atributo-alert/dialog/edit-notification/edit-notification.component';
 import { FormviewComponent } from './formview/formview.component';
+import { ListNotificationComponent } from './atributo-alert/dialog/list-notification/list-notification.component';
 import { MakeFormComponent } from './dialog/make-form/make-form.component';
+import { NewAlertComponent } from './atributo-alert/dialog/new-alert/new-alert.component';
 import { OrderViewComponent } from './order-view/order-view.component';
 
 // DIALOG
@@ -52,15 +56,22 @@ import { SupportModule } from '../support/support.module';
   ],
   declarations:
   [
+    AtributoAlertComponent,
     CreateFormComponent,
     EditFormComponent,
+    EditNotificationComponent,
     FormviewComponent,
+    ListNotificationComponent,
     MakeFormComponent,
+    NewAlertComponent,
     OrderViewComponent,
   ],
   entryComponents: [
     EditFormComponent,
+    EditNotificationComponent,
+    ListNotificationComponent,
     MakeFormComponent,
+    NewAlertComponent
   ],
   providers: [
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},

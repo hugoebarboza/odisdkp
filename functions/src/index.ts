@@ -1,7 +1,7 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase);
-import * as Hello from './app'
+import * as clf from './app'
 const cors = require("cors")({ origin: true });
 
 
@@ -12,21 +12,14 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 
 
 // Function Hello
-export const hi = Hello.listener
+export const hi = clf.listener
 
-/*
-exports.hello = functions.https.onRequest((req, res) => {
-  return cors(req, res, () => {
-      res.send("New Hello from a New Severless Database!")
-  });
-});*/
+// Function HelloWorld
+export const hello = clf.helloWorld
 
-// Function Hello World
-exports.helloWorld = functions.https.onRequest((req, res) => {
-  return cors(req, res, () => {
-      res.send("Hello from a Old Severless Database!")
-  });
-});
+// Function TimeStamp
+export const time = clf.timestamp
+
 
 
 // Function FCM Send

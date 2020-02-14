@@ -54,6 +54,16 @@ export class CustomformService {
     }
   }
 
+
+  getFormFieldNotification(token: any, id: number) {
+    if (!token) {
+      return;
+    }
+
+    return this.getQuery('servicetypeform/' + id + '/formfieldnotification', token);
+  }
+
+
   getProjectForm(token: any, id: number) {
     if (!token) {
       return;
@@ -70,29 +80,13 @@ export class CustomformService {
     return this.getQuery('order/' + id + '/form/' + formid, token);
   }
 
-  async storepostFormResource(token: any, data: any, id: number) {
+  getFormNotification(token: any, id: number) {
     if (!token) {
-     return;
+      return;
     }
 
-    try {
-      const json = JSON.stringify(data);
-      const params = 'json=' + json;
-      const href = this.url + 'order/' + id + '/form';
-      const requestUrl = href;
-
-      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-      return await this._http.post(requestUrl, params, {headers: headers}).toPromise()
-      .then()
-      .catch((error) => { this.handleError (error); }
-      );
-
-    } catch (err) {
-      throw new Error(`Error HTTP `);
-    }
-
+    return this.getQuery('servicetype/' + id + '/formnotification', token);
   }
-
 
 
   getProjectFormField(token: any, id: number, formid: number) {
@@ -110,6 +104,23 @@ export class CustomformService {
 
     return this.getQuery('type', token);
   }
+
+  getTipoServicio(id: number, token: any) {
+    if (!token) {
+      return;
+    }
+    return this.getQuery('service/' + id + '/servicetype', token);
+  }
+
+  showFormNotification(token: any, servicetype_id: number, form_id: number) {
+    if (!token) {
+      return;
+    }
+
+    return this.getQuery('servicetype/' + servicetype_id + '/formnotification/' +  form_id, token);
+  }
+
+
 
 
   async delete(token: any, id: number, formid: number) {
@@ -152,6 +163,27 @@ export class CustomformService {
     }
 
   }
+
+  async deleteFormNotification(token: any, servicetype_id: number, form_id: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const href = this.url + 'servicetype/' + servicetype_id + '/formnotification/' + form_id;
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.delete(requestUrl, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); });
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
 
   async update(token: any, data: Form, id: number, formid: number) {
     if (!token) {
@@ -201,6 +233,45 @@ export class CustomformService {
 
   }
 
+  async updateFormNotification(token: any, data: any, servicetype_id: number, form_id: number) {
+    if (!token) {
+     return;
+    }
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'servicetype/' + servicetype_id + '/formnotification/' + form_id;
+      const requestUrl = href;
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.put(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+  }
+
+  async updateFieldNotification(token: any, data: any, id: number) {
+    if (!token) {
+     return;
+    }
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'servicetypeform/' + id + '/formfieldnotification/' + id;
+      const requestUrl = href;
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.put(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+  }
+
+
 
   async store(token: any, data: Form, id: number) {
     if (!token) {
@@ -225,6 +296,75 @@ export class CustomformService {
 
   }
 
+
+  async storepostFormResource(token: any, data: any, id: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'order/' + id + '/form';
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.post(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
+  async storeFormNotification(token: any, data: Form, id: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'servicetype/' + id + '/formnotification';
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.post(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
+  async storepostFieldNotification(token: any, data: any, id: number) {
+    if (!token) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'servicetypeform/' + id + '/formfieldnotification';
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.post(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
 
 
 

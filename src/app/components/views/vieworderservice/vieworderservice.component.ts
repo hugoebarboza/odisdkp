@@ -442,15 +442,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  ngOnChanges(_changes: SimpleChanges) {
-    if (this.id && this.id > 0) {
-      this.afterChanges(this.id);
-    }
-  }
-
-  async afterChanges(id: number) {
-    // this._userService.isRoleService('store', this.id);
-    if (id && id > 0 && this.proyectos && this.proyectos.length > 0) {
+  async ngOnChanges(_changes: SimpleChanges) {
+    if (this.id && this.id > 0 && this.proyectos && this.proyectos.length > 0 && this.token) {
+      // this.afterChanges(this.id);
       this.proyectos = this._userService.getProyectos();
       const response: any = await this._userService.getFilterService(this.proyectos, this.id);
       if (response) {
@@ -472,7 +466,53 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         this.fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
         this.date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
         this.loadInfo();
-        this.getZona(this.id);
+        this.getZona(this.id, this.token);
+        this.getProject(this.id, this.token);
+        this.getTipoServicio(this.id, this.token);
+        this.getEstatus(this.id, this.token);
+        this.refreshTable();
+        // this.cd.detectChanges();
+        const serviceid = this.id;
+        this.service_id = serviceid;
+        this.cd.markForCheck();
+      }
+    } else {
+      this.cd.markForCheck();
+      this._router.navigate(['/notfound']);
+    }
+  }
+
+  /*
+  async afterChanges(id: number) {
+    // this._userService.isRoleService('store', this.id);
+
+    if (id && id > 0 && this.proyectos && this.proyectos.length > 0) {
+
+      this.proyectos = this._userService.getProyectos();
+      const response: any = await this._userService.getFilterService(this.proyectos, this.id);
+      if (response) {
+        this.profile = response;
+        this.portal = 0;
+        this.selectedRow = -1;
+        this.order_id = 0;
+        this.dataSource = new MatTableDataSource();
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.matSort;
+        this._portal = this.myTemplate;
+        this._home = this.myTemplate;
+        this.showcell = true;
+        this.isactiveSearch = false;
+        this.datasourceLength = 0;
+        this.filterValue = '';
+        this.termino = '';
+        this.selectedoption = 0;
+        this.fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
+        this.date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
+        this.loadInfo();
+        console.log('---------------------------------------------');
+        console.log(this.token);
+        console.log('---------------------------------------------');
+        this.getZona(this.id, this.token);
         this.getProject(this.id);
         this.getTipoServicio(this.id);
         this.getEstatus(this.id);
@@ -488,7 +528,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
     }
 
-  }
+  }*/
 
   ngOnDestroy() {
     this._onDestroy.next();
@@ -506,8 +546,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
 
 
-  getTipoServicio(id: number) {
-    this.zipService.getTipoServicio(id, this.token.token).then(
+  getTipoServicio(id: number, token: any) {
+    if (!token) {
+      return;
+    }
+    this.zipService.getTipoServicio(id, token.token).then(
       (res: any) => {
         res.subscribe(
           (some: any) => {
@@ -522,8 +565,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     );
   }
 
-  getZona(id: number) {
-    this.zipService.getZona(id, this.token.token).then(
+  getZona(id: number, token: any) {
+    if (!token) {
+      return;
+    }
+    this.zipService.getZona(id, token.token).then(
       (res: any) => {
         res.subscribe(
           (some) => {
@@ -539,8 +585,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  getProject(id: number) {
-   this.subscription = this._orderService.getService(this.token.token, id).subscribe(
+  getProject(id: number, token: any) {
+  if (!token) {
+    return;
+  }
+   this.subscription = this._orderService.getService(token.token, id).subscribe(
     response => {
               if (response.status === 'success') {
               this.project_id = response.datos['project_id'];
@@ -552,8 +601,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
-  getEstatus(id: number) {
-   this.subscription = this._orderService.getServiceEstatus(this.token.token, id).subscribe(
+  getEstatus(id: number, token: any) {
+    if (!token) {
+      return;
+    }
+   this.subscription = this._orderService.getServiceEstatus(token.token, id).subscribe(
     response => {
               if (!response) {
                 return;

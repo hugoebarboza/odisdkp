@@ -1,0 +1,104 @@
+<meta name="Description" content="User Profile Security.">
+<h1 mat-dialog-title style="width: 100%; text-align: center;">{{title}} <br> <span *ngIf="data">{{data.notification.servicetype_name}}</span></h1>
+<div class="container-fluid" *ngIf="isLoading">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row d-flex justify-content-center">
+                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+            </div>                        
+        </div>
+    </div>
+</div>
+<div class="mat-app-background" >
+    <div class="card-body">
+        <form class="mat-dialog-content" ngNativeValidate *ngIf="forma && forma.value.id && forma.value.id > 0 && !isLoading" [formGroup]="forma"  >
+            <div class="row">
+                <div class="col-sm-12">
+                    <span>
+                        Estatus <span *ngIf="forma.value.status"> (Activo)</span> <span *ngIf="!forma.value.status"> (Desactivo)</span>.
+                        <mat-slide-toggle
+                        name="status" 
+                        formControlName = "status"
+                        color="primary">                                                                        
+                        </mat-slide-toggle>                                                
+                    </span>
+                </div>
+            </div>   
+            <br>        
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="nombre">Nombre de notificación</label>
+                    <input type="text" name="name" formControlName="name"   class="form-control">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="description">Descripción de notificación</label>
+                    <textarea name="description" formControlName="description"   class="form-control"></textarea>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="value">Tipo notificación</label>
+                    <mat-radio-group class="radio-group" name="type" formControlName="type" (change)="selectType($event)">
+                        <mat-radio-button class="radio-button" value=1>Notificación</mat-radio-button>
+                        <mat-radio-button class="radio-button" value=2>Estado de Pago</mat-radio-button>
+                        <mat-radio-button class="radio-button" value=3>Notificación y Estado de Pago</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+            </div>
+            <br>
+            <mat-divider></mat-divider>
+            <mat-divider></mat-divider>
+            <br>
+            <div class="row" style="margin-top: 4px;">
+                <div class="col-sm-12">
+                    <label for="value">Valor</label>
+                    <input type="number" name="value" formControlName="value" class="form-control">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="users">Para</label>
+                    <ng-select
+                    *ngIf="usuarios && usuarios.length > 0"
+                    [items]="usuarios"
+                    [multiple]="true"
+                    [closeOnSelect]="false"
+                    [hideSelected]="true"
+                    bindLabel="email"
+                    class="width-100percentage" name="user" formControlName="user">
+                </ng-select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="main">Asunto correo</label>
+                    <input type="text" name="main" formControlName="main"   class="form-control">
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="body">Cuerpo correo</label>
+                    <textarea name="body" formControlName="body"   class="form-control"></textarea>
+                </div>
+            </div>
+            <br>
+        </form>
+    </div>
+</div>
+<!---
+<pre *ngIf="forma">{{forma.value | json}}</pre>
+-->
+<br>
+<div mat-dialog-actions *ngIf="forma">      
+    <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="saveForma(forma)">Actualizar</button>
+    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+</div>
+    
+

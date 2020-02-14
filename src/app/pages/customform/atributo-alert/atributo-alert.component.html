@@ -1,0 +1,316 @@
+<mat-drawer-container class="container-drawer">   
+    <div class="pagecontent">           
+        <div class="example-container" ><!--[class.example-is-mobile]="mobileQuery.matches"-->
+            <mat-sidenav-container class="example-sidenav-container"> <!--[style.marginTop.px]="mobileQuery.matches ? 56 : 0"-->
+                <mat-sidenav #sidenav opened [mode]="mobileQuery.matches ? 'over' : 'side'"
+                            [fixedInViewport]="mobileQuery.matches" fixedTopGap="102" style="background-color: rgb(244, 245, 247);">
+                    <div class="not-scroll">
+                        <div class="sidebar-header">
+                            <div class="css-1qm1lh">
+                                <div role="presentation" class="css-7xjigh">
+                                    <a class="css-1t5na7c" data-testid="NavigationItem" id="back-item" [routerLink]="['/project', project_id]" target="_self">
+                                        <div class="css-1wgdpuu">
+                                            <span class="sc-hqyNC hItagX">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                                    <circle fill="currentColor" cx="12" cy="12" r="10">
+                                                    </circle>
+                                                    <path d="M16 10.995h-5.586l1.272-1.279a1.01 1.01 0 0 0 0-1.421.996.996 0 0 0-1.415 0l-2.978 2.994a1.01 1.01 0 0 0 0 1.423l2.978 2.993a.999.999 0 0 0 1.415 0 1.01 1.01 0 0 0 0-1.421l-1.272-1.279H16c.552 0 1-.45 1-1.005 0-.555-.448-1.005-1-1.005" fill="inherit">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="css-t44v0r">
+                                            <div class="css-xuepxh">
+                                                Proyectos
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <mat-divider></mat-divider>
+                            <div class="container-fluid" style="margin-top: 10px; margin-bottom: 10px; height: 17px;">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="row d-flex justify-content-center">
+                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" [hidden]="isLoadingMenu"></mat-spinner>
+                                        </div>                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!----Menú---->
+                        <div id="sidebar">
+                            <ul class="list-unstyled components">
+                                <li *ngFor="let service of servicios;  let i = index;">
+                                    <a href="#servicetype{{i}}" id="service{{i}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"  (click)="getServicetype(service, i)">
+                                        <div style="margin-right: 20px;">{{service.service_name}}   </div>
+                                    </a>
+                                    <ul class="list-unstyled collapse active show" id="servicetype{{i}}" *ngIf="service.servicetype">
+                                        <li *ngFor="let servicetype of service.servicetype; let x = index;">
+                                            <a href="#servicetype_{{servicetype.id}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle" style="display: flex;"  (click)="getNotifications(servicetype, i, x)">
+                                                {{ servicetype.name }}
+                                                <h6 *ngIf="servicetype.notifications"><span class="badge badge-light">{{servicetype.notifications.length}}</span></h6>   
+                                            </a>
+                                            <ul class="collapse list-unstyled active show" id="servicetype_{{servicetype.id}}" *ngIf="servicetype.notifications">
+                                                <li>
+                                                    <a href="javascript:void(0)" class="nav-link" (click)="newNotification(servicetype, service, i, x)" title="Añadir una notificación al formulario." style="display: flex;">
+                                                        <mat-icon>add</mat-icon> Nueva notificación 
+                                                    </a>
+                                                </li>
+                                                <li *ngIf="servicetype.disablednotifications" style="border-bottom: 1px dotted;">
+                                                    <a href="javascript:void(0)" class="nav-link" (click)="viewNotificationDisabled(servicetype)" 
+                                                    title="Ver listado de notificaciones desactivas" style="display: flex;">
+                                                        <mat-icon>remove_circle_outline</mat-icon>Notificaciones desactivas
+                                                        <h6 *ngIf="servicetype.disablednotifications"><span class="badge badge-light">{{servicetype.disablednotifications.length}}</span></h6>   
+                                                    </a>
+                                                </li>
+                                                <li *ngFor="let notifications of servicetype.notifications; let y = index;">
+                                                    <a href="javascript:void(0)" (click)="showFormNotification(servicetype, notifications.id)" >
+                                                        <mat-icon>sms</mat-icon> {{ notifications.name }} 
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                            <ul class="collapse list-unstyled active" id="servicetype_{{servicetype.id}}" *ngIf="!servicetype.notifications">
+                                                <li>
+                                                    <a href="javascript:void(0)" class="nav-link" (click)="newNotification(servicetype, service, i, x)" title="Añadir notificación al formulario." style="display: flex;">
+                                                        <mat-icon>add</mat-icon> Nueva notificación 
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-footer">
+                            <div class="sidebar-header">
+                                <mat-divider></mat-divider>
+                            </div>
+                        </div>
+                    </div>                                
+                </mat-sidenav>
+                <mat-sidenav-content class="overflow">
+                    <main >
+                        <div class="container-fluid" *ngIf="project">
+                            <div class="row">
+                                <div class="col-12">
+                                    <span style="float: left; position: relative;">
+                                        <button mat-icon-button color="primary" *ngIf="sidenav.opened">
+                                            <mat-icon (click)="sideNavOnClick()">keyboard_arrow_left</mat-icon>
+                                        </button>                    
+                                        <button mat-icon-button color="primary" *ngIf="!sidenav.opened">
+                                            <mat-icon (click)="sideNavOnClick()">keyboard_arrow_right</mat-icon>
+                                        </button>    
+                                    </span>  
+                                    <div class="container-fluid d-flex justify-content-center text-center">
+                                        <div class="eEbvfo">
+                                            <span class="css-eaycls">Proyecto / {{project.project_name}} / {{title}}</span>
+                                            <div class="EacRc" *ngIf="forma && !forma.value.id && !isLoading">
+                                                <a class="css-1t5na7c">
+                                                <div class="css-1wgdpuu">
+                                                    <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                                                        <span class="iHthaF">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24">
+                                                                <path d="M11.433 5.428l-4.207.6a2 2 0 0 0-1.697 1.698l-.601 4.207a1 1 0 0 0 .283.849l6.894 6.894a1 1 0 0 0 1.414 0l5.657-5.657a1 1 0 0 0 0-1.414L12.282 5.71a1 1 0 0 0-.849-.283zm-.647 5.858a1.667 1.667 0 1 1-2.357-2.357 1.667 1.667 0 0 1 2.357 2.357z" fill="currentColor" fill-rule="evenodd">
+                                                                </path>
+                                                            </svg>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                                <div class="css-xuepxh">Debe selecionar o crear una notificación en el menu lateral, para continuar.</div>
+                                                </a>   
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <div class="row" style="margin-top: 17px;">
+                            <div class="col-1"></div>
+                            <div class="col-10">
+                                <div class="container-fluid">
+                                    <div class="row justify-content-md-center">
+                                        <!----MAIN PRINCIPAL EN CASO EXISTAN FORMULARIOS PERO NO HA SIDO SELECCIONADO--->
+                                        <div class="container-fluid"  *ngIf="isLoading && forma && !forma.value.id" style="margin-top: 10px; margin-bottom: 10px; height: 17px;">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" ></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8" *ngIf="servicios && servicios.length > 0 && forma && forma.value.id && forma.value.id > 0">
+                                            <div class="hEEDMy" data-test-selector="profile-work-list">
+                                                <div class="dQWNoB">
+                                                    <div class="gtZlhk">
+                                                        <div role="presentation" class="css-7xjigh" *ngIf="servicios && servicios.length > 0">
+                                                            <a class="css-1t5na7c" data-testid="NavigationItem" id="10004" title="Formulario">
+                                                            <div class="css-1wgdpuu">
+                                                                <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                                                                    <span class="styledCache__StyledSpan-zohhd2-3 iHthaF">
+                                                                        <img class="gXBZbl" src="https://odissoftware.atlassian.net/secure/viewavatar?size=medium&amp;avatarId=10307&amp;avatarType=issuetype">
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                                <div class="css-t44v0r">
+                                                                    <div class="css-xuepxh">Notificación:  {{forma.value.name}}</div>
+                                                                </div>
+                                                            </a>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <!--
+                                                <div class="EacRc">
+                                                    <span>
+                                                        Seleccione un formulario de la lista de <span style="font-weight: bold;">Tipos de Alertas</span>.                                                    
+                                                    </span>
+                                                </div>-->
+                                            </div>
+                                            <br>
+                                            <div>
+                                                <!--
+                                                <div class="iamyYC bGTkQd">
+                                                    <div class="klJOKX bGTkQd">
+                                                        <p class="jvTKTk">Formulario: {{forma.value.name}}</p>
+                                                    </div>
+                                                </div>
+                                                -->
+                                                <div class="gMrJwo">
+                                                    <div class="VESiD">
+                                                    </div>
+                                                        <strong class="CRvrQ">Detalle de notificación</strong>
+                                                    <div class="VESiD">
+                                                    </div>
+                                                </div>
+                                                <div class="iamyYC bGTkQd">
+                                                    <div class="app animated fadeIn">
+                                                        <form class="mat-dialog-content" ngNativeValidate [formGroup]="forma">
+                                                            
+                                                            <div class="row">
+                                                                <div class="col-sm-10">
+                                                                        <div class="llCsQv">
+                                                                            <input type="text" name="name" placeholder="Ingrese nombre de notificación" formControlName="name" class="dpbvNR dpbvNRfont17" required  width="100%">
+                                                                        </div>
+                
+                                                                        <div class="llCsQv">
+                                                                            <textarea name="description" placeholder="Ingrese descripción de notificación" formControlName="description" class="dpbvNR dpbvNRfont12" required width="100%" (keyup)="autoGrowTextZone($event)" ></textarea>
+                                                                        </div>
+                                                                        
+                                                                        <div class="jfCYPT">
+                                                                            <div data-test-selector="profile-work-list">
+                                                                                <div class="EacRcN">
+                                                                                    <span>
+                                                                                        Estatus <span *ngIf="forma.value.status"> (Activo)</span> <span *ngIf="!forma.value.status"> (Desactivo)</span>.
+                                                                                        <mat-slide-toggle
+                                                                                        name="status" 
+                                                                                        formControlName = "status"
+                                                                                        color="primary">                                                                        
+                                                                                        </mat-slide-toggle>                                                
+                                                                                    </span>
+                                                                                </div>
+                                                                            </div>                                                                                      
+                                                                        </div>                                                        
+                                                                </div>
+                                                                <div class="col-sm-2">
+                                                                    <button mat-icon-button  class="puntos" [matMenuTriggerFor]="menuviewselectorder" *ngIf="_userService.isRole(7)"  matTooltip="Acciones (Presiona para acceder a las acciones del formulario)">
+                                                                        <mat-icon class="material-icons md-color" aria-label="launch" >more_horiz</mat-icon>
+                                                                    </button>
+                                                                    
+                                                                    <mat-menu #menuviewselectorder="matMenu" [overlapTrigger]="false">
+                                                                        <button mat-menu-item (click)="updateForma(forma)" *ngIf="_userService.isRole(7)">
+                                                                            <span >Editar Notificación</span>
+                                                                        </button>        
+                                                                        <button mat-menu-item (click)="deleteForma(forma)" *ngIf="_userService.isRole(7)">
+                                                                            <span >Eliminar Notificación</span>
+                                                                        </button>
+                                                                    </mat-menu>                                                    
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                        <div>      
+                                                            <button mat-button color="primary" type="submit"  style="float: right;" [disabled]="forma.invalid" (click)="saveForma(forma)">Actualizar</button>
+                                                        </div>    
+                                                    </div>
+                                                </div>
+                                                <div class="gMrJwo" style="margin-top: 10px; margin-bottom: 10px;">
+                                                    <div class="VESiD">
+                                                    </div>
+                                                    <strong class="CRvrQ"  matTooltip="Seleccione la conbinación de repuestas del formulario, que activaran la notificación via correo electrónico. ">Detalle del Formulario</strong>
+                                                    <div class="VESiD">
+                                                    </div>
+                                                </div>
+                                                <div class="container-fluid" *ngIf="isLoadingAtributos" style="margin-top: 10px;">
+                                                    <div class="row">
+                                                        <div class="col-sm">
+                                                            <div class="row d-flex justify-content-center">
+                                                                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingAtributos" ></mat-spinner>
+                                                            </div>                        
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div [hidden]="isLoadingAtributos" style="margin-bottom: 100px;">
+                                                    <table #tableAtributo mat-table [dataSource]="dataSource" matSort sort="matSort" class="topmargin full-width-table">
+                                                                                <!-- ID Column -->
+                                                        <ng-container matColumnDef="descripcion">
+                                                            <th mat-header-cell *matHeaderCellDef  mat-sort-header> Descripción </th>
+                                                            <td mat-cell *matCellDef="let row; let i = index;">
+                                                                <div *ngIf="row.type === 'spinner' || row.type === 'radio'"> {{row.descripcion}}</div>
+                                                                <div *ngIf="row.type !== 'spinner' && row.type !== 'radio'" class="descdisabled"> {{row.descripcion}}</div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <ng-container matColumnDef="datos">
+                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Datos </th>
+                                                            <td mat-cell *matCellDef="let row; let i = index;">
+                                                                <div  class="example-selected-value" *ngIf="row.type == 'radio' ">
+                                                                    
+                                                                    <button mat-icon-button class="mat-icon" (click)="row.alert = null" tabindex="-1"  matTooltip="Limpiar campo selecionado">
+                                                                        <mat-icon>clear</mat-icon>       
+                                                                    </button>
+                                                                    <mat-radio-group class="radio-group" [(ngModel)]="row.alert" name="{{row.id}}">
+                                                                        <ng-container *ngFor="let items of row.datos | split">
+                                                                            <mat-radio-button class="radio-button" *ngFor="let item of items; let r = index;" [value]="item.value">
+                                                                                {{item.value}}
+                                                                            </mat-radio-button>
+                                                                        </ng-container>
+                                                                    </mat-radio-group>
+                                                                </div>
+                                                                <div *ngIf="row.type == 'spinner'">
+                                                                    <mat-form-field class="full-width">
+                                                                        <mat-select placeholder="{{row.descripcion}}" [(ngModel)]="row.alert" name="{{row.id}}" >
+                                                                          <div *ngFor="let items of row.datos | split" >
+                                                                            <mat-option *ngFor="let item of items" [value]="item.value" >
+                                                                              {{item.value}}
+                                                                            </mat-option>
+                                                                          </div>
+                                                                        </mat-select>
+                                                                    </mat-form-field>
+                                                                </div>
+                                                            </td>
+                                                        </ng-container>
+                                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                                        <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
+                                                    </table>
+                                                    <mat-paginator #paginator [pageSizeOptions]="[10, 20, 30, 50, 100]" showFirstLastButtons></mat-paginator>
+                                            
+                                                    <div style="margin-bottom: 20px; margin-top: 10px;" >      
+                                                        <button mat-button color="primary" type="submit" style="float: right;" *ngIf="booaction" [disabled]="isLoadingAtributosSave" (click)="updatePila(dataSource.data, forma)">Actualizar</button>
+                                                        <button mat-button color="primary" type="submit" style="float: right;" *ngIf="!booaction"[disabled]="isLoadingAtributosSave" (click)="savePila(dataSource.data, forma)">Guardar</button>
+                                                    </div>   
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-1"></div>
+                        </div>
+                    </main>
+                </mat-sidenav-content>
+            </mat-sidenav-container>
+        </div>
+    </div>
+</mat-drawer-container>

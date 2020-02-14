@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // COMPONENT
+import { AtributoAlertComponent } from './atributo-alert/atributo-alert.component';
 import { CreateFormComponent } from './create-form/create-form.component';
 import { FormviewComponent } from './formview/formview.component';
 import { OrderViewComponent } from './order-view/order-view.component';
@@ -9,12 +10,19 @@ import { OrderViewComponent } from './order-view/order-view.component';
 // Guards
 import { AuthguardService } from '../../services/authguard.service';
 
+
 const routes: Routes = [
   {
     path: '',
     component: FormviewComponent,
     canActivate: [AuthguardService],
     data: { path: 'formview', titulo: 'OCA Global - ODIS Soporte de usuario', subtitle: 'Soporte del Usuario', descripcion: 'OCA Global - ODIS Support Managment'}
+  },
+  {
+    path: 'notification/:id',
+    component: AtributoAlertComponent,
+    canActivate: [AuthguardService],
+    data: { path: 'orderview', titulo: 'OCA Global - ODIS Crear Formulario', subtitle: 'Configuración de notificaciones y EDP', descripcion: 'OCA Global - ODIS Form Managment'}
   },
   {
     path: 'form/:id/settings/:formid',

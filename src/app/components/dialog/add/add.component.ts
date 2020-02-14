@@ -138,7 +138,9 @@ export class AddComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // console.log('La página se va a cerrar');
-    this.subscription.unsubscribe();
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
   submit() {

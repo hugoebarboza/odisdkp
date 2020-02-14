@@ -4,11 +4,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 
-import * as firebase from 'firebase/app'; 
+import * as firebase from 'firebase/app';
 import '@firebase/messaging';
 
 import 'rxjs/add/operator/take';
-import { BehaviorSubject } from 'rxjs/BehaviorSubject'
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 
 @Injectable()

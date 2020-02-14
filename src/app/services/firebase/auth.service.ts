@@ -358,7 +358,7 @@ export class AuthService {
   const data = {
     email: this.authState.email,
     name: this.authState.displayName
-  }
+  };
 
   this.db.object(path).update(data)
     .catch(error => console.log(error));

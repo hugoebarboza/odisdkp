@@ -1,0 +1,51 @@
+[debug] [2020-02-12T20:18:06.892Z] ----------------------------------------------------------------------
+[debug] [2020-02-12T20:18:06.894Z] Command:       C:\Program Files\nodejs\node.exe C:\Users\Hugo Barboza\AppData\Roaming\npm\node_modules\firebase-tools\lib\bin\firebase.js serve --only functions,hosting
+[debug] [2020-02-12T20:18:06.894Z] CLI Version:   7.12.1
+[debug] [2020-02-12T20:18:06.895Z] Platform:      win32
+[debug] [2020-02-12T20:18:06.895Z] Node Version:  v10.13.0
+[debug] [2020-02-12T20:18:06.896Z] Time:          Wed Feb 12 2020 17:18:06 GMT-0300 (GMT-03:00)
+[debug] [2020-02-12T20:18:06.896Z] ----------------------------------------------------------------------
+[debug] [2020-02-12T20:18:06.896Z] 
+[debug] [2020-02-12T20:18:06.906Z] > command requires scopes: ["email","openid","https://www.googleapis.com/auth/cloudplatformprojects.readonly","https://www.googleapis.com/auth/firebase","https://www.googleapis.com/auth/cloud-platform"]
+[debug] [2020-02-12T20:18:06.907Z] > authorizing via signed-in user
+[debug] [2020-02-12T20:18:06.907Z] [iam] checking project odisdkp for permissions ["firebase.projects.get"]
+[debug] [2020-02-12T20:18:06.909Z] >>> HTTP REQUEST POST https://cloudresourcemanager.googleapis.com/v1/projects/odisdkp:testIamPermissions  
+
+[debug] [2020-02-12T20:18:07.921Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-12T20:18:07.923Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/odisdkp  
+ 
+[debug] [2020-02-12T20:18:08.978Z] <<< HTTP RESPONSE 200
+[debug] [2020-02-12T20:18:08.981Z] >>> HTTP REQUEST GET https://firebase.googleapis.com/v1beta1/projects/odisdkp/webApps/-/config  
+ 
+[warn] !  Your requested "node" version "8" doesn't match your global version "10"
+[debug] [2020-02-12T20:18:10.253Z] <<< HTTP RESPONSE 200
+[info] i  hosting: Serving hosting files from: dist/odisdkp
+[info] +  hosting: Local server: http://localhost:5000
+[info] +  functions: Emulator started at http://localhost:5001
+[info] i  functions: Watching "C:\xampp\htdocs\odisdkp\functions" for Cloud Functions...
+[debug] [2020-02-12T20:18:10.533Z] [worker-pool] addWorker(~diagnostic~)
+[debug] [2020-02-12T20:18:10.533Z] [worker-pool] Adding worker with key ~diagnostic~, total=1
+[debug] [2020-02-12T20:18:10.533Z] [worker-pool] submitWork(triggerId=)
+[debug] [2020-02-12T20:18:10.533Z] [worker-~diagnostic~-a3909d0b-8fdb-486d-8d72-4f06358075e4]: Assigning socketPath: \\?\pipe\C:\xampp\htdocs\odisdkp\functions\3276
+[debug] [2020-02-12T20:18:10.534Z] [worker-~diagnostic~-a3909d0b-8fdb-486d-8d72-4f06358075e4]: BUSY
+[debug] [2020-02-12T20:18:11.018Z] [runtime-status] [3276] Functions runtime initialized. {"cwd":"C:\\xampp\\htdocs\\odisdkp\\functions","node_version":"10.13.0"}
+[debug] [2020-02-12T20:18:11.020Z] [runtime-status] [3276] Disabled runtime features: {"functions_config_helper":true,"network_filtering":true,"timeout":true,"memory_limiting":true,"admin_stubs":true,"pubsub_emulator":true}
+[debug] [2020-02-12T20:18:11.023Z] [runtime-status] [3276] Resolved module firebase-admin {"declared":true,"installed":true,"version":"8.7.0","resolution":"C:\\xampp\\htdocs\\odisdkp\\functions\\node_modules\\firebase-admin\\lib\\index.js"}
+[debug] [2020-02-12T20:18:11.025Z] [runtime-status] [3276] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"C:\\xampp\\htdocs\\odisdkp\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[debug] [2020-02-12T20:18:11.025Z] [runtime-status] [3276] Resolved module firebase-functions {"declared":true,"installed":true,"version":"3.3.0","resolution":"C:\\xampp\\htdocs\\odisdkp\\functions\\node_modules\\firebase-functions\\lib\\index.js"}
+[warn] !  TypeError: Cannot read property 'key' of undefined
+    at Object.<anonymous> (C:\xampp\htdocs\odisdkp\functions\lib\index.js:9:53)
+    at Module._compile (internal/modules/cjs/loader.js:688:30)
+    at Object.Module._extensions..js (internal/modules/cjs/loader.js:699:10)
+    at Module.load (internal/modules/cjs/loader.js:598:32)
+    at tryModuleLoad (internal/modules/cjs/loader.js:537:12)
+    at Function.Module._load (internal/modules/cjs/loader.js:529:3)
+    at Module.require (internal/modules/cjs/loader.js:636:17)
+    at require (internal/modules/cjs/helpers.js:20:18)
+    at C:\Users\Hugo Barboza\AppData\Roaming\npm\node_modules\firebase-tools\lib\emulator\functionsEmulatorRuntime.js:718:33
+    at Generator.next (<anonymous>)
+[warn] !  We were unable to load your functions code. (see above)
+   - It appears your code is written in Typescript, which must be compiled before emulation.
+   - You may be able to run "npm run build" in your functions directory to resolve this.
+[debug] [2020-02-12T20:18:11.120Z] [worker-~diagnostic~-a3909d0b-8fdb-486d-8d72-4f06358075e4]: exited
+[debug] [2020-02-12T20:18:11.120Z] [worker-~diagnostic~-a3909d0b-8fdb-486d-8d72-4f06358075e4]: FINISHED

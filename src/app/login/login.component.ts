@@ -255,13 +255,17 @@ export class LoginComponent implements OnInit, OnDestroy {
       const proyectos = response.datos;
       const key = 'proyectos';
       this._userService.saveStorage(key, proyectos);
-      this.spinnerButtonOptions.active = false;
-      this.spinnerButtonOptions.text = 'Iniciar sesión';
-      this.toasterService.success('Acceso: ' + this.success, 'Exito', {timeOut: 4000, closeButton: true, });
-      this._router.navigate(['dashboard']);
-      this.loginAction(proyectos, identity);
-      this.loginFirebase(token, this.usuario, identity);
-      this.getRegion(token, identity);
+      const region: any = await this._regionService.getRegion(token.token, identity.country);
+      if (region && region.status === 'success' && region.datos) {
+        const keyr = 'region';
+        this._userService.saveStorage(keyr, region);
+        this.loginAction(proyectos, identity);
+        this.loginFirebase(token, this.usuario, identity);
+        this.spinnerButtonOptions.active = false;
+        this.spinnerButtonOptions.text = 'Iniciar sesión';
+        this.toasterService.success('Acceso: ' + this.success, 'Exito', {timeOut: 4000, closeButton: true, });
+        this._router.navigate(['dashboard']);
+      }
     } else {
       this.spinnerButtonOptions.active = false;
       this.spinnerButtonOptions.text = 'Iniciar sesión';
@@ -328,19 +332,6 @@ export class LoginComponent implements OnInit, OnDestroy {
     return await this._userService.getPerfilUser(token.token, id);
   }
 
-  getRegion(token: any, identity: any) {
-    if (!token || !identity) {
-      return;
-    }
-
-    this.subscription = this._regionService.getRegion(token.token, identity.country).subscribe(
-      response => {
-         if (response.status === 'success') {
-          const key = 'region';
-          this._userService.saveStorage(key, response);
-          }
-      });
-  }
 
 
   loginFirebase(token: any, value: User, identity: any) {

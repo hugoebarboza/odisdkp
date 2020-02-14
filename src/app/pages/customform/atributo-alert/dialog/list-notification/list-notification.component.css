@@ -1,0 +1,30 @@
+.full-width {
+    width: 100%;
+}
+
+.marginlr10 {
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+}
+
+:host ::ng-deep mat-tab-group .mat-tab-body-content {
+  overflow: hidden !important;
+}
+
+.circle:before {
+  content: ' \25CF';
+  font-size: 20px;
+}
+
+::ng-deep .cdk-overlay-container {
+  z-index: 9999 !important;
+}
+
+::ng-deep .swal2-container {
+  z-index: 9999 !important;
+}
+
+.margintop10 {
+  margin-top: 10px;
+}

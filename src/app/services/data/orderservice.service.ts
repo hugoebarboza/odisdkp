@@ -414,14 +414,16 @@ import { GLOBAL } from '../global';
   }
 
 
-  delete(token: any, orderid: number, id: number): void {
+  delete(token: any, orderid: number, id: number): Observable<any> {
     if (!token) {
        return;
     }
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-    this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers}).subscribe(
+    return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers}).map( (resp: any) => resp );
+    /*
+    subscribe(
     (data: any) => {
       if (data.status === 'success') {
         Swal.fire('Eliminada Orden de Trabajo con identificador: ', orderid + ' exitosamente.', 'success' );
@@ -434,7 +436,32 @@ import { GLOBAL } from '../global';
         this.error = err.error.message;
         Swal.fire('No fue posible procesar su solicitud', '', 'error');
         // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-      });
+      });*/
+  }
+
+  deleteotedp(token: any, orderid: number, id: number): Observable<any> {
+    if (!token) {
+       return;
+    }
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid + '/deleteotedp', {headers: headers}).map( (resp: any) => resp );
+    /*
+    subscribe(
+    (data: any) => {
+      if (data.status === 'success') {
+        Swal.fire('Eliminada Orden de Trabajo con identificador: ', orderid + ' exitosamente.', 'success' );
+        } else {
+        Swal.fire('Orden de Trabajo con identificador: ', orderid + ' no eliminada.' , 'error');
+        }
+        // this.toasterService.success('Orden de Trabajo eliminada.', 'Exito', {timeOut: 6000,});
+      },
+      (err: HttpErrorResponse) => {
+        this.error = err.error.message;
+        Swal.fire('No fue posible procesar su solicitud', '', 'error');
+        // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
+      });*/
   }
 
 

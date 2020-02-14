@@ -1,28 +1,45 @@
-import { Component, OnInit, OnDestroy, Input, ViewChild, NgZone } from '@angular/core';
+import {
+  Component, OnInit, OnDestroy, Input, ViewChild, NgZone
+} from '@angular/core';
 // import { ActivatedRoute, Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
-import { ReplaySubject, Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import {
+  FormControl
+} from '@angular/forms';
+import {
+  ReplaySubject, Subject
+} from 'rxjs';
+import {
+  takeUntil
+} from 'rxjs/operators';
 
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import {
+  NgbActiveModal
+} from '@ng-bootstrap/ng-bootstrap';
 
 // AGM
-import { InfoWindow } from '@agm/core/services/google-maps-types';
-import { MapsAPILoader, MouseEvent} from '@agm/core';
+import {
+  InfoWindow
+} from '@agm/core/services/google-maps-types';
+import {
+  MapsAPILoader, MouseEvent
+} from '@agm/core';
 
 // MODELS
 import {
   Order,
   ServiceEstatus,
   UserGeoreference
- } from 'src/app/models/types';
-
+} from 'src/app/models/types';
 
 // SERVICES
-import { MapaService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
+import {
+  MapaService, OrderserviceService, ProjectsService, UserService
+} from 'src/app/services/service.index';
 
 // CLASSES
-import { Marcador } from '../../../classes/marcador.class';
+import {
+  Marcador
+} from '../../../classes/marcador.class';
 
 // MOMENT
 import * as _moment from 'moment';
@@ -65,75 +82,77 @@ export class MapaFullWidthComponent implements OnInit, OnDestroy {
       origin: {
           icon: '',
           infoWindow: `
-          <h4>Origen<h4>
-        `
+        <h4>Origen<h4>
+      `
       },
       destination: {
           icon: '',
           infoWindow: `
-          <h4>Destino<h4>
-          `
+        <h4>Destino<h4>
+        `
       },
 
-      waypoints: [
-          {
-           icon: '',
-           infoWindow: '',
-          },
-      ],
+      waypoints: [{
+          icon: '',
+          infoWindow: '',
+      }, ],
   };
 
   // ICON USER TRACKIN
   // private iconusertracking = { url: '../../../assets/img/marker-red-tod.png', };
 
   private datadirections = {
-    origin: '',
-    destination: '',
-    waypoints: []  
+      origin: '',
+      destination: '',
+      waypoints: []
   }
-
 
   public optimizeWaypoints = false
 
   // TIME PICKER
   // timefrom = {hour: 9, minute: 0};
-  timefrom: Time = {hour: '', minute: ''};
-  timeuntil: Time = {hour: '', minute: ''};
+  timefrom: Time = {
+      hour: '',
+      minute: ''
+  };
+  timeuntil: Time = {
+      hour: '',
+      minute: ''
+  };
   meridian = true;
   spinners = false;
   columnTimeFromValue: FormControl;
   columnTimeUntilValue: FormControl;
 
   ordenes: Order[] = [];
-  users: UserGeoreference[] = [];  
+  users: UserGeoreference[] = [];
   usuarios: UserGeoreference[] = [];
   usuariostracking: UserGeoreference[] = [];
   usuariosordenes: UserGeoreference[] = [];
-  homemarcador: Marcador[]=[];
-  marcadores: Marcador[]=[];
-  usermarcadores: Marcador[]=[];
-  usertrackingmarcadores: Marcador[]=[];
-  directionsmarcadores: Marcador[]=[];
-  userordenesmarcadores: Marcador[]=[];
-  usertrackingadvancemarcadores: Marcador[]=[];  
+  homemarcador: Marcador[] = [];
+  marcadores: Marcador[] = [];
+  usermarcadores: Marcador[] = [];
+  usertrackingmarcadores: Marcador[] = [];
+  directionsmarcadores: Marcador[] = [];
+  userordenesmarcadores: Marcador[] = [];
+  usertrackingadvancemarcadores: Marcador[] = [];
   serviceestatus: ServiceEstatus[] = [];
   latitude: number;
   longitude: number;
-  lat:number;
-  lng:number;
+  lat: number;
+  lng: number;
   titulo: string;
-  subtitulo:string;
-  direccion:string;
+  subtitulo: string;
+  direccion: string;
   create_at: string;
   update_at: string;
   create_by: string;
   update_by: string;
   estatus: string;
-  label:number;
-  icon:string;
-  servicename: string;  
+  label: number;
+  icon: string;
+  servicename: string;
   country_id: number;
-  //id : number;
   project_id: number;
   isLoadingResults: boolean;
   termino: any;
@@ -141,61 +160,61 @@ export class MapaFullWidthComponent implements OnInit, OnDestroy {
   status: number;
   message: String;
   messageadvance: String;
-  servicetype: number
-  show:boolean = true;
-  showadvance:boolean = true;
-  showdrawer:boolean = false;
+  servicetype: number;
+  show = true;
+  showadvance = true;
+  showdrawer = false;
 
+  role: number;
 
-  role:number;
-
-  //FILTERS
+  // FILTERS
 
   selectedColumnnOrdenes = {
-    fieldValue: '',
-    criteria: '',
-    columnValue: ''
+      fieldValue: '',
+      criteria: '',
+      columnValue: ''
   };
 
   selectedColumnnEstatus = {
-    fieldValue: '',
-    criteria: '',
-    columnValue: ''
+      fieldValue: '',
+      criteria: '',
+      columnValue: ''
   };
 
   selectedColumnnAdvance = {
-    fieldValue: '',
-    criteria: '',
-    columnValue: ''
+      fieldValue: '',
+      criteria: '',
+      columnValue: ''
   };
 
   selectedColumnnDate = {
-    fieldValue: '',
-    criteria: '',
-    columnValueDesde: ''
+      fieldValue: '',
+      criteria: '',
+      columnValueDesde: ''
   };
 
-
-
-/** control for the selected user for multi-selection */
+  /** control for the selected user for multi-selection */
   public userFullCtrl: FormControl = new FormControl();
   public userMultiFilter: FormControl = new FormControl();
-  private user = new Array();  
+  private user = new Array();
 
   public userAdvanceCtrl: FormControl = new FormControl();
   public userAdvanceMultiFilterCtrl: FormControl = new FormControl();
 
-
   /** list of users filtered by search keyword */
-  public filteredUserMultiFull: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
-  public filteredUserAdvanceMulti: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
+  public filteredUserMultiFull: ReplaySubject < User[] > = new ReplaySubject < User[] > (1);
+  public filteredUserAdvanceMulti: ReplaySubject < User[] > = new ReplaySubject < User[] > (1);
 
-  private _onDestroy = new Subject<void>();
+  private _onDestroy = new Subject < void > ();
 
-  @ViewChild('drawer', { static: true }) drawer;
+  @ViewChild('drawer', {
+      static: true
+  }) drawer;
   @Input() id: number;
 
-  @ViewChild('search', { static: true }) search;
+  @ViewChild('search', {
+      static: true
+  }) search;
   private geoCoder;
   mylatitude: number;
   mylongitude: number;
@@ -203,863 +222,798 @@ export class MapaFullWidthComponent implements OnInit, OnDestroy {
   zoom = 15;
 
   constructor(
-    private _dataService: OrderserviceService,
-    private _mapaService: MapaService,
-    private _proyectoService: ProjectsService,
-    // private _route: ActivatedRoute,
-    // private _router: Router,
-    // private _regionService: CountriesService,
-    private _userService: UserService,
-    // private modalService: NgbModal,
-    public activeModal: NgbActiveModal,
+      private _dataService: OrderserviceService,
+      private _mapaService: MapaService,
+      private _proyectoService: ProjectsService,
+      // private _route: ActivatedRoute,
+      // private _router: Router,
+      // private _regionService: CountriesService,
+      private _userService: UserService,
+      // private modalService: NgbModal,
+      public activeModal: NgbActiveModal,
 
-    private mapsAPILoader: MapsAPILoader,
-    private ngZone: NgZone
-    
-  	) {
-    this.identity = this._userService.getIdentity();
-    this.token = this._userService.getToken();
-    this.role = 5; //USUARIOS INSPECTORES
-    this.message = '';
-  	}
+      private mapsAPILoader: MapsAPILoader,
+      private ngZone: NgZone
+
+  ) {
+      this.identity = this._userService.getIdentity();
+      this.token = this._userService.getToken();
+      this.role = 5; // USUARIOS INSPECTORES
+      this.message = '';
+  }
 
   ngOnInit() {
-    //console.log(this.identity);
-    //console.log(this.token);
-    this.renderMap = false;
-    this.homemarcador = [];
-    this.marcadores = [];
-    this.users = [];
-    this.user = [];
-    this.usermarcadores = [];    
-    this.usertrackingmarcadores = [];
-    this.userordenesmarcadores = [];
-    this.selectedColumnnOrdenes.fieldValue = '';
-    this.selectedColumnnEstatus.fieldValue = '';
-    this.selectedColumnnAdvance.fieldValue = '';
-    this.selectedColumnnDate.columnValueDesde = '';
-    this.message = '';
-    this.userFullCtrl.reset();
-    this.userAdvanceCtrl.reset();
-    this.loadInfo();
-    this.loadServiceEstatus();
+      this.renderMap = false;
+      this.homemarcador = [];
+      this.marcadores = [];
+      this.users = [];
+      this.user = [];
+      this.usermarcadores = [];
+      this.usertrackingmarcadores = [];
+      this.userordenesmarcadores = [];
+      this.selectedColumnnOrdenes.fieldValue = '';
+      this.selectedColumnnEstatus.fieldValue = '';
+      this.selectedColumnnAdvance.fieldValue = '';
+      this.selectedColumnnDate.columnValueDesde = '';
+      this.message = '';
+      this.userFullCtrl.reset();
+      this.userAdvanceCtrl.reset();
+      this.loadInfo();
+      this.loadServiceEstatus();
 
+      this.userMultiFilter.valueChanges
+          .pipe(takeUntil(this._onDestroy))
+          .subscribe(() => {
+              this.filterUsers();
+          });
 
-    this.userMultiFilter.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filterUsers();
-      });    
+      this.userAdvanceMultiFilterCtrl.valueChanges
+          .pipe(takeUntil(this._onDestroy))
+          .subscribe(() => {
+              this.filterUsersAdvance();
+          });
 
-    this.userAdvanceMultiFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filterUsersAdvance();
-      });    
-
-
-    this.mapsAPILoader.load().then(() => {
-      this.setCurrentLocation();
-      this.geoCoder = new google.maps.Geocoder;
-      const autocomplete = new google.maps.places.Autocomplete(this.search.nativeElement, {
-        types: ['address']
+      this.mapsAPILoader.load().then(() => {
+          this.setCurrentLocation();
+          this.geoCoder = new google.maps.Geocoder;
+          const autocomplete = new google.maps.places.Autocomplete(this.search.nativeElement, {
+              types: ['address']
+          });
+          autocomplete.addListener('place_changed', () => {
+              this.ngZone.run(() => {
+                  // get the place result
+                  const place: google.maps.places.PlaceResult = autocomplete.getPlace();
+                  // verify result
+                  if (place.geometry === undefined || place.geometry === null) {
+                      return;
+                  }
+                  // set latitude, longitude and zoom
+                  this.mylatitude = place.geometry.location.lat();
+                  this.mylongitude = place.geometry.location.lng();
+                  this.getAddress(this.mylatitude, this.mylongitude);
+              });
+          });
       });
-      autocomplete.addListener('place_changed', () => {
-        this.ngZone.run(() => {
-          // get the place result
-          const place: google.maps.places.PlaceResult = autocomplete.getPlace();
-          // verify result
-          if (place.geometry === undefined || place.geometry === null) {
-            return;
-          }
-          // set latitude, longitude and zoom
-          this.mylatitude = place.geometry.location.lat();
-          this.mylongitude = place.geometry.location.lng();
-          this.getAddress(this.mylatitude, this.mylongitude);
-        });
-      });
-    });
-  
-  
+
   }
-  
-    private setCurrentLocation() {
+
+  private setCurrentLocation() {
       if ('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition((position) => {
-          this.mylatitude = position.coords.latitude;
-          this.mylongitude = position.coords.longitude;
-          // this.zoom = 15;
-          this.getAddress(this.mylatitude, this.mylongitude);
-        });
+          navigator.geolocation.getCurrentPosition((position) => {
+              this.mylatitude = position.coords.latitude;
+              this.mylongitude = position.coords.longitude;
+              // this.zoom = 15;
+              this.getAddress(this.mylatitude, this.mylongitude);
+          });
       }
-    }
-  
-  
-    markerDragEnd($event: MouseEvent) {
+  }
+
+  markerDragEnd($event: MouseEvent) {
       console.log($event);
       this.mylatitude = $event.coords.lat;
       this.mylongitude = $event.coords.lng;
       this.getAddress(this.mylatitude, this.mylongitude);
-    }
-  
-    getAddress(latitude, longitude) {
-      this.geoCoder.geocode({ 'location': { lat: latitude, lng: longitude } }, (results, status) => {
-        //console.log(results);
-        //console.log(status);
-        if (status === 'OK') {
-          if (results[0]) {
-            this.myaddress = results[0].formatted_address;
-            this.latitude = latitude;
-            this.longitude = longitude;
-            this.zoom = 17;
-          } else {
-            window.alert('No results found');
+  }
+
+  getAddress(latitude, longitude) {
+      this.geoCoder.geocode({
+          'location': {
+              lat: latitude,
+              lng: longitude
           }
-        } else {
-          window.alert('Geocoder failed due to: ' + status);
-        }
-  
+      }, (results, status) => {
+          if (status === 'OK') {
+              if (results[0]) {
+                  this.myaddress = results[0].formatted_address;
+                  this.latitude = latitude;
+                  this.longitude = longitude;
+                  this.zoom = 17;
+              } else {
+                  window.alert('No results found');
+              }
+          } else {
+              window.alert('Geocoder failed due to: ' + status);
+          }
+
       });
-    } 
+  }
 
-
-
-
-  refresh() {    
-    this.renderMap = false;
-    this.homemarcador = [];
-    this.marcadores = [];
-    this.users = [];
-    this.user = [];
-    this.usermarcadores = [];    
-    this.usertrackingmarcadores = [];
-    this.userordenesmarcadores = [];
-    this.wayspoints = [];
-    this.datadirections.origin = '';
-    this.datadirections.destination = '';      
-    this.selectedColumnnOrdenes.fieldValue = '';
-    this.selectedColumnnEstatus.fieldValue = '';
-    this.selectedColumnnAdvance.fieldValue = '';
-    this.selectedColumnnDate.columnValueDesde = '';    
-    this.message = '';
-    this.userFullCtrl.reset();
-    this.userAdvanceCtrl.reset();
-    //this.userMultiFilter.reset();
-    this.loadInfo();
-    this.loadServiceEstatus();
-
+  refresh() {
+      this.renderMap = false;
+      this.homemarcador = [];
+      this.marcadores = [];
+      this.users = [];
+      this.user = [];
+      this.usermarcadores = [];
+      this.usertrackingmarcadores = [];
+      this.userordenesmarcadores = [];
+      this.wayspoints = [];
+      this.datadirections.origin = '';
+      this.datadirections.destination = '';
+      this.selectedColumnnOrdenes.fieldValue = '';
+      this.selectedColumnnEstatus.fieldValue = '';
+      this.selectedColumnnAdvance.fieldValue = '';
+      this.selectedColumnnDate.columnValueDesde = '';
+      this.message = '';
+      this.userFullCtrl.reset();
+      this.userAdvanceCtrl.reset();
+      this.loadInfo();
+      this.loadServiceEstatus();
 
   }
 
-
-
-
-  reset(){
-    this.userFullCtrl.reset();
-    this.userAdvanceCtrl.reset();    
-    //this.userMultiFilter.reset();    
-    this.selectedColumnnOrdenes.fieldValue = '';
-    this.selectedColumnnEstatus.fieldValue = '';
-    this.selectedColumnnAdvance.fieldValue = '';
-    this.selectedColumnnDate.columnValueDesde = '';        
+  reset() {
+      this.userFullCtrl.reset();
+      this.userAdvanceCtrl.reset();
+      // this.userMultiFilter.reset();
+      this.selectedColumnnOrdenes.fieldValue = '';
+      this.selectedColumnnEstatus.fieldValue = '';
+      this.selectedColumnnAdvance.fieldValue = '';
+      this.selectedColumnnDate.columnValueDesde = '';
   }
 
   private filterUsers() {
-    //console.log('filter');
-    if (!this.user) {
-      return;
-    }
-    // get the search keyword
-    let search = this.userMultiFilter.value;
-    if (!search) {
-      this.filteredUserMultiFull.next(this.user.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the banks
-    this.filteredUserMultiFull.next(
-      this.user.filter(bank => bank.name.toLowerCase().indexOf(search) > -1)
-    );
+      if (!this.user) {
+          return;
+      }
+      // get the search keyword
+      let search = this.userMultiFilter.value;
+      if (!search) {
+          this.filteredUserMultiFull.next(this.user.slice());
+          return;
+      } else {
+          search = search.toLowerCase();
+      }
+      // filter the banks
+      this.filteredUserMultiFull.next(
+          this.user.filter(bank => bank.name.toLowerCase().indexOf(search) > -1)
+      );
   }
 
   private filterUsersAdvance() {
-    //console.log('filter');
-    if (!this.user) {
-      return;
-    }
-    // get the search keyword
-    let search = this.userAdvanceMultiFilterCtrl.value;
-    if (!search) {
-      this.filteredUserAdvanceMulti.next(this.user.slice());
-      return;
-    } else {
-      search = search.toLowerCase();
-    }
-    // filter the banks
-    this.filteredUserAdvanceMulti.next(
-      this.user.filter(bank => bank.name.toLowerCase().indexOf(search) > -1)
-    );
+      if (!this.user) {
+          return;
+      }
+      // get the search keyword
+      let search = this.userAdvanceMultiFilterCtrl.value;
+      if (!search) {
+          this.filteredUserAdvanceMulti.next(this.user.slice());
+          return;
+      } else {
+          search = search.toLowerCase();
+      }
+      // filter the banks
+      this.filteredUserAdvanceMulti.next(
+          this.user.filter(bank => bank.name.toLowerCase().indexOf(search) > -1)
+      );
   }
 
-
-
   public loadInfo() {
-    this.isLoadingResults = true;
-    this._dataService.getService(this.token.token, this.id).subscribe(
-                response => {
-                   if (response.status === 'success') {
-                     this.project_id = Number (response.datos.project.id);
-                     this.country_id = Number (response.datos.project.country_id);
-                     this.servicename = String (response.datos.service_name);
-                     this.loadregion(this.country_id);
-                     this.loadproject(this.project_id);
-                     this.loaduser(this.project_id);
-                     this.loadusergeoreference(this.project_id);
-                     this.isLoadingResults = false;
-                    } else {
-                     this.country_id = 0;
-                     this.isLoadingResults = false;
-                     }
-                    },
-                    (_error) => {
+          this.isLoadingResults = true;
+          this._dataService.getService(this.token.token, this.id).subscribe(
+              response => {
+                  if (response.status === 'success') {
+                      this.project_id = Number(response.datos.project.id);
+                      this.country_id = Number(response.datos.project.country_id);
+                      this.servicename = String(response.datos.service_name);
+                      this.loadregion(this.country_id);
+                      this.loadproject(this.project_id);
+                      this.loaduser(this.project_id);
+                      this.loadusergeoreference(this.project_id);
                       this.isLoadingResults = false;
-                    }
+                  } else {
+                      this.country_id = 0;
+                      this.isLoadingResults = false;
+                  }
+              }, (_error) => {
+                  this.isLoadingResults = false;
+              }
 
-                    );
+          );
 
-    }// END IF
+      } // END IF
 
   async loadregion(countryid: number) {
 
-    const data = await this._userService.getRegion();
+      const data = await this._userService.getRegion();
 
-    if (data && countryid > 0) {
-      this.latitude = Number (data.datos.latitud);
-      this.longitude = Number (data.datos.longitud);
-      this.titulo = data.datos.company_name;
-      this.subtitulo = data.datos.company_footer;
-      this.direccion = data.datos.company_footer;
-      this.create_at = '';
-      this.update_at = '';
-      this.create_by = '';
-      this.update_by = '';
-      this.estatus = '';
-      this.label = 0;
-      this.icon = 'https://img.icons8.com/color/25/000000/google-home.png';
-      const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
-      this.homemarcador.push(nuevoMarcador);
-      this.renderMap = true;
+      if (data && countryid > 0) {
+          this.latitude = Number(data.datos.latitud);
+          this.longitude = Number(data.datos.longitud);
+          this.titulo = data.datos.company_name;
+          this.subtitulo = data.datos.company_footer;
+          this.direccion = data.datos.company_footer;
+          this.create_at = '';
+          this.update_at = '';
+          this.create_by = '';
+          this.update_by = '';
+          this.estatus = '';
+          this.label = 0;
+          this.icon = 'https://img.icons8.com/color/25/000000/google-home.png';
+          const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+          this.homemarcador.push(nuevoMarcador);
+          this.renderMap = true;
 
-        /*
-        this._regionService.getRegion(this.token.token, countryid).subscribe(
-                response => {
-                   if (response.status === 'success') {
-                    this.latitude = Number (response.datos.latitud);
-                    this.longitude = Number (response.datos.longitud);
-                    this.titulo = response.datos.company_name;
-                    this.subtitulo = response.datos.company_footer;
-                    this.direccion = response.datos.company_footer;
-                    this.create_at = '';
-                    this.update_at = '';
-                    this.create_by = '';
-                    this.update_by = '';
-                    this.estatus = '';
-                    this.label = 0;
-                    // this.icon = 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png'
-                    // this.icon = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
-                    this.icon = 'https://img.icons8.com/color/25/000000/google-home.png';
-                    // this.lat = response.datos.latitud;
-                    // this.lng = response.datos.longitud;
-                    const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
-                    this.homemarcador.push(nuevoMarcador);
-                    this.renderMap = true;
-                    } else {
-                      this.lat = 0;
-                      this.lng = 0;
-                         }
-                    },
-                      error => {
-                      this._userService.logout();
-                      // this._router.navigate(["/login"]);
-                      console.log(<any>error);
-                      }
-                    );*/
+          /*
+          this._regionService.getRegion(this.token.token, countryid).subscribe(
+                  response => {
+                     if (response.status === 'success') {
+                      this.latitude = Number (response.datos.latitud);
+                      this.longitude = Number (response.datos.longitud);
+                      this.titulo = response.datos.company_name;
+                      this.subtitulo = response.datos.company_footer;
+                      this.direccion = response.datos.company_footer;
+                      this.create_at = '';
+                      this.update_at = '';
+                      this.create_by = '';
+                      this.update_by = '';
+                      this.estatus = '';
+                      this.label = 0;
+                      // this.icon = 'https://maps.google.com/mapfiles/kml/shapes/info-i_maps.png'
+                      // this.icon = 'https://developers.google.com/maps/documentation/javascript/examples/full/images/beachflag.png'
+                      this.icon = 'https://img.icons8.com/color/25/000000/google-home.png';
+                      // this.lat = response.datos.latitud;
+                      // this.lng = response.datos.longitud;
+                      const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+                      this.homemarcador.push(nuevoMarcador);
+                      this.renderMap = true;
+                      } else {
+                        this.lat = 0;
+                        this.lng = 0;
+                           }
+                      },
+                        error => {
+                        this._userService.logout();
+                        // this._router.navigate(["/login"]);
+                        console.log(<any>error);
+                        }
+                      );*/
       } else {
-        this.lat = 0;
-        this.lng = 0;
+          this.lat = 0;
+          this.lng = 0;
       }
   }
 
   public loadproject(projectid: number) {
-    this.termino = 0;
-    this.date = 'day';
-    this.status = 0;
-    this.servicetype = 0;
+      this.termino = 0;
+      this.date = 'day';
+      this.status = 0;
+      this.servicetype = 0;
 
-    if(projectid > 0) {
-        this._proyectoService.getProjectOrder(this.token.token, projectid, this.termino, this.date, this.status, this.id, this.servicetype).then(
-          (res: any) => 
-          {
-            res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
-                  this.ordenes = some.datos;  
-                  for (var i=0; i<this.ordenes.length; i++){
-                    //console.log(this.ordenes[i]);
-                    if(this.ordenes[i]['latitud'] && this.ordenes[i]['longitud']){
-                      this.titulo = String('N.Cliente: '+ this.ordenes[i]['cc_number']);
-                      this.subtitulo = String('N.Orden: '+ this.ordenes[i]['order_number']);
-                      this.latitude = Number (this.ordenes[i]['latitud']);
-                      this.longitude = Number (this.ordenes[i]['longitud']);
-                      this.direccion = String('Dirección: '+ this.ordenes[i]['direccion']);
-                      this.create_at = String('Creado el: '+ this.ordenes[i]['create_at']);
-                      this.update_at = String('Editado el: '+ this.ordenes[i]['update_at']);
-                      this.estatus = String('Estatus: '+ this.ordenes[i]['estatus']);
-                      this.create_by = String('Creado por: '+ this.ordenes[i]['user']);
-                      this.update_by = String('Editado por: '+ this.ordenes[i]['userupdate']);
-                      //this.label = String(i);
-                      this.label = 0;
-                      if(this.ordenes[i]['estatus'] === 'Atendido'){
-                        this.icon = './assets/img/marker-green.png';  
-                        //this.icon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';  
-                      }else{
-                         this.icon = 'https://img.icons8.com/color/25/000000/marker.png';
-                        //this.icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';  
+      if (projectid > 0) {
+          this._proyectoService.getProjectOrder(this.token.token, projectid, this.termino, this.date, this.status, this.id, this.servicetype).then(
+              (res: any) => {
+                  res.subscribe(
+                      (some) => {
+                          if (some.datos) {
+                              this.ordenes = some.datos;
+                              for (let i = 0; i < this.ordenes.length; i++) {
+                                  if (this.ordenes[i]['latitud'] && this.ordenes[i]['longitud']) {
+                                      this.titulo = String('N.Cliente: ' + this.ordenes[i]['cc_number']);
+                                      this.subtitulo = String('N.Orden: ' + this.ordenes[i]['order_number']);
+                                      this.latitude = Number(this.ordenes[i]['latitud']);
+                                      this.longitude = Number(this.ordenes[i]['longitud']);
+                                      this.direccion = String('Dirección: ' + this.ordenes[i]['direccion']);
+                                      this.create_at = String('Creado el: ' + this.ordenes[i]['create_at']);
+                                      this.update_at = String('Editado el: ' + this.ordenes[i]['update_at']);
+                                      this.estatus = String('Estatus: ' + this.ordenes[i]['estatus']);
+                                      this.create_by = String('Creado por: ' + this.ordenes[i]['user']);
+                                      this.update_by = String('Editado por: ' + this.ordenes[i]['userupdate']);
+                                      this.label = 0;
+                                      if (this.ordenes[i]['estatus'] === 'Atendido') {
+                                          this.icon = './assets/img/marker-green.png';
+                                          // this.icon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+                                      } else {
+                                          this.icon = 'https://img.icons8.com/color/25/000000/marker.png';
+                                          // this.icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+                                      }
+
+                                      const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+                                      this.marcadores.push(nuevoMarcador);
+                                  }
+
+                              }
+
+                          } else {}
+                      }, (_error) => {
+                          this.marcadores = [];
                       }
-                      
-                      const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
-                      this.marcadores.push(nuevoMarcador);                     
-                    }
-                    
-                    
-                  }
-                  
-                }else{
-                }
-              },
-              (_error) => { 
-              this.marcadores = [];
-              //console.log(<any>error);
-              }  
-              )
-        })
-    }//END MAIN IF
+                  );
+              });
+      } // END MAIN IF
   }
 
-
-  public loadServiceEstatus(){  
-    this._dataService.getServiceEstatus(this.token.token, this.id).subscribe(
-    response => {
-              if(!response){
-                return;
+  public loadServiceEstatus() {
+      this._dataService.getServiceEstatus(this.token.token, this.id).subscribe(
+          response => {
+              if (!response) {
+                  return;
               }
-              if(response.status == 'success'){                  
-                this.serviceestatus = response.datos;
+              if (response.status === 'success') {
+                  this.serviceestatus = response.datos;
               }
-              });        
+          });
   }
 
+  public loadusergeoreference(projectid: number) {
+      this.termino = 0;
+      this.date = 'day';
+      this.status = 0;
+      this.servicetype = 0;
 
-  public loadusergeoreference(projectid:number){
-    this.termino = 0;
-    this.date = 'day';
-    this.status = 0;
-    this.servicetype = 0;
+      if (projectid > 0) {
+          this._proyectoService.getProjectUserGeoreference(this.token.token, projectid).then(
+              (res: any) => {
+                  res.subscribe(
+                      (some) => {
+                          if (some.datos) {
+                              this.usuarios = some.datos;
+                              for (let i = 0; i < this.usuarios.length; i++) {
+                                  if (this.usuarios[i]['latitud'] && this.usuarios[i]['longitud']) {
+                                      this.titulo = String('Ubicación');
+                                      this.subtitulo = String('Usuario: ' + this.usuarios[i]['usuario']);
+                                      this.latitude = Number(this.usuarios[i]['latitud']);
+                                      this.longitude = Number(this.usuarios[i]['longitud']);
+                                      this.direccion = '';
+                                      this.create_at = String('Creado el: ' + this.usuarios[i]['create_at']);
+                                      this.update_at = String('Editado el: ' + this.usuarios[i]['update_at']);
+                                      this.estatus = String('Estatus: ' + this.usuarios[i]['estatus']);
+                                      this.create_by = '';
+                                      this.update_by = '';
+                                      // this.label = String(i);
+                                      this.label = 0;
+                                      this.icon = './assets/img/marker-blue.png';
+                                      // this.icon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+                                      const userMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+                                      this.usermarcadores.push(userMarcador);
+                                  }
 
-    if(projectid > 0){                                
-        this._proyectoService.getProjectUserGeoreference(this.token.token, projectid).then(
-          (res: any) => 
-          {
-            res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
-                  this.usuarios = some.datos;  
-                  for (var i=0; i<this.usuarios.length; i++){
-                    //console.log(this.ordenes[i]);
-                    if(this.usuarios[i]['latitud'] && this.usuarios[i]['longitud']){
-                      this.titulo = String('Ubicación');
-                      this.subtitulo = String('Usuario: '+ this.usuarios[i]['usuario']);
-                      this.latitude = Number (this.usuarios[i]['latitud']);
-                      this.longitude = Number (this.usuarios[i]['longitud']);
-                      this.direccion = '';
-                      this.create_at = String('Creado el: '+ this.usuarios[i]['create_at']);
-                      this.update_at = String('Editado el: '+ this.usuarios[i]['update_at']);
-                      this.estatus = String('Estatus: '+ this.usuarios[i]['estatus']);
-                      this.create_by = '';
-                      this.update_by = '';                      
-                      //this.label = String(i);
-                      this.label = 0;
-                      this.icon = './assets/img/marker-blue.png';  
-                      //this.icon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';                        
-                      const userMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
-                      this.usermarcadores.push(userMarcador);
-                    }
-                    
-                    
-                  }
-                  
-                }else{
+                              }
 
-                }
-              },
-              (_error) => { 
-              this.usermarcadores = [];
-              //console.log(<any>error);
-              }  
-              )
-        })
-    }//END MAIN IF PROJECT
-  }
+                          } else {
 
-
-  public loaduser(projectid:number){
-
-    if(projectid > 0){     
-        this._proyectoService.getProjectUser(this.token.token, projectid, this.role).then(
-          (res: any) => 
-          {
-            res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
-                  this.users = some.datos;
-                  for (var i=0; i<this.users.length; i++){
-                    const userid = this.users[i]['id'];
-                    const username = this.users[i]['usuario'];
-                    this.user[i] = { name: username, id: userid };
-                  }
-                  //console.log(this.user);
-                  this.filteredUserMultiFull.next(this.user.slice());
-                  this.filteredUserAdvanceMulti.next(this.user.slice());
-                  //console.log(this.filteredUserMultiFull);                  
-                }else{
-                }
-              },
-              (_error) => { 
-              this.users = [];
-              //console.log(<any>error);
-              }  
-              )
-        })
-    }
-  }
-
-
-  public loadusertracking(projectid:number, userid:number){
-    if(projectid > 0 && userid > 0 ){ 
-      this.isLoadingResults = true;      
-      this.renderMap = false;
-      this.marcadores = [];
-      this.usermarcadores = [];
-      this.usertrackingmarcadores = [];
-      this.usertrackingadvancemarcadores = [];      
-      this.selectedColumnnEstatus.fieldValue = '';
-      this.selectedColumnnDate.columnValueDesde = '';
-      this.wayspoints = [];
-      this.datadirections.origin = '';
-      this.datadirections.destination = '';      
-
-      this.userAdvanceCtrl.reset();
-      this.userAdvanceMultiFilterCtrl.reset();
-      this.messageadvance = '';
-      this.columnTimeFromValue = new FormControl;
-      this.columnTimeUntilValue = new FormControl;
-      var newtimefrom = "";
-      var newtimeuntil = "";
-
-
-      //this.userordenesmarcadores = [];
-        this._proyectoService.gettUserGeoreference(this.token.token, userid, this.selectedColumnnDate.columnValueDesde, newtimefrom, newtimeuntil).then(
-          (res: any) => 
-          {
-            res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
-                  //console.log(some.datos);  
-                  this.usuariostracking = some.datos;                
-                  if(this.usuariostracking.length > 0){
-                  var j = Number(this.usuariostracking.length);
-                  }                  
-                  //console.log(this.usuariostracking.length);
-                  for (var i=0; i<this.usuariostracking.length; i++){
-                    if(this.usuariostracking[i]['latitud'] && this.usuariostracking[i]['longitud']){
-                      this.titulo = String('Ubicación');
-                      this.subtitulo = String('Usuario: '+ this.usuariostracking[i]['usuario']);
-                      this.latitude = Number (this.usuariostracking[i]['latitud']);
-                      this.longitude = Number (this.usuariostracking[i]['longitud']);
-                      this.create_at = String('Creado el: '+ this.usuariostracking[i]['create_at']);
-                      //this.icon = './assets/img/marker-blue-tod.png';  
-                      this.direccion = '';
-                      this.update_at = '';
-                      this.estatus = '';
-                      this.create_by = '';
-                      this.update_by = '';                                            
-                      this.label = Number(j--);                                           
-                      const userTrackingMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
-                      this.usertrackingmarcadores.push(userTrackingMarcador);
-                      this.isLoadingResults = false;
-                    }
-                  }
-                  this.isLoadingResults = false;
-                  this.renderMap = true;
-                  this.message = 'success';
-                  //this.directions(this.usertrackingmarcadores);
-                  //console.log(this.usertrackingmarcadores);
-                }else{
-                  this.isLoadingResults = false;
-                  this.renderMap = true;
-                  this.message = 'error';
-                }
-              },
-              (_error) => { 
-              this.usertrackingmarcadores = [];
-              this.isLoadingResults = false;
-              this.renderMap = true;
-              this.message = 'error';
-              //console.log(<any>error);
-              }  
-              )
-          })      
-        }
-    }
-
-  public directions(data:Marcador[]){
-    var banderafirst = false;
-    var banderalast = false;    
-    this.directionsmarcadores = data;    
-    if(this.directionsmarcadores.length > 0){     
-    const lastinsert = this.directionsmarcadores.length - 1;
-    var j = Number(this.directionsmarcadores.length - 1);
-    // var x = Number(this.usuariostracking.length);          
-      for (var i=0; i<this.directionsmarcadores.length; i++){
-        if(this.directionsmarcadores[i].lat && this.directionsmarcadores[i].lng && !banderalast && lastinsert == i){
-          this.datadirections.destination = this.directionsmarcadores[i].lat +','+ this.directionsmarcadores[i].lng;
-          banderalast = true;     
-          break;
-        }
-
-        if(banderafirst){ 
-           this.wayspoints.push(
-          {
-              location: { lat: this.directionsmarcadores[j].lat, lng: this.directionsmarcadores[j].lng }
-          })
-          
-          this.markerOptions.waypoints.push({icon:'https://i.imgur.com/7teZKif.png', infoWindow: `
-        <h4>Hello<h4>
-        `})
-          /*GOOGLE API
-          if(i==1){
-            this.datadirections.waypoints = this.directionsmarcadores[i].lat +','+ this.directionsmarcadores[i].lng ;            
-          }else{
-            this.datadirections.waypoints = this.datadirections.waypoints + '|' + this.directionsmarcadores[i].lat +','+ this.directionsmarcadores[i].lng ;          
-          }*/
-          
-        }
-
-        if(this.directionsmarcadores[i].lat && this.directionsmarcadores[i].lng && !banderafirst){
-          this.datadirections.origin = this.directionsmarcadores[i].lat +','+ this.directionsmarcadores[i].lng;
-          banderafirst = true;
-        }
-        j = j-1;
-
-
-
-
-      }
-      if(this.datadirections){
-        //console.log(this.markerOptions);
-        //console.log(this.datadirections);
-        //console.log(this.wayspoints);
-        //this.GoogleApi(this.datadirections);
-      }
-    }
-  }
-
-  
-
-
-
-  public GoogleApi(data:any){
-    if(data){
-      //console.log(data);
-      this._mapaService.getDirections(this.token.token, data).subscribe(
-      response => {
-      if(!response){
-        return;
-         }       
-          console.log(response);
-        
-      },
-          error => {                      
-          console.log(<any>error);
-          }        
-      );      
-
-
-    }
-
-
-
-  }
-
-  public loaduserordenes(projectid:number, userid:number){
-    this.isLoadingResults = true;
-    if(projectid > 0 && userid > 0 ){ 
-      this.renderMap = false;
-      this.marcadores = [];
-      this.usermarcadores = [];
-      this.usertrackingadvancemarcadores = [];           
-      this.selectedColumnnEstatus.fieldValue = '';
-      this.selectedColumnnDate.columnValueDesde = '';
-      this.userAdvanceCtrl.reset();
-      this.userAdvanceMultiFilterCtrl.reset();      
-      this.messageadvance = '';
-      this.wayspoints = [];
-      this.datadirections.origin = '';
-      this.datadirections.destination = '';      
-
-      //this.usertrackingmarcadores = [];
-      this.userordenesmarcadores = [];
-        this._proyectoService.gettUserOrdenesGeoreference(this.token.token, projectid, userid).then(
-          (res: any) => 
-          {
-            res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
-                  //console.log(some.datos);  
-                  this.usuariosordenes = some.datos;                
-                  if(this.usuariosordenes.length > 0){
-                  var j = Number(this.usuariosordenes.length);      
-                  }                  
-                  //console.log(this.usuariostracking.length);
-                  for (var i=0; i<this.usuariosordenes.length; i++){
-                    if(this.usuariosordenes[i]['latitud'] && this.usuariosordenes[i]['longitud']){
-                      this.titulo = String('N.Cliente: '+ this.ordenes[i]['cc_number']);
-                      this.subtitulo = String('N.Orden: '+ this.ordenes[i]['order_number']);
-                      this.latitude = Number (this.usuariosordenes[i]['latitud']);
-                      this.longitude = Number (this.usuariosordenes[i]['longitud']);
-                      this.create_at = String('Creado el: '+ this.usuariosordenes[i]['create_at']);
-                      this.update_at = String('Editado el: '+ this.usuariosordenes[i]['update_at']);
-                      this.update_by = String('Editada por: '+ this.usuariosordenes[i]['usuario']);
-                      this.estatus = String('Estatus: '+ this.usuariosordenes[i]['estatus']);
-                      this.icon = './assets/img/marker-green-tod.png';  
-                      this.direccion = '';
-                      this.create_by = '';
-                      this.label = Number(j--);                                           
-                      const userOrdenesMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
-                      this.userordenesmarcadores.push(userOrdenesMarcador);
-                      this.isLoadingResults = false;
-                    }
-                  }
-                  this.isLoadingResults = false;
-                  this.renderMap = true;
-                  this.message = 'success';
-                  //console.log(this.usertrackingmarcadores);
-                }else{
-                  this.isLoadingResults = false;
-                  this.renderMap = true;
-                  this.message = 'error';
-                }
-              },
-              (_error) => { 
-              this.userordenesmarcadores = [];
-              this.isLoadingResults = false;
-              this.renderMap = true;
-              this.message = 'error';
-              //console.log(<any>error);
-              }  
-              )
-          })      
-        }
-    }
-
-  public loadordenesestatus(projectid:number, statusid:number){
-    this.status = statusid;
-
-    if(projectid > 0 && statusid>0 ){    
-    this.isLoadingResults = true; 
-    this.renderMap = false;
-    this.marcadores = [];
-    this.usertrackingmarcadores = [];
-    this.usertrackingadvancemarcadores = [];      
-    this.userordenesmarcadores = [];    
-    this.selectedColumnnOrdenes.fieldValue = '';
-    this.selectedColumnnDate.columnValueDesde = '';
-    this.wayspoints = [];
-    this.datadirections.origin = '';
-    this.datadirections.destination = '';      
-
-    this.userAdvanceCtrl.reset();
-    this.userAdvanceMultiFilterCtrl.reset();
-    this.messageadvance = '';
-    this.userFullCtrl.reset();
-
-                           
-        this._proyectoService.getProjectOrder(this.token.token, projectid, this.termino, this.date, this.status, this.id, this.servicetype).then(
-          (res: any) => 
-          {
-            res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
-                  this.ordenes = some.datos;  
-                  for (var i=0; i<this.ordenes.length; i++){
-                    //console.log(this.ordenes[i]);
-                    if(this.ordenes[i]['latitud'] && this.ordenes[i]['longitud']){
-                      this.titulo = String('N.Cliente: '+ this.ordenes[i]['cc_number']);
-                      this.subtitulo = String('N.Orden: '+ this.ordenes[i]['order_number']);
-                      this.latitude = Number (this.ordenes[i]['latitud']);
-                      this.longitude = Number (this.ordenes[i]['longitud']);
-                      this.direccion = String('Dirección: '+ this.ordenes[i]['direccion']);
-                      this.create_at = String('Creado el: '+ this.ordenes[i]['create_at']);
-                      this.update_at = String('Editado el: '+ this.ordenes[i]['update_at']);
-                      this.estatus = String('Estatus: '+ this.ordenes[i]['estatus']);
-                      this.create_by = String('Creado por: '+ this.ordenes[i]['user']);
-                      this.update_by = String('Editado por: '+ this.ordenes[i]['userupdate']);
-                      //this.label = String(i);
-                      this.label = 0;
-                      if(this.ordenes[i]['estatus'] === 'Atendido'){
-                        this.icon = './assets/img/marker-green.png';  
-                        //this.icon = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';  
-                      }else{
-                         this.icon = 'https://img.icons8.com/color/25/000000/marker.png';
-                        //this.icon = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';  
+                          }
+                      }, (_error) => {
+                          this.usermarcadores = [];
+                          // console.log(<any>error);
                       }
-                      
-                      const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
-                      this.marcadores.push(nuevoMarcador);                     
-                    }                                        
+                  );
+              });
+      } // END MAIN IF PROJECT
+  }
+
+  public loaduser(projectid: number) {
+
+      if (projectid > 0) {
+          this._proyectoService.getProjectUser(this.token.token, projectid, this.role).then(
+              (res: any) => {
+                  res.subscribe(
+                      (some) => {
+                          if (some.datos) {
+                              this.users = some.datos;
+                              for (let i = 0; i < this.users.length; i++) {
+                                  const userid = this.users[i]['id'];
+                                  const username = this.users[i]['usuario'];
+                                  this.user[i] = {
+                                      name: username,
+                                      id: userid
+                                  };
+                              }
+                              // console.log(this.user);
+                              this.filteredUserMultiFull.next(this.user.slice());
+                              this.filteredUserAdvanceMulti.next(this.user.slice());
+                              // console.log(this.filteredUserMultiFull);
+                          } else {}
+                      }, (_error) => {
+                          this.users = [];
+                          // console.log(<any>error);
+                      }
+                  );
+              });
+      }
+  }
+
+  public loadusertracking(projectid: number, userid: number) {
+      if (projectid > 0 && userid > 0) {
+          this.isLoadingResults = true;
+          this.renderMap = false;
+          this.marcadores = [];
+          this.usermarcadores = [];
+          this.usertrackingmarcadores = [];
+          this.usertrackingadvancemarcadores = [];
+          this.selectedColumnnEstatus.fieldValue = '';
+          this.selectedColumnnDate.columnValueDesde = '';
+          this.wayspoints = [];
+          this.datadirections.origin = '';
+          this.datadirections.destination = '';
+
+          this.userAdvanceCtrl.reset();
+          this.userAdvanceMultiFilterCtrl.reset();
+          this.messageadvance = '';
+          this.columnTimeFromValue = new FormControl;
+          this.columnTimeUntilValue = new FormControl;
+          var newtimefrom = '';
+          var newtimeuntil = '';
+
+
+          this._proyectoService.gettUserGeoreference(this.token.token, userid, this.selectedColumnnDate.columnValueDesde, newtimefrom, newtimeuntil).then(
+              (res: any) => {
+                  res.subscribe(
+                      (some) => {
+                          if (some.datos) {
+                              // console.log(some.datos);
+                              this.usuariostracking = some.datos;
+                              if (this.usuariostracking.length > 0) {
+                                  var j = Number(this.usuariostracking.length);
+                              }
+                              // console.log(this.usuariostracking.length);
+                              for (let i = 0; i < this.usuariostracking.length; i++) {
+                                  if (this.usuariostracking[i]['latitud'] && this.usuariostracking[i]['longitud']) {
+                                      this.titulo = String('Ubicación');
+                                      this.subtitulo = String('Usuario: ' + this.usuariostracking[i]['usuario']);
+                                      this.latitude = Number(this.usuariostracking[i]['latitud']);
+                                      this.longitude = Number(this.usuariostracking[i]['longitud']);
+                                      this.create_at = String('Creado el: ' + this.usuariostracking[i]['create_at']);
+                                      // this.icon = './assets/img/marker-blue-tod.png';
+                                      this.direccion = '';
+                                      this.update_at = '';
+                                      this.estatus = '';
+                                      this.create_by = '';
+                                      this.update_by = '';
+                                      this.label = Number(j--);
+                                      const userTrackingMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+                                      this.usertrackingmarcadores.push(userTrackingMarcador);
+                                      this.isLoadingResults = false;
+                                  }
+                              }
+                              this.isLoadingResults = false;
+                              this.renderMap = true;
+                              this.message = 'success';
+                              // this.directions(this.usertrackingmarcadores);
+                              // console.log(this.usertrackingmarcadores);
+                          } else {
+                              this.isLoadingResults = false;
+                              this.renderMap = true;
+                              this.message = 'error';
+                          }
+                      }, (_error) => {
+                          this.usertrackingmarcadores = [];
+                          this.isLoadingResults = false;
+                          this.renderMap = true;
+                          this.message = 'error';
+                          // console.log(<any>error);
+                      }
+                  );
+              });
+      }
+  }
+
+  public directions(data: Marcador[]) {
+      let banderafirst = false;
+      let banderalast = false;
+      this.directionsmarcadores = data;
+      if (this.directionsmarcadores.length > 0) {
+          const lastinsert = this.directionsmarcadores.length - 1;
+          var j = Number(this.directionsmarcadores.length - 1);
+          // var x = Number(this.usuariostracking.length);
+          for (let i = 0; i < this.directionsmarcadores.length; i++) {
+              if (this.directionsmarcadores[i].lat && this.directionsmarcadores[i].lng && !banderalast && lastinsert === i) {
+                  this.datadirections.destination = this.directionsmarcadores[i].lat + ',' + this.directionsmarcadores[i].lng;
+                  banderalast = true;
+                  break;
+              }
+
+              if (banderafirst) {
+                  this.wayspoints.push({
+                      location: {
+                          lat: this.directionsmarcadores[j].lat,
+                          lng: this.directionsmarcadores[j].lng
+                      }
+                  })
+
+                  this.markerOptions.waypoints.push({
+                          icon: 'https://i.imgur.com/7teZKif.png',
+                          infoWindow: `
+      <h4>Hello<h4>
+      `
+                      });
+                      /*GOOGLE API
+                      if(i==1){
+                        this.datadirections.waypoints = this.directionsmarcadores[i].lat +','+ this.directionsmarcadores[i].lng ;
+                      }else{
+                        this.datadirections.waypoints = this.datadirections.waypoints + '|' + this.directionsmarcadores[i].lat +','+ this.directionsmarcadores[i].lng ;
+                      }*/
+
+              }
+
+              if (this.directionsmarcadores[i].lat && this.directionsmarcadores[i].lng && !banderafirst) {
+                  this.datadirections.origin = this.directionsmarcadores[i].lat + ',' + this.directionsmarcadores[i].lng;
+                  banderafirst = true;
+              }
+              j = j - 1;
+
+          }
+          if (this.datadirections) {
+              // console.log(this.markerOptions);
+              // console.log(this.datadirections);
+              // console.log(this.wayspoints);
+              // this.GoogleApi(this.datadirections);
+          }
+      }
+  }
+
+  public GoogleApi(data: any) {
+      if (data) {
+          this._mapaService.getDirections(this.token.token, data).subscribe(
+              response => {
+                  if (!response) {
+                      return;
                   }
-                  this.isLoadingResults = false;
-                  this.renderMap = true;
-                  this.message = 'success';                                  
-                }else{
-                  this.isLoadingResults = false;
-                  this.renderMap = true;
-                  this.message = 'error';                  
-                }
+                  console.log(response);
+
               },
-              (_error) => { 
-              this.marcadores = [];
-              this.isLoadingResults = false;
-              this.renderMap = true;
-              this.message = 'error';
-              //console.log(<any>error);
-              }  
-              )
-        })
-    }//END MAIN IF    
+              error => {
+                  console.log( < any > error);
+              }
+          );
+
+      }
 
   }
 
+  public loaduserordenes(projectid: number, userid: number) {
+      this.isLoadingResults = true;
+      if (projectid > 0 && userid > 0) {
+          this.renderMap = false;
+          this.marcadores = [];
+          this.usermarcadores = [];
+          this.usertrackingadvancemarcadores = [];
+          this.selectedColumnnEstatus.fieldValue = '';
+          this.selectedColumnnDate.columnValueDesde = '';
+          this.userAdvanceCtrl.reset();
+          this.userAdvanceMultiFilterCtrl.reset();
+          this.messageadvance = '';
+          this.wayspoints = [];
+          this.datadirections.origin = '';
+          this.datadirections.destination = '';
 
-  public loadusertrackingdate(projectid:number, userid:number){
-
-    if(projectid > 0 && userid > 0 ){ 
-      this.isLoadingResults = true; 
-      this.renderMap = false;
-      this.marcadores = [];
-      this.usermarcadores = [];
-      this.usertrackingmarcadores = [];
-      this.userordenesmarcadores = [];      
-      this.usertrackingadvancemarcadores = [];
-      this.wayspoints = [];
-      this.selectedColumnnOrdenes.fieldValue = '';
-      this.selectedColumnnEstatus.fieldValue = '';
-      this.datadirections.origin = '';
-      this.datadirections.destination = '';      
-      this.message = '';
-      this.userFullCtrl.reset();
-      this.userMultiFilter.reset();
-
-      if(this.selectedColumnnDate.columnValueDesde){
-        this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
-        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
-      }else{
-        this.selectedColumnnDate.columnValueDesde = "";
+          this.userordenesmarcadores = [];
+          this._proyectoService.gettUserOrdenesGeoreference(this.token.token, projectid, userid).then(
+              (res: any) => {
+                  res.subscribe(
+                      (some) => {
+                          if (some.datos) {
+                              this.usuariosordenes = some.datos;
+                              if (this.usuariosordenes.length > 0) {
+                                  var j = Number(this.usuariosordenes.length);
+                              }
+                              for (let i = 0; i < this.usuariosordenes.length; i++) {
+                                  if (this.usuariosordenes[i]['latitud'] && this.usuariosordenes[i]['longitud']) {
+                                      this.titulo = String('N.Cliente: ' + this.ordenes[i]['cc_number']);
+                                      this.subtitulo = String('N.Orden: ' + this.ordenes[i]['order_number']);
+                                      this.latitude = Number(this.usuariosordenes[i]['latitud']);
+                                      this.longitude = Number(this.usuariosordenes[i]['longitud']);
+                                      this.create_at = String('Creado el: ' + this.usuariosordenes[i]['create_at']);
+                                      this.update_at = String('Editado el: ' + this.usuariosordenes[i]['update_at']);
+                                      this.update_by = String('Editada por: ' + this.usuariosordenes[i]['usuario']);
+                                      this.estatus = String('Estatus: ' + this.usuariosordenes[i]['estatus']);
+                                      this.icon = './assets/img/marker-green-tod.png';
+                                      this.direccion = '';
+                                      this.create_by = '';
+                                      this.label = Number(j--);
+                                      const userOrdenesMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+                                      this.userordenesmarcadores.push(userOrdenesMarcador);
+                                      this.isLoadingResults = false;
+                                  }
+                              }
+                              this.isLoadingResults = false;
+                              this.renderMap = true;
+                              this.message = 'success';
+                              // console.log(this.usertrackingmarcadores);
+                          } else {
+                              this.isLoadingResults = false;
+                              this.renderMap = true;
+                              this.message = 'error';
+                          }
+                      }, (_error) => {
+                          this.userordenesmarcadores = [];
+                          this.isLoadingResults = false;
+                          this.renderMap = true;
+                          this.message = 'error';
+                          // console.log(<any>error);
+                      }
+                  );
+              });
       }
+  }
 
+  public loadordenesestatus(projectid: number, statusid: number) {
+      this.status = statusid;
 
-      //console.log(this.timefrom);
-      //console.log(this.timeuntil);
-      if(this.timefrom !=null && this.timeuntil !=null && this.timefrom.hour !=null && this.timefrom.hour != "" && this.timefrom.hour != "00" && this.timefrom.hour != "0"  && this.timeuntil.hour !=null && this.timeuntil.hour != "" && this.timeuntil.hour != "00" && this.timeuntil.hour != "0"){
-        const momenttimefrom = this.timefrom.hour +':'+ this.timefrom.minute +':00';
-        const momenttimeuntil  = this.timeuntil.hour +':'+ this.timeuntil.minute +':00';
-        this.columnTimeFromValue = new FormControl(moment(momenttimefrom, 'H:mm:ss').format('LTS'));
-        this.columnTimeUntilValue = new FormControl(moment(momenttimeuntil, 'H:mm:ss').format('LTS'));
-        var newtimefrom = moment(this.columnTimeFromValue.value, "h:mm:ss A").format("HH:mm:ss");   
-        var newtimeuntil = moment(this.columnTimeUntilValue.value, "h:mm:ss A").format("HH:mm:ss");
-      }else{
-        var newtimefrom = "";
-        var newtimeuntil = "";
-      }      
+      if (projectid > 0 && statusid > 0) {
+          this.isLoadingResults = true;
+          this.renderMap = false;
+          this.marcadores = [];
+          this.usertrackingmarcadores = [];
+          this.usertrackingadvancemarcadores = [];
+          this.userordenesmarcadores = [];
+          this.selectedColumnnOrdenes.fieldValue = '';
+          this.selectedColumnnDate.columnValueDesde = '';
+          this.wayspoints = [];
+          this.datadirections.origin = '';
+          this.datadirections.destination = '';
 
-        this._proyectoService.gettUserGeoreference(this.token.token, userid, this.selectedColumnnDate.columnValueDesde, newtimefrom, newtimeuntil).then(
-          (res: any) => 
-          {
-            res.subscribe(
-              (some) => 
-              {
-                if(some.datos){
-                  //console.log(some.datos);  
-                  this.usuariostracking = some.datos;                
-                  if(this.usuariostracking.length > 0){
-                  var j = Number(this.usuariostracking.length);      
-                  }                  
-                  //console.log(this.usuariostracking.length);
-                  for (var i=0; i<this.usuariostracking.length; i++){
-                    if(this.usuariostracking[i]['latitud'] && this.usuariostracking[i]['longitud']){
-                      this.titulo = String('Ubicación');
-                      this.subtitulo = String('Usuario: '+ this.usuariostracking[i]['usuario']);
-                      this.latitude = Number (this.usuariostracking[i]['latitud']);
-                      this.longitude = Number (this.usuariostracking[i]['longitud']);
-                      this.create_at = String('Creado el: '+ this.usuariostracking[i]['create_at']);
-                      this.icon = './assets/img/marker-blue-tod.png';  
-                      this.direccion = '';
-                      this.update_at = '';
-                      this.estatus = '';
-                      this.create_by = '';
-                      this.update_by = '';                                            
-                      this.label = Number(j--);                                           
-                      const userTrackingAdvanceMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
-                      this.usertrackingadvancemarcadores.push(userTrackingAdvanceMarcador);
-                      this.usertrackingmarcadores.push(userTrackingAdvanceMarcador);
-                      this.isLoadingResults = false;
-                    }
-                  }
-                  this.isLoadingResults = false;
-                  this.renderMap = true;
-                  this.messageadvance = 'success';
-                  this.directions(this.usertrackingadvancemarcadores);
-                  //console.log(this.usertrackingadvancemarcadores);
-                }else{
-                  this.isLoadingResults = false;
-                  this.renderMap = true;
-                  this.messageadvance = 'error';
-                }
-              },
-              (_error) => { 
-              this.usertrackingadvancemarcadores = [];
-              this.isLoadingResults = false;
-              this.renderMap = true;
-              this.messageadvance = 'error';
-              //console.log(<any>error);
-              }  
-              )
-          })  
-        }     
+          this.userAdvanceCtrl.reset();
+          this.userAdvanceMultiFilterCtrl.reset();
+          this.messageadvance = '';
+          this.userFullCtrl.reset();
+
+          this._proyectoService.getProjectOrder(this.token.token, projectid, this.termino, this.date, this.status, this.id, this.servicetype).then(
+              (res: any) => {
+                  res.subscribe(
+                      (some) => {
+                          if (some.datos) {
+                              this.ordenes = some.datos;
+                              for (let i = 0; i < this.ordenes.length; i++) {
+                                  if (this.ordenes[i]['latitud'] && this.ordenes[i]['longitud']) {
+                                      this.titulo = String('N.Cliente: ' + this.ordenes[i]['cc_number']);
+                                      this.subtitulo = String('N.Orden: ' + this.ordenes[i]['order_number']);
+                                      this.latitude = Number(this.ordenes[i]['latitud']);
+                                      this.longitude = Number(this.ordenes[i]['longitud']);
+                                      this.direccion = String('Dirección: ' + this.ordenes[i]['direccion']);
+                                      this.create_at = String('Creado el: ' + this.ordenes[i]['create_at']);
+                                      this.update_at = String('Editado el: ' + this.ordenes[i]['update_at']);
+                                      this.estatus = String('Estatus: ' + this.ordenes[i]['estatus']);
+                                      this.create_by = String('Creado por: ' + this.ordenes[i]['user']);
+                                      this.update_by = String('Editado por: ' + this.ordenes[i]['userupdate']);
+                                      this.label = 0;
+                                      if (this.ordenes[i]['estatus'] === 'Atendido') {
+                                          this.icon = './assets/img/marker-green.png';
+                                      } else {
+                                          this.icon = 'https://img.icons8.com/color/25/000000/marker.png';
+                                      }
+
+                                      const nuevoMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+                                      this.marcadores.push(nuevoMarcador);
+                                  }
+                              }
+                              this.isLoadingResults = false;
+                              this.renderMap = true;
+                              this.message = 'success';
+                          } else {
+                              this.isLoadingResults = false;
+                              this.renderMap = true;
+                              this.message = 'error';
+                          }
+                      }, (_error) => {
+                          this.marcadores = [];
+                          this.isLoadingResults = false;
+                          this.renderMap = true;
+                          this.message = 'error';
+                      }
+                  );
+              });
+      } // END MAIN IF
+
+  }
+
+  public loadusertrackingdate(projectid: number, userid: number) {
+
+      if (projectid > 0 && userid > 0) {
+          this.isLoadingResults = true;
+          this.renderMap = false;
+          this.marcadores = [];
+          this.usermarcadores = [];
+          this.usertrackingmarcadores = [];
+          this.userordenesmarcadores = [];
+          this.usertrackingadvancemarcadores = [];
+          this.wayspoints = [];
+          this.selectedColumnnOrdenes.fieldValue = '';
+          this.selectedColumnnEstatus.fieldValue = '';
+          this.datadirections.origin = '';
+          this.datadirections.destination = '';
+          this.message = '';
+          this.userFullCtrl.reset();
+          this.userMultiFilter.reset();
+
+          if (this.selectedColumnnDate.columnValueDesde) {
+              this.datedesde = new FormControl(moment(this.selectedColumnnDate.columnValueDesde).format('YYYY[-]MM[-]DD'));
+              this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
+          } else {
+              this.selectedColumnnDate.columnValueDesde = '';
+          }
+
+          // console.log(this.timefrom);
+          // console.log(this.timeuntil);
+          if (this.timefrom != null && this.timeuntil != null && this.timefrom.hour != null && this.timefrom.hour !== '' && this.timefrom.hour !== '00' && this.timefrom.hour !== '0' && this.timeuntil.hour != null && this.timeuntil.hour !== '' && this.timeuntil.hour !== '00' && this.timeuntil.hour !== '0') {
+              const momenttimefrom = this.timefrom.hour + ':' + this.timefrom.minute + ':00';
+              const momenttimeuntil = this.timeuntil.hour + ':' + this.timeuntil.minute + ':00';
+              this.columnTimeFromValue = new FormControl(moment(momenttimefrom, 'H:mm:ss').format('LTS'));
+              this.columnTimeUntilValue = new FormControl(moment(momenttimeuntil, 'H:mm:ss').format('LTS'));
+              var newtimefrom = moment(this.columnTimeFromValue.value, 'h:mm:ss A').format('HH:mm:ss');
+              var newtimeuntil = moment(this.columnTimeUntilValue.value, 'h:mm:ss A').format('HH:mm:ss');
+          } else {
+              var newtimefrom = '';
+              var newtimeuntil = '';
+          }
+
+          this._proyectoService.gettUserGeoreference(this.token.token, userid, this.selectedColumnnDate.columnValueDesde, newtimefrom, newtimeuntil).then(
+              (res: any) => {
+                  res.subscribe(
+                      (some) => {
+                          if (some.datos) {
+                              // console.log(some.datos);
+                              this.usuariostracking = some.datos;
+                              if (this.usuariostracking.length > 0) {
+                                  var j = Number(this.usuariostracking.length);
+                              }
+                              // console.log(this.usuariostracking.length);
+                              for (let i = 0; i < this.usuariostracking.length; i++) {
+                                  if (this.usuariostracking[i]['latitud'] && this.usuariostracking[i]['longitud']) {
+                                      this.titulo = String('Ubicación');
+                                      this.subtitulo = String('Usuario: ' + this.usuariostracking[i]['usuario']);
+                                      this.latitude = Number(this.usuariostracking[i]['latitud']);
+                                      this.longitude = Number(this.usuariostracking[i]['longitud']);
+                                      this.create_at = String('Creado el: ' + this.usuariostracking[i]['create_at']);
+                                      this.icon = './assets/img/marker-blue-tod.png';
+                                      this.direccion = '';
+                                      this.update_at = '';
+                                      this.estatus = '';
+                                      this.create_by = '';
+                                      this.update_by = '';
+                                      this.label = Number(j--);
+                                      const userTrackingAdvanceMarcador = new Marcador(this.latitude, this.longitude, this.titulo, this.subtitulo, this.label, this.icon, this.direccion, this.create_at, this.update_at, this.create_by, this.update_by, this.estatus);
+                                      this.usertrackingadvancemarcadores.push(userTrackingAdvanceMarcador);
+                                      this.usertrackingmarcadores.push(userTrackingAdvanceMarcador);
+                                      this.isLoadingResults = false;
+                                  }
+                              }
+                              this.isLoadingResults = false;
+                              this.renderMap = true;
+                              this.messageadvance = 'success';
+                              this.directions(this.usertrackingadvancemarcadores);
+                              // console.log(this.usertrackingadvancemarcadores);
+                          } else {
+                              this.isLoadingResults = false;
+                              this.renderMap = true;
+                              this.messageadvance = 'error';
+                          }
+                      }, (_error) => {
+                          this.usertrackingadvancemarcadores = [];
+                          this.isLoadingResults = false;
+                          this.renderMap = true;
+                          this.messageadvance = 'error';
+                          // console.log(<any>error);
+                      }
+                  );
+              });
+      }
   }
 
   public obtainInfowindow(window: InfoWindow) {
-    this.infoWindow = window
-    console.log(this.infoWindow);
+      this.infoWindow = window;
+      console.log(this.infoWindow);
   }
-
 
   public change(event: any) {
       this.wayspoints = event.request.waypoints;
@@ -1072,45 +1026,35 @@ export class MapaFullWidthComponent implements OnInit, OnDestroy {
       return;
   }
 
-
-  toggle() {    
-    this.show = !this.show;
-    this.message = '';
-    this.userFullCtrl.reset();
-
-    //this.userMultiFilter.reset();
-
+  toggle() {
+      this.show = !this.show;
+      this.message = '';
+      this.userFullCtrl.reset();
   }
-
 
   toggleadvance() {
-    this.showadvance = !this.showadvance;
-    this.messageadvance = '';
-    this.userAdvanceCtrl.reset();
+      this.showadvance = !this.showadvance;
+      this.messageadvance = '';
+      this.userAdvanceCtrl.reset();
 
   }
-
 
   resetUserFilters() {
-    this.userFullCtrl.reset();
-    this.userMultiFilter.reset();
-  }  
-
-
-  resetUserAdvanceFilters() {
-    this.userAdvanceCtrl.reset();
-    this.userAdvanceMultiFilterCtrl.reset();
-    this.selectedColumnnAdvance.fieldValue = '';
-    this.selectedColumnnDate.columnValueDesde = '';        
-
-  }  
-
-
-  ngOnDestroy() {
-    this._onDestroy.next();
-    this._onDestroy.complete();
+      this.userFullCtrl.reset();
+      this.userMultiFilter.reset();
   }
 
+  resetUserAdvanceFilters() {
+      this.userAdvanceCtrl.reset();
+      this.userAdvanceMultiFilterCtrl.reset();
+      this.selectedColumnnAdvance.fieldValue = '';
+      this.selectedColumnnDate.columnValueDesde = '';
 
+  }
+
+  ngOnDestroy() {
+      this._onDestroy.next();
+      this._onDestroy.complete();
+  }
 
 }

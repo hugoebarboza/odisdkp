@@ -1,0 +1,112 @@
+<meta name="Description" content="User Profile Security.">
+<h1 mat-dialog-title style="width: 100%; text-align: center;">{{title}} <br> <span *ngIf="servicetype && servicetype.name">{{servicetype.name}}</span></h1>
+<div mat-dialog-content >
+    <mat-tab-group mat-align-tabs="center">
+        <mat-tab label="Desactivas">
+            <ng-template mat-tab-label>
+                <h6>Desactivas <span class="badge badge-secondary" *ngIf="desactivos && desactivos.length > 0">{{desactivos.length}}</span></h6>
+            </ng-template>
+            <ng-template matTabContent class="custom-tabs">
+                <div class="row animated fadeIn" *ngIf="isLoading" class="margintop10">
+                    <div class="col-sm-12">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </div>
+                </div>
+                <div class="row animated fadeIn" *ngIf="!isLoading && desactivos && desactivos.length == 0" style="margin-top: 20px;">
+                    <div class="col-sm-12">
+                        <div class="alert alert-danger">
+                                No se encontraron registros que coincidan con su búsqueda. 
+                                <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon>sync</mat-icon> Refrescar </button>
+                        </div>
+                    </div>
+                </div>
+                <div [hidden]="(desactivos && desactivos.length == 0)">
+                    <mat-form-field class="full-width marginlr10">
+                        <mat-label> Busqueda </mat-label>
+                        <input matInput (keyup)="applyFilterDes($event)" placeholder="... ">
+                    </mat-form-field>
+                    <table #tableDes mat-table [dataSource]="dataSourceDes" matSort sortDes="matSort" class="full-width">
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                            <td mat-cell *matCellDef="let row; let i = index;"> 
+                                <div class="circle" [style.color]="row.status? 'green' : 'red'"></div>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Nombre </th>
+                            <td mat-cell *matCellDef="let row; let i = index;"> 
+                                {{row.name}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Acción </th>
+                            <td mat-cell *matCellDef="let row; let i = index;"> 
+                                <button type="button" (click)="editNotificacion(row)" class="btn btn-outline-success" matTooltip="Activar Notificación"> Activar </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                        <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
+                    </table>
+                    <!--<mat-paginator #paginatorDes [pageSizeOptions]="[10, 20, 30, 50, 100]" showFirstLastButtons></mat-paginator>-->
+                </div>
+            </ng-template>
+        </mat-tab>
+        <mat-tab label="Activas">
+            <ng-template mat-tab-label>
+                <h6>Activas <span class="badge badge-secondary" *ngIf="activos && activos.length > 0">{{activos.length}}</span></h6>
+            </ng-template>
+            <ng-template matTabContent>
+                <div class="row animated fadeIn" *ngIf="isLoading" class="margintop10">
+                    <div class="col-sm-12">
+                        <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                    </div>
+                </div>
+                <div class="row animated fadeIn" *ngIf="!isLoading && activos && activos.length == 0" style="margin-top: 20px;">
+                    <div class="col-sm-12">
+                        <div class="alert alert-danger">
+                                No se encontraron registros que coincidan con su búsqueda. 
+                                <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon>sync</mat-icon> Refrescar </button>
+                        </div>
+                    </div>
+                </div>
+                <div [hidden]="(activos && activos.length == 0)">
+                    <mat-form-field class="full-width marginlr10">
+                        <mat-label> Busqueda </mat-label>
+                        <input matInput (keyup)="applyFilterAct($event)" placeholder="... ">
+                    </mat-form-field>
+                    <table #tableAct mat-table [dataSource]="dataSourceAct" matSort sortAct="matSort" class="full-width">
+                        <!-- ID Column -->
+                        <ng-container matColumnDef="status">
+                            <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                            <td mat-cell *matCellDef="let row; let i = index;"> 
+                                <div class="circle" [style.color]="row.status? 'green' : 'red'"></div>
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="name">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header matSortDirection="desc"> Nombre </th>
+                            <td mat-cell *matCellDef="let row; let i = index;"> 
+                                {{row.name}}
+                            </td>
+                        </ng-container>
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef> Acción </th>
+                            <td mat-cell *matCellDef="let row; let i = index;"> 
+                                <button type="button" (click)="editNotificacion(row)" class="btn btn-outline-warning" matTooltip="Desactivar Notificación"> Desactivar </button>
+                            </td>
+                        </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns;"></tr>
+                        <tr mat-row *matRowDef="let row; let i = index; columns: displayedColumns;"></tr>
+                    </table>
+                    <!--<mat-paginator #paginatorAct [pageSizeOptions]="[10, 20, 30, 50, 100]" showFirstLastButtons></mat-paginator>-->
+                </div>
+            </ng-template>
+        </mat-tab>
+    </mat-tab-group>
+</div>
+<br>
+<div mat-dialog-actions>      
+     <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+</div>
+    
+

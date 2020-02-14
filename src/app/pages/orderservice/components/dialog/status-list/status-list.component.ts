@@ -14,19 +14,19 @@ export class StatusListComponent implements OnInit, OnDestroy {
 
   code: string;
   clase: string;
-  editando: boolean = false;
+  editando = false;
   estatus: ServiceEstatus;
-  indexitem:number;
-  isLoading: boolean = true;
-  isLoadingSave: boolean = false;
-  isLoadingDelete: boolean = false;
-  label:number = 0;
-  newestatus: string = '';
-  orderby:number = 0;
+  indexitem: number;
+  isLoading = true;
+  isLoadingSave = false;
+  isLoadingDelete = false;
+  label = 0;
+  newestatus = '';
+  orderby = 0;
   serviceestatus: ServiceEstatus[] = [];
   status: string;
   subscription: Subscription;
-  show:boolean = false;
+  show = false;
   token: any;
 
 
@@ -39,56 +39,51 @@ export class StatusListComponent implements OnInit, OnDestroy {
     public _userService: UserService,
     public dataService: OrderserviceService,
     public snackBar: MatSnackBar,
-  ) { 
+  ) {
     this.token = this._userService.getToken();
     this.totalEstatus = new EventEmitter();
   }
 
   ngOnInit() {
-    if(this.id > 0){
+    if (this.id > 0) {
       this.cargarEstatus();
     }
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();      
-      //console.log("ngOnDestroy unsuscribe");
-		}
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
 
-  crearEstatus(data: ServiceEstatus){
-  
+  crearEstatus(data: ServiceEstatus) {
 
-    if(this.newestatus.length == 0){
+    if (this.newestatus.length == 0) {
       return;
     }
 
-    if(data.label == 0){
-      this.snackBar.open('Seleccione el color del estatus.', '', {duration: 3000,});
+    if (data.label == 0) {
+      this.snackBar.open('Seleccione el color del estatus.', '', {duration: 3000, });
       return;
     }
 
-    if(data.order_by <= 0  ){
-      this.snackBar.open('Seleccione el orden del estatus.', '', {duration: 3000,});
+    if (data.order_by <= 0  ) {
+      this.snackBar.open('Seleccione el orden del estatus.', '', {duration: 3000, });
       return;
     }
 
-    //this.snackBar.open('Procesando solicitud.', '', {duration: 2000,});
-  
 
-    if(data.label  == 1){
+    if (data.label  == 1) {
       this.code = '#E52320';
       this.clase = 'warn';
     }
 
-    if(data.label  == 2){
+    if (data.label  == 2) {
       this.code = '#00E900';
       this.clase = 'primary';
     }
-  
 
-    if(data.label  == 3){
+    if (data.label  == 3) {
       this.code = '#c51162';
       this.clase = 'accent';
     }
@@ -98,25 +93,24 @@ export class StatusListComponent implements OnInit, OnDestroy {
 
 
     this.dataService.addEstatus(this.token.token, this.estatus, this.id)
-            .subscribe( (resp: any) => {              
-              if(!resp){
-                this.snackBar.openFromComponent(SnackErrorComponent, {duration:3000, });
+            .subscribe( (resp: any) => {
+              if (!resp) {
+                this.snackBar.openFromComponent(SnackErrorComponent, {duration: 3000, });
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.openFromComponent(SnackSuccessComponent, {duration:3000,});
+              if (resp.status === 'success') {
+                this.snackBar.openFromComponent(SnackSuccessComponent, {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 this.label = 0;
                 this.newestatus = '';
-                this.orderby = 0;              
+                this.orderby = 0;
                 setTimeout( () => {
                   this.cargarEstatus();
                   this.show = false;
                 }, 1000);
-            
-              }else{
+              } else {
                 this.show = false;
                 this.indexitem = -1;
               }
@@ -125,22 +119,22 @@ export class StatusListComponent implements OnInit, OnDestroy {
                 this.snackBar.openFromComponent(SnackErrorComponent, {duration:3000, });
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
+              }
             );
-  
+
   }
-  
-  cargarEstatus(){
+
+  cargarEstatus() {
     this.isLoading = true;
     this.subscription = this.dataService.getServiceEstatus(this.token.token, this.id)
     .subscribe(
     response => {
-              if(!response){
+              if (!response) {
                 this.status = 'error';
                 this.isLoading = false;
                 return;
               }
-              if(response.status == 'success'){   
+              if (response.status === 'success') {
                 this.serviceestatus = response.datos;
                 this.totalEstatus.emit(this.serviceestatus.length);
                 this.isLoading = false;
@@ -152,82 +146,77 @@ export class StatusListComponent implements OnInit, OnDestroy {
                 console.log(<any>error);
               }
 
-              );        
+              );
   }
 
-  startEdit(i:number){
+  startEdit(i: number) {
     this.indexitem = i;
     this.editando = true;
   }
 
-  close(){
+  close() {
     this.indexitem = -1;
   }
 
-  guardarEstatus(i, estatus){
+  guardarEstatus(i, estatus) {
     this.indexitem = i;
     this.editando = false;
     this.isLoadingSave = true;
-    //console.log(estatus);
-    //this.snackBar.open('Procesando solicitud.', '', {duration: 2000,});
     this.dataService.updateEstatus(this.token.token, estatus, estatus.id)
-            .subscribe( (resp: any) => {              
-              if(!resp){
-                this.snackBar.openFromComponent(SnackErrorComponent, {duration:3000, });
+            .subscribe( (resp: any) => {
+              if (!resp) {
+                this.snackBar.openFromComponent(SnackErrorComponent, {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.openFromComponent(SnackSuccessComponent, {duration:3000,});
+              if (resp.status === 'success') {
+                this.snackBar.openFromComponent(SnackSuccessComponent, {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
-              }else{
+              } else {
                 this.isLoadingSave = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                this.snackBar.openFromComponent(SnackErrorComponent, {duration:3000, });
+                this.snackBar.openFromComponent(SnackErrorComponent, {duration: 3000, });
                 this.isLoadingSave = false;
                 this.indexitem = -1;
                 console.log(<any>error);
-              }       
+              }
             );
   }
 
-  borrarEstatus(i, estatus){
+  borrarEstatus(i, estatus) {
     this.indexitem = i;
     this.isLoadingDelete = true;
-    //this.snackBar.open('Procesando solicitud.', '', {duration: 2000,});
-    //console.log(estatus.id);
     this.dataService.deleteEstatus(this.token.token, estatus.id)
             .subscribe( (resp: any) => {
-              if(!resp){
-                this.snackBar.openFromComponent(SnackErrorComponent, {duration:3000, });
+              if (!resp) {
+                this.snackBar.openFromComponent(SnackErrorComponent, {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-                return;        
+                return;
               }
-              if(resp.status == 'success'){
-                this.snackBar.openFromComponent(SnackSuccessComponent, {duration:3000,});
+              if (resp.status === 'success') {
+                this.snackBar.openFromComponent(SnackSuccessComponent, {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
                 setTimeout( () => {
                   this.cargarEstatus();
                 }, 2000);
-                
-              }else{
+
+              } else {
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
               }
             },
               error => {
-                //this.snackBar.open(error.error.message, '', {duration:3000, });
-                this.snackBar.open(error, '', {duration:3000, });
+                this.snackBar.open(error, '', {duration: 3000, });
                 this.isLoadingDelete = false;
                 this.indexitem = -1;
-              }       
+              }
             );
   }
 
@@ -235,13 +224,12 @@ export class StatusListComponent implements OnInit, OnDestroy {
     this.show = !this.show;
   }
 
-  
 
 }
 
 
 
-@Component({  
+@Component({
   selector: 'snack-bar-component-error',
   templateUrl: 'snack-bar-component-error.html',
   styles: [`
@@ -253,7 +241,7 @@ export class StatusListComponent implements OnInit, OnDestroy {
 export class SnackErrorComponent {}
 
 
-@Component({  
+@Component({
   selector: 'snack-bar-component-sucess',
   templateUrl: 'snack-bar-component-sucess.html',
   styles: [`

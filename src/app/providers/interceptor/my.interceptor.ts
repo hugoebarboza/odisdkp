@@ -44,6 +44,7 @@ export class MyInterceptor implements HttpInterceptor {
           // const headers = new HttpHeaders({'Authorization': token	});
           // req = req.clone({ headers });
           req = req.clone({ headers: req.headers.set('Authorization', token) });
+        } else {
         }
 
         const reqClone = req;

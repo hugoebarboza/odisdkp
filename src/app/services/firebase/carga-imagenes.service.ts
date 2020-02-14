@@ -29,7 +29,7 @@ export class CargaImagenesService {
         continue;
       }
 
-      //console.log(item);
+      // console.log(item);
       const uploadTask: firebase.storage.UploadTask =
                   storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
                             .put( item.archivo );
@@ -50,7 +50,7 @@ export class CargaImagenesService {
             item.progreso = 100;
           }
 
-          //console.log('PROGESOO:   ' + item.progreso );
+          // console.log('PROGESOO:   ' + item.progreso );
         }, (_error) => {
           console.error('Error al subir');
         }, () => {
@@ -79,25 +79,25 @@ export class CargaImagenesService {
   }
 
 
-  cargarImagenesProjectFirebase( imagenes: FileItem[], carpeta_archivo: string, source: string, data:any, created: any , extra: any, uid: any):  Promise<any> {
+  cargarImagenesProjectFirebase( imagenes: FileItem[], carpeta_archivo: string, source: string, data: any, created: any , extra: any, uid: any):  Promise<any> {
     const storageRef = firebase.storage().ref();
-    let files = [];
+    const files = [];
 
     return new Promise((resolve, reject) => {
-      if (!imagenes) reject('Sin Imagenes');
-      if (carpeta_archivo == '') reject('Sin Rute');
+      if (!imagenes) { reject('Sin Imagenes'); }
+      if (carpeta_archivo === '') { reject('Sin Rute'); }
 
         for ( const item of imagenes ) {
           item.estaSubiendo = true;
           if ( item.progreso >= 100 ) {
             continue;
           }
-    
-          //console.log(item);
+
+          // console.log(item);
           const uploadTask: firebase.storage.UploadTask =
                       storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
                                 .put( item.archivo );
-    
+
           uploadTask.on( 'state_changed', (snapshot: firebase.storage.UploadTaskSnapshot) => {
               const count = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
               if (count < 99) {
@@ -109,14 +109,14 @@ export class CargaImagenesService {
               if (count === 100) {
                 item.progreso = 100;
               }
-              //console.log('PROGESOO:   ' + item.progreso );
+              // console.log('PROGESOO:   ' + item.progreso );
             }, (_error) => {
               console.error('Error al subir');
               item.status = 'Error';
               files.push(item);
-              if(files.length == imagenes.length){
+              if (files.length === imagenes.length) {
                 resolve(files);
-              }        
+              }
             }, () => {
               // Handle successful uploads on complete
               uploadTask.snapshot.ref.getDownloadURL()
@@ -126,10 +126,10 @@ export class CargaImagenesService {
                 item.created = created;
                 item.status = 'Success';
                 files.push(item);
-                this.guardarImagenProjectExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra, uid:uid }, carpeta_archivo, source, data );
-                if(files.length == imagenes.length){
+                this.guardarImagenProjectExtra({ nombre: item.nombreArchivo, type: item.type, url: item.url, created: item.created, id: extra, uid: uid }, carpeta_archivo, source, data );
+                if (files.length === imagenes.length) {
                   resolve(files);
-                }        
+                }
               });
             }
           );
@@ -142,10 +142,10 @@ export class CargaImagenesService {
           reject('Sin Imagenes');
       if (carpeta_archivo == '')
           reject('Sin Rute');
-      
+
       resolve(
 
-      );    
+      );
     });*/
 
 
@@ -162,7 +162,7 @@ export class CargaImagenesService {
         continue;
       }
 
-      //console.log(item);
+      // console.log(item);
       const uploadTask: firebase.storage.UploadTask =
                   storageRef.child(`${ carpeta_archivo }/${ item.nombreArchivo }`)
                             .put( item.archivo );
@@ -183,7 +183,7 @@ export class CargaImagenesService {
             item.progreso = 100;
           }
 
-          //console.log('PROGESOO:   ' + item.progreso );
+          // console.log('PROGESOO:   ' + item.progreso );
         }, (_error) => {
           console.error('Error al subir');
         }, () => {
@@ -207,42 +207,40 @@ export class CargaImagenesService {
 
   private guardarImagenExtra( imagen: { nombre: string, type: string, url: string, created: any, id_case: any },  path: string ) {
 
-    //console.log(path);
     this.afs.collection(`${ path }`).add( imagen );
 
   }
 
-  private guardarImagenProjectExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any, uid: any },  path: string, source:string, data:any ) {
+  private guardarImagenProjectExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any, uid: any },  path: string, source: string, data: any ) {
 
-    //console.log(path);
     const that = this;
     this.afs.collection(`${ path }`).add( imagen )
-    .then(function(docRef) {      
-      if (docRef) {        
-        let obj = {
+    .then(function(docRef) {
+      if (docRef) {
+        const obj = {
           nombre: imagen.nombre,
-          type: imagen.type, 
-          url:  imagen.url, 
-          created: imagen.created, 
+          type: imagen.type,
+          url:  imagen.url,
+          created: imagen.created,
           id: imagen.id,
           iddocfile: docRef.id,
           ref: path,
           data: data,
           uid: imagen.uid
-        }
+        };
         that.afs.collection(`${ source }`).add( obj )
         .then(function(docColRef) {
-          that.afs.collection(`${ path }`).doc(docRef.id).update({iddoccol : docColRef.id})
+          that.afs.collection(`${ path }`).doc(docRef.id).update({iddoccol : docColRef.id});
         }
-        );    
+        );
       }
-      
+
     });
 
   }
 
 
-  private guardarImagenProjectServiceExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any, uid:any },  path: string ) {
+  private guardarImagenProjectServiceExtra( imagen: { nombre: string, type: string, url: string, created: any, id: any, uid: any },  path: string ) {
 
     this.afs.collection(`${ path }`).add( imagen );
 
@@ -261,14 +259,13 @@ export class CargaImagenesService {
     });*/
 
 
-    //console.log(path);
+    // console.log(path);
     this.afs.collection<Item>(path, ref => ref.where('nombre', '==', imagen.nombre).limit(1))
     .get()
     .subscribe((data) => { if (data.size > 0) {
-          //console.log(data);
+          // console.log(data);
           data.forEach((doc) => {
-                //console.log(doc.id);
-                //console.log(doc.id);
+                // console.log(doc.id);
                 this.afs.collection(`${ path }`).doc(doc.id).set(imagen);
               }
             );
@@ -279,6 +276,6 @@ export class CargaImagenesService {
         }
       );
 
-  } 
+  }
 
 }
