@@ -20,7 +20,6 @@ import { ViewOrderDetailComponent } from '../../components/views/vieworderdetail
 import { VieworderserviceComponent } from '../../components/views/vieworderservice/vieworderservice.component';
 import { ViewOrderServiceSelectComponent } from './components/vieworderserviceselect/vieworderserviceselect.component';
 import { ViewprojectcustomerComponent } from '../../components/views/viewprojectcustomer/viewprojectcustomer.component';
-import { ViewprojectorderComponent } from '../../components/views/viewprojectorder/viewprojectorder.component';
 import { ViewModule } from '../../components/views/view.module';
 
 // DIALOG
@@ -257,7 +256,6 @@ registerLocaleData(localeEs);
     UsertableComponent,
     VehiculoOverviewDialog,
     ViewOrderDetailComponent,
-    ViewprojectorderComponent,
     ViewprojectcustomerComponent,
     VieworderserviceComponent,
     ViewOrderServiceSelectComponent,

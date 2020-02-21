@@ -1,28 +1,30 @@
-import * as functions from 'firebase-functions'
-import * as admin from 'firebase-admin'
-admin.initializeApp(functions.config().firebase);
-import * as clf from './app'
-const cors = require("cors")({ origin: true });
+// import * as functions from 'firebase-functions'
+// import * as admin from 'firebase-admin'
+// admin.initializeApp(functions.config().firebase);
+// const cors = require("cors")({ origin: true });
+import * as app from './app'
+import * as email from './http/index'
+import * as fcm from './fcm/index'
 
-
-//SEND GRID API KEY
-const SENDGRID_API_KEY = functions.config().sendgrid.key;
-const sgMail = require('@sendgrid/mail');
-sgMail.setApiKey(SENDGRID_API_KEY);
 
 
 // Function Hello
-export const hi = clf.listener
+// export const hi = clf.listener
 
 // Function HelloWorld
-export const hello = clf.helloWorld
+// export const hello = clf.helloWorld
 
 // Function TimeStamp
-export const time = clf.timestamp
+export const clf = app.dkp
 
-
+// Function SenEmail
+export const httpEmail = email.httpEmail
 
 // Function FCM Send
+export const fcmSend = fcm.fcmSend
+
+// Function FCM Send
+/***************************************
 exports.fcmSend = functions.https.onRequest((req, res) => {
   return cors(req, res, () => {
     if(req.method !== 'POST') {
@@ -145,8 +147,12 @@ function addUserNotificationSend(data:any) {
 		}, err => reject(err))
     });
 }
+*///////////////////////////////////////////////////////////////
+
+
 
 // Function HTTP Email
+/**************************************************************
 exports.httpEmail = functions.https.onRequest((req, res) => {
 
   cors( req, res, () => { 
@@ -162,15 +168,6 @@ exports.httpEmail = functions.https.onRequest((req, res) => {
           from: fromTo,
           subject: subject,
           html: message,
-          //html: `<strong>Hola ${toName}. Tiene una nueva notificación!!!</strong>`,
-          //text: `Hola ${toName}. Tiene una nueva notificación!!! `,
-          /* custom templates
-          templateId: 'd-3ce0b6c7294849e5bcdffee694bad8b9',
-          substitutionWrappers: ['{{', '}}'],
-          substitutions: {
-            name: toName
-            // and other custom properties here
-          }*/
       };
 
       return sgMail.send(msg)
@@ -181,7 +178,7 @@ exports.httpEmail = functions.https.onRequest((req, res) => {
       });
 
 });
-
+*////////////////////////////////////////////
 
 /*
 exports.fcmSend = functions.https.onRequest((req, res) => {

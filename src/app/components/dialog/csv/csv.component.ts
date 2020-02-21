@@ -464,9 +464,9 @@ export class CsvComponent implements OnInit, OnDestroy {
                     if (arraydata[i] == this.exportDataSource.data[j]['servicetype_id']) { // FIRST IF
                       if (Object.keys(this.exportDataSource.data[j]['atributo_share']).length > 0 && banderatitulo == true) {
                         if (this.exportDataSource.data[j]['name_table'] === 'address') {
-                           valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;SET;ALIMENTADOR;SED;LLAVECIRCUITO;FASE;CLAVELECTURA;FACTOR;FECHAULTIMALECTURA;FECHAULTIMADETECCION;FALTAULTIMOCNR;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;';
+                           valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;SET;ALIMENTADOR;SED;LLAVECIRCUITO;FASE;CLAVELECTURA;FACTOR;FECHAULTIMALECTURA;FECHAULTIMADETECCION;FALTAULTIMOCNR;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;FECHA DE VENCIMIENTO;';
                         } else {
-                           valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;';
+                           valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;FECHA DE VENCIMIENTO;';
                         }
                         for (let key in this.exportDataSource.data[j]['atributo_share']) {
                           let newarray = this.exportDataSource.data[j]['atributo_share'][key];
@@ -479,11 +479,11 @@ export class CsvComponent implements OnInit, OnDestroy {
 
                       } else {
                         if (Object.keys(this.exportDataSource.data[j]['atributo_share']).length == 0 && banderatitulo == true && this.exportDataSource.data[j]['name_table'] === 'vehiculos') {
-                          valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;' + '\n';
+                          valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;FECHA DE VENCIMIENTO;' + '\n';
                           banderatitulo = false;
                         } else {
                           if (Object.keys(this.exportDataSource.data[j]['atributo_share']).length == 0 && banderatitulo == true && this.exportDataSource.data[j]['name_table'] === 'address') {
-                          valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;SET;ALIMENTADOR;SED;LLAVECIRCUITO;FASE;CLAVELECTURA;FACTOR;FECHAULTIMALECTURA;FECHAULTIMADETECCION;FALTAULTIMOCNR;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;' + '\n';
+                          valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;SET;ALIMENTADOR;SED;LLAVECIRCUITO;FASE;CLAVELECTURA;FACTOR;FECHAULTIMALECTURA;FECHAULTIMADETECCION;FALTAULTIMOCNR;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;FECHA DE VENCIMIENTO;' + '\n';
                           banderatitulo = false;
                           }
                         }
@@ -504,7 +504,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                                               valuearrayexcel = valuearrayexcel + obs + ';' + this.exportDataSource.data[j]['cc_number'] + ';' + this.exportDataSource.data[j]['orderdetail_direccion'] + ';' + ubicacion
                                               + ';' + this.exportDataSource.data[j]['marca'] + ';' + this.exportDataSource.data[j]['modelo'] + ';' + this.exportDataSource.data[j]['color'] + ';' + this.exportDataSource.data[j]['description'] + ';' + this.exportDataSource.data[j]['secondcolor']
                                               + ';' + this.exportDataSource.data[j]['patio'] + ';' + this.exportDataSource.data[j]['espiga'] + ';' + this.exportDataSource.data[j]['posicion']
-                                              + ';' + this.exportDataSource.data[j]['create_at'] + ';' + this.exportDataSource.data[j]['update_at'] + ';';
+                                              + ';' + this.exportDataSource.data[j]['create_at'] + ';' + this.exportDataSource.data[j]['update_at'] + ';' + this.exportDataSource.data[j]['vencimiento_date'] + ';';
                         } else {
                           valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] + ';' + this.exportDataSource.data[j]['order_number'] + ';' + this.exportDataSource.data[j]['imagen'] + ';' + this.exportDataSource.data[j]['user'] + ';' + this.exportDataSource.data[j]['userupdate']
                           + ';' + this.exportDataSource.data[j]['userassigned'] + ';' + this.exportDataSource.data[j]['service_name'] + ';' + this.exportDataSource.data[j]['servicetype'] + ';' + this.exportDataSource.data[j]['estatus']
@@ -519,7 +519,7 @@ export class CsvComponent implements OnInit, OnDestroy {
 
                           + ';' + this.exportDataSource.data[j]['set'] + ';' + this.exportDataSource.data[j]['alimentador'] + ';' + this.exportDataSource.data[j]['sed'] + ';' + this.exportDataSource.data[j]['llave_circuito'] + ';' + this.exportDataSource.data[j]['fase'] + ';' + this.exportDataSource.data[j]['clavelectura'] + ';' + this.exportDataSource.data[j]['factor'] + ';' + this.exportDataSource.data[j]['fecha_ultima_lectura'] + ';' + this.exportDataSource.data[j]['fecha_ultima_deteccion'] + ';' + this.exportDataSource.data[j]['falta_ultimo_cnr']
 
-                          + ';' + this.exportDataSource.data[j]['create_at'] + ';' + this.exportDataSource.data[j]['update_at'] + ';';
+                          + ';' + this.exportDataSource.data[j]['create_at'] + ';' + this.exportDataSource.data[j]['update_at'] + ';' + this.exportDataSource.data[j]['vencimiento_date'] + ';';
                         }
 
 
@@ -532,7 +532,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                             for (var keyorderatributovalue in this.exportDataSource.data[j]['orderatributo']) {
                              if (this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['atributo_id'] == this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['id']) {
 
-                                 if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == "chip") {
+                                 if (this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == "chip") {
                                   const orderarray: Array<any> = JSON.parse(this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor']);
                                   let chipconcat = '';
                                   orderarray.forEach(elemento => {
@@ -556,7 +556,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                                     banderasindato = false;
                                 }
                              }
-                             if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'layout_line'){
+                             if (this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == 'layout_line') {
                                 banderasindato = false;
                              }
                             }
@@ -584,12 +584,12 @@ export class CsvComponent implements OnInit, OnDestroy {
                 for (let i = 0; i < arraydata.length; i++) { // FIRSTFOR
                   let banderatitulo = true;
                   for (let j = 0; j < this.exportDataSource.data.length; j++) { // SECONDFORD
-                    if(arraydata[i] == this.exportDataSource.data[j]['servicetype_id']) { // FIRST IF
-                      if(Object.keys(this.exportDataSource.data[j]['atributo_share']).length > 0 && banderatitulo == true) {
-                        if(this.exportDataSource.data[j]['name_table'] === 'address') {
+                    if (arraydata[i] == this.exportDataSource.data[j]['servicetype_id']) { // FIRST IF
+                      if (Object.keys(this.exportDataSource.data[j]['atributo_share']).length > 0 && banderatitulo == true) {
+                        if (this.exportDataSource.data[j]['name_table'] === 'address') {
                            valuearrayexcel = valuearrayexcel + ' NO; ';
                         }
-                        for(let key in this.exportDataSource.data[j]['atributo_share']){
+                        for (let key in this.exportDataSource.data[j]['atributo_share']){
                           let newarray = this.exportDataSource.data[j]['atributo_share'][key];
                           if(newarray['type']  !== 'label' && newarray['type']  !== 'layout_line') {
                              valuearrayexcel = valuearrayexcel+newarray['descripcion']+';';
@@ -608,15 +608,15 @@ export class CsvComponent implements OnInit, OnDestroy {
                         valuearrayexcel = valuearrayexcel + j + ';';
 
 
-                        if(Object.keys(this.exportDataSource.data[j]['orderatributo']).length > 0) {
+                        if (Object.keys(this.exportDataSource.data[j]['orderatributo']).length > 0) {
                         for (var keyatributovalue in this.exportDataSource.data[j]['atributo_share']) {
-                          if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue] !== null) {
+                          if (this.exportDataSource.data[j]['atributo_share'][keyatributovalue] !== null) {
                             orderatributovalue[keyatributovalue] = this.exportDataSource.data[j]['atributo_share'][keyatributovalue];
                             var banderasindato = true;
-                            for(var keyorderatributovalue in this.exportDataSource.data[j]['orderatributo']){
-                             if(this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['atributo_id'] == this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['id']) {
+                            for (var keyorderatributovalue in this.exportDataSource.data[j]['orderatributo']){
+                             if (this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['atributo_id'] == this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['id']) {
                               
-                              if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == "chip"){
+                              if (this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] == "chip"){
                                   const orderarray: Array<any> = JSON.parse(this.exportDataSource.data[j]['orderatributo'][keyorderatributovalue]['valor']);
                                   let chipconcat = '';
                                   orderarray.forEach(elemento => {
@@ -640,7 +640,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                                   banderasindato = false;
                               }
                              }
-                             if(this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] === 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] === 'layout_line') {
+                             if (this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] === 'label' || this.exportDataSource.data[j]['atributo_share'][keyatributovalue]['type'] === 'layout_line') {
                                 banderasindato = false;
                              }
                             }
@@ -668,15 +668,15 @@ export class CsvComponent implements OnInit, OnDestroy {
 
 
               if ($event == 3) {
-                for (var i=0; i<arraydata.length; i++) { // FIRSTFOR
+                for (let i = 0;  i < arraydata.length; i++) { // FIRSTFOR
                   var banderatitulo = true;
-                  for (var j=0; j<this.exportDataSource.data.length; j++) { // SECONDFORD
+                  for (let j = 0; j < this.exportDataSource.data.length; j++) { // SECONDFORD
                     if (arraydata[i] == this.exportDataSource.data[j]['servicetype_id']) { // FIRST IF
                       if (this.exportDataSource.data[j]['atributo_share'] && Object.keys(this.exportDataSource.data[j]['atributo_share']).length > 0 && banderatitulo == true){
                         if (this.exportDataSource.data[j]['name_table'] === 'address') {
-                           valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;SET;ALIMENTADOR;SED;LLAVECIRCUITO;FASE;CLAVELECTURA;FACTOR;FECHAULTIMALECTURA;FECHAULTIMADETECCION;FALTAULTIMOCNR;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;';
+                           valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;SET;ALIMENTADOR;SED;LLAVECIRCUITO;FASE;CLAVELECTURA;FACTOR;FECHAULTIMALECTURA;FECHAULTIMADETECCION;FALTAULTIMOCNR;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;FECHA DE VENCIMIENTO;';
                         } else {
-                           valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;';
+                           valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;FECHA DE VENCIMIENTO;';
                         }
 
 
@@ -685,11 +685,11 @@ export class CsvComponent implements OnInit, OnDestroy {
 
                       } else {
                         if (!this.exportDataSource.data[j]['atributo_share'] && banderatitulo == true && this.exportDataSource.data[j]['name_table'] === 'vehiculos') {
-                          valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;' + '\n';
+                          valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;OBSERVACIONES;NUMERO DE CLIENTE;REALIZADOEN;UBICACIÓN;MARCAVEHICULO;MODELOVEHICULO;COLORVEHICULO;DESCRIPCIONVEHICULO;OTROCOLORVEHICULO;PATIO;ESPIGA;POSICION;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;FECHA DE VENCIMIENTO;' + '\n';
                           banderatitulo = false;
                         } else {
                           if (!this.exportDataSource.data[j]['atributo_share'] && banderatitulo == true && this.exportDataSource.data[j]['name_table'] === 'address') {
-                          valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;SET;ALIMENTADOR;SED;LLAVECIRCUITO;FASE;CLAVELECTURA;FACTOR;FECHAULTIMALECTURA;FECHAULTIMADETECCION;FALTAULTIMOCNR;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;' + '\n';
+                          valuearrayexcel = valuearrayexcel + 'ID ORDEN;NUMERO DE ORDEN;IMAGEN;CREADO POR;EDITADO POR;ASIGNADO A;SERVICIO;TIPO DE SERVICIO;ESTATUS;LEIDOPOR;OBSERVACIONES;NUMERO DE CLIENTE;UBICACIÓN;RUTA;COMUNA;CALLE;NUMERO;BLOCK;DEPTO;TRANSFORMADOR;MEDIDOR;TARIFA;CONSTANTE;GIRO;SECTOR;ZONA;MERCADO;SET;ALIMENTADOR;SED;LLAVECIRCUITO;FASE;CLAVELECTURA;FACTOR;FECHAULTIMALECTURA;FECHAULTIMADETECCION;FALTAULTIMOCNR;FECHA CREACIÓN;FECHA DE ACTUALIZACIÓN;FECHA DE VENCIMIENTO;' + '\n';
                           banderatitulo = false;
                           }
                         }
@@ -711,7 +711,7 @@ export class CsvComponent implements OnInit, OnDestroy {
 
                                               + ';' + this.exportDataSource.data[j]['marca'] + ';' + this.exportDataSource.data[j]['modelo'] + ';' + this.exportDataSource.data[j]['color'] + ';' + this.exportDataSource.data[j]['description'] + ';' + this.exportDataSource.data[j]['secondcolor']
                                               + ';' + this.exportDataSource.data[j]['patio'] + ';' + this.exportDataSource.data[j]['espiga'] + ';' + this.exportDataSource.data[j]['posicion']
-                                              + ';' + this.exportDataSource.data[j]['create_at'] + ';' + this.exportDataSource.data[j]['update_at'] + ';';
+                                              + ';' + this.exportDataSource.data[j]['create_at'] + ';' + this.exportDataSource.data[j]['update_at'] + ';' + this.exportDataSource.data[j]['vencimiento_date'] + ';';
                         } else {
                           valuearrayexcel = valuearrayexcel + this.exportDataSource.data[j]['order_id'] + ';' + this.exportDataSource.data[j]['order_number'] + ';' + this.exportDataSource.data[j]['imagen'] + ';' + this.exportDataSource.data[j]['user'] + ';' + this.exportDataSource.data[j]['userupdate']
                           + ';' + this.exportDataSource.data[j]['userassigned'] + ';' + this.exportDataSource.data[j]['service_name'] + ';' + this.exportDataSource.data[j]['servicetype'] + ';' + this.exportDataSource.data[j]['estatus']
@@ -724,7 +724,7 @@ export class CsvComponent implements OnInit, OnDestroy {
                           + ';' + this.exportDataSource.data[j]['transformador'] + ';' + this.exportDataSource.data[j]['medidor'] + ';' + this.exportDataSource.data[j]['tarifa'] + ';' + this.exportDataSource.data[j]['constante']
                           + ';' + this.exportDataSource.data[j]['giro'] + ';' + this.exportDataSource.data[j]['sector'] + ';' + this.exportDataSource.data[j]['zona'] + ';' + this.exportDataSource.data[j]['mercado']
                           + ';' + this.exportDataSource.data[j]['set'] + ';' + this.exportDataSource.data[j]['alimentador'] + ';' + this.exportDataSource.data[j]['sed'] + ';' + this.exportDataSource.data[j]['llave_circuito'] + ';' + this.exportDataSource.data[j]['fase'] + ';' + this.exportDataSource.data[j]['clavelectura'] + ';' + this.exportDataSource.data[j]['factor'] + ';' + this.exportDataSource.data[j]['fecha_ultima_lectura'] + ';' + this.exportDataSource.data[j]['fecha_ultima_deteccion'] + ';' + this.exportDataSource.data[j]['falta_ultimo_cnr']
-                          + ';' + this.exportDataSource.data[j]['create_at'] + ';' + this.exportDataSource.data[j]['update_at'] + ';';
+                          + ';' + this.exportDataSource.data[j]['create_at'] + ';' + this.exportDataSource.data[j]['update_at'] + ';' + this.exportDataSource.data[j]['vencimiento_date'] + ';';
                         }
 
                         valuearrayexcel = valuearrayexcel + '\n';
@@ -738,7 +738,7 @@ export class CsvComponent implements OnInit, OnDestroy {
 
 
 
-            if($event == 1) {
+            if ($event == 1) {
               valuearrayexcel = valuearrayexcel.toUpperCase();
             }
 

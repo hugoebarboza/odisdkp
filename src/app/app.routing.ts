@@ -112,6 +112,12 @@ const appRoute: Routes = [
       data: { preload: false, delay: false }
     },
     {
+      path: 'projectorder',
+      canLoad: [ LoginGuardGuard ],
+      loadChildren : () => import('./pages/projectorder/projectorder.module').then(m => m.ProjectOrderModule),
+      data: { preload: false, delay: false }
+    },
+    {
       path: 'service',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/orderservice/orderservice.module').then(m => m.OrderServiceModule),

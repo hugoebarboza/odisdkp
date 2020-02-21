@@ -7,8 +7,10 @@
 //importScripts('https://www.gstatic.com/firebasejs/6.4.0/firebase-app.js');
 //importScripts('https://www.gstatic.com/firebasejs/6.4.0/firebase-performance.js');
 
-importScripts('https://www.gstatic.com/firebasejs/7.2.3/firebase-app.js');
-importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
+importScripts('https://www.gstatic.com/firebasejs/7.8.2/firebase-app.js');
+importScripts('https://www.gstatic.com/firebasejs/7.8.2/firebase-analytics.js');
+importScripts('https://www.gstatic.com/firebasejs/4.6.1/firebase-messaging.js');
+// importScripts('https://www.gstatic.com/firebasejs/3.9.0/firebase-messaging.js');
 // importScripts('https://www.gstatic.com/firebasejs/7.2.3/firebase-analytics.js');
 
 
@@ -28,8 +30,9 @@ var firebaseConfig = {
 };
 
 
+
 firebase.initializeApp(firebaseConfig);
-// firebase.analytics();
+firebase.analytics();
 const messaging = firebase.messaging();
 //const perf = firebase.performance();
 

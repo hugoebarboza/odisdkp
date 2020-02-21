@@ -1,0 +1,305 @@
+<div class="p-4" id="content">
+  <header class="saved-search-selector">
+    <div id="search-header-view">
+      <div class="header-section-primary">
+      <h1 class="search-title" >{{project_name}} - Todas las incidencias 
+        <a class="refresh-table" href="javascript:;" (click)="load()" >
+          <i class="material-icons md-16" matTooltip="Refrescar" [matTooltipPosition]="positionrightaction.value">sync</i>
+        </a>   
+      </h1>
+      <div class="fFIwAW">
+        <span *ngIf="since">
+        {{country}}, desde {{since}}.
+        </span>
+      </div>
+      </div>
+    </div>        
+  </header>
+  <div class="navigator-search">
+    <div class="row">
+      <div class="col-10">
+        <div class="row">
+
+          <div class="col" *ngIf="selectedColumnnFilterDate && selectedColumnnFilterDate.length > 0">
+            <ng-select [items]="selectedColumnnFilterDate"
+            bindLabel="name"
+            placeholder="Fecha"
+            [(ngModel)]="selectedDate"
+            (change)="searchDate(selectedDate)">
+            </ng-select>            
+          </div>
+
+          <div class="col" *ngIf="selectedDate && selectedDate.value == 4">
+            <mat-form-field  >
+              <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde" >
+              <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
+              <mat-datepicker #fecha1 ></mat-datepicker>
+            </mat-form-field>    
+          </div>
+
+          <div class="col" *ngIf="selectedDate && selectedDate.value == 4">
+            <mat-form-field >
+              <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" (dateChange)="datePicker($event)" >
+              <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
+              <mat-datepicker #fecha2 ></mat-datepicker>
+            </mat-form-field>    
+          </div>
+
+
+          <div class="col" *ngIf="project && project.service.length > 0">
+            <ng-select [items]="project.service"
+            bindLabel="service_name"
+            placeholder="Servicio"
+            [(ngModel)]="selectedService"
+            (change)="searchService(selectedService)">
+            </ng-select>            
+          </div>
+
+          <div class="col" *ngIf="servicetype && servicetype.length > 0">
+            <ng-select [items]="servicetype"
+            bindLabel="name"
+            placeholder="Servicio"
+            [(ngModel)]="selectedServiceType"
+            (change)="searchServiceType(selectedServiceType)">
+            </ng-select>            
+          </div>
+
+
+          <div class="col" *ngIf="masterusers && masterusers.length > 0">
+            <ng-select [items]="masterusers"
+            bindLabel="usuario"
+            placeholder="Informador"
+            [(ngModel)]="selectedMaster"
+            (change)="searchInformador(selectedMaster)">
+             </ng-select>
+          </div>
+          <div class="col" *ngIf="users && users.length > 0">
+              <ng-select [items]="users"
+              bindLabel="usuario"
+              placeholder="Responsable"
+              [(ngModel)]="selectedResponsable"
+              (change)="searchResponsable(selectedResponsable)">
+               </ng-select>
+          </div>  
+        </div>        
+      </div>
+      <div class="col-2"></div>
+    </div>
+  </div>
+</div>
+
+<!---{{selectedService | json}}---->
+
+<div class="p-4">
+<mat-card [ngStyle]="{'padding':'0px'}">
+  <mat-card-header [ngClass]="{'custom-card':true}">
+  </mat-card-header>
+
+  <mat-card-content>
+    <div class="rate-limit-reached" *ngIf="isRateLimitReached">
+      No se encontraron registros que coincidan con su búsqueda.
+      <button mat-button color="primary" (click)="load()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+    </div>
+
+
+    <div class="example-container" >
+      <div class="loading-shade" *ngIf="isLoading || isRateLimitReached">
+          <app-loading *ngIf="isLoading"></app-loading>
+          <!--<mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>--->
+      </div>
+      
+      <div class="row" >
+        <div class="col-md-12">
+
+
+          <mat-table #table  [dataSource]="dataSource" 
+          matSort    
+          (matSortChange)="handleSortChange($event)" 
+          [matSortActive]="sort.active" 
+          [matSortDirection]="sort.direction" 
+          matSortDisableClear  
+          [class.isMobile]="isMobile"
+          >
+      
+      
+      
+        <ng-container matColumnDef="order_number"  >  
+          <mat-header-cell *matHeaderCellDef mat-sort-header > N. Orden </mat-header-cell>
+            <mat-cell *matCellDef="let order; let i = index" >
+                <span class="mobile-label">N. Orden:</span>
+                {{order.order_number}}
+                <mat-icon class="material-icons md-13-color" *ngIf="order.imagen">image</mat-icon>        
+                <mat-icon class="material-icons md-13-nocolor" *ngIf="!order.imagen">image</mat-icon>                
+              </mat-cell>
+        </ng-container>
+      
+      
+        <ng-container matColumnDef="cc_number">
+          <mat-header-cell *matHeaderCellDef mat-sort-header> N. Cliente </mat-header-cell>
+            <mat-cell *matCellDef="let order"> 
+                <span class="mobile-label">N. Cliente:</span>
+              {{order.cc_number}} 
+            </mat-cell>
+        </ng-container>
+          
+
+        <ng-container matColumnDef="orderdetail_direccion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header  > Realizado En </mat-header-cell>
+            <mat-cell *matCellDef="let order"> 
+                <span class="mobile-label">Realizado En:</span>
+              {{order.orderdetail_direccion}} 
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="direccion">
+          <mat-header-cell *matHeaderCellDef mat-sort-header  > Ubicación </mat-header-cell>
+            <mat-cell *matCellDef="let order"> 
+                <span class="mobile-label">Ubicación:</span>
+              {{order.direccion}} 
+            </mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="servicetype" >
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Servicio </mat-header-cell>
+            <mat-cell *matCellDef="let order"> 
+                <span class="mobile-label">T. Serv.:</span>
+              {{order.servicetype}}     
+            </mat-cell>
+        </ng-container>
+
+
+
+  <ng-container matColumnDef="user" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Informador </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">Informador:</span>
+        {{order.user}} 
+      </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="userupdate" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Editado </mat-header-cell>
+      <mat-cell *matCellDef="let order"> {{order.userupdate}} </mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="userassigned" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Responsable</mat-header-cell>
+      <mat-cell *matCellDef="let order" > 
+        <span class="mobile-label">Responsable:</span>
+        <span *ngIf="order && order.userassigned">
+          <div *ngIf="identity && identity.role < 7">{{order.userassigned}}</div>
+          <a class="nav-link pointer" href="javascript:;" (click)="showModal(order.assigned_to)" *ngIf="_userService.isRole(7)">
+              {{order.userassigned}}
+          </a>
+        </span>
+        <em *ngIf="order && !order.userassigned" style="color:#D3D3D3">sin asignar</em>
+      </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="create_at" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">Creado El:</span>
+        {{order.create_at }}
+      </mat-cell>
+  </ng-container>
+
+
+  <ng-container matColumnDef="update_at" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Editado El:</mat-header-cell>
+        <mat-cell *matCellDef="let order">
+          <span class="mobile-label">Editado El:</span>
+          {{order.update_at }}
+        </mat-cell>
+  </ng-container>
+  
+
+  <ng-container matColumnDef="time" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> T. Ejecución </mat-header-cell>
+      <mat-cell *matCellDef="let order"> 
+          <span class="mobile-label">T. Ejecución:</span>
+        <div *ngIf="order.time">{{order.time }}</div></mat-cell>
+  </ng-container>
+
+  <ng-container matColumnDef="atentiontime" >
+      <mat-header-cell *matHeaderCellDef mat-sort-header>T. Atención</mat-header-cell>
+        <mat-cell *matCellDef="let order">
+          <span class="mobile-label">T. Atención:</span>
+          <app-viewordertimespent [timefrom]="order.create_at"  [timeuntil]="order.update_at"></app-viewordertimespent>
+        </mat-cell>
+  </ng-container>  
+  
+  <ng-container matColumnDef="estatus" >
+    <mat-header-cell *matHeaderCellDef mat-sort-header> Estatus </mat-header-cell>
+    <mat-cell *matCellDef="let order; let i = index" >
+        <span class="mobile-label">Estatus:</span>
+      <mat-chip-list>
+          <mat-chip *ngIf="order.label==1" selected color="warn">
+            {{order.estatus}}
+          </mat-chip>
+
+          <mat-chip *ngIf="order.label==2" selected color="primary">
+            {{order.estatus}}
+          </mat-chip>
+
+          <mat-chip *ngIf="order.label==3" selected color="accent">
+            {{order.estatus}}
+          </mat-chip>
+      </mat-chip-list>
+    </mat-cell>
+  </ng-container>
+
+
+      <ng-container matColumnDef="actions" >
+        <mat-header-cell *matHeaderCellDef >        
+        </mat-header-cell>
+        <mat-cell *matCellDef="let order; let i = index" >
+
+          <button mat-icon-button  [matMenuTriggerFor]="menuviewshoworder"  matTooltip="Acciones (Presiona para acceder a la visualización de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
+            <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
+            <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
+            </button>
+
+          <mat-menu #menuviewshoworder="matMenu" [overlapTrigger]="false">
+              <button mat-menu-item (click)="showItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.estatus, order.order_date, order.required_date, order.vencimiento_date, order.observation, order.create_at, order.user, order.project_name, order.service_name, order.servicetype, order.update_at, order.userupdate, order.region, order.provincia, order.comuna, order.direccion)">
+                <span >Ver orden</span>
+              </button>
+              <a mat-menu-item [routerLink]="['/formview/orderview/', order.service_id, order.order_id]" target="_blank" style="color: rgba(0, 0, 0, 0.87) !important">
+                <span >Ver orden y formularios</span>
+              </a>
+          </mat-menu> 
+
+        </mat-cell>
+      </ng-container>
+
+
+      
+        <mat-header-row *matHeaderRowDef="columnsOrderToDisplay" color="primary" ></mat-header-row>
+        <mat-row *matRowDef="let order; let i = index; columns: columnsOrderToDisplay;" (click)="setClickedRow(i, order.order_id)" (mouseenter)="hoverIn(i)" (mouseleave)="hoverOut(i)" [class.active]="i == selectedRow"></mat-row>
+      
+      
+      
+        </mat-table>
+      
+
+
+        </div>
+      </div>
+
+      <mat-paginator    [length]="resultsLength"
+      [pageSize]="pageSize"
+      [pageSizeOptions]="pageSizeOptions"
+      (page)="onPaginateChange($event)"
+      [showFirstLastButtons]="true" 
+      [ngClass]="{'custom-card':true}"
+      >
+      </mat-paginator>    
+
+    </div>
+
+  </mat-card-content>
+
+</mat-card>
+</div>

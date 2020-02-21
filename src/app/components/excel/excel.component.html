@@ -44,6 +44,11 @@
                 <mat-slide-toggle class="marginLeftX2" (change)="checkduplicatOt($event)"  [checked]="checkboxDupOt">
                   N°OT Unico <p *ngIf="checkboxDupOt">(No se permite duplicar N° de OT)</p> <p *ngIf="!checkboxDupOt">(Se permite duplicar N° de OT)</p>
                 </mat-slide-toggle>
+                <mat-slide-toggle class="marginLeftX2" (change)="asynclatlnt($event)"  [checked]="checkboxasynclatlnt"
+                matTooltip="El sistema autocompletara los campos de latitud y longitud, usando la dirección ingresada.
+                &#13;* Se debe conciderar que la Geo-localización resultante puede diferir de la real.">
+                  Latitud y Longitud
+                </mat-slide-toggle>
 
                 <div class="floatIzq">
                   <a mat-mini-fab target="_self" color="primary" href="../../assets/ModuloCarga.xlsx" download="ModuloCarga.xlsx">
@@ -89,7 +94,17 @@
                     <!-- Symbol Column -->
                     <ng-container matColumnDef="calle">
                       <th mat-header-cell *matHeaderCellDef> Calle </th>
-                      <td mat-cell *matCellDef="let element"> {{element.calle}} </td>
+                      <td mat-cell *matCellDef="let element">
+                        <ng-container *ngIf="element.apimap === 0">
+                          {{element.calle}} 
+                        </ng-container>
+                        <ng-container *ngIf="element.apimap === 1">
+                          <a href="https://maps.google.com/?q={{element.latitud}},{{element.longitud}}" 
+                          matTooltip="Dirección ingresada:&#13;{{element.calle}}
+                          &#13;Dirección Google Map Api:&#13;{{element.apiaddress}}"
+                          target="_blank">{{element.calle}} </a>
+                        </ng-container>
+                      </td>
                     </ng-container>
         
                     <!-- Symbol Column -->
@@ -358,7 +373,16 @@
                   <!-- Symbol Column -->
                   <ng-container matColumnDef="calle">
                     <th mat-header-cell *matHeaderCellDef> Calle </th>
-                    <td mat-cell *matCellDef="let element"> {{element.calle}} </td>
+                    <td mat-cell *matCellDef="let element">
+                      <ng-container *ngIf="element.apimap === 0">
+                        {{element.calle}} 
+                      </ng-container>
+                      <ng-container *ngIf="element.apimap === 1">
+                        <a href="https://maps.google.com/?q={{element.latitud}},{{element.longitud}}" 
+                        matTooltip="Dirección ingresada:&#13;{{element.calle}}&#13;Dirección Google API:&#13;{{element.apiaddress}}"
+                        target="_blank">{{element.calle}} </a>
+                      </ng-container>
+                    </td>
                   </ng-container>
 
                   <!-- Symbol Column -->
@@ -631,7 +655,16 @@
                 <!-- Symbol Column -->
                 <ng-container matColumnDef="calle">
                   <th mat-header-cell *matHeaderCellDef> Calle </th>
-                  <td mat-cell *matCellDef="let element"> {{element.calle}} </td>
+                  <td mat-cell *matCellDef="let element">
+                    <ng-container *ngIf="element.apimap === 0">
+                      {{element.calle}} 
+                    </ng-container>
+                    <ng-container *ngIf="element.apimap === 1">
+                      <a href="https://maps.google.com/?q={{element.latitud}},{{element.longitud}}" 
+                      matTooltip="Dirección ingresada:&#13;{{element.calle}}&#13;Dirección Google API:&#13;{{element.apiaddress}}"
+                      target="_blank">{{element.calle}} </a>
+                    </ng-container>
+                  </td>
                 </ng-container>
 
                 <!-- Symbol Column -->

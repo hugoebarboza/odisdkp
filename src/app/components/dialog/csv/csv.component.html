@@ -60,7 +60,7 @@
 
         <br *ngIf="servicetype && servicetype.length > 1">
             <mat-form-field class="middle-width" *ngIf="servicetype && servicetype.length > 1">
-              <mat-select  placeholder="Tipo Servicio" [(ngModel)]="servicetypeid" name="servicetype_id">
+              <mat-select  placeholder="Tipo de Servicio" [(ngModel)]="servicetypeid" name="servicetype_id">
               <mat-option [value]="0">Seleccione</mat-option>
               <mat-option *ngFor="let k of servicetype | keys;" [value]="servicetype[k].id">
                 {{servicetype[k].name}}

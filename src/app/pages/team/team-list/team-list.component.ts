@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material/dialog';
@@ -26,7 +26,7 @@ import { CustomerService, ProjectsService, SettingsService, UserService } from '
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./team-list.component.css']
 })
-export class TeamListComponent implements OnInit, OnDestroy {
+export class TeamListComponent implements OnDestroy {
 
   departamento_id: number;
   identity: any;
@@ -95,10 +95,6 @@ export class TeamListComponent implements OnInit, OnDestroy {
     });
   }
 
-  ngOnInit() {
-    this.cd.markForCheck();
-    this.load();
-  }
 
   ngOnDestroy() {
     if (this.subscription) {

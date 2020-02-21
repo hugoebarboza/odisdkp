@@ -41,7 +41,7 @@ export class DashboardComponent implements OnInit, OnDestroy {
         private _proyectoService: ProjectsService,
         public _userService: UserService,
         public label: SettingsService,
-        private msgService: MessagingService,
+        public msgService: MessagingService,
         fb: FormBuilder
     ) {
         this.identity = this._userService.getIdentity();

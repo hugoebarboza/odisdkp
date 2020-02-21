@@ -341,8 +341,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     private afp: AngularFirePerformance,
     private cd: ChangeDetectorRef,
     public dialog: MatDialog,
-    public snackBar: MatSnackBar,
     private excelService: ExcelService,
+    public snackBar: MatSnackBar,
     private toasterService: ToastrService,
     public zipService: ZipService,
   ) {
@@ -475,6 +475,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         const serviceid = this.id;
         this.service_id = serviceid;
         this.cd.markForCheck();
+      } else {
+        this.cd.markForCheck();
+        this._router.navigate(['/notfound']);
       }
     } else {
       this.cd.markForCheck();
@@ -755,6 +758,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
     // console.log('get params');
     this.isLoadingResults = true;
+    console.log(this.selectedoption);
 
     if (this.filterValue) {
       this.selectedColumnn.fieldValue = '';

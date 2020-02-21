@@ -10,6 +10,11 @@
 mat-form-field{
     margin-right: 20px;
 }
+
+::ng-deep .cdk-overlay-container {
+  white-space: pre-line !important;
+}
+
 .loadExcel {
     display:inline-block;
     margin-right: 20px;

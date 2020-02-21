@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
+import { Component, Inject, OnInit, OnDestroy, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
@@ -26,6 +26,7 @@ interface ObjectServiceType {
 @Component({
   selector: 'app-add',
   templateUrl: './add.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./add.component.css']
 })
 
@@ -91,8 +92,8 @@ export class AddComponent implements OnInit, OnDestroy {
     public dataService: OrderserviceService,
     public _dataService: DataService,
     private firebaseAuth: AngularFireAuth,
+    private cd: ChangeDetectorRef,
     @Inject(MAT_DIALOG_DATA) public data: Order
-
   ) {
 
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
@@ -109,6 +110,24 @@ export class AddComponent implements OnInit, OnDestroy {
     });
 
     this.route = this._route.url.split('?')[0];
+
+  }
+
+  isRequired(detailatributo: any) {
+    // const element: HTMLElement = document.getElementById(detailatributo.id) as HTMLElement;
+    // console.log(detailatributo);
+    if (detailatributo && detailatributo.required && detailatributo.required === 1) {
+      if (this.identity.role <= detailatributo.rol) {
+        // element.setAttribute('required', '');
+        return true;
+      } else {
+        // element.removeAttribute('required');
+        return false;
+      }
+    } else {
+      // element.removeAttribute('required');
+      return false;
+    }
 
   }
 
@@ -204,8 +223,6 @@ export class AddComponent implements OnInit, OnDestroy {
       this.data.vencimiento_date = new FormControl(moment(this.data.vencimiento_date).format('YYYY[-]MM[-]DD HH:mm:ss')).value;
     }
 
-
-
     for (let i = 0; i < this.atributo.length; i++) {
 
       if (this.atributo[i]['type'] !== 'label' || this.atributo[i]['type'] !== 'layout_line') {
@@ -244,10 +261,8 @@ export class AddComponent implements OnInit, OnDestroy {
       }
     }
 
-
     const objPila = {pila: pila};
     const obj = Object.assign(this.data, objPila);
-
 
     this.dataService.add(this.token.token, obj, this.category_id).subscribe(
       response => {
@@ -346,7 +361,6 @@ export class AddComponent implements OnInit, OnDestroy {
 
   }
 
-
   public loadService() {
     this.servicetype = null;
     this.subscription = this._orderService.getService(this.token.token, this.data['service_id']).subscribe(
@@ -367,7 +381,6 @@ export class AddComponent implements OnInit, OnDestroy {
               }
             });
     }
-
 
   public loadServiceType() {
     this.servicetype = null;
@@ -400,32 +413,35 @@ export class AddComponent implements OnInit, OnDestroy {
     this.isvalid = !isWhitespace;
   }
 
-   public searchCustomer(termino: string) {
-     this.termino = termino.trim();
-     if (this.termino.length > 0) {
-       this.isLoading = true;
-       this.active = true;
-     } else {
-       this.isLoading = false;
-       this.active = false;
-     }
-     if (this.termino.length > 1) {
+  public searchCustomer(termino: string) {
+    this.termino = termino.trim();
+    if (this.termino.length > 0) {
+      this.isLoading = true;
+      this.active = true;
+    } else {
+      this.isLoading = false;
+      this.active = false;
+    }
+    if (this.termino.length > 1) {
 
-       this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
-        response => {
-              if (!response) {
-                this.isLoading = true;
-                return;
-              }
-              if (response.status === 'success') {
-                this.results = response.datos;
-                this.isLoading = false;
-              }
-              });
-      } else {
-        this.results = null;
-      }
-   }
+      this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
+      response => {
+            if (!response) {
+              this.cd.markForCheck();
+              this.isLoading = true;
+              return;
+            }
+            if (response.status === 'success') {
+              this.results = response.datos;
+              this.isLoading = false;
+              this.cd.markForCheck();
+            }
+            });
+    } else {
+      this.results = null;
+      this.cd.markForCheck();
+    }
+  }
 
   public loadAtributo(event: any) {
     if (event > 0) {
@@ -435,6 +451,7 @@ export class AddComponent implements OnInit, OnDestroy {
     response => {
       // console.log(response);
               if (!response) {
+                this.cd.markForCheck();
                 this.isOrderLoading = false;
                 return;
               }
@@ -463,10 +480,12 @@ export class AddComponent implements OnInit, OnDestroy {
                 // console.log(this.atributo);
 
                 this.isOrderLoading = false;
+                this.cd.markForCheck();
               }
               },
           error => {
           this.isOrderLoading = false;
+          this.cd.markForCheck();
           console.log(<any>error);
           });
     }

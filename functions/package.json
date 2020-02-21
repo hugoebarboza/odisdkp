@@ -14,17 +14,20 @@
   },
   "main": "lib/index.js",
   "dependencies": {
-    "@sendgrid/mail": "^6.4.0",
+    "@sendgrid/mail": "^6.5.3",
+    "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "firebase-admin": "^8.7.0",
+    "firebase-admin": "^8.9.2",
     "firebase-functions": "^3.3.0",
-    "typescript": "^3.5.3",
-    "webpack": "^4.41.2"
+    "webpack": "^4.41.6"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.6",
+    "@types/express": "^4.17.2",
     "ts-loader": "^6.2.1",
-    "tslint": "^5.20.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5",
     "webpack-node-externals": "^1.7.2"
   },
   "private": true

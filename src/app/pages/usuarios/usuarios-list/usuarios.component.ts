@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Component, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material/dialog';
@@ -34,7 +34,7 @@ import { SettingsService, UserService } from 'src/app/services/service.index';
   templateUrl: './usuarios.component.html',
   styleUrls: ['./usuarios.component.css']
 })
-export class UsuariosComponent implements OnInit, OnDestroy {
+export class UsuariosComponent implements OnDestroy {
 
   identity: any;
   id: number;
@@ -104,9 +104,6 @@ export class UsuariosComponent implements OnInit, OnDestroy {
 
   }
 
-  ngOnInit() {
-
-  }
 
   ngOnDestroy() {
     if (this.subscription) {

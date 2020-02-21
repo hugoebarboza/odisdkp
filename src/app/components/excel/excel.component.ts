@@ -7,7 +7,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import * as FileSaver from 'file-saver';
 import { MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs/Subscription';
-
+import { environment } from '../../../environments/environment';
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
 
 // SERVICES
@@ -18,6 +18,7 @@ import { Service } from 'src/app/models/types';
 
 // MOMENT
 import * as _moment from 'moment';
+import { Http } from '@angular/http';
 const moment = _moment;
 
 
@@ -26,6 +27,18 @@ const EXCEL_EXTENSION = '.xlsx';
 
 // CLIENTE EXISTE EN EL EXCEL DUPLICADO
 // GENERAR ORDEN CON ID CLIENTE
+
+@Component({
+  selector: 'app-dialog-overview-dialog',
+  templateUrl: './dialog-overview-dialog.html',
+})
+
+// tslint:disable-next-line:component-class-suffix
+export class DialogOverviewDialog {
+  constructor(
+    public dialogRef: MatDialogRef<DialogOverviewDialog>
+    ) {}
+}
 
 @Component({
   selector: 'app-excel',
@@ -56,6 +69,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   checkboxAuto = false;
   checkOrdenes = false;
   checkboxDupOt = true;
+  checkboxasynclatlnt = false;
 
   project_id: number;
   servicename: string;
@@ -122,6 +136,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
   dataSourceOrdenes = new MatTableDataSource();
 
   subscription: Subscription;
+  public apikey: string;
 
   @ViewChild('paginator', { static: true }) paginator: MatPaginator;
   @ViewChild('paginatorClientes', { static: true }) paginatorClientes: MatPaginator;
@@ -137,9 +152,11 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     public dialog: MatDialog,
     // private activatedRoute: ActivatedRoute,
     private _userService: UserService,
+    public http: Http,
     private _orderService: OrderserviceService
   ) {
 
+    this.apikey = environment.global.agmapikey;
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.ServicioSeleccionado = new EventEmitter();
@@ -355,6 +372,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
             let id_mercado: Number = 0;
             let latitud: String = '' + '' + that.arrayCarga[ii]['latitud'];
             let longitud: String = '' + '' + that.arrayCarga[ii]['longitud'];
+            let apimap: Number = 0;
+            let apiaddress: String = '';
             // ------------------ Orden
             let order_number: String = '' + that.arrayCarga[ii]['order_number'];
             let tipo_servicio: String = '' + that.arrayCarga[ii]['tipo_servicio'];
@@ -475,7 +494,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               // fecha_ultima_lectura = fecha_ultima_lectura.replace(/ /g, '');
               // fecha_ultima_lectura = fecha_ultima_lectura.substring(0, 10) + ' ' + fecha_ultima_lectura.substring(10, fecha_ultima_lectura.length);
               fecha_ultima_lectura = fecha_ultima_lectura.trim();
-              if (fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/) 
+              if (fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]\ [0-2][0-9]\:[0-6][0-9]\:[0-6][0-9]$/)
               || fecha_ultima_lectura.match(/^[0-2][0-9][0-9][0-9]\-[0-1][0-9]\-[0-3][0-9]$/)
               || fecha_ultima_lectura.match(/^[0-3][0-9]\-[0-1][0-9]\-[0-2][0-9][0-9][0-9]$/)) {
 
@@ -821,15 +840,34 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
                 }
             }
 
-            if (latitud === 'undefined' || latitud.trim().length === 0) {
-              latitud = 'S/N';
+            if ((latitud === 'undefined' || latitud.trim().length === 0 || latitud.trim() === 'S/N') || (longitud === 'undefined' || longitud.trim().length === 0 || longitud.trim() === 'S/N')) {
+              if (that.checkboxasynclatlnt) {
+                if (calle !== 'undefined' && calle.trim().length > 0 &&  numero !== 'undefined' && numero.trim().length > 0 && comuna !== 'undefined' && comuna.trim().length > 0) {
+                  let validateadrress: string = calle + ' ' + numero + ' ' + comuna;
+                  // console.log(validateadrress);
+                  validateadrress = validateadrress.replace(/S\/N/g, '');
+                  // console.log(validateadrress);
+                  const resgetapi: any = await that.getLocationApi(validateadrress);
+                  // console.log('resgetapi', resgetapi);
+                  if (resgetapi && resgetapi.location && resgetapi.adrress) {
+                    latitud = resgetapi.location.lat;
+                    longitud = resgetapi.location.lng;
+                    apimap = 1;
+                    apiaddress = resgetapi.adrress;
+                  } else {
+                    latitud = 'S/N';
+                    longitud = 'S/N';
+                  }
+                } else {
+                  latitud = 'S/N';
+                  longitud = 'S/N';
+                }
+              } else {
+                latitud = 'S/N';
+                longitud = 'S/N';
+              }
             } else {
               latitud = latitud.trim();
-            }
-
-            if (longitud === 'undefined' || longitud.trim().length === 0) {
-              longitud = 'S/N';
-            } else {
               longitud = longitud.trim();
             }
 
@@ -939,6 +977,8 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
               'depto': depto,
               'latitud': latitud,
               'longitud': longitud,
+              'apimap': apimap,
+              'apiaddress': apiaddress,
               'medidor': medidor,
               'modelo_medidor': modelo_medidor,
               'transformador': transformador,
@@ -1138,6 +1178,14 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
+
+  asynclatlnt(event) {
+    if (event.checked) {
+      this.checkboxasynclatlnt = true;
+    } else {
+      this.checkboxasynclatlnt = false;
+    }
+  }
   checkduplicatOt(event) {
     if (!event.checked) {
       this.checkboxDupOt = false;
@@ -1160,6 +1208,40 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
         );
       }
     );
+  }
+
+
+  async getLocationApi(adrress: any) {
+
+    const url = 'https://maps.googleapis.com/maps/api/geocode/json?new_forward_geocoder=true&sensor=false&key=' + this.apikey + '&address=' + encodeURI(adrress);
+    // console.log('url', url);
+    const response: any = await this.http.get(url).toPromise();
+    // console.log('response', response);
+    if (response && response.hasOwnProperty('status') && response.status === 200 && response.hasOwnProperty('_body')) {
+      const _body: any = JSON.parse(response._body);
+      // console.log('_body', _body);
+      if (_body.results && _body.results.length > 0) {
+        const results = _body.results;
+        // console.log('results', results);
+        if (results[0]['formatted_address'] && results[0]['geometry']) {
+          const geometry: any = results[0]['geometry'];
+          // console.log(typeof geometry);
+          // console.log(geometry);
+          // console.log('return', {adrress: results[0]['formatted_address'], location: geometry['location'] });
+          return {adrress: results[0]['formatted_address'], location: geometry['location'] };
+        } else {
+          // console.log('return', 'false 1');
+          return false;
+        }
+      } else {
+        // console.log('return', 'false 2');
+        return false;
+      }
+    } else {
+      // console.log('return', 'false 3');
+      return false;
+    }
+
   }
 
   getTipoServicio(id) {
@@ -1868,15 +1950,4 @@ applyFilterCliente(filterValue: string) {
 
 }
 
-@Component({
-  selector: 'app-dialog-overview-dialog',
-  templateUrl: './dialog-overview-dialog.html',
-})
-
-// tslint:disable-next-line:component-class-suffix
-export class DialogOverviewDialog {
-  constructor(
-    public dialogRef: MatDialogRef<DialogOverviewDialog>
-    ) {}
-}
 

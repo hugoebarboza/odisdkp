@@ -87,6 +87,7 @@ export class AuthService {
         this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
         .then(user => {
           this.authState = user;
+          // console.log(user);
           // console.log(this.authState.user.uid);
           const key = 'uid';
           this.saveStorage(key, this.authState.user.uid);

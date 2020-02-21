@@ -74,7 +74,7 @@ export class MessagingService {
   updateTokenDatabase(token) {
     this.afAuth.authState.take(1).subscribe(user => {
       if (!user) { return; }
-      const data = { [user.uid]: token }
+      const data = { [user.uid]: token };
       this.db.object('fcmTokens/').update(data);
     });
   }
@@ -127,7 +127,7 @@ export class MessagingService {
 
   receiveMessage() {
        this.messaging.onMessage((payload) => {
-        // console.log("Message received. ", payload);
+        // console.log('Message received. ', payload);
         this.currentMessage.next(payload);
       });
   }

@@ -56,9 +56,21 @@ margin: 2px;
 .mat-spacer {
   flex: 1 1 auto;
 }
+
 .ng-valid[required], .ng-valid.required  {
   border-left: 5px solid #42A948; /* green */
+  padding-left: 10px;
 }
+
+.ng-invalid[required], .ng-invalid.require {
+  border-left: 5px solid red; /* green */
+  padding-left: 10px;
+}
+
+:host ::ng-deep .mat-form-field-label-wrapper {
+  margin-left: 10px;
+}
+
 
 .btnsave {
   background-color: rgba( 48,  63, 159);

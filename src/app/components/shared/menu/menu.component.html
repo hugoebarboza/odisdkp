@@ -48,11 +48,18 @@
                       Equipos
                     </a>
                   </li>
+                  <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="_userService.isRole(7)">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/projectorder', proyectos[k].id]" > 
+                      Todas las incidencias
+                    </a>
+                  </li>
 
                   <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngFor="let service of proyectos[k].service; let i = index" (click)="navigate(service.id)">
                       <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', service.id]" > 
+                        <!--
                           <i class="material-icons md-14-color" *ngIf="service.id === selected && path === 'service'">launch</i> 
-                          <i class="material-icons md-14" *ngIf="service.id != selected || path != 'service'">launch</i> 
+                          <i class="material-icons md-14" *ngIf="service.id != selected || path != 'service'">launch</i>
+                        -->
                           {{service.service_name}} 
                       </a>
                   </li>

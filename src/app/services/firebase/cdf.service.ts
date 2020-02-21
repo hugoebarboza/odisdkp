@@ -60,12 +60,16 @@ export class CdfService  {
             return;
     }
 
-      const headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
+    // console.log(params);
+
+    const headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
 
     return this._http.post(this.url + 'fcmSend', params, {headers: headers})
         .map( (resp: any) => {
+          // console.log(resp);
         return resp;
         }).catch( err => {
+          console.log(err);
         return Observable.throw( err );
     });
   }

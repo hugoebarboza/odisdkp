@@ -463,7 +463,7 @@
 
         <div class="col-sm" *ngIf="selectedColumnnDate.fieldValue">
         <mat-form-field *ngIf="selectedColumnnDate.fieldValue" class="margin" >
-          <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde"disabled>
+          <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde" disabled>
           <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
           <mat-datepicker #fecha1 disabled="false"></mat-datepicker>
         </mat-form-field>
@@ -588,7 +588,7 @@
 </div>
 
 
-<div class="example-container " >
+<div class="example-container" >
 <div class="example-loading-shade" *ngIf="isLoadingResults || isRateLimitReached">
   <app-loading *ngIf="isLoadingResults"></app-loading>
 </div>
@@ -847,8 +847,8 @@
           </button>
 
           <button mat-icon-button *ngIf="profile.show === 1" [matMenuTriggerFor]="menuviewshoworder"  matTooltip="Acciones (Presiona para acceder a la visualización de la incidencia)" [matTooltipPosition]="positionheaderaction.value">
-              <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
-              <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
+            <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
+            <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
             </button>
 
           <mat-menu #menuviewshoworder="matMenu" [overlapTrigger]="false">

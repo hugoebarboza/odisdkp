@@ -132,6 +132,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
           this.project_name = this.project.project_name;
           this.subscription = this._proyectoService.getUserProjectServiceDetail(this.token.token, this.identity.sub, this.id).subscribe(
             response => {
+              // console.log(response);
                 if (response.status === 'success') {
                   this.services = response.datos;
                   this.datasource = new MatTableDataSource(response.datos);
@@ -146,7 +147,7 @@ export class ServiceComponent  implements OnInit, OnDestroy {
             (error: any) => {
                 this.loading = false;
                 this.isRateLimitReached = true;
-                this._userService.logout();
+                // this._userService.logout();
                 console.log(<any>error);
               }
             );
