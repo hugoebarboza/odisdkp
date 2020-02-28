@@ -10,7 +10,7 @@ import Swal from 'sweetalert2';
 import { AngularFireAuth } from '@angular/fire/auth';
 
 // MODELS
-import { Team, User, UserFirebase } from 'src/app/models/types';
+import { Team, UserFirebase } from 'src/app/models/types';
 
 // SERVICES
 import { CustomerService, ProjectsService, UserService } from 'src/app/services/service.index';
@@ -34,7 +34,7 @@ export class AddTeamComponent implements OnInit, OnDestroy {
   roles:  any[] = [];
   subscription: Subscription;
   token: any;
-  users: User[] = [];
+  users: any;
   userFirebase: UserFirebase;
 
 

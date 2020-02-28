@@ -8,6 +8,14 @@ import { TooltipPosition } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
+import { MatDialog } from '@angular/material/dialog';
+import { shareReplay, tap } from 'rxjs/operators';
+
+// CSV
+import * as FileSaver from 'file-saver';
+
+// DIALOG
+import { ShowComponent } from 'src/app/components/shared/shared.index';
 
 // SERVICES
 import { OrderserviceService, ProjectsService, SettingsService, UserService } from 'src/app/services/service.index';
@@ -50,9 +58,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
   resultsLength = 0;
   selectedRow: any;
   servicetype = [];
+  servicestatus = [];
   since: any;
   sub: any;
   subscription: Subscription;
+  teams = [];
   title = '';
   token: any;
   users = [];
@@ -68,6 +78,8 @@ export class ViewProjectOrderComponent implements OnDestroy {
   selectedResponsable: any;
   selectedService: any;
   selectedServiceType: any;
+  selectedServiceStatus: any;
+  selectedTeam: any;
   selectedColumnn = {
     fieldValue: '',
     criteria: '',
@@ -98,18 +110,19 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
   // TABLE HEADERS
   columns: Array<any> = [
-    { name: 'order_number', label: 'N. Orden' },
-    { name: 'cc_number', label: 'N. Cliente' },
-    { name: 'orderdetail_direccion', label: 'Realizado En' },
-    { name: 'direccion', label: 'Ubicación' },
-    { name: 'servicetype', label: 'Servicio' },
-    { name: 'user', label: 'Informador' },
-    { name: 'create_at', label: 'Creado El' },
-    { name: 'userassigned', label: 'Responsable' },
-    { name: 'time', label: 'T. Ejecución' },
-    { name: 'atentiontime', label: 'T. Atención' },
-    { name: 'estatus', label: 'Estatus' },
-    { name: 'actions', label: 'Acciones' }
+    { name: 'order_number', label: 'N. Orden', csv: 1, order: 1 },
+    { name: 'cc_number', label: 'N. Cliente', csv: 1, order: 2 },
+    { name: 'orderdetail_direccion', label: 'Realizado En', csv: 1, order: 3 },
+    { name: 'direccion', label: 'Ubicación', csv: 1, order: 4 },
+    { name: 'servicetype', label: 'Servicio', csv: 1, order: 5 },
+    { name: 'user', label: 'Informador', csv: 1, order: 6 },
+    { name: 'create_at', label: 'Creado El', csv: 1, order: 7 },
+    { name: 'update_at', label: 'Editado El', csv: 1, order: 8 },
+    { name: 'userassigned', label: 'Responsable', csv: 1, order: 9 },
+    { name: 'time', label: 'T. Ejecución', csv: 1, order: 10 },
+    { name: 'atentiontime', label: 'T. Atención', csv: 0, order: 0 },
+    { name: 'estatus', label: 'Estatus', csv: 1, order: 11 },
+    { name: 'actions', label: 'Acciones', csv: 0, order: 0 }
   ];
 
   displayedColumns: string[] = ['order_number', 'cc_number', 'region', 'direccion', 'servicetype', 'user', 'userupdate', 'userassigned', 'create_at', 'update_at', 'time', 'atentiontime', 'estatus', 'actions'];
@@ -129,6 +142,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
     private _route: ActivatedRoute,
     public _router: Router,
     public _userService: UserService,
+    public dialog: MatDialog,
     private cd: ChangeDetectorRef,
     public label: SettingsService,
     public snackBar: MatSnackBar
@@ -152,12 +166,15 @@ export class ViewProjectOrderComponent implements OnDestroy {
         this.selectedDate = 'Fecha';
         this.selectedService = 'Servicio';
         this.selectedServiceType = 'Tipo de Servicio';
+        this.selectedServiceStatus = 'Estatus de Servicio';
         this.selectedMaster = 'Informador';
         this.selectedResponsable = 'Responsable';
+        this.selectedTeam = 'Equipo';
         this.project_name = this.project.project_name;
         this.country = this.project.country_name;
         this.since = moment(this.project.create_at).locale('ES').format('LL');
         this.load();
+        this.loadTeam(this.id);
         this.loadUserProject(this.id);
         this.loadMasterUserProject(this.id);
         } else {
@@ -183,11 +200,14 @@ export class ViewProjectOrderComponent implements OnDestroy {
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
+      this.dataSource = new MatTableDataSource();
     }
   }
 
 
-  getData(response: any) {
+  getData(response: any, csv?: any) {
+
+    this.cd.markForCheck();
 
     if (response && response.status === 'success') {
       if (response.datos && response.datos.data) {
@@ -197,22 +217,26 @@ export class ViewProjectOrderComponent implements OnDestroy {
         }
         this.resultsLength = response.datos.total;
         this.isRateLimitReached = false;
+        if (csv && csv === 1) {
+          this.buildCsv(this.dataSource);
+        }
       } else {
         this.resultsLength = 0;
         this.isRateLimitReached = true;
         }
         this.isLoading = false;
+
         this.cd.markForCheck();
       } else {
       // console.log('No Response');
+        this.cd.markForCheck();
         this.dataSource = new MatTableDataSource();
         return;
       }
-      this.cd.markForCheck();
   }
 
 
-  load() {
+  async load() {
     this.cd.markForCheck();
     this.isLoading = true;
     this.filterValue = '';
@@ -229,8 +253,10 @@ export class ViewProjectOrderComponent implements OnDestroy {
     this.selectedDate = 'Fecha';
     this.selectedService = 'Servicio';
     this.selectedServiceType = 'Tipo de Servicio';
+    this.selectedServiceStatus = 'Estatus de Servicio';
     this.selectedMaster = 'Informador';
     this.selectedResponsable = 'Responsable';
+    this.selectedTeam = 'Equipo';
     this.pageSize = 15;
     this.sort.active = 'create_at';
     this.sort.direction = 'desc';
@@ -246,6 +272,10 @@ export class ViewProjectOrderComponent implements OnDestroy {
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
+      .pipe(
+        tap(() => console.log('HTTP Request Executed') ),
+        shareReplay()
+      )
       .subscribe( (resp: any) => {
         this.getData(resp);
         this.snackBar.open('Incidencias de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
@@ -262,9 +292,37 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
   }
 
+  loadTeam(id: number) {
+
+    this.isLoading = true;
+
+    this.subscription = this._userService.getTeamPaginate( this.token.token, id)
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe( (resp: any) => {
+      // console.log(this.totalRegistros);
+      this.teams = resp.datos.data;
+      this.cd.markForCheck();
+    },
+    error => {
+      console.log(<any>error);
+      this.cd.markForCheck();
+    }
+    );
+
+  }
+
+
   loadUserProject(id: number) {
 
-    this.subscription = this._projectService.getUserProject(this.token.token, id, 5).subscribe(
+    this.subscription = this._projectService.getUserProject(this.token.token, id, 5)
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
     response => {
               if (!response) {
                 return;
@@ -278,7 +336,12 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
    loadMasterUserProject(id: number) {
 
-    this.subscription = this._projectService.getMasterUserProject(this.token.token, id, 6).subscribe(
+    this.subscription = this._projectService.getMasterUserProject(this.token.token, id, 6)
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
     response => {
               if (!response) {
                 return;
@@ -293,7 +356,12 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
    loadServiceType(id: number) {
     this.cd.markForCheck();
-    this.subscription = this._orderService.getServiceType(this.token, id).subscribe(
+    this.subscription = this._orderService.getServiceType(this.token, id)
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
       (response: any) => {
                 if (!response) {
                   return;
@@ -310,17 +378,44 @@ export class ViewProjectOrderComponent implements OnDestroy {
   }
 
 
+  loadServiceStatus(id: number) {
+    this.cd.markForCheck();
+    this.subscription = this._orderService.getServiceEstatus(this.token, id)
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
+      (response: any) => {
+                if (!response) {
+                  return;
+                }
+                if (response.status === 'success') {
+                  this.servicestatus = response.datos;
+                  this.cd.markForCheck();
+                }
+                },
+      (error) => {
+                  console.log(<any>error);
+                  }
+                );
+  }
 
-   getQuery() {
 
+   async getQuery(pageSize: number, csv = 0) {
+    this.pageSize = pageSize;
     this.isLoading = true;
     this.subscription = this._projectService.getProjectOrderService(
       this.filterValue, this.searchparams, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
+      this.sort.active, this.sort.direction, pageSize, this.paginator.pageIndex, this.id, this.token.token)
+      .pipe(
+        tap(),
+        shareReplay()
+      )
       .subscribe( (resp: any) => {
-        this.getData(resp);
+        this.getData(resp, csv);
         this.cd.markForCheck();
       },
       error => {
@@ -336,9 +431,9 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
 
   async onPaginateChange(event) {
-    this.pageSize = event.pageSize;
+    // this.pageSize = event.pageSize;
     this.cd.markForCheck();
-    this.getQuery();
+    this.getQuery(event.pageSize);
   }
 
   async handleSortChange(sort: Sort) {
@@ -348,7 +443,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
     }
 
     this.cd.markForCheck();
-    this.getQuery();
+    this.getQuery(this.pageSize);
   }
 
 
@@ -389,7 +484,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
     }
 
     this.cd.markForCheck();
-    this.getQuery();
+    this.getQuery(this.pageSize);
 
   }
 
@@ -400,13 +495,15 @@ export class ViewProjectOrderComponent implements OnDestroy {
       const datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
       this.selectedColumnnDate.columnValueDesde = datedesde.value;
       this.selectedColumnnDate.columnValueHasta = datehasta.value;
-      this.getQuery();
+      this.cd.markForCheck();
+      this.getQuery(this.pageSize);
     }
     this.cd.markForCheck();
   }
 
 
   searchService(data: any) {
+    this.selectedServiceType = 'Tipo de Servicio';
     if (!data) {
       if (this.searchparams.length > 0) {
         for (let i = 0; i < this.searchparams.length; i++) {
@@ -438,11 +535,12 @@ export class ViewProjectOrderComponent implements OnDestroy {
       this.searchparams.push(param);
 
       this.loadServiceType(data.id);
+      this.loadServiceStatus(data.id);
     }
 
 
     this.cd.markForCheck();
-    this.getQuery();
+    this.getQuery(this.pageSize);
 
   }
 
@@ -482,10 +580,85 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
 
     this.cd.markForCheck();
-    this.getQuery();
+    this.getQuery(this.pageSize);
 
   }
 
+
+  searchServiceStatus(data: any) {
+    if (!data) {
+      if (this.searchparams.length > 0) {
+        for (let i = 0; i < this.searchparams.length; i++) {
+          const result = this.searchparams[i].fieldValue;
+          if ( result === 'orders_details.status_id') {
+            this.searchparams.splice(i, 1);
+            break;
+          }
+        }
+      }
+    }
+
+    if (data && data.id) {
+      if (this.searchparams.length > 0) {
+        for (let i = 0; i < this.searchparams.length; i++) {
+          const result = this.searchparams[i].fieldValue;
+          if ( result === 'orders_details.status_id') {
+            this.searchparams.splice(i, 1);
+            break;
+          }
+        }
+      }
+
+      const param: SearchParam = {
+        fieldValue: 'orders_details.status_id',
+        columnValue: data.id
+      };
+
+      this.searchparams.push(param);
+    }
+
+
+
+    this.cd.markForCheck();
+    this.getQuery(this.pageSize);
+
+  }
+
+  searchEquipo(data: any) {
+    if (!data) {
+      if (this.searchparams.length > 0) {
+        for (let i = 0; i < this.searchparams.length; i++) {
+          const result = this.searchparams[i].fieldValue;
+          if ( result === 'orders_details.team_id') {
+            this.searchparams.splice(i, 1);
+            break;
+          }
+        }
+      }
+    }
+
+    if (data && data.id) {
+      for (let i = 0; i < this.searchparams.length; i++) {
+        const result = this.searchparams[i].fieldValue;
+        if ( result === 'orders_details.team_id') {
+          this.searchparams.splice(i, 1);
+          break;
+        }
+      }
+
+      const param: SearchParam = {
+        fieldValue: 'orders_details.team_id',
+        columnValue: data.id
+      };
+
+      this.searchparams.push(param);
+    }
+
+
+    this.cd.markForCheck();
+    this.getQuery(this.pageSize);
+
+  }
 
 
   searchResponsable(data: any) {
@@ -520,7 +693,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
 
     this.cd.markForCheck();
-    this.getQuery();
+    this.getQuery(this.pageSize);
 
   }
 
@@ -558,15 +731,29 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
 
     this.cd.markForCheck();
-    this.getQuery();
+    this.getQuery(this.pageSize);
 
   }
 
 
-  showItem() {
+  showItem(order_id: number, order_number: string, category_id: number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, estatus: string, order_date: string, required_date: string, vencimiento_date: string, observation: string, create_at: string, usercreate: string, project_name: string, service_name: string, servicetype: string, update_at: string, userupdate: string, region: string, provincia: string, comuna: string, direccion: string, serviceid: number) {
+    const dialogRef = this.dialog.open(ShowComponent, {
+      width: '1000px',
+      disableClose: true,
+      data: {order_id: order_id, order_number: order_number, service_id: serviceid,
+        category_id: category_id, customer_id: customer_id, cc_number: cc_number,
+        servicetype_id: servicetype_id, status_id: status_id, estatus: estatus,
+        order_date: order_date, required_date: required_date, vencimiento_date: vencimiento_date, observation: observation,
+        create_at: create_at, usercreate: usercreate, update_at: update_at, userupdate: userupdate,
+        project_name: project_name, service_name: service_name, servicetype: servicetype,
+        region: region, provincia: provincia, comuna: comuna, direccion: direccion}
+    });
 
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+      }
+    });
   }
-
 
   hoverIn(index: number) {
     this.indexitem = index;
@@ -586,6 +773,99 @@ export class ViewProjectOrderComponent implements OnDestroy {
     }
   }
 
+  async ExportTOExcel($event: any, limit = 0) {
+
+
+    if ($event === 1) {
+
+      if (limit === 0) {
+      this.cd.markForCheck();
+      this.getQuery(this.pageSize, 1);
+      }
+
+      if (limit > 0) {
+        this.cd.markForCheck();
+        this.getQuery(limit, 1);
+      }
+    }
+
+  }
+
+  async buildCsv(data: any) {
+    if (data && data.data.length > 0) {
+
+      let csv: any = await this.buildHeader(this.columns);
+
+      if (csv) {
+        csv = csv + '\n';
+        const length = data.data.length;
+
+        for (let i = 0; i <= data.data.length; i++) {
+          if (data.data[i] && data.data[i].order_number) {
+            csv = csv + data.data[i]['order_number'] + ';' + data.data[i]['cc_number'] + ';' + data.data[i]['orderdetail_direccion'] + ';' + data.data[i]['direccion'] + ';' +
+            data.data[i]['servicetype'] + ';' + data.data[i]['user'] + ';' + data.data[i]['create_at'] + ';' + data.data[i]['update_at'] + ';' + data.data[i]['userassigned'] + ';' +
+            data.data[i]['time'] + ';' + data.data[i]['estatus'] + ';';
+          }
+          csv = csv + '\n';
+
+          if (length === i) {
+            const FILE_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=utf-8;';
+            const FILE_EXTENSION = '.csv';
+            const fileName = 'Incidencias';
+
+            const blob = new Blob([csv], {type: FILE_TYPE});
+            FileSaver.saveAs(blob, fileName + '_export_' + new Date().getTime() + FILE_EXTENSION);
+            this.cd.markForCheck();
+          }
+        }
+      }
+
+    }
+
+  }
+
+  async buildHeader(data?: any) {
+    if (!data) {
+      return;
+    }
+
+    const sortdata: any = await this.sortArray(data);
+
+    if (sortdata && sortdata.length > 0) {
+      let header = '';
+      for (let i = 0; i < sortdata.length; i++) {
+        if (sortdata[i].csv === 1) {
+          header = header + sortdata[i].label + ';';
+        }
+      }
+      return header;
+    }
+  }
+
+  async sortArray(data?: any) {
+    if (!data) {
+      return;
+    }
+
+    if (data && data.length > 0) {
+      const sortdata = [];
+      const length = data.length;
+      for (let i = 0; i <= data.length; i++) {
+        if (data[i] && data[i].csv === 1 && data[i].order > 0) {
+          sortdata.push(data[i]);
+        }
+        if (length === i) {
+          // sort by value
+          sortdata.sort(function (a, b) {
+            return a.order - b.order;
+          });
+          return sortdata;
+        }
+      }
+    }
+
+
+  }
 
 
 }

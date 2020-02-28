@@ -560,7 +560,7 @@ export class AtributoAlertComponent implements OnInit, OnDestroy {
             this.toasterService.success('Notificación eliminada exitosamente', 'Exito', {timeOut: 4000, closeButton: true, });
             this.cd.markForCheck();
           } else {
-            Swal.fire('Importante', 'A ocurrido un error en la eliminación. Verifique si existen ordenes asociadas a la notificación.', 'error');
+            Swal.fire('Importante', 'A ocurrido un error en la eliminación. Verifique si existen notificaciones o estados de pago asociados.', 'error');
             return;
           }
         }

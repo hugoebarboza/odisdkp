@@ -3,6 +3,9 @@ import { Router } from '@angular/router';
 import { FormControl, Validators, NgForm} from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { shareReplay, tap } from 'rxjs/operators';
+
+import Swal from 'sweetalert2';
 
 // FIREBASE
 
@@ -154,12 +157,12 @@ export class EditComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     // console.log('La página se va a cerrar');
-    if (this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
 
-  confirmEdit(form: NgForm): void {
+  async confirmEdit(form: NgForm) {
     const editform = form;
     let j = 0;
     this.myArray = editform.value;
@@ -249,31 +252,54 @@ export class EditComponent implements OnInit, OnDestroy {
 
     const objPila = {pila: this.pila };
     const obj = Object.assign(this.data, objPila);
+
     // console.log(obj);
-    this._orderService.update(this.token.token, this.infodata['order_id'], obj, this.category_id);
+
+    const editot: any = await this._orderService.update(this.token.token, this.infodata['order_id'], obj, this.category_id);
+    // console.log(editot);
+
+    if (editot && editot.status && editot.status === 'success') {
+
+        Swal.fire('Actualizada Orden de Trabajo: ', obj.order_number + ' exitosamente.', 'success' );
+
+        // SEND CDF MESSAGING AND NOTIFICATION
+        if (this.destinatario.length > 0)  {
+          this.sendCdf(this.destinatario);
+         }
+        if (editot && editot.formnotificacion && editot.formnotificacion.length > 0) {
+          this.sendformnotificacion(editot.formnotificacion, obj);
+        }
+    } else {
+        Swal.fire('N. Orden de Trabajo: ', obj.order_number + ' no actualizada.' , 'error');
+    }
+
+
 
     /*
     for (var propiedad in this.pila) {
       console.log(propiedad);
       console.log(this.pila[propiedad]);
-    }*/
+    }
+    */
 
     // console.log(obj);
     // console.log(this.data);
     // console.log(this.pila);
-   // this.dataService.update(this.token.token, this.infodata['order_id'], editform.value, this.category_id);
+    // this.dataService.update(this.token.token, this.infodata['order_id'], editform.value, this.category_id);
 
-   if (this.destinatario.length > 0)  {
-    // SEND CDF MESSAGING AND NOTIFICATION
-    this.sendCdf(this.destinatario);
-   }
+
   }
 
   public loadAtributo(event: any) {
     if (event > 0) {
     this.show = true;
     this.isOrderLoading = true;
-    this.subscription = this._orderService.getAtributoServiceType(this.token.token, event).subscribe(
+    this.subscription = this._orderService.getAtributoServiceType(this.token.token, event)
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
     response => {
       // console.log('loadAtributo');
       // console.log(response);
@@ -304,9 +330,8 @@ export class EditComponent implements OnInit, OnDestroy {
 
                 this.orderatributo = [];
                 this.atributo = atributotem;
-                // console.log(this.atributo);
-
                 this.isOrderLoading = false;
+                // console.log(this.atributo);
               }
               },
           error => {
@@ -315,6 +340,62 @@ export class EditComponent implements OnInit, OnDestroy {
           });
     }
 
+  }
+
+  getServicetype(id: number): String {
+    for (let i = 0; i < this.servicetype.length; i++) {
+      const element = this.servicetype[i];
+      if (element.id === id) {
+        return element.name;
+      }
+    }
+  }
+
+
+  sendformnotificacion(formnotificacion: any, orderdata: any) {
+    if (!formnotificacion) {
+      return;
+    }
+
+    for (let i = 0; i < formnotificacion.length; i++) {
+      const element: any = formnotificacion[i];
+
+      const user: any = JSON.parse(element.user);
+
+      for (let x = 0; x < user.length; x++) {
+        const usermail = user[x];
+
+        const msg = {
+          toEmail: usermail.email,
+          fromTo: this.identity.email,
+          subject: 'OCA GLOBAL - Nueva notificación - ' + element.main,
+          body: element.body,
+          project: orderdata.project,
+          service_name: this.service_name,
+          servicetype_name: this.getServicetype(orderdata.servicetype_id),
+          order_number: orderdata.order_number,
+          service_id: orderdata.service_id,
+          order_id: orderdata.order_id
+          };
+
+        // console.log(msg);
+
+        this._cdf.httpEmailNotification(this.token.token, msg).subscribe(
+          response => {
+            if (!response) {
+            return false;
+            }
+            if (response.status === 200) {
+              // console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }
+          );
+      }
+
+    }
   }
 
   sendCdf(data) {
@@ -404,7 +485,12 @@ export class EditComponent implements OnInit, OnDestroy {
       this.client_loading = true;
 
       if (this.project_id > 0) {
-        this._customerService.getProjectCustomerDetail(this.token.token, this.project_id, this.order[0]['cc_id']).subscribe(
+        this._customerService.getProjectCustomerDetail(this.token.token, this.project_id, this.order[0]['cc_id'])
+        .pipe(
+          tap(),
+          shareReplay()
+        )
+        .subscribe(
           response => {
             if (response.status === 'success') {
               const customer: any = response.datos;
@@ -493,11 +579,16 @@ export class EditComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.order = null;
       // tslint:disable-next-line:max-line-length
-      this.subscription = this._orderService.getShowOrderService(this.token.token, this.infodata['service_id'], this.infodata['order_id']).subscribe(
+      this.subscription = this._orderService.getShowOrderService(this.token.token, this.infodata['service_id'], this.infodata['order_id'])
+      .pipe(
+        tap(),
+        shareReplay()
+      )
+      .subscribe(
       response => {
-      if (!response) {
-        return;
-         }
+          if (!response) {
+            return;
+          }
 
           this.order = response.datos;
 
@@ -625,7 +716,6 @@ export class EditComponent implements OnInit, OnDestroy {
               }
             });
 
-
             this.atributo = atributotem;
             this.orderatributo = orderatributotem;
 
@@ -713,7 +803,12 @@ export class EditComponent implements OnInit, OnDestroy {
 
   public loadService() {
     this.servicetype = null;
-    this.subscription = this._orderService.getService(this.token.token, this.infodata['service_id']).subscribe(
+    this.subscription = this._orderService.getService(this.token.token, this.infodata['service_id'])
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
     response => {
               if (!response) {
                 return;
@@ -735,7 +830,12 @@ export class EditComponent implements OnInit, OnDestroy {
 
   public loadServiceType() {
     this.servicetype = null;
-    this.subscription = this._orderService.getServiceType(this.token.token, this.infodata['service_id']).subscribe(
+    this.subscription = this._orderService.getServiceType(this.token.token, this.infodata['service_id'])
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
     response => {
               if (!response) {
                 return;
@@ -748,7 +848,12 @@ export class EditComponent implements OnInit, OnDestroy {
 
   public loadServiceEstatus() {
     this.serviceestatus = null;
-    this.subscription = this._orderService.getServiceEstatus(this.token.token, this.infodata['service_id']).subscribe(
+    this.subscription = this._orderService.getServiceEstatus(this.token.token, this.infodata['service_id'])
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
     response => {
               if (!response) {
                 return;
@@ -761,7 +866,12 @@ export class EditComponent implements OnInit, OnDestroy {
 
 
    public loadUserProject(id) {
-    this.subscription = this._projectService.getUserProject(this.token.token, id, 5).subscribe(
+    this.subscription = this._projectService.getUserProject(this.token.token, id, 5)
+    .pipe(
+      tap(),
+      shareReplay()
+    )
+    .subscribe(
     response => {
               if (!response) {
                 return;
@@ -783,7 +893,12 @@ export class EditComponent implements OnInit, OnDestroy {
     }
 
      if (this.termino.length > 2) {
-       this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id).subscribe(
+       this.subscription = this._orderService.getCustomer(this.token.token, this.termino, this.category_id)
+       .pipe(
+        tap(),
+        shareReplay()
+      )
+       .subscribe(
         response => {
 
               if (!response) {

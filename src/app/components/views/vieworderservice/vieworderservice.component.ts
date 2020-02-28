@@ -758,7 +758,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
     // console.log('get params');
     this.isLoadingResults = true;
-    console.log(this.selectedoption);
 
     if (this.filterValue) {
       this.selectedColumnn.fieldValue = '';

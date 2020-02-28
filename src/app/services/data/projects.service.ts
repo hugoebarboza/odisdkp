@@ -1013,10 +1013,10 @@ export class ProjectsService {
             return;
         }
 
-        console.log(requestUrl);
+        // console.log(requestUrl);
 
         try {
-            return this._http.get<any>(requestUrl, {headers: httpOptions.headers}).shareReplay();
+            return this._http.get<any>(requestUrl, {headers: httpOptions.headers});
        } catch (err) {
             console.log(err);
        }

@@ -1,0 +1,479 @@
+<mat-drawer-container class="container-drawer">   
+    <div class="pagecontent">           
+        <div class="example-container" ><!--[class.example-is-mobile]="mobileQuery.matches"-->
+            <mat-sidenav-container class="example-sidenav-container"> <!--[style.marginTop.px]="mobileQuery.matches ? 56 : 0"-->
+                <mat-sidenav #sidenav opened [mode]="mobileQuery.matches ? 'over' : 'side'"
+                            [fixedInViewport]="mobileQuery.matches" fixedTopGap="102" style="background-color: rgb(244, 245, 247);">
+                    <div class="not-scroll">
+                        <div class="sidebar-header">
+                            <div class="css-1qm1lh">
+                                <div role="presentation" class="css-7xjigh">
+                                    <a class="css-1t5na7c" data-testid="NavigationItem" id="back-item" [routerLink]="['/project', project_id]" target="_self">
+                                        <div class="css-1wgdpuu">
+                                            <span class="sc-hqyNC hItagX">
+                                                <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation">
+                                                    <circle fill="currentColor" cx="12" cy="12" r="10">
+                                                    </circle>
+                                                    <path d="M16 10.995h-5.586l1.272-1.279a1.01 1.01 0 0 0 0-1.421.996.996 0 0 0-1.415 0l-2.978 2.994a1.01 1.01 0 0 0 0 1.423l2.978 2.993a.999.999 0 0 0 1.415 0 1.01 1.01 0 0 0 0-1.421l-1.272-1.279H16c.552 0 1-.45 1-1.005 0-.555-.448-1.005-1-1.005" fill="inherit">
+                                                    </path>
+                                                </svg>
+                                            </span>
+                                        </div>
+                                        <div class="css-t44v0r">
+                                            <div class="css-xuepxh">
+                                                Proyectos
+                                            </div>
+                                        </div>
+                                    </a>
+                                </div>
+                            </div>
+                            <mat-divider></mat-divider>
+                            <div class="container-fluid" style="margin-top: 10px; margin-bottom: 10px; height: 17px;">
+                                <div class="row">
+                                    <div class="col-sm">
+                                        <div class="row d-flex justify-content-center">
+                                            <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" [hidden]="isLoadingMenu"></mat-spinner>
+                                        </div>                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!----Menú---->
+                        <div id="sidebar">
+                            <ul class="list-unstyled components">
+                                <li *ngFor="let service of servicios;  let i = index;">
+                                    <a href="#servicetype{{i}}" id="service{{i}}" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle"  (click)="getServicetype(service, i)">
+                                        <div style="margin-right: 20px; display: flex;">{{service.service_name}}
+                                            <h6 *ngIf="service.servicetype"><span class="badge badge-light">{{service.servicetype.length}}</span></h6>   
+                                        </div>
+                                    </a>
+                                    <ul class="list-unstyled collapse active show" id="servicetype{{i}}" *ngIf="service.servicetype">
+                                        <li *ngFor="let servicetype of service.servicetype; let x = index;">
+                                            <a href="javascript:void(0)" (click)="getAtributo(servicetype)"> <!-- i, x-->
+                                                {{ servicetype.name }}
+                                            </a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="sidebar-footer">
+                            <div class="sidebar-header">
+                                <mat-divider></mat-divider>
+                            </div>
+                        </div>
+                    </div>                                
+                </mat-sidenav>
+                <mat-sidenav-content class="overflow">
+                    <mat-drawer-container class="container-drawer"> 
+                        <mat-sidenav-container style="height: 100%; overflow-y: hidden;"> 
+                            <mat-sidenav #sidenavend [mode]="mobileQuery.matches ? 'over' : 'side'" position="end">
+                                <div class="not-scroll">
+                                    <div class="sidebar-header-two">
+                                        <div class="css-1qm1lh">
+                                            <div role="presentation" class="css-7xjigh">
+                                                <div class="css-t44v0r">
+                                                    <div class="css-xuepxh">
+                                                        Agregar elemento
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <mat-divider></mat-divider>
+                                        <div class="container-fluid" style="margin-top: 10px; margin-bottom: 10px; height: 17px;">
+                                            <div class="row">
+                                                <div class="col-sm">
+                                                    <div class="row d-flex justify-content-center">
+                                                        <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" [hidden]="isLoadingMenu"></mat-spinner>
+                                                    </div>                        
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!----Menú---->
+                                    <div id="sidebartwo">
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <form ngNativeValidate [formGroup]="forma">
+                                                    <div class="row">
+                                                        <div class="col-md-12">                                                            
+                                                            <h2 class="jeEmY">Tipo de elemento</h2>
+                                                            <mat-select
+                                                                placeholder="Tipo"
+                                                                formControlName="type"
+                                                                class="form-control"
+                                                                (selectionChange)="changetypeform($event.value)">
+                                                                <mat-option *ngFor="let t of types" 
+                                                                            [value]="t.type">
+                                                                            {{ t.value }}
+                                                                </mat-option>
+                                                            </mat-select>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h2 class="jeEmY">Descripción</h2>
+                                                            <input type="text" formControlName="descripcion" class="form-control width-full">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <h2 class="jeEmY">Rol</h2>
+                                                            <mat-select
+                                                                placeholder="Roles"
+                                                                appendTo="body"
+                                                                class="form-control"
+                                                                formControlName="rol">
+                                                                <mat-option *ngFor="let r of roles" 
+                                                                            [value]="r.id">
+                                                                            {{ r.title }}
+                                                                </mat-option>
+                                                            </mat-select>   
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h2 class="jeEmY">Obligatorio</h2>
+                                                            <mat-slide-toggle
+                                                                formControlName="required">
+                                                            </mat-slide-toggle>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <h2 class="jeEmY">Estatus</h2>
+                                                            <mat-slide-toggle
+                                                                formControlName="status">
+                                                            </mat-slide-toggle>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            <h2 class="jeEmY">Posición</h2>
+                                                            <input type="number" formControlName="order_by" class="form-control width-full">
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" *ngIf="forma.value.type == 'spinner' || forma.value.type == 'radio' || forma.value.type == 'chip'">
+                                                        <div class="col-md-12">
+                                                            <h2 class="jeEmY">Respuestas</h2>
+                                                            <ng-container *ngIf="forma.value.type == 'spinner' || forma.value.type == 'radio' || forma.value.type == 'chip'">
+                                                                <ng-select
+                                                                        formControlName="datos"
+                                                                        bindLabel="value"
+                                                                        [addTag]="true"
+                                                                        [selectOnTab]="true"
+                                                                        [isOpen]="false"
+                                                                        [multiple]="true"
+                                                                        placeholder="Respuestas"
+                                                                        class="width-full">
+                                                                </ng-select>
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" *ngIf="showRespuestas(forma.value.type)">
+                                                        <div class="col-md-12">
+                                                            <h2 class="jeEmY">Respuestas</h2>
+                                                            <ng-container>
+                                                                <input type="text" formControlName="datos" class="form-control width-full">
+                                                            </ng-container>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row" style="margin-bottom: 20px; margin-top: 20px;">
+                                                        <div class="col-md-12" align="center">
+                                                            <button mat-raised-button [disabled]="forma.invalid" (click)="addRow()">Guardar</button>                                        
+                                                        </div>
+                                                    </div>
+                                                    </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="sidebar-footer">
+                                        <div class="sidebar-header">
+                                            <mat-divider></mat-divider>
+                                        </div>
+                                    </div>
+                                </div>         
+                            </mat-sidenav>
+                            <mat-sidenav-content>
+                                <main  style="overflow-x: hidden;">
+                                    <div class="container-fluid" *ngIf="project">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <span style="float: left; position: relative;">
+                                                    <button mat-icon-button color="primary" *ngIf="sidenav.opened">
+                                                        <mat-icon (click)="sideNavOnClick()">keyboard_arrow_left</mat-icon>
+                                                    </button>                    
+                                                    <button mat-icon-button color="primary" *ngIf="!sidenav.opened">
+                                                        <mat-icon (click)="sideNavOnClick()">keyboard_arrow_right</mat-icon>
+                                                    </button>    
+                                                </span>  
+                                                <div class="container-fluid d-flex justify-content-center text-center">
+                                                    <div class="eEbvfo">
+                                                        <span class="css-eaycls">Proyecto / {{project.project_name}} / {{title}}</span>
+                                                        <div class="EacRc" *ngIf="countclick === 0">
+                                                            <a class="css-1t5na7c">
+                                                            <div class="css-1wgdpuu">
+                                                                <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                                                                    <span class="iHthaF">
+                                                                        <svg width="24" height="24" viewBox="0 0 24 24">
+                                                                            <path d="M11.433 5.428l-4.207.6a2 2 0 0 0-1.697 1.698l-.601 4.207a1 1 0 0 0 .283.849l6.894 6.894a1 1 0 0 0 1.414 0l5.657-5.657a1 1 0 0 0 0-1.414L12.282 5.71a1 1 0 0 0-.849-.283zm-.647 5.858a1.667 1.667 0 1 1-2.357-2.357 1.667 1.667 0 0 1 2.357 2.357z" fill="currentColor" fill-rule="evenodd">
+                                                                            </path>
+                                                                        </svg>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="css-xuepxh">Debe selecionar un tipo de servicio para crear o editar el formulario.</div>
+                                                            </a>   
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="margin-top: 17px;">
+                                        <div class="col-1"></div>
+                                        <div class="col-10">
+                                            <div class="container-fluid">
+                                                <div class="row justify-content-md-center">
+                                                    <!----MAIN PRINCIPAL EN CASO EXISTAN FORMULARIOS PERO NO HA SIDO SELECCIONADO--->
+                                                    <div class="container-fluid" *ngIf="isLoadingAtributos" style="margin-top: 10px;">
+                                                        <div class="row">
+                                                            <div class="col-sm">
+                                                                <div class="row d-flex justify-content-center">
+                                                                    <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoadingAtributos" ></mat-spinner>
+                                                                </div>                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                    <div class="col-md-12" *ngIf="servicetype && servicetype.id && servicetype.id > 0">                                            
+                                                        <div class="hEEDMy" data-test-selector="profile-work-list">
+                                                            <div class="dQWNoB">
+                                                                <div class="gtZlhk">
+                                                                    <div role="presentation" class="css-7xjigh" *ngIf="servicios && servicios.length > 0">
+                                                                        <a class="css-1t5na7c" data-testid="NavigationItem" id="10004" title="Formulario">
+                                                                        <div class="css-1wgdpuu">
+                                                                            <div style="display: inline-block; position: relative; outline: 0px; height: 28px; width: 28px;">
+                                                                                <span class="styledCache__StyledSpan-zohhd2-3 iHthaF">
+                                                                                    <img class="gXBZbl" src="https://odissoftware.atlassian.net/secure/viewavatar?size=medium&amp;avatarId=10307&amp;avatarType=issuetype">
+                                                                                </span>
+                                                                            </div>
+                                                                        </div>
+                                                                            <div class="css-t44v0r">
+                                                                                <div class="css-xuepxh">Formulario:  {{servicetype.name}}</div>
+                                                                            </div>
+                                                                        </a>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <br>
+                                                        <div>
+                                                            <div class="gMrJwo">
+                                                                <div class="VESiD">
+                                                                </div>
+                                                                <strong class="CRvrQ"  matTooltip="Puedes crear tus formularios, y cambiar la posición de los elementos">Detalle del Formulario</strong>
+                                                                <div class="VESiD">
+                                                                </div>
+                                                            </div>                                                
+                                                            <div style="width: 100%; margin-bottom: 40px !important;">
+                                                                <div class="row">
+                                                                    <div class="col-md-12">
+                                                                        <span style="float: right; margin-left: 10px;" matTooltip="Agregar nuevo elemento al formulario">
+                                                                            <button mat-icon-button color="primary" *ngIf="sidenavend.opened">
+                                                                                <mat-icon (click)="sideNavOnEndClick()">keyboard_arrow_right</mat-icon>
+                                                                            </button>                    
+                                                                            <button mat-icon-button color="primary" *ngIf="!sidenavend.opened">
+                                                                                <mat-icon (click)="sideNavOnEndClick()">keyboard_arrow_left</mat-icon>
+                                                                            </button>    
+                                                                        </span>
+                                                                        <button mat-raised-button (click)="openBottomSheet()" style="float: right;">Agregar elemento</button>
+                                                                    </div>      
+                                                                </div>  
+                                                                
+                                                                <form #formPila="ngForm" [hidden]="!dataSource || (dataSource && dataSource.data && dataSource.data.length === 0)">
+                                                                    <div class="loading-shade" *ngIf="!isLoadingSave">
+                                                                        <app-loading *ngIf="!isLoadingSave"></app-loading>
+                                                                    </div>
+                                                                    <table mat-table #tableAtributo [dataSource]="dataSource" matSort sort="matSort" class="full-width-table example-list"
+                                                                    cdkDropList
+                                                                    #list="cdkDropList"
+                                                                    [cdkDropListData]="dataSource.data"
+                                                                    (cdkDropListDropped)="onListDrop($event)"
+                                                                    multiTemplateDataRows>
+                                                                        <ng-container matColumnDef="position">
+                                                                            <th mat-header-cell *matHeaderCellDef  mat-sort-header> Posición </th>
+                                                                            <td *matCellDef="let row;">
+                                                                                <div *ngIf="row.order_by"> {{row.order_by}} </div>
+                                                                            </td>
+                                                                        </ng-container>
+                                                                        <ng-container matColumnDef="type">
+                                                                            <th mat-header-cell *matHeaderCellDef  mat-sort-header> Tipo de elemento </th>
+                                                                            <td mat-cell *matCellDef="let row;">
+                                                                                <div *ngIf="row.type"> {{getType(row.type)}} </div>
+                                                                            </td>
+                                                                        </ng-container>
+                                                                        <ng-container matColumnDef="descripcion">
+                                                                            <th mat-header-cell *matHeaderCellDef  mat-sort-header> Descripción </th>
+                                                                            <td mat-cell *matCellDef="let row;">
+                                                                                <div *ngIf="row.descripcion"> {{row.descripcion}}</div>
+                                                                                <!--<div *ngIf="row.type !== 'spinner' && row.type !== 'radio'" class="descdisabled"> {{row.descripcion}}</div>-->
+                                                                            </td>
+                                                                        </ng-container>
+                                                                        <ng-container matColumnDef="datos">
+                                                                            <th mat-header-cell *matHeaderCellDef mat-sort-header> Respuestas </th>
+                                                                            <td mat-cell *matCellDef="let row;">
+                                                                                <ng-container *ngIf="row.type == 'radio' || row.type == 'spinner' || row.type == 'chip'">
+                                                                                    <mat-chip-list>
+                                                                                        <mat-chip color="primary" selected> {{row.datos.length}} </mat-chip>
+                                                                                    </mat-chip-list>
+                                                                                </ng-container>
+                                                                            </td>
+                                                                        </ng-container>
+                                                                        <ng-container matColumnDef="required">
+                                                                            <th mat-header-cell *matHeaderCellDef  mat-sort-header> Obligatorio </th>
+                                                                            <td mat-cell *matCellDef="let row;">
+                                                                                <div *ngIf="row">
+                                                                                    <span *ngIf="row.required">Si</span>
+                                                                                    <span *ngIf="!row.required">No</span>
+                                                                                </div>
+                                                                            </td>
+                                                                        </ng-container>
+                                                                        <ng-container matColumnDef="rol">
+                                                                            <th mat-header-cell *matHeaderCellDef  mat-sort-header> Rol </th>
+                                                                            <td mat-cell *matCellDef="let row;">
+                                                                                <div *ngIf="row.rol"> {{getRol(row.rol)}} </div>
+                                                                            </td>
+                                                                        </ng-container>
+                                                                        <ng-container matColumnDef="expandedDetail">
+                                                                            <td mat-cell *matCellDef="let element;let i = dataIndex" [attr.colspan]="displayedColumns.length">
+                                                                                <div class="example-element-detail"
+                                                                                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                                                                    <div class="example-element-description divxpand">
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-6">                                                            
+                                                                                                <h2 class="jeEmY">Tipo de elemento</h2>
+                                                                                                <mat-select
+                                                                                                    [(ngModel)]="element.type"
+                                                                                                    placeholder="Tipo"
+                                                                                                    class="form-control"
+                                                                                                    name="type_{{i}}"
+                                                                                                    (selectionChange)="changetype(element)"
+                                                                                                    required>
+                                                                                                    <mat-option *ngFor="let t of types" 
+                                                                                                                [value]="t.type">
+                                                                                                                {{ t.value }}
+                                                                                                    </mat-option>
+                                                                                                </mat-select>
+                                                                                            </div>
+                                                                                            <div class="col-md-6">
+                                                                                                <h2 class="jeEmY">Descripción</h2>
+                                                                                                <ng-container *ngIf="element.type !== 'layout_line'">
+                                                                                                    <input type="text" name="descripcion_{{i}}" [(ngModel)]="element.descripcion" class="form-control width-full" required>
+                                                                                                </ng-container>
+                                                                                                <ng-container *ngIf="element.type === 'layout_line'">
+                                                                                                    <input type="text" name="descripcion_{{i}}" [(ngModel)]="element.descripcion" class="form-control width-full" disabled>
+                                                                                                </ng-container>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="row">
+                                                                                            <div class="col-md-6">
+                                                                                                <h2 class="jeEmY">Rol</h2>
+                                                                                                <mat-select
+                                                                                                    [(ngModel)]="element.rol"
+                                                                                                    placeholder="Roles"
+                                                                                                    appendTo="body"
+                                                                                                    name="rol_{{i}}"
+                                                                                                    class="form-control"
+                                                                                                    required>
+                                                                                                    <mat-option *ngFor="let r of roles" 
+                                                                                                                [value]="r.id">
+                                                                                                                {{ r.title }}
+                                                                                                    </mat-option>
+                                                                                                </mat-select>   
+                                                                                            </div>
+                                                                                            <div class="col-md-2">
+                                                                                                <h2 class="jeEmY">Obligatorio</h2>
+                                                                                                <mat-slide-toggle
+                                                                                                    name="required_{{i}}"
+                                                                                                    [(ngModel)]="element.required"
+                                                                                                    [checked]="element.required"
+                                                                                                    (change)="!element.required"
+                                                                                                    [disabled]="element.type === 'label' || element.type === 'layout_line'">
+                                                                                                </mat-slide-toggle>
+                                                                                            </div>
+                                                                                            <div class="col-md-2">
+                                                                                                <h2 class="jeEmY">Estatus</h2>
+                                                                                                <mat-slide-toggle
+                                                                                                    name="status_{{i}}"
+                                                                                                    [(ngModel)]="element.status"
+                                                                                                    [checked]="element.status"
+                                                                                                    (change)="!element.status">
+                                                                                                </mat-slide-toggle>
+                                                                                            </div>
+                                                                                            <div class="col-md-2">
+                                                                                                <h2 class="jeEmY"></h2>
+                                                                                                <mat-action-row>
+                                                                                                    <button mat-button color="warn" (click)="deleteFormField(element, i)">Eliminar</button>
+                                                                                                </mat-action-row>
+                                                                                            </div>
+                                                                                            
+                                                                                        </div>
+                                                                                        <div class="row" *ngIf="element.type == 'spinner' || element.type == 'radio' || element.type == 'chip'">
+                                                                                            <div class="col-md-12">
+                                                                                                <h2 class="jeEmY">Respuestas</h2>
+                                                                                                <ng-container>
+                                                                                                    <ng-select [items]="(element.datos)"
+                                                                                                            bindLabel="value"
+                                                                                                            appendTo="body"
+                                                                                                            [addTag]="true"
+                                                                                                            [selectOnTab]="true"
+                                                                                                            [isOpen]="false"
+                                                                                                            [multiple]="true"
+                                                                                                            [(ngModel)]="element.datos"
+                                                                                                            placeholder="Respuestas"
+                                                                                                            class="width-full"
+                                                                                                            name="datos_{{i}}"
+                                                                                                            [required]="true">
+                                                                                                    </ng-select>
+                                                                                                </ng-container>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        <div class="row" *ngIf="showRespuestas(element.type)">
+                                                                                            <div class="col-md-12">
+                                                                                                <h2 class="jeEmY">Respuestas</h2>
+                                                                                                <ng-container>
+                                                                                                    <input type="text" name="datos_{{i}}" [(ngModel)]="element.datos" class="form-control width-full" [required]="false">
+                                                                                                </ng-container>
+                                                                                            </div>
+                                                                                        </div>
+                                                                                        
+                                                                                    </div>
+                                                                                </div>
+                                                                            </td>
+                                                                        </ng-container>
+                                                                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                                                        <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                                                                            class="example-element-row"
+                                                                            [class.example-expanded-row]="expandedElement === element"
+                                                                            (click)="expandedElement = expandedElement === element ? null : element"
+                                                                            cdkDrag>
+                                                                        </tr>
+                                                                        <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];"  class="example-detail-row"></tr>
+                                                                    </table>
+                                                                    <div style="margin-top: 10px;" >      
+                                                                        <button mat-button color="primary" type="submit" style="float: right;" *ngIf="booaction && isLoadingSave" [disabled]="!formPila.form.valid" (click)="updatePila(dataSource.data)">Actualizar</button>
+                                                                        <button mat-button color="primary" type="submit" style="float: right;" *ngIf="!booaction && isLoadingSave"[disabled]="!formPila.form.valid" (click)="savePila(dataSource.data)">Guardar</button>
+                                                                    </div>
+                                                                    <br>
+                                                                </form> 
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-1"></div>
+                                    </div>
+                                </main>
+                            </mat-sidenav-content>
+                        </mat-sidenav-container>
+                    </mat-drawer-container>
+                </mat-sidenav-content>
+            </mat-sidenav-container>
+        </div>
+    </div>
+</mat-drawer-container>

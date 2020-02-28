@@ -17,10 +17,11 @@
   </header>
   <div class="navigator-search">
     <div class="row">
-      <div class="col-10">
+      <div class="col-12">
         <div class="row">
 
-          <div class="col" *ngIf="selectedColumnnFilterDate && selectedColumnnFilterDate.length > 0">
+
+          <div class="col-sm" *ngIf="selectedColumnnFilterDate && selectedColumnnFilterDate.length > 0">
             <ng-select [items]="selectedColumnnFilterDate"
             bindLabel="name"
             placeholder="Fecha"
@@ -29,7 +30,7 @@
             </ng-select>            
           </div>
 
-          <div class="col" *ngIf="selectedDate && selectedDate.value == 4">
+          <div class="col-sm" *ngIf="selectedDate && selectedDate.value == 4">
             <mat-form-field  >
               <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde" >
               <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
@@ -37,7 +38,7 @@
             </mat-form-field>    
           </div>
 
-          <div class="col" *ngIf="selectedDate && selectedDate.value == 4">
+          <div class="col-sm" *ngIf="selectedDate && selectedDate.value == 4">
             <mat-form-field >
               <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" (dateChange)="datePicker($event)" >
               <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
@@ -45,8 +46,7 @@
             </mat-form-field>    
           </div>
 
-
-          <div class="col" *ngIf="project && project.service.length > 0">
+          <div class="col-sm" *ngIf="project && project.service.length > 0">
             <ng-select [items]="project.service"
             bindLabel="service_name"
             placeholder="Servicio"
@@ -55,7 +55,7 @@
             </ng-select>            
           </div>
 
-          <div class="col" *ngIf="servicetype && servicetype.length > 0">
+          <div class="col-sm" *ngIf="servicetype && servicetype.length > 0">
             <ng-select [items]="servicetype"
             bindLabel="name"
             placeholder="Servicio"
@@ -64,8 +64,16 @@
             </ng-select>            
           </div>
 
+          <div class="col-sm" *ngIf="servicestatus && servicestatus.length > 0">
+            <ng-select [items]="servicestatus"
+            bindLabel="name"
+            placeholder="Estatus"
+            [(ngModel)]="selectedServiceStatus"
+            (change)="searchServiceStatus(selectedServiceStatus)">
+            </ng-select>            
+          </div>
 
-          <div class="col" *ngIf="masterusers && masterusers.length > 0">
+          <div class="col-sm" *ngIf="masterusers && masterusers.length > 0">
             <ng-select [items]="masterusers"
             bindLabel="usuario"
             placeholder="Informador"
@@ -73,17 +81,49 @@
             (change)="searchInformador(selectedMaster)">
              </ng-select>
           </div>
-          <div class="col" *ngIf="users && users.length > 0">
+
+          <div class="col-sm" *ngIf="users && users.length > 0">
               <ng-select [items]="users"
               bindLabel="usuario"
               placeholder="Responsable"
               [(ngModel)]="selectedResponsable"
               (change)="searchResponsable(selectedResponsable)">
                </ng-select>
-          </div>  
+          </div>
+
+          <div class="col-sm" *ngIf="teams && teams.length > 0">
+            <ng-select [items]="teams"
+            bindLabel="descripcion"
+            placeholder="Equipo"
+            [(ngModel)]="selectedTeam"
+            (change)="searchEquipo(selectedTeam)">
+             </ng-select>
+        </div>
+
+
+          <div class="col-sm" align="right">
+            <button type="button"
+            class="btn btn-light btn-sm"
+            [matMenuTriggerFor]="menuviewselectaction"
+            matTooltip="Exportar las incidencias."
+            [matTooltipPosition]="positionleftaction.value"
+
+            (event)="$event.stopinmediatePropagation()"
+            >
+            <mat-icon class="material-icons md-14" >save_alt</mat-icon>Exportar</button>
+            <mat-menu #menuviewselectaction="matMenu" [overlapTrigger]="false" >
+              <button mat-menu-item (click)="ExportTOExcel(1)" >
+                <span >Incidencias actuales</span>
+              </button>            
+              <button mat-menu-item (click)="ExportTOExcel(1, 1000)" matTooltip="Hasta 1000 incidencias." [matTooltipPosition]="positionleftaction.value">
+                <span >Todos los incidencias</span>
+              </button>
+            </mat-menu>
+          </div>
+
+
         </div>        
       </div>
-      <div class="col-2"></div>
     </div>
   </div>
 </div>
@@ -147,7 +187,14 @@
           <mat-header-cell *matHeaderCellDef mat-sort-header  > Realizado En </mat-header-cell>
             <mat-cell *matCellDef="let order"> 
                 <span class="mobile-label">Realizado En:</span>
-              {{order.orderdetail_direccion}} 
+                <ng-container *ngIf="order.orderdetail_direccion && order.latitud && order.longitud">
+                  <a href="https://maps.google.com/?q={{order.latitud}},{{order.longitud}}" 
+                  matTooltip="Google Map"
+                  target="_blank">{{order.orderdetail_direccion}}</a>
+                </ng-container>
+                <ng-container *ngIf="order.orderdetail_direccion && !order.latitud && !order.longitud">
+                  {{order.orderdetail_direccion}}
+                </ng-container>        
             </mat-cell>
         </ng-container>
 
@@ -161,7 +208,7 @@
 
 
         <ng-container matColumnDef="servicetype" >
-          <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo Servicio </mat-header-cell>
+          <mat-header-cell *matHeaderCellDef mat-sort-header> Servicio </mat-header-cell>
             <mat-cell *matCellDef="let order"> 
                 <span class="mobile-label">T. Serv.:</span>
               {{order.servicetype}}     
@@ -263,7 +310,7 @@
             </button>
 
           <mat-menu #menuviewshoworder="matMenu" [overlapTrigger]="false">
-              <button mat-menu-item (click)="showItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.estatus, order.order_date, order.required_date, order.vencimiento_date, order.observation, order.create_at, order.user, order.project_name, order.service_name, order.servicetype, order.update_at, order.userupdate, order.region, order.provincia, order.comuna, order.direccion)">
+              <button mat-menu-item (click)="showItem(order.order_id, order.order_number, order.category_id, order.customer_id, order.cc_number, order.servicetype_id, order.status_id, order.estatus, order.order_date, order.required_date, order.vencimiento_date, order.observation, order.create_at, order.user, order.project_name, order.service_name, order.servicetype, order.update_at, order.userupdate, order.region, order.provincia, order.comuna, order.direccion, order.service_id)">
                 <span >Ver orden</span>
               </button>
               <a mat-menu-item [routerLink]="['/formview/orderview/', order.service_id, order.order_id]" target="_blank" style="color: rgba(0, 0, 0, 0.87) !important">

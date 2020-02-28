@@ -24,13 +24,26 @@
                 </div>
                 <div class="col-sm-6">
                             <label for="nombre">Responsable</label>
-                            <ng-select [items]="users"
-                            bindLabel="usuario"
-                            bindValue="id"
-                            name="owner_id"
-                            placeholder="Responsable"
-                            formControlName="owner_id">
-                           </ng-select>            
+                            <mat-select
+                                placeholder="Responsable"
+                                appendTo="body"
+                                class="form-control"
+                                formControlName="owner_id">
+                                <mat-option *ngFor="let u of users" 
+                                            [value]="u.id">
+                                            {{ u.usuario }}
+                                </mat-option>
+                            </mat-select> 
+                            
+                    <!---
+                    <ng-select [items]="users"
+                    bindLabel="usuario"
+                    bindValue="id"
+                    name="owner_id"
+                    placeholder="Responsable"
+                    formControlName="owner_id"
+                    >
+                    </ng-select>-->
                     <!---
                     <label for="dni">Proyecto</label>
                     <select formControlName="project_id" name="project_id" class="form-control" *ngIf="proyectos && project_id" required>

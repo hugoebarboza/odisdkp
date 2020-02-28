@@ -5,6 +5,7 @@ import { Routes, RouterModule } from '@angular/router';
 import { AtributoAlertComponent } from './atributo-alert/atributo-alert.component';
 import { CreateFormComponent } from './create-form/create-form.component';
 import { FormviewComponent } from './formview/formview.component';
+import { FormularioComponent } from './formulario/formulario.component';
 import { OrderViewComponent } from './order-view/order-view.component';
 
 // Guards
@@ -29,6 +30,12 @@ const routes: Routes = [
     component: CreateFormComponent,
     canActivate: [AuthguardService],
     data: { path: 'orderview', titulo: 'OCA Global - ODIS Crear Formulario', subtitle: 'Configuración de Formularios', descripcion: 'OCA Global - ODIS Form Managment'}
+  },
+  {
+    path: 'formularios/:id',
+    component: FormularioComponent,
+    canActivate: [AuthguardService],
+    data: { path: 'orderview', titulo: 'OCA Global - ODIS Crear Formulario', subtitle: 'Configuración de formularios', descripcion: 'OCA Global - ODIS Form Managment'}
   },
   {
     path: 'orderview/:serviceid/:orderid',

@@ -72,8 +72,11 @@
                                   <button type="button" class="btn btn-light btn-sm" (click)="openDialogUser(id)"><mat-icon class="material-icons md-14">people</mat-icon>Usuarios</button>
                                 </div>
                                 <div class="btn-group mr-2" role="group" aria-label="Second group">
-                                  <button type="button" class="btn btn-light btn-sm" [routerLink]="['/formview/form/', id, 'settings', 0]"><mat-icon class="material-icons md-14">receipt</mat-icon>Formularios</button>
+                                  <button type="button" class="btn btn-light btn-sm" [routerLink]="['/formview/form/', id, 'settings', 0]"><mat-icon class="material-icons md-14">receipt</mat-icon>Recursos</button>
                                 </div>
+                                <div class="btn-group mr-2" role="group" aria-label="Second group">
+                                  <button type="button" class="btn btn-light btn-sm" [routerLink]="['/formview/formularios/', id]"><mat-icon class="material-icons md-14">description</mat-icon>Formularios</button>
+                                </div>                                 
                                 <div class="btn-group mr-2" role="group" aria-label="Second group">
                                   <button type="button" class="btn btn-light btn-sm" [routerLink]="['/formview/notification/', id]"><mat-icon class="material-icons md-14" style="color: crimson;">add_alert</mat-icon>Notificaciones Insp.</button>
                                 </div>                                

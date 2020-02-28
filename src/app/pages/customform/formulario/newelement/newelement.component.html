@@ -1,0 +1,98 @@
+
+<div class="container-fluid viewmedia">
+    <div class="container-fluid" *ngIf="!roles" style="margin-top: 10px; margin-bottom: 10px; height: 17px;">
+        <div class="row">
+            <div class="col-sm">
+                <div class="row d-flex justify-content-center">
+                    <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" ></mat-spinner>
+                </div>                        
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <form ngNativeValidate [formGroup]="forma">
+                <div class="row">
+                    <div class="col-md-6">                                                            
+                        <h2 class="jeEmY">Tipo de elemento</h2>
+                        <mat-select
+                            placeholder="Tipo"
+                            formControlName="type"
+                            class="form-control"
+                            (selectionChange)="changetype($event.value)">
+                            <mat-option *ngFor="let t of types" 
+                                        [value]="t.type">
+                                        {{ t.value }}
+                            </mat-option>
+                        </mat-select>
+                    </div>
+                    <div class="col-md-6">
+                        <h2 class="jeEmY">Descripción</h2>
+                        <input type="text" formControlName="descripcion" class="form-control width-full">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6">
+                        <h2 class="jeEmY">Rol</h2>
+                        <mat-select
+                            placeholder="Roles"
+                            appendTo="body"
+                            class="form-control"
+                            formControlName="rol">
+                            <mat-option *ngFor="let r of roles" 
+                                        [value]="r.id">
+                                        {{ r.title }}
+                            </mat-option>
+                        </mat-select>   
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="jeEmY">Obligatorio</h2>
+                        <mat-slide-toggle
+                            formControlName="required">
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="jeEmY">Estatus</h2>
+                        <mat-slide-toggle
+                            formControlName="status">
+                        </mat-slide-toggle>
+                    </div>
+                    <div class="col-md-2">
+                        <h2 class="jeEmY">Posición</h2>
+                        <input type="number" formControlName="order_by" class="form-control width-full">
+                    </div>
+                </div>
+                <div class="row" *ngIf="forma.value.type == 'spinner' || forma.value.type == 'radio' || forma.value.type == 'chip'">
+                    <div class="col-md-12">
+                        <h2 class="jeEmY">Respuestas</h2>
+                        <ng-container *ngIf="forma.value.type == 'spinner' || forma.value.type == 'radio' || forma.value.type == 'chip'">
+                            <ng-select
+                                    formControlName="datos"
+                                    bindLabel="value"
+                                    [addTag]="true"
+                                    [selectOnTab]="true"
+                                    [isOpen]="false"
+                                    [multiple]="true"
+                                    placeholder="Respuestas"
+                                    class="width-full">
+                            </ng-select>
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="row" *ngIf="showRespuestas(forma.value.type)">
+                    <div class="col-md-12">
+                        <h2 class="jeEmY">Respuestas</h2>
+                        <ng-container>
+                            <input type="text" formControlName="datos" class="form-control width-full">
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="row" style="margin-bottom: 20px; margin-top: 20px;">
+                    <div class="col-md-12" align="center">
+                        <button mat-raised-button [disabled]="forma.invalid" (click)="addRow()">Guardar</button>                                        
+                    </div>
+                </div>
+                </form>
+        </div>
+    </div>
+</div>

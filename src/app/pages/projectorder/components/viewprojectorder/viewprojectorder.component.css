@@ -73,6 +73,7 @@
 }
 .material-icons.md-13-color { font-size: 13px; color: #809c13; padding: 1px;}
 .material-icons.md-13-nocolor { font-size: 13px; color: #CFCFCF; padding: 1px;}
+.material-icons.md-14 { font-size: 14px; }
 .material-icons.md-16 { font-size: 16px;}
 
 mat-header-cell, mat-header-row, .mat-header-cell-def{
@@ -113,7 +114,35 @@ color: white;
   margin-left: 5px;
   color: #707070;
 }
-
+.mat-icon-button {
+  outline: 0;
+  border: none;
+}
+.button {
+  outline: 0;
+  border: none;
+}
+.mat-menu-item {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  cursor: pointer;
+  outline: 0;
+  border: none;
+  -webkit-tap-highlight-color: transparent;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+  line-height: 48px;
+  height: 48px;
+  padding: 0 16px;
+  text-align: left;
+  text-decoration: none;
+  max-width: 100%;
+  position: relative;
+}
 .mobile-label {
     display: none;
   }

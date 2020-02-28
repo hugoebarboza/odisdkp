@@ -53,7 +53,7 @@
                     <div class="col-sm-12">
                         <div class="alert alert-danger" *ngIf="status == 'error'">
                             No se encontraron registros que coincidan con su búsqueda. 
-                            <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                            <button mat-button color="primary" (click)="cargarUsuarios()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
                         </div>
                     </div>
                 </div>
@@ -130,6 +130,7 @@
                                           bindLabel="title"
                                           bindValue="id"
                                           placeholder="Roles"
+                                          appendTo="body"
                                           [(ngModel)]="usuario.role_id">
                                           </ng-select>                                          
                                           </div>
@@ -142,12 +143,17 @@
                                           </select>                            
                                         </td>
         
-                                        <td align="center" *ngIf="_userService.isRole(8)">
+                                        <td align="center" >
         
-                                          <button mat-icon-button  (click)="usuario.verified=!usuario.verified; onChangeIcon(usuario.id, usuario.verified) " *ngIf="usuario.id !== identity.sub">
+                                          <button mat-icon-button  (click)="usuario.verified=!usuario.verified; onChangeIcon(usuario.id, usuario.verified) " *ngIf="usuario.id !== identity.sub && _userService.isRole(8)">
                                           <mat-icon class="material-icons md-20-color-green" *ngIf="usuario.verified == 1">verified_user</mat-icon>
                                           <mat-icon class="material-icons md-20-color-red" *ngIf="usuario.verified == 0">verified_user</mat-icon>
                                           </button>
+
+                                          <div *ngIf="!_userService.isRole(8)">
+                                            <mat-icon class="material-icons md-20-color-green" *ngIf="usuario.verified == 1">verified_user</mat-icon>
+                                            <mat-icon class="material-icons md-20-color-red" *ngIf="usuario.verified == 0">verified_user</mat-icon>
+                                          </div>
                                         </td>
         
                                         <td>
@@ -180,7 +186,7 @@
                                               <mat-icon aria-label="Edit" >edit</mat-icon>          
                                           </button>            
                               
-                                          <button mat-icon-button color="primary" matTooltip="Configuración de acceso del Usuario." [matTooltipPosition]="positionheaderaction.value" *ngIf="_userService.isRole(7) && usuario.status === 1" (click)="setting(usuario)">
+                                          <button mat-icon-button color="primary" matTooltip="Configuración de acceso del Usuario." [matTooltipPosition]="positionheaderaction.value" *ngIf="_userService.isRole(7) && usuario.status === 1 && identity.role >= usuario.role_id" (click)="setting(usuario)">
                                               <mat-icon aria-label="Edit" >account_circle</mat-icon>          
                                           </button>            
         

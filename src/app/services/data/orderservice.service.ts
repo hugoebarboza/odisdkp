@@ -12,7 +12,7 @@ import 'rxjs/add/operator/shareReplay';
 // CACHE
 import { Cacheable } from 'ngx-cacheable';
 
-import Swal from 'sweetalert2';
+// import Swal from 'sweetalert2';
 
 // MODELS
 import {  Order, ServiceEstatus } from 'src/app/models/types';
@@ -216,7 +216,7 @@ import { GLOBAL } from '../global';
           'Content-Type':  'application/json'
         })
       };
-      return this._http.get(url, {headers: httpOptions.headers}).map((res: any) => res).shareReplay();
+      return this._http.get(url, {headers: httpOptions.headers}).map((res: any) => res);
 
       /*const headers = new HttpHeaders({'Content-Type': 'application/json' });
       return this.getQuery('service/' + id + '/order/' + orderid, token);*/
@@ -331,32 +331,27 @@ import { GLOBAL } from '../global';
     return this._http.post(this.url + 'service/' + id + '/estatus/', params, {headers: headers}).map( (resp: any) => resp);
   }
 
-  update(token: any, orderid: number, order: Order, id: number): void {
+
+  async update(token: any, orderid: number, order: Order, id: number) {
     if (!token) {
       return;
     }
 
-    const json = JSON.stringify(order);
-    const params = 'json=' + json;
-    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    try {
+      const json = JSON.stringify(order);
+      const params = 'json=' + json;
+      const href = this.url + 'project/' + id + '/order/' + orderid;
+      const requestUrl = href;
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.put(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this.handleError (error); }
+      );
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
 
-    this._http.put(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, params, {headers: headers}).subscribe(
-       (data: any) => {
-        // this.toasterService.success('Orden de Trabajo actualizada.', 'Exito', {timeOut: 6000,});
-              this.dialogData = order;
-              if (data.status === 'success') {
-              Swal.fire('Actualizada Orden de Trabajo: ', this.dialogData.order_number + ' exitosamente.', 'success' );
-              } else {
-              Swal.fire('N. Orden de Trabajo: ', this.dialogData.order_number + ' no actualizada.' , 'error');
-              }
-            },
-            (err: HttpErrorResponse) => {
-            // this.error = err.error.message;
-            // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-            Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
-        });
   }
-
 
   updateEstatus(token: any, data: ServiceEstatus, id: number): Observable<any> {
     if (!token) {

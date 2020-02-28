@@ -1,9 +1,9 @@
 import { Component, OnInit, OnDestroy, Inject } from '@angular/core';
-
 import { Router } from '@angular/router';
 import { FormControl, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { shareReplay, tap } from 'rxjs/operators';
 
 import Swal from 'sweetalert2';
 // FIREBASE
@@ -494,11 +494,15 @@ export class ClonarOtComponent implements OnInit, OnDestroy  {
       this.loading = true;
       this.order = null;
       // tslint:disable-next-line:max-line-length
-      this.subscription = this._orderService.getShowOrderService(this.token.token, this.infodata['service_id'], this.infodata['order_id']).subscribe(
-      response => {
-      if (!response) {
-        return;
-         }
+      this.subscription = this._orderService.getShowOrderService(this.token.token, this.infodata['service_id'], this.infodata['order_id'])
+      .pipe(
+        tap(),
+        shareReplay()
+      )
+      .subscribe( response => {
+          if (!response) {
+              return;
+          }
 
           this.order = response.datos;
 

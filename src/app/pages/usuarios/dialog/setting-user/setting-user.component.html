@@ -255,7 +255,7 @@
 
 
 <div mat-dialog-actions >      
-    <button mat-button color="primary" type="submit"  class="btnsave" (click)="submit(form)">Actualizar</button>
+    <button mat-button color="primary" type="submit"  class="btnsave" (click)="submit(form)" [disabled]="buttonactive">Actualizar</button>
     <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
 </div>
 

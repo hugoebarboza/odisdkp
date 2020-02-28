@@ -1,6 +1,7 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs/Subscription';
+import { shareReplay, tap } from 'rxjs/operators';
 // import { HttpHeaders, HttpClient } from '@angular/common/http';
 // import { startWith, map } from 'rxjs/operators';
 
@@ -313,10 +314,15 @@ export class ShowComponent implements OnInit, OnDestroy {
       */
 
       return this._orderService.getShowOrderService(this.token.token, this.data['service_id'], this.data['order_id'])
+      .pipe(
+        tap(),
+        shareReplay()
+      )
       .subscribe( res => {
         if (!res) {
           return;
         }
+        console.log(res);
         return this.getData(res);
       }
       );

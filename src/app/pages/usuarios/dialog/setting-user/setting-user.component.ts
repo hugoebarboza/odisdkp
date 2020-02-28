@@ -25,6 +25,7 @@ import { ToastrService } from 'ngx-toastr';
 })
 export class SettingUserComponent implements OnInit {
 
+  buttonactive = false;
   form: FormGroup;
   identity: any;
   isLoading = false;
@@ -235,6 +236,8 @@ export class SettingUserComponent implements OnInit {
       return;
     }
 
+    this.buttonactive = true;
+
     const pila = {pila: []};
 
     for (let i = 0; i < data.value.roles.length; i += 1) {
@@ -253,6 +256,7 @@ export class SettingUserComponent implements OnInit {
         Swal.fire('Se procesó exitosamente el perfil del usuario:', this.usuario.name + ' ' + this.usuario.surname, 'success' );
       } else {
         Swal.fire('Ha ocurrido un error con el perfil del usuario:', this.usuario.name + ' ' + this.usuario.surname, 'error');
+        this.buttonactive = false;
         // this.snackBar.open('Error procesando solicitud!!!', '', {duration: 3000});
       }
 

@@ -1,6 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
+import { shareReplay, tap } from 'rxjs/operators';
 
 // MODELS
 import { AtributoFirma, Order, OrderAtributoFirma, User } from 'src/app/models/types';
@@ -187,7 +188,12 @@ export class OrderViewComponent implements OnInit, OnDestroy {
       this.getListImage();
       this.project_id = this.filterProjectByService();
       this.cargarProjectForm(this.project_id);
-      this.subscription = this._orderService.getShowOrderService(this.token.token, this.service_id, this.order_id).subscribe(
+      this.subscription = this._orderService.getShowOrderService(this.token.token, this.service_id, this.order_id)
+      .pipe(
+        tap(),
+        shareReplay()
+      )
+      .subscribe(
       response => {
         if (!response) {
           this.isloading = false;

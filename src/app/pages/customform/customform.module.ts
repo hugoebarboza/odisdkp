@@ -14,9 +14,11 @@ import { CreateFormComponent } from './create-form/create-form.component';
 import { EditFormComponent } from './dialog/edit-form/edit-form.component';
 import { EditNotificationComponent } from './atributo-alert/dialog/edit-notification/edit-notification.component';
 import { FormviewComponent } from './formview/formview.component';
+import { FormularioComponent } from './formulario/formulario.component';
 import { ListNotificationComponent } from './atributo-alert/dialog/list-notification/list-notification.component';
 import { MakeFormComponent } from './dialog/make-form/make-form.component';
 import { NewAlertComponent } from './atributo-alert/dialog/new-alert/new-alert.component';
+import { NewelementComponent } from './formulario/newelement/newelement.component';
 import { OrderViewComponent } from './order-view/order-view.component';
 
 // DIALOG
@@ -61,9 +63,11 @@ import { SupportModule } from '../support/support.module';
     EditFormComponent,
     EditNotificationComponent,
     FormviewComponent,
+    FormularioComponent,
     ListNotificationComponent,
     MakeFormComponent,
     NewAlertComponent,
+    NewelementComponent,
     OrderViewComponent,
   ],
   entryComponents: [
