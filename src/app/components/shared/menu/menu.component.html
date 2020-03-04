@@ -18,14 +18,14 @@
               <ul class="collapse list-unstyled" id="pro{{proyectos[k].id}}" >
 
                   <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="_userService.isRole(6)">
-                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/calendar', proyectos[k].id]" > 
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/calendar', proyectos[k].id]" title="Añade, quita, cambia de nombre, mueve o busca eventos."> 
                         <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'calendar'">date_range</i> 
                         <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'calendar' ">calendar_today</i> 
                         Calendario
                       </a>
                   </li>
                   <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="_userService.isRole(7)">
-                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/project', proyectos[k].id]" > 
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/project', proyectos[k].id]" title="Añade, quita, cambia de nombre, mueve o busca una unidad organizativa"> 
                         <!--<i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'project'">folder</i>-->
                         <!--<i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'project' ">folder_open</i> -->
                         
@@ -35,27 +35,41 @@
                       </a>
                   </li>
                   <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="_userService.isRole(7)">
-                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/users', proyectos[k].id]" > 
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/users', proyectos[k].id]" title="Añade, quita, cambia de nombre, mueve o busca usuarios."> 
                         <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'users'">person</i>
                         <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'users' ">person_outline</i>                        
                         Usuarios
                       </a>
                   </li>
                   <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="_userService.isRole(7)">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/team', proyectos[k].id]" > 
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/team', proyectos[k].id]" title="Añade, quita, cambia de nombre, mueve o busca equipos de trabajo."> 
                       <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'team'">people</i>
                       <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'team' ">people_outline</i>     
                       Equipos
                     </a>
                   </li>
+
                   <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="_userService.isRole(7)">
-                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/projectorder', proyectos[k].id]" > 
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/notificationorder', proyectos[k].id]" title="Visualiza todas las notificaciones de las incidencias."> 
+                      <i class="material-icons md-14-color" *ngIf="proyectos[k].id === projectselected && path === 'notificationorder'">
+                        <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation"><path d="M6.485 17.669a2 2 0 0 0 2.829 0l-2.829-2.83a2 2 0 0 0 0 2.83zm4.897-12.191l-.725.725c-.782.782-2.21 1.813-3.206 2.311l-3.017 1.509c-.495.248-.584.774-.187 1.171l8.556 8.556c.398.396.922.313 1.171-.188l1.51-3.016c.494-.988 1.526-2.42 2.311-3.206l.725-.726a5.048 5.048 0 0 0 .64-6.356 1.01 1.01 0 1 0-1.354-1.494c-.023.025-.046.049-.066.075a5.043 5.043 0 0 0-2.788-.84 5.036 5.036 0 0 0-3.57 1.478z" fill="currentColor" fill-rule="evenodd"></path></svg>                        
+                      </i>
+                      <i class="material-icons md-14" *ngIf="proyectos[k].id != projectselected || path != 'notificationorder' ">
+                        <svg width="24" height="24" viewBox="0 0 24 24" focusable="false" role="presentation"><path d="M6.485 17.669a2 2 0 0 0 2.829 0l-2.829-2.83a2 2 0 0 0 0 2.83zm4.897-12.191l-.725.725c-.782.782-2.21 1.813-3.206 2.311l-3.017 1.509c-.495.248-.584.774-.187 1.171l8.556 8.556c.398.396.922.313 1.171-.188l1.51-3.016c.494-.988 1.526-2.42 2.311-3.206l.725-.726a5.048 5.048 0 0 0 .64-6.356 1.01 1.01 0 1 0-1.354-1.494c-.023.025-.046.049-.066.075a5.043 5.043 0 0 0-2.788-.84 5.036 5.036 0 0 0-3.57 1.478z" fill="currentColor" fill-rule="evenodd"></path></svg>                        
+                      </i>     
+                      Notificaciones
+                    </a>
+                  </li>
+
+
+                  <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngIf="_userService.isRole(7)">
+                    <a class="nav-link" routerLinkActive="active" [routerLink]="['/projectorder', proyectos[k].id]" title="Visualiza todas las incidencias de {{proyectos[k].project_name}}">
                       Todas las incidencias
                     </a>
                   </li>
 
                   <li routerLinkActive="active-link" [routerLinkActiveOptions]="{exact: true}" *ngFor="let service of proyectos[k].service; let i = index" (click)="navigate(service.id)">
-                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', service.id]" > 
+                      <a class="nav-link" routerLinkActive="active" [routerLink]="['/service', service.id]" title="Visualiza las incidencias de {{service.service_name}}.">
                         <!--
                           <i class="material-icons md-14-color" *ngIf="service.id === selected && path === 'service'">launch</i> 
                           <i class="material-icons md-14" *ngIf="service.id != selected || path != 'service'">launch</i>

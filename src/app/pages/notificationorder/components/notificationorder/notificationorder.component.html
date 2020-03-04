@@ -1,0 +1,237 @@
+<div class="p-4" id="content">
+    <header class="saved-search-selector">
+      <div id="search-header-view">
+        <div class="header-section-primary">
+        <h1 class="search-title" >{{project_name}} - Notificaciones de incidencias
+          <a class="refresh-table" href="javascript:;" (click)="load()" >
+            <i class="material-icons md-16" matTooltip="Refrescar" [matTooltipPosition]="positionrightaction.value">sync</i>
+          </a>   
+        </h1>
+        <div class="fFIwAW">
+          <span *ngIf="since">
+          {{country}}, desde {{since}}.
+          </span>
+        </div>
+        </div>
+      </div>        
+    </header>
+
+<div class="navigator-search">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+    
+              <div class="col-sm" *ngIf="selectedColumnnFilterDate && selectedColumnnFilterDate.length > 0">
+                <ng-select [items]="selectedColumnnFilterDate"
+                bindLabel="name"
+                placeholder="Fecha"
+                [(ngModel)]="selectedDate"
+                (change)="searchDate(selectedDate)">
+                </ng-select>            
+              </div>
+
+              <div class="col-sm" *ngIf="selectedDate && selectedDate.value == 4">
+                <mat-form-field  >
+                  <input matInput [matDatepicker]="fecha1" placeholder="Desde" [(ngModel)]="selectedColumnnDate.columnValueDesde" >
+                  <mat-datepicker-toggle matSuffix [for]="fecha1"></mat-datepicker-toggle>
+                  <mat-datepicker #fecha1 ></mat-datepicker>
+                </mat-form-field>    
+              </div>
+    
+              <div class="col-sm" *ngIf="selectedDate && selectedDate.value == 4">
+                <mat-form-field >
+                  <input matInput [min]="selectedColumnnDate.columnValueDesde" [matDatepicker]="fecha2" placeholder="Hasta" [(ngModel)]="selectedColumnnDate.columnValueHasta" (dateChange)="datePicker($event)" >
+                  <mat-datepicker-toggle matSuffix [for]="fecha2"></mat-datepicker-toggle>
+                  <mat-datepicker #fecha2 ></mat-datepicker>
+                </mat-form-field>    
+              </div>
+    
+              <div class="col-sm" *ngIf="project && project.service.length > 0">
+                <ng-select [items]="project.service"
+                bindLabel="service_name"
+                placeholder="Servicio"
+                [(ngModel)]="selectedService"
+                (change)="searchService(selectedService)">
+                </ng-select>            
+              </div>
+    
+              <div class="col-sm" *ngIf="servicetype && servicetype.length > 0">
+                <ng-select [items]="servicetype"
+                bindLabel="name"
+                placeholder="Servicio"
+                [(ngModel)]="selectedServiceType"
+                (change)="searchServiceType(selectedServiceType)">
+                </ng-select>            
+              </div>
+
+              <div class="col-sm" *ngIf="users && users.length > 0">
+                <ng-select [items]="users"
+                bindLabel="usuario"
+                placeholder="Responsable"
+                [(ngModel)]="selectedResponsable"
+                (change)="searchResponsable(selectedResponsable)">
+                 </ng-select>
+            </div>
+      
+
+            </div>
+        </div>
+    </div>
+</div>    
+
+</div>
+
+
+
+
+
+
+<div class="p-4">
+<div class="rate-limit-reached" *ngIf="isRateLimitReached">
+    No se encontraron registros que coincidan con su búsqueda.
+    <button mat-button color="primary" (click)="load()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+</div>
+
+
+    <mat-card [ngStyle]="{'padding':'0px'}">
+      <mat-card-header [ngClass]="{'custom-card':true}">
+      </mat-card-header>
+    
+      <mat-card-content>
+    
+        <div class="example-container" >
+          <div class="loading-shade" *ngIf="isLoading || isRateLimitReached">
+              <app-loading *ngIf="isLoading"></app-loading>
+              <!--<mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>--->
+          </div>
+          
+          <div class="row" >
+            <div class="col-md-12">
+    
+    
+              <mat-table #table  [dataSource]="dataSource" 
+              matSort    
+              (matSortChange)="handleSortChange($event)" 
+              [matSortActive]="sort.active" 
+              [matSortDirection]="sort.direction" 
+              matSortDisableClear  
+              [class.isMobile]="isMobile"
+              >
+          
+          
+          
+            <ng-container matColumnDef="order_number"  >  
+              <mat-header-cell *matHeaderCellDef mat-sort-header > N. Orden </mat-header-cell>
+                <mat-cell *matCellDef="let order; let i = index" >
+                    <span class="mobile-label">N. Orden:</span>
+                    {{order.order_number}}
+                  </mat-cell>
+            </ng-container>
+          
+          
+            <ng-container matColumnDef="type">
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Notificación </mat-header-cell>
+                <mat-cell *matCellDef="let order"> 
+                    <span class="mobile-label">Tipo de Notificación:</span>
+                  {{order.title}} 
+                </mat-cell>
+            </ng-container>
+              
+            <ng-container matColumnDef="service_name" >
+                <mat-header-cell *matHeaderCellDef mat-sort-header> Servicio </mat-header-cell>
+                  <mat-cell *matCellDef="let order"> 
+                      <span class="mobile-label">Servicio:</span>
+                    {{order.service_name}}     
+                  </mat-cell>
+              </ng-container>
+      
+    
+    
+            <ng-container matColumnDef="servicetype" >
+              <mat-header-cell *matHeaderCellDef mat-sort-header> Tipo de Servicio </mat-header-cell>
+                <mat-cell *matCellDef="let order"> 
+                    <span class="mobile-label">Tipo de Servicio:</span>
+                  {{order.servicetype}}     
+                </mat-cell>
+            </ng-container>
+    
+    
+    
+      <ng-container matColumnDef="user" >
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Informador </mat-header-cell>
+          <mat-cell *matCellDef="let order"> 
+              <span class="mobile-label">Informador:</span>
+            {{order.user}} 
+          </mat-cell>
+      </ng-container>
+    
+    
+   
+    
+      <ng-container matColumnDef="create_at" >
+        <mat-header-cell *matHeaderCellDef mat-sort-header> Creado El </mat-header-cell>
+          <mat-cell *matCellDef="let order"> 
+              <span class="mobile-label">Creado El:</span>
+            {{order.create_at }}
+          </mat-cell>
+      </ng-container>
+    
+    
+    
+  
+    
+          <ng-container matColumnDef="actions" >
+            <mat-header-cell *matHeaderCellDef >        
+            </mat-header-cell>
+            <mat-cell *matCellDef="let order; let i = index" >
+    
+              <button mat-icon-button  [matMenuTriggerFor]="menuviewshoworder"  matTooltip="Acciones (Presiona para acceder a la visualización de la notificación)" [matTooltipPosition]="positionheaderaction.value">
+                <mat-icon class="material-icons md-color" aria-label="launch" *ngIf="i != indexitem">launch</mat-icon>
+                <mat-icon aria-label="launch" *ngIf="i == indexitem">launch</mat-icon>
+                </button>
+    
+              <mat-menu #menuviewshoworder="matMenu" [overlapTrigger]="false">
+                <button mat-menu-item (click)="showNotificationItem(order.servicetype_id, order.formnotification_id)">
+                    <span >Ver notificación</span>
+                  </button>
+
+                <button mat-menu-item (click)="showItem(order.order_id, order.service_id)">
+                    <span >Ver orden</span>
+                  </button>
+                  <a mat-menu-item [routerLink]="['/formview/orderview/', order.service_id, order.order_id]" target="_blank" style="color: rgba(0, 0, 0, 0.87) !important">
+                    <span >Ver orden y formularios</span>
+                  </a>
+              </mat-menu> 
+    
+            </mat-cell>
+          </ng-container>
+    
+    
+          
+            <mat-header-row *matHeaderRowDef="columnsOrderToDisplay" color="primary" ></mat-header-row>
+            <mat-row *matRowDef="let order; let i = index; columns: columnsOrderToDisplay;" (click)="setClickedRow(i, order.order_id)" (mouseenter)="hoverIn(i)" (mouseleave)="hoverOut(i)" [class.active]="i == selectedRow"></mat-row>
+          
+          
+          
+            </mat-table>
+          
+    
+    
+            </div>
+          </div>
+    
+          <mat-paginator    [length]="resultsLength"
+          [pageSize]="pageSize"
+          [pageSizeOptions]="pageSizeOptions"
+          (page)="onPaginateChange($event)"
+          [showFirstLastButtons]="true" 
+          [ngClass]="{'custom-card':true}"
+          >
+          </mat-paginator>    
+    
+        </div>
+    
+      </mat-card-content>
+    
+    </mat-card>
+    </div>

@@ -267,7 +267,7 @@ export class EditComponent implements OnInit, OnDestroy {
           this.sendCdf(this.destinatario);
          }
         if (editot && editot.formnotificacion && editot.formnotificacion.length > 0) {
-          this.sendformnotificacion(editot.formnotificacion, obj);
+          this.sendformnotificacion(editot.formnotificacion, editot.order, editot.service, editot.servicetype);
         }
     } else {
         Swal.fire('N. Orden de Trabajo: ', obj.order_number + ' no actualizada.' , 'error');
@@ -342,17 +342,7 @@ export class EditComponent implements OnInit, OnDestroy {
 
   }
 
-  getServicetype(id: number): String {
-    for (let i = 0; i < this.servicetype.length; i++) {
-      const element = this.servicetype[i];
-      if (element.id === id) {
-        return element.name;
-      }
-    }
-  }
-
-
-  sendformnotificacion(formnotificacion: any, orderdata: any) {
+  sendformnotificacion(formnotificacion: any, order: any, service: any, servicetype: any) {
     if (!formnotificacion) {
       return;
     }
@@ -370,12 +360,12 @@ export class EditComponent implements OnInit, OnDestroy {
           fromTo: this.identity.email,
           subject: 'OCA GLOBAL - Nueva notificación - ' + element.main,
           body: element.body,
-          project: orderdata.project,
-          service_name: this.service_name,
-          servicetype_name: this.getServicetype(orderdata.servicetype_id),
-          order_number: orderdata.order_number,
-          service_id: orderdata.service_id,
-          order_id: orderdata.order_id
+          project: order.project,
+          service_name: service.service_name,
+          servicetype_name: servicetype.name,
+          order_number: order.order_number,
+          service_id: order.service_id,
+          order_id: order.order_id
           };
 
         // console.log(msg);
@@ -397,6 +387,8 @@ export class EditComponent implements OnInit, OnDestroy {
 
     }
   }
+
+
 
   sendCdf(data) {
     if (!data) {

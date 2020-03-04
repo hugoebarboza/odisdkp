@@ -6,10 +6,11 @@ import { Sort, MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 import { TooltipPosition } from '@angular/material/tooltip';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { Subscription } from 'rxjs/Subscription';
+// import { Subscription } from 'rxjs/Subscription';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { shareReplay, tap } from 'rxjs/operators';
+import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 // CSV
 import * as FileSaver from 'file-saver';
@@ -18,7 +19,7 @@ import * as FileSaver from 'file-saver';
 import { ShowComponent } from 'src/app/components/shared/shared.index';
 
 // SERVICES
-import { OrderserviceService, ProjectsService, SettingsService, UserService } from 'src/app/services/service.index';
+import { ModalManageService, OrderserviceService, ProjectsService, SettingsService, UserService } from 'src/app/services/service.index';
 
 
 // MOMENT
@@ -32,11 +33,13 @@ const moment = _moment;
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./viewprojectorder.component.css']
 })
+@UntilDestroy()
 export class ViewProjectOrderComponent implements OnDestroy {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) matSort: MatSort;
 
+  assigned_to: number;
   country = '';
   dataSource: MatTableDataSource<any>;
   datasourceLength = 0;
@@ -44,9 +47,10 @@ export class ViewProjectOrderComponent implements OnDestroy {
   id: number;
   identity: any;
   indexitem: any;
-  isLoading = true;
-  isRateLimitReached = false;
+  isLoading: boolean;
+  isRateLimitReached: boolean;
   isMobile = '';
+  masterusers = [];
   profile: any;
   project: any;
   project_name = '';
@@ -61,12 +65,12 @@ export class ViewProjectOrderComponent implements OnDestroy {
   servicestatus = [];
   since: any;
   sub: any;
-  subscription: Subscription;
+  // subscription: Subscription;
   teams = [];
   title = '';
   token: any;
   users = [];
-  masterusers = [];
+  
 
   // SEARCH PARAMS
   date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
@@ -137,6 +141,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
 
   constructor(
+    public _modalManage: ModalManageService,
     private _orderService: OrderserviceService,
     private _projectService: ProjectsService,
     private _route: ActivatedRoute,
@@ -197,27 +202,32 @@ export class ViewProjectOrderComponent implements OnDestroy {
     }
   }
 
+
   ngOnDestroy() {
+    this.dataSource = new MatTableDataSource();
+    /*
     if (this.subscription) {
       this.subscription.unsubscribe();
       this.dataSource = new MatTableDataSource();
-    }
+    }*/
   }
 
 
   getData(response: any, csv?: any) {
 
-    this.cd.markForCheck();
 
+    this.isLoading = true;
+    this.cd.markForCheck();
     if (response && response.status === 'success') {
       if (response.datos && response.datos.data) {
         this.dataSource = new MatTableDataSource(response.datos.data);
+        this.isLoading = false;
+        this.isRateLimitReached = false;
         if (this.dataSource && this.dataSource.data.length > this.datasourceLength) {
           this.datasourceLength = this.dataSource.data.length;
         }
         this.resultsLength = response.datos.total;
-        this.isRateLimitReached = false;
-        if (csv && csv === 1) {
+       if (csv && csv === 1) {
           this.buildCsv(this.dataSource);
         }
       } else {
@@ -225,10 +235,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
         this.isRateLimitReached = true;
         }
         this.isLoading = false;
-
+        this.isRateLimitReached = false;
         this.cd.markForCheck();
       } else {
       // console.log('No Response');
+      this.isLoading = false;
         this.cd.markForCheck();
         this.dataSource = new MatTableDataSource();
         return;
@@ -238,7 +249,6 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
   async load() {
     this.cd.markForCheck();
-    this.isLoading = true;
     this.filterValue = '';
     this.selectedColumnn.columnValue = '';
     this.selectedColumnn.fieldValue = '';
@@ -258,26 +268,25 @@ export class ViewProjectOrderComponent implements OnDestroy {
     this.selectedResponsable = 'Responsable';
     this.selectedTeam = 'Equipo';
     this.pageSize = 15;
-    this.sort.active = 'create_at';
+    this.sort.active = 'orders.create_at';
     this.sort.direction = 'desc';
-    if (this.paginator) {
-      this.paginator.pageIndex = 0;
-    } else {
-      this.pageIndex = 0;
-    }
+    this.pageIndex = 0;
+    this.isLoading = true;
 
 
-    this.subscription = this._projectService.getProjectOrderService(
+    this._projectService.getProjectOrderService(
       this.filterValue, this.searchparams, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
       .pipe(
-        tap(() => console.log('HTTP Request Executed') ),
-        shareReplay()
+        tap(),
+        shareReplay(),
+        untilDestroyed(this)
       )
       .subscribe( (resp: any) => {
         this.getData(resp);
+        // this.isLoading = false;
         this.snackBar.open('Incidencias de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
         this.cd.markForCheck();
       },
@@ -294,12 +303,12 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
   loadTeam(id: number) {
 
-    this.isLoading = true;
 
-    this.subscription = this._userService.getTeamPaginate( this.token.token, id)
+    this._userService.getTeamPaginate( this.token.token, id)
     .pipe(
       tap(),
-      shareReplay()
+      shareReplay(),
+      untilDestroyed(this)
     )
     .subscribe( (resp: any) => {
       // console.log(this.totalRegistros);
@@ -317,10 +326,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
   loadUserProject(id: number) {
 
-    this.subscription = this._projectService.getUserProject(this.token.token, id, 5)
+    this._projectService.getUserProject(this.token.token, id, 5)
     .pipe(
       tap(),
-      shareReplay()
+      shareReplay(),
+      untilDestroyed(this)
     )
     .subscribe(
     response => {
@@ -336,10 +346,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
    loadMasterUserProject(id: number) {
 
-    this.subscription = this._projectService.getMasterUserProject(this.token.token, id, 6)
+    this._projectService.getMasterUserProject(this.token.token, id, 6)
     .pipe(
       tap(),
-      shareReplay()
+      shareReplay(),
+      untilDestroyed(this)
     )
     .subscribe(
     response => {
@@ -356,10 +367,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
    loadServiceType(id: number) {
     this.cd.markForCheck();
-    this.subscription = this._orderService.getServiceType(this.token, id)
+    this._orderService.getServiceType(this.token, id)
     .pipe(
       tap(),
-      shareReplay()
+      shareReplay(),
+      untilDestroyed(this)
     )
     .subscribe(
       (response: any) => {
@@ -380,10 +392,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
   loadServiceStatus(id: number) {
     this.cd.markForCheck();
-    this.subscription = this._orderService.getServiceEstatus(this.token, id)
+    this._orderService.getServiceEstatus(this.token, id)
     .pipe(
       tap(),
-      shareReplay()
+      shareReplay(),
+      untilDestroyed(this)
     )
     .subscribe(
       (response: any) => {
@@ -403,16 +416,19 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
 
    async getQuery(pageSize: number, csv = 0) {
+
+    // console.log(this.paginator.pageIndex);
     this.pageSize = pageSize;
     this.isLoading = true;
-    this.subscription = this._projectService.getProjectOrderService(
+    this._projectService.getProjectOrderService(
       this.filterValue, this.searchparams, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, pageSize, this.paginator.pageIndex, this.id, this.token.token)
       .pipe(
         tap(),
-        shareReplay()
+        shareReplay(),
+        untilDestroyed(this)
       )
       .subscribe( (resp: any) => {
         this.getData(resp, csv);
@@ -737,6 +753,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
 
   showItem(order_id: number, order_number: string, category_id: number, customer_id: number, cc_number: string, servicetype_id: number, status_id: number, estatus: string, order_date: string, required_date: string, vencimiento_date: string, observation: string, create_at: string, usercreate: string, project_name: string, service_name: string, servicetype: string, update_at: string, userupdate: string, region: string, provincia: string, comuna: string, direccion: string, serviceid: number) {
+
+    if (!order_id || !serviceid) {
+      return;
+    }
+
     const dialogRef = this.dialog.open(ShowComponent, {
       width: '1000px',
       disableClose: true,
@@ -754,6 +775,18 @@ export class ViewProjectOrderComponent implements OnDestroy {
       }
     });
   }
+
+  showModal(id: number) {
+    // console.log(id);
+    if (id > 0) {
+      this.cd.markForCheck();
+      this._modalManage.showModal(id);
+      this.assigned_to = id;
+    } else {
+      return;
+    }
+  }
+
 
   hoverIn(index: number) {
     this.indexitem = index;

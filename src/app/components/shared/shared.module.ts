@@ -48,6 +48,7 @@ import {
     TagUserDbComponent,
     UploaderComponent,
     UploadTaskComponent,
+    UserJobProfileComponent,
     ViewOrderTimeSpentComponent,
    } from './shared.index';
 
@@ -102,8 +103,8 @@ import { PipesModule } from '../../pipes/pipes.module';
         TagUserDbComponent,
         UploaderComponent,
         UploadTaskComponent,
+        UserJobProfileComponent,
         ViewOrderTimeSpentComponent,
-        TagUserDbComponent,
 
     ],
     exports: [
@@ -139,6 +140,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         TagUserDbComponent,
         UploaderComponent,
         UploadTaskComponent,
+        UserJobProfileComponent,
         ViewOrderTimeSpentComponent
     ],
     providers: [  ],

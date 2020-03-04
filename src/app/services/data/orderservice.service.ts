@@ -210,6 +210,7 @@ import { GLOBAL } from '../global';
 
       const query = 'service/' + id + '/order/' + orderid;
       const url = this.url + query;
+
       const httpOptions = {
         headers: new HttpHeaders({
           'Cache-Control': 'public, max-age=300, s-maxage=600',

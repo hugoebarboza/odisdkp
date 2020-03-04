@@ -79,7 +79,7 @@ function parseBody(req:any, userId:any, userIdTo:any) {
         }
       };
   
-  return payload;  
+  return payload;
 }
 
 function addNotification(data:any) {

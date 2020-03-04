@@ -79,7 +79,6 @@ import { StatusComponent } from './components/dialog/status/status.component';
 import { StatusListComponent, SnackErrorComponent, SnackSuccessComponent } from './components/dialog/status-list/status-list.component';
 import { StatusCrudComponent } from './components/dialog/status-crud/status-crud.component';
 import { TarifaListComponent } from './components/dialog/tarifa-list/tarifa-list.component';
-import { UserJobProfileComponent } from './components/dialog/user-job-profile/user-job-profile.component';
 import { VehiculoOverviewDialog } from '../../components/excel-vehiculo/excel-vehiculo.component';
 import { ZipComponent } from '../../components/dialog/zip/zip.component';
 import { ZonaListComponent } from './components/dialog/zona-list/zona-list.component';
@@ -252,7 +251,6 @@ registerLocaleData(localeEs);
     TableroComponent,
     TarifaListComponent,
     TableOrderComponent,
-    UserJobProfileComponent,
     UsertableComponent,
     VehiculoOverviewDialog,
     ViewOrderDetailComponent,

@@ -11,7 +11,7 @@ export { ItemFirebaseService } from './firebase/itemfirebase.service';
 export { KpiService } from './data/kpi.service';
 export { MapaService } from './mapa/mapa.service';
 export { MessagingService } from 'src/app/services/firebase/messaging.service';
-export { ModalManageService } from 'src/app/pages/orderservice/components/dialog/user-job-profile/modal-manage.service';
+export { ModalManageService } from 'src/app/components/dialog/user-job-profile/modal-manage.service';
 export { OrderserviceService } from './data/orderservice.service';
 export { PaymentService } from './data/payment.service';
 export { ProjectsService } from './data/projects.service';

@@ -977,6 +977,53 @@ export class ProjectsService {
         return this.getQueryPromise('user/' + user_id + '/projectservice/' + project_id, token);
     }
 
+
+    @Cacheable({
+        cacheBusterObserver: cacheBuster$
+      })
+    getProjectOrderNotificacion(filter: string, searchParams = [], fieldValue: string, columnValue: string, fieldValueDate: string, columnDateDesdeValue: string, columnDateHastaValue: string, fieldValueUsuario: string, columnValueUsuario: string, sort: string, order: string, pageSize: number, page: number, id: number, token: any): Observable<any> {
+        // console.log(sort);
+        if (!fieldValue) {
+          fieldValue = '';
+        }
+
+        if (!order) {
+          order = 'desc';
+        }
+        if (!sort) {
+          sort = 'create_at';
+        }
+
+        const json = JSON.stringify(searchParams);
+
+        const url = this.url;
+        const paginate = `?filter=${filter}&searchParams=${json}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
+        const query = 'project/' + id + '/ordernotification' + paginate;
+        const href = url + query;
+        const requestUrl = href;
+
+        const httpOptions = {
+          headers: new HttpHeaders({
+            'Cache-Control': 'public, max-age=300, s-maxage=600',
+            'Content-Type':  'application/json'
+          })
+        };
+
+
+        if (!requestUrl || !token) {
+            return;
+        }
+
+        // console.log(requestUrl);
+
+        try {
+            return this._http.get<any>(requestUrl, {headers: httpOptions.headers});
+       } catch (err) {
+            console.log(err);
+       }
+      }
+
+
     @Cacheable({
         cacheBusterObserver: cacheBuster$
       })

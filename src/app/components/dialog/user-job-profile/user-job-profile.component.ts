@@ -51,7 +51,6 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
     if (this.id > 0) {
       const userid = this.id;
       this.userid = userid;
-      // console.log(this.userid);
       this.isLoading = true;
       this.subscription = this._userService.getUserShowInfo(this.token.token, this.userid).subscribe(
         response => {

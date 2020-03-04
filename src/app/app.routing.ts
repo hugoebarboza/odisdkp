@@ -88,6 +88,12 @@ const appRoute: Routes = [
       data: { preload: false, delay: false }
     },
     {
+      path: 'notificationorder',
+      canLoad: [ LoginGuardGuard ],
+      loadChildren : () => import('./pages/notificationorder/notificationorder.module').then(m => m.NotificationOrderModule),
+      data: { preload: false, delay: false }
+    },
+    {
       path: 'payments',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/payments/payments.module').then(m => m.PaymentsModule),

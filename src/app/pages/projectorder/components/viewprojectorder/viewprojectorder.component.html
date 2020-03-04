@@ -131,16 +131,17 @@
 <!---{{selectedService | json}}---->
 
 <div class="p-4">
+
+<div class="rate-limit-reached" *ngIf="isRateLimitReached">
+  No se encontraron registros que coincidan con su búsqueda.
+  <button mat-button color="primary" (click)="load()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+</div>
+  
 <mat-card [ngStyle]="{'padding':'0px'}">
   <mat-card-header [ngClass]="{'custom-card':true}">
   </mat-card-header>
 
   <mat-card-content>
-    <div class="rate-limit-reached" *ngIf="isRateLimitReached">
-      No se encontraron registros que coincidan con su búsqueda.
-      <button mat-button color="primary" (click)="load()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
-    </div>
-
 
     <div class="example-container" >
       <div class="loading-shade" *ngIf="isLoading || isRateLimitReached">
@@ -349,4 +350,7 @@
   </mat-card-content>
 
 </mat-card>
+</div>
+<div >
+  <app-user-job-profile [id]="assigned_to" ></app-user-job-profile>
 </div>

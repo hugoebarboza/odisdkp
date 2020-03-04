@@ -8,6 +8,7 @@ import { environment } from '../../../environments/environment';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/toPromise';
+// import 'rxjs/add/observable/throw';
 
 export interface CdfMessage {
   toEmail: string;
@@ -65,12 +66,11 @@ export class CdfService  {
     const headers = new Headers({'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*', 'Authorization': this.key });
 
     return this._http.post(this.url + 'fcmSend', params, {headers: headers})
-        .map( (resp: any) => {
-          // console.log(resp);
-        return resp;
-        }).catch( err => {
-          console.log(err);
-        return Observable.throw( err );
+        .map( (resp: any) => resp)
+        .catch( err => {
+          // console.log(err);
+        // return  Observable.throw( err );
+        throw new Error(`Error CDF fcmsend ${err}`);
     });
   }
 

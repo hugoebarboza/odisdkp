@@ -54,6 +54,7 @@ export class ShowComponent implements OnInit, OnDestroy {
   imageRows = new Array();
   isImageLoading = false;
   isAudioLoading = false;
+  isRateLimitReached: boolean;
   listaudio = [];
   loading: boolean;
   listimageorder = new Array();
@@ -104,7 +105,11 @@ export class ShowComponent implements OnInit, OnDestroy {
 
   async ngOnInit() {
 
-    if (this.token.token != null) {
+    if (!this.data && !this.data['service_id'] && !this.data['order_id']) {
+      return;
+    }
+
+    if (this.token.token != null && this.data && this.data['service_id'] && this.data['order_id']) {
        this.response = await this.loadData();
     }
   }
@@ -144,8 +149,10 @@ export class ShowComponent implements OnInit, OnDestroy {
                     this.atributofirma = this.order[0].atributo_firma;
                   }
                     this.loading = false;
+                    this.isRateLimitReached = false;
               } else {
                     this.loading = false;
+                    this.isRateLimitReached = false;
               }
           }
     } else {
@@ -322,8 +329,12 @@ export class ShowComponent implements OnInit, OnDestroy {
         if (!res) {
           return;
         }
-        console.log(res);
         return this.getData(res);
+      },
+      error => {
+        this.loading = false;
+        this.isRateLimitReached = true;
+        console.log(<any>error);
       }
       );
 

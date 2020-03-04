@@ -27,4 +27,5 @@ export { TagUserComponent } from './taguser/taguser.component';
 export { TagUserDbComponent } from './tag-user-db/tag-user-db.component';
 export { UploaderComponent  } from './uploader/uploader.component';
 export { UploadTaskComponent } from './upload-task/upload-task.component';
+export { UserJobProfileComponent } from 'src/app/components/dialog/user-job-profile/user-job-profile.component';
 export { ViewOrderTimeSpentComponent } from '../../components/views/viewordertimespent/viewordertimespent.component';
