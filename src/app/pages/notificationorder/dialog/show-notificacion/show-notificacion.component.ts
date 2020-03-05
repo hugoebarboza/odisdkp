@@ -15,14 +15,17 @@ export class ShowNotificacionComponent  {
 
   identity: any;
   isLoading: boolean;
+  notification: any = [];
+  title = 'Notificación del formulario: ';
   token: any;
+  usuarios: any;
 
   constructor(
     public _customForm: CustomformService,
     public _userService: UserService,
     public dialogRef: MatDialogRef<ShowNotificacionComponent>,
     @Inject(MAT_DIALOG_DATA) public data
-  ) { 
+  ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.load();
@@ -37,7 +40,6 @@ export class ShowNotificacionComponent  {
     if (this.data && this.token.token) {
       this.showFormNotification(this.data);
     }
-    
 
   }
 
@@ -52,8 +54,11 @@ export class ShowNotificacionComponent  {
       const response: any = await this._customForm.showFormNotification(this.token.token, data.servicetype_id, data.formnotification_id);
 
       if (response && response.datos) {
-        // const formnotification: any = data.datos;
-        console.log(response);
+
+        this.notification = response;
+        if (this.notification.datos[0].user) {
+          this.usuarios = JSON.parse(this.notification.datos[0].user);
+        }
 
       this.isLoading = false;
       }

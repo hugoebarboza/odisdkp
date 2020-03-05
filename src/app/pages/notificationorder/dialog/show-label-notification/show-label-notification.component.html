@@ -1,0 +1,45 @@
+<meta name="Description" content="User Profile Security.">
+<h1 mat-dialog-title style="width: 100%; text-align: center;" >{{title}} <br> <span *ngIf="data.notification.servicetype">{{data.notification.servicetype}}</span></h1>
+<div class="container-fluid" *ngIf="isLoading">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row d-flex justify-content-center">
+                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+            </div>                        
+        </div>
+    </div>
+</div>
+
+<div class="mat-app-background" >
+    <div class="card-body">
+      <div class="mat-dialog-content"  *ngIf="userFirebase && !isLoading && data && data.id > 0 && notification" >
+
+        <div class="row" >
+            <div class="col-12" >
+              <h2 class="jeEmY">Etiquetados</h2>
+              <div class="xlModal">
+                <app-tag-user-db [userFirebase]="userFirebase" [id]="data.id" (tagUser)="taguser($event)" > </app-tag-user-db>
+                <!----  <app-taguser [userFirebase]="userFirebase" (tagUser)="taguser($event)" > </app-taguser>-->
+              </div>              
+            </div>
+        </div>                                                                      
+
+      </div>
+  </div>
+  <br>
+  <br>
+</div>
+
+
+
+<br>
+<div mat-dialog-actions>
+    <div class="container">      
+      <div class="row ">
+      <div class="footer-button-row">   
+      <button mat-button color="primary" type="submit"  [disabled]="destinatario.length === 0 || bandera" class="btnsave" (click)="submit(destinatario, notification)">Guardar y Enviar</button>
+      <button mat-button (click)="onNoClick()" class="btnclose">Cancelar</button>
+      </div>
+      </div>
+    </div>
+</div>

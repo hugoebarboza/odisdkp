@@ -271,6 +271,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
   public gerenarPicking() {
 
+    this.bandera = false;
     this.arrayExcel = [];
     this.arrayExcelSuccess = [];
     this.arrayExcelError = [];
@@ -495,6 +496,7 @@ export class ExcelVehiculoComponent implements OnInit, OnDestroy, OnChanges {
 
   public UploadFile() {
 
+    this.bandera = false;
     this.arrayCarga = [];
     this.arrayExcel = [];
     this.arrayExcelSuccess = [];

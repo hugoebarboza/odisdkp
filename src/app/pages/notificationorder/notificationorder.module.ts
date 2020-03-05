@@ -6,6 +6,7 @@ import { HttpModule } from '@angular/http';
 
 // COMPONENTS
 import { NotificationOrderComponent } from './components/notificationorder/notificationorder.component';
+import { ShowLabelNotificationComponent } from './dialog/show-label-notification/show-label-notification.component';
 import { ShowNotificacionComponent } from './dialog/show-notificacion/show-notificacion.component';
 
 // DIRECTIVES
@@ -42,6 +43,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
 
 
+
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -62,11 +64,13 @@ registerLocaleData(localeEs);
   ],
   declarations: [
     NotificationOrderComponent,
+    ShowLabelNotificationComponent,
     ShowNotificacionComponent,
   ],
   exports: [
   ],
   entryComponents: [
+    ShowLabelNotificationComponent,
     ShowNotificacionComponent
   ],
   providers: [

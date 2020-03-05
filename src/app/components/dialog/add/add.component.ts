@@ -272,6 +272,11 @@ export class AddComponent implements OnInit, OnDestroy {
         }
         if (response.status === 'success') {
           Swal.fire('Creada Orden de Trabajo: ', this.data.order_number + ' exitosamente.', 'success' );
+
+          if (response.formnotificacion && response.formnotificacion.length > 0) {
+            this.sendformnotificacion(response.formnotificacion, response.order, response.project, response.service, response.servicetype, response.lastInsertedId);
+          }
+
         } else {
           Swal.fire('N. Orden de Trabajo: ', this.data.order_number + ' no fue posible crearla.' , 'error');
         }
@@ -289,6 +294,53 @@ export class AddComponent implements OnInit, OnDestroy {
 
   }
 
+
+  sendformnotificacion(formnotificacion: any, orderdata: any, project: any, service: any, servicetype: any, lastInsertedId: any) {
+    if (!formnotificacion) {
+      return;
+    }
+
+    for (let i = 0; i < formnotificacion.length; i++) {
+      const element: any = formnotificacion[i];
+
+      const user: any = JSON.parse(element.user);
+
+      for (let x = 0; x < user.length; x++) {
+        const usermail = user[x];
+
+        const msg = {
+          toEmail: usermail.email,
+          fromTo: this.identity.email,
+          subject: 'OCA GLOBAL - Nueva notificación - ' + element.main,
+          body: element.body,
+          project: project.project_name,
+          service_name: service.service_name,
+          servicetype_name: servicetype.name,
+          order_number: orderdata.order_number,
+          service_id: orderdata.service_id,
+          order_id: lastInsertedId
+          };
+
+        // console.log(msg);
+
+        this._cdf.httpEmailNotification(this.token.token, msg).subscribe(
+          response => {
+            if (!response) {
+            return false;
+            }
+            if (response.status === 200) {
+              // console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }
+          );
+      }
+
+    }
+  }
+
   public isDisabled(userRol: number, requeridoRol: number): boolean {
     if (requeridoRol > userRol) {
       return true;
@@ -297,7 +349,7 @@ export class AddComponent implements OnInit, OnDestroy {
     }
   }
 
-  sendCdf(data) {
+  sendCdf(data: any) {
     if (!data) {
       return;
     }

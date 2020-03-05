@@ -12,6 +12,7 @@ import { shareReplay, tap } from 'rxjs/operators';
 
 // COMPONENTS
 import { ShowComponent } from 'src/app/components/shared/shared.index';
+import { ShowLabelNotificationComponent } from '../../dialog/show-label-notification/show-label-notification.component';
 import { ShowNotificacionComponent } from '../../dialog/show-notificacion/show-notificacion.component';
 
 // SERVICES
@@ -112,7 +113,7 @@ export class NotificationOrderComponent implements OnDestroy {
 
   displayedColumns: string[] = ['order_number', 'type', 'service_name', 'servicetype', 'user', 'create_at', 'actions'];
   columnsOrderToDisplay: string[] = this.columns.map(column => column.name);
-  
+
 
 
   // MESSAGES
@@ -185,7 +186,7 @@ export class NotificationOrderComponent implements OnDestroy {
   }
 
   getData(response: any, csv?: any) {
-    console.log(response);
+    // console.log(response);
     this.cd.markForCheck();
     if (response && response.status === 'success') {
       if (response.datos && response.datos.data) {
@@ -266,7 +267,7 @@ export class NotificationOrderComponent implements OnDestroy {
     const pageIndex = 0;
     this.isLoading = true;
 
-    this.getQuery(this.pageSize, pageIndex)
+    this.getQuery(this.pageSize, pageIndex);
 
   }
 
@@ -531,7 +532,7 @@ export class NotificationOrderComponent implements OnDestroy {
     }
 
     const dialogRef = this.dialog.open(ShowNotificacionComponent, {
-      width: '777px',
+      width: '477px',
       disableClose: true,
       data: {servicetype_id: servicetype_id, formnotification_id: formnotification_id}
     });
@@ -542,6 +543,28 @@ export class NotificationOrderComponent implements OnDestroy {
     });
 
   }
+
+
+  showLabel(id: number, project: any, notification: any) {
+    if (!id || !notification) {
+      return;
+    }
+
+    const dialogRef = this.dialog.open(ShowLabelNotificationComponent, {
+      width: '477px',
+      disableClose: true,
+      data: {id: id, project: project, notification: notification},
+      panelClass: 'custom-dialog-container'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result === 1) {
+      }
+    });
+
+  }
+
+
 
   hoverIn(index: number) {
     this.indexitem = index;

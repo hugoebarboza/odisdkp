@@ -19,6 +19,7 @@
     white-space: nowrap;
     overflow: hidden;
   }
-.full-width {
+  .full-width {
     width: 100%;
-}
+  }
+  

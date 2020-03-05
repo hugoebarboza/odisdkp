@@ -113,7 +113,7 @@ export class CustomformService {
   }
 
   showFormNotification(token: any, servicetype_id: number, form_id: number) {
-    if (!token) {
+    if (!token || !servicetype_id || !form_id) {
       return;
     }
 

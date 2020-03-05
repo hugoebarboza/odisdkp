@@ -74,36 +74,42 @@ export class DeleteComponent implements OnInit, OnDestroy {
         (err: HttpErrorResponse) => {
           // this.error = err.error.message;
           // Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
-          Swal.fire({
-            title: '¿Está seguro? ' + err.error.message,
-            text: 'Está seguro de borrar OT ' + this.data['order_id'],
-            showCancelButton: true,
-            confirmButtonText: 'Si',
-            cancelButtonText: 'No'
-          })
-          .then( borrar => {
-            if (borrar.value) {
-              /************************************************/
-              this._orderService.deleteotedp(this.token.token, this.data['order_id'], this.category_id).subscribe(
-                (data: any) => {
-                  if (data.status === 'success') {
-                    Swal.fire('Eliminada Orden de Trabajo con identificador: ', this.data['order_id'] + ' exitosamente.', 'success' );
-                    } else {
-                    Swal.fire('Orden de Trabajo con identificador: ', this.data['order_id'] + ' no eliminada.' , 'error');
-                    }
-                  },
-                  (erro: HttpErrorResponse) => {
-                    Swal.fire('No fue posible procesar su solicitud', erro.error.message, 'error');
-                  });
-                /********************************************** */
-            } else if (borrar.dismiss === Swal.DismissReason.cancel) {
-              Swal.fire(
-                'Cancelado',
-              );
-            }
-          });
+          if (err.status === 403) {
+            Swal.fire({
+              title: '¿Está seguro? ' + err.error.message,
+              text: 'Está seguro de borrar OT ' + this.data['order_id'],
+              showCancelButton: true,
+              confirmButtonText: 'Si',
+              cancelButtonText: 'No'
+            })
+            .then( borrar => {
+              if (borrar.value) {
+                /************************************************/
+                this._orderService.deleteotedp(this.token.token, this.data['order_id'], this.category_id).subscribe(
+                  (data: any) => {
+                    if (data.status === 'success') {
+                      Swal.fire('Eliminada Orden de Trabajo con identificador: ', this.data['order_id'] + ' exitosamente.', 'success' );
+                      } else {
+                      Swal.fire('Orden de Trabajo con identificador: ', this.data['order_id'] + ' no eliminada.' , 'error');
+                      }
+                    },
+                    (erro: HttpErrorResponse) => {
+                      Swal.fire('No fue posible procesar su solicitud', erro.error.message, 'error');
+                    });
+                  /********************************************** */
+              } else if (borrar.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire(
+                  'Cancelado',
+                );
+              }
+            });
+          } else {
+            Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
+          }
 
-        });
+          }
+
+        );
   }
 
 

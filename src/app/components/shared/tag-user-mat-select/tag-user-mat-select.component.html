@@ -10,7 +10,8 @@
                   </span>
                 </div>
               </div>
-              <div class="custom-dialog-container full-width">
+              <div class="full-width">
+
               <ng-select name="destinatario" formControlName="destinatario"  class="form-control" required       
               [items]="usersFt | async"
               [multiple]="true"
@@ -30,10 +31,6 @@
     </div>
 
 </form>
-
-<!----
-<mat-checkbox formControlName="select" (click)='toggleDisable()'>Cc</mat-checkbox>
--->
 
 
 

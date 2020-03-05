@@ -17,7 +17,7 @@ html{
 
 .body{
 	margin: 0px;
-	padding-bottom: 50px;
+  padding-bottom: 50px;
 }
 
 .main-container {
@@ -130,4 +130,12 @@ mark {
   outline: 0;
   top:calc(40% - 25px);
   left:calc(40% - 25px);
+}
+.custom-dialog-container .mat-dialog-container {
+  overflow: visible;
+  z-index: 99999 !important;
+}
+.custom-dialog-container .mat-dialog-content {
+  overflow: visible;
+  z-index: 99999 !important;
 }

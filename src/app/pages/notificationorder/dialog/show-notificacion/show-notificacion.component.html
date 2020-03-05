@@ -1,3 +1,105 @@
+<meta name="Description" content="User Profile Security.">
+<h1 mat-dialog-title style="width: 100%; text-align: center;">{{title}} <br> <span *ngIf="notification.servicetype">{{notification.servicetype.name}}</span></h1>
+<div class="container-fluid" *ngIf="isLoading">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row d-flex justify-content-center">
+                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+            </div>                        
+        </div>
+    </div>
+</div>
+
+<div class="mat-app-background" >
+  <div class="card-body">
+      <div class="mat-dialog-content"  *ngIf="notification && !isLoading" >
+          <div class="row">
+              <div class="col-sm-12">
+                  <span>
+                    <label for="estatus" class="thick">Estatus:</label> <span *ngIf="notification.datos[0].status"> (Activo)</span> <span *ngIf="!notification.datos[0].status"> (Desactivo)</span>.
+                  </span>
+              </div>
+          </div>   
+          <br>        
+          <div class="row">
+              <div class="col-sm-12">
+                  <label for="nombre" class="thick">Nombre de notificación:</label>
+                  <p>
+                    {{notification.datos[0].name}}
+                  </p>
+              </div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col-sm-12">
+                  <label for="description" class="thick">Descripción de notificación:</label>
+                  <p>
+                    {{notification.datos[0].description}}
+                  </p>
+              </div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col-sm-12">
+                  <label for="type" class="thick">Tipo notificación:</label>
+                      <div class="radio-button" value=1 *ngIf="notification.datos[0].type === 1">Notificación</div>
+                      <div class="radio-button" value=2 *ngIf="notification.datos[0].type === 2">Estado de Pago</div>
+                      <div class="radio-button" value=3 *ngIf="notification.datos[0].type === 3">Notificación y Estado de Pago</div>
+              </div>
+          </div>
+          <br>
+
+          <mat-divider></mat-divider>
+          <mat-divider></mat-divider>
+          <br *ngIf="notification.datos[0].value">
+          <div class="row" style="margin-top: 4px;" *ngIf="notification.datos[0].value">
+              <div class="col-sm-12">
+                  <label for="value" class="thick">Valor:</label>
+                  <p>
+                    {{notification.datos[0].value}}
+                  </p>
+              </div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col-sm-12">
+                  <label for="users" class="thick">Para:</label>
+                  <ng-select
+                  *ngIf="usuarios && usuarios.length > 0"
+                  [items]="usuarios"
+                  [multiple]="true"
+                  [closeOnSelect]="false"
+                  [hideSelected]="true"
+                  bindLabel="email"
+                  [disabled]="true"
+                  class="width-100percentage" name="user" [(ngModel)]="usuarios">
+                  </ng-select>
+              </div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col-sm-12">
+                  <label for="main" class="thick">Asunto correo:</label>
+                  <p>
+                    {{notification.datos[0].main}}
+                  </p>
+              </div>
+          </div>
+          <br>
+          <div class="row">
+              <div class="col-sm-12">
+                  <label for="body" class="thick">Cuerpo correo:</label>
+                  <p>
+                    {{notification.datos[0].body}}
+                  </p>
+              </div>
+          </div>
+
+        </div>
+  </div>
+</div>
+
+
 <div mat-dialog-actions>
     <div class="container">      
       <div class="row justify-content-center">

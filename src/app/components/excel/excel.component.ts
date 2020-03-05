@@ -261,6 +261,7 @@ export class ExcelComponent implements OnInit, OnDestroy, OnChanges {
 
   public Upload() {
 
+    this.bandera = false;
     this.arrayCarga = [];
     this.arrayExcel = [];
     this.arrayExcelSuccess = [];

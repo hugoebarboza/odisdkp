@@ -66,103 +66,103 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
     this.proyectos = this._userService.getProyectos();
     this.firebaseAuth.authState.subscribe(
       (auth) => {
-        if(auth){
+        if (auth) {
           this.userFirebase = auth;
-          //console.log(this.userFirebase);
+          // console.log(this.userFirebase);
         }
     });
 
   }
 
   ngOnInit() {
-    if(this.data.project > 0){
+    if (this.data.project > 0) {
       this.project_id = this.data.project;
       this.id = this.data.service_id;
       this.project = this.filter();
       this.service = this.filterService();
-      if(this.id){
+      if (this.id) {
         this.getTipoServicio(this.id);
       }
       this.isLoading = false;
     }
 
-    if(this.data.orderid){
-      //console.log(this.data.orderid);
-      //this.getListImage();
+    if (this.data.orderid) {
+      // console.log(this.data.orderid);
+      // this.getListImage();
     }
 
-    if(this.data.service_id > 0){
-      //console.log(this.data.service_id);
+    if (this.data.service_id > 0) {
+      // console.log(this.data.service_id);
       this.subscription = this.dataservice.getService(this.token.token, this.data.service_id).subscribe(
         response => {
-                  if(!response){
+                  if (!response) {
                     return;
                   }
-                  if(response.status == 'success'){
-                    //console.log(response.datos);
+                  if (response.status === 'success') {
+                    // console.log(response.datos);
                     this.services = response.datos;
-                    //console.log(this.kpi);
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_informador){                      
+                    // console.log(this.kpi);
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_informador) {
                       this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_informador).subscribe(
                         response => {
-                          if(!response){
+                          if (!response) {
                             return;
                           }
-                          if(response.status == 'success'){
+                          if (response.status === 'success') {
                             this.user_informador = response.data[0];
-                            //console.log(this.user_informador);
+                            // console.log(this.user_informador);
                           }
                         }
-                      )
+                      );
                     }
 
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_responsable){                      
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_responsable) {
                       this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_responsable).subscribe(
                         response => {
-                          if(!response){
+                          if (!response) {
                             return;
                           }
-                          if(response.status == 'success'){
+                          if (response.status === 'success') {
                             this.user_responsable = response.data[0];
-                            //console.log(this.user_responsable);
+                            // console.log(this.user_responsable);
                           }
                         }
-                      )
+                      );
                     }
 
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_itocivil_assigned_to){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_itocivil_assigned_to) {
                       this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_itocivil_assigned_to).subscribe(
                         response => {
-                          if(!response){
+                          if (!response) {
                             return;
                           }
-                          if(response.status == 'success'){
+                          if (response.status === 'success') {
                             this.user_itocivil_assigned_to = response.data[0];
                           }
                         }
-                      )
+                      );
                     }
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_itoelec_assigned_to){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].user_itoelec_assigned_to) {
                       this.subscription = this._userService.getUserInfo(this.token.token, this.services['servicedetail'][0].user_itoelec_assigned_to).subscribe(
                         response => {
-                          if(!response){
+                          if (!response) {
                             return;
                           }
-                          if(response.status == 'success'){
+                          if (response.status === 'success') {
                             this.user_itoelec_assigned_to = response.data[0];
                           }
                         }
-                      )
+                      );
                     }
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_obra){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_obra) {
                       this.user_responsable_obra = this.services['servicedetail'][0].responsable_obra;
                     }
 
-                    if(this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_email){
+                    if (this.services && this.services['servicedetail'][0] && this.services['servicedetail'][0].responsable_email) {
                       this.email_responsable_obra = this.services['servicedetail'][0].responsable_email;
                     }
                   }
@@ -172,69 +172,68 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    if(this.subscription){
+    if (this.subscription) {
       this.subscription.unsubscribe();
-    }    
+    }
   }
 
 
-  
-  filter(){
-    if(this.proyectos && this.project_id){
-      for(var i = 0; i < this.proyectos.length; i += 1){
-        var result = this.proyectos[i];
-        if(result.id === this.project_id){
+
+  filter() {
+    if (this.proyectos && this.project_id) {
+      for (let i = 0; i < this.proyectos.length; i += 1) {
+        const result = this.proyectos[i];
+        if (result.id === this.project_id) {
             return result;
         }
       }
-    }    
+    }
   }
 
-  filterService(){
-    if(this.project.service && this.id){
-      for(var i = 0; i < this.project.service.length; i += 1){
-        var result = this.project.service[i];
-        if(result.id === this.id){
+  filterService() {
+    if (this.project.service && this.id) {
+      for (let i = 0; i < this.project.service.length; i += 1) {
+        const result = this.project.service[i];
+        if (result.id === this.id) {
             return result;
         }
       }
-    }    
+    }
   }
 
 
-  filterServiceType(){
-    if(this.tipoServicio && this.data.tiposervicio){
-      for(var i = 0; i < this.tipoServicio.length; i += 1){
-        var result = this.tipoServicio[i];
-        if(result.id === this.data.tiposervicio){
+  filterServiceType() {
+    if (this.tipoServicio && this.data.tiposervicio) {
+      for (let i = 0; i < this.tipoServicio.length; i += 1) {
+        const result = this.tipoServicio[i];
+        if (result.id === this.data.tiposervicio) {
             return result;
         }
       }
-    }    
+    }
   }
 
 
-  public getListImage(){     
+  public getListImage() {
     this.subscription = this.dataservice.getImageOrder(this.token.token, this.data.orderid).subscribe(
-    response => {        
-      if(!response){
-        return;        
+    response => {
+      if (!response) {
+        return;
       }
-        if(response.status == 'success'){ 
+        if (response.status === 'success') {
           this.listimageorder = response.datos;
-          //console.log(this.listimageorder);
-          if(this.listimageorder.length>0){
-            //this.getSplitArray(this.listimageorder, 2);
+          // console.log(this.listimageorder);
+          if (this.listimageorder.length > 0) {
           }
         }
     },
         error => {
         console.log(<any>error);
-        }   
+        }
     );
-  }  
+  }
 
-  getTipoServicio(id:number) {
+  getTipoServicio(id: number) {
     this.zipService.getTipoServicio(id, this.token.token).then(
       (res: any) => {
         res.subscribe(
@@ -295,9 +294,9 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
       address: '',
       company : '',
       comentario: 'Orden de Trabajo compartida por correo.',
-      name: this.project.project_name,      
+      name: this.project.project_name,
       observacion: '',
-      description : '', 
+      description : '',
       order_number: this.data.order_number,
       service_name: this.service.service_name,
       service_type_name: this.service_type.name,
@@ -310,7 +309,7 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
 
 
 
-    if (to && body && project ){
+    if (to && body && project ) {
       const asunto = 'OCA GLOBAL - Orden de Trabajo en Proyecto: ' + ' ' + this.service.service_name + '. OT: ' + this.data.order_number;
       this._cdf.httpEmailShareOrder(this.token.token, to, this.userFirebase.email, asunto, created, body, project ).subscribe(
         response => {

@@ -19,8 +19,7 @@
                 <mat-form-field class="marginLeft">
                     <input matInput placeholder="Seleccione archivo" value="{{nombreFile}}"  (click)="fileInput.click()">
                 </mat-form-field>
-                <button  class="btnUpload" mat-raised-button (click)="Upload()" [disabled]="true"  *ngIf="!bandera">Validar</button>
-                <button  class="btnUpload" mat-raised-button (click)="Upload()" *ngIf="bandera">Validar</button>
+                <button  class="btnUpload" mat-raised-button (click)="Upload()" [disabled]="!bandera"  >Validar</button>
 
 
                 <mat-form-field *ngIf="dateend !== undefined && (!checkboxRegistro && !checkboxUpdateVIN && !checkboxPicking)" class="marginLeftX2" >

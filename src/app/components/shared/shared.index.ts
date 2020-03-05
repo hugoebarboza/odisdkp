@@ -25,6 +25,7 @@ export { ReportkpiComponent } from './firebase/reportkpi/reportkpi.component';
 export { ShowComponent } from 'src/app/components/dialog/show/show.component';
 export { TagUserComponent } from './taguser/taguser.component';
 export { TagUserDbComponent } from './tag-user-db/tag-user-db.component';
+export { TagUserMatSelectComponent } from './tag-user-mat-select/tag-user-mat-select.component';
 export { UploaderComponent  } from './uploader/uploader.component';
 export { UploadTaskComponent } from './upload-task/upload-task.component';
 export { UserJobProfileComponent } from 'src/app/components/dialog/user-job-profile/user-job-profile.component';

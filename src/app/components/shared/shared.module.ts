@@ -46,6 +46,7 @@ import {
     ShowComponent,
     TagUserComponent,
     TagUserDbComponent,
+    TagUserMatSelectComponent,
     UploaderComponent,
     UploadTaskComponent,
     UserJobProfileComponent,
@@ -54,8 +55,6 @@ import {
 
 // Pipes
 import { PipesModule } from '../../pipes/pipes.module';
-
-
 
 
 @NgModule({
@@ -101,11 +100,11 @@ import { PipesModule } from '../../pipes/pipes.module';
         ShowComponent,
         TagUserComponent,
         TagUserDbComponent,
+        TagUserMatSelectComponent,
         UploaderComponent,
         UploadTaskComponent,
         UserJobProfileComponent,
         ViewOrderTimeSpentComponent,
-
     ],
     exports: [
         AddDocComponent,
@@ -138,6 +137,7 @@ import { PipesModule } from '../../pipes/pipes.module';
         ShowComponent,
         TagUserComponent,
         TagUserDbComponent,
+        TagUserMatSelectComponent,
         UploaderComponent,
         UploadTaskComponent,
         UserJobProfileComponent,
