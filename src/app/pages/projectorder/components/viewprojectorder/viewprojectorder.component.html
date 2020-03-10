@@ -107,7 +107,7 @@
             [matMenuTriggerFor]="menuviewselectaction"
             matTooltip="Exportar las incidencias."
             [matTooltipPosition]="positionleftaction.value"
-
+            [disabled]="isDisabled"
             (event)="$event.stopinmediatePropagation()"
             >
             <mat-icon class="material-icons md-14" >save_alt</mat-icon>Exportar</button>

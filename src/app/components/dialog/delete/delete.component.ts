@@ -1,14 +1,13 @@
 import { Component, Inject, OnInit, OnDestroy } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { HttpErrorResponse } from '@angular/common/http';
 import { Subscription } from 'rxjs/Subscription';
+import { UntilDestroy } from '@ngneat/until-destroy';
 
 // SERVICES
 import { OrderserviceService, UserService } from 'src/app/services/service.index';
 
 // MESSAGE
 import Swal from 'sweetalert2';
-
 
 @Component({
   selector: 'app-delete',
@@ -18,7 +17,7 @@ import Swal from 'sweetalert2';
   ],
   providers: []
 })
-
+@UntilDestroy()
 export class DeleteComponent implements OnInit, OnDestroy {
   public title: string;
   public identity;
@@ -62,8 +61,11 @@ export class DeleteComponent implements OnInit, OnDestroy {
   }
 
 
-  confirmDelete(): void {
-    this._orderService.delete(this.token.token, this.data['order_id'], this.category_id).subscribe(
+  confirmDelete() {
+    const query: any = this._orderService.delete(this.token.token, this.data['order_id'], this.category_id);
+
+    query
+    .subscribe(
       (data: any) => {
         if (data.status === 'success') {
           Swal.fire('Eliminada Orden de Trabajo con identificador: ', this.data['order_id'] + ' exitosamente.', 'success' );
@@ -71,7 +73,7 @@ export class DeleteComponent implements OnInit, OnDestroy {
           Swal.fire('Orden de Trabajo con identificador: ', this.data['order_id'] + ' no eliminada.' , 'error');
           }
         },
-        (err: HttpErrorResponse) => {
+        (err: any) => {
           // this.error = err.error.message;
           // Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
           if (err.status === 403) {
@@ -84,7 +86,6 @@ export class DeleteComponent implements OnInit, OnDestroy {
             })
             .then( borrar => {
               if (borrar.value) {
-                /************************************************/
                 this._orderService.deleteotedp(this.token.token, this.data['order_id'], this.category_id).subscribe(
                   (data: any) => {
                     if (data.status === 'success') {
@@ -93,10 +94,9 @@ export class DeleteComponent implements OnInit, OnDestroy {
                       Swal.fire('Orden de Trabajo con identificador: ', this.data['order_id'] + ' no eliminada.' , 'error');
                       }
                     },
-                    (erro: HttpErrorResponse) => {
+                    (erro: any) => {
                       Swal.fire('No fue posible procesar su solicitud', erro.error.message, 'error');
                     });
-                  /********************************************** */
               } else if (borrar.dismiss === Swal.DismissReason.cancel) {
                 Swal.fire(
                   'Cancelado',
@@ -107,11 +107,10 @@ export class DeleteComponent implements OnInit, OnDestroy {
             Swal.fire('No fue posible procesar su solicitud', err.error.message, 'error');
           }
 
-          }
+        });
 
-        );
+
   }
-
 
 
 

@@ -21,6 +21,9 @@ import { ShowComponent } from 'src/app/components/shared/shared.index';
 // SERVICES
 import { ModalManageService, OrderserviceService, ProjectsService, SettingsService, UserService } from 'src/app/services/service.index';
 
+// TOASTER MESSAGES
+import { ToastrService } from 'ngx-toastr';
+
 
 // MOMENT
 import * as _moment from 'moment';
@@ -47,6 +50,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
   id: number;
   identity: any;
   indexitem: any;
+  isDisabled = false;
   isLoading: boolean;
   isRateLimitReached: boolean;
   isMobile = '';
@@ -70,7 +74,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
   title = '';
   token: any;
   users = [];
-  
+
 
   // SEARCH PARAMS
   date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
@@ -150,7 +154,8 @@ export class ViewProjectOrderComponent implements OnDestroy {
     public dialog: MatDialog,
     private cd: ChangeDetectorRef,
     public label: SettingsService,
-    public snackBar: MatSnackBar
+    public snackBar: MatSnackBar,
+    private toasterService: ToastrService,
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
@@ -237,9 +242,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
         this.isLoading = false;
         this.isRateLimitReached = false;
         this.cd.markForCheck();
+        if (csv === 1) {
+        this.isDisabled = false;
+        }
       } else {
-      // console.log('No Response');
-      this.isLoading = false;
+        this.isLoading = false;
         this.cd.markForCheck();
         this.dataSource = new MatTableDataSource();
         return;
@@ -435,6 +442,11 @@ export class ViewProjectOrderComponent implements OnDestroy {
         this.cd.markForCheck();
       },
       error => {
+        if (csv === 1) {
+          const err = 'No se encontraron incidencias.';
+          this.toasterService.error('Error: ' + err, '', {enableHtml: true, closeButton: true, timeOut: 6000 });
+          this.isDisabled = false;
+        }
         console.log(<any>error);
         this.dataSource = new MatTableDataSource();
         this.isLoading = false;
@@ -808,6 +820,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
 
   async ExportTOExcel($event: any, limit = 0) {
 
+    this.isDisabled = true;
 
     if ($event === 1) {
 

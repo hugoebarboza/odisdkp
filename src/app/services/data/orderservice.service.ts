@@ -67,7 +67,11 @@ import { GLOBAL } from '../global';
   }
 
 
-  async getServiceOrder(filter: string, fieldValue: string, columnValue: string, fieldValueDate: string, columnDateDesdeValue: string, columnDateHastaValue: string, fieldValueRegion: string, columnValueRegion: string, fieldValueUsuario: string, columnValueUsuario: string, sort: string, order: string, pageSize: number, page: number, id: number, token: any) {
+  async getServiceOrder(filter: string, fieldValue: string, columnValue: string, fieldValueDate: string, columnDateDesdeValue: string, columnDateHastaValue: string, fieldValueRegion: string, columnValueRegion: string, fieldValueUsuario: string, columnValueUsuario: string, sort: string, order: string, pageSize: number, page: number, id: number, token: any, userid: number, grant?: number ) {
+    let query = '';
+    if (!token) {
+      return;
+    }
     // console.log(sort);
     if (!fieldValue) {
       fieldValue = '';
@@ -82,7 +86,12 @@ import { GLOBAL } from '../global';
 
     const url = this.url;
     const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
-    const query = 'service/' + id + '/order' + paginate;
+
+    if (grant === 1) {
+      query = 'service/' + id + '/order' + paginate;
+    } else {
+      query = 'service/' + id + '/user/' + userid + '/order' + paginate;
+    }
     const href = url + query;
     const requestUrl = href;
     // const headers = new HttpHeaders().set('Content-Type', 'application/json');
@@ -410,14 +419,27 @@ import { GLOBAL } from '../global';
   }
 
 
-  delete(token: any, orderid: number, id: number): Observable<any> {
-    if (!token) {
+  delete(token: any, orderid: number, id: number): Observable <any> {
+    if (!token || !orderid || !id) {
        return;
     }
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+    return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers});
 
-    return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers}).map( (resp: any) => resp );
+    /*
+    return await this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers}).shareReplay(1).toPromise()
+    .then()
+    .catch((error) => { this.handleError (error); }
+    );*/
+
+    /*
+    .shareReplay().toPromise()
+        .then()
+        .catch((error) => { this.handleError (error); }
+        );
+    */
+
     /*
     subscribe(
     (data: any) => {

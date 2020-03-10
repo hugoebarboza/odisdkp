@@ -143,11 +143,12 @@
 
                       <thead>
                         <tr align="center">
-                          <th scope="col" style="width: 40%;">Servicio</th>
+                          <th scope="col" style="width: 25%;">Servicio</th>
                           <th scope="col" style="width: 15%;" >Ver</th>
                           <th scope="col" style="width: 15%;">Agregar</th>
                           <th scope="col" style="width: 15%;">Editar</th>
                           <th scope="col" style="width: 15%;">Eliminar</th>
+                          <th scope="col" style="width: 15%;">Acceso (todas las incidencias)</th>
                         </tr>
                       </thead>
     
@@ -185,6 +186,13 @@
                               <input type="checkbox" formControlName="{{key.key}}" id="myCheck{{ i + key.key + roles.value.id}}">
                             </td>  
                           </ng-container>
+
+                          <ng-container *ngFor="let key of roles?.controls | keyvalue" >
+                            <td *ngIf="leerkey(key) && posicion === 6" style="width: 15%;" align="center">
+                              <input type="checkbox" formControlName="{{key.key}}" id="myCheck{{ i + key.key + roles.value.id}}">
+                            </td>  
+                          </ng-container>
+
 
                         </tr>
                         </tbody>                                                                 

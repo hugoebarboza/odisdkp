@@ -15,6 +15,7 @@ import { ShowLoaderAction, HideLoaderAction } from 'src/app/stores/loader/loader
 
 // SERVICES
 import { RequestCacheService } from 'src/app/services/utility/request-cache.service';
+// import { ErrorsHandler } from '../error/error-handler';
 
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
@@ -22,6 +23,7 @@ export class MyInterceptor implements HttpInterceptor {
 
     constructor(
       // private cache: RequestCacheService,
+      // private handleError: ErrorsHandler,
       private store: Store<AppState>,
     ) {
 
@@ -54,10 +56,11 @@ export class MyInterceptor implements HttpInterceptor {
 
         return next.handle( reqClone ).pipe(
           finalize(() => this.store.dispatch(new HideLoaderAction())),
-          retry(1),
-          // catchError( this.handleError )
+          retry(0),
+          /* catchError( return this.handleError.handleError(error) )*/
           catchError((error: HttpErrorResponse) => {
-              return throwError(error);
+              // return this.handleError.handleError(error);
+               return throwError(error);
           })
         );
 
@@ -98,31 +101,4 @@ export class MyInterceptor implements HttpInterceptor {
       );
     }
 
-  /*
-  private handleError( error: HttpErrorResponse ) {
-    //console.log('Sucedió un error');
-    //console.log('Registrado en el log file');
-    if (!navigator.onLine) {
-      // Handle offline error
-      console.error('Browser Offline!');
-    } else {
-      if (error instanceof HttpErrorResponse) {
-        // Server or connection error happened
-        if (!navigator.onLine) {
-            console.error('Browser Offline!');
-        } else {
-            // Handle Http Error (4xx, 5xx, ect.)
-            if(error.status == 500){
-              //Se debe redireccionar a pagina 500
-            }
-            console.warn(error);
-        }
-      } else {
-          // Handle Client Error (Angular Error, ReferenceError...)
-          console.error('Client Error!');
-      }
-      //return throwError('Error');
-      return throwError(error.error.message);
-    }
-  }*/
 }

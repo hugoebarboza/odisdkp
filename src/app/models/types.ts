@@ -732,6 +732,7 @@ export class UserRolService {
     public store: number,
     public update: number,
     public destroy: number,
+    public grant: number,
     public status: number,
     ) {}
 }

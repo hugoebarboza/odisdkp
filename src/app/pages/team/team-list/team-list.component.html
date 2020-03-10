@@ -51,7 +51,7 @@
                       <div class="col-sm-12">
                           <div class="alert alert-danger" *ngIf="status == 'error'">
                               No se encontraron registros que coincidan con su búsqueda. 
-                              <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+                              <button mat-button color="primary" (click)="load()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
                               <button mat-button  (click)="addTeam(id)" *ngIf="_userService.isRole(7)"><mat-icon class="material-icons md-14">people</mat-icon>Crear Equipo</button>
                           </div>
                       </div>
@@ -101,19 +101,22 @@
                                           </td>
 
                                           <td>
-                                              <div class="form-group row" >
+                                              <div>
                                                 {{ team.project_name}} 
                                               </div>
                                           </td>
 
                                           <td>
+                                            <ng-container *ngIf="users && users.length > 0">
                                             <ng-select [items]="users"
                                             bindLabel="usuario"
                                             bindValue="id"
                                             name="owner_id"
                                             placeholder="Responsable"
+                                            appendTo="body"
                                             [(ngModel)]="team.owner_id">
-                                           </ng-select>                 
+                                            </ng-select>
+                                            </ng-container>              
                                           </td>
             
           

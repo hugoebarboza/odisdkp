@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, SimpleChanges, OnDestroy, OnChanges, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, SimpleChanges, OnDestroy, OnChanges, ViewChild, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 import { ReplaySubject } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
@@ -34,7 +34,7 @@ interface Inspector {
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./tablero.component.css']
 })
-export class TableroComponent implements OnInit, OnDestroy, OnChanges {
+export class TableroComponent implements OnDestroy, OnChanges {
 
   title = 'Tablero de Inspecciones';
   subtitle = 'Listado de Inspecciones';
@@ -57,6 +57,8 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
   isLoadingResults = true;
   isRateLimitReached = false;
   pageIndex: number;
+  profile: any;
+  proyectos: any;
   project_id: number;
   resultsLength = 0;
   role: number;
@@ -138,27 +140,37 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
 
    }
 
-  ngOnInit() {
-  }
+  async ngOnChanges(_changes: SimpleChanges) {
 
-  ngOnChanges(_changes: SimpleChanges) {
-    this.terms = '';
-    this.isLoadingResults = true;
-    this.isRateLimitReached = false;
-    this.getEstatus(this.id);
-    this.getProject(this.id);
-    this.refreshTable();
-    this.cd.markForCheck();
+    if (this.id && this.id > 0 && this.token) {
+      this.terms = '';
+      this.proyectos = this._userService.getProyectos();
+      const response: any = await this._userService.getFilterService(this.proyectos, this.id);
+      if (response) {
+
+        this.profile = response;
+        this.project_id = response.project_id;
+        if (this.project_id && this.project_id > 0) {
+          this.getUser(this.project_id);
+        }
+        this.getEstatus(this.id);
+        // this.getProject(this.id);
+        this.refreshTable();
+        this.cd.markForCheck();
+      }
+    }
   }
 
   ngOnDestroy() {
     if (this.subscription) {
       this.subscription.unsubscribe();
+      this.datasource = [];
     }
   }
 
 
   public getData(response: any) {
+
     if (response && response.status === 'success') {
       if (response && response.datos.data) {
       this.resultsLength = response.datos.total;
@@ -179,10 +191,14 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
         this.getCountData(this.datasource, this.estatus);
       }
       this.isLoadingResults = false;
+      this.cd.markForCheck();
     } else {
+      this.isLoadingResults = false;
+      this.isRateLimitReached = true;
+      this.datasource = [];
+      this.cd.markForCheck();
       return;
     }
-    this.cd.markForCheck();
   }
 
   public getCountData(_data: any, _estatus: any) {
@@ -229,12 +245,13 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
+      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token, this.identity.sub, this.profile.grant)
       .then(response => { this.getData(response); })
       .catch(error => {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             console.log(<any>error);
+            this.cd.markForCheck();
       });
       this.cd.markForCheck();
   }
@@ -249,7 +266,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
+      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token, this.identity.sub, this.profile.grant)
       .then(response => {this.getData(response); })
       .catch(error => {
              this.isLoadingResults = false;
@@ -384,14 +401,15 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
     this.cd.markForCheck();
    }
 
+   /*
    getProject(id: number) {
     this.subscription = this._orderService.getService(this.token.token, id).subscribe(
      response => {
                if (response.status === 'success') {
 
                this.project_id = response.datos['project_id'];
-               this.servicename = response.datos['service_name'];
-               this.ServicioSeleccionado.emit(this.servicename);
+               // this.servicename = response.datos['service_name'];
+               // this.ServicioSeleccionado.emit(this.servicename);
 
                if (this.project_id > 0) {
                  this.getUser(this.project_id);
@@ -399,7 +417,7 @@ export class TableroComponent implements OnInit, OnDestroy, OnChanges {
                }
       });
       this.cd.markForCheck();
-   }
+   }*/
 
    getUser(projectid: number) {
     if (projectid > 0) {

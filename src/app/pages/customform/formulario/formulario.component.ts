@@ -241,15 +241,18 @@ export class FormularioComponent implements OnInit , OnDestroy {
 
     const form = JSON.parse(JSON.stringify(this.forma.getRawValue()));
 
-    if (form && form.type && form.type === 'spinner') {
+    if (form && form.type && (form.type === 'spinner' || form.type === 'radio' || form.type === 'chip')) {
       const datosfiltro = form.datos;
       const newdatosfiltro: Array<any> = [];
       for (let i = 0; i < datosfiltro.length; i++) {
         const element = datosfiltro[i];
         if (element.label) {
           newdatosfiltro.push({value: element.label});
+        } else if (element.value) {
+          newdatosfiltro.push({value: element.value});
         } else {
-          newdatosfiltro.push({value: element});
+          Swal.fire('Importante', 'A ocurrido un error al agregar un elemento al formulario', 'error');
+          return;
         }
       }
       form.datos = newdatosfiltro;
@@ -310,9 +313,26 @@ export class FormularioComponent implements OnInit , OnDestroy {
     sheetRef.afterDismissed().subscribe( data => {
       // console.log('after close data :', data);
       if (data && data.message === 'success' && data.data) {
-        const response: any = data.data;
-        // console.log(response);
-        this.addrowtable(response);
+        const form: any = data.data;
+        // console.log(form);
+
+        if (form && form.type && (form.type === 'spinner' || form.type === 'radio' || form.type === 'chip')) {
+          const datosfiltro = form.datos;
+          const newdatosfiltro: Array<any> = [];
+          for (let i = 0; i < datosfiltro.length; i++) {
+            const element = datosfiltro[i];
+            if (element.label) {
+              newdatosfiltro.push({value: element.label});
+            } else if (element.value) {
+              newdatosfiltro.push({value: element.value});
+            } else {
+              Swal.fire('Importante', 'A ocurrido un error al agregar un elemento al formulario', 'error');
+              return;
+            }
+          }
+          form.datos = newdatosfiltro;
+        }
+        this.addrowtable(form);
       }
     });
   }

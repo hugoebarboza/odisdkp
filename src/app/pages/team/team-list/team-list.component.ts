@@ -147,6 +147,7 @@ export class TeamListComponent implements OnDestroy {
               }
               if (response.status === 'success') {
                 this.users = response.datos;
+                this.cd.markForCheck();
                 // console.log(this.users);
               }
               });

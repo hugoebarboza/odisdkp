@@ -36,8 +36,17 @@
 <div mat-dialog-actions>
     <div class="container">      
       <div class="row ">
-      <div class="footer-button-row">   
-      <button mat-button color="primary" type="submit"  [disabled]="destinatario.length === 0 || bandera" class="btnsave" (click)="submit(destinatario, notification)">Guardar y Enviar</button>
+      <div class="footer-button-row">
+        <!--
+          <button mat-button color="primary" type="submit"  [disabled]="destinatario.length === 0 || bandera" class="btnsave" (click)="submit(destinatario, notification)">Guardar y Enviar</button>
+          --->
+    
+      <mat-bar-button [options]="barButtonOptionsDisabled"  style="margin-right: 8px;" *ngIf="destinatario.length === 0 ">
+      </mat-bar-button>
+
+      <mat-bar-button [options]="barButtonOptions" (click)="submit(destinatario, notification)" style="margin-right: 8px;" *ngIf="destinatario.length > 0 ">
+      </mat-bar-button>
+
       <button mat-button (click)="onNoClick()" class="btnclose">Cancelar</button>
       </div>
       </div>

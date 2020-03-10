@@ -41,7 +41,8 @@ export class SettingUserComponent implements OnInit {
     { name: 'show', posicion: 2 },
     { name: 'store', posicion: 3 },
     { name: 'update', posicion: 4 },
-    { name: 'destroy', posicion: 5 }
+    { name: 'destroy', posicion: 5 },
+    { name: 'grant', posicion: 6 },
   ];
 
   posicion = 0;
@@ -120,7 +121,7 @@ export class SettingUserComponent implements OnInit {
   }
 
   makeForm(data: any) {
-
+    // console.log(data);
     this.userservicerol = data;
 
     // console.log(this.userservicerol);
@@ -213,6 +214,8 @@ export class SettingUserComponent implements OnInit {
       element3.disabled = true;
       const element4 = <HTMLInputElement> document.getElementById('myCheck' + index + 'destroy' + key.value.id);
       element4.disabled = true;
+      const element5 = <HTMLInputElement> document.getElementById('myCheck' + index + 'grant' + key.value.id);
+      element5.disabled = true;
 
     }
     if (status) {
@@ -224,6 +227,8 @@ export class SettingUserComponent implements OnInit {
       element3.disabled = false;
       const element4 = <HTMLInputElement> document.getElementById('myCheck' + index + 'destroy' + key.value.id);
       element4.disabled = false;
+      const element5 = <HTMLInputElement> document.getElementById('myCheck' + index + 'grant' + key.value.id);
+      element5.disabled = false;
     }
 
     // console.log(index);
@@ -246,6 +251,8 @@ export class SettingUserComponent implements OnInit {
         pila.pila.push(result);
       }
     }
+
+    // console.log(data);
 
 
     if (data && data.value && this.usuario && this.usuario.id > 0 && this.data && this.data.id && this.data.id > 0 && pila.pila.length > 0) {
@@ -320,7 +327,7 @@ export class SettingUserComponent implements OnInit {
           for (let x = 0; x < userservice.length; x += 1) {
             const res = userservice[x];
             if (result.id === res.id) {
-              const data = new UserRolService(res.userrol_id, res.user_id, result.id, result.project_id, res.service_name, res.show, res.store, res.update, res.delete, res.status);
+              const data = new UserRolService(res.userrol_id, res.user_id, result.id, result.project_id, res.service_name, res.show, res.store, res.update, res.delete, res.grant, res.status);
               find = true;
               userservicerol.push(data);
               // console.log(data);
@@ -328,7 +335,7 @@ export class SettingUserComponent implements OnInit {
             }
           }
           if (find === false) {
-            const nodata = new UserRolService(0, this.usuario.id, result.id, result.project_id, result.service_name, 0, 0, 0, 0, 0);
+            const nodata = new UserRolService(0, this.usuario.id, result.id, result.project_id, result.service_name, 0, 0, 0, 0, 0, 0);
             // console.log(nodata);
             userservicerol.push(nodata);
             // console.log(result);
@@ -341,7 +348,7 @@ export class SettingUserComponent implements OnInit {
       if (service && service.length > 0 && userservice.length === 0) {
         for (let i = 0; i < service.length; i += 1) {
           const result = service[i];
-          const nodata = new UserRolService(0, this.usuario.id, result.id, result.project_id, result.service_name, 0, 0, 0, 0, 0);
+          const nodata = new UserRolService(0, this.usuario.id, result.id, result.project_id, result.service_name, 0, 0, 0, 0, 0, 0);
           userservicerol.push(nodata);
         }
         // console.log(userservicerol);

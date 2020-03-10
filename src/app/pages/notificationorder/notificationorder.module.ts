@@ -13,6 +13,7 @@ import { ShowNotificacionComponent } from './dialog/show-notificacion/show-notif
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
 // MODULES
+import { MatProgressButtonsModule } from 'mat-progress-buttons';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
@@ -53,6 +54,7 @@ registerLocaleData(localeEs);
     FormsModule,
     HttpModule,
     HttpClientModule,
+    MatProgressButtonsModule,
     NgbModule,
     NgSelectModule,
     PipesModule,

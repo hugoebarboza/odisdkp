@@ -63,6 +63,19 @@
 		</div>
 	</div>
 
+	<div class="container-fluid" *ngIf="!isLoadingResults">
+		<div class="row">
+			<div class="col-sm">
+				<div class="row d-flex justify-content-center">
+					<div class="example-rate-limit-reached" *ngIf="isRateLimitReached">
+						No se encontraron registros que coincidan con su búsqueda.
+					</div>
+				</div>                        
+			</div>
+		</div>
+	</div>
+
+
 	<div class="p-2">
 		<div class="container-fluid " >
 				<div class="row mb-2" *ngIf="bootstrapClass !== null">

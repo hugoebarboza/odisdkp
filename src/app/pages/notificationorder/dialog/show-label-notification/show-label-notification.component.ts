@@ -4,6 +4,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs/Subscription';
 import { timer } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { MatProgressButtonOptions } from 'mat-progress-buttons';
 
 // FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -23,7 +24,6 @@ import { UserFirebase } from 'src/app/models/types';
 @UntilDestroy()
 export class ShowLabelNotificationComponent  {
 
-  bandera = false;
   destinatario = [];
   identity: any;
   isLoading: boolean;
@@ -32,6 +32,33 @@ export class ShowLabelNotificationComponent  {
   title = 'Etiquetar notificación del formulario: ';
   token: any;
   userFirebase: UserFirebase;
+
+  // BUTTONS
+  barButtonOptionsDisabled: MatProgressButtonOptions = {
+    active: false,
+    text: 'Guardar y Enviar',
+    buttonColor: 'primary',
+    barColor: 'accent',
+    raised: true,
+    stroked: false,
+    mode: 'indeterminate',
+    value: 0,
+    disabled: true
+  };
+
+
+  barButtonOptions: MatProgressButtonOptions = {
+    active: false,
+    text: 'Guardar y Enviar',
+    buttonColor: 'primary',
+    barColor: 'accent',
+    raised: true,
+    stroked: false,
+    mode: 'indeterminate',
+    value: 0,
+    disabled: false
+  };
+
 
   constructor(
     private _cdf: CdfService,
@@ -92,7 +119,9 @@ export class ShowLabelNotificationComponent  {
       return;
     }
 
-    this.bandera = true;
+    this.barButtonOptions.active = true;
+    this.barButtonOptions.text = 'Procesando...';
+
 
     if (users.length > 0 && this.data) {
       for (let x = 0; x < users.length; x++) {
@@ -111,6 +140,7 @@ export class ShowLabelNotificationComponent  {
           order_id: this.data.notification.order_id
           };
 
+        // console.log(msg);
 
         this._cdf.httpEmailNotification(this.token.token, msg).subscribe(
           response => {
@@ -122,10 +152,14 @@ export class ShowLabelNotificationComponent  {
             this.destinatario = [];
             this.toasterService.success('Notificación enviada exitosamente.', 'Exito', {timeOut: 8000});
             this.subscription = timer(2000).subscribe(_res => this.onNoClick());
+            this.barButtonOptions.active = false;
+            this.barButtonOptions.text = 'Guardar y Enviar';
 
             }
           },
             error => {
+            this.barButtonOptions.active = false;
+            this.barButtonOptions.text = 'Guardar y Enviar';
             console.log(<any>error);
             }
           );

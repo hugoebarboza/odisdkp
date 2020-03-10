@@ -3,6 +3,7 @@ import { SelectionModel } from '@angular/cdk/collections';
 import { FormControl, Validators, FormGroup} from '@angular/forms';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort, Sort } from '@angular/material/sort';
+import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatTableDataSource } from '@angular/material/table';
 import { debounceTime } from 'rxjs/operators/debounceTime';
 import { distinctUntilChanged } from 'rxjs/operators/distinctUntilChanged';
@@ -54,6 +55,7 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
 
 
   category_id: number;
+  durationInSeconds = 5;
   date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
   datedesde: FormControl;
   datehasta: FormControl;
@@ -64,12 +66,13 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   filteredInspectorMulti: ReplaySubject<Inspector[]> = new ReplaySubject<Inspector[]>(1);
   filteredRegionMulti: ReplaySubject<Region[]> = new ReplaySubject<Region[]>(1);
   filterValue = '';
+  debouncedInputValue = this.filterValue;
   form: FormGroup;
   form2: FormGroup;
   form3: FormGroup;
   form4: FormGroup;
   form5: FormGroup;
-  debouncedInputValue = this.filterValue;
+  fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
   identity: any;
   inspectorCtrl: FormControl = new FormControl();
   inspectorMultiFilterCtrl: FormControl = new FormControl();
@@ -85,7 +88,9 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   pageSize = 15;
   paramset = '';
   paramvalue: any;
+  proyectos: any;
   project_id: number;
+  profile: any;
   region = new Array();
   role: number;
   searchDecouncer$: Subject<string> = new Subject();
@@ -95,7 +100,7 @@ export class ViewOrderServiceSelectComponent implements OnInit,  OnDestroy {
   subscription: Subscription;
   selection = new SelectionModel<Order[]>(true, []);
   select = 0;
-  selectedEntry;
+  selectedEntry: any;
   serviceestatus: ServiceEstatus[] = [];
   resultsLength = 0;
   regionMultiCtrl: FormControl = new FormControl('', Validators.required );
@@ -184,11 +189,13 @@ selectedColumnnEstatus = {
   constructor(
     private cd: ChangeDetectorRef,
     public dataService: OrderserviceService,
+    public snackBar: MatSnackBar,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
     public _userService: UserService,
   ) {
     this.identity = this._userService.getIdentity();
+    this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
     this.portalevent = new EventEmitter();
     this.role = 5;
@@ -388,7 +395,19 @@ selectedColumnnEstatus = {
   }
 
 
-  ngOnInit() {
+  async ngOnInit() {
+    this.selectedColumnnDate.fieldValue = 'orders.create_at';
+    this.selectedColumnn.fieldValue = 'orders.create_at';
+    this.selectedColumnnDate.columnValueDesde = this.date.value;
+    this.selectedColumnnDate.columnValueHasta = this.date.value;
+    this.selectedRow = -1;
+    this.order_id = 0;
+    this.dataSource.paginator = this.paginator;
+    this.dataSource.sort = this.matSort;
+    this.showcell = true;
+    this.isactiveSearch = false;
+    this.datasourceLength = 0;
+
 
     this.es = {
       firstDayOfWeek: 1,
@@ -399,37 +418,38 @@ selectedColumnnEstatus = {
       monthNamesShort: [ 'ene', 'feb', 'mar', 'abr', 'may', 'jun', 'jul', 'ago', 'sep', 'oct', 'nov', 'dic' ],
       today: 'Hoy',
       clear: 'Borrar'
-  };
+    };
 
-    // console.log('on init');
-    // VALORES POR DEFECTO DE FILTRO AVANZADO
 
-    this.selectedColumnnDate.fieldValue = 'orders.create_at';
-    this.selectedColumnn.fieldValue = 'orders.create_at';
-    this.selectedColumnnDate.columnValueDesde = this.date.value;
-    this.selectedColumnnDate.columnValueHasta = this.date.value;
+    if (this.id && this.id > 0 && this.proyectos && this.proyectos.length > 0 && this.token) {
+      this.proyectos = this._userService.getProyectos();
+      const response: any = await this._userService.getFilterService(this.proyectos, this.id);
 
-    this.selectedRow = -1;
-    this.order_id = 0;
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.matSort;
-    this.showcell = true;
-    this.isactiveSearch = false;
-    this.datasourceLength = 0;
-    this.loadInfo();
-    this.getProject(this.id);
-    this.refreshTable();
+      if (response) {
+        this.project_id = response.project_id;
+        this.profile = response;
+        if (this.project_id && this.project_id > 0) {
+          this.getUser(this.project_id);
+        }
+        this.loadInfo();
+        // this.getProject(this.id);
+        this.refreshTable();
 
-    this.setupSearchDebouncer();
-    this.inspectorMultiFilterCtrl.valueChanges
-      .pipe(takeUntil(this._onDestroy))
-      .subscribe(() => {
-        this.filterInspector();
-        this.cd.markForCheck();
-      });
+        this.setupSearchDebouncer();
+        this.inspectorMultiFilterCtrl.valueChanges
+          .pipe(takeUntil(this._onDestroy))
+          .subscribe(() => {
+            this.filterInspector();
+            this.cd.markForCheck();
+          });
+      }
+    } else {
+      return;
+    }
 
       this.cd.markForCheck();
   }
+
 
 
   /** Whether the number of selected elements matches the total number of rows. */
@@ -485,10 +505,31 @@ selectedColumnnEstatus = {
               }
               });
     this.cd.markForCheck();
-    }
+  }
 
 
-  public refreshTable() {
+  async getQuery() {
+
+
+    this._orderService.getServiceOrder(
+      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
+      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+      this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
+      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token, this.identity.sub, this.profile.grant)
+      .then(response => {this.getData(response); })
+      .catch(error => {
+            this.isLoadingResults = false;
+            this.isRateLimitReached = true;
+            this.cd.markForCheck();
+            console.log(<any>error);
+      });
+  }
+
+
+  async refreshTable() {
+    this.fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
+    this.date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
     this.termino = '';
     this.selectedRow = -1;
     this.order_id = 0;
@@ -498,9 +539,12 @@ selectedColumnnEstatus = {
     this.filterValue = '';
     this.selectedColumnn.columnValue = '';
     this.selectedColumnn.fieldValue = '';
-    this.selectedColumnnDate.fieldValue = '';
-    this.selectedColumnnDate.columnValueDesde = '';
-    this.selectedColumnnDate.columnValueHasta = '';
+    this.selectedColumnnDate.fieldValue = 'orders.create_at';
+    this.selectedColumnnDate.columnValueDesde = this.fromdate;
+    this.selectedColumnnDate.columnValueHasta = this.date.value;
+    // this.selectedColumnnDate.fieldValue = '';
+    // this.selectedColumnnDate.columnValueDesde = '';
+    // this.selectedColumnnDate.columnValueHasta = '';
     this.filtersregion.fieldValue = '';
     this.selectedColumnnUsuario.fieldValue = '';
     this.selectedColumnnUsuario.columnValue = '';
@@ -516,20 +560,44 @@ selectedColumnnEstatus = {
     }
 
 
+    const data: any = await this._orderService.getServiceOrder(
+      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
+      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+      this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
+      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token, this.identity.sub, this.profile.grant);
+
+      if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
+        this.getData(data);
+        this.snackBar.open('Indicencias de Trabajo de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
+      } else {
+        this.getData(data);
+        this.dataSource = new MatTableDataSource();
+        this.isLoadingResults = false;
+        this.isRateLimitReached = true;
+      }
+
+      this.cd.markForCheck();
+
+
+      /*
     this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
+      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token, this.identity.sub, this.profile.grant)
       .then(response => { this.getData(response); })
       .catch(error => {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
+            this.dataSource = new MatTableDataSource();
+            this.cd.markForCheck();
             console.log(<any>error);
       });
-      this.cd.markForCheck();
+      this.cd.markForCheck();*/
   }
+
 
   public getData(response: any) {
     this.selection.clear();
@@ -551,7 +619,12 @@ selectedColumnnEstatus = {
         this.isactiveSearch = true;
       }
       this.isLoadingResults = false;
+      this.cd.markForCheck();
     } else {
+      this.isLoadingResults = false;
+      this.isRateLimitReached = true;
+      this.dataSource = new MatTableDataSource();
+      this.cd.markForCheck();
       return;
     }
     this.cd.markForCheck();
@@ -587,12 +660,14 @@ selectedColumnnEstatus = {
     ).subscribe((term: string) => {
       // Remember value after debouncing
       this.debouncedInputValue = term;
+      this.getQuery();
+      /*
       this._orderService.getServiceOrder(
         this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
         this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
         this.filtersregion.fieldValue, this.regionMultiCtrl.value,
         this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-        this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
+        this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token, this.identity.sub)
         .then(response => {
           this.getData(response);
 
@@ -601,7 +676,7 @@ selectedColumnnEstatus = {
               this.isLoadingResults = false;
               this.isRateLimitReached = true;
               console.log(<any>error);
-        });
+        });*/
       // Do the actual search
       this.cd.markForCheck();
     });
@@ -680,7 +755,7 @@ selectedColumnnEstatus = {
   }
 
 
-
+  /*
   getProject(id: number) {
     this.subscription = this._orderService.getService(this.token.token, id).subscribe(
      response => {
@@ -691,7 +766,7 @@ selectedColumnnEstatus = {
                }
                }
       });
-   }
+   }*/
 
    getUser(projectid: number) {
     if (projectid > 0) {
@@ -823,19 +898,20 @@ selectedColumnnEstatus = {
     }
 
     this.getParams();
-
+    this.getQuery();
+    /*
     this._orderService.getServiceOrder(
     this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
     this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
     this.filtersregion.fieldValue, this.regionMultiCtrl.value,
     this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-    this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
+    this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token, this.identity.sub)
     .then(response => {this.getData(response); })
     .catch(error => {
           this.isLoadingResults = false;
           this.isRateLimitReached = true;
           console.log(<any>error);
-    });
+    });*/
   }
 
 
@@ -862,18 +938,20 @@ selectedColumnnEstatus = {
 
   search() {
     this.getParams();
+    this.getQuery();
+    /*
     this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
+      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token, this.identity.sub)
       .then(response => {this.getData(response); })
       .catch(error => {
             this.isLoadingResults = false;
             this.isRateLimitReached = true;
             console.log(<any>error);
-      });
+      });*/
       this.cd.markForCheck();
   }
 
@@ -882,18 +960,20 @@ selectedColumnnEstatus = {
   onPaginateChange(event) {
     this.pageSize = event.pageSize;
     this.getParams();
+    this.getQuery();
+    /*
      this._orderService.getServiceOrder(
        this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
        this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
        this.filtersregion.fieldValue, this.regionMultiCtrl.value,
        this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-       this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token)
+       this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token, this.identity.sub)
        .then(response => { this.getData(response); } )
        .catch(error => {
              this.isLoadingResults = false;
              this.isRateLimitReached = true;
              console.log(<any>error);
-       });
+       });*/
        this.cd.markForCheck();
    }
 

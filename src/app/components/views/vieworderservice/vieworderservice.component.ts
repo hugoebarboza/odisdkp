@@ -138,7 +138,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   private project_id: number;
   private searchDecouncer$: Subject<string> = new Subject();
   service_id: number;
-  servicename: string;
+  // servicename: string;
   servicetypeid = 0;
   servicetype: ServiceType[] = [];
   selectedValueOrdeno: string;
@@ -448,7 +448,11 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.proyectos = this._userService.getProyectos();
       const response: any = await this._userService.getFilterService(this.proyectos, this.id);
       if (response) {
+        // console.log(response);
+        this.project_id = response.project_id;
         this.profile = response;
+        // this.servicename = response.service_name;
+        // this.ServicioSeleccionado.emit(this.servicename);
         this.portal = 0;
         this.selectedRow = -1;
         this.order_id = 0;
@@ -467,13 +471,16 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         this.date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
         this.loadInfo();
         this.getZona(this.id, this.token);
-        this.getProject(this.id, this.token);
+        // this.getProject(this.id, this.token);
         this.getTipoServicio(this.id, this.token);
         this.getEstatus(this.id, this.token);
         this.refreshTable();
         // this.cd.detectChanges();
         const serviceid = this.id;
         this.service_id = serviceid;
+        if (this.project_id && this.project_id > 0) {
+          this.getUser(this.project_id);
+        }
         this.cd.markForCheck();
       } else {
         this.cd.markForCheck();
@@ -538,6 +545,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     this._onDestroy.complete();
     if (this.subscription) {
     this.subscription.unsubscribe();
+    this.dataSource = new MatTableDataSource();
     }
   }
 
@@ -588,6 +596,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
+  /*
   getProject(id: number, token: any) {
   if (!token) {
     return;
@@ -596,12 +605,13 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     response => {
               if (response.status === 'success') {
               this.project_id = response.datos['project_id'];
+              console.log(this.project_id);
               if (this.project_id > 0) {
                 this.getUser(this.project_id);
               }
               }
      });
-  }
+  }*/
 
 
   getEstatus(id: number, token: any) {
@@ -674,18 +684,17 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
 
           if (response.datos && response.datos.data) {
             this.resultsLength = response.datos.total;
-            this.servicename = response.datos.data[0]['service_name'];
+            // this.servicename = response.datos.data[0]['service_name'];
             this.category_id =  response.datos.data[0]['category_id'];
             this.project_id = response.datos.data[0]['project_id'];
             this.isRateLimitReached = false;
             } else {
             this.resultsLength = 0;
-            this.servicename = response.datos['service_name'];
+            // this.servicename = response.datos['service_name'];
             this.category_id =  response.datos['projects_categories_customers']['id'];
             this.project_id = response.datos['project']['id'];
             this.isRateLimitReached = true;
             }
-            this.ServicioSeleccionado.emit(this.servicename);
             this.dataSource = new MatTableDataSource(response.datos.data);
             if (this.dataSource && this.dataSource.data.length > this.datasourceLength) {
               this.datasourceLength = this.dataSource.data.length;
@@ -699,6 +708,26 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       return;
     }
     this.cd.markForCheck();
+  }
+
+  async getQuery() {
+
+    const data: any = await this._orderService.getServiceOrder(
+      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
+      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
+      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
+      this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
+      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token, this.identity.sub, this.profile.grant);
+
+      if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
+        this.getData(data);
+      } else {
+        this.dataSource = new MatTableDataSource();
+        this.isLoadingResults = false;
+        this.isRateLimitReached = true;
+      }
+      this.cd.markForCheck();
+
   }
 
 
@@ -735,14 +764,14 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
       this.filtersregion.fieldValue, this.regionMultiCtrl.value,
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token);
+      this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token, this.identity.sub, this.profile.grant);
 
       if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
         this.getData(data);
         const trace = this.afp.trace$('getServiceOrder').subscribe();
         this.afp.trace('getServiceOrder', { metrics: { count: data.datos.data.length }, attributes: { user: this.identity.email}, incrementMetric$: { } });
         trace.unsubscribe();
-        this.snackBar.open('Órdenes de Trabajo de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
+        this.snackBar.open('Incidencias de Trabajo de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
       } else {
         this.getData(data);
         this.dataSource = new MatTableDataSource();
@@ -915,35 +944,21 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
 
+
   async onPaginateChange(event) {
 
    this.isLoadingResults = true;
    this.pageSize = event.pageSize;
    this.getParams();
-
-    const data: any = await this._orderService.getServiceOrder(
-      this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
-      this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
-      this.filtersregion.fieldValue, this.regionMultiCtrl.value,
-      this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
-      this.sort.active, this.sort.direction, this.pageSize, this.paginator.pageIndex, this.id, this.token.token);
-
-      if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
-        this.getData(data);
-      } else {
-        this.dataSource = new MatTableDataSource();
-        this.isLoadingResults = false;
-        this.isRateLimitReached = true;
-      }
-      this.cd.markForCheck();
+   this.getQuery();
   }
 
 
   async search() {
     this.isLoadingResults = true;
     this.getParams();
-
-
+    this.getQuery();
+    /*
     const data: any = await this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
       this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
@@ -958,7 +973,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.isLoadingResults = false;
       this.isRateLimitReached = true;
     }
-    this.cd.markForCheck();
+    this.cd.markForCheck();*/
 
   }
 
@@ -982,6 +997,8 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       // Remember value after debouncing
       this.getParams();
       this.debouncedInputValue = term;
+      this.getQuery();
+      /*
       this._orderService.getServiceOrder(
         this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
         this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
@@ -996,7 +1013,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
               this.isRateLimitReached = true;
               console.log(<any>error);
         });
-        this.cd.markForCheck();
+        this.cd.markForCheck();*/
     });
   }
 
@@ -1010,7 +1027,9 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }
     this.isLoadingResults = true;
     this.getParams();
+    this.getQuery();
 
+    /*
     const data: any = await this._orderService.getServiceOrder(
     this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
     this.selectedColumnnDate.fieldValue, this.selectedColumnnDate.columnValueDesde, this.selectedColumnnDate.columnValueHasta,
@@ -1025,7 +1044,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this.isLoadingResults = false;
       this.isRateLimitReached = true;
     }
-    this.cd.markForCheck();
+    this.cd.markForCheck();*/
 
   }
 
