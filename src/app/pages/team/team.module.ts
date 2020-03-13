@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // PROVIDERS
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
-
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 // MODULES
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -15,7 +14,6 @@ import { SharedModule } from '../../components/shared/shared.module';
 // COMPONENTS
 
 // DIALOG
-// import { AddTeamComponent } from '../usuarios/dialog/add-team/add-team.component';
 import { AddUserTeamComponent } from './dialog/add-user-team/add-user-team.component';
 import { EditTeamComponent } from './dialog/edit-team/edit-team.component';
 
@@ -52,7 +50,7 @@ import { TeamListComponent } from './team-list/team-list.component';
     EditTeamComponent
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+    httpInterceptorProviders
   ],
 })
 export class TeamModule { }

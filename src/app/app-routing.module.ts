@@ -1,4 +1,6 @@
 import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+
 import { Routes, RouterModule } from '@angular/router';
 
 // PRELOAD
@@ -17,7 +19,7 @@ import { RegisterComponent } from './register/register.component';
 import { PagesComponent } from './pages/pages.component';
 
 // Guards
-import { AuthguardService } from './services/authguard.service';
+// import { AuthguardService } from './services/authguard.service';
 import { LoginGuardGuard } from './services/guards/login-guard.guard';
 
 
@@ -182,16 +184,15 @@ const appRoute: Routes = [
 ];
 
 
+
 @NgModule({
-    imports: [
+  declarations: [],
+  imports: [
+    CommonModule,
     QuicklinkModule,
     RouterModule.forRoot(appRoute, { useHash: true,  enableTracing: false,  preloadingStrategy: QuicklinkStrategy })
-    ],
-    exports: [QuicklinkModule, RouterModule],
-    providers: [AuthguardService, LoginGuardGuard]
-  })
-
+  ],
+  exports: [QuicklinkModule, RouterModule],
+  providers: [LoginGuardGuard]
+})
 export class AppRoutingModule { }
-
-
-

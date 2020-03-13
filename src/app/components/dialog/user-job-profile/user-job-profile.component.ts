@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, OnDestroy, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, Input, OnDestroy, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
 import { Subscription } from 'rxjs/Subscription';
 
 // SERVICES
@@ -7,19 +7,17 @@ import { ModalManageService, UserService } from 'src/app/services/service.index'
 @Component({
   selector: 'app-user-job-profile',
   templateUrl: './user-job-profile.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./user-job-profile.component.css']
 })
-export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
+export class UserJobProfileComponent implements OnDestroy, OnChanges {
+
+  @Input() id: number;
 
   isLoading = true;
   subscription: Subscription;
   title = 'Perfil del Usuario';
   token: any;
   user: any;
-  userid = 0;
-
-  @Input() id: number;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -30,10 +28,6 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
     this.cd.markForCheck();
   }
 
-  ngOnInit() {
-    // console.log('oninit');
-    // this.cd.markForCheck();
-  }
 
   ngOnDestroy() {
     if (this.subscription) {
@@ -45,14 +39,12 @@ export class UserJobProfileComponent implements OnInit, OnDestroy, OnChanges {
 
   ngOnChanges(_changes: SimpleChanges) {
     this.user = null;
-    this.userid = 0;
+    let userid = 0;
     this.cd.markForCheck();
-    // console.log(this.userid);
     if (this.id > 0) {
-      const userid = this.id;
-      this.userid = userid;
+      userid = this.id;
       this.isLoading = true;
-      this.subscription = this._userService.getUserShowInfo(this.token.token, this.userid).subscribe(
+      this.subscription = this._userService.getUserShowInfo(this.token.token, userid).subscribe(
         response => {
           this.isLoading = false;
           this.cd.markForCheck();

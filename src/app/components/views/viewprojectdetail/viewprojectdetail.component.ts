@@ -18,23 +18,24 @@ import { AngularFireAuth } from '@angular/fire/auth';
 // DIALOG
 import { AddAlimentadorComponent } from 'src/app/pages/orderservice/components/dialog/add-alimentador/add-alimentador.component';
 import { AddClavelecturaComponent } from 'src/app/pages/orderservice/components/dialog/add-clavelectura/add-clavelectura.component';
-import { AddColorComponent } from '../../../pages/orderservice/components/dialog/add-color/add-color.component';
-import { AddConstanteComponent } from '../../../pages/orderservice/components/dialog/add-constante/add-constante.component';
-import { AddGiroComponent } from '../../../pages/orderservice/components/dialog/add-giro/add-giro.component';
-import { AddMarcaComponent } from '../../../pages/orderservice/components/dialog/add-marca/add-marca.component';
-import { AddMercadoComponent } from '../../../pages/orderservice/components/dialog/add-mercado/add-mercado.component';
-import { AddModeloComponent } from '../../../pages/orderservice/components/dialog/add-modelo/add-modelo.component';
-import { AddSectorComponent } from '../../../pages/orderservice/components/dialog/add-sector/add-sector.component';
+import { AddColorComponent } from 'src/app/pages/orderservice/components/dialog/add-color/add-color.component';
+import { AddConstanteComponent } from 'src/app/pages/orderservice/components/dialog/add-constante/add-constante.component';
+import { AddGiroComponent } from 'src/app/pages/orderservice/components/dialog/add-giro/add-giro.component';
+import { AddMarcaComponent } from 'src/app/pages/orderservice/components/dialog/add-marca/add-marca.component';
+import { AddMercadoComponent } from 'src/app/pages/orderservice/components/dialog/add-mercado/add-mercado.component';
+import { AddModeloComponent } from 'src/app/pages/orderservice/components/dialog/add-modelo/add-modelo.component';
+import { AddPriorityComponent } from 'src/app/pages/orderservice/components/dialog/add-priority/add-priority.component';
+import { AddSectorComponent } from 'src/app/pages/orderservice/components/dialog/add-sector/add-sector.component';
 import { AddSedComponent } from 'src/app/pages/orderservice/components/dialog/add-sed/add-sed.component';
 import { AddSetComponent } from 'src/app/pages/orderservice/components/dialog/add-set/add-set.component';
-import { AddServiceTypeComponent } from '../../../pages/orderservice/components/dialog/add-service-type/add-service-type.component';
-import { AddServiceTypeValueComponent } from '../../../pages/orderservice/components/dialog/add-service-type-value/add-service-type-value.component';
-import { AddServiceValueComponent } from '../../../pages/orderservice/components/dialog/add-service-value/add-service-value.component';
-import { AddTarifaComponent } from '../../../pages/orderservice/components/dialog/add-tarifa/add-tarifa.component';
-import { AddZonaComponent } from '../../../pages/orderservice/components/dialog/add-zona/add-zona.component';
-import { EditServiceComponent } from '../../../components/shared/shared.index';
-import { ShowcustomerComponent } from '../../../components/dialog/showcustomer/showcustomer.component';
-import { StatusComponent } from '../../../pages/orderservice/components/dialog/status/status.component';
+import { AddServiceTypeComponent } from 'src/app/pages/orderservice/components/dialog/add-service-type/add-service-type.component';
+import { AddServiceTypeValueComponent } from 'src/app/pages/orderservice/components/dialog/add-service-type-value/add-service-type-value.component';
+import { AddServiceValueComponent } from 'src/app/pages/orderservice/components/dialog/add-service-value/add-service-value.component';
+import { AddTarifaComponent } from 'src/app/pages/orderservice/components/dialog/add-tarifa/add-tarifa.component';
+import { AddZonaComponent } from 'src/app/pages/orderservice/components/dialog/add-zona/add-zona.component';
+import { EditServiceComponent } from 'src/app/components/shared/shared.index';
+import { ShowcustomerComponent } from 'src/app/components/dialog/showcustomer/showcustomer.component';
+import { StatusComponent } from 'src/app/pages/orderservice/components/dialog/status/status.component';
 
 
 // MATERIAL
@@ -42,17 +43,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 
 // MODELS
-import {
-  Comuna,
-  Customer,
-  FileItem,
-  Provincia,
-  ProjectServiceCategorie,
-  ProjectServiceType,
-  Region,
-  Service,
-  User,
-  UserFirebase} from 'src/app/models/types';
+import { Comuna, Customer, FileItem, Provincia, ProjectServiceCategorie, ProjectServiceType, Region, Service, User, UserFirebase } from 'src/app/models/types';
 
 // MOMENT
 import * as _moment from 'moment';
@@ -390,7 +381,7 @@ sendCdf(data, message) {
   const body = 'Registro de trabajo en Proyecto: ' + this.project + ', Servicio: ' + this.servicename + ', con el siguiente Comentario: ' + message;
 
   if (this.destinatario.length > 0 && this.userFirebase.uid) {
-    for (let d of data) {
+    for (const d of data) {
 
       const notification = {
         userId: this.userFirebase.uid,
@@ -788,6 +779,20 @@ deleteCommentDatabase(item: any) {
       });
     }
 
+    priority(id: number) {
+      const dialogRef = this.dialog.open(AddPriorityComponent, {
+        width: '777px',
+        disableClose: true,
+        data: {
+          project_id: this.project_id,
+          service_id: id
+        }
+      });
+      dialogRef.afterClosed().subscribe(result => {
+        if (result === 1) {
+        }
+      });
+    }
 
     sector(id: number) {
       const dialogRef = this.dialog.open(AddSectorComponent, {

@@ -564,6 +564,7 @@ export class FormularioComponent implements OnInit , OnDestroy {
                   this.countclick++;
                   this.isLoadingAtributos = false;
                 } else {
+                  this.isLoadingAtributos = false;
                   Swal.fire('Importante', 'A ocurrido un error al cargar el formulario.', 'error');
                 }
                 console.log(<any>error);

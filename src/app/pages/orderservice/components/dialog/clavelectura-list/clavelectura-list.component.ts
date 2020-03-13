@@ -53,9 +53,9 @@ export class ClavelecturaListComponent implements OnInit, OnDestroy {
     this.total = new EventEmitter();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     if (this.id && this.id > 0) {
-      this.proyecto = this.filterProjectByService(this.id);
+      this.proyecto = await this.filterProjectByService(this.id);
       if (this.proyecto && this.proyecto.id > 0) {
         this.forma = new FormGroup({
           descripcion: new FormControl(null, [Validators.required, Validators.minLength(2)]),

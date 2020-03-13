@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 // PROVIDERS
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
-
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 // COMPONENTS
 import { NotificationComponent } from './notification-list/notification.component';
@@ -25,7 +24,6 @@ import { NotificationRoutingModule } from './notification.routing';
 import { ServiceModule } from 'src/app/services/service.module';
 
 
-
 @NgModule({
   imports: [
     CommonModule,
@@ -38,7 +36,7 @@ import { ServiceModule } from 'src/app/services/service.module';
   ],
   declarations: [NotificationComponent, NotificationReadComponent, NotificationUnreadComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+    httpInterceptorProviders
   ],
 })
 export class NotificationModule { }

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpInterceptor, HttpHandler, HttpResponse, HttpRequest, HttpEvent, HttpErrorResponse } from '@angular/common/http';
-import { throwError } from 'rxjs';
+// import { throwError } from 'rxjs';
 import { Observable } from 'rxjs/Observable';
 import { retry, catchError } from 'rxjs/operators';
 import { finalize } from 'rxjs/operators';
@@ -14,8 +14,12 @@ import { ShowLoaderAction, HideLoaderAction } from 'src/app/stores/loader/loader
 
 
 // SERVICES
+// import { LoggingService } from 'src/app/services/utility/logging.service';
 import { RequestCacheService } from 'src/app/services/utility/request-cache.service';
-// import { ErrorsHandler } from '../error/error-handler';
+
+// ERROR
+import { ErrorsHandler } from '../error/error-handler';
+
 
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
@@ -23,7 +27,8 @@ export class MyInterceptor implements HttpInterceptor {
 
     constructor(
       // private cache: RequestCacheService,
-      // private handleError: ErrorsHandler,
+      private _handleError: ErrorsHandler,
+      // private _logging: LoggingService,
       private store: Store<AppState>,
     ) {
 
@@ -31,10 +36,14 @@ export class MyInterceptor implements HttpInterceptor {
 
     intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
 
+        // const started = Date.now();
+        // let ok: string;
 
         Promise.resolve(null).then(() => this.store.dispatch(new ShowLoaderAction({isloading: true})));
 
         let token: string;
+        let authReq: any;
+
         const currentUser: any = JSON.parse(localStorage.getItem('token'));
         if (currentUser) {
           token = currentUser.token;
@@ -43,26 +52,40 @@ export class MyInterceptor implements HttpInterceptor {
         }
 
         if (token) {
-          // const headers = new HttpHeaders({'Authorization': token	});
-          // req = req.clone({ headers });
-          req = req.clone({ headers: req.headers.set('Authorization', token) });
+          authReq = req.clone({
+            headers: req.headers.set('Authorization', token)
+          });
+          // req = req.clone({ headers: req.headers.set('Authorization', token) });
         } else {
+          authReq = req;
+          // return;
         }
 
-        const reqClone = req;
-
+        // const reqClone = req;
         /* const cachedResponse = this.cache.get(req);
         return cachedResponse ? of(cachedResponse) : this.sendRequest(req, next, this.cache); */
 
-        return next.handle( reqClone ).pipe(
-          finalize(() => this.store.dispatch(new HideLoaderAction())),
-          retry(0),
-          /* catchError( return this.handleError.handleError(error) )*/
-          catchError((error: HttpErrorResponse) => {
-              // return this.handleError.handleError(error);
-               return throwError(error);
-          })
-        );
+        return next.handle( authReq )
+                   .pipe(
+                    retry(0),
+                    tap(
+                      // Succeeds when there is a response; ignore other events
+                      // event => ok = event instanceof HttpResponse ? 'succeeded' : '',
+                      // Operation failed; error is an HttpErrorResponse
+                      // error => ok = error + 'failed'
+                    ),
+                    finalize(() => {
+                        this.store.dispatch(new HideLoaderAction());
+                        // const elapsed = Date.now() - started;
+                        // const msg = `${req.method} "${req.urlWithParams}"${ok} in ${elapsed} ms.`;
+                        // this._logging.add(msg);
+                      }
+                    ),
+                    catchError((error: HttpErrorResponse) => {
+                          return this._handleError.handleError(error);
+                          // return throwError(error);
+                      }
+                    ));
 
     }
 
@@ -73,7 +96,7 @@ export class MyInterceptor implements HttpInterceptor {
       cache: RequestCacheService): Observable<HttpEvent<any>> {
       return next.handle(req).pipe(
         finalize(() => this.store.dispatch(new HideLoaderAction())),
-        retry(1),
+        retry(0),
         tap(event => {
           if (event instanceof HttpResponse) {
             // console.log(req.url.indexOf("/role/"));

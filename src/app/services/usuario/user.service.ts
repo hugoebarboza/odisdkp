@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-
 import { Observable } from 'rxjs/Observable';
+import { catchError, share } from 'rxjs/operators';
 
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
@@ -14,16 +14,18 @@ import { Store } from '@ngrx/store';
 import { LoginAction, ResetAction } from 'src/app/contador.actions';
 import { ResetUserAction } from 'src/app/stores/auth/auth.actions';
 
-
 // MODELS
 import { Departamento, Proyecto, User } from 'src/app/models/types';
 
-
-// SETTINGS
+// GLOBAL
 import { GLOBAL } from '../global';
 
 // FIREBASE
 import { AngularFirePerformance } from '@angular/fire/performance';
+
+// ERROR
+import { ErrorsHandler } from 'src/app/providers/error/error-handler';
+
 
 
 @Injectable()
@@ -42,10 +44,11 @@ export class UserService  {
 
 
     constructor(
-    private afp: AngularFirePerformance,
+    private _handleError: ErrorsHandler,
     public _http: HttpClient,
-    private store: Store<AppState>,
     public _router: Router,
+    private afp: AngularFirePerformance,
+    private store: Store<AppState>,
     ) {
     this.url = GLOBAL.url;
     this.headers = undefined;
@@ -81,14 +84,17 @@ export class UserService  {
 
   getQuery( query: string, token: any ) {
 
-    if (!token) {
+    if (!token || !query) {
        return;
     }
 
     const url = this.url + query;
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this._http.get(url, {headers: headers});
-
+    return this._http.get(url, {headers: headers})
+                     .pipe(
+                       share(),
+                       catchError(this._handleError.handleError)
+                     );
   }
 
 
@@ -266,17 +272,6 @@ export class UserService  {
         }
 
 
-
-        /*
-		return this._http.post(this.url+'logindkp', params, {headers: headers})
-			.map( (resp: any) => {
-				this.token = resp;
-				let key = 'token';
-				this.saveStorage(key, resp);
-				return resp;
-			}).catch( err => {
-				return Observable.throw( err );
-			});*/
     }
 
     async signuptrue(user: any, getToken= null) {
@@ -298,17 +293,6 @@ export class UserService  {
         })
         .catch((error) => { console.log(error); });
 
-        /*
-		let headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-		return this._http.post(this.url+'logindkptrue', params, {headers: headers})
-			.map( (resp: any) => {
-				this.identity = resp;
-				let key = 'identity';
-				this.saveStorage(key, resp);
-				return resp;
-		}).catch( err => {
-			return Observable.throw( err );
-		});*/
     }
 
 

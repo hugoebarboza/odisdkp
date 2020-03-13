@@ -1,20 +1,12 @@
-import {
-    Injectable
-} from '@angular/core';
-
-import {
-    Http, URLSearchParams
-} from '@angular/http';
-
+import { Injectable } from '@angular/core';
+import { Http, URLSearchParams } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import {
-    environment
-} from '../../../environments/environment';
+// ENVIROMENT
+import { environment } from '../../../environments/environment';
 
-import {
-    GLOBAL
-} from '../global';
+// GLOBAL
+import { GLOBAL } from '../global';
 
 @Injectable({
     providedIn: 'root'
@@ -52,26 +44,20 @@ export class MapaService {
         return this.getQuery(paginate, params, token);
     }
 
-    getQuery(query: any, params, token) {
-        if (!token) {
+    getQuery(query: any, params: any, token: any) {
+        if (!token || !query) {
             return;
         }
 
-        console.log(query);
         const url = this.urlmap;
         // const href = url + query;
         const requestUrl = url;
 
-        return this._http.get(requestUrl, {
-            search: params
-        }).map((res: any) => {
-            // console.log(res.json());
-            return res;
-        });
+        return this._http.get(requestUrl, { search: params }).map((res: any) => res);
     }
 
-    getGoogleDirections(query: string, params, token) {
-        if (!token) {
+    getGoogleDirections(query: string, params: any, token: any) {
+        if (!token || !query) {
             return;
         }
 
@@ -89,7 +75,7 @@ export class MapaService {
             resolve(this._http.get(requestUrl, {
                 search: params
             }));
-        })
+        });
     }
 
 }

@@ -147,3 +147,12 @@ padding-top: 1px;
   .progress-bar {
   height: 2px;
   }
+
+  .knkYsf {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    opacity: 1;
+    border-radius: 50%;
+    margin: 2px;
+}

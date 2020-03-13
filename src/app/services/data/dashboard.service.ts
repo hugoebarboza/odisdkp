@@ -2,8 +2,11 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import { GLOBAL } from '../global';
+import { catchError, share } from 'rxjs/operators';
 
-import 'rxjs/add/operator/map';
+// ERROR
+import { ErrorsHandler } from 'src/app/providers/error/error-handler';
+
 
 @Injectable()
 export class DashboardService {
@@ -11,6 +14,7 @@ export class DashboardService {
     public url: string;
 
     constructor(
+       private _handleError: ErrorsHandler,
        public _http: HttpClient
     ) {
        this.url = GLOBAL.url;
@@ -19,16 +23,20 @@ export class DashboardService {
 
 
     getQuery( query: string, token: any ): Observable<any> {
-    if (!token) {
+    if (!token || !query) {
        return;
     }
 
     const url = this.url + query;
     const headers = new HttpHeaders({'Content-Type': 'application/json', });
-        return this._http.get(url, {headers: headers}).map((res: any) => res);
+        return this._http.get(url, {headers: headers})
+                         .pipe(
+                             share(),
+                             catchError(this._handleError.handleError)
+                         );
     }
 
-    getDepartamentos(token): Observable<any> {
+    getDepartamentos(token: any): Observable<any> {
         if (!token) {
            return;
         }
@@ -37,7 +45,7 @@ export class DashboardService {
     }
 
 
-    getProyectos(token, id): Observable<any> {
+    getProyectos(token: any, id: number): Observable<any> {
         if (!token) {
            return;
         }
@@ -45,7 +53,7 @@ export class DashboardService {
         return this.getQuery('departamento/' + id + '/proyecto', token);
     }
 
-    getServicios(token, id): Observable<any> {
+    getServicios(token: any, id: number): Observable<any> {
         if (!token) {
           return;
         }

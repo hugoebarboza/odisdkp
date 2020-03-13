@@ -35,6 +35,7 @@ import { AddJobComponent } from './components/dialog/add-job/add-job.component';
 import { AddMercadoComponent } from './components/dialog/add-mercado/add-mercado.component';
 import { AddMarcaComponent } from './components/dialog/add-marca/add-marca.component';
 import { AddModeloComponent } from './components/dialog/add-modelo/add-modelo.component';
+import { AddPriorityComponent } from './components/dialog/add-priority/add-priority.component';
 import { AddSectorComponent } from './components/dialog/add-sector/add-sector.component';
 import { AddServiceTypeComponent } from './components/dialog/add-service-type/add-service-type.component';
 import { AddServiceValueComponent } from './components/dialog/add-service-value/add-service-value.component';
@@ -64,6 +65,7 @@ import { LogUbicacionesComponent } from '../../components/dialog/log-ubicaciones
 import { MarcaListComponent } from './components/dialog/marca-list/marca-list.component';
 import { MercadoListComponent } from './components/dialog/mercado-list/mercado-list.component';
 import { ModeloListComponent } from './components/dialog/modelo-list/modelo-list.component';
+import { PriorityListComponent } from './components/dialog/priority-list/priority-list.component';
 import { SectorListComponent } from './components/dialog/sector-list/sector-list.component';
 import { SendOrderByEmailComponent } from './components/dialog/send-order-by-email/send-order-by-email.component';
 import { ServiceTypeListComponent } from './components/dialog/service-type-list/service-type-list.component';
@@ -93,8 +95,8 @@ import { ModalImageComponent } from '../../components/modal/modalimage/modalimag
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
 // PROVIDERS
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 
 // MODULES
@@ -141,7 +143,6 @@ import { OrderserviceComponent } from './components/orderservice/orderservice.co
 // Global vars
 import { environment } from '../../../environments/environment';
 
-
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -179,6 +180,7 @@ registerLocaleData(localeEs);
     ViewModule
   ],
   declarations: [
+    AddAlimentadorComponent,
     AddClavelecturaComponent,
     AddComponent,
     AddConstanteComponent,
@@ -187,10 +189,10 @@ registerLocaleData(localeEs);
     AddFormComponent,
     AddGiroComponent,
     AddJobComponent,
-    AddAlimentadorComponent,
     AddMarcaComponent,
     AddMercadoComponent,
     AddModeloComponent,
+    AddPriorityComponent,
     AddServiceTypeComponent,
     AddServiceTypeValueComponent,
     AddServiceValueComponent,
@@ -232,6 +234,7 @@ registerLocaleData(localeEs);
     ModalImageComponent,
     ModeloListComponent,
     OrderserviceComponent,
+    PriorityListComponent,
     ServiceTypeListComponent,
     SettingsComponent,
     SettingscustomerComponent,
@@ -263,6 +266,7 @@ registerLocaleData(localeEs);
   exports: [
   ],
   entryComponents: [
+    AddAlimentadorComponent,
     AddClavelecturaComponent,
     AddComponent,
     AddConstanteComponent,
@@ -271,10 +275,10 @@ registerLocaleData(localeEs);
     AddFormComponent,
     AddGiroComponent,
     AddJobComponent,
-    AddAlimentadorComponent,
     AddMarcaComponent,
     AddMercadoComponent,
     AddModeloComponent,
+    AddPriorityComponent,
     AddSectorComponent,
     AddServiceTypeComponent,
     AddServiceTypeValueComponent,
@@ -317,12 +321,12 @@ registerLocaleData(localeEs);
     ZipComponent
   ],
   providers: [
+    httpInterceptorProviders,
     NgbActiveModal,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
-    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
   ],
 })
 export class OrderServiceModule { }

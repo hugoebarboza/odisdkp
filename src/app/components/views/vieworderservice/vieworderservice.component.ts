@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
+import { Component, ElementRef, OnDestroy, ViewChild, Input, Output, EventEmitter, OnChanges, SimpleChanges, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { Sort, MatSort } from '@angular/material/sort';
@@ -90,7 +90,7 @@ interface Time {
   providers: [ExcelService, OrderserviceService, UserService]
 })
 
-export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
+export class VieworderserviceComponent implements OnDestroy, OnChanges {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) matSort: MatSort;
@@ -105,14 +105,14 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   @ViewChild('myTemplate3', { static: true }) myTemplate3: TemplatePortal<any>;
   @ViewChild('myTemplate4', { static: true }) myTemplate4: TemplatePortal<any>;
 
-  public title = 'Órdenes de trabajo';
+  title = 'Incidencias de trabajo';
   // date = new FormControl(moment([2019, 3, 2]).format('YYYY[-]MM[-]DD'));
   assigned_to = 0;
   fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
   date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
   durationInSeconds = 5;
   isMobile = '';
-  subtitle = 'Listado de órdenes de trabajo. Agregue, edite, elimine y ordene los datos de acuerdo a su preferencia.';
+  subtitle = 'Listado de incidencias. Agregue, edite, elimine y ordene los datos de acuerdo a su preferencia.';
   columnselect: string[] = new Array();
   datedesde: FormControl;
   datehasta: FormControl;
@@ -417,7 +417,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   showModal(id: number) {
-    // console.log(id);
     if (id > 0) {
       this.cd.markForCheck();
       this._modalManage.showModal(id);
@@ -427,7 +426,10 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
     }
   }
 
-  ngOnInit() {
+
+
+  async ngOnChanges(_changes: SimpleChanges) {
+
     // VALORES POR DEFECTO DE FILTRO AVANZADO
     this.selectedColumnnDate.fieldValue = 'orders.create_at';
     this.selectedColumnn.fieldValue = 'orders.create_at';
@@ -439,10 +441,7 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
         this.cd.markForCheck();
       });
     this.cd.markForCheck();
-  }
 
-
-  async ngOnChanges(_changes: SimpleChanges) {
     if (this.id && this.id > 0 && this.proyectos && this.proyectos.length > 0 && this.token) {
       // this.afterChanges(this.id);
       this.proyectos = this._userService.getProyectos();
@@ -491,54 +490,6 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
       this._router.navigate(['/notfound']);
     }
   }
-
-  /*
-  async afterChanges(id: number) {
-    // this._userService.isRoleService('store', this.id);
-
-    if (id && id > 0 && this.proyectos && this.proyectos.length > 0) {
-
-      this.proyectos = this._userService.getProyectos();
-      const response: any = await this._userService.getFilterService(this.proyectos, this.id);
-      if (response) {
-        this.profile = response;
-        this.portal = 0;
-        this.selectedRow = -1;
-        this.order_id = 0;
-        this.dataSource = new MatTableDataSource();
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.matSort;
-        this._portal = this.myTemplate;
-        this._home = this.myTemplate;
-        this.showcell = true;
-        this.isactiveSearch = false;
-        this.datasourceLength = 0;
-        this.filterValue = '';
-        this.termino = '';
-        this.selectedoption = 0;
-        this.fromdate = moment(Date.now() - 7 * 24 * 3600 * 1000).format('YYYY-MM-DD');
-        this.date = new FormControl(moment(new Date()).format('YYYY[-]MM[-]DD'));
-        this.loadInfo();
-        console.log('---------------------------------------------');
-        console.log(this.token);
-        console.log('---------------------------------------------');
-        this.getZona(this.id, this.token);
-        this.getProject(this.id);
-        this.getTipoServicio(this.id);
-        this.getEstatus(this.id);
-        this.refreshTable();
-        // this.cd.detectChanges();
-        const serviceid = this.id;
-        this.service_id = serviceid;
-        this.cd.markForCheck();
-      } else {
-        this.cd.markForCheck();
-        this._router.navigate(['/notfound']);
-      }
-
-    }
-
-  }*/
 
   ngOnDestroy() {
     this._onDestroy.next();
@@ -978,13 +929,23 @@ export class VieworderserviceComponent implements OnInit, OnDestroy, OnChanges {
   }
 
   applyFilter() {
+    let previousSearchTerm = '';
+    previousSearchTerm = this.filterValue.trim();
+    if (previousSearchTerm.length > 1 && previousSearchTerm !== '' && this.termino !== previousSearchTerm) {
+      this.isLoadingResults = true;
+      this.termino = this.filterValue.trim();
+      this.searchDecouncer$.next(previousSearchTerm);
+    }
+
+    /*
     this.filterValue = this.filterValue.trim();
     if (this.filterValue.length > 1 && this.filterValue.trim() !== '' && this.termino !== this.filterValue) {
       this.isLoadingResults = true;
       // this.getParams();
       this.termino = this.filterValue.trim();
-      this.searchDecouncer$.next(this.filterValue.trim());
+      this.searchDecouncer$.next(previousSearchTerm);
     }
+    */
     this.cd.markForCheck();
 
   }
@@ -1519,7 +1480,7 @@ private filterRegionMulti() {
     this.excelService.exportAsExcelFile(this.dataSource.data, 'Ordenes');
   }
 
-  ExportTOExcelDate($event): void {
+  ExportTOExcelDate($event: any): void {
    const arraydata = [];
    let valuearrayexcel = '';
    // var pattern = /(\w+)\s+(\w+)/;
@@ -1575,7 +1536,7 @@ private filterRegionMulti() {
      this.sort.active, this.sort.direction, 0, 0, this.project_id, this.id, this.token.token, $event).then(
      (res: any) => {
         res.subscribe(
-         (some) => {
+         (some: any) => {
            if (some.datos) {
            this.exportDataSource = new MatTableDataSource(some.datos);
 

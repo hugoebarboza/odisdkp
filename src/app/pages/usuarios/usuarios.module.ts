@@ -3,9 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // PROVIDERS
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
-
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 // MODULES
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -19,7 +18,6 @@ import { UsuarioWorkComponent } from './usuario-work/usuario-work.component';
 
 // DIALOG
 import { AddUserComponent } from './dialog/adduser/adduser.component';
-// import { AddTeamComponent } from './dialog/add-team/add-team.component';
 import { EditUserComponent } from './dialog/edituser/edituser.component';
 import { ModalUploadImageComponent } from './dialog/modaluploadimage/modaluploadimage.component';
 import { SettingUserComponent } from './dialog/setting-user/setting-user.component';
@@ -31,7 +29,6 @@ import { UsuariosRoutingModule } from './usuarios.routing';
 
 // SERVICES
 import { ServiceModule } from 'src/app/services/service.module';
-
 
 
 @NgModule({
@@ -48,7 +45,6 @@ import { ServiceModule } from 'src/app/services/service.module';
   ],
   declarations: [
     AddUserComponent,
-    // AddTeamComponent,
     EditUserComponent,
     ModalUploadImageComponent,
     SettingUserComponent,
@@ -59,14 +55,13 @@ import { ServiceModule } from 'src/app/services/service.module';
   ],
   entryComponents: [
     AddUserComponent,
-    // AddTeamComponent,
     EditUserComponent,
     ModalUploadImageComponent,
     SettingUserComponent,
     ShowProfileSecurityComponent,
   ],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+    httpInterceptorProviders
   ],
 })
 export class UsuariosModule { }

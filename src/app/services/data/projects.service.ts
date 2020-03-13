@@ -1,10 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Observable } from 'rxjs/Observable';
-import { throwError } from 'rxjs';
 import 'rxjs/add/operator/map';
+import { catchError, share } from 'rxjs/operators';
 
 // CACHE
 import { Cacheable } from 'ngx-cacheable';
@@ -20,6 +19,9 @@ import { Color, Constante, CurrencyValue, Giro, Mercado, Order, Proyecto, Projec
 
 import Swal from 'sweetalert2';
 
+// ERROR
+import { ErrorsHandler } from 'src/app/providers/error/error-handler';
+
 const cacheBuster$ = new Subject<void>();
 
 @Injectable({
@@ -28,13 +30,10 @@ const cacheBuster$ = new Subject<void>();
 export class ProjectsService {
     public url: string;
     error: boolean;
-    errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
-    errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
 
     constructor(
+        private _handleError: ErrorsHandler,
         public _http: HttpClient,
-        private _snackBar: MatSnackBar,
-        // private toasterService: ToastrService,
     ) {
         this.url = GLOBAL.url;
         this.error = false;
@@ -83,24 +82,6 @@ export class ProjectsService {
         return this._http.post(this.url + 'project' + '/' + id + '/' + 'service', params, {
             headers: headers
         }).map((resp: any) => resp);
-        /*
-		this._http.post(this.url+'project'+'/'+id+'/'+'service', params, {headers: headers}).subscribe(
-			(data:any) => {
-
-				if(data.status === 'success'){
-					swal('Proyecto creado exitosamente con ID: ', data.lastInsertedId +'.', 'success' );
-				}else{
-					swal('No fue posible procesar su solicitud', data.message, 'error');
-				}
-
-				//this.toasterService.success('Proyecto creado.', 'Exito', {timeOut: 6000,});
-				},
-				(err: HttpErrorResponse) => {
-				this.error = err.error.message;
-				//console.log(err.error.message);
-				//this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-				swal('No fue posible procesar su solicitud', err.error.message, 'error');
-				});*/
     }
 
     addProjectServiceCategorie(token: any, id: number, data: ProjectServiceType): Observable < any > {
@@ -113,12 +94,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'project/' + id + '/servicecategorie', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'project/' + id + '/servicecategorie', params, { headers: headers }).map((resp: any) => resp);
     }
 
     addProjecType(token: any, id: number, data: ProjectServiceType): Observable < any > {
@@ -131,12 +107,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'project/' + id + '/servicetype', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'project/' + id + '/servicetype', params, { headers: headers }).map((resp: any) => resp);
     }
 
     addServiceConstante(token: any, id: number, data: Constante): Observable < any > {
@@ -149,12 +120,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'service/' + id + '/constante', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'service/' + id + '/constante', params, { headers: headers }).map((resp: any) => resp);
     }
 
     addServiceGiro(token: any, id: number, data: Giro): Observable < any > {
@@ -167,12 +133,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'service/' + id + '/giro', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'service/' + id + '/giro', params, { headers: headers }).map((resp: any) => resp );
     }
 
     addServiceMercado(token: any, id: number, data: Mercado): Observable < any > {
@@ -185,12 +146,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'service/' + id + '/mercado', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'service/' + id + '/mercado', params, { headers: headers }).map((resp: any) => resp );
     }
 
     addServiceSector(token: any, id: number, data: Sector): Observable < any > {
@@ -203,12 +159,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'service/' + id + '/sector', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'service/' + id + '/sector', params, { headers: headers }).map((resp: any) => resp );
     }
 
     addServiceTarifa(token: any, id: number, data: Tarifa): Observable < any > {
@@ -221,12 +172,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'service/' + id + '/tarifa', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'service/' + id + '/tarifa', params, { headers: headers }).map((resp: any) => resp);
     }
 
     addServiceType(token: any, id: number, data: ServiceType): Observable < any > {
@@ -239,12 +185,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'service/' + id + '/servicetype', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'service/' + id + '/servicetype', params, { headers: headers }).map((resp: any) => resp);
     }
 
     addServiceZona(token: any, id: number, data: Zona): Observable < any > {
@@ -257,12 +198,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'service/' + id + '/zona', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'service/' + id + '/zona', params, { headers: headers }).map((resp: any) => resp);
     }
 
     addServiceValue(token: any, id: number, data: ServiceValue): Observable < any > {
@@ -275,12 +211,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'service/' + id + '/value', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'service/' + id + '/value', params, { headers: headers }).map((resp: any) => resp);
     }
 
     addServiceTypeValue(token: any, id: number, data: ServiceTypeValue): Observable < any > {
@@ -293,12 +224,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'servicetype/' + id + '/value', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'servicetype/' + id + '/value', params, { headers: headers }).map((resp: any) => resp);
     }
 
     cloneService(token: any, service: Service, id: number, service_id: number): Observable < any > {
@@ -310,12 +236,7 @@ export class ProjectsService {
         const params = 'json=' + json;
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'project' + '/' + id + '/' + 'service' + '/' + service_id + '/clone/1', params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'project' + '/' + id + '/' + 'service' + '/' + service_id + '/clone/1', params, { headers: headers }).map((resp: any) => resp);
 
     }
 
@@ -361,12 +282,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.post(this.url + 'currencyvalue/' + id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'currencyvalue/' + id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     updateProject(token: any, project: Proyecto, id: number): Observable < any > {
@@ -380,12 +296,7 @@ export class ProjectsService {
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
         // console.log(headers);
 
-        return this._http.post(this.url + 'projectupdate/' + id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.post(this.url + 'projectupdate/' + id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     updateProjectServiceCategorie(token: any, id: number, data: ProjectServiceType, data_id: number): Observable < any > {
@@ -398,12 +309,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'project/' + id + '/servicecategorie/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'project/' + id + '/servicecategorie/' + data_id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     updateProjecType(token: any, id: number, data: ProjectServiceType, data_id: number): Observable < any > {
@@ -416,12 +322,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'project/' + id + '/servicetype/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'project/' + id + '/servicetype/' + data_id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     updateService(token: any, service: Service, id: number, service_id: number): Observable < any > {
@@ -433,29 +334,8 @@ export class ProjectsService {
         const params = 'json=' + json;
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'project' + '/' + id + '/' + 'service' + '/' + service_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'project' + '/' + id + '/' + 'service' + '/' + service_id, params, { headers: headers }).map((resp: any) => resp);
 
-        /*
-		this._http.put(this.url+'project'+'/'+id+'/'+'service'+'/'+service_id, params, {headers: headers}).subscribe(
-    		(data:any) => {
-				  //this.toasterService.success('Proyecto actualizado.', 'Exito', {timeOut: 6000,});
-					if(data.status === 'success'){
-						swal('Proyecto actualizado exitosamente con ID: ', id +'.', 'success' );
-					}else{
-						swal('No fue posible procesar su solicitud', '', 'error');
-					}
-			      },
-			      (err: HttpErrorResponse) => {
-			      //this.error = err.error.message;
-			      //console.log(err.error.message);
-				  //this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-				  swal('No fue posible procesar su solicitud', err.error.message, 'error');
-			    });*/
     }
 
     updateServiceConstante(token: any, id: number, data: Constante, data_id: number): Observable < any > {
@@ -468,12 +348,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'service/' + id + '/constante/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'service/' + id + '/constante/' + data_id, params, { headers: headers }).map((resp: any) => resp );
     }
 
     updateServiceGiro(token: any, id: number, data: Giro, data_id: number): Observable < any > {
@@ -486,12 +361,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'service/' + id + '/giro/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'service/' + id + '/giro/' + data_id, params, { headers: headers }).map((resp: any) => resp );
     }
 
     updateServiceMercado(token: any, id: number, data: Mercado, data_id: number): Observable < any > {
@@ -504,12 +374,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'service/' + id + '/mercado/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'service/' + id + '/mercado/' + data_id, params, { headers: headers }).map((resp: any) => resp );
     }
 
     updateServiceSector(token: any, id: number, data: Sector, data_id: number): Observable < any > {
@@ -522,12 +387,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'service/' + id + '/sector/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'service/' + id + '/sector/' + data_id, params, { headers: headers }).map((resp: any) => resp );
     }
 
     updateServiceTarifa(token: any, id: number, data: Tarifa, data_id: number): Observable < any > {
@@ -540,12 +400,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'service/' + id + '/tarifa/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'service/' + id + '/tarifa/' + data_id, params, { headers: headers }).map((resp: any) => resp );
     }
 
     updateServiceType(token: any, id: number, data: ServiceType, data_id: number): Observable < any > {
@@ -558,12 +413,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'service/' + id + '/servicetype/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'service/' + id + '/servicetype/' + data_id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     updateServiceZona(token: any, id: number, data: Zona, data_id: number): Observable < any > {
@@ -576,12 +426,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'service/' + id + '/zona/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'service/' + id + '/zona/' + data_id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     updateServiceValue(token: any, id: number, data: ServiceValue, data_id: number): Observable < any > {
@@ -594,12 +439,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'service/' + id + '/value/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'service/' + id + '/value/' + data_id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     updateServiceTypeValue(token: any, id: number, data: ServiceValue, data_id: number): Observable < any > {
@@ -612,12 +452,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'servicetype/' + id + '/value/' + data_id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'servicetype/' + id + '/value/' + data_id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     updateColor(token: any, id: number, data: Color): Observable < any > {
@@ -630,12 +465,7 @@ export class ProjectsService {
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
-        return this._http.put(this.url + 'colors/' + id, params, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.put(this.url + 'colors/' + id, params, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteCurrencyValue(token: any, id: number): Observable < any > {
@@ -644,12 +474,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'currencyvalue/' + id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'currencyvalue/' + id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteService(token: any, id: number, service_id: number): void {
@@ -681,12 +506,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'project/' + id + '/servicecategorie/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'project/' + id + '/servicecategorie/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteProjecType(token: any, id: number, data_id: number): Observable < any > {
@@ -695,12 +515,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'project/' + id + '/servicetype/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'project/' + id + '/servicetype/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteServiceConstante(token: any, id: number, data_id: number): Observable < any > {
@@ -709,12 +524,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'service/' + id + '/constante/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'service/' + id + '/constante/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteServiceGiro(token: any, id: number, data_id: number): Observable < any > {
@@ -723,12 +533,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'service/' + id + '/giro/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'service/' + id + '/giro/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteServiceMercado(token: any, id: number, data_id: number): Observable < any > {
@@ -737,12 +542,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'service/' + id + '/mercado/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'service/' + id + '/mercado/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteServiceSector(token: any, id: number, data_id: number): Observable < any > {
@@ -751,12 +551,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'service/' + id + '/sector/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'service/' + id + '/sector/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteServiceTarifa(token: any, id: number, data_id: number): Observable < any > {
@@ -765,12 +560,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'service/' + id + '/tarifa/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'service/' + id + '/tarifa/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteServiceType(token: any, id: number, data_id: number): Observable < any > {
@@ -779,12 +569,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'service/' + id + '/servicetype/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'service/' + id + '/servicetype/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteServiceZona(token: any, id: number, data_id: number): Observable < any > {
@@ -793,12 +578,7 @@ export class ProjectsService {
         }
 
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.delete(this.url + 'service/' + id + '/zona/' + data_id, {
-                headers: headers
-            })
-            .map((resp: any) => {
-                return resp;
-            });
+        return this._http.delete(this.url + 'service/' + id + '/zona/' + data_id, { headers: headers }).map((resp: any) => resp);
     }
 
     deleteServiceValue(token: any, id: number, data_id: number): Observable < any > {
@@ -842,9 +622,11 @@ export class ProjectsService {
         const headers = new HttpHeaders({
             'Content-Type': 'application/json',
         });
-        return this._http.get(url, {
-            headers: headers
-        }).map((res: any) => res);
+        return this._http.get(url, { headers: headers})
+                         .pipe(
+                            catchError(this._handleError.handleError)
+                         );
+
     }
 
     async getQueryPromise(query: string, token: any) {
@@ -869,7 +651,7 @@ export class ProjectsService {
                     }).toPromise()
                     .then()
                     .catch((error) => {
-                        this.handleError(error);
+                        this._handleError.handleError(error);
                     });
             }
         } catch (err) {
@@ -1017,10 +799,14 @@ export class ProjectsService {
         // console.log(requestUrl);
 
         try {
-            return this._http.get<any>(requestUrl, {headers: httpOptions.headers});
-       } catch (err) {
+            return this._http.get<any>(requestUrl, {headers: httpOptions.headers})
+                             .pipe(
+                                share(),
+                                catchError(this._handleError.handleError)
+                             );
+        } catch (err) {
             console.log(err);
-       }
+        }
       }
 
 
@@ -1063,7 +849,11 @@ export class ProjectsService {
         // console.log(requestUrl);
 
         try {
-            return this._http.get<any>(requestUrl, {headers: httpOptions.headers});
+            return this._http.get<any>(requestUrl, {headers: httpOptions.headers})
+                             .pipe(
+                                 share(),
+                                 catchError(this._handleError.handleError)
+                             );
        } catch (err) {
             console.log(err);
        }
@@ -1275,6 +1065,7 @@ export class ProjectsService {
             });
     }
 
+    /*
     private handleError(error: HttpErrorResponse) {
         if (!navigator.onLine) {
             // Handle offline error
@@ -1304,6 +1095,6 @@ export class ProjectsService {
             }
             return throwError(error.error);
         }
-    }
+    }*/
 
 }

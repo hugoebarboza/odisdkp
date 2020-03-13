@@ -397,14 +397,14 @@
       <div class="col-md-4  order-md-last">
         <div class="form"  *ngIf="projectservicetype && projectservicetype.length > 0">  
           <div class="full-width">
-            <h2 class="jeEmY">Tipo</h2>                
+            <h2 class="jeEmY">Tipo de Proyecto</h2>                
             <ng-select  
                 [items]="projectservicetype"
                 [clearable]="false" 
                 bindLabel="descripcion"
                 bindValue="id"
                 [(ngModel)]="data.type_id"
-                placeholder="Tipo"
+                placeholder="Tipo de Proyecto"
                 name="type_id"
                 required
                 class="full-width">
@@ -414,14 +414,14 @@
 
         <div class="form" *ngIf="projectservicecategorie && projectservicecategorie.length > 0">
           <div class="full-width">
-            <h2 class="jeEmY">Tipo Proyecto</h2>  
+            <h2 class="jeEmY">Categoría de Proyecto</h2>  
             <ng-select  
                 [items]="projectservicecategorie"
                 [clearable]="false" 
                 bindLabel="descripcion"
                 bindValue="id"
                 [(ngModel)]="data.category_id"
-                placeholder="Tipo Proyecto"
+                placeholder="Categoría de Proyecto"
                 name="category_id"
                 required
                 class="full-width">

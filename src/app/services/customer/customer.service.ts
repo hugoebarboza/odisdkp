@@ -3,11 +3,16 @@ import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http'
 import { GLOBAL } from '../global';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
+import { catchError, share } from 'rxjs/operators';
 
 // MODELS
 import { Alimentador, ClaveLectura, Customer, Marca, Modelo, Set, Sed, Team } from 'src/app/models/types';
 
 import Swal from 'sweetalert2';
+
+// ERROR
+import { ErrorsHandler } from 'src/app/providers/error/error-handler';
+
 
 
 @Injectable()
@@ -17,8 +22,9 @@ export class CustomerService {
     error: boolean;
 
   constructor(
-    public _http: HttpClient,
-    ) {
+   private _handleError: ErrorsHandler,
+   public _http: HttpClient,
+   ) {
     this.url = GLOBAL.url;
     this.error = false;
   }
@@ -26,14 +32,17 @@ export class CustomerService {
 
 
    getQuery( query: string, token: any ) {
-    if (!token) {
+    if (!token || !query) {
        return;
     }
     const url = this.url + query;
     const headers = new HttpHeaders({ 'Content-Type': 'application/json', });
-    return this._http.get(url, {headers: headers}).map((res: any) => {
-           return res;
-           });
+    return this._http.get(url, {headers: headers})
+                     .pipe(
+                        share(),
+                        catchError(this._handleError.handleError)
+                     );
+
    }
 
 
@@ -73,7 +82,7 @@ export class CustomerService {
 
 
    getCustomerData(query: string, token: any) {
-    if (!token) {
+    if (!token || !query) {
        return;
     }
     const url = this.url;
@@ -84,7 +93,13 @@ export class CustomerService {
     return new Promise((resolve, reject) => {
       if (token === '') { reject(); }
       if (query === '') { reject(); }
-      resolve(this._http.get<Customer>(requestUrl, {headers: headers}));
+      resolve(
+         this._http.get<Customer>(requestUrl, {headers: headers})
+                   .pipe(
+                      share(),
+                      catchError(this._handleError.handleError)
+                   )
+      );
       });
    }
 
@@ -119,7 +134,7 @@ export class CustomerService {
     }
 
 
-    getClaveDeLectura(token, id): Observable<any> {
+    getClaveDeLectura(token: any, id: number): Observable<any> {
       return this.getQuery('project/' + id + '/clavelectura', token);
    }
 
@@ -131,6 +146,11 @@ export class CustomerService {
     getGiro(token, id): Observable<any> {
        return this.getQuery('service/' + id + '/giro', token);
     }
+
+    getPriority(token: any, id: number): Observable<any> {
+      return this.getQuery('service/' + id + '/priority', token);
+   }
+
 
     getSector(token, id): Observable<any> {
        return this.getQuery('service/' + id + '/sector', token);

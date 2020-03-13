@@ -19,6 +19,5 @@ export class ModalManageService {
   showModal(data: any) {
     this.hide = '';
     this.data = data;
-    // console.log(this.data);
   }
 }

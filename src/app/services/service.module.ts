@@ -14,6 +14,7 @@ import {
   ExcelService,
   ItemFirebaseService,
   KpiService,
+  LoggingService,
   MapaService,
   MessagingService,
   ModalManageService,
@@ -26,6 +27,10 @@ import {
   UserService,
   ZipService,
  } from './service.index';
+
+// Providers
+import { ErrorsHandler } from '../providers/error/error-handler';
+
 
 
 @NgModule({
@@ -46,6 +51,7 @@ import {
     ExcelService,
     ItemFirebaseService,
     KpiService,
+    LoggingService,
     MapaService,
     MessagingService,
     ModalManageService,
@@ -56,7 +62,8 @@ import {
     SettingsService,
     SidenavService,
     UserService,
-    ZipService
+    ZipService,
+    ErrorsHandler
   ],
   declarations: []
 })

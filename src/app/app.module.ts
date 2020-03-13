@@ -17,7 +17,7 @@ import { RegisterComponent } from './register/register.component';
 
 
 // MODULES
-import { AppRoutingModule } from './app.routing';
+import { AppRoutingModule } from './app-routing.module';
 import { ServiceModule } from './services/service.module';
 import { SharedModule } from './components/shared/shared.module';
 
@@ -51,8 +51,8 @@ import { MatProgressButtonsModule } from 'mat-progress-buttons';
 // import { PipesModule } from './pipes/pipes.module';
 
 // SERVICES
-import { AuthguardService } from './services/authguard.service';
-import { LoginGuardGuard } from './services/guards/login-guard.guard';
+// import { AuthguardService } from './services/authguard.service';
+// import { LoginGuardGuard } from './services/guards/login-guard.guard';
 
 // Import toast module
 import { ToastrModule } from 'ngx-toastr';
@@ -68,8 +68,8 @@ import { environment } from '../environments/environment';
 
 // Providers
 import { ErrorsHandler } from './providers/error/error-handler';
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from './providers/interceptor/my.interceptor';
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from './providers/interceptor/index';
 
 // REDUX
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -127,15 +127,15 @@ registerLocaleData(localeEs);
   ],
   providers: [
     AuthService,
-    AuthguardService,
+    // AuthguardService,
+    httpInterceptorProviders,
     { provide: FirestoreSettingsToken, useValue: {}},
-    LoginGuardGuard,
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: LOCALE_ID, useValue: 'es' },
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
+    // LoginGuardGuard,
+    { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
+    { provide: LOCALE_ID, useValue: 'es' },
+    { provide: MAT_DATE_LOCALE, useValue: 'es'},
+    { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
     { provide: ErrorHandler, useClass: ErrorsHandler },
-    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
   ],
   bootstrap: [
     AppComponent

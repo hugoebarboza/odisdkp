@@ -5,9 +5,8 @@ import { LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 // PROVIDERS
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../providers/interceptor/my.interceptor';
-
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from '../providers/interceptor/index';
 
 // MODULES
 import { AgmCoreModule } from '@agm/core';
@@ -88,12 +87,12 @@ registerLocaleData(localeEs);
   entryComponents: [
   ],
   providers: [
+    httpInterceptorProviders,
     NgbActiveModal,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
     {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
-    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
   ],
 })
 export class PagesModule { }

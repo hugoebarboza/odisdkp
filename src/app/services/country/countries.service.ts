@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { GLOBAL } from '../global';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { throwError } from 'rxjs';
-import 'rxjs/add/operator/map';
+import { catchError, share } from 'rxjs/operators';
 
+// GLOBAL
+import { GLOBAL } from '../global';
+
+// ERROR
+import { ErrorsHandler } from 'src/app/providers/error/error-handler';
 
 
 @Injectable({
@@ -14,30 +16,32 @@ import 'rxjs/add/operator/map';
 export class CountriesService {
 
    error: boolean;
-   errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
-   errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
    public url: string;
 
 
   constructor(
+    private _handleError: ErrorsHandler,
     public _http: HttpClient,
-    private _snackBar: MatSnackBar,
   ) {
     this.url = GLOBAL.url;
   }
 
   getQuery( query: string, token: any ) {
-      if (!token) {
+      if (!token || !query) {
        return;
       }
         const url = this.url + query;
         const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
-        return this._http.get(url, {headers: headers}).map((res: any) => res);
+        return this._http.get(url, {headers: headers})
+                         .pipe(
+                           share(),
+                           catchError(this._handleError.handleError)
+                         );
     }
 
     async getQueryPromise(query: string, token: any) {
-        if (!token) {
+        if (!token || !query) {
             return;
           }
 
@@ -53,7 +57,7 @@ export class CountriesService {
             } else {
               return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
               .then()
-              .catch((error) => { this.handleError (error); }
+              .catch((error) => { this._handleError.handleError (error); }
               );
             }
 
@@ -92,33 +96,6 @@ export class CountriesService {
         return this.getQuery('provincia/' + id + '/comuna', token);
     }
 
-
-  private handleError( error: HttpErrorResponse ) {
-    if (!navigator.onLine) {
-      // Handle offline error
-      // console.error('Browser Offline!');
-    } else {
-      if (error instanceof HttpErrorResponse) {
-        // Server or connection error happened
-        if (!navigator.onLine) {
-            // console.error('Browser Offline!');
-        } else {
-            // Handle Http Error (4xx, 5xx, ect.)
-            if (error.status === 500) {
-              this._snackBar.open(this.errorMessage500, '', {duration: 7000, });
-            }
-
-            if (error.status === 0) {
-              this._snackBar.open(this.errorMessage, '', {duration: 7000, });
-            }
-        }
-      } else {
-          // Handle Client Error (Angular Error, ReferenceError...)
-          console.error('Client Error!');
-      }
-      return throwError(error.error);
-    }
-  }
 
 
 }

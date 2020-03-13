@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { throwError } from 'rxjs';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import { GLOBAL } from '../global';
+
+// ERROR
+import { ErrorsHandler } from 'src/app/providers/error/error-handler';
 
 
 @Injectable({
@@ -13,12 +14,10 @@ export class KpiService {
 
   error: boolean;
   url: string;
-  errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
-  errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
 
 
   constructor(
-    private _snackBar: MatSnackBar,
+    private _handleError: ErrorsHandler,
     public _http: HttpClient,
   ) {
     this.url = GLOBAL.url;
@@ -27,7 +26,7 @@ export class KpiService {
 
     async getQuery(query: string, token: any) {
 
-      if (!token) {
+      if (!token || !query) {
         return;
       }
 
@@ -42,7 +41,7 @@ export class KpiService {
         } else {
           return await this._http.get<any>(requestUrl, {headers: headers}).toPromise()
           .then()
-          .catch((error) => { this.handleError (error); }
+          .catch((error) => { this._handleError.handleError (error); }
           );
         }
       } catch (err) {
@@ -51,7 +50,7 @@ export class KpiService {
     }
 
     async getQueryPromise(query: string, token: any) {
-      if (!token) {
+      if (!token || !query) {
         return;
       }
 
@@ -253,32 +252,6 @@ export class KpiService {
         return this.getQueryPromise('user/' + id + '/orderkpi' + paginate, token);
     }
 
-    private handleError( error: HttpErrorResponse ) {
-      if (!navigator.onLine) {
-        // Handle offline error
-        console.error('Browser Offline!');
-      } else {
-        if (error instanceof HttpErrorResponse) {
-          // Server or connection error happened
-          if (!navigator.onLine) {
-              console.error('Browser Offline!');
-          } else {
-              // Handle Http Error (4xx, 5xx, ect.)
-              if (error.status === 500) {
-                this._snackBar.open(this.errorMessage500, '', {duration: 7000, });
-              }
-
-              if (error.status === 0) {
-                this._snackBar.open(this.errorMessage, '', {duration: 7000, });
-              }
-          }
-        } else {
-            // Handle Client Error (Angular Error, ReferenceError...)
-            console.error('Client Error!');
-        }
-        return throwError(error.error);
-      }
-    }
 
 
 

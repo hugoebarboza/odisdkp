@@ -3,8 +3,8 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // PROVIDERS
-import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-import { MyInterceptor } from '../../providers/interceptor/my.interceptor';
+import { HttpClientModule } from '@angular/common/http';
+import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 
 // MODULES
@@ -33,7 +33,7 @@ import { ServiceModule } from 'src/app/services/service.module';
   ],
   declarations: [ChangepasswordComponent],
   providers: [
-    { provide: HTTP_INTERCEPTORS, useClass: MyInterceptor, multi: true },
+    httpInterceptorProviders,
   ],
 })
 export class ChangePasswordModule { }

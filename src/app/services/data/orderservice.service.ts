@@ -1,39 +1,32 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { MatSnackBar } from '@angular/material/snack-bar';
-// import { BehaviorSubject } from 'rxjs/BehaviorSubject';
-// import { of } from 'rxjs/observable/of';
-import { throwError } from 'rxjs';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/operator/shareReplay';
-// import { Subject } from 'rxjs/Subject';
+import { catchError, share } from 'rxjs/operators';
 
 // CACHE
 import { Cacheable } from 'ngx-cacheable';
-
-// import Swal from 'sweetalert2';
 
 // MODELS
 import {  Order, ServiceEstatus } from 'src/app/models/types';
 
 import { GLOBAL } from '../global';
 
-// const cacheBuster$ = new Subject<void>();
+// ERROR
+import { ErrorsHandler } from 'src/app/providers/error/error-handler';
+
 
 @Injectable()
     export class OrderserviceService {
 
     url: string;
     dialogData: any;
-    // dataChange: BehaviorSubject<Order[]> = new BehaviorSubject<Order[]>([]);
     error: boolean;
-    errorMessage = 'NETWORK ERROR, NOT INTERNET CONNECTION!!!!';
-    errorMessage500 = '500 SERVER ERROR, CONTACT ADMINISTRATOR!!!!';
     responseCache = new Map();
 
     constructor(
-        private _snackBar: MatSnackBar,
+        private _handleError: ErrorsHandler,
         public _http: HttpClient,
     ) {
         this.url = GLOBAL.url;
@@ -46,16 +39,18 @@ import { GLOBAL } from '../global';
   }
 
   getQuery( query: string, token: string | string[] ): Observable<any> {
-    if (!token) {
+    if (!token || !query) {
        return;
     }
 
         const url = this.url + query;
         const headers = new HttpHeaders({'Content-Type': 'application/json' });
         return this._http.get(url, {headers: headers})
-        .map((res: any) => {
-            return res;
-        });
+                         .pipe(
+                           share(),
+                           catchError(this._handleError.handleError)
+                         );
+
   }
 
   getOrderDetail(orderid: number, token: any) {
@@ -112,7 +107,7 @@ import { GLOBAL } from '../global';
     try {
         return await this._http.get<any>(requestUrl, {headers: httpOptions.headers}).shareReplay().toPromise()
         .then()
-        .catch((error) => { this.handleError (error); }
+        .catch((error) => { this._handleError.handleError (error); }
         );
    } catch (err) {
         console.log(err);
@@ -149,7 +144,8 @@ import { GLOBAL } from '../global';
 
 
     async getOrderData(query: string, token: any) {
-        if (!token) {
+
+        if (!token || !query) {
           return;
         }
 
@@ -172,7 +168,15 @@ import { GLOBAL } from '../global';
                 reject('Sin Query Consulta');
             }
 
-            resolve(this._http.get<Order>(requestUrl, {headers: headers}));
+            console.log(requestUrl);
+
+            resolve(
+              this._http.get<Order>(requestUrl, {headers: headers})
+                        .pipe(
+                          share(),
+                          catchError(this._handleError.handleError)
+                        )
+            );
             });
 
         } catch (err) {
@@ -355,7 +359,7 @@ import { GLOBAL } from '../global';
       const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
       return await this._http.put(requestUrl, params, {headers: headers}).toPromise()
       .then()
-      .catch((error) => { this.handleError (error); }
+      .catch((error) => { this._handleError.handleError (error); }
       );
     } catch (err) {
       throw new Error(`Error HTTP `);
@@ -427,34 +431,6 @@ import { GLOBAL } from '../global';
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
     return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers});
 
-    /*
-    return await this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers}).shareReplay(1).toPromise()
-    .then()
-    .catch((error) => { this.handleError (error); }
-    );*/
-
-    /*
-    .shareReplay().toPromise()
-        .then()
-        .catch((error) => { this.handleError (error); }
-        );
-    */
-
-    /*
-    subscribe(
-    (data: any) => {
-      if (data.status === 'success') {
-        Swal.fire('Eliminada Orden de Trabajo con identificador: ', orderid + ' exitosamente.', 'success' );
-        } else {
-        Swal.fire('Orden de Trabajo con identificador: ', orderid + ' no eliminada.' , 'error');
-        }
-        // this.toasterService.success('Orden de Trabajo eliminada.', 'Exito', {timeOut: 6000,});
-      },
-      (err: HttpErrorResponse) => {
-        this.error = err.error.message;
-        Swal.fire('No fue posible procesar su solicitud', '', 'error');
-        // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-      });*/
   }
 
   deleteotedp(token: any, orderid: number, id: number): Observable<any> {
@@ -465,21 +441,6 @@ import { GLOBAL } from '../global';
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
 
     return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid + '/deleteotedp', {headers: headers}).map( (resp: any) => resp );
-    /*
-    subscribe(
-    (data: any) => {
-      if (data.status === 'success') {
-        Swal.fire('Eliminada Orden de Trabajo con identificador: ', orderid + ' exitosamente.', 'success' );
-        } else {
-        Swal.fire('Orden de Trabajo con identificador: ', orderid + ' no eliminada.' , 'error');
-        }
-        // this.toasterService.success('Orden de Trabajo eliminada.', 'Exito', {timeOut: 6000,});
-      },
-      (err: HttpErrorResponse) => {
-        this.error = err.error.message;
-        Swal.fire('No fue posible procesar su solicitud', '', 'error');
-        // this.toasterService.error('Error: '+this.error, 'Error', {timeOut: 6000,});
-      });*/
   }
 
 
@@ -498,31 +459,5 @@ import { GLOBAL } from '../global';
       });
   }
 
-  private handleError( error: HttpErrorResponse ) {
-    if (!navigator.onLine) {
-      // Handle offline error
-      console.error('Browser Offline!');
-    } else {
-      if (error instanceof HttpErrorResponse) {
-       // Server or connection error happened
-      if (!navigator.onLine) {
-        console.error('Browser Offline!');
-      } else {
-        // Handle Http Error (4xx, 5xx, ect.)
-        if (error.status === 500) {
-          this._snackBar.open(this.errorMessage500, '', {duration: 7000, });
-        }
-
-        if (error.status === 0) {
-          this._snackBar.open(this.errorMessage, '', {duration: 7000, });
-        }
-      }
-      } else {
-        // Handle Client Error (Angular Error, ReferenceError...)
-        console.error('Client Error!');
-      }
-      return throwError(error.error);
-    }
-  }
 
 }
