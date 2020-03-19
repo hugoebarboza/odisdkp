@@ -1,10 +1,10 @@
-import {Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy} from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import Swal from 'sweetalert2';
 
 // HELPERS
-import { MustMatch } from '../helpers/must-match.validator';
+import { MustMatch } from 'src/app/helpers/must-match.validator';
 
 // MODELS
 import { User } from 'src/app/models/types';
@@ -15,7 +15,7 @@ import { SettingsService, UserService } from 'src/app/services/service.index';
 
 @Component({
     changeDetection: ChangeDetectionStrategy.OnPush,
-    selector: 'register',
+    selector: 'app-register',
     templateUrl: './register.component.html',
     providers: [UserService]
 })

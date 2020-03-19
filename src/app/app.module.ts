@@ -22,7 +22,7 @@ import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.compone
 import { LogoutComponent } from './components/dialog/logout/logout.component';
 import { MenuComponent } from './components/shared/menu/menu.component';
 // import { PagesComponent } from './pages/pages.component';
-import { RegisterComponent } from './register/register.component';
+// import { RegisterComponent } from './register/register.component';
 
 
 // MODULES
@@ -51,7 +51,7 @@ import { AuthService } from './services/firebase/auth.service';
 // import { RouterModule } from '@angular/router';
 
 // UTILITYS
-import { NgxCaptchaModule } from 'ngx-captcha';
+// import { NgxCaptchaModule } from 'ngx-captcha';
 
 
 // ANGULAR UTILITY
@@ -98,7 +98,7 @@ registerLocaleData(localeEs);
     LogoutComponent,
     MenuComponent,
     // PagesComponent,
-    RegisterComponent
+    // RegisterComponent
   ],
   imports: [
     AppRoutingModule,
@@ -142,7 +142,7 @@ registerLocaleData(localeEs);
     MatSnackBarModule,
     MatToolbarModule,
     // MatProgressButtonsModule.forRoot(),
-    NgxCaptchaModule,
+    // NgxCaptchaModule,
     PipesModule,
     ReactiveFormsModule,
     // RouterModule,

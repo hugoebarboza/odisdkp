@@ -12,7 +12,6 @@ import {QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
 import { DefaultComponent } from './default/default.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
 import { NotfoundComponent } from './components/shared/notfound/notfound.component';
-import { RegisterComponent } from './register/register.component';
 
 // PAGES
 import { PagesComponent } from './pages/pages.component';
@@ -36,18 +35,21 @@ const appRoute: Routes = [
         data: { titulo: 'OCA Global - ODIS Acceso', subtitle: '', descripcion: 'OCA Global - ODIS User Login' }
     },
     { path: 'notfound', component: NotfoundComponent, data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  }},
-    { path: 'register', component: RegisterComponent, data: { titulo: 'OCA Global - ODIS Registro', subtitle: 'Registro', descripcion: 'OCA Global - ODIS User Register' }},
+    { path: 'register',
+        loadChildren : () => import('./pages/register/register.module').then(m => m.RegisterModule),
+        data: { titulo: 'OCA Global - ODIS Registro', subtitle: 'Registro', descripcion: 'OCA Global - ODIS User Register' }
+    },
     {
       path: 'calendar',
       canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/calendar/calendario.module').then(m => m.CalendarioModule),
-      data: { preload: false, delay: false }
+        loadChildren : () => import('./pages/calendar/calendario.module').then(m => m.CalendarioModule),
+        data: { preload: false, delay: false }
     },
     {
       path: 'change',
       canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/changepassword/changepassword.module').then(m => m.ChangePasswordModule),
-      data: { preload: false, delay: true }
+        loadChildren : () => import('./pages/changepassword/changepassword.module').then(m => m.ChangePasswordModule),
+        data: { preload: false, delay: true }
     },
     {
       path: 'dashboard',

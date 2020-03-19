@@ -9,10 +9,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from '../providers/interceptor/index';
 
 // MODULES
-import { AgmCoreModule } from '@agm/core';
-import { AgmDirectionModule} from 'agm-direction';
-import { PipesModule } from '../pipes/pipes.module';
-import { SharedModule } from '../components/shared/shared.module';
+// import { AgmCoreModule } from '@agm/core';
+// import { AgmDirectionModule} from 'agm-direction';
+// import { PipesModule } from '../pipes/pipes.module';
+// import { SharedModule } from '../components/shared/shared.module';
 import { ServiceModule } from '../services/service.module';
 
 // MOMENT
@@ -22,63 +22,60 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 
 // ROUTER
 import { PagesRoutingModule } from '../pages/pages.routes';
-import { AngularSplitModule } from 'angular-split';
-import { CalendarModule } from 'primeng/calendar';
-import { FlexLayoutModule } from '@angular/flex-layout';
-import { MatProgressButtonsModule } from 'mat-progress-buttons';
-import { MarkdownModule } from 'ngx-markdown';
-import { NgSelectModule } from '@ng-select/ng-select';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
-import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
-import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { Ng5SliderModule } from 'ng5-slider';
-import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import { ScrollingModule } from '@angular/cdk/scrolling';
-import { VerticalTimelineModule } from 'angular-vertical-timeline';
+// import { AngularSplitModule } from 'angular-split';
+// import { CalendarModule } from 'primeng/calendar';
+// import { FlexLayoutModule } from '@angular/flex-layout';
+// import { MatProgressButtonsModule } from 'mat-progress-buttons';
+// import { MarkdownModule } from 'ngx-markdown';
+// import { NgSelectModule } from '@ng-select/ng-select';
+// import { Ng2SearchPipeModule } from 'ng2-search-filter';
+// import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
+// import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+// import { Ng5SliderModule } from 'ng5-slider';
+// import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
+// import { ScrollingModule } from '@angular/cdk/scrolling';
+// import { VerticalTimelineModule } from 'angular-vertical-timeline';
 
-import { ToastrModule } from 'ngx-toastr';
+// import { ToastrModule } from 'ngx-toastr';
 
 // ESPAÑOL DATE
 import localeEs from '@angular/common/locales/es';
 import { registerLocaleData } from '@angular/common';
 
 // Global vars
-import { environment } from '../../environments/environment';
+// import { environment } from '../../environments/environment';
 
 
 registerLocaleData(localeEs);
 
 @NgModule({
   imports: [
-    AgmDirectionModule,
-    AngularSplitModule.forRoot(),
-    AgmCoreModule.forRoot({
-      apiKey: environment.global.agmapikey,
-      libraries: ['places']
-    }),
-    CalendarModule,
+    // AgmDirectionModule,
+    // AngularSplitModule.forRoot(),
+    // AgmCoreModule.forRoot({ apiKey: environment.global.agmapikey, libraries: ['places']}),
+    // CalendarModule,
     CommonModule,
-    FlexLayoutModule,
+    // FlexLayoutModule,
     FormsModule,
     HttpModule,
     HttpClientModule,
-    MatProgressButtonsModule,
-    MarkdownModule.forRoot(),
-    NgbModule,
-    NgSelectModule,
-    Ng2SearchPipeModule,
-    NgxMatSelectSearchModule,
-    Ng5SliderModule,
-    OwlDateTimeModule,
-    OwlNativeDateTimeModule,
-    PipesModule,
+    // MatProgressButtonsModule,
+    // MarkdownModule.forRoot(),
+    // NgbModule,
+    // NgSelectModule,
+    // Ng2SearchPipeModule,
+    // NgxMatSelectSearchModule,
+    // Ng5SliderModule,
+    // OwlDateTimeModule,
+    // OwlNativeDateTimeModule,
+    // PipesModule,
     ReactiveFormsModule,
     PagesRoutingModule,
-    ScrollingModule,
-    SharedModule,
+    // ScrollingModule,
+    // SharedModule,
     ServiceModule,
-    ToastrModule.forRoot(),
-    VerticalTimelineModule,
+    // ToastrModule.forRoot(),
+    // VerticalTimelineModule,
   ],
   declarations: [
   ],
@@ -88,7 +85,7 @@ registerLocaleData(localeEs);
   ],
   providers: [
     httpInterceptorProviders,
-    NgbActiveModal,
+    // NgbActiveModal,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},
