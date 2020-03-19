@@ -1,1 +1,156 @@
-<p>priority-list works!</p>
+<div class="container-fluid p-2">
+
+    <div class="row animated fadeIn" *ngIf="isLoading">
+        <div class="col-sm-12">
+          <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+    </div>
+
+
+    <div class="row animated fadeIn" [hidden]="isLoading">
+    <div class="col-12">
+
+        <div class="animated fadeIn" *ngIf="isLoading">
+            <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+        </div>
+
+        <div class="alert alert-danger" *ngIf="priority.length == 0">
+            No se encontraron registros.
+        </div>
+        
+
+        <div >
+
+            <mat-form-field class="full-width">
+                <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Filter">
+            </mat-form-field>
+
+            <div *ngIf="priority.length > 0">
+                <table class="table table-hover" >
+                    <thead>
+                        <tr>
+                            <th></th>                        
+                            <th>Descripción</th>                            
+                            <th>Prioridad</th>
+                            <th>Posición</th>                                  
+                            <th *ngIf="_userService.isRole(7)"></th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        <tr *ngFor="let p of priority; let i = index">
+                          <td class="w10">
+                              <div class="circle" [style.color]="p.status? 'green' : 'red'"></div>
+                          </td>
+                          <td>
+                            <label *ngIf="i !== indexitem || isLoadingDelete">{{p.name}}</label>
+                            <input type="text" class="form-control" id="{{p.name}}" [(ngModel)]="p.name" *ngIf="i == indexitem && !isLoadingDelete"  required>
+                          </td>
+
+                          <td>
+                              <label *ngIf="(i !== indexitem || isLoadingDelete) && p.label == 1" >Rojo</label>
+                              <label *ngIf="(i !== indexitem || isLoadingDelete) && p.label == 2" >Azul</label>
+                              <label *ngIf="(i !== indexitem || isLoadingDelete) && p.label == 3" >Magenta</label>
+                              <select [(ngModel)]="p.label" name="label" class="form-control" *ngIf="i == indexitem && !isLoadingDelete" required>
+                                  <option value="0">Color</option>
+                                  <option value="1">Rojo</option>
+                                  <option value="2">Azul</option>
+                                  <option value="3">Magenta</option>
+                              </select>
+                          </td>
+    
+
+                          <td>
+                              <label *ngIf="i !== indexitem || isLoadingDelete">{{p.order_by}}</label>
+                              <input type="number" class="form-control"  [(ngModel)]="p.order_by" *ngIf="i == indexitem && !isLoadingDelete"  required>
+                          </td>
+                          <td *ngIf="_userService.isRole(7)">
+
+      
+                            <button mat-icon-button color="primary" *ngIf="p.name.length > 1 && i != indexitem" (click)="startEdit(i)">
+                            <mat-icon aria-label="Edit" >edit</mat-icon>          
+                            </button>            
+      
+
+                            <button mat-icon-button color="primary" *ngIf="p.name.length > 1 && i == indexitem && editando && !isLoadingDelete" (click)="update(i, p)" >
+                            <mat-icon aria-label="Edit"  >done</mat-icon>                            
+                            </button>
+
+                            <button mat-icon-button color="primary" *ngIf="p.name.length > 1 && i == indexitem && editando && !isLoadingDelete" (click)="close()" >
+                                <mat-icon aria-label="Edit"  >close</mat-icon>                            
+                            </button>
+    
+
+                            <button mat-icon-button color="primary" *ngIf="isLoadingSave && i == indexitem && !editando">
+                            <app-progress-spinner ></app-progress-spinner>
+                            </button>
+
+
+                            <button mat-icon-button color="warn" (click)="destroy(i, p)" *ngIf="i != indexitem">
+                                <mat-icon aria-label="Edit" >delete</mat-icon>                             
+                            </button>
+
+                            <button mat-icon-button color="primary" *ngIf="isLoadingDelete && i == indexitem && !editando">
+                            <app-progress-spinner ></app-progress-spinner>
+                            </button>
+
+
+                          </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="form p-t-20" >
+                <table class="table table-hover" *ngIf="_userService.isRole(7)">                    
+                    <tbody>
+                        <tr >
+                            <td class="w10">
+                                <button mat-icon-button (click)="toggle()" >
+                                    <mat-icon class="material-icons md-20-color" >add</mat-icon> <span *ngIf="!show">Agregar</span>
+                                </button>                            
+                            </td>
+
+                            <td>
+                                <input type="text" name="name" class="form-control"  placeholder="Descripción" formControlName="name"  *ngIf="show" required>
+                            </td>
+
+                            <td>
+                                <select formControlName="label" name="label" class="form-control" *ngIf="show" required>
+                                    <option value="0">Color</option>
+                                    <option value="1">Rojo</option>
+                                    <option value="2">Azul</option>
+                                    <option value="3">Magenta</option>
+                                </select>
+                            </td>          
+
+
+                            <td>
+                                <input type="number" name="order_by" class="form-control"  placeholder="Posición" formControlName="order_by" *ngIf="show" >
+                            </td>
+                            <td>
+                            <select name="status" class="form-control" formControlName="status"  *ngIf="show">
+                                <option value="">Seleccione</option>
+                                <option value="1">Activo</option>
+                                <option value="0">Desactivo</option>
+                            </select>
+                            </td>
+    
+                            <td >
+                                <button  mat-icon-button color="primary" [disabled]="forma.invalid" *ngIf="show && !isLoadingSave && !isLoadingDelete && !forma.invalid" (click)="onSubmit()" >
+                                    <mat-icon aria-label="Edit"  >done</mat-icon>                            
+                                </button>      
+                            </td>
+                        </tr>
+                    </tbody>                    
+                </table>
+            </form>
+
+
+        </div>
+    
+    </div>
+    </div>
+
+
+</div>

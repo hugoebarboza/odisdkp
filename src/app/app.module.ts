@@ -5,21 +5,32 @@ import { HttpModule } from '@angular/http';
 import { LOCALE_ID, NgModule, ErrorHandler  } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+// MATERIAL
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 // COMPONENT
 import { AppComponent } from './app.component';
 import { DefaultComponent } from './default/default.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
-import { LoginComponent } from './login/login.component';
 import { LogoutComponent } from './components/dialog/logout/logout.component';
-import { PagesComponent } from './pages/pages.component';
+import { MenuComponent } from './components/shared/menu/menu.component';
+// import { PagesComponent } from './pages/pages.component';
 import { RegisterComponent } from './register/register.component';
 
 
 // MODULES
 import { AppRoutingModule } from './app-routing.module';
+import { LoadableModule, matcher } from 'ngx-loadable';
 import { ServiceModule } from './services/service.module';
-import { SharedModule } from './components/shared/shared.module';
+// import { SharedModule } from './components/shared/shared.module';
+
 
 // MOMENT
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -44,11 +55,11 @@ import { NgxCaptchaModule } from 'ngx-captcha';
 
 
 // ANGULAR UTILITY
-import { MatProgressButtonsModule } from 'mat-progress-buttons';
+// import { MatProgressButtonsModule } from 'mat-progress-buttons';
 
 
 // PIPE MODULE
-// import { PipesModule } from './pipes/pipes.module';
+import { PipesModule } from './pipes/pipes.module';
 
 // SERVICES
 // import { AuthguardService } from './services/authguard.service';
@@ -76,8 +87,6 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from './app.reducers';
 
-
-
 registerLocaleData(localeEs);
 
 @NgModule({
@@ -85,9 +94,10 @@ registerLocaleData(localeEs);
     AppComponent,
     DefaultComponent,
     ForgotpasswordComponent,
-    LoginComponent,
+    // LoginComponent,
     LogoutComponent,
-    PagesComponent,
+    MenuComponent,
+    // PagesComponent,
     RegisterComponent
   ],
   imports: [
@@ -106,11 +116,37 @@ registerLocaleData(localeEs);
     FormsModule,
     HttpModule,
     HttpClientModule,
-    MatProgressButtonsModule.forRoot(),
+    LoadableModule.forRoot(
+      {
+        moduleConfigs: [{
+          name: 'footermain',
+          loadChildren : () => import('./pages/footer/footer.module').then(m => m.FooterModule),
+          matcher
+        },
+        {
+          name: 'header',
+          loadChildren : () => import('./pages/header/header.module').then(m => m.HeaderModule),
+          matcher
+        }]
+      }
+    ),
+    MatButtonModule,
+    MatCardModule,
+    MatDialogModule,
+    // MatFormFieldModule,
+    MatIconModule,
+    // MatInputModule,
+    MatListModule,
+    MatSidenavModule,
+    // MatSlideToggleModule,
+    MatSnackBarModule,
+    MatToolbarModule,
+    // MatProgressButtonsModule.forRoot(),
     NgxCaptchaModule,
-    // PipesModule,
+    PipesModule,
     ReactiveFormsModule,
-    SharedModule,
+    // RouterModule,
+    // SharedModule,
     ServiceModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     StoreModule.forRoot(appReducers),
@@ -124,6 +160,7 @@ registerLocaleData(localeEs);
     LogoutComponent,
   ],
   exports: [
+
   ],
   providers: [
     AuthService,

@@ -1,7 +1,7 @@
 import { Component, Input } from '@angular/core';
 
 @Component({
-  
+
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css'],
@@ -11,7 +11,7 @@ import { Component, Input } from '@angular/core';
 export class FooterComponent {
 
 	year: number;
-	@Input() identity : any = {};
+	@Input() identity: any = {};
 
 	constructor() {
 		this.year = new Date().getFullYear();

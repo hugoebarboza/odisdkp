@@ -1,5 +1,7 @@
 <div class="header">
-    <app-header></app-header>
+    <!-- <app-header></app-header> -->
+    <!-- Header -->
+    <ngx-loadable [module]="'header'" [show]="true"></ngx-loadable>
 </div>
     
     <mat-drawer-container class="container-drawer">
@@ -62,7 +64,9 @@
     
                     <mat-sidenav-content class="overflow">
                             <router-outlet></router-outlet>
-                            <app-footermain></app-footermain>
+                            <!-- Footer -->
+                            <ngx-loadable [module]="'footermain'" [show]="true"></ngx-loadable>
+                            <!-- <app-footermain></app-footermain> -->
                     </mat-sidenav-content>
                 </mat-sidenav-container>
                 

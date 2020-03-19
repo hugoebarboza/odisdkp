@@ -19,7 +19,7 @@ import { TooltipPosition } from '@angular/material/tooltip';
 import { User, UserFirebase } from 'src/app/models/types';
 
 // DIALOG
-import { LogoutComponent } from '../../../components/dialog/logout/logout.component';
+import { LogoutComponent } from 'src/app/components/dialog/logout/logout.component';
 
 // NGRX REDUX
 import { Store } from '@ngrx/store';
@@ -108,7 +108,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       }
     });
 
- 
+
 
    this. subscription = this.afAuth.authState.subscribe((auth: any) => {
     if ( auth ) {

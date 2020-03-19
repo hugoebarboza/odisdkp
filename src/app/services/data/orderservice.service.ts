@@ -9,8 +9,9 @@ import { catchError, share } from 'rxjs/operators';
 import { Cacheable } from 'ngx-cacheable';
 
 // MODELS
-import {  Order, ServiceEstatus } from 'src/app/models/types';
+import {  Order, Priority, ServiceEstatus } from 'src/app/models/types';
 
+// GLOBAL
 import { GLOBAL } from '../global';
 
 // ERROR
@@ -345,6 +346,19 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
     return this._http.post(this.url + 'service/' + id + '/estatus/', params, {headers: headers}).map( (resp: any) => resp);
   }
 
+  addPriority(token: any, id: number, data: Priority): Observable<any> {
+    if (!token) {
+       return;
+    }
+
+    const json = JSON.stringify(data);
+    const params = 'json=' + json;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this._http.post(this.url + 'service/' + id + '/priority', params, {headers: headers}).map( (resp: any) => resp);
+ }
+
 
   async update(token: any, orderid: number, order: Order, id: number) {
     if (!token) {
@@ -395,6 +409,20 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
     return this._http.post(Url, params, {headers: headers}).map( (resp: any) => resp );
   }
 
+  updatePriority(token: any, id: number, data: Priority, data_id: number): Observable<any> {
+    if (!token) {
+       return;
+    }
+
+    const json = JSON.stringify(data);
+    const params = 'json=' + json;
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this._http.put(this.url + 'service/' + id + '/priority/' + data_id, params, {headers: headers}).map( (resp: any) => resp);
+ }
+
+
 
   deleteMass(token: any, data: any, id: number): Observable<any> {
     if (!token) {
@@ -442,6 +470,17 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
 
     return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid + '/deleteotedp', {headers: headers}).map( (resp: any) => resp );
   }
+
+  deletePriority(token: any, id: number, data_id: number): Observable<any> {
+    if (!token || !id || !data_id) {
+        return;
+    }
+
+    const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+
+    return this._http.delete(this.url + 'service/' + id + '/priority/' + data_id, {headers: headers}).map( (resp: any) => resp);
+ }
+
 
 
   important(token: any, id: number, orderid: number, label: number): void {

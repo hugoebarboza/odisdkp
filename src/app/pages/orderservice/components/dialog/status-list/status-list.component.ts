@@ -31,7 +31,7 @@ export class StatusListComponent implements OnInit, OnDestroy {
 
 
 
-  @Input() id : number;
+  @Input() id: number;
   @Output() totalEstatus: EventEmitter<number>;
   @ViewChild('txtInputFisico', { static: true }) txtInputFisico: ElementRef;
 

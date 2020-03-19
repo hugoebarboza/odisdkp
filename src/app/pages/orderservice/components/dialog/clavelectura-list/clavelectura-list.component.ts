@@ -204,7 +204,7 @@ export class ClavelecturaListComponent implements OnInit, OnDestroy {
 
 
 
-  delete(i: number, element: ClaveLectura) {
+  destroy(i: number, element: ClaveLectura) {
     this.indexitem = i;
     this.isLoadingDelete = true;
     this.show = false;

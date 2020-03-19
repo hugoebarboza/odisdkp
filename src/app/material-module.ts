@@ -1,4 +1,4 @@
-import {NgModule} from '@angular/core';
+import { NgModule } from '@angular/core';
 import { MatDatepickerModule} from '@angular/material/datepicker';
 import { MatExpansionModule } from '@angular/material/expansion';
 

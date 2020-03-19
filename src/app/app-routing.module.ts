@@ -11,7 +11,6 @@ import {QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
 // DEFAULT AND LOGIN
 import { DefaultComponent } from './default/default.component';
 import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
-import { LoginComponent } from './login/login.component';
 import { NotfoundComponent } from './components/shared/notfound/notfound.component';
 import { RegisterComponent } from './register/register.component';
 
@@ -29,10 +28,13 @@ const appRoute: Routes = [
     { path: 'forgot', component: ForgotpasswordComponent, data: { titulo: 'OCA Global - ODIS Acceso', subtitle: 'Olvido Clave', descripcion: 'OCA Global - ODIS User Forgot Password' }},
     { path: 'home', component: DefaultComponent, data: { titulo: 'OCA Global - ODIS Home', subtitle: '', descripcion: 'OCA Global - ODIS Home' } },
     { path: 'login',
-        component: LoginComponent,
+        loadChildren : () => import('./pages/login/login.module').then(m => m.LoginModule),
         data: { titulo: 'OCA Global - ODIS Acceso', subtitle: 'Acceso', descripcion: 'OCA Global - ODIS User Login' }
     },
-    { path: 'logout/:sure', component: LoginComponent, data: { titulo: 'OCA Global - ODIS Acceso', subtitle: '', descripcion: 'OCA Global - ODIS User Login' }},
+    { path: 'logout/:sure',
+        loadChildren : () => import('./pages/login/login.module').then(m => m.LoginModule),
+        data: { titulo: 'OCA Global - ODIS Acceso', subtitle: '', descripcion: 'OCA Global - ODIS User Login' }
+    },
     { path: 'notfound', component: NotfoundComponent, data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  }},
     { path: 'register', component: RegisterComponent, data: { titulo: 'OCA Global - ODIS Registro', subtitle: 'Registro', descripcion: 'OCA Global - ODIS User Register' }},
     {

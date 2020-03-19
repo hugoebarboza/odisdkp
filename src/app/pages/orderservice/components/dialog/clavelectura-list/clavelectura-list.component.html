@@ -28,6 +28,7 @@
                 </mat-form-field>
   
                 <div>
+
                     <table mat-table [dataSource]="dataSource" matSort >
   
                         <!-- ID Column -->
@@ -97,7 +98,7 @@
                                   </button>
       
       
-                                  <button mat-icon-button color="warn" (click)="delete(i, row)" *ngIf="i != indexitem">
+                                  <button mat-icon-button color="warn" (click)="destroy(i, row)" *ngIf="i != indexitem">
                                       <mat-icon aria-label="Edit" >delete</mat-icon>                             
                                   </button>
       
@@ -156,7 +157,7 @@
                             </tr>
                         </tbody>                    
                     </table>
-                </form>
+            </form>
 
 
         </div>

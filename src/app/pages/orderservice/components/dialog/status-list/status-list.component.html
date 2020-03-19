@@ -4,16 +4,16 @@
     <div class="col-sm-12">
       <mat-progress-bar mode="indeterminate"></mat-progress-bar>
     </div>
-  </div>
+</div>
 
-  <div class="row animated fadeIn" *ngIf="!isLoading && status == 'error'">
-      <div class="col-sm-12">
-          <div class="alert alert-danger" *ngIf="status == 'error'">
-              No se encontraron registros que coincidan con su búsqueda. 
-              <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
-          </div>
-      </div>
-  </div>
+<div class="row animated fadeIn" *ngIf="!isLoading && status == 'error'">
+    <div class="col-sm-12">
+        <div class="alert alert-danger" *ngIf="status == 'error'">
+            No se encontraron registros que coincidan con su búsqueda. 
+            <button mat-button color="primary" (click)="ngOnInit()"> <mat-icon aria-label="Example icon-button with a heart icon" >sync</mat-icon> Refrescar</button>
+        </div>
+    </div>
+</div>
     
 
 

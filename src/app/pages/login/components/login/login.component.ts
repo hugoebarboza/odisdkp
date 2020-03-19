@@ -11,7 +11,7 @@ import { Proyecto, User } from 'src/app/models/types';
 import { AuthService, CountriesService, DashboardService, SettingsService, UserService } from 'src/app/services/service.index';
 
 // SETTINGS
-import { GLOBAL } from '../services/global';
+import { GLOBAL } from 'src/app/services/global';
 
 import Swal from 'sweetalert2';
 

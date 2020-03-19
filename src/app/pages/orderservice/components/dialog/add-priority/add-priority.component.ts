@@ -1,4 +1,4 @@
-import { Component, OnInit, ChangeDetectionStrategy, Inject } from '@angular/core';
+import { Component, OnInit, ChangeDetectionStrategy, Inject, ChangeDetectorRef } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { UntilDestroy } from '@ngneat/until-destroy';
 import { FormControl } from '@angular/forms';
@@ -28,6 +28,7 @@ export class AddPriorityComponent implements OnInit {
 
   constructor(
     public _userService: UserService,
+    private cd: ChangeDetectorRef,
     public dialogRef: MatDialogRef<AddPriorityComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {
@@ -40,6 +41,7 @@ export class AddPriorityComponent implements OnInit {
     if (this.data && this.data.project_id > 0 && this.data.service_id > 0) {
       console.log(this.data);
       this.project = await this.filter(this.data.project_id);
+      this.cd.markForCheck();
       if (this.project) {
         this.project_name = this.project.project_name;
         this.isLoading = false;

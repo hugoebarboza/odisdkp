@@ -386,6 +386,23 @@ export interface OrderAtributoFirma {
     create_at: any;
 }
 
+export class Priority  {
+
+    constructor(
+    public id: number,
+    public service_id: number,
+    public name: string,
+    public label: number,
+    public avatar: string,
+    public order_by: number,
+    public status: number,
+    public create_by: number,
+    public create_at: any,
+    public update_by: number,
+    public update_at: any
+    ) {}
+  }
+
 
 export class ProjectServiceCategorie  {
 
