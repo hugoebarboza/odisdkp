@@ -41,7 +41,9 @@
               "node_modules/bootstrap/dist/js/bootstrap.min.js"
             ],
             "lazyModules": [
-              "src/app/pages/footer/footer.module"
+              "src/app/pages/footer/footer.module",
+              "src/app/pages/header/header.module",
+              "src/app/pages/menu/menu.module"
             ]
           },
           "configurations": {

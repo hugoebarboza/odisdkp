@@ -9,9 +9,8 @@ import { MatDialogRef } from '@angular/material/dialog';
 export class LogoutComponent  {
 
   constructor(
-	public dialogRef: MatDialogRef<LogoutComponent>,
-    //@Inject(MAT_DIALOG_DATA) public data: DialogData
-  	) { }
+  public dialogRef: MatDialogRef<LogoutComponent>,
+  ) { }
 
 
 

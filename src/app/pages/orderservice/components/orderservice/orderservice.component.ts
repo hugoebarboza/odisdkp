@@ -5,8 +5,8 @@ import { FormControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { OnDestroy } from '@angular/core';
 
-import { MatIconRegistry } from '@angular/material/icon';
-import { DomSanitizer } from '@angular/platform-browser';
+// import { MatIconRegistry } from '@angular/material/icon';
+// import { DomSanitizer } from '@angular/platform-browser';
 
 // SERVICES
 import { DashboardService, SettingsService, UserService } from 'src/app/services/service.index';
@@ -111,14 +111,15 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   public _userService: UserService,
   private _proyectoService: DashboardService,
   public fb: FormBuilder,
-  private matIconRegistry: MatIconRegistry,
-  private domSanitizer: DomSanitizer
+  // private matIconRegistry: MatIconRegistry,
+  // private domSanitizer: DomSanitizer
   ) {
 
+    /*
   this.matIconRegistry.addSvgIcon(
     'icongestion',
     this.domSanitizer.bypassSecurityTrustResourceUrl('../assets/icons/iconprojectblanco.svg')
-  );
+  ); */
   this.identity = this._userService.getIdentity();
   this.token = this._userService.getToken();
   this.proyectos = this._userService.getProyectos();

@@ -24,7 +24,7 @@
           </div>
           <div class="login-container" *ngIf="!_userService.isIdaccount()">
             <mat-form-field>
-              <input matInput placeholder="Usuario" name="email" [(ngModel)]="email"  size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+              <input matInput placeholder="Usuario" name="email" [(ngModel)]="email"  size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" autocomplete="off">
               <mat-icon matSuffix ><i class="material-icons">person</i></mat-icon>
               <mat-error *ngIf="formControl.invalid">{{getErrorMessage()}}</mat-error>
             </mat-form-field>
@@ -33,7 +33,7 @@
 
           <div class="login-container" *ngIf="_userService.isIdaccount()">
             <mat-form-field>
-            <input matInput placeholder="Usuario." name="email"  [(ngModel)]="email"   size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" >          
+            <input matInput placeholder="Usuario." name="email"  [(ngModel)]="email"   size="3" required email pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" autocomplete="off">          
             <mat-icon matSuffix ><i class="material-icons">person</i></mat-icon>
             </mat-form-field>
           </div>      

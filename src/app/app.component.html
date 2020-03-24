@@ -52,7 +52,9 @@
                             <div class="sidebar-header">
                                 <img width="100%" src="./../assets/img/logo.png">
                             </div>
-                            <app-menu (RefreshMenu) = "refreshMenu($event)" class="sidebar-body"></app-menu>
+                            <!-- Menu -->
+                            <ngx-loadable [module]="'menu'" [show]="true" (RefreshMenu) = "refreshMenu($event)" class="sidebar-body"></ngx-loadable>
+                            <!-- <app-menu (RefreshMenu) = "refreshMenu($event)" class="sidebar-body"></app-menu> -->
                             <div class="sidebar-footer">
                                 <button mat-icon-button color="warn" class="keyboard_arrow_left">
                                     <mat-icon (click)="sidenav.toggle()">keyboard_arrow_left</mat-icon>

@@ -1,31 +1,31 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { Routes, RouterModule } from '@angular/router';
+
+// COMPONENTES
+import { NotfoundComponent } from './components/shared/notfound/notfound.component';
+
+// GUARDS
+import { LoginGuardGuard } from './services/guards/login-guard.guard';
 
 // PRELOAD
 import {QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
 // import { PreloadAllModules } from "@angular/router";
 // import { CustomPreloading } from './custompreloading';
 
-// DEFAULT AND LOGIN
-import { DefaultComponent } from './default/default.component';
-import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.component';
-import { NotfoundComponent } from './components/shared/notfound/notfound.component';
-
 // PAGES
 import { PagesComponent } from './pages/pages.component';
 
-// Guards
-// import { AuthguardService } from './services/authguard.service';
-import { LoginGuardGuard } from './services/guards/login-guard.guard';
-
-
-
 // ROUTES
 const appRoute: Routes = [
-    { path: 'forgot', component: ForgotpasswordComponent, data: { titulo: 'OCA Global - ODIS Acceso', subtitle: 'Olvido Clave', descripcion: 'OCA Global - ODIS User Forgot Password' }},
-    { path: 'home', component: DefaultComponent, data: { titulo: 'OCA Global - ODIS Home', subtitle: '', descripcion: 'OCA Global - ODIS Home' } },
+    { path: 'forgot',
+        loadChildren : () => import('./pages/forgot/forgot.module').then(m => m.ForgotModule),
+        data: { titulo: 'OCA Global - ODIS Acceso', subtitle: 'Olvido Clave', descripcion: 'OCA Global - ODIS User Forgot Password' }
+    },
+    { path: 'home',
+        loadChildren : () => import('./pages/default/default.module').then(m => m.DefaultModule),
+        data: { titulo: 'OCA Global - ODIS Home', subtitle: '', descripcion: 'OCA Global - ODIS Home' }
+    },
     { path: 'login',
         loadChildren : () => import('./pages/login/login.module').then(m => m.LoginModule),
         data: { titulo: 'OCA Global - ODIS Acceso', subtitle: 'Acceso', descripcion: 'OCA Global - ODIS User Login' }

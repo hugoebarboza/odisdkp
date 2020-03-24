@@ -24,6 +24,7 @@ import { ErrorsHandler } from '../error/error-handler';
 @Injectable()
 export class MyInterceptor implements HttpInterceptor {
 
+    url: string;
 
     constructor(
       // private cache: RequestCacheService,
@@ -44,6 +45,19 @@ export class MyInterceptor implements HttpInterceptor {
         let token: string;
         let authReq: any;
 
+        // If you are calling an outside domain then do not add the token.
+        if (!req.url.match(/odissoftware.api.ocachile.cl\//)) {
+          console.log('************************************');
+          console.log(req.url);
+          return;
+        }
+
+        if (!req.headers.has('Content-Type')) {
+          req = req.clone({
+            headers: req.headers.set('Content-Type', 'application/json')
+          });
+        }
+
         const currentUser: any = JSON.parse(localStorage.getItem('token'));
         if (currentUser) {
           token = currentUser.token;
@@ -53,12 +67,11 @@ export class MyInterceptor implements HttpInterceptor {
 
         if (token) {
           authReq = req.clone({
+            url: req.url.replace('http://', 'https://'),
             headers: req.headers.set('Authorization', token)
           });
-          // req = req.clone({ headers: req.headers.set('Authorization', token) });
         } else {
           authReq = req;
-          // return;
         }
 
         // const reqClone = req;
