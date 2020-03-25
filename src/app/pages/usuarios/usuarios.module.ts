@@ -4,17 +4,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // PROVIDERS
 import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
+import { httpInterceptorProviders } from 'src/app/providers/interceptor/index';
 
 // MODULES
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PipesModule } from '../../pipes/pipes.module';
-import { SharedModule } from '../../components/shared/shared.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
+import { SharedModule } from 'src/app/components/shared/shared.module';
 
 // COMPONENTS
-import { UsuariosComponent } from './usuarios-list/usuarios.component';
-import { UsuariosDetailComponent } from './usuarios-detail/usuarios-detail.component';
-import { UsuarioWorkComponent } from './usuario-work/usuario-work.component';
+import { UsuariosComponent } from './components/usuarios-list/usuarios.component';
+import { UsuariosDetailComponent } from './components/usuarios-detail/usuarios-detail.component';
+import { UsuarioWorkComponent } from './components/usuario-work/usuario-work.component';
 
 // DIALOG
 import { AddUserComponent } from './dialog/adduser/adduser.component';
@@ -28,7 +28,7 @@ import { UsuariosRoutingModule } from './usuarios.routing';
 
 
 // SERVICES
-import { ServiceModule } from 'src/app/services/service.module';
+// import { ServiceModule } from 'src/app/services/service.module';
 
 
 @NgModule({
@@ -39,7 +39,7 @@ import { ServiceModule } from 'src/app/services/service.module';
     NgSelectModule,
     ReactiveFormsModule,
     PipesModule,
-    ServiceModule,
+    // ServiceModule,
     SharedModule,
     UsuariosRoutingModule,
   ],

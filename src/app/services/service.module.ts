@@ -26,6 +26,7 @@ import {
   SidenavService,
   UserService,
   ZipService,
+  WebsocketService,
  } from './service.index';
 
 // Providers
@@ -49,6 +50,7 @@ import { ErrorsHandler } from '../providers/error/error-handler';
     DataService,
     DashboardService,
     ExcelService,
+    ErrorsHandler,
     ItemFirebaseService,
     KpiService,
     LoggingService,
@@ -63,7 +65,7 @@ import { ErrorsHandler } from '../providers/error/error-handler';
     SidenavService,
     UserService,
     ZipService,
-    ErrorsHandler
+    WebsocketService
   ],
   declarations: []
 })

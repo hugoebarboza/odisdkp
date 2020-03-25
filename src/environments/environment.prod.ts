@@ -1,7 +1,7 @@
 export const environment = {
   production: true,
-  wsUrl: 'http://localhost:5000',
-  // wsUrl: 'https://odissocket.appspot.com/',
+  // wsUrl: 'http://localhost:5000',
+  wsUrl: 'https://odissocket.appspot.com/',
   firebase: {
     apiKey: 'AIzaSyBPUJBehQOjnzd9S3iVkHk8drGUR-AXDKk',
     authDomain: 'odisdkp.firebaseapp.com',

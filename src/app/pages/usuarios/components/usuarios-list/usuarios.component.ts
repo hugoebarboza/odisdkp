@@ -8,12 +8,12 @@ import { FormControl } from '@angular/forms';
 import Swal from 'sweetalert2';
 
 // DIALOG
-import { AddUserComponent } from '../dialog/adduser/adduser.component';
-import { AddTeamComponent } from '../../team/dialog/add-team/add-team.component';
-import { EditUserComponent } from '../dialog/edituser/edituser.component';
-import { ModalUploadImageComponent } from '../dialog/modaluploadimage/modaluploadimage.component';
-import { SettingUserComponent } from '../dialog/setting-user/setting-user.component';
-import { ShowProfileSecurityComponent } from '../dialog/showprofilesecurity/showprofilesecurity.component';
+import { AddUserComponent } from 'src/app/pages/usuarios/dialog/adduser/adduser.component';
+import { AddTeamComponent } from 'src/app/pages/team/dialog/add-team/add-team.component';
+import { EditUserComponent } from 'src/app/pages/usuarios/dialog/edituser/edituser.component';
+import { ModalUploadImageComponent } from 'src/app/pages/usuarios/dialog/modaluploadimage/modaluploadimage.component';
+import { SettingUserComponent } from 'src/app/pages/usuarios/dialog/setting-user/setting-user.component';
+import { ShowProfileSecurityComponent } from 'src/app/pages/usuarios/dialog/showprofilesecurity/showprofilesecurity.component';
 
 // MODEL
 import { Proyecto } from 'src/app/models/types';

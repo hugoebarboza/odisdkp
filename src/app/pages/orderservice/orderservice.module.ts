@@ -106,7 +106,7 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 // SERVICES
-import { ServiceModule } from 'src/app/services/service.module';
+// import { ServiceModule } from 'src/app/services/service.module';
 
 
 // MOMENT
@@ -174,7 +174,7 @@ registerLocaleData(localeEs);
     OrderServiceRoutingModule,
     ScrollingModule,
     SharedModule,
-    ServiceModule,
+    // ServiceModule,
     ToastrModule.forRoot(),
     VerticalTimelineModule,
     ViewModule

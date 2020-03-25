@@ -2,6 +2,9 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
+// COMPONENTS
+import { TeamListComponent } from './team-list/team-list.component';
+
 // PROVIDERS
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from '../../providers/interceptor/index';
@@ -22,8 +25,7 @@ import { TeamRoutingModule } from './team.routing';
 
 
 // SERVICES
-import { ServiceModule } from 'src/app/services/service.module';
-import { TeamListComponent } from './team-list/team-list.component';
+// import { ServiceModule } from 'src/app/services/service.module';
 
 
 @NgModule({
@@ -34,7 +36,7 @@ import { TeamListComponent } from './team-list/team-list.component';
     NgSelectModule,
     ReactiveFormsModule,
     PipesModule,
-    ServiceModule,
+    // ServiceModule,
     SharedModule,
     TeamRoutingModule,
   ],

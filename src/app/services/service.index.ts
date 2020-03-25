@@ -21,3 +21,4 @@ export { SettingsService } from './settings/settings.service';
 export { SidenavService } from './shared/sidenav.service';
 export { UserService } from './usuario/user.service';
 export { ZipService } from './utility/zip.service';
+export { WebsocketService } from './socket/websocket.service';

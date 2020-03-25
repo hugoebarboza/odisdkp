@@ -3,11 +3,11 @@ import { ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { MatDialog } from '@angular/material/dialog';
 
-//DIALOG
-import { EditUserComponent } from '../dialog/edituser/edituser.component';
+// DIALOG
+import { EditUserComponent } from 'src/app/pages/usuarios/dialog/edituser/edituser.component';
 
 
-//SERVICES
+// SERVICES
 import { KpiService, OrderserviceService, UserService } from 'src/app/services/service.index';
 import { ShowComponent } from 'src/app/components/dialog/show/show.component';
 

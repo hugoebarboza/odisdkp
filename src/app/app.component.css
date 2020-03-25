@@ -24,11 +24,6 @@ ng-progress {
   color: rgb(0,122,217);    
 }
 
-.example-toolbar {
-  height: 46px !important;
-  box-shadow: 7px 0 6px rgba(0,0,0,.24) !important;
-}
-
 .container-drawer {
   display: flex;
   flex-direction: column;
@@ -55,11 +50,6 @@ ng-progress {
   right: 0;
 }
 
-.example-is-mobile .example-toolbar {
-  position: fixed;
-  /* Make sure the toolbar will stay on top of the content as it scrolls past. */
-  z-index: 2;
-}
 
 h1.example-app-name {
   margin-left: 8px;
@@ -75,6 +65,20 @@ h1.example-app-name {
   /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
      `<body>` to be our scrolling element for mobile layouts. */
   flex: 1 0 auto;
+}
+
+.main-sidenav-container {
+  /* When the sidenav is not fixed, stretch the sidenav container to fill the available space. This
+     causes `<mat-sidenav-content>` to act as our scrolling element for desktop layouts. */
+  flex: 1;
+  min-height: 1920px;
+}
+
+.main-is-mobile .main-sidenav-container {
+  /* When the sidenav is fixed, don't constrain the height of the sidenav container. This allows the
+     `<body>` to be our scrolling element for mobile layouts. */
+  flex: 1 0 auto;
+  min-height: 1920px;
 }
 
 
@@ -124,7 +128,7 @@ h1.example-app-name {
 }
 
 .keyboard_arrow_left {
-  float: right !important; 
+  float: right !important;
 }
 
 .keyboard_arrow_right {
@@ -134,7 +138,7 @@ h1.example-app-name {
 .center-support {
   white-space: nowrap;
   text-overflow: ellipsis;
-  font-size: 1.2em;
+  font-size: 1.0em;
   font-style: inherit;
   color: #16191f;
   font-weight: 500;
@@ -165,13 +169,13 @@ h1.example-app-name {
   overflow: hidden;
   text-overflow: ellipsis;
   display: block;
-  line-height: 48px;
-  height: 48px;
+  line-height: 40px;
+  height: 40px;
   width: auto !important;
   margin-left: 4px;
   padding-left: 10px;
-  padding-right: 20px;
-  text-align: left;
+  padding-right: 0px;
+  text-align: right;
   text-decoration: none;
   position: relative;
 }
@@ -191,4 +195,11 @@ h1.example-app-name {
   outline: 0;
   border: none;
 }
-
+.knkYsf {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  opacity: 1;
+  border-radius: 50%;
+  margin: 2px;
+}

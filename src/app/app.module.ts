@@ -1,9 +1,8 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-// import { HttpModule } from '@angular/http';
-// import { HttpClientModule } from '@angular/common/http';
 import { LOCALE_ID, NgModule, ErrorHandler  } from '@angular/core';
+import { HttpModule } from '@angular/http';
 
 // COMPONENT
 import { AppComponent } from './app.component';
@@ -16,26 +15,7 @@ import { registerLocaleData } from '@angular/common';
 // ENVIROMENT
 import { environment } from '../environments/environment';
 
-// MATERIAL
-import { MatButtonModule } from '@angular/material/button';
-import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
-import { MatListModule } from '@angular/material/list';
-import { MatSidenavModule } from '@angular/material/sidenav';
-import { MatSnackBarModule } from '@angular/material/snack-bar';
-import { MatToolbarModule } from '@angular/material/toolbar';
-
-// MODULES
-import { AppRoutingModule } from './app-routing.module';
-import { LoadableModule, matcher } from 'ngx-loadable';
-import { ServiceModule } from './services/service.module';
-import { ToastrModule } from 'ngx-toastr';
-
-// MOMENT
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
-// NEW IMPORT
+// FIREBASE
 import { AngularFireModule } from '@angular/fire';
 import { AngularFirePerformanceModule } from '@angular/fire/performance';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
@@ -44,6 +24,26 @@ import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FirestoreSettingsToken} from '@angular/fire/firestore';
 import { AuthService } from './services/firebase/auth.service';
+
+// MATERIAL
+import { MatButtonModule } from '@angular/material/button';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { MatListModule } from '@angular/material/list';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+// MODULES
+import { AppRoutingModule } from './app-routing.module';
+import { LoadableModule, matcher } from 'ngx-loadable';
+import { MenuModule } from './pages/menu/menu.module';
+import { ServiceModule } from './services/service.module';
+import { ToastrModule } from 'ngx-toastr';
+import { ToolbarModule } from './pages/toolbar/toolbar.module';
+
+// MOMENT
+import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
+import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 // PIPE MODULE
 import { PipesModule } from './pipes/pipes.module';
@@ -84,13 +84,16 @@ registerLocaleData(localeEs);
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     CommonModule,
-    // FormsModule,
-    // HttpModule,
-    // HttpClientModule,
+    HttpModule,
     LoadableModule.forRoot(
       {
         moduleConfigs:
       [
+        {
+          name: 'activeusers',
+          loadChildren : () => import('./pages/active-users/active-users.module').then(m => m.ActiveUsersModule),
+          matcher
+        },
         {
           name: 'footermain',
           loadChildren : () => import('./pages/footer/footer.module').then(m => m.FooterModule),
@@ -101,11 +104,6 @@ registerLocaleData(localeEs);
           loadChildren : () => import('./pages/header/header.module').then(m => m.HeaderModule),
           matcher
         },
-        {
-          name: 'menu',
-          loadChildren : () => import('./pages/menu/menu.module').then(m => m.MenuModule),
-          matcher
-        }
       ]
       }
     ),
@@ -115,9 +113,8 @@ registerLocaleData(localeEs);
     MatListModule,
     MatSidenavModule,
     MatSnackBarModule,
-    MatToolbarModule,
+    MenuModule,
     PipesModule,
-    // ReactiveFormsModule,
     ServiceModule,
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     StoreModule.forRoot(appReducers),
@@ -127,13 +124,12 @@ registerLocaleData(localeEs);
     }),
     SocketIoModule.forRoot(socketConfig),
     ToastrModule.forRoot(),
+    ToolbarModule
   ],
   entryComponents: [
     LogoutComponent,
   ],
-  exports: [
-
-  ],
+  exports: [],
   providers: [
     AuthService,
     httpInterceptorProviders,

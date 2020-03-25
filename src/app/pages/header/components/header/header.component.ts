@@ -28,7 +28,7 @@ import { ResetAction } from 'src/app/contador.actions';
 import { SetUserAction } from 'src/app/stores/auth/auth.actions';
 
 // SERVICES
-import { SidenavService, UserService } from 'src/app/services/service.index';
+import { SidenavService, UserService, WebsocketService } from 'src/app/services/service.index';
 
 export interface Item { id: number; }
 
@@ -77,7 +77,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     private afAuth: AngularFireAuth,
     public dialog: MatDialog,
     private store: Store<AppState>,
-    private supportDrawer: SidenavService
+    private supportDrawer: SidenavService,
+    public wsService: WebsocketService,
 
    ) {
     this.title = 'Header';

@@ -2,7 +2,6 @@ import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@ang
 import { Router } from '@angular/router';
 import { RouteConfigLoadStart, RouteConfigLoadEnd, RouterEvent } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
-// import { ActivationEnd } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 import { MediaMatcher } from '@angular/cdk/layout';
@@ -27,11 +26,11 @@ import { MatSidenav } from '@angular/material/sidenav';
 })
 export class AppComponent implements OnInit, OnDestroy {
 
-  id: number;
-  titulo: string;
   description: string;
   departamentos: Array<any> = [];
+  id: number;
   identity: any;
+  titulo: string;
   loading: boolean;
   proyectos: Array<Proyecto>;
   subscription: Subscription;
@@ -41,9 +40,10 @@ export class AppComponent implements OnInit, OnDestroy {
   mobileQuery: MediaQueryList;
   private _mobileQueryListener: () => void;
 
+  @ViewChild('mainsidenav', { static: true }) mainsidenav: MatSidenav;
   @ViewChild('sidenav', { static: true }) sidenav: MatSidenav;
   @ViewChild('supportDrawer', { static: true }) supportDrawer: MatSidenav;
-
+  @ViewChild('activeUsersDrawer', { static: true }) activeUsersDrawer: MatSidenav;
 
   constructor(
     private sidenavService: SidenavService,
@@ -129,6 +129,7 @@ export class AppComponent implements OnInit, OnDestroy {
         if(Object.keys(this.identity).length == 0){
         }*/
         this.sidenav.close();
+        this.mainsidenav.close();
       }
 
     });
@@ -147,6 +148,12 @@ export class AppComponent implements OnInit, OnDestroy {
 
   refreshMenu(event: number) {
   if ( event === 1 ) {
+    }
+  }
+
+  sideToggle(event: number) {
+    if ( event === 1 ) {
+      this.sidenav.toggle();
     }
   }
 

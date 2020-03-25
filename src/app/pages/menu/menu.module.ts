@@ -22,7 +22,7 @@ import { PipesModule } from '../../pipes/pipes.module';
     PipesModule,
     RouterModule
   ],
-  exports: [],
+  exports: [MenuComponent],
   providers: [],
   bootstrap: [MenuComponent]
 })

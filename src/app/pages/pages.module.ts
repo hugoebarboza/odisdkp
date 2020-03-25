@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
-import { HttpModule } from '@angular/http';
+// import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+// import { HttpModule } from '@angular/http';
 
 // PROVIDERS
-import { HttpClientModule } from '@angular/common/http';
+// import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from '../providers/interceptor/index';
 
 // MODULES
@@ -13,7 +13,7 @@ import { httpInterceptorProviders } from '../providers/interceptor/index';
 // import { AgmDirectionModule} from 'agm-direction';
 // import { PipesModule } from '../pipes/pipes.module';
 // import { SharedModule } from '../components/shared/shared.module';
-import { ServiceModule } from '../services/service.module';
+// import { ServiceModule } from '../services/service.module';
 
 // MOMENT
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -56,9 +56,9 @@ registerLocaleData(localeEs);
     // CalendarModule,
     CommonModule,
     // FlexLayoutModule,
-    FormsModule,
-    HttpModule,
-    HttpClientModule,
+    // FormsModule,
+    // HttpModule,
+    // HttpClientModule,
     // MatProgressButtonsModule,
     // MarkdownModule.forRoot(),
     // NgbModule,
@@ -69,11 +69,11 @@ registerLocaleData(localeEs);
     // OwlDateTimeModule,
     // OwlNativeDateTimeModule,
     // PipesModule,
-    ReactiveFormsModule,
+    // ReactiveFormsModule,
     PagesRoutingModule,
     // ScrollingModule,
     // SharedModule,
-    ServiceModule,
+    // ServiceModule,
     // ToastrModule.forRoot(),
     // VerticalTimelineModule,
   ],

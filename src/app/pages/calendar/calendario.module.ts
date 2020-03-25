@@ -27,7 +27,7 @@ import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/
 import { CalendarRoutingModule } from './calendario.routing';
 
 // SERVICES
-import { ServiceModule } from 'src/app/services/service.module';
+// import { ServiceModule } from 'src/app/services/service.module';
 
 
 @NgModule({
@@ -43,7 +43,7 @@ import { ServiceModule } from 'src/app/services/service.module';
     HttpClientModule,
     PipesModule,
     ReactiveFormsModule,
-    ServiceModule,
+    // ServiceModule,
     SharedModule
   ],
   declarations: [

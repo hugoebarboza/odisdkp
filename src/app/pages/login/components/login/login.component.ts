@@ -3,34 +3,32 @@ import { FormControl, Validators, NgForm } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
-// MODELS
-import { Proyecto, User } from 'src/app/models/types';
+// FIREBASE
+import { AngularFirePerformance } from '@angular/fire/performance';
 
-
-// SERVICES
-import { AuthService, CountriesService, DashboardService, SettingsService, UserService } from 'src/app/services/service.index';
-
-// SETTINGS
-import { GLOBAL } from 'src/app/services/global';
-
+// MESSAGES
 import Swal from 'sweetalert2';
 
-
-// UTILITY
-import { MatProgressButtonOptions } from 'mat-progress-buttons';
-
-
-// TOASTER MESSAGES
-import { ToastrService } from 'ngx-toastr';
+// MODELS
+import { Proyecto, User } from 'src/app/models/types';
 
 // NGRX REDUX
 import { AppState } from 'src/app/app.reducers';
 import { Store } from '@ngrx/store';
 import { LoginAction } from 'src/app/contador.actions';
 
+// SERVICES
+import { AuthService, CountriesService, DashboardService, SettingsService, UserService, WebsocketService } from 'src/app/services/service.index';
 
-// FIREBASE
-import { AngularFirePerformance } from '@angular/fire/performance';
+// SETTINGS
+import { GLOBAL } from 'src/app/services/global';
+
+// TOASTER MESSAGES
+import { ToastrService } from 'ngx-toastr';
+
+// UTILITY
+import { MatProgressButtonOptions } from 'mat-progress-buttons';
+
 
 
 @Component({
@@ -41,25 +39,20 @@ import { AngularFirePerformance } from '@angular/fire/performance';
 
 export class LoginComponent implements OnInit, OnDestroy {
 
-  departamentos: Array<any> = [];
   email: string;
   error: string;
   hide = true;
-  loading = false;
   identity: any;
-  idaccount;
+  idaccount: any;
   proyectos: Array<Proyecto>;
   rememberMe = 0;
-  selected: string;
   success: string;
-  show = false;
   status: string;
   subscription: Subscription;
   title: string;
   token: any;
   trace: any;
   usuario: User;
-  userFirebase;
   useraccount: string;
   year: number;
   version: string;
@@ -124,6 +117,7 @@ export class LoginComponent implements OnInit, OnDestroy {
     public label: SettingsService,
     private store: Store<AppState>,
     public toasterService: ToastrService,
+    public wsService: WebsocketService,
   ) {
     // this.user = new User('','','','','','','', 1,'','',1,'','',1,1,1);
     this.year = new Date().getFullYear();
@@ -261,6 +255,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this._userService.saveStorage(keyr, region);
         this.loginAction(proyectos, identity);
         this.loginFirebase(token, this.usuario, identity);
+        this.loginWsocket(this.usuario);
         this.spinnerButtonOptions.active = false;
         this.spinnerButtonOptions.text = 'Iniciar sesión';
         this.toasterService.success('Acceso: ' + this.success, 'Exito', {timeOut: 4000, closeButton: true, });
@@ -332,7 +327,14 @@ export class LoginComponent implements OnInit, OnDestroy {
     return await this._userService.getPerfilUser(token.token, id);
   }
 
+  loginWsocket(usuario: User) {
+    if (!usuario || !usuario.email) {
+      return;
+    }
 
+    this.wsService.loginWS(usuario.email);
+
+  }
 
   loginFirebase(token: any, value: User, identity: any) {
     if (!token || !value) {
@@ -427,6 +429,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this.proyectos = null;
         this._userService.logout();
         this.authService.logout();
+        this.wsService.logoutWS();
         // this._router.navigate(['/login']);
       }
     });

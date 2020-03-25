@@ -1,0 +1,22 @@
+<div *ngIf="identity && identity.role === 9" >    
+    <ul class="list-group">
+      <li class="list-group-item" *ngFor="let usuario of usuariosActivosObs | async">
+        {{ usuario.nombre }}
+
+        <!--
+        <span class="badge badge-primary">
+          {{ usuario.sala }}
+        </span>
+        -->
+
+        <br>
+        <span class="badge badge-info">
+          {{ usuario.id }}
+        </span>
+      </li>
+    </ul>
+    
+</div>
+
+
+

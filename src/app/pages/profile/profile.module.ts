@@ -17,7 +17,7 @@ import { SharedModule } from '../../components/shared/shared.module';
 import { ProfileRoutingModule } from './profile.routing';
 
 // SERVICES
-import { ServiceModule } from 'src/app/services/service.module';
+// import { ServiceModule } from 'src/app/services/service.module';
 
 
 @NgModule({
@@ -27,7 +27,7 @@ import { ServiceModule } from 'src/app/services/service.module';
     HttpClientModule,
     PipesModule,
     ProfileRoutingModule,
-    ServiceModule,
+    // ServiceModule,
     SharedModule
   ],
   declarations: [ProfileComponent],

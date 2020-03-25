@@ -3,81 +3,132 @@
     <!-- Header -->
     <ngx-loadable [module]="'header'" [show]="true"></ngx-loadable>
 </div>
-    
-    <mat-drawer-container class="container-drawer">
-        <mat-drawer #supportDrawer class="example-sidenav" mode="over" position="end">
-            <div class="not-scroll">
-                <div class="drawer-header">
-                    <mat-list>
-                        <div class="magin-center">
-                            <h2 mat-subheader class="center-support">
-                                Centro de Soporte
-                                <button mat-icon-button class="mat-menu-item">
-                                    <mat-icon (click)="supportDrawer.toggle()">close</mat-icon>
-                                </button>
-                            </h2>
-                        </div>
-                        <mat-divider></mat-divider>
-                        <mat-list-item [routerLink]="['/support']" class="pointer" (click)="supportDrawer.toggle()">
-                            <mat-icon mat-list-icon  class="color-matIcon" >list_alt</mat-icon>
-                            <h4 mat-line>Mis Solicitudes</h4>
-                        </mat-list-item>
-                        <mat-list-item [routerLink]="['/formview']" class="pointer" (click)="supportDrawer.toggle()">
-                            <mat-icon mat-list-icon  class="color-matIcon" >add_circle_outline</mat-icon>
-                            <h4 mat-line>Nueva Solicitud</h4>
-                        </mat-list-item>                        
-                    </mat-list>
-                </div>
-                <div class="drawer-footer">
-                </div>
+
+
+
+
+<mat-drawer-container class="container-drawer">
+
+    <mat-drawer #supportDrawer class="example-sidenav" mode="over" position="end">
+        <div class="not-scroll">
+            <div class="drawer-header">
+                <mat-list>
+                    <div class="magin-center">
+                        <h2 mat-subheader class="center-support">
+                            Centro de Soporte
+                            <button mat-icon-button class="mat-menu-item">
+                                <mat-icon (click)="supportDrawer.toggle()">close</mat-icon>
+                            </button>
+                        </h2>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <mat-list-item [routerLink]="['/support']" class="pointer" (click)="supportDrawer.toggle()">
+                        <mat-icon mat-list-icon  class="color-matIcon" >list_alt</mat-icon>
+                        <h4 mat-line>Mis Solicitudes</h4>
+                    </mat-list-item>
+                    <mat-list-item [routerLink]="['/formview']" class="pointer" (click)="supportDrawer.toggle()">
+                        <mat-icon mat-list-icon  class="color-matIcon" >add_circle_outline</mat-icon>
+                        <h4 mat-line>Nueva Solicitud</h4>
+                    </mat-list-item>                        
+                </mat-list>
             </div>
-        </mat-drawer>
-    
-        <div class="pagecontent">           
-            <div class="example-container" ><!--[class.example-is-mobile]="mobileQuery.matches"-->
-    
-                <mat-toolbar class="bg-white example-toolbar" *ngIf="identity">
-                        <a class="nav-link active pointer" (click)="sidenav.toggle()"><i class="material-icons">menu</i></a>    
-                        <a class="nav-link active pointer" href="https://mail.google.com" target="_blank"><i class="material-icons">email</i></a>
-                        <a class="nav-link active pointer" routerLink="/dashboard"><i class="material-icons">dashboard</i></a>
-                </mat-toolbar>
-    
-    
-                <mat-sidenav-container class="example-sidenav-container"> <!--[style.marginTop.px]="mobileQuery.matches ? 56 : 0"-->
-    
-                    <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                                [fixedInViewport]="mobileQuery.matches" fixedTopGap="102">
-    
-                        <div class="not-scroll">
-                            <div class="sidebar-header">
-                                <img width="100%" src="./../assets/img/logo.png">
-                            </div>
-                            <!-- Menu -->
-                            <ngx-loadable [module]="'menu'" [show]="true" (RefreshMenu) = "refreshMenu($event)" class="sidebar-body"></ngx-loadable>
-                            <!-- <app-menu (RefreshMenu) = "refreshMenu($event)" class="sidebar-body"></app-menu> -->
-                            <div class="sidebar-footer">
-                                <button mat-icon-button color="warn" class="keyboard_arrow_left">
-                                    <mat-icon (click)="sidenav.toggle()">keyboard_arrow_left</mat-icon>
-                                </button>
-                            </div>
-                        </div>
-                                    
-                    </mat-sidenav>
-    
-                    <mat-sidenav-content class="overflow">
-                            <router-outlet></router-outlet>
-                            <!-- Footer -->
-                            <ngx-loadable [module]="'footermain'" [show]="true"></ngx-loadable>
-                            <!-- <app-footermain></app-footermain> -->
-                    </mat-sidenav-content>
-                </mat-sidenav-container>
-                
+            <div class="drawer-footer">
             </div>
-    
         </div>
+    </mat-drawer>
+
+    <mat-drawer #activeUsersDrawer class="example-sidenav" mode="over" position="end" >
+        <div class="not-scroll">
+            <div class="drawer-header">
+                <mat-list>
+                    <div class="magin-center">
+                        <h2 mat-subheader class="center-support">
+                            Usuarios Conectados
+                            <button mat-icon-button class="mat-menu-item">
+                                <mat-icon (click)="activeUsersDrawer.toggle()">close</mat-icon>
+                            </button>
+                        </h2>
+                    </div>
+                    <mat-divider></mat-divider>
+                    <ngx-loadable [module]="'activeusers'" [show]="true" ></ngx-loadable>
+                </mat-list>
+            </div>
+            <div class="drawer-footer">
+            </div>
+        </div>
+    </mat-drawer>
+
+
+
+    <div class="pagecontent">           
+        <div class="example-container" ><!--[class.example-is-mobile]="mobileQuery.matches"-->
+
+            <div *ngIf="identity">                    
+                <app-toolbar  (sidenav) = "sideToggle( $event )"></app-toolbar>
+            </div>
             
-          
-    </mat-drawer-container>
+
+                
+
+                    <!-- =============================================================================================================== -->
+                    <!-- =============================================================================================================== -->
+                    <mat-sidenav-container class="example-sidenav-container"> 
+
+                        <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
+                                    [fixedInViewport]="mobileQuery.matches" fixedTopGap="102">
+        
+                            <div class="not-scroll">
+                                <div class="sidebar-header">
+                                    <img width="100%" src="./../assets/img/logo.png">
+                                </div>
+                                <!-- Menu -->
+                                <!-- <ngx-loadable [module]="'menu'" [show]="true" class="sidebar-body"></ngx-loadable> -->
+                                <app-menu (RefreshMenu) = "refreshMenu($event)" class="sidebar-body" *ngIf="identity"></app-menu>                                                                  
+                                <div class="sidebar-footer">
+                                    <button mat-icon-button  class="keyboard_arrow_right" *ngIf="identity && identity.role === 9">
+                                        <mat-icon (click)="activeUsersDrawer.toggle()" title="Usuarios">
+                                            <img class="knkYsf" src="data:image/svg+xml;base64,PHN2ZyBoZWlnaHQ9IjEyOCIgdmlld0JveD0iMCAwIDEyOCAxMjgiIHdpZHRoPSIxMjgiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGcgZmlsbD0ibm9uZSIgZmlsbC1ydWxlPSJldmVub2RkIj48Y2lyY2xlIGN4PSI2NCIgY3k9IjY0IiBmaWxsPSIjQzFDN0QwIiBmaWxsLXJ1bGU9Im5vbnplcm8iIHI9IjY0Ii8+PHBhdGggZD0ibTgwIDY0Yy02LjYyNzQxNyAwLTEyLTUuMzcyNTgzLTEyLTEyczUuMzcyNTgzLTEyIDEyLTEyIDEyIDUuMzcyNTgzIDEyIDEyLTUuMzcyNTgzIDEyLTEyIDEyem0tMzItMTJjLTYuNjI3NDE3IDAtMTItNS4zNzI1ODMtMTItMTJzNS4zNzI1ODMtMTIgMTItMTIgMTIgNS4zNzI1ODMgMTIgMTItNS4zNzI1ODMgMTItMTIgMTJ6bTEyIDI0YzAtNC40MiAzLjU0OC04IDgtOGgyNGM0LjQyIDAgOCAzLjU0IDggOHYxNC45MmMwIDEyLjEwOC00MCAxMi4xMDgtNDAgMHptOC0xMmgtLjAxMmMtMy4xODQzNTM3LjAwNDI0LTYuMjM2NTQxIDEuMjczNTYxNS04LjQ4NDg0MjcgMy41Mjg2MTQ5LTIuMjQ4MzAxOCAyLjI1NTA1MzQtMy41MDg0NjU2IDUuMzExMDMzLTMuNTAzMTU3MyA4LjQ5NTM4NTF2MTEuMjI4Yy0xMS43ODQgMi4xMzYtMjgtLjI1Mi0yOC03LjkzNnYtMTUuMzA0YzAtNC40MjQgMy41NDgtOC4wMTIgOC04LjAxMmgyNGMyLjEyMjcwODYtLjAwMzE5MTIgNC4xNTkzOTQ2LjgzODYzODYgNS42NjAzNzggMi4zMzk2MjJzMi4zNDI4MTMyIDMuNTM3NjY5NCAyLjMzOTYyMiA1LjY2MDM3OHoiIGZpbGw9IiNmZmYiIGZpbGwtb3BhY2l0eT0iLjk1Ii8+PC9nPjwvc3ZnPgo=">
+                                        </mat-icon>
+                                    </button>
+                                    
+                                    <button mat-icon-button color="warn" class="keyboard_arrow_left">
+                                        <mat-icon (click)="sidenav.toggle()">keyboard_arrow_left</mat-icon>
+                                    </button>
+                                </div>
+                            </div>
+                                        
+                        </mat-sidenav>
+        
+                        <mat-sidenav-content class="overflow">
+                                <router-outlet></router-outlet>
+                                <!-- Footer -->
+                                <ngx-loadable [module]="'footermain'" [show]="true"></ngx-loadable>
+                                <!-- <app-footermain></app-footermain> -->
+                        </mat-sidenav-content>
     
-    
+                    </mat-sidenav-container>
+                    <!-- =============================================================================================================== -->
+                    <!-- =============================================================================================================== -->
+
+                            
+
             
+        </div>
+
+    </div>
+        
+</mat-drawer-container>
+    
+<!--
+<mat-sidenav-container  class="example-sidenav-container">
+
+    <mat-sidenav #mainsidenav [mode]="'over'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="102" >
+    <p><button mat-button (click)="mainsidenav.toggle()">Toggle</button></p>
+    <ngx-loadable [module]="'activeusers'" [show]="true" *ngIf="identity && identity.role === 9"></ngx-loadable>
+    </mat-sidenav>
+    
+    <mat-sidenav-content class="overflow">
+    </mat-sidenav-content>
+                  
+</mat-sidenav-container>
+-->

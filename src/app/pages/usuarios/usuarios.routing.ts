@@ -2,9 +2,9 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // COMPONENT
-import { UsuariosComponent } from './usuarios-list/usuarios.component';
-import { UsuariosDetailComponent } from './usuarios-detail/usuarios-detail.component';
-import { UsuarioWorkComponent } from './usuario-work/usuario-work.component';
+import { UsuariosComponent } from 'src/app/pages/usuarios/components/usuarios-list/usuarios.component';
+import { UsuariosDetailComponent } from 'src/app/pages/usuarios/components/usuarios-detail/usuarios-detail.component';
+import { UsuarioWorkComponent } from 'src/app/pages/usuarios/components/usuario-work/usuario-work.component';
 
 // Guards
 import { AuthguardService } from '../../services/authguard.service';

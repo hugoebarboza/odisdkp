@@ -24,6 +24,10 @@
 .u-img-margin{
   margin-top: 4px;
 }
+.circle:before {
+  content: ' \25CF';
+  font-size: 20px;
+}
 .divider{
   height: 1px;
   margin: 9px 0;

@@ -55,7 +55,7 @@
               <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
               
               <div class="btn-group mr-2" role="group" aria-label="Cero group" *ngIf="_userService.isRole(6)">              
-              <button mat-icon-button  (click)="toggleRightSidenav()"><mat-icon class="material-icons md-14">contact_support</mat-icon></button>
+              <button mat-icon-button  (click)="toggleRightSidenav()" title="Centro de Soporte"><mat-icon class="material-icons md-14">contact_support</mat-icon></button>
               </div>
 
               <div class="btn-group mr-1" role="group" aria-label="First group">
@@ -115,7 +115,7 @@
               <div class="btn-group mr-1" role="group" aria-label="Second group">
 
                 <button mat-icon-button [matMenuTriggerFor]="menu">
-                  <mat-icon class="material-icons md-14">account_circle</mat-icon>
+                  <mat-icon class="material-icons md-14" title="Perfil de Usuario">account_circle</mat-icon>
                 </button>
                 <mat-menu #menu="matMenu">
                   
@@ -146,10 +146,11 @@
                       <mat-icon>person_outline</mat-icon>
                       <span><a routerLink="/profile"><i class="ti-user"></i>Mi Perfil</a> ({{identity.role_name}})</span>
                   </button>
-                                  
+
                   <button mat-menu-item >
-                    <mat-icon>language</mat-icon>
-                    <span>{{identity.country_name}}</span>
+                    <mat-icon>language</mat-icon>        
+                    <span *ngIf="wsService.socketStatus" > {{identity.country_name}} <span class="circle" [style.color]="'green'"></span></span>
+                    <span *ngIf="!wsService.socketStatus" > {{identity.country_name}} <span class="circle" [style.color]="'red'"></span></span>
                   </button>
 
 

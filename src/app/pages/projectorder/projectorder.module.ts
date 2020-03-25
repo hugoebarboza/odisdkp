@@ -18,7 +18,7 @@ import { SharedModule } from '../../components/shared/shared.module';
 import { ToastrModule } from 'ngx-toastr';
 
 // SERVICES
-import { ServiceModule } from 'src/app/services/service.module';
+// import { ServiceModule } from 'src/app/services/service.module';
 
 
 // MOMENT
@@ -56,7 +56,7 @@ registerLocaleData(localeEs);
     ReactiveFormsModule,
     ProjectOrderRoutingModule,
     SharedModule,
-    ServiceModule,
+    // ServiceModule,
     ToastrModule.forRoot(),
   ],
   declarations: [
