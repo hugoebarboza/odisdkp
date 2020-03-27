@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Socket } from 'ngx-socket-io';
 
-// MODELS
-import { User } from 'src/app/models/types';
 
 @Injectable({
   providedIn: 'root'
@@ -34,8 +32,8 @@ export class WebsocketService {
   cargarStorage() {
 
     if ( localStorage.getItem('identity') ) {
-      const usuario: User = JSON.parse( localStorage.getItem('identity') );
-      this.loginWS( usuario.email );
+      const usuario = JSON.parse( localStorage.getItem('identity') );
+      this.loginWS( usuario );
     }
 
   }
@@ -61,15 +59,15 @@ export class WebsocketService {
     return this.socket.fromEvent(evento);
   }
 
-  loginWS( nombre: string ) {
+  loginWS( usuario: any ) {
 
     return new Promise(  (resolve, reject) => {
 
-      if (nombre === '') {
+      if (!usuario) {
         reject();
       }
 
-      this.emit( 'configurar-usuario', { nombre }, (resp: any) => {
+      this.emit( 'configurar-usuario', { usuario }, (resp: any) => {
 
         // console.log(resp);
         // this.usuario = new Usuario( nombre );

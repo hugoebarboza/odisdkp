@@ -255,7 +255,7 @@ export class LoginComponent implements OnInit, OnDestroy {
         this._userService.saveStorage(keyr, region);
         this.loginAction(proyectos, identity);
         this.loginFirebase(token, this.usuario, identity);
-        this.loginWsocket(this.usuario);
+        this.loginWsocket(identity);
         this.spinnerButtonOptions.active = false;
         this.spinnerButtonOptions.text = 'Iniciar sesión';
         this.toasterService.success('Acceso: ' + this.success, 'Exito', {timeOut: 4000, closeButton: true, });
@@ -269,43 +269,6 @@ export class LoginComponent implements OnInit, OnDestroy {
       this._userService.logout();
     }
   }
-
-
-  /*
-  async storageProject (projects: any, services = []) {
-
-    if (!projects || !services || projects.length === 0 || services.length === 0) {
-      return;
-    }
-
-    // console.log(projects);
-
-      for (let i = 0; i < projects.length ; i++) {
-
-            const reproject = projects[i];
-            const dataservices = [];
-
-            for (let x = 0; x < services.length; x++) {
-
-              const reservice = services[x];
-
-
-              if (reproject.id === reservice.project_id) {
-                dataservices.push(reservice);
-
-              }
-
-            }
-            if (dataservices.length > 0) {
-              projects[i].service = dataservices;
-            } else {
-              projects[i].service = [];
-            }
-      }
-      console.log(projects);
-
-  }*/
-
 
 
   async getProyectos(identity: any, token: any) {
@@ -327,12 +290,12 @@ export class LoginComponent implements OnInit, OnDestroy {
     return await this._userService.getPerfilUser(token.token, id);
   }
 
-  loginWsocket(usuario: User) {
+  loginWsocket(usuario: any) {
     if (!usuario || !usuario.email) {
       return;
     }
 
-    this.wsService.loginWS(usuario.email);
+    this.wsService.loginWS(usuario);
 
   }
 

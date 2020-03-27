@@ -99,16 +99,32 @@ h1.example-app-name {
 .drawer-header {
   border-left: 1px solid #DDD;
   overflow: auto; 
-  height: calc(100% - 180px);
-  min-width: 250px;
-  max-width: 250px;
+  height: calc(100% - 10px);
+  min-width: 270px;
+  max-width: 270px;
   transition: all 0.3s;
   -webkit-transition: all 0.5s ease;
   -moz-transition: all 0.5s ease;
   -o-transition: all 0.5s ease;
   transition: all 0.5s ease;
   margin-bottom: 0px;
+  overflow-x: hidden;
 }
+.drawer-header-start {
+  border-left: 1px solid #DDD;
+  overflow: auto; 
+  height: calc(100% - 10px);
+  min-width: 300px;
+  max-width: 300px;
+  transition: all 0.3s;
+  -webkit-transition: all 0.5s ease;
+  -moz-transition: all 0.5s ease;
+  -o-transition: all 0.5s ease;
+  transition: all 0.5s ease;
+  margin-bottom: 0px;
+  overflow-x: hidden;
+}
+
 
 .sidebar-footer {
  height: 80px;

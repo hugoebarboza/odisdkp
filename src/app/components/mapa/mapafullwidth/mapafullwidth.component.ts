@@ -107,7 +107,7 @@ export class MapaFullWidthComponent implements OnInit, OnDestroy {
       waypoints: []
   }
 
-  public optimizeWaypoints = false
+  public optimizeWaypoints = false;
 
   // TIME PICKER
   // timefrom = {hour: 9, minute: 0};
@@ -652,8 +652,8 @@ export class MapaFullWidthComponent implements OnInit, OnDestroy {
           this.messageadvance = '';
           this.columnTimeFromValue = new FormControl;
           this.columnTimeUntilValue = new FormControl;
-          var newtimefrom = '';
-          var newtimeuntil = '';
+          const newtimefrom = '';
+          const newtimeuntil = '';
 
 
           this._proyectoService.gettUserGeoreference(this.token.token, userid, this.selectedColumnnDate.columnValueDesde, newtimefrom, newtimeuntil).then(

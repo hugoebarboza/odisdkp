@@ -1,6 +1,7 @@
-<div *ngIf="identity && identity.role === 9" >    
-    <ul class="list-group">
-      <li class="list-group-item" *ngFor="let usuario of usuariosActivosObs | async">
+<nav  *ngIf="identity && identity.role === 9">
+<div >    
+    <ul class="list-unstyled p-2">
+      <li *ngFor="let usuario of usuariosActivosObs | async">
         {{ usuario.nombre }}
 
         <!--
@@ -11,12 +12,14 @@
 
         <br>
         <span class="badge badge-info">
-          {{ usuario.id }}
+          {{usuario.country_code}} - {{ usuario.role }}
         </span>
+        <hr>
       </li>
     </ul>
     
 </div>
+</nav>
 
 
 
