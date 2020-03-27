@@ -360,3 +360,11 @@
     max-width: 50%;
     min-width: 50%;
 }
+.knkYsf {
+  width: 24px;
+  height: 24px;
+  display: flex;
+  opacity: 1;
+  border-radius: 50%;
+  margin: 2px;
+}

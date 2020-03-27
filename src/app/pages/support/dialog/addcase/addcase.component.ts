@@ -67,6 +67,7 @@ export class AddcaseComponent implements OnInit {
   booReport = false;
 
   idPais = null;
+  idDpto = null;
 
   public departamento$: Observable<any[]>;
   private departamentosCollection: AngularFirestoreCollection<any>;
@@ -241,6 +242,7 @@ export class AddcaseComponent implements OnInit {
       this._afs.doc('countries/' + this.idPais + '/departments/' + value.id).get()
       .subscribe(async res => {
         if (res.exists) {
+          this.idDpto = value.id;
           this.arrayResponsables = [];
           if (res.data().admins && res.data().admins.length > 0) {
             this.arrayResponsables = await this.getUserResponsables(res.data().admins);
@@ -632,7 +634,6 @@ export class AddcaseComponent implements OnInit {
       return;
     }
 
-    // console.log(data);
 
     // tslint:disable-next-line:max-line-length
     const body = 'El número de solicitud es #' + this.ncase + '. Asunto: ' + this.forma.value.asunto + ', con Descripción: ' + this.forma.value.descripcion + ' y Prioridad: ' + this.urgencia;
@@ -666,7 +667,7 @@ export class AddcaseComponent implements OnInit {
           );
 
 
-          this._cdf.httpEmailFromOrigin(this.token.token, this.userFirebase.email, this.userFirebase.email, 'OCA GLOBAL - Nueva solicitud #' + this.ncase, created, body)
+          this._cdf.httpEmailFromOrigin(this.token.token, this.userFirebase.email, this.userFirebase.email, 'OCA GLOBAL - Nueva solicitud #' + this.ncase, created, body, this.idPais, this.idDpto, element.id)
           .subscribe(
             response => {
               if (!response) {

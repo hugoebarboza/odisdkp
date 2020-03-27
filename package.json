@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "http-server dist/odisdkp/",
+    "start": "node --max-old-space-size=12192 ./node_modules/@angular/cli/bin/ng s",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -14,7 +14,6 @@
     "stats": "node --max-old-space-size=12192 ./node_modules/@angular/cli/bin/ng build --prod --stats-json",
     "analyze": "webpack-bundle-analyzer dist/odisdkp/stats.json",
     "sanalyze": "source-map-explorer dist/odisdkp/main*js",
-    "preinstall": "npm install -g http-server",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "private": true,

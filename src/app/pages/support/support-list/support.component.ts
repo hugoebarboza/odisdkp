@@ -533,7 +533,7 @@ export class SupportComponent implements OnInit, OnDestroy  {
   }
 
   addNew() {
-    
+
     const dialogRef = this.dialog.open(AddcaseComponent, {
     width: '1000px',
     disableClose: true,

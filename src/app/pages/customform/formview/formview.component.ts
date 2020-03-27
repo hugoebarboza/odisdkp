@@ -91,6 +91,7 @@ export class FormviewComponent implements OnInit {
   public tagPais$: Observable<any[]>;
   private tagPaisCollection: AngularFirestoreCollection<any>;
   idPais = null;
+  idDpto = null;
 
   constructor(
     private _afs: AngularFirestore,
@@ -266,6 +267,7 @@ export class FormviewComponent implements OnInit {
       this._afs.doc('countries/' + this.idPais + '/departments/' + value.id).get()
       .subscribe(async res => {
         if (res.exists) {
+          this.idDpto = value.id;
           this.arrayResponsables = [];
           // res.data();
           // console.log(res.data());
@@ -679,7 +681,8 @@ export class FormviewComponent implements OnInit {
           );
 
 
-          this._cdf.httpEmailFromOrigin(this.token.token, this.userFirebase.email, this.userFirebase.email, 'OCA GLOBAL - Nueva solicitud #' + this.ncase, created, body).subscribe(
+          this._cdf.httpEmailFromOrigin(this.token.token, this.userFirebase.email, this.userFirebase.email, 'OCA GLOBAL - Nueva solicitud #' + this.ncase, created, body, this.idPais, this.idDpto, element.id)
+          .subscribe(
             response => {
               if (!response) {
               return false;
@@ -784,4 +787,4 @@ export const docJoin = (
         })
       );
     });
-}
+};

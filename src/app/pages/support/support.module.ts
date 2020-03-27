@@ -4,14 +4,17 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // COMPONENTS
 import { AddcaseComponent } from './dialog/addcase/addcase.component';
+import { CategorysettingsComponent } from './support-settings/components/categorysettings/categorysettings.component';
 import { ShowcaseComponent } from './dialog/showcase/showcase.component';
 import { SupportComponent } from './support-list/support.component';
 import { SupportUsersComponent } from './support-users/supportusers.component';
 import { SupportsettingsComponent } from './support-settings/supportsettings.component';
+import { StatussettingsComponent } from './support-settings/components/statussettings/statussettings.component';
+import { TypesettingsComponent } from './support-settings/components/typesettings/typesettings.component';
+import { ViewCaseComponent } from './components/view-case/view-case.component';
 
 // MODULES
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
-// import { MaterialModule } from '../../material-module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
@@ -19,13 +22,9 @@ import { SharedModule } from '../../components/shared/shared.module';
 // ROUTING
 import { SupportRoutingModule } from './support.routing';
 
-
-
 // DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
-import { TypesettingsComponent } from './support-settings/components/typesettings/typesettings.component';
-import { CategorysettingsComponent } from './support-settings/components/categorysettings/categorysettings.component';
-import { StatussettingsComponent } from './support-settings/components/statussettings/statussettings.component';
+
 
 
 @NgModule({
@@ -33,7 +32,6 @@ import { StatussettingsComponent } from './support-settings/components/statusset
     CommonModule,
     DirectiveModule,
     FormsModule,
-    // MaterialModule,
     PipesModule,
     ReactiveFormsModule,
     SupportRoutingModule,
@@ -43,14 +41,17 @@ import { StatussettingsComponent } from './support-settings/components/statusset
   ],
   exports: [CommonModule],
   // tslint:disable-next-line:max-line-length
-  declarations: [SupportComponent,
+  declarations: [
     AddcaseComponent,
-    ShowcaseComponent,
-    SupportsettingsComponent,
-    TypesettingsComponent,
     CategorysettingsComponent,
+    ShowcaseComponent,
+    SupportComponent,
+    SupportsettingsComponent,
     StatussettingsComponent,
-    SupportUsersComponent],
+    SupportUsersComponent,
+    TypesettingsComponent,
+    ViewCaseComponent
+  ],
   entryComponents: [
     AddcaseComponent, ShowcaseComponent
   ],

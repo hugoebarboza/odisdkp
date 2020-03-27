@@ -2,19 +2,19 @@
 <div >    
     <ul class="list-unstyled p-2">
       <li *ngFor="let usuario of usuariosActivosObs | async">
-        {{ usuario.nombre }}
-
+        <div *ngIf="usuario">
+        <span *ngIf="usuario.nombre">{{ usuario.nombre }}</span>
         <!--
         <span class="badge badge-primary">
           {{ usuario.sala }}
         </span>
         -->
-
         <br>
-        <span class="badge badge-info">
+        <span class="badge badge-info" *ngIf="usuario.country_code && usuario.role">
           {{usuario.country_code}} - {{ usuario.role }}
         </span>
         <hr>
+        </div>
       </li>
     </ul>
     

@@ -97,7 +97,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (objNgrx) {
         this.fotoperfil = this._userService.getFotoProfile();
         this.identity = objNgrx.identificacion;
-        this.wsService.checkStatus();
+        // this.wsService.checkStatus();
       } else {
         if (this.subscription) {
           this.subscription.unsubscribe();

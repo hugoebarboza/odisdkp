@@ -1,146 +1,140 @@
-import { Component, OnInit, Inject, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatSlideToggleChange } from '@angular/material/slide-toggle';
-import { UserService, CargaImagenesService, CdfService } from 'src/app/services/service.index';
-import { ToastrService } from 'ngx-toastr';
-import { FileItem, UserFirebase } from 'src/app/models/types';
-import { defer, combineLatest, Observable, Subject, concat } from 'rxjs';
-import { of } from 'rxjs/observable/of';
-import { distinctUntilChanged, tap, switchMap, catchError, debounceTime, map } from 'rxjs/operators';
+import { Component } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-
+import { ToastrService } from 'ngx-toastr';
+import { defer, combineLatest, Observable, Subject, concat } from 'rxjs';
+import { distinctUntilChanged, tap, switchMap, catchError, debounceTime, map } from 'rxjs/operators';
+import { of } from 'rxjs/observable/of';
+import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import Swal from 'sweetalert2';
 
-import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
-
+// FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
+
+// MODELS
+import { FileItem, UserFirebase } from 'src/app/models/types';
 
 import * as _moment from 'moment';
 const moment = _moment;
 
+
+// SERVICES
+import { CargaImagenesService, CdfService, SettingsService, UserService } from 'src/app/services/service.index';
+
+
+
 @Component({
-  selector: 'app-showcase',
-  templateUrl: './showcase.component.html',
-  styleUrls: ['./showcase.component.css']
+  selector: 'app-view-case',
+  templateUrl: './view-case.component.html',
+  styleUrls: ['./view-case.component.css']
 })
-
-export class ShowcaseComponent implements OnInit {
-
-  @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
-
-  datacase: any;
-  identity: any;
-  array_usersInfo = [];
-  userinput = new Subject<string>();
-  isLoading = true;
-  userLoading = false;
-  totalRegistros = 0;
-  page = 1;
-  pageSize = 2;
-  limit = 2;
-  resultCount = 0;
-  title = 'Soporte';
-  token: any;
-  countEtiq = false;
-
-  formComentar: FormGroup;
-  userFirebase: UserFirebase;
-
-  checkedToggle = false;
-
-  // FILE
-
-  file: FileItem[] = [];
-  archivos: FileItem[] = [];
-  archivosTem: Array<number> = [];
-
-  arrayResponsables = [];
-
-  public CARPETA_ARCHIVOS = '';
-
-
-  infocaso$: any;
-  supportcase = 'supportcase';
-
-  public caso$: Observable<any>;
-
-  public estatus$: Observable<any[]>;
-
-  public documentos$: Observable<any[]>;
-  private documentosCollection: AngularFirestoreCollection<any>;
-
-  public users$: Observable<any[]>;
-  private usersCollection: AngularFirestoreCollection<any>;
-
-  public comentarios$: Observable<any[]>;
-  private comentariosCollection: AngularFirestoreCollection<any>;
+export class ViewCaseComponent  {
 
   public actividad$: Observable<any[]>;
   public actividadCollection: AngularFirestoreCollection<any>;
+  arrayEtiquetados = [];
+  arrayEtiquetadosDefault = [];
+  arrayResponsables = [];
+  array_usersInfo = [];
+  checkedToggle = false;
+  public comentarios$: Observable<any[]>;
+  private comentariosCollection: AngularFirestoreCollection<any>;
+  data: any;
+  datacase: any;
+  public documentos$: Observable<any[]>;
+  private documentosCollection: AngularFirestoreCollection<any>;
+  id: any;
+  identity: any;
+  infocaso$: any;
+  isLoading = true;
+  formComentar: FormGroup;
+  supportcase = 'supportcase';
+  title = '';
+  token: any;
+  userFirebase: UserFirebase;
+  userinput = new Subject<string>();
+  userLoading = false;
+  public users$: Observable<any[]>;
+  private usersCollection: AngularFirestoreCollection<any>;
 
-  public arrayEtiquetados = [];
-  public arrayEtiquetadosDefault = [];
+    // FILE
+    file: FileItem[] = [];
+    archivos: FileItem[] = [];
+    archivosTem: Array<number> = [];
+
+
 
   constructor(
     private _afs: AngularFirestore,
-    private _cdf: CdfService,
     public _cargaImagenes: CargaImagenesService,
+    private _cdf: CdfService,
+    private _route: ActivatedRoute,
     public _userService: UserService,
     private firebaseAuth: AngularFireAuth,
+    public label: SettingsService,
     private toasterService: ToastrService,
-    public dialogRef: MatDialogRef<ShowcaseComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
-    ) {
-      this.identity = this._userService.getIdentity();
-      this.token = this._userService.getToken();
-      this.supportcase = this.supportcase + '/' + this.data.pais + '/cases';
-      this.page = 1;
-      this.pageSize = 2;
+  ) {
+    this.identity = this._userService.getIdentity();
+    this.token = this._userService.getToken();
+    this.label.getDataRoute().subscribe(data => {
+      this.title = data.subtitle;
+    });
 
-      this.firebaseAuth.authState.subscribe(
-        (auth) => {
-          if (auth) {
-            this.userFirebase = auth;
-          }
-      });
-     }
+    this.firebaseAuth.authState.subscribe(
+      (auth) => {
+        if (auth) {
+          this.userFirebase = auth;
+        }
+    });
 
-  ngOnInit() {
+    this._route.params.subscribe(async params => {
+      if (params) {
+        this.supportcase = this.supportcase + '/' + params.idpais + '/cases';
+        this.id = params.iddoc;
+        this.data = params;
+        this.getCase(this.supportcase, params);
+      }
+    });
 
-    if (this.data) {
+  }
 
-      this.formComentar = new FormGroup({
-        comentario: new FormControl ('', [Validators.required]),
-      });
+  getCase(path: string, params: any) {
 
-      this.formComentar.setValue({
-        'comentario': ''
-      });
+    if (!path || !params) {
+      return;
+    }
 
-      // console.log(this.data.id);
+    console.log(path);
+    console.log(params);
 
-      this.documentosCollection = this._afs.collection(this.supportcase + '/' + this.data.id + '/caseFiles');
-      this.documentos$ = this.documentosCollection.snapshotChanges()
-        .map(actions => {
-          return actions.map(a => {
-            const data = a.payload.doc.data();
-            const id = a.payload.doc.id;
-            return { id, ...data };
-          });
+    this.formComentar = new FormGroup({
+      comentario: new FormControl ('', [Validators.required]),
+    });
+
+    this.formComentar.setValue({
+      'comentario': ''
+    });
+
+    this.documentosCollection = this._afs.collection(path + '/' + params.iddoc + '/caseFiles');
+
+    this.documentos$ = this.documentosCollection.snapshotChanges()
+      .map(actions => {
+        return actions.map(a => {
+          const data = a.payload.doc.data();
+          const id = a.payload.doc.id;
+          return { id, ...data };
         });
+      });
 
 
-      this._afs.doc(this.supportcase + '/' + this.data.id).get().subscribe(
+      this._afs.doc(path + '/' + params.iddoc).get().subscribe(
         res => {
           if (res.exists) {
             this.arrayEtiquetados = [];
             this.arrayEtiquetadosDefault = [];
             this.datacase = res.data();
             const docData = res.data();
-            // console.log(docData.etiquetados);
-            // console.log(this.datacase);
-            // docData.etiquetados = this.getUserInfo(docData.etiquetados);
             if (docData.etiquetados) {
               docData.etiquetados = this.getUserInfo(docData.etiquetados);
             }
@@ -148,30 +142,31 @@ export class ShowcaseComponent implements OnInit {
             // Do something with doc data
            } else {
             this.infocaso$ = null;
+            this.isLoading = false;
             console.log('Document does not exist');
            }
         }
       );
 
-      this._afs.doc('countries/' + this.data.pais + '/departments/' + this.data.depto_id).get()
-        .subscribe(res => {
-          if (res.exists) {
-            this.arrayResponsables = [];
-            // res.data();
-            // console.log(res.data());
-            if (res.data().admins && res.data().admins.length > 0) {
-              // console.log(res.data().admins);
-              this.arrayResponsables = this.getUserResponsables(res.data().admins);
-            }
-           } else {
-            this.arrayResponsables = [];
-            console.log('Document does not exist');
-           }
-        });
+      this._afs.doc('countries/' + params.idpais + '/departments/' + params.iddpto).get()
+      .subscribe(res => {
+        if (res.exists) {
+          this.arrayResponsables = [];
+          // res.data();
+          // console.log(res.data());
+          if (res.data().admins && res.data().admins.length > 0) {
+            // console.log(res.data().admins);
+            this.arrayResponsables = this.getUserResponsables(res.data().admins);
+          }
+         } else {
+          this.arrayResponsables = [];
+          console.log('Document does not exist');
+         }
+      });
 
 
-      // tslint:disable-next-line:max-line-length
-      this.comentariosCollection = this._afs.collection(this.supportcase + '/' + this.data.id + '/comments', ref => ref.orderBy('create_at', 'desc'));
+      this.comentariosCollection = this._afs.collection(path + '/' + params.iddoc + '/comments', ref => ref.orderBy('create_at', 'desc'));
+
       this.comentariosCollection.snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
@@ -191,7 +186,7 @@ export class ShowcaseComponent implements OnInit {
       );
 
       // tslint:disable-next-line:max-line-length
-      this.actividadCollection = this._afs.collection(this.supportcase + '/' + this.data.id + '/activity', ref => ref.orderBy('create_at', 'desc'));
+      this.actividadCollection = this._afs.collection(path + '/' + params.iddoc + '/activity', ref => ref.orderBy('create_at', 'desc'));
       this.actividadCollection.snapshotChanges().pipe(
         map(actions => {
           return actions.map(a => {
@@ -211,9 +206,6 @@ export class ShowcaseComponent implements OnInit {
       );
 
       this.loadusers();
-
-    }
-
 
   }
 
@@ -268,21 +260,21 @@ export class ShowcaseComponent implements OnInit {
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
     if (arr.length > 0) {
-      this._afs.collection(this.supportcase + '/' + this.data.id + '/activity').add({
+      this._afs.collection(this.supportcase + '/' + this.id + '/activity').add({
         create_to: this.userFirebase.uid,
         create_at: date,
         comentario: 'Actualizó etiquetados a ' + cc
       });
     } else {
-      this._afs.collection(this.supportcase + '/' + this.data.id + '/activity').add({
+      this._afs.collection(this.supportcase + '/' + this.id + '/activity').add({
         create_to: this.userFirebase.uid,
         create_at: date,
         comentario: 'Elimino etiquetados'
       });
     }
 
-    this._afs.doc(this.supportcase + '/' + this.data.id).update({update_at: date});
-    this._afs.doc(this.supportcase + '/' + this.data.id).update({etiquetados: arr})
+    this._afs.doc(this.supportcase + '/' + this.id).update({update_at: date});
+    this._afs.doc(this.supportcase + '/' + this.id).update({etiquetados: arr})
     .then(function(_docRef) {
        if (that.array_usersInfo && that.array_usersInfo.length > 0) {
         that.array_usersInfo.forEach(res => {
@@ -307,21 +299,6 @@ export class ShowcaseComponent implements OnInit {
 
   }
 
-  getUserResponsables(to): Array<any> {
-
-    const arr: any = [];
-    for (let ii = 0; ii < to.length; ii++) {
-
-      this._afs.doc('users/' + to[ii]).get()
-      .subscribe(res => {
-        if (res.exists) {
-          // console.log(res.data());
-          arr.push(res.data());
-         }
-      });
-    }
-    return arr;
-  }
 
   getUserInfo(to): Array<any> {
 
@@ -336,14 +313,22 @@ export class ShowcaseComponent implements OnInit {
       });
     }
     return arr;
-
   }
 
-  documentJoin(document): Observable<any> {
-    //  console.log(document);
-    return document.pipe(
-      docJoin(this._afs, { id: 'users'},  2, '', '', 'etiquetado', '', ''),
-    );
+  getUserResponsables(to): Array<any> {
+
+    const arr: any = [];
+    for (let ii = 0; ii < to.length; ii++) {
+
+      this._afs.doc('users/' + to[ii]).get()
+      .subscribe(res => {
+        if (res.exists) {
+          // console.log(res.data());
+          arr.push(res.data());
+         }
+      });
+    }
+    return arr;
   }
 
   loadusers() {
@@ -390,52 +375,11 @@ export class ShowcaseComponent implements OnInit {
 
   }
 
-  collectionJoin(document): Observable<any> {
-    this.isLoading = false;
-    return this.infocaso$ = document.pipe(
-      docJoin(this._afs, { create_to: 'users'},  0, '', '', 'create_to', '', ''),
-      // docJoin(this._afs, { depto_id: 'countries/' + 1 + '/departments'},  0, '', '', 'depto_id'),
-      // docJoin(this._afs, { type_id: 'supporttype'},  0, '', '', 'typeselect'),
-      // docJoin(this._afs, { category_id: 'supportcategory'},  0, '', '', 'category_id'),
-      docJoin(this._afs, { type_id: 'supportstatus'} , 3, 'stype_id', '==', 'supportstatus', 'order_by', 'asc'),
-    );
-  }
-
-  collectionJoinUserActivity(document): Observable<any> {
-    return this.actividad$ = document.pipe(
-      leftJoin(this._afs, 'create_to', 'users', 0, '', '', 'usercomment'),
-      leftJoin(this._afs, 'id', this.supportcase + '/' + this.data.id + '/commentsFiles', 1, 'id_case', '==', 'adjuntos')
-    );
-  }
-
-  collectionJoinUser(document): Observable<any> {
-    return this.comentarios$ = document.pipe(
-      leftJoin(this._afs, 'create_to', 'users', 0, '', '', 'usercomment'),
-      leftJoin(this._afs, 'id', this.supportcase + '/' + this.data.id + '/commentsFiles', 1, 'id_case', '==', 'adjuntos')
-    );
-  }
-
-  ngChangeEstatus(value) {
-   // console.log(value);
-    const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-    this._afs.doc(this.supportcase + '/' + this.data.id).update({update_at: date});
-    this._afs.doc(this.supportcase + '/' + this.data.id).update({status_id: value._iddoc, status_desc: value.name, label: value.label});
-    this._afs.collection(this.supportcase + '/' + this.data.id + '/activity').add({
-      create_to: this.userFirebase.uid,
-      create_at: date,
-      comentario: 'Actualizó estado a ' + value.name
-    });
-  }
-
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-
   addComentario() {
 
     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
-    this.CARPETA_ARCHIVOS = this.supportcase + '/';
+    let CARPETA_ARCHIVOS = this.supportcase + '/';
 
     if (this.formComentar.invalid ) {
       Swal.fire('Importante', 'A ocurrido un error en el procesamiento de formulario', 'error');
@@ -443,8 +387,8 @@ export class ShowcaseComponent implements OnInit {
     }
 
     const that = this;
-    this._afs.doc(this.supportcase + '/' + this.data.id).update({update_at: date});
-    this._afs.collection(this.supportcase + '/' + this.data.id + '/comments').add({
+    this._afs.doc(this.supportcase + '/' + this.id).update({update_at: date});
+    this._afs.collection(this.supportcase + '/' + this.id + '/comments').add({
       create_to: this.userFirebase.uid,
       create_at: date,
       comentario: this.formComentar.value.comentario
@@ -480,8 +424,8 @@ export class ShowcaseComponent implements OnInit {
         // console.log('Document written with ID: ', docRef.id);
         if (that.archivos.length > 0) {
           that.toasterService.success('Solicitud actualizada, Cerrar al finalizar carga de archivos', 'Exito', {timeOut: 8000});
-          that.CARPETA_ARCHIVOS =  that.CARPETA_ARCHIVOS + that.data.id + '/commentsFiles';
-          that._cargaImagenes.cargarImagenesFirebase( that.archivos,  that.CARPETA_ARCHIVOS, date, docRef.id);
+          CARPETA_ARCHIVOS =  CARPETA_ARCHIVOS + that.id + '/commentsFiles';
+          that._cargaImagenes.cargarImagenesFirebase( that.archivos,  CARPETA_ARCHIVOS, date, docRef.id);
         }
 
         that.formComentar.reset();
@@ -493,6 +437,114 @@ export class ShowcaseComponent implements OnInit {
 
 
   }
+
+
+
+  collectionJoin(document): Observable<any> {
+    this.isLoading = false;
+    return this.infocaso$ = document.pipe(
+      docJoin(this._afs, { create_to: 'users'},  0, '', '', 'create_to', '', ''),
+      // docJoin(this._afs, { depto_id: 'countries/' + 1 + '/departments'},  0, '', '', 'depto_id'),
+      // docJoin(this._afs, { type_id: 'supporttype'},  0, '', '', 'typeselect'),
+      // docJoin(this._afs, { category_id: 'supportcategory'},  0, '', '', 'category_id'),
+      docJoin(this._afs, { type_id: 'supportstatus'} , 3, 'stype_id', '==', 'supportstatus', 'order_by', 'asc'),
+    );
+  }
+
+  collectionJoinUserActivity(document): Observable<any> {
+    return this.actividad$ = document.pipe(
+      leftJoin(this._afs, 'create_to', 'users', 0, '', '', 'usercomment'),
+      leftJoin(this._afs, 'id', this.supportcase + '/' + this.id + '/commentsFiles', 1, 'id_case', '==', 'adjuntos')
+    );
+  }
+
+  collectionJoinUser(document): Observable<any> {
+    return this.comentarios$ = document.pipe(
+      leftJoin(this._afs, 'create_to', 'users', 0, '', '', 'usercomment'),
+      leftJoin(this._afs, 'id', this.supportcase + '/' + this.id + '/commentsFiles', 1, 'id_case', '==', 'adjuntos')
+    );
+  }
+
+
+  documentJoin(document): Observable<any> {
+    //  console.log(document);
+    return document.pipe(
+      docJoin(this._afs, { id: 'users'},  2, '', '', 'etiquetado', '', ''),
+    );
+  }
+
+  ngChangeEstatus(value) {
+    // console.log(value);
+     const date = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+     this._afs.doc(this.supportcase + '/' + this.id).update({update_at: date});
+     this._afs.doc(this.supportcase + '/' + this.id).update({status_id: value._iddoc, status_desc: value.name, label: value.label});
+     this._afs.collection(this.supportcase + '/' + this.id + '/activity').add({
+       create_to: this.userFirebase.uid,
+       create_at: date,
+       comentario: 'Actualizó estado a ' + value.name
+     });
+   }
+
+
+
+  sendCdfUser(data, element, _content, comment) {
+    if (!data) {
+      return;
+    }
+
+    // console.log(element);
+    // console.log(data);
+    // tslint:disable-next-line:max-line-length
+    const body = 'Comentario solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
+    const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+
+    if (data && this.userFirebase.uid) {
+
+        const notification = {
+          userId: this.userFirebase.uid,
+          userIdTo: data.uid,
+          title: 'Comentario solicitud',
+          message: body,
+          create_at: created,
+          status: '1',
+          idUx: element.id,
+          descriptionidUx: 'cases',
+          routeidUx: `${this.supportcase}`
+        };
+
+        this._cdf.fcmsend(this.token.token, notification).subscribe(
+          response => {
+            if (!response) {
+            return false;
+            }
+            if (response.status === 200) {
+              // console.log(response);
+            }
+          },
+            error => {
+            console.log(<any>error);
+            }
+          );
+
+
+          this._cdf.httpEmailCommentToSupport(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario solicitud #' + this.datacase.ncase, created, body).subscribe(
+            response => {
+              if (!response) {
+              return false;
+              }
+              if (response.status === 200) {
+                // console.log(response);
+              }
+            },
+              error => {
+              console.log(<any>error);
+              }
+            );
+
+      }
+
+    }
+
 
   sendCdfTag(data, element, content) {
     if (!data) {
@@ -511,7 +563,7 @@ export class ShowcaseComponent implements OnInit {
           message: body,
           create_at: created,
           status: '1',
-          idUx: element.id,
+          idUx: element.iddoc,
           descriptionidUx: 'cases',
           routeidUx: `${this.supportcase}`
         };
@@ -555,20 +607,19 @@ export class ShowcaseComponent implements OnInit {
 
     }
 
-    sendCdfUser(data, element, _content, comment) {
+
+    sendCdfUserOrigin(data, element, _content, comment) {
       if (!data) {
         return;
       }
 
-      // console.log(element);
-      // console.log(data);
-      // tslint:disable-next-line:max-line-length
-      const body = 'Comentario solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', y Comentario: ' + comment ;
+      const body =  'Solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', con Descripción: ' + this.datacase.description + ' y Prioridad: ' + this.datacase.important;
+      const bodycomment = 'Comentario solicitud #' + this.datacase.ncase + ', y Comentario: ' + comment ;
       const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
 
       if (data && this.userFirebase.uid) {
 
-          const notification = {
+        const notification = {
             userId: this.userFirebase.uid,
             userIdTo: data.uid,
             title: 'Comentario solicitud',
@@ -594,8 +645,7 @@ export class ShowcaseComponent implements OnInit {
               }
             );
 
-
-            this._cdf.httpEmailCommentToSupport(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario solicitud #' + this.datacase.ncase, created, body).subscribe(
+            this._cdf.httpEmailCommentFromOrigin(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario solicitud #' + this.datacase.ncase, this.datacase.create_at, created, body, bodycomment).subscribe(
               response => {
                 if (!response) {
                 return false;
@@ -608,66 +658,9 @@ export class ShowcaseComponent implements OnInit {
                 console.log(<any>error);
                 }
               );
-
         }
 
       }
-
-      sendCdfUserOrigin(data, element, _content, comment) {
-        if (!data) {
-          return;
-        }
-        // console.log(element);
-        // console.log(data);
-        // tslint:disable-next-line:max-line-length
-        const body =  'Solicitud #' + this.datacase.ncase + ', Asunto: ' + this.datacase.asunto + ', con Descripción: ' + this.datacase.description + ' y Prioridad: ' + this.datacase.important;
-        const bodycomment = 'Comentario solicitud #' + this.datacase.ncase + ', y Comentario: ' + comment ;
-        const created = moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
-
-        if (data && this.userFirebase.uid) {
-
-          const notification = {
-              userId: this.userFirebase.uid,
-              userIdTo: data.uid,
-              title: 'Comentario solicitud',
-              message: body,
-              create_at: created,
-              status: '1',
-              idUx: element.id,
-              descriptionidUx: 'cases',
-              routeidUx: `${this.supportcase}`
-            };
-
-            this._cdf.fcmsend(this.token.token, notification).subscribe(
-              response => {
-                if (!response) {
-                return false;
-                }
-                if (response.status === 200) {
-                  // console.log(response);
-                }
-              },
-                error => {
-                console.log(<any>error);
-                }
-              );
-
-              this._cdf.httpEmailCommentFromOrigin(this.token.token, data.email, this.userFirebase.email, 'OCA GLOBAL - Comentario solicitud #' + this.datacase.ncase, this.datacase.create_at, created, body, bodycomment).subscribe(
-                response => {
-                  if (!response) {
-                  return false;
-                  }
-                  if (response.status === 200) {
-                    // console.log(response);
-                  }
-                },
-                  error => {
-                  console.log(<any>error);
-                  }
-                );
-          }
-
-        }
 
 }
 
@@ -732,6 +725,8 @@ export const leftJoin = (
       );
     });
 };
+
+
 
 export const docJoin = (
   afs: AngularFirestore,
@@ -813,3 +808,4 @@ export const docJoin = (
       );
     });
 };
+

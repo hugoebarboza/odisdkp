@@ -18,13 +18,13 @@ export class WebsocketService {
 
   checkStatus() {
     this.socket.on('connect', () => {
-      console.log('Conectado con WsServer');
+      // console.log('Conectado con WsServer');
       this.socketStatus = true;
       this.cargarStorage();
     });
 
     this.socket.on('disconnect', () => {
-      console.log('Desconectado con WsServer');
+      // console.log('Desconectado con WsServer');
       this.socketStatus = false;
     });
   }

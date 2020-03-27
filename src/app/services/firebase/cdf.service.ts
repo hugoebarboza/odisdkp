@@ -214,7 +214,7 @@ export class CdfService  {
 
 
 
-  httpEmailFromOrigin(token= null, toEmail: string, fromTo: string, subject: string, created: any, body: string): Observable<any> {
+  httpEmailFromOrigin(token= null, toEmail: string, fromTo: string, subject: string, created: any, body: string, idPais?: number, idDpto?: any, docId?: any): Observable<any> {
     if (!token) {
             return;
     }
@@ -269,10 +269,14 @@ export class CdfService  {
                         <p>Gracias por contactar al equipo de soporte de OCA GLOBAL.</p>
                         <p>Hemos recibido su solicitud y estamos trabajando para resolverla. Le ayudaremos tan pronto como podamos.</p>
                         <p></p>
-                        <p>Para verificar el estado de la solicitud y agregar comentarios adicionales, siga el enlace aquí
-                          <a href="https://odisdkp.firebaseapp.com/#/support" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://support.sendgrid.com/hc/requests/2306369&amp;source=gmail&amp;ust=1561827470902000&amp;usg=AFQjCNHthhPllbak25dNtf46FraBxDF9uQ">odisdkp.firebaseapp.com/#/support</a>.</p>
-                          <p>Saludos cordiales!</p>
-                          <p></p>
+                        <p>Para verificar el estado de sus solicitudes y agregar comentarios adicionales, siga el enlace aquí
+                          <a href="https://odisdkp.firebaseapp.com/#/support" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://support.sendgrid.com/hc/requests/2306369&amp;source=gmail&amp;ust=1561827470902000&amp;usg=AFQjCNHthhPllbak25dNtf46FraBxDF9uQ">odisdkp.firebaseapp.com/#/support</a></p>
+
+                          <p>Para verificar el estado de la solicitud recientemente creada, siga el enlace aquí
+                          <a href="https://odisdkp.firebaseapp.com/#/support/viewcase/${idPais}/${idDpto}/${docId}" target="_blank" data-saferedirecturl="https://www.google.com/url?q=http://support.sendgrid.com/hc/requests/2306369&amp;source=gmail&amp;ust=1561827470902000&amp;usg=AFQjCNHthhPllbak25dNtf46FraBxDF9uQ">odisdkp.firebaseapp.com/#/support/viewcase/${idPais}/${idDpto}/${docId}</a></p>
+
+                        <p>Saludos cordiales!</p>
+                        <p></p>
                         <div style="margin-top:25px">
                           <table width="100%" cellpadding="0" cellspacing="0" border="0" role="presentation">
                           <tbody>
