@@ -6,14 +6,6 @@
 /out-tsc
 
 # environments
-.environments/*
-/src/environments
-/src/environments-
-/src/environments/
-/environments
-environments/
-/environments/
-/environments/*
 
 # dependencies
 /node_modules
