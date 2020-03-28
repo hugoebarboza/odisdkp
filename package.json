@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
-    "start": "node --max-old-space-size=12192 ./node_modules/@angular/cli/bin/ng s",
+    "start": "http-server dist/odisdkp/",
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
@@ -14,12 +14,14 @@
     "stats": "node --max-old-space-size=12192 ./node_modules/@angular/cli/bin/ng build --prod --stats-json",
     "analyze": "webpack-bundle-analyzer dist/odisdkp/stats.json",
     "sanalyze": "source-map-explorer dist/odisdkp/main*js",
+    "preinstall": "npm install -g http-server",
     "postinstall": "ngcc --properties es2015 browser module main --first-only --create-ivy-entry-points"
   },
   "private": true,
   "dependencies": {
     "@agm/core": "^1.1.0",
     "@amcharts/amcharts4": "^4.9.12",
+    "@angular-devkit/build-angular": "^0.900.7",
     "@angular-devkit/schematics": "^9.1.0",
     "@angular/animations": "^9.1.0",
     "@angular/cdk": "^9.2.0",
@@ -101,7 +103,6 @@
     "zone.js": "~0.10.3"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "^0.901.0",
     "@angular/cli": "^9.1.0",
     "@angular/compiler-cli": "^9.1.0",
     "@angular/language-service": "^9.1.0",
