@@ -5,7 +5,7 @@
     "build": "tsc",
     "serve": "npm run build && firebase serve --only functions",
     "shell": "npm run build && firebase functions:shell",
-    "start": "npm run shell",
+    "start": "functions-framework --target=clf",
     "deploy": "firebase deploy --only functions",
     "logs": "firebase functions:log"
   },
@@ -14,6 +14,7 @@
   },
   "main": "lib/index.js",
   "dependencies": {
+    "@google-cloud/functions-framework": "^1.5.0",
     "@sendgrid/mail": "^6.5.5",
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",

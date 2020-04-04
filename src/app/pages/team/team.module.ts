@@ -24,10 +24,6 @@ import { EditTeamComponent } from './dialog/edit-team/edit-team.component';
 import { TeamRoutingModule } from './team.routing';
 
 
-// SERVICES
-// import { ServiceModule } from 'src/app/services/service.module';
-
-
 @NgModule({
   imports: [
     CommonModule,
@@ -36,7 +32,6 @@ import { TeamRoutingModule } from './team.routing';
     NgSelectModule,
     ReactiveFormsModule,
     PipesModule,
-    // ServiceModule,
     SharedModule,
     TeamRoutingModule,
   ],

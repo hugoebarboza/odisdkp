@@ -16,7 +16,7 @@ import * as _moment from 'moment';
 const moment = _moment;
 
 // SERVICES
-import { CdfService, OrderserviceService, ProjectsService, UserService, CustomerService, DataService } from 'src/app/services/service.index';
+import { CdfService, OrderserviceService, ProjectsService, UserService, CustomerService, DataService, WebsocketService } from 'src/app/services/service.index';
 
 // MODELS
 import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
@@ -96,6 +96,7 @@ export class EditComponent implements OnInit, OnDestroy {
     private _customerService: CustomerService,
     public dialogRef: MatDialogRef<EditComponent>,
     private firebaseAuth: AngularFireAuth,
+    public wsService: WebsocketService,
     @Inject(MAT_DIALOG_DATA) public infodata: any
 
   ) {
@@ -256,11 +257,20 @@ export class EditComponent implements OnInit, OnDestroy {
     // console.log(obj);
 
     const editot: any = await this._orderService.update(this.token.token, this.infodata['order_id'], obj, this.category_id);
-    // console.log(editot);
+
+    // Socket data
+    const data = {
+      serviceid: this.infodata['service_id'],
+      orderid: this.infodata['order_id'],
+    };
+
 
     if (editot && editot.status && editot.status === 'success') {
 
         Swal.fire('Actualizada Orden de Trabajo: ', obj.order_number + ' exitosamente.', 'success' );
+
+        // Socket
+        this.wsService.emitirUpdateOrder(data);
 
         // SEND CDF MESSAGING AND NOTIFICATION
         if (this.destinatario.length > 0)  {
@@ -571,7 +581,7 @@ export class EditComponent implements OnInit, OnDestroy {
       this.loading = true;
       this.order = null;
       // tslint:disable-next-line:max-line-length
-      this.subscription = this._orderService.getShowOrderService(this.token.token, this.infodata['service_id'], this.infodata['order_id'])
+      this.subscription = this._orderService.getDetailOrderService(this.token.token, this.infodata['service_id'], this.infodata['order_id'])
       .pipe(
         tap(),
         shareReplay()

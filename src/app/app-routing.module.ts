@@ -2,9 +2,6 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Routes, RouterModule } from '@angular/router';
 
-// COMPONENTES
-import { NotfoundComponent } from './components/shared/notfound/notfound.component';
-
 // GUARDS
 import { LoginGuardGuard } from './services/guards/login-guard.guard';
 
@@ -13,8 +10,6 @@ import {QuicklinkStrategy, QuicklinkModule} from 'ngx-quicklink';
 // import { PreloadAllModules } from "@angular/router";
 // import { CustomPreloading } from './custompreloading';
 
-// PAGES
-import { PagesComponent } from './pages/pages.component';
 
 // ROUTES
 const appRoute: Routes = [
@@ -34,7 +29,9 @@ const appRoute: Routes = [
         loadChildren : () => import('./pages/login/login.module').then(m => m.LoginModule),
         data: { titulo: 'OCA Global - ODIS Acceso', subtitle: '', descripcion: 'OCA Global - ODIS User Login' }
     },
-    { path: 'notfound', component: NotfoundComponent, data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  }},
+    { path: 'notfound',
+      loadChildren: () => import('./pages/notfound/notfound.module').then(m => m.NotfoundModule)
+    },
     { path: 'register',
         loadChildren : () => import('./pages/register/register.module').then(m => m.RegisterModule),
         data: { titulo: 'OCA Global - ODIS Registro', subtitle: 'Registro', descripcion: 'OCA Global - ODIS User Register' }
@@ -185,9 +182,9 @@ const appRoute: Routes = [
     },
     {
       path: '',
-      component: PagesComponent,
       canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/pages.module').then(m => m.PagesModule),
+      loadChildren : () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
+      data: { preload: false, delay: false }
     },
     { path: '**', pathMatch: 'full', redirectTo: 'notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
 
@@ -200,7 +197,7 @@ const appRoute: Routes = [
   imports: [
     CommonModule,
     QuicklinkModule,
-    RouterModule.forRoot(appRoute, { useHash: true,  enableTracing: false,  preloadingStrategy: QuicklinkStrategy })
+    RouterModule.forRoot(appRoute, { useHash: true, enableTracing: false, preloadingStrategy: QuicklinkStrategy, initialNavigation: 'enabled' })
   ],
   exports: [QuicklinkModule, RouterModule],
   providers: [LoginGuardGuard]

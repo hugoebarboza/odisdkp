@@ -14,7 +14,7 @@ import { PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSelect } from '@angular/material/select';
 import { debounceTime } from 'rxjs/operators/debounceTime';
-
+import { tap, shareReplay } from 'rxjs/operators';
 
 // CDK
 import { Portal, TemplatePortal } from '@angular/cdk/portal';
@@ -25,7 +25,7 @@ import * as FileSaver from 'file-saver';
 import { GLOBAL } from '../../../services/global';
 
 // SERVICES
-import { ExcelService, ModalManageService, OrderserviceService, ProjectsService, UserService, ZipService } from 'src/app/services/service.index';
+import { ExcelService, ModalManageService, OrderserviceService, ProjectsService, UserService, ZipService, WebsocketService } from 'src/app/services/service.index';
 
 
 // MODELS
@@ -62,7 +62,6 @@ import { ToastrService } from 'ngx-toastr';
 
 // FIREBASE
 import { AngularFirePerformance } from '@angular/fire/performance';
-
 
 
 interface Inspector {
@@ -305,7 +304,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
   columnsOrderSettingsToDisplay: string[] = this.columns.map(column => column.name);
 
   data: Order[] = [];
-  dataSource: MatTableDataSource<Order[]>;
+  dataSource: MatTableDataSource<any>;
   exportDataSource: MatTableDataSource<Order[]>;
 
   isLoadingResults = true;
@@ -345,6 +344,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
     public snackBar: MatSnackBar,
     private toasterService: ToastrService,
     public zipService: ZipService,
+    public wsService: WebsocketService,
   ) {
     this.url = GLOBAL.url;
     this.loading = true;
@@ -358,6 +358,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
     this.role = 5; // USUARIOS INSPECTORES
     this.open = false;
     this.cd.markForCheck();
+    this.listenSocket();
   }
 
   hoverIn(index: number) {
@@ -733,6 +734,64 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
       this.cd.markForCheck();
   }
 
+  listenSocket() {
+
+    this.wsService.listen('update-order-completed')
+      .subscribe( (data: any) => {
+        if (!data) {
+          return;
+        }
+        if (data.serviceid === Number(this.id)) {
+            this.updateDatasource(data);
+        }
+      });
+  }
+
+  updateDatasource(data: any) {
+    if (!data) {
+      return;
+    }
+    // Find data in datasource
+    if (this.dataSource && this.dataSource.data.length > 0) {
+      const index = this.dataSource.data.findIndex( order => order.order_id === data.orderid );
+      if (Number(index) >= 0) {
+      this.subscription = this._orderService.getDetailOrderService(this.token.token, this.id, data.orderid)
+                        .pipe(
+                          tap(res => {
+                            if (!res) {
+                              return;
+                            }
+                            if (res.datos && res.datos.length > 0) {
+                              this.dataSource.data[index].important = res.datos[0].important;
+                              this.dataSource.data[index].order_number = res.datos[0].order_number;
+                              this.dataSource.data[index].cc_number = res.datos[0].cc_number;
+                              this.dataSource.data[index].region = res.datos[0].region;
+                              this.dataSource.data[index].provincia = res.datos[0].provincia;
+                              this.dataSource.data[index].comuna = res.datos[0].comuna;
+                              this.dataSource.data[index].orderdetail_direccion = res.datos[0].orderdetail_direccion;
+                              this.dataSource.data[index].direccion = res.datos[0].direccion;
+                              this.dataSource.data[index].servicetype = res.datos[0].servicetype;
+                              this.dataSource.data[index].user = res.datos[0].user;
+                              this.dataSource.data[index].userupdate = res.datos[0].userupdate;
+                              this.dataSource.data[index].userassigned = res.datos[0].userassigned;
+                              this.dataSource.data[index].time = res.datos[0].time;
+                              this.dataSource.data[index].create_at = res.datos[0].create_at;
+                              this.dataSource.data[index].update_at = res.datos[0].update_at;
+                              this.dataSource.data[index].label = res.datos[0].label;
+                              this.dataSource.data[index].estatus = res.datos[0].estatus;
+                              this.cd.markForCheck();
+                            }
+                          }
+                          ),
+                          shareReplay()
+                        ).subscribe();
+
+      }
+    }
+
+
+  }
+
 
   getParams() {
 
@@ -740,11 +799,15 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
     this.isLoadingResults = true;
 
     if (this.filterValue) {
+      this.selectedColumnnDate.fieldValue = 'orders.create_at';
+      this.selectedColumnnDate.columnValueDesde = this.fromdate;
+      this.selectedColumnnDate.columnValueHasta = this.date.value;
+
       this.selectedColumnn.fieldValue = '';
       this.selectedColumnn.columnValue = '';
-      this.selectedColumnnDate.fieldValue = '';
-      this.selectedColumnnDate.columnValueDesde = '';
-      this.selectedColumnnDate.columnValueHasta = '';
+      // this.selectedColumnnDate.fieldValue = '';
+      // this.selectedColumnnDate.columnValueDesde = '';
+      // this.selectedColumnnDate.columnValueHasta = '';
       this.filtersregion.fieldValue = '';
       this.selectedColumnnUsuario.fieldValue = '';
       this.selectedColumnnUsuario.columnValue = '';
@@ -793,7 +856,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
       this.datedesde = new FormControl('');
       this.datehasta = new FormControl('');
       this.regionMultiCtrl = new FormControl('');
-      // console.log('paso3333');
+       // console.log('paso3333');
    }
 
 
@@ -887,7 +950,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
        this.datehasta = new FormControl(moment(this.selectedColumnnDate.columnValueHasta).format('YYYY[-]MM[-]DD'));
        this.selectedColumnnDate.columnValueDesde = this.datedesde.value;
        this.selectedColumnnDate.columnValueHasta = this.datehasta.value;
-        // console.log('paso000');
+        // console.log('paso1000');
     }
     this.cd.markForCheck();
     // console.log(this.filterValue);
@@ -1172,7 +1235,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
         // Then you update that record using data from dialogData (values you enetered)
        // this.exampleDatabase.dataChange.value[foundIndex] = this.dataService.getDialogData();
         // And lastly refresh table
-        this.refreshTable();
+        // this.refreshTable();
       }
     });
   }

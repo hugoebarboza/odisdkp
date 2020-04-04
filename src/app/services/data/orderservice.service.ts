@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/shareReplay';
-import { catchError, share } from 'rxjs/operators';
+import { catchError, share, shareReplay } from 'rxjs/operators';
 
 // CACHE
 import { Cacheable } from 'ngx-cacheable';
@@ -83,6 +82,8 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
     const url = this.url;
     const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
 
+    console.log(paginate);
+
     if (grant === 1) {
       query = 'service/' + id + '/order' + paginate;
     } else {
@@ -106,7 +107,11 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
     }
 
     try {
-        return await this._http.get<any>(requestUrl, {headers: httpOptions.headers}).shareReplay().toPromise()
+        return await this._http.get<any>(requestUrl, {headers: httpOptions.headers})
+        .pipe(
+          shareReplay(1)
+          )
+        .toPromise()
         .then()
         .catch((error) => { this._handleError.handleError (error); }
         );
@@ -237,6 +242,26 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
       return this.getQuery('service/' + id + '/order/' + orderid, token);*/
     }
 
+
+    getDetailOrderService(token: any, id: number, orderid: number): Observable<any> {
+      if (!token) {
+        return;
+      }
+
+      const query = 'service/' + id + '/order/' + orderid;
+      const url = this.url + query;
+
+      const httpOptions = {
+        headers: new HttpHeaders({
+          'Cache-Control': 'public, max-age=300, s-maxage=600',
+          'Content-Type':  'application/json'
+        })
+      };
+      return this._http.get(url, {headers: httpOptions.headers}).map((res: any) => res);
+
+    }
+
+
     getFirmaImageOrder(token: any, id: string): Observable<any> {
         return this.getQuery('order/' + id + '/firmaimage', token);
     }
@@ -246,8 +271,25 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
     }
 
 
+    @Cacheable({
+      maxCacheCount: 2,
+      maxAge: 30000,
+    })
     getListImageOrder(token: any, id: number): Observable<any> {
-        return this.getQuery('order/' + id + '/listimage', token);
+        if (!token) {
+          return;
+        }
+
+        // return this.getQuery('order/' + id + '/listimage', token);
+        const query = 'order/' + id + '/listimage';
+        const url = this.url + query;
+        const headers = new HttpHeaders({'Content-Type': 'application/json' });
+        return this._http.get(url, {headers: headers})
+                         .pipe(
+                          shareReplay(1),
+                          catchError(this._handleError.handleError)
+                         );
+
     }
 
     getImageOrder(token: any, id: string): Observable<any> {

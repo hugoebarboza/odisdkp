@@ -17,9 +17,6 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 import { ToastrModule } from 'ngx-toastr';
 
-// SERVICES
-// import { ServiceModule } from 'src/app/services/service.module';
-
 
 // MOMENT
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
@@ -56,7 +53,6 @@ registerLocaleData(localeEs);
     ReactiveFormsModule,
     ProjectOrderRoutingModule,
     SharedModule,
-    // ServiceModule,
     ToastrModule.forRoot(),
   ],
   declarations: [

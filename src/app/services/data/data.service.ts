@@ -163,6 +163,10 @@ export class DataService {
 
   getDataBD(href: string, token) {
     // console.log(href);
+    if (!token) {
+      return;
+    }
+
     const headers = new HttpHeaders({'Content-Type': 'application/json'});
     return new Promise((resolve, reject) => {
       if (token === '') {
@@ -171,7 +175,7 @@ export class DataService {
       resolve(this._http.get(href, {headers: headers}));
       });
   }
-  
+
   getEquipos(id, token) {
     return this.getDataBD(this.url + 'project/' + id + '/team' , token);
   }

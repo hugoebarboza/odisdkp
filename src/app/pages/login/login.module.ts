@@ -21,7 +21,6 @@ import { MatProgressButtonsModule } from 'mat-progress-buttons';
 // ROUTING
 import { LoginRoutingModule } from './login.routing';
 
-
 @NgModule({
   declarations: [LoginComponent],
   imports: [

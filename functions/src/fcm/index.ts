@@ -1,17 +1,29 @@
 import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase);
+
+/*
+const serviceAccount = require("path/to/serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+  databaseURL: "https://odisdkp.firebaseio.com"
+}); */
+
 const cors = require("cors")({ origin: true });
 
 
   // Function FCM Send
   export const fcmSend = functions.https.onRequest((req, res) => {
+
   return cors(req, res, () => {
+
     if(req.method !== 'POST') {
       return res.status(401).json({
         message: 'Not allowed'
       })
     }
+    
     const userId  = req.body.userId;
     const userIdTo  = req.body.userIdTo;
     const payload = parseBody(req.body, userId, userIdTo);

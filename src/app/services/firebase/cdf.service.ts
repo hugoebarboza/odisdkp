@@ -57,7 +57,7 @@ export class CdfService  {
 
 
   fcmsend(token= null, params: any): Observable<any> {
-    if (!token) {
+    if (!token || !params) {
             return;
     }
 
@@ -77,7 +77,7 @@ export class CdfService  {
 
 
   httpEmail(token= null, params: any): Observable<any> {
-    if (!token) {
+    if (!token || !params) {
             return;
     }
 

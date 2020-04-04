@@ -9,7 +9,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 // import { Subscription } from 'rxjs/Subscription';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
-import { shareReplay, tap } from 'rxjs/operators';
+import { of as observableOf} from 'rxjs';
+import { catchError, shareReplay, tap, map } from 'rxjs/operators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 // CSV
@@ -173,6 +174,9 @@ export class ViewProjectOrderComponent implements OnDestroy {
         if (this.project !== 'Undefined' && this.project !== null && this.project) {
         this.cd.markForCheck();
         this.searchparams = [];
+        this.teams = [];
+        this.users = [];
+        this.masterusers = [];
         this.selectedDate = 'Fecha';
         this.selectedService = 'Servicio';
         this.selectedServiceType = 'Tipo de Servicio';
@@ -221,32 +225,33 @@ export class ViewProjectOrderComponent implements OnDestroy {
   getData(response: any, csv?: any) {
 
 
-    this.isLoading = true;
+    // this.isLoading = true;
     this.cd.markForCheck();
     if (response && response.status === 'success') {
       if (response.datos && response.datos.data) {
         this.dataSource = new MatTableDataSource(response.datos.data);
-        this.isLoading = false;
-        this.isRateLimitReached = false;
-        if (this.dataSource && this.dataSource.data.length > this.datasourceLength) {
-          this.datasourceLength = this.dataSource.data.length;
+        // this.isLoading = false;
+        // this.isRateLimitReached = false;
+        // if (this.dataSource && this.dataSource.data.length > this.datasourceLength) {
+          // this.datasourceLength = this.dataSource.data.length;
+        // }
+        // this.resultsLength = response.datos.total;
+      } else {
+        // this.resultsLength = 0;
+        // this.isRateLimitReached = true;
         }
-        this.resultsLength = response.datos.total;
-       if (csv && csv === 1) {
+        // this.isLoading = false;
+        // this.isRateLimitReached = false;
+        // if (csv === 1) {
+        // this.isDisabled = false;
+        // }
+        if (csv && csv === 1) {
           this.buildCsv(this.dataSource);
+          this.isDisabled = false;
         }
-      } else {
-        this.resultsLength = 0;
-        this.isRateLimitReached = true;
-        }
-        this.isLoading = false;
-        this.isRateLimitReached = false;
         this.cd.markForCheck();
-        if (csv === 1) {
-        this.isDisabled = false;
-        }
       } else {
-        this.isLoading = false;
+        // this.isLoading = false;
         this.cd.markForCheck();
         this.dataSource = new MatTableDataSource();
         return;
@@ -287,17 +292,39 @@ export class ViewProjectOrderComponent implements OnDestroy {
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, this.pageSize, this.pageIndex, this.id, this.token.token)
       .pipe(
-        tap(),
-        shareReplay(),
-        untilDestroyed(this)
+        tap(data => {
+          if (data) {
+            this.isLoading = false;
+            this.isRateLimitReached = false;
+            this.resultsLength = data.datos.total;
+            this.datasourceLength = data.datos.total;
+            this.cd.markForCheck();
+          }
+        }),
+        map(data => {
+          // Flip flag to show that loading has finished.
+          return this.getData(data);
+          // return data;
+        }),
+        shareReplay(1),
+        untilDestroyed(this),
+        catchError(() => {
+          this.dataSource = new MatTableDataSource();
+          this.isLoading = false;
+          this.isRateLimitReached = true;
+          this.cd.markForCheck();
+          return observableOf([]);
+        })
       )
-      .subscribe( (resp: any) => {
-        this.getData(resp);
+      .subscribe( () => {
+        // console.log(resp);
+        // this.getData(resp);
         // this.isLoading = false;
         this.snackBar.open('Incidencias de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
         this.cd.markForCheck();
       },
       error => {
+        console.log('erorr');
         console.log(<any>error);
         this.isLoading = false;
         this.dataSource = new MatTableDataSource();
@@ -314,7 +341,6 @@ export class ViewProjectOrderComponent implements OnDestroy {
     this._userService.getTeamPaginate( this.token.token, id)
     .pipe(
       tap(),
-      shareReplay(),
       untilDestroyed(this)
     )
     .subscribe( (resp: any) => {
@@ -433,12 +459,34 @@ export class ViewProjectOrderComponent implements OnDestroy {
       this.selectedColumnnUsuario.fieldValue, this.selectedColumnnUsuario.columnValue,
       this.sort.active, this.sort.direction, pageSize, this.paginator.pageIndex, this.id, this.token.token)
       .pipe(
-        tap(),
-        shareReplay(),
-        untilDestroyed(this)
+        tap(
+          data => {
+            if (data) {
+              this.isLoading = false;
+              this.isRateLimitReached = false;
+              this.resultsLength = data.datos.total;
+              this.datasourceLength = data.datos.total;
+              this.cd.markForCheck();
+            }
+          }
+        ),
+        map(data => {
+          // console.log(data);
+          // Flip flag to show that loading has finished.
+          return this.getData(data, csv);
+          // return data;
+        }),
+        untilDestroyed(this),
+        catchError(() => {
+          this.dataSource = new MatTableDataSource();
+          this.isLoading = false;
+          this.isRateLimitReached = true;
+          this.cd.markForCheck();
+          return observableOf([]);
+        })
       )
-      .subscribe( (resp: any) => {
-        this.getData(resp, csv);
+      .subscribe( () => {
+        // this.getData(resp, csv);
         this.cd.markForCheck();
       },
       error => {

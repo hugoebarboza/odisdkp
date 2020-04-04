@@ -10,8 +10,14 @@ sgMail.setApiKey(SENDGRID_API_KEY);
 
 // Function HTTP Email
 export const httpEmail = functions.https.onRequest((req, res) => {
+  
+  return cors( req, res, () => {
 
-  cors( req, res, () => { 
+      if(!req || !req.body || !req.body.toEmail) {
+        return res.status(401).json({
+          message: 'Not allowed'
+        })
+      }
 
       //const toName  = req.body.toName;
       const toEmail = req.body.toEmail;
@@ -24,21 +30,16 @@ export const httpEmail = functions.https.onRequest((req, res) => {
           from: fromTo,
           subject: subject,
           html: message,
-          //html: `<strong>Hola ${toName}. Tiene una nueva notificación!!!</strong>`,
-          //text: `Hola ${toName}. Tiene una nueva notificación!!! `,
-          /* custom templates
-          templateId: 'd-3ce0b6c7294849e5bcdffee694bad8b9',
-          substitutionWrappers: ['{{', '}}'],
-          substitutions: {
-            name: toName
-            // and other custom properties here
-          }*/
       };
 
-      return sgMail.send(msg)
-              
+      sgMail.send(msg)
           .then(() => res.status(200).send('email sent!') )
           .catch((err:any) => res.status(400).send(err) )
+
+      return res.status(200).json({
+        ok: true,
+        mensaje: 'Petición realizada correctamente'
+      });
 
       });
 

@@ -122,7 +122,7 @@
           "builder": "@angular-devkit/build-angular:server",
           "options": {
             "outputPath": "dist/odisdkp-server",
-            "main": "src/main.server.ts",
+            "main": "server.ts",
             "tsConfig": "src/tsconfig.server.json"
           },
           "configurations": {
@@ -150,6 +150,32 @@
               "browserTarget": "odisdkp:build:production",
               "serverTarget": "odisdkp:server:production"
             }
+          }
+        },
+        "serve-ssr": {
+          "builder": "@nguniversal/builders:ssr-dev-server",
+          "options": {
+            "browserTarget": "odisdkp:build",
+            "serverTarget": "odisdkp:server"
+          },
+          "configurations": {
+            "production": {
+              "browserTarget": "odisdkp:build:production",
+              "serverTarget": "odisdkp:server:production"
+            }
+          }
+        },
+        "prerender": {
+          "builder": "@nguniversal/builders:prerender",
+          "options": {
+            "browserTarget": "odisdkp:build:production",
+            "serverTarget": "odisdkp:server:production",
+            "routes": [
+              "/"
+            ]
+          },
+          "configurations": {
+            "production": {}
           }
         }
       }

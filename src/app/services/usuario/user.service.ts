@@ -2,11 +2,9 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import { catchError, share } from 'rxjs/operators';
-
+import { map, catchError, share } from 'rxjs/operators';
 import 'rxjs/add/operator/catch';
 import 'rxjs/add/operator/map';
-
 
 // NGRX REDUX
 import { AppState } from 'src/app/app.reducers';
@@ -25,7 +23,6 @@ import { AngularFirePerformance } from '@angular/fire/performance';
 
 // ERROR
 import { ErrorsHandler } from 'src/app/providers/error/error-handler';
-
 
 
 @Injectable()
@@ -479,7 +476,17 @@ export class UserService  {
 
         const Url = this.url + 'teampaginate/' + id + '/page' + paginate;
 
-        return this._http.get<User[]>(Url, {headers: headers});
+        return this._http.get<User[]>(Url, {headers: headers})
+                         .pipe(
+                          map(res => {
+                            if (!res) {
+                                throw new Error('Value expected!');
+                              }
+                              return res;
+                          }),
+                          catchError(this._handleError.handleError)
+      );
+
     }
 
     getUserPaginate(token: string, id: number, page: number = 0): Observable<User[]> {
@@ -680,7 +687,7 @@ export class UserService  {
         if (departamentos !== 'Undefined' && departamentos != null) {
         this.departamentos = departamentos;
         } else {
-        this.logout();
+        // this.logout();
         this.departamentos = null;
       }
       return this.departamentos;

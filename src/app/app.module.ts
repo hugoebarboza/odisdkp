@@ -37,7 +37,7 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { AppRoutingModule } from './app-routing.module';
 import { LoadableModule, matcher } from 'ngx-loadable';
 import { MenuModule } from './pages/menu/menu.module';
-import { ServiceModule } from './services/service.module';
+import { ServicesModule } from './services/service.module';
 import { ToastrModule } from 'ngx-toastr';
 import { ToolbarModule } from './pages/toolbar/toolbar.module';
 
@@ -115,7 +115,7 @@ registerLocaleData(localeEs);
     MatSnackBarModule,
     MenuModule,
     PipesModule,
-    ServiceModule,
+    ServicesModule.forRoot(),
     ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production }),
     StoreModule.forRoot(appReducers),
     StoreDevtoolsModule.instrument({

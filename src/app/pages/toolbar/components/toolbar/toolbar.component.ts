@@ -33,7 +33,7 @@ export class ToolbarComponent implements OnInit {
     .subscribe( objNgrx  => {
       if (objNgrx) {
         this.identity = objNgrx.identificacion;
-        console.log(this.identity);
+        // console.log(this.identity);
       }
       this.identity = this._userService.getIdentity();
     });

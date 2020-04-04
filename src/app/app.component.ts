@@ -128,8 +128,10 @@ export class AppComponent implements OnInit, OnDestroy {
         /*this.identity = {};
         if(Object.keys(this.identity).length == 0){
         }*/
-        if (this.sidenav && this.sidenav.position) {
+        if (this.sidenav) {
           this.sidenav.close();
+          this.supportDrawer.close();
+          this.activeUsersDrawer.close();
         }
       }
 

@@ -7,12 +7,14 @@ const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(SENDGRID_API_KEY);
 
 // Function HTTP Email
-export const notification = functions.https.onRequest((req: any, res) => {
+export const notification = functions.https.onRequest(async (req: any, res) => {
 
 return cors( req, res, () => {
 
-    if(!req) {
-        return;
+    if(!req || !req.body || !req.body.formnotificacion) {
+      return res.status(401).json({
+        message: 'Not allowed'
+      })
     }
 
     const formnotificacion: any = JSON.parse(req.body.formnotificacion);

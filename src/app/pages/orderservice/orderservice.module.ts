@@ -105,10 +105,6 @@ import { AgmDirectionModule} from 'agm-direction';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
-// SERVICES
-// import { ServiceModule } from 'src/app/services/service.module';
-
-
 // MOMENT
 import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
 import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
@@ -174,7 +170,6 @@ registerLocaleData(localeEs);
     OrderServiceRoutingModule,
     ScrollingModule,
     SharedModule,
-    // ServiceModule,
     ToastrModule.forRoot(),
     VerticalTimelineModule,
     ViewModule

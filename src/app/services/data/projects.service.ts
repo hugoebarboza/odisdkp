@@ -2,8 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http';
 import { Subject } from 'rxjs/Subject';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import { catchError, share } from 'rxjs/operators';
+import { map, catchError, share } from 'rxjs/operators';
 
 // CACHE
 import { Cacheable } from 'ngx-cacheable';
@@ -851,13 +850,18 @@ export class ProjectsService {
         try {
             return this._http.get<any>(requestUrl, {headers: httpOptions.headers})
                              .pipe(
-                                 share(),
+                                 map(res => {
+                                    if (!res) {
+                                        throw new Error('Value expected!');
+                                      }
+                                      return res;
+                                 }),
                                  catchError(this._handleError.handleError)
                              );
        } catch (err) {
             console.log(err);
        }
-      }
+    }
 
 
     getProjectServiceCategorie(token: any, id: number) {

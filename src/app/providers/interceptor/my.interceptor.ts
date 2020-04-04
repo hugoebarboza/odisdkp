@@ -80,7 +80,7 @@ export class MyInterceptor implements HttpInterceptor {
 
         return next.handle( authReq )
                    .pipe(
-                    retry(0),
+                    // retry(0),
                     tap(
                       // Succeeds when there is a response; ignore other events
                       // event => ok = event instanceof HttpResponse ? 'succeeded' : '',

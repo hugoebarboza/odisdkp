@@ -9,7 +9,6 @@ import { ChangepasswordComponent } from './changepassword-list/changepassword.co
 import { HttpClientModule } from '@angular/common/http';
 import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
-
 // MODULES
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -17,11 +16,6 @@ import { SharedModule } from '../../components/shared/shared.module';
 import { PipesModule } from '../../pipes/pipes.module';
 
 import { ChangePasswordRoutingModule } from './changepassword.routing';
-
-
-// SERVICES
-// import { ServiceModule } from 'src/app/services/service.module';
-
 
 @NgModule({
   imports: [
@@ -31,7 +25,6 @@ import { ChangePasswordRoutingModule } from './changepassword.routing';
     HttpClientModule,
     PipesModule,
     ReactiveFormsModule,
-    // ServiceModule,
     SharedModule
   ],
   declarations: [ChangepasswordComponent],

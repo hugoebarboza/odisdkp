@@ -105,8 +105,8 @@ export class ViewCaseComponent  {
       return;
     }
 
-    console.log(path);
-    console.log(params);
+    // console.log(path);
+    // console.log(params);
 
     this.formComentar = new FormGroup({
       comentario: new FormControl ('', [Validators.required]),

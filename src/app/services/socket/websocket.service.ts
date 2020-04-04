@@ -18,7 +18,7 @@ export class WebsocketService {
 
   checkStatus() {
     this.socket.on('connect', () => {
-      // console.log('Conectado con WsServer');
+      console.log('Conectado con WsServer');
       this.socketStatus = true;
       this.cargarStorage();
     });
@@ -33,7 +33,9 @@ export class WebsocketService {
 
     if ( localStorage.getItem('identity') ) {
       const usuario = JSON.parse( localStorage.getItem('identity') );
-      this.loginWS( usuario );
+      if (usuario) {
+        this.loginWS( usuario );
+      }
     }
 
   }
@@ -48,6 +50,10 @@ export class WebsocketService {
 
   emitirUsuariosActivos() {
     this.emit( 'obtener-usuarios' );
+  }
+
+  emitirUpdateOrder(payload?: any) {
+    this.emit( 'update-order', payload );
   }
 
   getUsuariosActivos() {
@@ -81,11 +87,17 @@ export class WebsocketService {
   }
 
   logoutWS() {
-    const payload = {
-      nombre: 'sin-nombre'
+    const usuario = {
+      name: 'sin-nombre',
+      email: 'sin-email',
+      role_name: 'sin-role',
+      country_code: 'sin-country',
+      sala: 'sin-sala',
     };
 
-    this.emit('configurar-usuario', payload, () => {});
+    // console.log(usuario);
+
+    this.emit('configurar-usuario', { usuario }, () => {});
   }
 
 

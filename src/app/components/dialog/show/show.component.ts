@@ -429,6 +429,7 @@ public getListAudio() {
 
 
   public getListImage() {
+    console.log('viene');
       this.isImageLoading = true;
       this.subscription = this._orderService.getListImageOrder(this.token.token, this.data['order_id']).subscribe(
       response => {
@@ -437,6 +438,7 @@ public getListAudio() {
           return;
         }
           if (response.status === 'success') {
+            console.log('pasoooo');
             this.listimageorder = response.datos;
             if (this.listimageorder.length > 0) {
               this.imageRows = this.getSplitArray(this.listimageorder, 2);

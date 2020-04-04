@@ -17,7 +17,7 @@ export { KpiProjectLocationComponent } from './kpi/kpi-project-location/kpi-proj
 export { LoadingComponent } from './loading/loading.component';
 // export { MenuComponent } from './menu/menu.component';
 export { MynavComponent } from './mynav/mynav.component';
-export { NotfoundComponent } from './notfound/notfound.component';
+// export { NotfoundComponent } from './notfound/notfound.component';
 export { ProgressSpinnerComponent } from './progress-spinner/progress-spinner.component';
 export { ReportkpiComponent } from './firebase/reportkpi/reportkpi.component';
 export { ShowComponent } from 'src/app/components/dialog/show/show.component';

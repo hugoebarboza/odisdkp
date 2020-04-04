@@ -19,7 +19,6 @@ import { SharedModule } from '../../components/shared/shared.module';
 import { DashboardRoutingModule } from './dashboard.routing';
 
 // SERVICES
-// import { ServiceModule } from 'src/app/services/service.module';
 // import { MessagingService } from 'src/app/services/service.index';
 
 
@@ -30,7 +29,6 @@ import { DashboardRoutingModule } from './dashboard.routing';
     DashboardRoutingModule,
     HttpClientModule,
     PipesModule,
-    // ServiceModule,
     SharedModule
   ],
   declarations: [DashboardComponent, ProjectListComponent],

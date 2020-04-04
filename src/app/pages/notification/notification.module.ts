@@ -20,9 +20,6 @@ import { SharedModule } from '../../components/shared/shared.module';
 // ROUTING
 import { NotificationRoutingModule } from './notification.routing';
 
-// SERVICES
-// import { ServiceModule } from 'src/app/services/service.module';
-
 
 @NgModule({
   imports: [
@@ -31,7 +28,6 @@ import { NotificationRoutingModule } from './notification.routing';
     HttpClientModule,
     NotificationRoutingModule,
     PipesModule,
-    // ServiceModule,
     SharedModule
   ],
   declarations: [NotificationComponent, NotificationReadComponent, NotificationUnreadComponent],

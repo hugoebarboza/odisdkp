@@ -26,11 +26,6 @@ import { ShowProfileSecurityComponent } from './dialog/showprofilesecurity/showp
 // ROUTING
 import { UsuariosRoutingModule } from './usuarios.routing';
 
-
-// SERVICES
-// import { ServiceModule } from 'src/app/services/service.module';
-
-
 @NgModule({
   imports: [
     CommonModule,
@@ -39,7 +34,6 @@ import { UsuariosRoutingModule } from './usuarios.routing';
     NgSelectModule,
     ReactiveFormsModule,
     PipesModule,
-    // ServiceModule,
     SharedModule,
     UsuariosRoutingModule,
   ],

@@ -3,6 +3,7 @@ const cors = require('cors')({ origin: true, credentials: true });
 
 // APP Express
 const app = express();
+app.use(auth);
 
 app.get('/timestamp', cors, (req: any, res: any) => {
     res.send(`${Date.now()}`);
@@ -34,6 +35,15 @@ app.get('/', cors, (req: any, res: any) => {
     });
     }
   );
+
+
+function auth (req: any, res: any, next: any) {
+  if (req.query.admin === 'true') {
+    next()
+  } else {
+    res.send('ERROR: No aut...')
+  }
+}
 
 
 module.exports = app;
