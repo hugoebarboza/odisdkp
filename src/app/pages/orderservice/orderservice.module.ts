@@ -59,12 +59,15 @@ import { DeletecustomerComponent } from '../../components/dialog/deletecustomer/
 import { DownloadComponent } from '../../components/dialog/download/download.component';
 import { EditComponent } from '../../components/dialog/edit/edit.component';
 import { EditcustomerComponent } from '../../components/dialog/editcustomer/editcustomer.component';
+import { EditshapeComponent } from '../../components/mapa/dialog/editshape/editshape.component';
 import { GiroListComponent } from './components/dialog/giro-list/giro-list.component';
+import { ListMapCategoryComponent } from '../../components/mapa/dialog/list-map-category/list-map-category.component';
 import { LogLecturaComponent } from '../../components/dialog/log-lectura/log-lectura.component';
 import { LogUbicacionesComponent } from '../../components/dialog/log-ubicaciones/log-ubicaciones.component';
 import { MarcaListComponent } from './components/dialog/marca-list/marca-list.component';
 import { MercadoListComponent } from './components/dialog/mercado-list/mercado-list.component';
 import { ModeloListComponent } from './components/dialog/modelo-list/modelo-list.component';
+import { NewshapeComponent } from '../../components/mapa/dialog/newshape/newshape.component';
 import { PriorityListComponent } from './components/dialog/priority-list/priority-list.component';
 import { SectorListComponent } from './components/dialog/sector-list/sector-list.component';
 import { SendOrderByEmailComponent } from './components/dialog/send-order-by-email/send-order-by-email.component';
@@ -147,7 +150,7 @@ registerLocaleData(localeEs);
     AngularSplitModule.forRoot(),
     AgmCoreModule.forRoot({
       apiKey: environment.global.agmapikey,
-      libraries: ['places']
+      libraries: ['places', 'drawing', 'geometry'],
     }),
     CalendarModule,
     CommonModule,
@@ -213,11 +216,13 @@ registerLocaleData(localeEs);
     DialogOverviewDialog,
     EditcustomerComponent,
     EditComponent,
+    EditshapeComponent,
     ExcelComponent,
     ExcelVehiculoComponent,
     FileComponent,
     GestionComponent,
     GiroListComponent,
+    ListMapCategoryComponent,
     LogLecturaComponent,
     LogUbicacionesComponent,
     MapaComponent,
@@ -228,6 +233,7 @@ registerLocaleData(localeEs);
     ModalMapaComponent,
     ModalImageComponent,
     ModeloListComponent,
+    NewshapeComponent,
     OrderserviceComponent,
     PriorityListComponent,
     ServiceTypeListComponent,
@@ -304,6 +310,7 @@ registerLocaleData(localeEs);
     ModalMapaComponent,
     ModalImageComponent,
     ModeloListComponent,
+    NewshapeComponent,
     SendOrderByEmailComponent,
     SnackErrorComponent,
     SnackSuccessComponent,

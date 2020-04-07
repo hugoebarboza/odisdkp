@@ -19,7 +19,9 @@ import { Departamento, Proyecto, User } from 'src/app/models/types';
 import { GLOBAL } from '../global';
 
 // FIREBASE
-import { AngularFirePerformance } from '@angular/fire/performance';
+import * as firebase from 'firebase/app';
+import 'firebase/performance';
+
 
 // ERROR
 import { ErrorsHandler } from 'src/app/providers/error/error-handler';
@@ -44,7 +46,6 @@ export class UserService  {
     private _handleError: ErrorsHandler,
     public _http: HttpClient,
     public _router: Router,
-    private afp: AngularFirePerformance,
     private store: Store<AppState>,
     ) {
     this.url = GLOBAL.url;
@@ -246,7 +247,8 @@ export class UserService  {
            return;
         }
 
-        const trace = this.afp.trace$('LoginDkp').subscribe();
+        const trace = firebase.performance().trace('LoginDkp');
+        trace.start();
 
         try {
 
@@ -256,12 +258,12 @@ export class UserService  {
                     this.token = resp;
                     const key = 'token';
                     this.saveStorage(key, resp);
-                    trace.unsubscribe();
+                    trace.stop();
                     return resp;
                 }
             })
             .catch((_error) => {
-                    trace.unsubscribe();
+              trace.stop();
             });
 
         } catch (err) {

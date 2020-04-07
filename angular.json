@@ -10,7 +10,6 @@
       "prefix": "app",
       "schematics": {},
       "architect": {
-
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
@@ -19,10 +18,18 @@
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",            
+            "tsConfig": "src/tsconfig.app.json",
             "assets": [
-              { "glob": "**/*", "input": "src/assets/", "output": "/assets/" },
-              { "glob": "favicon.ico", "input": "src/", "output": "/" },
+              {
+                "glob": "**/*",
+                "input": "src/assets/",
+                "output": "/assets/"
+              },
+              {
+                "glob": "favicon.ico",
+                "input": "src/",
+                "output": "/"
+              },
               "src/firebase-messaging-sw.js",
               "src/manifest.json"
             ],
@@ -177,6 +184,10 @@
           "configurations": {
             "production": {}
           }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {}
         }
       }
     },

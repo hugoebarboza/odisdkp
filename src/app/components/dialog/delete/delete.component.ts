@@ -4,7 +4,7 @@ import { Subscription } from 'rxjs/Subscription';
 import { UntilDestroy } from '@ngneat/until-destroy';
 
 // SERVICES
-import { OrderserviceService, UserService } from 'src/app/services/service.index';
+import { OrderserviceService, UserService, WebsocketService } from 'src/app/services/service.index';
 
 // MESSAGE
 import Swal from 'sweetalert2';
@@ -28,14 +28,11 @@ export class DeleteComponent implements OnInit, OnDestroy {
   subscription: Subscription;
 
   constructor(
-  // private _route: ActivatedRoute,
-  // private _router: Router,
-  private _userService: UserService,
-  // private _proyectoService: UserService,
-  public dialogRef: MatDialogRef<DeleteComponent>,
   private _orderService: OrderserviceService,
+  private _userService: UserService,
+  public dialogRef: MatDialogRef<DeleteComponent>,
+  public wsService: WebsocketService,
   @Inject(MAT_DIALOG_DATA) public data: any,
-  // private messageService: MessageService
   ) {
   this.title = 'Eliminar Orden N.';
   this.identity = this._userService.getIdentity();
@@ -62,13 +59,22 @@ export class DeleteComponent implements OnInit, OnDestroy {
 
 
   confirmDelete() {
+
     const query: any = this._orderService.delete(this.token.token, this.data['order_id'], this.category_id);
+
+    // Socket data
+    const payload = {
+      serviceid: this.data['service_id'],
+      orderid: this.data['order_id'],
+    };
 
     query
     .subscribe(
       (data: any) => {
         if (data.status === 'success') {
           Swal.fire('Eliminada Orden de Trabajo con identificador: ', this.data['order_id'] + ' exitosamente.', 'success' );
+          // Socket
+          this.wsService.emit('delete-order', payload);
           } else {
           Swal.fire('Orden de Trabajo con identificador: ', this.data['order_id'] + ' no eliminada.' , 'error');
           }
@@ -90,6 +96,8 @@ export class DeleteComponent implements OnInit, OnDestroy {
                   (data: any) => {
                     if (data.status === 'success') {
                       Swal.fire('Eliminada Orden de Trabajo con identificador: ', this.data['order_id'] + ' exitosamente.', 'success' );
+                      // Socket
+                      this.wsService.emit('delete-order', payload);
                       } else {
                       Swal.fire('Orden de Trabajo con identificador: ', this.data['order_id'] + ' no eliminada.' , 'error');
                       }

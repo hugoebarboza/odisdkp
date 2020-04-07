@@ -16,13 +16,15 @@ import { registerLocaleData } from '@angular/common';
 import { environment } from '../environments/environment';
 
 // FIREBASE
+import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFireModule } from '@angular/fire';
-import { AngularFirePerformanceModule } from '@angular/fire/performance';
+// import { AngularFirePerformanceModule, PerformanceMonitoringService } from '@angular/fire/performance';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
-import { FirestoreSettingsToken} from '@angular/fire/firestore';
+import { AngularFireMessagingModule } from '@angular/fire/messaging';
+// import { FirestoreSettingsToken} from '@angular/fire/firestore';
 import { AuthService } from './services/firebase/auth.service';
 
 // MATERIAL
@@ -74,12 +76,14 @@ registerLocaleData(localeEs);
   ],
   imports: [
     AppRoutingModule,
+    AngularFireAnalyticsModule,
     AngularFireModule.initializeApp(environment.firebase),
-    AngularFirePerformanceModule,
+    // AngularFirePerformanceModule,
     // AngularFirestoreModule.enablePersistence(),
     AngularFirestoreModule,
     AngularFireAuthModule,
     AngularFireDatabaseModule,
+    AngularFireMessagingModule,
     AngularFireStorageModule,
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
@@ -133,7 +137,8 @@ registerLocaleData(localeEs);
   providers: [
     AuthService,
     httpInterceptorProviders,
-    { provide: FirestoreSettingsToken, useValue: {}},
+    // PerformanceMonitoringService,
+    // { provide: FirestoreSettingsToken, useValue: {}},
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     { provide: LOCALE_ID, useValue: 'es' },
     { provide: MAT_DATE_LOCALE, useValue: 'es'},

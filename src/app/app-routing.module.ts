@@ -40,67 +40,67 @@ const appRoute: Routes = [
       path: 'calendar',
       canLoad: [ LoginGuardGuard ],
         loadChildren : () => import('./pages/calendar/calendario.module').then(m => m.CalendarioModule),
-        data: { preload: false, delay: false }
+        data: { preload: false }
     },
     {
       path: 'change',
       canLoad: [ LoginGuardGuard ],
         loadChildren : () => import('./pages/changepassword/changepassword.module').then(m => m.ChangePasswordModule),
-        data: { preload: false, delay: true }
+        data: { preload: false }
     },
     {
       path: 'dashboard',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'formview',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/customform/customform.module').then(m => m.CustomformModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'formview/createform/:id',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/customform/customform.module').then(m => m.CustomformModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'formview/orderview/:serviceid/:orderid',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/customform/customform.module').then(m => m.CustomformModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'notification',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'notification/read',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'notification/unread',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'notificationorder',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/notificationorder/notificationorder.module').then(m => m.NotificationOrderModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'payments',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/payments/payments.module').then(m => m.PaymentsModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'profile',
@@ -112,79 +112,79 @@ const appRoute: Routes = [
       path: 'project',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/service/service.module').then(m => m.ServiceModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'project/:id/settings',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/service/service.module').then(m => m.ServiceModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'projectorder',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/projectorder/projectorder.module').then(m => m.ProjectOrderModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'service',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/orderservice/orderservice.module').then(m => m.OrderServiceModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'support',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'support/settings',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'support/users',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'support/viewcase',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'team',
       canLoad: [LoginGuardGuard],
       loadChildren : () => import('./pages/team/team.module').then(m => m.TeamModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'users',
       canLoad: [LoginGuardGuard],
       loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'users/:id/settings',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: 'users/:id/work',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     {
       path: '',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/dashboard/dashboard.module').then(m => m.DashboardModule),
-      data: { preload: false, delay: false }
+      data: { preload: false }
     },
     { path: '**', pathMatch: 'full', redirectTo: 'notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
 

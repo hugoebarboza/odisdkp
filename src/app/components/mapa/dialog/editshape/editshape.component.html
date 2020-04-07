@@ -1,0 +1,60 @@
+<meta name="Description" content="User Profile Security.">
+<div class="container-fluid" *ngIf="isLoading">
+    <div class="row">
+        <div class="col-sm">
+            <div class="row d-flex justify-content-center">
+                <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="isLoading" ></mat-spinner>
+            </div>                        
+        </div>
+    </div>
+</div>
+<h1 mat-dialog-title style="width: 100%; text-align: center;">Editar figura<br><span>Complete formulario</span></h1>
+<div class="mat-app-background" >
+    <div class="card-body">
+        <form class="mat-dialog-content" [formGroup]="forma">        
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="nombre">Nombre</label>
+                    <input type="text" name="name" formControlName="name"   class="form-control" required>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="description">Descripción</label>
+                    <textarea name="description" formControlName="description"   class="form-control" required></textarea>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="id_categoria">Categoría</label>
+                    <ng-select [items]="categoria"
+                                bindLabel="descripcion"
+                                bindValue="id"
+                                name="id_categoria" 
+                                formControlName="id_categoria" >
+                    </ng-select>
+                </div>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-sm-12">
+                    <label for="coordinates">Cordenadas</label>
+                    <textarea name="coordinates" formControlName="coordinates" class="form-control"></textarea>
+                </div>
+            </div>
+            <br>
+            <div mat-dialog-actions>
+                <button mat-button color="primary" type="submit"  [disabled]="forma.invalid" class="btnsave" (click)="saveForma(forma)">Actualizar</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!---
+    <pre *ngIf="forma">{{forma.value | json}}</pre>
+-->
+<br>
+<div mat-dialog-actions>
+    <button mat-button (click)="onNoClick()" tabindex="-1" mat-raised-button class="btnclose">Cancelar</button>
+</div>

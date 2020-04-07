@@ -193,6 +193,7 @@ export class OrderserviceComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   filterService() {
+    this.proyectos = this._userService.getProyectos();
     if (this.proyectos && this.id) {
       for (let i = 0; i < this.proyectos.length; i += 1) {
         const result = this.proyectos[i];

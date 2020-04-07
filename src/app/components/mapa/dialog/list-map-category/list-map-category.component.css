@@ -1,0 +1,149 @@
+.jeEmY {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 0.857143em;
+    font-style: inherit;
+    color: rgb(94, 108, 132);
+    font-weight: 600;
+    margin-top: 20px;
+    text-transform: uppercase;
+    line-height: 12px;
+    overflow: hidden;
+}
+
+.margeninput {
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.circle:before {
+    content: ' \25CF';
+    font-size: 20px;
+}
+
+.deleteborder{
+    outline: 0;
+    border: none;
+}
+
+.width-full {
+    width: 100%;
+}
+
+.full-width-table {
+    margin-top: 20px;
+    width: 100%;
+}
+
+/* Drag and Drop START */
+
+.cdk-drag-preview {
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+                0 8px 10px 1px rgba(0, 0, 0, 0.14),
+                0 3px 14px 2px rgba(0, 0, 0, 0.12);
+                z-index: 9999999 !important;
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    z-index: 9999999 !important;
+
+}
+
+.cdk-drop-list-dragging .mat-row:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+    border: dashed 2px #ccc;
+}
+
+
+/*
+.cdk-drop-list:active {
+    border: dashed 2px rgb(0, 60, 255);
+}
+*/
+
+/* Drag and Drop END */
+
+
+/** TABLE
+th:first-child,td:first-child{
+    flex:20%;
+}
+th:nth-child(2),td:nth-child(2){
+    flex:45%;
+}
+th:nth-child(3),td:nth-child(3){
+    flex:15%;
+}
+th:last-child,td:last-child{
+    flex:20%
+} */
+
+/* Table expand start */
+
+.full-width-table {
+    width: 100%;
+}
+
+.tr_width td {
+    width: 20% !important;
+}
+
+table {
+    border-collapse: inherit !important;
+}
+
+.divxpand {
+    background-color: rgb(244, 245, 247);
+    border-radius: 5px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+}
+
+td:first-of-type {
+    padding-left: 24px;
+}
+tr.example-detail-row {
+    height: 0;
+}
+  
+tr.example-element-row:not(.example-expanded-row):hover {
+    background: rgb(244, 245, 247);
+}
+
+tr.example-element-row:not(.example-expanded-row):active {
+    background: #efefef;
+}
+
+.example-element-row td{
+    border-bottom-width: 0;
+}
+  
+.example-element-detail {
+    width: 100%;
+    overflow: hidden;
+    display: flex;
+}
+  
+.example-element-symbol {
+    font-weight: bold;
+    font-size: 40px;
+    line-height: normal;
+}
+  
+.example-element-description {
+    width: 100%;
+    padding: 16px;
+}
+  
+.example-element-description-attribution {
+    opacity: 0.5;
+}
+
+/* Table expand end */

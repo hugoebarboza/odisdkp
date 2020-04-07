@@ -82,7 +82,7 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
     const url = this.url;
     const paginate = `?filter=${filter}&fieldValue=${fieldValue}&columnValue=${columnValue}&fieldValueDate=${fieldValueDate}&columnDateDesdeValue=${columnDateDesdeValue}&columnDateHastaValue=${columnDateHastaValue}&fieldValueRegion=${fieldValueRegion}&columnValueRegion=${columnValueRegion}&fieldValueUsuario=${fieldValueUsuario}&columnValueUsuario=${columnValueUsuario}&sort=${sort}&order=${order}&limit=${pageSize}&page=${page + 1}`;
 
-    console.log(paginate);
+    // console.log(paginate);
 
     if (grant === 1) {
       query = 'service/' + id + '/order' + paginate;

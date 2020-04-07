@@ -1,0 +1,231 @@
+<meta name="Description" content="Project Profile.">
+<div class="app">
+    <form class="mat-dialog-content" novalidate="novalidate">
+        <h1 mat-dialog-title>{{title}}</h1>
+        <div class="mat-app-background" >
+            <div class="card-body">
+                <p class="card-text"><mat-icon mat-list-icon>category</mat-icon> {{subtitle}}</p>        
+                <mat-list>
+                    <mat-divider></mat-divider>
+                </mat-list>
+                <main class="content">        
+                    <div >    
+                        <mat-tab-group 
+                            [selectedIndex]="selected.value"
+                            (selectedIndexChange)="selected.setValue($event)"
+                            animationDuration="0ms"
+                            mat-align-tabs="center"
+                        >
+                            <mat-tab label="Tipos">
+                                <ng-template mat-tab-label>
+                                    <h6>Total <span class="badge badge-secondary">{{totalRegistros}}</span></h6>
+                                </ng-template>
+                                <ng-template matTabContent>
+                                    <div class="p-2" style="width: 100%;" *ngIf="selected.value==0" >
+                                        <!--<app-giro-list [id] = "id" (total) = "loadDataTotal( $event )"></app-giro-list>-->
+                                        <div class="container-fluid p-2">
+                                            <div class="row animated fadeIn" *ngIf="isLoading">
+                                                <div class="col-sm-12">
+                                                    <mat-progress-bar mode="indeterminate"></mat-progress-bar>
+                                                </div>
+                                            </div>
+                                            <div class="row animated fadeIn" [hidden]="isLoading">
+                                                <div class="col-12">
+                                                    <div class="alert alert-danger" *ngIf="totalRegistros == 0">
+                                                            No se encontraron registros.
+                                                    </div>
+                                                    <div  [hidden]="(totalRegistros === 0)">
+                                                        <mat-form-field class="width-full">
+                                                            <input matInput (keyup)="applyFilter($event.target.value)" placeholder="Busqueda">
+                                                        </mat-form-field>
+                                                        <form #formPila="ngForm">
+                                                            <table mat-table [dataSource]="dataSource" class="full-width-table"
+                                                            cdkDropList
+                                                            #list="cdkDropList"
+                                                            [cdkDropListData]="dataSource.data"
+                                                            (cdkDropListDropped)="onListDrop($event);"
+                                                            multiTemplateDataRows
+                                                            >
+                                                                <ng-container matColumnDef="order_by">
+                                                                    <th mat-header-cell mat-header-cell *matHeaderCellDef> Posición </th>
+                                                                    <td mat-cell *matCellDef="let row; let i = dataIndex">                                                                         
+                                                                        <div>{{ (i + 1) + (paginator.pageIndex * paginator.pageSize) }}</div>
+                                                                    </td>
+                                                                </ng-container>
+                                                                <ng-container matColumnDef="descripcion">
+                                                                    <th mat-header-cell *matHeaderCellDef> Descripción </th>
+                                                                    <td mat-cell *matCellDef="let row; let i = index"> 
+                                                                        <div>{{row.descripcion}}</div>
+                                                                    </td>
+                                                                </ng-container>
+                                                                <ng-container matColumnDef="fillColor">
+                                                                    <th mat-header-cell *matHeaderCellDef> Relleno </th>
+                                                                    <td mat-cell *matCellDef="let row; let i = index"> 
+                                                                        <div class="margeninput">
+                                                                            <div class="circle" [style.color]="row.fillColor"></div>
+                                                                        </div>
+                                                                    </td>
+                                                                </ng-container>
+                                                                <ng-container matColumnDef="strokeColor">
+                                                                    <th mat-header-cell *matHeaderCellDef> Contorno </th>
+                                                                    <td mat-cell *matCellDef="let row; let i = index"> 
+                                                                        <div class="margeninput">
+                                                                            <div class="circle" [style.color]="row.strokeColor"></div>
+                                                                        </div>
+                                                                    </td>
+                                                                </ng-container>
+                                                                <ng-container matColumnDef="status">
+                                                                    <th mat-header-cell *matHeaderCellDef> Estatus </th>
+                                                                    <td mat-cell *matCellDef="let row; let i = index">
+                                                                        <div class="margeninput">
+                                                                            <div class="circle" [style.color]="row.status? 'green' : 'red'"></div>
+                                                                        </div>
+                                                                    </td>
+                                                                </ng-container>
+                                                                <ng-container matColumnDef="actions">
+                                                                    <th mat-header-cell *matHeaderCellDef > Acciones </th>
+                                                                    <td mat-cell *matCellDef="let row; let i = dataIndex"> 
+                                                                        <button mat-icon-button color="warn" class="deleteborder" (click)="delete(i, row)" matTooltip="Eliminar categoría">
+                                                                            <mat-icon>delete</mat-icon>                             
+                                                                        </button>
+                                                                        <button mat-icon-button color="primary" class="deleteborder" *ngIf="isLoadingDelete && i == indexitem && !editando">
+                                                                            <app-progress-spinner ></app-progress-spinner>
+                                                                        </button>
+                                                                    </td>
+                                                                </ng-container>
+                                                                <ng-container matColumnDef="expandedDetail">
+                                                                    <td mat-cell *matCellDef="let element;let i = dataIndex" [attr.colspan]="displayedColumns.length">
+                                                                        <div class="example-element-detail"
+                                                                                [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                                                                            <div class="example-element-description divxpand">
+                                                                                <div class="row">
+                                                                                    <div class="col-md-9">
+                                                                                        <h2 class="jeEmY">Descripción</h2>
+                                                                                        <input type="text" name="descripcion_{{i}}" [(ngModel)]="element.descripcion" class="form-control width-full" required minlength="2">
+                                                                                    </div>
+                                                                                    <div class="col-md-3">
+                                                                                        <h2 class="jeEmY">Estatus</h2>
+                                                                                        <mat-slide-toggle
+                                                                                            name="status_{{i}}" 
+                                                                                            [(ngModel)]="element.status"
+                                                                                            >
+                                                                                        </mat-slide-toggle>
+                                                                                    </div>
+                                                                                </div>
+                                                                                <!--<div class="row">
+                                                                                    <div class="col-md-6">
+                                                                                        <h2 class="jeEmY">Posición</h2>
+                                                                                        <input type="number" class="form-control" name="order_by_{{i}}" [(ngModel)]="element.order_by"  required min="0">
+                                                                                    </div>
+                                                                                </div>-->
+                                                                                <div class="row">
+                                                                                    <div class="col-sm-6">
+                                                                                        <h2 class="jeEmY">Color relleno</h2>
+                                                                                        <input type="color" name="fillColor_{{i}}" [(ngModel)]="element.fillColor"  class="form-control" required>
+                                                                                    </div>
+                                                                                    <div class="col-sm-6">
+                                                                                        <h2 class="jeEmY">Color contorno</h2>
+                                                                                        <input type="color" name="strokeColor_{{i}}" [(ngModel)]="element.strokeColor"  class="form-control" required>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </ng-container>                         
+                                                                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                                                                <tr mat-row *matRowDef="let element; columns: displayedColumns;"
+                                                                    class="example-element-row tr_width"
+                                                                    [class.example-expanded-row]="expandedElement === element"
+                                                                    (click)="expandedElement = expandedElement === element ? null : element"
+                                                                    cdkDrag>
+                                                                </tr>
+                                                                <tr mat-row *matRowDef="let row; columns: ['expandedDetail'];"  class="example-detail-row"></tr>
+                                                            </table>
+                                                            <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+                                                            <div style="margin-top: 10px; margin-bottom: 10px;"> <!--*ngIf="booaction && isLoadingSave"-->
+                                                                <button mat-button color="primary" type="submit" style="float: right;" *ngIf="booaction" [disabled]="!formPila.form.valid" (click)="update(dataSource.data)">Actualizar</button>
+                                                                <button mat-button color="primary" type="submit" style="float: right;" *ngIf="!booaction" [disabled]="!formPila.form.valid" (click)="save(dataSource.data)">Guardar</button>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                    <form ngNativeValidate *ngIf="forma" [formGroup]="forma" class="form p-t-20" >
+                                                        <table class="table" *ngIf="_userService.isRole(7)">                    
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td class="w10">
+                                                                        <button mat-icon-button (click)="showform = !showform;" class="deleteborder">
+                                                                            <mat-icon class="material-icons md-20-color" *ngIf="!showform">add</mat-icon>
+                                                                            <mat-icon class="material-icons md-20-color" *ngIf="showform">cancel</mat-icon>
+                                                                            <span *ngIf="!showform">Agregar</span>
+                                                                        </button>                            
+                                                                    </td>
+                                                                    <td *ngIf="showform">
+                                                                        <div class="row">
+                                                                            <div class="col-md-12">
+                                                                                <h2 class="jeEmY">Descripción</h2>
+                                                                                <input type="text" name="description" class="form-control" formControlName="descripcion">
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-md-6">
+                                                                                <h2 class="jeEmY">Posición</h2>
+                                                                                <input type="number" name="order_by" class="form-control" formControlName="order_by" min="0">
+                                                                            </div>
+                                                                            <div class="col-md-6">
+                                                                                <h2 class="jeEmY">Estatus</h2>
+                                                                                <mat-slide-toggle
+                                                                                    name="status" formControlName="status">
+                                                                                </mat-slide-toggle>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row">
+                                                                            <div class="col-sm-6">
+                                                                                <label for="fillColor">Color relleno</label>
+                                                                                <input type="color" name="fillColor" formControlName="fillColor"   class="form-control" required>
+                                                                            </div>
+                                                                            <div class="col-sm-6">
+                                                                                <label for="strokeColor">Color contorno</label>
+                                                                                <input type="color" name="strokeColor" formControlName="strokeColor"   class="form-control" required>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="row justify-content-end" style="margin-top: 10px;">
+                                                                            <div class="col-md-3">
+                                                                                <button  mat-icon-button color="primary" class="deleteborder" [disabled]="forma.invalid" *ngIf="showform && !forma.invalid" (click)="addRow()">
+                                                                                    <mat-icon>done</mat-icon> Agregar                           
+                                                                                </button>
+                                                                            </div>
+                                                                            <div class="col-md-3">
+                                                                                <button  mat-icon-button color="warn" class="deleteborder" (click)="forma.reset(); showform = !showform;">
+                                                                                    <mat-icon>cancel</mat-icon> Cancelar                           
+                                                                                </button>
+                                                                            </div>
+                                                                        </div>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>                    
+                                                        </table>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </ng-template>
+                            </mat-tab>
+                        </mat-tab-group>      
+                    </div>
+                </main>
+            </div>
+        </div>
+    </form>
+</div>
+<div mat-dialog-actions>
+    <div class="container">      
+        <div class="row justify-content-center">
+            <div class="footer-button-row">      
+                <button mat-button (click)="onNoClick()" >Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+

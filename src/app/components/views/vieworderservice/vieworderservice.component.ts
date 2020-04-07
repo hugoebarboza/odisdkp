@@ -32,8 +32,6 @@ import { ExcelService, ModalManageService, OrderserviceService, ProjectsService,
 import { Order, ServiceType, ServiceEstatus } from 'src/app/models/types';
 
 
-// COMPONENTS
-
 // DIALOG
 import { AddComponent } from '../../dialog/add/add.component';
 import { AddDocComponent } from '../../../components/shared/dialog/add-doc/add-doc.component';
@@ -61,7 +59,8 @@ import jsPDF from 'jspdf';
 import { ToastrService } from 'ngx-toastr';
 
 // FIREBASE
-import { AngularFirePerformance } from '@angular/fire/performance';
+import * as firebase from 'firebase/app';
+import 'firebase/performance';
 
 
 interface Inspector {
@@ -332,12 +331,10 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
 
   constructor(
     public _modalManage: ModalManageService,
-    // private _regionService: CountriesService,
     private _orderService: OrderserviceService,
     private _proyecto: ProjectsService,
     public _router: Router,
     public _userService: UserService,
-    private afp: AngularFirePerformance,
     private cd: ChangeDetectorRef,
     public dialog: MatDialog,
     private excelService: ExcelService,
@@ -710,6 +707,8 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
       this.pageIndex = 0;
     }
 
+    const trace = firebase.performance().trace('getServiceOrder');
+    trace.start();
 
     const data: any = await this._orderService.getServiceOrder(
       this.filterValue, this.selectedColumnn.fieldValue, this.selectedColumnn.columnValue,
@@ -720,9 +719,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
 
       if (data && data.datos && data.datos.data && data.datos.data.length > 0) {
         this.getData(data);
-        const trace = this.afp.trace$('getServiceOrder').subscribe();
-        this.afp.trace('getServiceOrder', { metrics: { count: data.datos.data.length }, attributes: { user: this.identity.email}, incrementMetric$: { } });
-        trace.unsubscribe();
+        trace.stop();
         this.snackBar.open('Incidencias de Trabajo de los últimos 7 días.', 'Información', {duration: this.durationInSeconds * 1500, });
       } else {
         this.getData(data);
@@ -736,8 +733,31 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
 
   listenSocket() {
 
+    this.wsService.listen('store-order-completed')
+    .pipe(takeUntil(this._onDestroy))
+    .subscribe( (data: any) => {
+      if (!data) {
+        return;
+      }
+      if (data.serviceid === Number(this.id)) {
+        // console.log(data);
+        if (Number(this.profile.grant) === 1) {
+          this.storeDatasource(data);
+        } else {
+          if (Number(this.identity.sub) === Number(data.userid)) {
+            this.storeDatasource(data);
+          } else {
+            // console.log('usuario nooo agrega orden');
+          }
+        }
+      }
+    });
+
+
     this.wsService.listen('update-order-completed')
+      .pipe(takeUntil(this._onDestroy))
       .subscribe( (data: any) => {
+        // console.log(data);
         if (!data) {
           return;
         }
@@ -745,18 +765,82 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
             this.updateDatasource(data);
         }
       });
+
+
+    this.wsService.listen('delete-order-completed')
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe( (data: any) => {
+        // console.log(data);
+        if (!data) {
+          return;
+        }
+        if (data.serviceid === Number(this.id)) {
+            this.deleteDatasource(data);
+        }
+      });
+  }
+
+  storeDatasource(data: any) {
+    if (!data) {
+      return;
+    }
+    console.log('Viene Store DataSource');
+    this.subscription = this._orderService.getDetailOrderService(this.token.token, this.id, data.orderid)
+    .pipe(
+      takeUntil(this._onDestroy),
+      tap(res => {
+        if (!res) {
+          return;
+        }
+        if (res.datos && res.datos.length > 0) {
+          const datasource = this.dataSource.data;
+          datasource.unshift(res.datos[0]);
+          this.dataSource.data = datasource;
+          this.resultsLength = this.dataSource.data.length;
+          this.isRateLimitReached = false;
+          this.cd.markForCheck();
+        }
+      }
+      ),
+      shareReplay()
+    ).subscribe();
+  }
+
+
+  deleteDatasource(data: any) {
+    if (!data) {
+      return;
+    }
+    console.log('Viene Delete DataSource');
+    if (this.dataSource && this.dataSource.data.length > 0) {
+      const index = this.dataSource.data.findIndex( order => order.order_id === data.orderid );
+      if (Number(index) >= 0) {
+        const datasource = this.dataSource.data;
+        datasource.splice(index, 1); // Index es la posición especifica que deseo eliminar
+        this.dataSource.data = datasource;
+        if (this.dataSource.data && this.dataSource.data.length > 0) {
+          this.resultsLength = this.dataSource.data.length;
+        } else {
+          this.isRateLimitReached = true;
+          this.resultsLength = 0;
+        }
+        this.cd.markForCheck();
+      }
+    }
   }
 
   updateDatasource(data: any) {
     if (!data) {
       return;
     }
+    console.log('Viene Update DataSource');
     // Find data in datasource
     if (this.dataSource && this.dataSource.data.length > 0) {
       const index = this.dataSource.data.findIndex( order => order.order_id === data.orderid );
       if (Number(index) >= 0) {
       this.subscription = this._orderService.getDetailOrderService(this.token.token, this.id, data.orderid)
                         .pipe(
+                          takeUntil(this._onDestroy),
                           tap(res => {
                             if (!res) {
                               return;
@@ -788,8 +872,6 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
 
       }
     }
-
-
   }
 
 
@@ -1213,7 +1295,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
               // After dialog is closed we're doing frontend updates
               // For add we're just pushing a new row inside DataService
               // this.dataService.dataChange.value.push(this.OrderserviceService.getDialogData());
-              this.refreshTable();
+              // this.refreshTable();
               }
             });
   }
@@ -1267,7 +1349,7 @@ export class VieworderserviceComponent implements OnDestroy, OnChanges {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result === 1) {
-        this.refreshTable();
+        // this.refreshTable();
       }
     });
   }

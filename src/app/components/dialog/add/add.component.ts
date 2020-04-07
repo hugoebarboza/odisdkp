@@ -12,7 +12,7 @@ import * as _moment from 'moment';
 const moment = _moment;
 
 // SERVICES
-import { CdfService, OrderserviceService, ProjectsService, UserService, DataService } from 'src/app/services/service.index';
+import { CdfService, DataService, OrderserviceService, ProjectsService, UserService, WebsocketService } from 'src/app/services/service.index';
 
 // MODELS
 import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
@@ -84,15 +84,16 @@ export class AddComponent implements OnInit, OnDestroy {
 
   constructor(
     private _cdf: CdfService,
-    public _userService: UserService,
+    public _dataService: DataService,
     private _orderService: OrderserviceService,
     private _projectService: ProjectsService,
     private _route: Router,
-    public dialogRef: MatDialogRef<AddComponent>,
-    public dataService: OrderserviceService,
-    public _dataService: DataService,
-    private firebaseAuth: AngularFireAuth,
+    public _userService: UserService,
     private cd: ChangeDetectorRef,
+    public dataService: OrderserviceService,
+    public dialogRef: MatDialogRef<AddComponent>,
+    private firebaseAuth: AngularFireAuth,
+    public wsService: WebsocketService,
     @Inject(MAT_DIALOG_DATA) public data: Order
   ) {
 
@@ -266,12 +267,23 @@ export class AddComponent implements OnInit, OnDestroy {
 
     this.dataService.add(this.token.token, obj, this.category_id).subscribe(
       response => {
+
         if (!response) {
           this.isOrderLoading = false;
           return;
         }
         if (response.status === 'success') {
+
+          // Socket data
+          const payload = {
+            userid: this.identity.sub,
+            serviceid: this.data['service_id'],
+            orderid: response.lastInsertedId,
+          };
+
           Swal.fire('Creada Orden de Trabajo: ', this.data.order_number + ' exitosamente.', 'success' );
+
+          this.wsService.emit('store-order', payload);
 
           if (response.formnotificacion && response.formnotificacion.length > 0) {
             this.sendformnotificacion(response.formnotificacion, response.order, response.project, response.service, response.servicetype, response.lastInsertedId);

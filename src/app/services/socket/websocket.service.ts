@@ -73,7 +73,9 @@ export class WebsocketService {
         reject();
       }
 
-      this.emit( 'configurar-usuario', { usuario }, (resp: any) => {
+      const nombre = usuario.email;
+
+      this.emit( 'configurar-usuario', { nombre }, (resp: any) => {
 
         // console.log(resp);
         // this.usuario = new Usuario( nombre );
@@ -87,17 +89,20 @@ export class WebsocketService {
   }
 
   logoutWS() {
+    /*
     const usuario = {
       name: 'sin-nombre',
       email: 'sin-email',
       role_name: 'sin-role',
       country_code: 'sin-country',
       sala: 'sin-sala',
-    };
+    };*/
 
     // console.log(usuario);
 
-    this.emit('configurar-usuario', { usuario }, () => {});
+    const nombre = 'sin-nombre';
+
+    this.emit('configurar-usuario', { nombre }, () => {});
   }
 
 

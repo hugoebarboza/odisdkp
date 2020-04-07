@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
-import { AngularFirePerformance } from '@angular/fire/performance';
 import * as firebase from 'firebase/app';
+import 'firebase/performance';
 
 import { Observable } from 'rxjs/Observable';
 import { User } from 'src/app/models/types';
@@ -26,13 +26,12 @@ export class AuthService {
 
 
   constructor(
-    private afp: AngularFirePerformance,
     private afs: AngularFirestore,
     private db: AngularFireDatabase,
     private firebaseAuth: AngularFireAuth,
   ) {
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
-    this.user = firebaseAuth.authState;
+    this.user = this.firebaseAuth.authState;
 
 
     // firebase.auth().signOut();
@@ -48,8 +47,7 @@ export class AuthService {
 
 
   signup(email: string, password: string) {
-    this.firebaseAuth
-      .auth
+      firebase.auth()
       .createUserWithEmailAndPassword(email, password)
       .then(value => {
         console.log('Success!', value);
@@ -64,8 +62,10 @@ export class AuthService {
     if (!token) {
       return;
     }
-    return this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
+    return firebase.auth()
+      .signInWithEmailAndPassword(email, password)
       .then((user) => {
+        console.log(user);
         this.authState = user;
         this.updateUserData();
       })
@@ -79,20 +79,18 @@ export class AuthService {
       return;
     }
 
-    const trace = this.afp.trace$('LoginFiresabe').subscribe();
+    const trace = firebase.performance().trace('LoginFiresabe');
+    trace.start();
 
     try {
 
       return new Promise<any>((resolve, reject) => {
-        this.firebaseAuth.auth.signInWithEmailAndPassword(email, password)
+        firebase.auth().signInWithEmailAndPassword(email, password)
         .then(user => {
           this.authState = user;
-          // console.log(user);
-          // console.log(this.authState.user.uid);
           const key = 'uid';
           this.saveStorage(key, this.authState.user.uid);
-          this.afp.trace('LoginFiresabe Init', { metrics: { something: 1 }, attributes: { app: 'odisdkp', user: this.authState.user.uid }, incrementMetric$: { }, });
-          trace.unsubscribe();
+          trace.stop();
           // this.updateUserData()
           // trace.putAttribute('verified', `${this.authState.user.uid}`);
           // trace.stop();
@@ -305,7 +303,8 @@ export class AuthService {
       return;
     }
 
-    this.firebaseAuth.auth.signInAnonymously()
+    firebase.auth()
+    .signInAnonymously()
     .then(_value => {
       console.log('Nice, it worked!');
       firebase.auth().onAuthStateChanged(function(user) {
@@ -327,7 +326,9 @@ export class AuthService {
 
 
   async logout() {
-    await firebase.auth().signOut();
+    if (this.firebaseAuth) {
+      await firebase.auth().signOut();
+    }
 
     /*
     this.firebaseAuth

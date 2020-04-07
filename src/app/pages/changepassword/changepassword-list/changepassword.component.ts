@@ -14,25 +14,24 @@ import { Proyecto } from 'src/app/models/types';
 import { SettingsService, UserService, AuthService } from 'src/app/services/service.index';
 
 
-import { AngularFireAuth } from '@angular/fire/auth';
+// import { AngularFireAuth } from '@angular/fire/auth';
 import * as firebase from 'firebase/app';
 
 
-@Component({    
+@Component({
   selector: 'app-changepassword',
   templateUrl: './changepassword.component.html',
   styleUrls: ['./changepassword.component.css']
 })
-export class ChangepasswordComponent implements OnInit, OnDestroy
-{
-  
-  changeForm: FormGroup; 
-  currentpassword : string;
+export class ChangepasswordComponent implements OnInit, OnDestroy {
+
+  changeForm: FormGroup;
+  currentpassword: string;
   identity: any;
-  isSave: boolean = false;
-  newpassword : string;
+  isSave = false;
+  newpassword: string;
   proyectos: Array<Proyecto>;
-  password_confirmation : string;
+  password_confirmation: string;
   status: string;
   subscription: Subscription;
   title: string;
@@ -43,21 +42,20 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
   constructor(
   public _userService: UserService,
   public label: SettingsService,
-  private firebaseAuth: AngularFireAuth,
+  // private firebaseAuth: AngularFireAuth,
   public authService: AuthService,
-  ) 
-  { 
+  ) {
     this.year = new Date().getFullYear();
     this.identity = this._userService.getIdentity();
     this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
-    
+
    this.changeForm = new FormGroup({
-      'currentpassword' : new FormControl('',[Validators.required,Validators.minLength(4)]),      
-      'newpassword' : new FormControl('',[Validators.required, Validators.minLength(6)]),      
-      'password_confirmation' : new FormControl('',[Validators.required, Validators.minLength(6)]),    
+      'currentpassword' : new FormControl('', [Validators.required, Validators.minLength(4)]),
+      'newpassword' : new FormControl('', [Validators.required, Validators.minLength(6)]),
+      'password_confirmation' : new FormControl('', [Validators.required, Validators.minLength(6)]),
     },
-    { validators: MustMatch('newpassword','password_confirmation') } 
+    { validators: MustMatch('newpassword', 'password_confirmation') }
     );
 
    this.label.getDataRoute().subscribe(data => {
@@ -69,28 +67,27 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
 
 
 
-  noIgual( control:FormControl ) :  { [s:string]: boolean }  {
-    var changeForm:any = this; 
+  noIgual( control: FormControl ):  { [s: string]: boolean }  {
 
-    if(control.value !== changeForm.controls['newpassword'].value){
-      return{
-        noiguales:true
+    const changeForm: any = this;
+
+    if (control.value !== changeForm.controls['newpassword'].value) {
+      return {
+        noiguales: true
       }
-
     }
     return null;
   }
 
-  ngOnInit(){
+  ngOnInit() {
   this.isSave = false;
   }
 
-	ngOnDestroy(){
-		if(this.subscription){
-			this.subscription.unsubscribe();
-			//console.log("ngOnDestroy unsuscribe");
-		}
-	}
+  ngOnDestroy() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
 
   changepassword(formValue: any) {
@@ -101,7 +98,7 @@ export class ChangepasswordComponent implements OnInit, OnDestroy
 
     this.isSave = true;
 
-    const user = this.firebaseAuth.auth.currentUser;
+    const user = firebase.auth().currentUser;
 
     const credential = firebase.auth.EmailAuthProvider.credential(
       this.identity.email,

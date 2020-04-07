@@ -205,8 +205,56 @@ export class CustomformService {
   }
 
 
-  async update(token: any, data: Form, id: number, formid: number) {
+  async deleteMapFigura(token: any, category_id: number, poligono_id: number) {
     if (!token) {
+     return;
+    }
+
+    try {
+      const href = this.url + 'mapacategoria/' + category_id + '/poligonos/' + poligono_id;
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.delete(requestUrl, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this._handleError.handleError (error); });
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+  }
+
+  async deleteMapCategory(token: any, service_id: number, category_id: number) {
+    if (!token || !service_id || !category_id) {
+     return;
+    }
+
+    try {
+      const href = this.url + 'service/' + service_id + '/mapacategoria/' + category_id;
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.delete(requestUrl, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this._handleError.handleError (error); });
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
+  showMapFigura(id: number, token: any) {
+    if (!token || !id) {
+      return;
+    }
+    return this.getQuery('mapacategoria/' + id + '/poligonos', token);
+  }
+
+
+
+  async update(token: any, data: Form, id: number, formid: number) {
+    if (!token || !id) {
      return;
     }
 
@@ -230,7 +278,7 @@ export class CustomformService {
 
 
   async updateAtributo(token: any, data: any, id: number) {
-    if (!token) {
+    if (!token || !id) {
      return;
     }
     try {
@@ -250,7 +298,7 @@ export class CustomformService {
 
 
   async updateFormField(token: any, data: Form, id: number, formid: number) {
-    if (!token) {
+    if (!token || !id) {
      return;
     }
 
@@ -293,7 +341,7 @@ export class CustomformService {
   }
 
   async updateFieldNotification(token: any, data: any, id: number) {
-    if (!token) {
+    if (!token || !id) {
      return;
     }
     try {
@@ -311,6 +359,12 @@ export class CustomformService {
     }
   }
 
+  showMapCategory(token: any, id: number) {
+    if (!token || !id) {
+      return;
+    }
+    return this.getQuery('service/' + id + '/mapacategoria', token);
+  }
 
 
   async store(token: any, data: Form, id: number) {
@@ -345,6 +399,54 @@ export class CustomformService {
       const json = JSON.stringify(data);
       const params = 'json=' + json;
       const href = this.url + 'servicetype/' + id + '/atributo';
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.post(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this._handleError.handleError (error); }
+      );
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
+
+  async storeMapCategory(token: any, data: any, id: number) {
+    if (!token || !id) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'service/' + id + '/mapacategoria';
+      const requestUrl = href;
+
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.post(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this._handleError.handleError (error); }
+      );
+
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+
+  }
+
+
+  async storeMapFigura(token: any, data: any, id: number) {
+    if (!token || !id) {
+     return;
+    }
+
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'mapacategoria/' + id + '/poligonos';
       const requestUrl = href;
 
       const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
@@ -428,5 +530,46 @@ export class CustomformService {
     }
 
   }
+
+
+  async updateMapCategory(token: any, data: any, id: number) {
+    if (!token || !id) {
+     return;
+    }
+    try {
+      const json = JSON.stringify(data);
+      const params = 'json=' + json;
+      const href = this.url + 'service/' + id + '/mapacategoria/' + id;
+      const requestUrl = href;
+      const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+      return await this._http.put(requestUrl, params, {headers: headers}).toPromise()
+      .then()
+      .catch((error) => { this._handleError.handleError (error); }
+      );
+    } catch (err) {
+      throw new Error(`Error HTTP `);
+    }
+  }
+
+  async updateMapFigura(token: any, data: any, category_id: number, poligono_id: number) {
+      if (!token || !category_id || !poligono_id) {
+        return;
+      }
+      try {
+        const json = JSON.stringify(data);
+        const params = 'json=' + json;
+        const href = this.url + 'mapacategoria/' + category_id + '/poligonos/' + poligono_id;
+        const requestUrl = href;
+        const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
+        return await this._http.put(requestUrl, params, {headers: headers}).toPromise()
+        .then()
+        .catch((error) => { this._handleError.handleError (error); }
+        );
+      } catch (err) {
+        throw new Error(`Error HTTP `);
+      }
+  }
+
+
 
 }

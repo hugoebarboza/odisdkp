@@ -4,7 +4,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { Subscription } from 'rxjs/Subscription';
 
 // FIREBASE
-import { AngularFirePerformance } from '@angular/fire/performance';
+import * as firebase from 'firebase/app';
+import 'firebase/performance';
 
 // MESSAGES
 import Swal from 'sweetalert2';
@@ -51,7 +52,6 @@ export class LoginComponent implements OnInit, OnDestroy {
   subscription: Subscription;
   title: string;
   token: any;
-  trace: any;
   usuario: User;
   useraccount: string;
   year: number;
@@ -107,7 +107,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   constructor(
-    private afp: AngularFirePerformance,
     public _proyectoService: DashboardService,
     public _regionService: CountriesService,
     public _route: ActivatedRoute,
@@ -134,7 +133,10 @@ export class LoginComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.trace = this.afp.trace$('LoginPage Init').subscribe();
+    const trace = firebase.performance().trace('LoginPage Init');
+    trace.start();
+    trace.stop();
+
     if (this._userService.isAuthenticated()) {
       this._router.navigate(['dashboard']);
     }
@@ -156,9 +158,6 @@ export class LoginComponent implements OnInit, OnDestroy {
 
 
   ngOnDestroy() {
-    if (this.trace) {
-      this.trace.unsubscribe();
-    }
     if (this.subscription) {
       this.subscription.unsubscribe();
       }
@@ -294,6 +293,8 @@ export class LoginComponent implements OnInit, OnDestroy {
     if (!usuario || !usuario.email) {
       return;
     }
+
+    // console.log(usuario);
 
     this.wsService.loginWS(usuario);
 
