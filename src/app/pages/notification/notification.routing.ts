@@ -12,28 +12,32 @@ import { AuthguardService } from '../../services/authguard.service';
 const routes: Routes = [
   {
     path: '',
-    component: NotificationComponent,
-    canActivate: [AuthguardService],
-    data: { path: 'profile', titulo: 'OCA Global - ODIS Notificaciones', subtitle: 'Notificaciones', descripcion: 'OCA Global - ODIS Notification Managment'}
-  },
-  {
-    path: 'read',
-    component: NotificationReadComponent,
-    canActivate: [AuthguardService],
-    data: { path: 'profile', titulo: 'OCA Global - ODIS Notificaciones', subtitle: 'Notificaciones', descripcion: 'OCA Global - ODIS Notification Managment'}
-  },
-  {
-    path: 'unread',
-    component: NotificationUnreadComponent,
-    canActivate: [AuthguardService],
-    data: { path: 'profile', titulo: 'OCA Global - ODIS Notificaciones', subtitle: 'Notificaciones', descripcion: 'OCA Global - ODIS Notification Managment'}
-  },
-  { path: '**', pathMatch: 'full', redirectTo: '/notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
+    children: [
+    {
+      path: '',
+      component: NotificationComponent,
+      canActivate: [AuthguardService],
+      data: { path: 'profile', titulo: 'OCA Global - ODIS Notificaciones', subtitle: 'Notificaciones', descripcion: 'OCA Global - ODIS Notification Managment'}
+    },
+    {
+      path: 'read',
+      component: NotificationReadComponent,
+      canActivate: [AuthguardService],
+      data: { path: 'profile', titulo: 'OCA Global - ODIS Notificaciones', subtitle: 'Notificaciones', descripcion: 'OCA Global - ODIS Notification Managment'}
+    },
+    {
+      path: 'unread',
+      component: NotificationUnreadComponent,
+      canActivate: [AuthguardService],
+      data: { path: 'profile', titulo: 'OCA Global - ODIS Notificaciones', subtitle: 'Notificaciones', descripcion: 'OCA Global - ODIS Notification Managment'}
+    },
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [AuthguardService]
+  providers: []
 })
 export class NotificationRoutingModule { }

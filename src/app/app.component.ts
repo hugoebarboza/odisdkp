@@ -1,10 +1,14 @@
-import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef, OnDestroy, ViewChild, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { Router } from '@angular/router';
 import { RouteConfigLoadStart, RouteConfigLoadEnd, RouterEvent } from '@angular/router';
 import { SwUpdate } from '@angular/service-worker';
 import { Subscription } from 'rxjs/Subscription';
 import { Title, Meta, MetaDefinition } from '@angular/platform-browser';
 import { MediaMatcher } from '@angular/cdk/layout';
+
+// MATERIAL
+import { MatSidenav } from '@angular/material/sidenav';
 
 // MODELS
 import { Proyecto } from './models/types';
@@ -15,14 +19,13 @@ import { SettingsService, SidenavService, UserService } from 'src/app/services/s
 // REDUX
 import { AppState } from './app.reducers';
 import { Store } from '@ngrx/store';
-import { MatSidenav } from '@angular/material/sidenav';
+
 
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css'],
-  providers: [UserService]
 })
 export class AppComponent implements OnInit, OnDestroy {
 
@@ -53,6 +56,7 @@ export class AppComponent implements OnInit, OnDestroy {
     private _title: Title,
     private _meta: Meta,
     private store: Store<AppState>,
+    @Inject(PLATFORM_ID) private platformId,
     updates: SwUpdate,
     changeDetectorRef: ChangeDetectorRef,
     media: MediaMatcher,
@@ -94,16 +98,6 @@ export class AppComponent implements OnInit, OnDestroy {
       }
     );
 
-    /*
-     this._router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
-      ).subscribe(() => {
-          const url = this._router.url.split('/');
-          const urlid = url[2];
-          this.id = Number(urlid);
-          console.log(this.id);
-      });*/
-
   }
 
   ngOnDestroy(): void {
@@ -112,6 +106,7 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
   ngOnInit() {
+    if (isPlatformBrowser(this.platformId)) {
     this.store.select('objNgrx')
     .subscribe( objNgrx  => {
       if (objNgrx) {
@@ -124,10 +119,6 @@ export class AppComponent implements OnInit, OnDestroy {
 
 
       if (!this.identity) {
-        // console.log('no identity');
-        /*this.identity = {};
-        if(Object.keys(this.identity).length == 0){
-        }*/
         if (this.sidenav) {
           this.sidenav.close();
           this.supportDrawer.close();
@@ -137,17 +128,9 @@ export class AppComponent implements OnInit, OnDestroy {
 
     });
 
-    this.sidenavService.setSidenav(this.supportDrawer);
+      this.sidenavService.setSidenav(this.supportDrawer);
+    }
   }
-
-  /*
-  getDataRoute() {
-    return this._router.events.pipe(
-      filter( evento => evento instanceof ActivationEnd ),
-      filter( (evento: ActivationEnd) => evento.snapshot.firstChild === null ),
-      map( (evento: ActivationEnd ) => evento.snapshot.data )
-    );
-  }*/
 
   refreshMenu(event: number) {
   if ( event === 1 ) {

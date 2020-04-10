@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
-// PROVIDERS
 import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 // COMPONENTS
 import { NotificationComponent } from './notification-list/notification.component';
@@ -13,6 +10,7 @@ import { NotificationUnreadComponent } from './components/notification-unread/no
 
 
 // MODULES
+import { CoreModule } from '../../core.module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -20,10 +18,10 @@ import { SharedModule } from '../../components/shared/shared.module';
 // ROUTING
 import { NotificationRoutingModule } from './notification.routing';
 
-
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     FormsModule,
     HttpClientModule,
     NotificationRoutingModule,
@@ -32,7 +30,6 @@ import { NotificationRoutingModule } from './notification.routing';
   ],
   declarations: [NotificationComponent, NotificationReadComponent, NotificationUnreadComponent],
   providers: [
-    httpInterceptorProviders
   ],
 })
 export class NotificationModule { }

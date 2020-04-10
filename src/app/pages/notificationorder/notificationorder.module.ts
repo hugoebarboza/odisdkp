@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 // COMPONENTS
 import { NotificationOrderComponent } from './components/notificationorder/notificationorder.component';
@@ -13,6 +13,7 @@ import { ShowNotificacionComponent } from './dialog/show-notificacion/show-notif
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
 // MODULES
+import { CoreModule } from '../../core.module';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
 import { NgbModule, NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
@@ -20,32 +21,15 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 import { ToastrModule } from 'ngx-toastr';
 
-// MOMENT
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
 
 // ROUTER
 import { NotificactionOrderRoutingModule } from './notificationorder.routes';
 
 
-
-// ESPAÑOL DATE
-import localeEs from '@angular/common/locales/es';
-import { registerLocaleData } from '@angular/common';
-
-
-// PROVIDERS
-import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
-
-
-
-registerLocaleData(localeEs);
-
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     DirectiveModule,
     FormsModule,
     HttpModule,
@@ -71,12 +55,7 @@ registerLocaleData(localeEs);
     ShowNotificacionComponent
   ],
   providers: [
-    httpInterceptorProviders,
     NgbActiveModal,
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: LOCALE_ID, useValue: 'es' },
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
 })
 export class NotificationOrderModule { }

@@ -11,6 +11,7 @@ export class ShowLoaderAction implements Action {
 
   export class HideLoaderAction implements Action {
     readonly type = RESET_LOADER;
+    constructor( public isloading: object ) {}
   }
 
 

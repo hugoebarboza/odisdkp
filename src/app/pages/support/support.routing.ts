@@ -13,32 +13,38 @@ import { AuthguardService } from '../../services/authguard.service';
 const routes: Routes = [
   {
     path: '',
-    component: SupportComponent,
-    canActivate: [AuthguardService],
-    data: { path: 'support', titulo: 'OCA Global - ODIS Centro de Soporte', subtitle: 'Centro de Soporte', descripcion: 'OCA Global - ODIS Support Managment'}
-  },
-  { path: 'settings',
-  component: SupportsettingsComponent,
-  canActivate: [AuthguardService],
-  data: { path: 'support', titulo: 'OCA Global - ODIS Centro de Soporte', subtitle: 'Configuración de Centro de Soporte', descripcion: 'OCA Global - ODIS Support Managment' }
-  },
-  { path: 'users',
-  component: SupportUsersComponent,
-  canActivate: [AuthguardService],
-  data: { path: 'support', titulo: 'OCA Global - ODIS Centro de Soporte', subtitle: 'Listado de Usuarios', descripcion: 'OCA Global - ODIS Support Managment' }
-  },
-  { path: 'viewcase/:idpais/:iddpto/:iddoc',
-  component: ViewCaseComponent,
-  canActivate: [AuthguardService],
-  data: { path: 'support', titulo: 'OCA Global - ODIS Centro de Soporte', subtitle: 'Ver Caso de Centro de Soporte', descripcion: 'OCA Global - ODIS Support Managment' }
-  },
-  { path: '**', pathMatch: 'full', redirectTo: '/notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
+    children: [
+        {
+        path: '',
+        component: SupportComponent,
+        canActivate: [AuthguardService],
+        data: { path: 'support', titulo: 'OCA Global - ODIS Centro de Soporte', subtitle: 'Centro de Soporte', descripcion: 'OCA Global - ODIS Support Managment'},        },
+        {
+        path: 'settings',
+        component: SupportsettingsComponent,
+        canActivate: [AuthguardService],
+        data: { path: 'support', titulo: 'OCA Global - ODIS Centro de Soporte', subtitle: 'Configuración de Centro de Soporte', descripcion: 'OCA Global - ODIS Support Managment' }
+        },
+        {
+        path: 'users',
+        component: SupportUsersComponent,
+        canActivate: [AuthguardService],
+        data: { path: 'support', titulo: 'OCA Global - ODIS Centro de Soporte', subtitle: 'Listado de Usuarios', descripcion: 'OCA Global - ODIS Support Managment' }
+        },
+        {
+        path: 'viewcase/:idpais/:iddpto/:iddoc',
+        component: ViewCaseComponent,
+        canActivate: [AuthguardService],
+        data: { path: 'support', titulo: 'OCA Global - ODIS Centro de Soporte', subtitle: 'Ver Caso de Centro de Soporte', descripcion: 'OCA Global - ODIS Support Managment' }
+        },
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [AuthguardService]
+  providers: []
 })
 
 export class SupportRoutingModule { }

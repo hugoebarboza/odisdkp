@@ -1,10 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-// PROVIDERS
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 // COMPONENTS
 import { AtributoAlertComponent } from './atributo-alert/atributo-alert.component';
@@ -19,17 +15,11 @@ import { NewAlertComponent } from './atributo-alert/dialog/new-alert/new-alert.c
 import { NewelementComponent } from './formulario/newelement/newelement.component';
 import { OrderViewComponent } from './order-view/order-view.component';
 
-// DIALOG
-
 // MODULES
+import { CoreModule } from '../../core.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
-
-// MOMENT
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
-
 
 // ROUTING
 import { DirectiveModule } from 'src/app/directives/directive.module';
@@ -39,11 +29,10 @@ import { CustomformRoutingModule } from './customform.routing';
 // MODULES
 import { SupportModule } from '../support/support.module';
 
-
-
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     DirectiveModule,
     FormsModule,
     PipesModule,
@@ -76,11 +65,6 @@ import { SupportModule } from '../support/support.module';
     NewAlertComponent
   ],
   providers: [
-    httpInterceptorProviders,
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: LOCALE_ID, useValue: 'es' },
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
 })
 export class CustomformModule { }

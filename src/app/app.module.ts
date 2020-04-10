@@ -1,7 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
-import { LOCALE_ID, NgModule, ErrorHandler  } from '@angular/core';
+import { LOCALE_ID, NgModule  } from '@angular/core';
 import { HttpModule } from '@angular/http';
 
 // COMPONENT
@@ -18,13 +18,11 @@ import { environment } from '../environments/environment';
 // FIREBASE
 import { AngularFireAnalyticsModule } from '@angular/fire/analytics';
 import { AngularFireModule } from '@angular/fire';
-// import { AngularFirePerformanceModule, PerformanceMonitoringService } from '@angular/fire/performance';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AngularFireDatabaseModule } from '@angular/fire/database';
 import { AngularFireStorageModule } from '@angular/fire/storage';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFireMessagingModule } from '@angular/fire/messaging';
-// import { FirestoreSettingsToken} from '@angular/fire/firestore';
 import { AuthService } from './services/firebase/auth.service';
 
 // MATERIAL
@@ -37,6 +35,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 // MODULES
 import { AppRoutingModule } from './app-routing.module';
+import { CoreModule } from './core.module';
+import { ErrorModule } from './error.module';
 import { LoadableModule, matcher } from 'ngx-loadable';
 import { MenuModule } from './pages/menu/menu.module';
 import { ServicesModule } from './services/service.module';
@@ -52,10 +52,6 @@ import { PipesModule } from './pipes/pipes.module';
 
 // PWA
 import { ServiceWorkerModule } from '@angular/service-worker';
-
-// PROVIDERS
-import { ErrorsHandler } from './providers/error/error-handler';
-import { httpInterceptorProviders } from './providers/interceptor/index';
 
 // REDUX
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
@@ -88,6 +84,8 @@ registerLocaleData(localeEs);
     BrowserModule.withServerTransition({ appId: 'serverApp' }),
     BrowserAnimationsModule,
     CommonModule,
+    CoreModule,
+    ErrorModule,
     HttpModule,
     LoadableModule.forRoot(
       {
@@ -136,14 +134,10 @@ registerLocaleData(localeEs);
   exports: [],
   providers: [
     AuthService,
-    httpInterceptorProviders,
-    // PerformanceMonitoringService,
-    // { provide: FirestoreSettingsToken, useValue: {}},
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     { provide: LOCALE_ID, useValue: 'es' },
     { provide: MAT_DATE_LOCALE, useValue: 'es'},
     { provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
-    { provide: ErrorHandler, useClass: ErrorsHandler },
   ],
   bootstrap: [
     AppComponent

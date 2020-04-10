@@ -259,7 +259,7 @@ export class EditComponent implements OnInit, OnDestroy {
     const editot: any = await this._orderService.update(this.token.token, this.infodata['order_id'], obj, this.category_id);
 
     // Socket data
-    const data = {
+    const payload = {
       serviceid: this.infodata['service_id'],
       orderid: this.infodata['order_id'],
     };
@@ -270,7 +270,7 @@ export class EditComponent implements OnInit, OnDestroy {
         Swal.fire('Actualizada Orden de Trabajo: ', obj.order_number + ' exitosamente.', 'success' );
 
         // Socket
-        this.wsService.emitirUpdateOrder(data);
+        this.wsService.emit('update-order', payload);
 
         // SEND CDF MESSAGING AND NOTIFICATION
         if (this.destinatario.length > 0)  {

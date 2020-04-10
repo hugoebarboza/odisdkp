@@ -2,16 +2,7 @@ import * as functions from 'firebase-functions'
 import * as admin from 'firebase-admin'
 admin.initializeApp(functions.config().firebase);
 
-/*
-const serviceAccount = require("path/to/serviceAccountKey.json");
-
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: "https://odisdkp.firebaseio.com"
-}); */
-
 const cors = require("cors")({ origin: true });
-
 
   // Function FCM Send
   export const fcmSend = functions.https.onRequest((req, res) => {

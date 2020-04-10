@@ -17,6 +17,9 @@
         <br>
 
         <div class="mat-dialog-content" *ngIf="!isLoading">
+            <div class="animated fadeIn row justify-content-md-center"  *ngIf="infocaso$ === null">
+                No se encontraron registros que coincidan con su búsqueda.
+            </div>
         <div class="animated fadeIn row" *ngIf="(infocaso$| async) as infocaso">
             <div class="col-md-8">
             <div class="example-full-width" style="text-align:right;">

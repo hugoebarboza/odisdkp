@@ -3,7 +3,10 @@
     <ul class="list-unstyled p-2">
       <li *ngFor="let usuario of usuariosActivosObs | async">
         <div *ngIf="usuario">
-        <span *ngIf="usuario.nombre">{{ usuario.nombre }}</span>
+        <span *ngIf="usuario.nombre">
+          <mat-icon mat-list-icon  class="color-matIcon margin" >person_outline</mat-icon>
+          {{ usuario.nombre }}
+        </span>
         <!--
         <span class="badge badge-primary">
           {{ usuario.sala }}

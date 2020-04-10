@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-// PROVIDERS
 import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from 'src/app/providers/interceptor/index';
 
 // MODULES
+import { CoreModule } from '../../core.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from 'src/app/pipes/pipes.module';
 import { SharedModule } from 'src/app/components/shared/shared.module';
@@ -26,9 +24,11 @@ import { ShowProfileSecurityComponent } from './dialog/showprofilesecurity/showp
 // ROUTING
 import { UsuariosRoutingModule } from './usuarios.routing';
 
+
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     FormsModule,
     HttpClientModule,
     NgSelectModule,
@@ -55,7 +55,6 @@ import { UsuariosRoutingModule } from './usuarios.routing';
     ShowProfileSecurityComponent,
   ],
   providers: [
-    httpInterceptorProviders
   ],
 })
 export class UsuariosModule { }

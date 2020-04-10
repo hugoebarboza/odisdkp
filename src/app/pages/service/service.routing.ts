@@ -10,24 +10,28 @@ import { AuthguardService } from '../../services/authguard.service';
 
 
 const routes: Routes = [
-    { path: ':id',
-    component: ServiceComponent,
-    canActivate: [AuthguardService],
-    data: { path: 'project', titulo: 'OCA Global - ODIS Proyectos', subtitle: 'Proyecto', descripcion: 'OCA Global - ODIS Project Services Managment' }
+  {
+    path: '',
+    children: [
+    {
+      path: ':id',
+      component: ServiceComponent,
+      canActivate: [AuthguardService],
+      data: { path: 'project', titulo: 'OCA Global - ODIS Proyectos', subtitle: 'Proyecto', descripcion: 'OCA Global - ODIS Project Services Managment' }
     },
     { path: ':id/settings',
-    component: SettingServiceComponent,
-    canActivate: [AuthguardService],
-    data: { path: 'project', titulo: 'OCA Global - ODIS Proyectos', subtitle: 'Configuración de Proyecto', descripcion: 'OCA Global - ODIS Project Services Managment' }
+      component: SettingServiceComponent,
+      canActivate: [AuthguardService],
+      data: { path: 'project', titulo: 'OCA Global - ODIS Proyectos', subtitle: 'Configuración de Proyecto', descripcion: 'OCA Global - ODIS Project Services Managment' }
     },
-    { path: '**', pathMatch: 'full', redirectTo: '/notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
-
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [AuthguardService]
+  providers: []
 })
 export class ServiceRoutingModule { }
 

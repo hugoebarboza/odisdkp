@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 // COMPONENTS
 import { ChangepasswordComponent } from './changepassword-list/changepassword.component';
 
-// PROVIDERS
-import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
-
 // MODULES
+import { CoreModule } from '../../core.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 // PIPE MODULE
@@ -20,6 +18,7 @@ import { ChangePasswordRoutingModule } from './changepassword.routing';
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     ChangePasswordRoutingModule,
     FormsModule,
     HttpClientModule,
@@ -29,7 +28,6 @@ import { ChangePasswordRoutingModule } from './changepassword.routing';
   ],
   declarations: [ChangepasswordComponent],
   providers: [
-    httpInterceptorProviders,
   ],
 })
 export class ChangePasswordModule { }

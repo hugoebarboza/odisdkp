@@ -5,20 +5,23 @@
 </div>
 
 
-
-
 <mat-drawer-container class="container-drawer">
 
-    <mat-drawer #supportDrawer class="example-sidenav" mode="over" position="end">
+    <mat-drawer #supportDrawer class="example-sidenav" mode="over" position="end" [hidden]="!identity">
         <div class="not-scroll">
             <div class="drawer-header">
                 <mat-list>
-                    <div class="magin-center">
+                    <div class="magin-center bNVLwB bg-light">
                         <h2 mat-subheader class="center-support">
                             Centro de Soporte
-                            <button mat-icon-button class="mat-menu-item">
-                                <mat-icon (click)="supportDrawer.toggle()">close</mat-icon>
+
+                            <button class="gkyRfq" (click)="supportDrawer.toggle()">
+                                <svg height="16px" width="16px" aria-hidden="true" data-icon="times" data-prefix="fas" role="img" viewBox="0 0 352 512" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" fill="currentColor">
+                                </path>
+                                </svg>
                             </button>
+
                         </h2>
                     </div>
                     <mat-divider></mat-divider>
@@ -37,15 +40,18 @@
         </div>
     </mat-drawer>
 
-    <mat-drawer #activeUsersDrawer mode="over" position="start" >
+    <mat-drawer #activeUsersDrawer mode="over" position="start" [hidden]="!identity">
         <div class="not-scroll">
             <div class="drawer-header-start">
                 <mat-list>
-                    <div class="magin-center">
+                    <div class="magin-center bNVLwB bg-light">
                         <h2 mat-subheader class="center-support">
                             Usuarios Conectados
-                            <button mat-icon-button class="mat-menu-item">
-                                <mat-icon (click)="activeUsersDrawer.toggle()">close</mat-icon>
+                            <button class="gkyRfq" (click)="activeUsersDrawer.toggle()">
+                                <svg height="16px" width="16px" aria-hidden="true" data-icon="times" data-prefix="fas" role="img" viewBox="0 0 352 512" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M242.72 256l100.07-100.07c12.28-12.28 12.28-32.19 0-44.48l-22.24-22.24c-12.28-12.28-32.19-12.28-44.48 0L176 189.28 75.93 89.21c-12.28-12.28-32.19-12.28-44.48 0L9.21 111.45c-12.28 12.28-12.28 32.19 0 44.48L109.28 256 9.21 356.07c-12.28 12.28-12.28 32.19 0 44.48l22.24 22.24c12.28 12.28 32.2 12.28 44.48 0L176 322.72l100.07 100.07c12.28 12.28 32.2 12.28 44.48 0l22.24-22.24c12.28-12.28 12.28-32.19 0-44.48L242.72 256z" fill="currentColor">
+                                </path>
+                                </svg>
                             </button>
                         </h2>
                     </div>
@@ -57,7 +63,6 @@
             </div>
         </div>
     </mat-drawer>
-
 
 
     <div class="pagecontent">           
@@ -75,7 +80,7 @@
                     <mat-sidenav-container class="example-sidenav-container"> 
 
                         <mat-sidenav #sidenav [mode]="mobileQuery.matches ? 'over' : 'side'"
-                                    [fixedInViewport]="mobileQuery.matches" fixedTopGap="102">
+                                    [fixedInViewport]="mobileQuery.matches" fixedTopGap="102" [hidden]="!identity">
         
                             <div class="not-scroll">
                                 <div class="sidebar-header">
@@ -118,17 +123,3 @@
     </div>
         
 </mat-drawer-container>
-    
-<!--
-<mat-sidenav-container  class="example-sidenav-container">
-
-    <mat-sidenav #mainsidenav [mode]="'over'" [fixedInViewport]="mobileQuery.matches" fixedTopGap="102" >
-    <p><button mat-button (click)="mainsidenav.toggle()">Toggle</button></p>
-    <ngx-loadable [module]="'activeusers'" [show]="true" *ngIf="identity && identity.role === 9"></ngx-loadable>
-    </mat-sidenav>
-    
-    <mat-sidenav-content class="overflow">
-    </mat-sidenav-content>
-                  
-</mat-sidenav-container>
--->

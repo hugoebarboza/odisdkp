@@ -11,6 +11,7 @@
           "/*.css",
           "/*.js",
           "/assets/*.png",
+          "/assets/*.css",
           "/manifest.json",
           "/manifest.webmanifest"
         ],
@@ -19,7 +20,9 @@
         "https://fonts.gstatic.com/s/roboto/**",
         "https://fonts.gstatic.com/s/materialicons/**",
         "https://ocaglobal.com/themes/ledel-foundation6-october/assets/img/favicon.png",
-        "https://stackpath.bootstrapcdn.com/bootstrap/**"
+        "https://stackpath.bootstrapcdn.com/bootstrap/**",
+        "https://fonts.googleapis.com/css?family=Roboto:regular,bold,italic,thin,light,bolditalic,black,medium&amp;lang=en",
+        "https://fonts.googleapis.com/icon?family=Material+Icons"
       ]
       }
     }, {
@@ -37,13 +40,13 @@
     {
       "name": "odis-api",
       "urls": [
-        "https://odis.api.ocachile.cl/api/v2.0/**"
+        "https://odissoftware.api.ocachile.cl/api/v2.0/**"
       ],
       "cacheConfig": {
         "strategy": "freshness",
-        "maxSize": 100,
+        "maxSize": 10,
         "maxAge": "1h",
-        "timeout": "5s"
+        "timeout": "7s"
       }
     }
   ]  

@@ -21,6 +21,6 @@ const pagesRoutes: Routes = [
 @NgModule({
     imports: [RouterModule.forChild(pagesRoutes)],
     exports: [RouterModule],
-    providers: [AuthguardService]
+    providers: []
   })
   export class NotificactionOrderRoutingModule { }

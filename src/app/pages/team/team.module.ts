@@ -1,15 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 // COMPONENTS
 import { TeamListComponent } from './team-list/team-list.component';
 
-// PROVIDERS
-import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
-
 // MODULES
+import { CoreModule } from '../../core.module';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
@@ -27,6 +25,7 @@ import { TeamRoutingModule } from './team.routing';
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     FormsModule,
     HttpClientModule,
     NgSelectModule,
@@ -47,7 +46,6 @@ import { TeamRoutingModule } from './team.routing';
     EditTeamComponent
   ],
   providers: [
-    httpInterceptorProviders
   ],
 })
 export class TeamModule { }

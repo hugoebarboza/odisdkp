@@ -1,17 +1,13 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { HttpClientModule } from '@angular/common/http';
 
 // COMPONENTS
 import { DashboardComponent } from './dashboard-list/dashboard.component';
 import { ProjectListComponent } from './components/project-list/project-list.component';
 
-// PROVIDERS
-import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
-
-
 // MODULES
+import { CoreModule } from '../../core.module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -26,6 +22,7 @@ import { DashboardRoutingModule } from './dashboard.routing';
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     DashboardRoutingModule,
     HttpClientModule,
     PipesModule,
@@ -33,8 +30,6 @@ import { DashboardRoutingModule } from './dashboard.routing';
   ],
   declarations: [DashboardComponent, ProjectListComponent],
   providers: [
-    httpInterceptorProviders,
-    // MessagingService,
   ],
 })
 export class DashboardModule { }

@@ -9,13 +9,13 @@ import { CalendarComponent } from './calendar-list/calendar.component';
 
 // INTERCEPTOR
 import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 
 // MODULES
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule } from 'primeng/calendar';
 import { CalendarModule as AngularCalendar, DateAdapter as AngularDateAdapter } from 'angular-calendar';
+import { CoreModule } from '../../core.module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -36,6 +36,7 @@ import { CalendarRoutingModule } from './calendario.routing';
     CalendarModule,
     CommonModule,
     CalendarRoutingModule,
+    CoreModule,
     FormsModule,
     HttpClientModule,
     PipesModule,
@@ -50,7 +51,6 @@ import { CalendarRoutingModule } from './calendario.routing';
     AddCalendarComponent,
   ],
   providers: [
-    httpInterceptorProviders,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: LOCALE_ID, useValue: 'es' },
     {provide: MAT_DATE_LOCALE, useValue: 'es'},

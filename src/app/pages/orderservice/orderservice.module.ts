@@ -3,6 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
 import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 
 // COMPONENTS
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
@@ -97,14 +98,10 @@ import { ModalImageComponent } from '../../components/modal/modalimage/modalimag
 // DIRECTIVES
 import { DirectiveModule } from 'src/app/directives/directive.module';
 
-// PROVIDERS
-import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
-
-
 // MODULES
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule} from 'agm-direction';
+import { CoreModule } from '../../core.module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
@@ -154,6 +151,7 @@ registerLocaleData(localeEs);
     }),
     CalendarModule,
     CommonModule,
+    CoreModule,
     DirectiveModule,
     FlexLayoutModule,
     FormsModule,
@@ -323,7 +321,6 @@ registerLocaleData(localeEs);
     ZipComponent
   ],
   providers: [
-    httpInterceptorProviders,
     NgbActiveModal,
     {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
     {provide: LOCALE_ID, useValue: 'es' },

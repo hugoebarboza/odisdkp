@@ -79,18 +79,6 @@ const appRoute: Routes = [
       data: { preload: false }
     },
     {
-      path: 'notification/read',
-      canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),
-      data: { preload: false }
-    },
-    {
-      path: 'notification/unread',
-      canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),
-      data: { preload: false }
-    },
-    {
       path: 'notificationorder',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/notificationorder/notificationorder.module').then(m => m.NotificationOrderModule),
@@ -115,12 +103,6 @@ const appRoute: Routes = [
       data: { preload: false }
     },
     {
-      path: 'project/:id/settings',
-      canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/service/service.module').then(m => m.ServiceModule),
-      data: { preload: false }
-    },
-    {
       path: 'projectorder',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/projectorder/projectorder.module').then(m => m.ProjectOrderModule),
@@ -139,24 +121,6 @@ const appRoute: Routes = [
       data: { preload: false }
     },
     {
-      path: 'support/settings',
-      canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
-      data: { preload: false }
-    },
-    {
-      path: 'support/users',
-      canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
-      data: { preload: false }
-    },
-    {
-      path: 'support/viewcase',
-      canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/support/support.module').then(m => m.SupportModule),
-      data: { preload: false }
-    },
-    {
       path: 'team',
       canLoad: [LoginGuardGuard],
       loadChildren : () => import('./pages/team/team.module').then(m => m.TeamModule),
@@ -165,18 +129,6 @@ const appRoute: Routes = [
     {
       path: 'users',
       canLoad: [LoginGuardGuard],
-      loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
-      data: { preload: false }
-    },
-    {
-      path: 'users/:id/settings',
-      canLoad: [ LoginGuardGuard ],
-      loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
-      data: { preload: false }
-    },
-    {
-      path: 'users/:id/work',
-      canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/usuarios/usuarios.module').then(m => m.UsuariosModule),
       data: { preload: false }
     },

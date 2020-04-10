@@ -4,21 +4,23 @@ import { FormsModule } from '@angular/forms';
 
 // PROVIDERS
 import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 // COMPONENTS
 import { ProfileComponent } from './profile-list/profile.component';
 
 // MODULES
+import { CoreModule } from '../../core.module';
 import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 // ROUTING
 import { ProfileRoutingModule } from './profile.routing';
 
+
 @NgModule({
   imports: [
     CommonModule,
+    CoreModule,
     FormsModule,
     HttpClientModule,
     PipesModule,
@@ -27,7 +29,6 @@ import { ProfileRoutingModule } from './profile.routing';
   ],
   declarations: [ProfileComponent],
   providers: [
-    httpInterceptorProviders,
   ],
 })
 export class ProfileModule { }

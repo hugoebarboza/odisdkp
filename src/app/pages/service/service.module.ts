@@ -1,11 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { LOCALE_ID } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
-// PROVIDERS
 import { HttpClientModule } from '@angular/common/http';
-import { httpInterceptorProviders } from '../../providers/interceptor/index';
 
 // COMPONENTS
 import { AddUserServiceComponent } from './components/adduserservice/adduserservice.component';
@@ -35,6 +31,7 @@ import { UserComponent } from './dialog/user/user.component';
 // MODULES
 import { AngularSplitModule } from 'angular-split';
 import { CalendarModule } from 'primeng/calendar';
+import { CoreModule } from '../../core.module';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
@@ -43,10 +40,6 @@ import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ViewModule } from '../../components/views/view.module';
-
-// MOMENT
-import {MAT_MOMENT_DATE_FORMATS, MomentDateAdapter} from '@angular/material-moment-adapter';
-import {DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE} from '@angular/material/core';
 
 // ROUTING
 import { ServiceRoutingModule } from './service.routing';
@@ -57,6 +50,7 @@ import { ServiceRoutingModule } from './service.routing';
     AngularSplitModule.forRoot(),
     CalendarModule,
     CommonModule,
+    CoreModule,
     DirectiveModule,
     FormsModule,
     HttpClientModule,
@@ -105,11 +99,6 @@ import { ServiceRoutingModule } from './service.routing';
     UserComponent
   ],
   providers: [
-    httpInterceptorProviders,
-    {provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE]},
-    {provide: LOCALE_ID, useValue: 'es' },
-    {provide: MAT_DATE_LOCALE, useValue: 'es'},
-    {provide: MAT_DATE_FORMATS, useValue: MAT_MOMENT_DATE_FORMATS},
   ],
 })
 export class ServiceModule { }

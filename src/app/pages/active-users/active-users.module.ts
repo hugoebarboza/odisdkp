@@ -4,10 +4,14 @@ import { CommonModule } from '@angular/common';
 // COMPONENTS
 import { ActiveUsersComponent } from './components/active-users/active-users.component';
 
+// MATERIAL
+import { MatIconModule } from '@angular/material/icon';
+
 @NgModule({
   declarations: [ActiveUsersComponent],
   imports: [
-    CommonModule
+    CommonModule,
+    MatIconModule
   ],
   exports: [],
   providers: [],

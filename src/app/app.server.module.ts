@@ -6,12 +6,16 @@ import { AppComponent } from './app.component';
 import { Routes, RouterModule } from '@angular/router';
 import { AppShellComponent } from './app-shell/app-shell.component';
 
+// LAZY
+import {ModuleMapLoaderModule} from '@nguniversal/module-map-ngfactory-loader';
+
 const routes: Routes = [ { path: 'shell', component: AppShellComponent }];
 
 @NgModule({
   imports: [
     AppModule,
     ServerModule,
+    ModuleMapLoaderModule,
     RouterModule.forRoot(routes, {
     initialNavigation: 'enabled'
 }),

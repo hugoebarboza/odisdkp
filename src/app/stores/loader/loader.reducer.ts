@@ -15,11 +15,13 @@ export function loaderReducer( state = initState, action: fromLoader.acciones ) 
 
         case fromLoader.RESET_LOADER:
             return {
+                ...state,
                 isLoading: false
             };
 
         case fromLoader.SET_LOADER:
             return {
+                ...state,
                 isLoading: true
             };
 

@@ -4,7 +4,6 @@ import { HttpInterceptor, HttpHandler, HttpResponse, HttpRequest, HttpEvent, Htt
 import { Observable } from 'rxjs/Observable';
 import { retry, catchError } from 'rxjs/operators';
 import { finalize } from 'rxjs/operators';
-import 'rxjs/add/operator/do';
 import { tap } from 'rxjs/operators';
 
 // NGRX REDUX
@@ -40,10 +39,11 @@ export class MyInterceptor implements HttpInterceptor {
         // const started = Date.now();
         // let ok: string;
 
-        Promise.resolve(null).then(() => this.store.dispatch(new ShowLoaderAction({isloading: true})));
+        // Promise.resolve(null).then(() => this.store.dispatch(new ShowLoaderAction({isloading: true})));
 
         let token: string;
         let authReq: any;
+        this.store.dispatch(new ShowLoaderAction({isloading: true}));
 
         // If you are calling an outside domain then do not add the token.
         if (!req.url.match(/odissoftware.api.ocachile.cl\//)) {
@@ -81,20 +81,22 @@ export class MyInterceptor implements HttpInterceptor {
         return next.handle( authReq )
                    .pipe(
                     // retry(0),
-                    tap(
+                    tap(() => {
                       // Succeeds when there is a response; ignore other events
                       // event => ok = event instanceof HttpResponse ? 'succeeded' : '',
                       // Operation failed; error is an HttpErrorResponse
                       // error => ok = error + 'failed'
+                    }
                     ),
                     finalize(() => {
-                        this.store.dispatch(new HideLoaderAction());
+                        this.store.dispatch(new HideLoaderAction({isloading: false}));
                         // const elapsed = Date.now() - started;
                         // const msg = `${req.method} "${req.urlWithParams}"${ok} in ${elapsed} ms.`;
                         // this._logging.add(msg);
                       }
                     ),
                     catchError((error: HttpErrorResponse) => {
+                          this.store.dispatch(new HideLoaderAction({isloading: false}));
                           return this._handleError.handleError(error);
                           // return throwError(error);
                       }
@@ -108,7 +110,7 @@ export class MyInterceptor implements HttpInterceptor {
       next: HttpHandler,
       cache: RequestCacheService): Observable<HttpEvent<any>> {
       return next.handle(req).pipe(
-        finalize(() => this.store.dispatch(new HideLoaderAction())),
+        finalize(() => this.store.dispatch(new HideLoaderAction({isloading: false}))),
         retry(0),
         tap(event => {
           if (event instanceof HttpResponse) {

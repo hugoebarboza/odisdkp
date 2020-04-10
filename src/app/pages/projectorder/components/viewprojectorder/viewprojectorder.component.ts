@@ -1,5 +1,5 @@
 import { Component, ChangeDetectionStrategy, ChangeDetectorRef, ViewChild, OnDestroy } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormControl } from '@angular/forms';
 import { PageEvent, MatPaginator } from '@angular/material/paginator';
 import { Sort, MatSort } from '@angular/material/sort';
@@ -9,8 +9,9 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 // import { Subscription } from 'rxjs/Subscription';
 import { MatDatepickerInputEvent } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
-import { of as observableOf} from 'rxjs';
+import { of as observableOf, throwError} from 'rxjs';
 import { catchError, shareReplay, tap, map } from 'rxjs/operators';
+// import { switchMap } from 'rxjs/operators';
 import { UntilDestroy, untilDestroyed } from '@ngneat/until-destroy';
 
 // CSV
@@ -165,52 +166,73 @@ export class ViewProjectOrderComponent implements OnDestroy {
       this.title = data.subtitle;
     });
 
-    this.sub = this._route.params.subscribe(async params => {
-      this.cd.markForCheck();
-      const id = +params['id'];
-      this.id = id;
-      if (this.id && this.proyectos) {
-        this.project = await this.filter(this.id);
-        if (this.project !== 'Undefined' && this.project !== null && this.project) {
+    /*
+    const dataid = this._route.paramMap.pipe(
+      switchMap((params: ParamMap) =>
+        this.getHero(params.get('id')))
+    );
+    console.log(dataid);
+    */
+
+    this.sub = this._route.params.pipe(
+      tap(async params => {
         this.cd.markForCheck();
-        this.searchparams = [];
-        this.teams = [];
-        this.users = [];
-        this.masterusers = [];
-        this.selectedDate = 'Fecha';
-        this.selectedService = 'Servicio';
-        this.selectedServiceType = 'Tipo de Servicio';
-        this.selectedServiceStatus = 'Estatus de Servicio';
-        this.selectedMaster = 'Informador';
-        this.selectedResponsable = 'Responsable';
-        this.selectedTeam = 'Equipo';
-        this.project_name = this.project.project_name;
-        this.country = this.project.country_name;
-        this.since = moment(this.project.create_at).locale('ES').format('LL');
-        this.load();
-        this.loadTeam(this.id);
-        this.loadUserProject(this.id);
-        this.loadMasterUserProject(this.id);
-        } else {
-          this._router.navigate(['/notfound']);
+        const id = params.id;
+        this.id = id;
+        if (this.id && this.proyectos) {
+          this.project = await this.filter(this.id);
+          if (this.project !== 'undefined' && this.project !== null && this.project) {
+          this.cd.markForCheck();
+          this.searchparams = [];
+          this.teams = [];
+          this.users = [];
+          this.masterusers = [];
+          this.selectedDate = 'Fecha';
+          this.selectedService = 'Servicio';
+          this.selectedServiceType = 'Tipo de Servicio';
+          this.selectedServiceStatus = 'Estatus de Servicio';
+          this.selectedMaster = 'Informador';
+          this.selectedResponsable = 'Responsable';
+          this.selectedTeam = 'Equipo';
+          this.project_name = this.project.project_name;
+          this.country = this.project.country_name;
+          this.since = moment(this.project.create_at).locale('ES').format('LL');
+          this.load();
+          this.loadTeam(this.id);
+          this.loadUserProject(this.id);
+          this.loadMasterUserProject(this.id);
+          } else {
+            this._router.navigate(['/notfound']);
+          }
         }
-      }
-    });
+       } ),
+      shareReplay(),
+      catchError((error: any) => {
+            return throwError(error);
+      })
+    )
+    .subscribe();
 
 
   }
 
   async filter(id: number) {
+    this.proyectos = this._userService.getProyectos();
     if (this.proyectos && id) {
       for (let i = 0; i < this.proyectos.length; i += 1) {
         const result = this.proyectos[i];
-        if (result.id === id) {
+        if (Number(result.id) === Number(id)) {
            return await result;
         }
       }
     }
   }
 
+  getHero(id: number | string) {
+    console.log(id);
+    const data = [];
+    return data;
+  }
 
   ngOnDestroy() {
     this.dataSource = new MatTableDataSource();

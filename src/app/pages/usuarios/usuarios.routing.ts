@@ -9,32 +9,34 @@ import { UsuarioWorkComponent } from 'src/app/pages/usuarios/components/usuario-
 // Guards
 import { AuthguardService } from '../../services/authguard.service';
 
-
-
 const routes: Routes = [
   {
-    path: ':id',
-    component: UsuariosComponent,
+    path: '',
+    children: [
+    {
+      path: ':id',
+      component: UsuariosComponent,
+      canActivate: [AuthguardService],
+      data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Usuarios', descripcion: 'OCA Global - ODIS Users Managment' }
+    },
+    { path: ':id/settings',
+    component: UsuariosDetailComponent,
     canActivate: [AuthguardService],
-    data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Usuarios', descripcion: 'OCA Global - ODIS Users Managment' }
-  },
-  { path: ':id/settings',
-  component: UsuariosDetailComponent,
-  canActivate: [AuthguardService],
-  data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Configuración de Usuario', descripcion: 'OCA Global - ODIS Project Users Managment' }
-  },
-  { path: ':id/work',
-  component: UsuarioWorkComponent,
-  canActivate: [AuthguardService],
-  data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Órdenes de Trabajo del Usuario', descripcion: 'OCA Global - ODIS Project Users Managment' }
-  },
-  { path: '**', pathMatch: 'full', redirectTo: '/notfound', data: { titulo: 'OCA Global - ODIS 404', subtitle: '', descripcion: 'OCA Global - ODIS User 404'  } }
+    data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Configuración de Usuario', descripcion: 'OCA Global - ODIS Project Users Managment' }
+    },
+    { path: ':id/work',
+    component: UsuarioWorkComponent,
+    canActivate: [AuthguardService],
+    data: { path: 'users', titulo: 'OCA Global - ODIS Users Managment', subtitle: 'Órdenes de Trabajo del Usuario', descripcion: 'OCA Global - ODIS Project Users Managment' }
+    },
+    ]
+  }
 ];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],
   exports: [RouterModule],
-  providers: [AuthguardService]
+  providers: []
 })
 export class UsuariosRoutingModule { }
 

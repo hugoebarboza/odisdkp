@@ -1,8 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpErrorResponse} from '@angular/common/http';
 import { Observable } from 'rxjs/Observable';
-import 'rxjs/add/operator/map';
-import { catchError, share, shareReplay } from 'rxjs/operators';
+import { catchError, share, shareReplay, map } from 'rxjs/operators';
 
 // CACHE
 import { Cacheable } from 'ngx-cacheable';
@@ -236,7 +235,11 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
           'Content-Type':  'application/json'
         })
       };
-      return this._http.get(url, {headers: httpOptions.headers}).map((res: any) => res);
+      return this._http.get(url, {headers: httpOptions.headers})
+                 .pipe(
+                   map((res: any) => res),
+                   catchError(this._handleError.handleError)
+                  );
 
       /*const headers = new HttpHeaders({'Content-Type': 'application/json' });
       return this.getQuery('service/' + id + '/order/' + orderid, token);*/
@@ -373,7 +376,12 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
         const json = JSON.stringify(order);
         const params = 'json=' + json;
         const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-        return this._http.post(this.url + 'project' + '/' + id + '/' + 'order', params, {headers: headers}).map( (resp: any) => resp);
+        return this._http.post(this.url + 'project' + '/' + id + '/' + 'order', params, {headers: headers})
+                         .pipe(
+                           map( (resp: any) => resp),
+                           share(),
+                           catchError(this._handleError.handleError)
+                           );
     }
 
     addEstatus(token: any, data: ServiceEstatus, id: number): Observable<any> {
