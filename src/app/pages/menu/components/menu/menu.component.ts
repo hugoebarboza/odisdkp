@@ -22,7 +22,7 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   identity: any;
   path: string;
-  proyectos: any = [];
+  proyectos: any;
   projectid = 0;
   projectselected = 0;
   selected = 0;
@@ -54,6 +54,9 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
+    // this.proyectos = JSON.stringify(this.proyectos);
+    // console.log(this.proyectos);
+    console.log(typeof(this.proyectos));
     this.RefreshMenu = new EventEmitter();
 
 
