@@ -9,6 +9,7 @@ export { DashboardService } from './data/dashboard.service';
 export { ExcelService } from './utility/excel.service';
 export { ItemFirebaseService } from './firebase/itemfirebase.service';
 export { KpiService } from './data/kpi.service';
+export { LoadingCompletedService } from './shared/loading-completed.service';
 export { LoggingService } from './utility/logging.service';
 export { MapaService } from './mapa/mapa.service';
 export { MessagingService } from 'src/app/services/firebase/messaging.service';

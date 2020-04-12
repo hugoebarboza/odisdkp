@@ -507,8 +507,12 @@ import { ErrorsHandler } from 'src/app/providers/error/error-handler';
     }
 
     const headers = new HttpHeaders().set('Content-Type', 'application/x-www-form-urlencoded');
-    return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers});
-
+    return this._http.delete(this.url + 'project' + '/' + id + '/' + 'order/' + orderid, {headers: headers})
+                     .pipe(
+                        map( (resp: any) => resp),
+                        share(),
+                        catchError(this._handleError.handleError)
+                      );
   }
 
   deleteotedp(token: any, orderid: number, id: number): Observable<any> {

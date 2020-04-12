@@ -1,9 +1,14 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { HttpModule } from '@angular/http';
+import { HttpClientModule } from '@angular/common/http';
 import { RouterModule } from '@angular/router';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+
+// CORE
+import { CoreModule } from 'src/app/core.module';
 
 // DIRECTIVE
 import { DirectiveModule } from 'src/app/directives/directive.module';
@@ -14,6 +19,7 @@ import {MaterialModule} from '../../material-module';
 // MODULES
 import { CalendarModule } from 'primeng/calendar';
 
+
 // PROLOAD STRATEGY
 import { QuicklinkModule } from 'ngx-quicklink';
 
@@ -21,7 +27,6 @@ import { QuicklinkModule } from 'ngx-quicklink';
 import {
     AddDocComponent,
     AddTeamComponent,
-    // DropdownNotificationComponent,
     EditServiceComponent,
     FilelistComponent,
     FileListComponent,
@@ -36,9 +41,8 @@ import {
     KpiProjectHeatmapComponent,
     KpiProjectLocationComponent,
     LoadingComponent,
-    // MenuComponent,
+    LoadingCompletedComponent,
     MynavComponent,
-    // NotfoundComponent,
     ProgressSpinnerComponent,
     ReportkpiComponent,
     ShowComponent,
@@ -59,8 +63,11 @@ import { PipesModule } from '../../pipes/pipes.module';
     imports: [
         CalendarModule,
         CommonModule,
+        CoreModule,
         DirectiveModule,
         FormsModule,
+        HttpModule,
+        HttpClientModule,
         QuicklinkModule,
         RouterModule,
         ReactiveFormsModule,
@@ -72,7 +79,6 @@ import { PipesModule } from '../../pipes/pipes.module';
     declarations: [
         AddDocComponent,
         AddTeamComponent,
-        // DropdownNotificationComponent,
         EditServiceComponent,
         FilelistComponent,
         FileListComponent,
@@ -87,9 +93,8 @@ import { PipesModule } from '../../pipes/pipes.module';
         KpiProjectHeatdayComponent,
         KpiProjectLocationComponent,
         LoadingComponent,
-        // MenuComponent,
+        LoadingCompletedComponent,
         MynavComponent,
-        // NotfoundComponent,
         ProgressSpinnerComponent,
         ReportkpiComponent,
         ShowComponent,
@@ -104,12 +109,17 @@ import { PipesModule } from '../../pipes/pipes.module';
     exports: [
         AddDocComponent,
         AddTeamComponent,
-        // DropdownNotificationComponent,
+        CommonModule,
+        CoreModule,
+        DirectiveModule,
         EditServiceComponent,
         FilelistComponent,
         FileListComponent,
         FileUploadComponent,
         FooterComponent,
+        FormsModule,
+        HttpModule,
+        HttpClientModule,
         KpiComponent,
         KpiProjectComponent,
         KpiProjectAmchartsComponent,
@@ -119,13 +129,14 @@ import { PipesModule } from '../../pipes/pipes.module';
         KpiProjectHeatmapComponent,
         KpiProjectLocationComponent,
         LoadingComponent,
+        LoadingCompletedComponent,
         MaterialModule,
-        // MenuComponent,
         MynavComponent,
         NgxChartsModule,
-        // NotfoundComponent,
+        PipesModule,
         ProgressSpinnerComponent,
         QuicklinkModule,
+        ReactiveFormsModule,
         ReportkpiComponent,
         ShowComponent,
         TagUserComponent,

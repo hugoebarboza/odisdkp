@@ -1,0 +1,46 @@
+<div class="p-4" id="content">
+  <header class="saved-search-selector">
+    <div id="search-header-view">
+      <div class="header-section-primary">
+      <h1  *ngIf="project">{{project.project_name}} - Monitor de incidencias 
+        <a class="refresh-table" href="javascript:;" (click)="load()" >
+          <i class="material-icons md-16" matTooltip="Refrescar" [matTooltipPosition]="positionrightaction.value">sync</i>
+        </a>   
+      </h1>
+      <div class="fFIwAW">
+        <span *ngIf="since">
+        {{project.country_name}}, desde {{since}}.
+        </span>
+      </div>
+      </div>
+    </div>        
+  </header>
+</div>
+
+
+<app-loading-completed></app-loading-completed>
+
+<ng-container *ngIf="activity$ | async as list; else nodata">
+  Length: {{list.length}}
+  <div *ngIf="list.length > 0">
+      <h2>HEROESSSS</h2>
+      <ul >
+        <li *ngFor="let data of activity$ | async"  >
+          AAA
+          <a [routerLink]="['/hero', data.order_id]">
+            <span >{{ data.order_id }}</span>{{ data.order_id }}
+          </a>
+        </li>
+      </ul>
+  </div>
+</ng-container>
+
+<ng-template #nodata>
+  <div class="main">
+      <h2>Sign in to use Facil!</h2>
+      <p>The easy facilitation tool</p>
+  </div>
+</ng-template>
+
+
+

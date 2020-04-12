@@ -1,7 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
 import { LOCALE_ID } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // COMPONENTS
 import { AddCalendarComponent } from './dialog/addcalendar/addcalendar.component';
@@ -15,8 +13,6 @@ import { HttpClientModule } from '@angular/common/http';
 import { adapterFactory } from 'angular-calendar/date-adapters/date-fns';
 import { CalendarModule } from 'primeng/calendar';
 import { CalendarModule as AngularCalendar, DateAdapter as AngularDateAdapter } from 'angular-calendar';
-import { CoreModule } from '../../core.module';
-import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 // MOMENT
@@ -34,13 +30,8 @@ import { CalendarRoutingModule } from './calendario.routing';
         useFactory: adapterFactory
       }),
     CalendarModule,
-    CommonModule,
     CalendarRoutingModule,
-    CoreModule,
-    FormsModule,
     HttpClientModule,
-    PipesModule,
-    ReactiveFormsModule,
     SharedModule
   ],
   declarations: [

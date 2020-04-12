@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // COMPONENTS
 import { AddcaseComponent } from './dialog/addcase/addcase.component';
@@ -16,31 +14,21 @@ import { ViewCaseComponent } from './components/view-case/view-case.component';
 // MODULES
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 // ROUTING
 import { SupportRoutingModule } from './support.routing';
 
-// DIRECTIVES
-import { DirectiveModule } from 'src/app/directives/directive.module';
-
 
 
 @NgModule({
   imports: [
-    CommonModule,
-    DirectiveModule,
-    FormsModule,
-    PipesModule,
-    ReactiveFormsModule,
     SupportRoutingModule,
     NgSelectModule,
     SharedModule,
     NgbTypeaheadModule,
   ],
-  exports: [CommonModule],
-  // tslint:disable-next-line:max-line-length
+  exports: [],
   declarations: [
     AddcaseComponent,
     CategorysettingsComponent,

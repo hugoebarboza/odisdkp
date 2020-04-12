@@ -1,6 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 // COMPONENTS
 import { AtributoAlertComponent } from './atributo-alert/atributo-alert.component';
@@ -16,13 +14,10 @@ import { NewelementComponent } from './formulario/newelement/newelement.componen
 import { OrderViewComponent } from './order-view/order-view.component';
 
 // MODULES
-import { CoreModule } from '../../core.module';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 // ROUTING
-import { DirectiveModule } from 'src/app/directives/directive.module';
 import { NgbTypeaheadModule } from '@ng-bootstrap/ng-bootstrap';
 import { CustomformRoutingModule } from './customform.routing';
 
@@ -31,12 +26,6 @@ import { SupportModule } from '../support/support.module';
 
 @NgModule({
   imports: [
-    CommonModule,
-    CoreModule,
-    DirectiveModule,
-    FormsModule,
-    PipesModule,
-    ReactiveFormsModule,
     CustomformRoutingModule,
     NgSelectModule,
     SupportModule,

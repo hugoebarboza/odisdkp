@@ -1,6 +1,5 @@
 export { AddDocComponent } from './dialog/add-doc/add-doc.component';
 export { AddTeamComponent } from 'src/app/pages/team/dialog/add-team/add-team.component';
-// export { DropdownNotificationComponent } from './dropdown-notification/dropdown-notification.component';
 export { EditServiceComponent } from './dialog/editservice/editservice.component';
 export { FilelistComponent } from '../../components/dialog/filelist/filelist.component';
 export { FileListComponent } from '../../components/file-list/file-list.component';
@@ -15,9 +14,8 @@ export { KpiProjectHeatdayComponent } from './kpi/kpi-project-heatday/kpi-projec
 export { KpiProjectHeatmapComponent } from './kpi/kpi-project-heatmap/kpi-project-heatmap.component';
 export { KpiProjectLocationComponent } from './kpi/kpi-project-location/kpi-project-location.component';
 export { LoadingComponent } from './loading/loading.component';
-// export { MenuComponent } from './menu/menu.component';
+export { LoadingCompletedComponent } from './loading-completed/loading-completed.component';
 export { MynavComponent } from './mynav/mynav.component';
-// export { NotfoundComponent } from './notfound/notfound.component';
 export { ProgressSpinnerComponent } from './progress-spinner/progress-spinner.component';
 export { ReportkpiComponent } from './firebase/reportkpi/reportkpi.component';
 export { ShowComponent } from 'src/app/components/dialog/show/show.component';

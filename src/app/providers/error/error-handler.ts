@@ -40,6 +40,7 @@ export class ErrorsHandler implements ErrorHandler {
                     // Se debe redireccionar a pagina 500
                   }
                   if (error.status === 500) {
+                    this._snackBar.open(this.errorMessage500, '', {duration: 3000, });
                     return throwError(error);
                     // this._snackBar.open(this.errorMessage500, '', {duration: 3000, });
                     // Se debe redireccionar a pagina 500

@@ -177,7 +177,7 @@ export class ViewProjectOrderComponent implements OnDestroy {
     this.sub = this._route.params.pipe(
       tap(async params => {
         this.cd.markForCheck();
-        const id = params.id;
+        const id = +params.id;
         this.id = id;
         if (this.id && this.proyectos) {
           this.project = await this.filter(this.id);

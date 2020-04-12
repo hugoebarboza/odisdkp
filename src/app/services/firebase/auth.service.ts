@@ -33,7 +33,6 @@ export class AuthService {
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
     this.user = this.firebaseAuth.authState;
 
-
     // firebase.auth().signOut();
 
     /*
@@ -326,7 +325,7 @@ export class AuthService {
 
 
   async logout() {
-    if (this.firebaseAuth) {
+    if (this.user) {
       await firebase.auth().signOut();
     }
 

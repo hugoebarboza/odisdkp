@@ -73,6 +73,12 @@ const appRoute: Routes = [
       data: { preload: false }
     },
     {
+      path: 'monitor',
+      canLoad: [ LoginGuardGuard ],
+      loadChildren : () => import('./pages/monitor/monitor.module').then(m => m.MonitorModule),
+      data: { preload: false }
+    },
+    {
       path: 'notification',
       canLoad: [ LoginGuardGuard ],
       loadChildren : () => import('./pages/notification/notification.module').then(m => m.NotificationModule),

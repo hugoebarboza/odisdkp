@@ -1,9 +1,5 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { LOCALE_ID } from '@angular/core';
-import { HttpModule } from '@angular/http';
-import { HttpClientModule } from '@angular/common/http';
 
 // COMPONENTS
 import { DateDialogComponent } from '../../components/date-dialog/date-dialog.component';
@@ -95,14 +91,9 @@ import { ModalMapaComponent } from '../../components/modal/modalmapa/modalmapa.c
 import { ModalImageComponent } from '../../components/modal/modalimage/modalimage.component';
 
 
-// DIRECTIVES
-import { DirectiveModule } from 'src/app/directives/directive.module';
-
 // MODULES
 import { AgmCoreModule } from '@agm/core';
 import { AgmDirectionModule} from 'agm-direction';
-import { CoreModule } from '../../core.module';
-import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 
 // MOMENT
@@ -150,13 +141,7 @@ registerLocaleData(localeEs);
       libraries: ['places', 'drawing', 'geometry'],
     }),
     CalendarModule,
-    CommonModule,
-    CoreModule,
-    DirectiveModule,
     FlexLayoutModule,
-    FormsModule,
-    HttpModule,
-    HttpClientModule,
     MatProgressButtonsModule,
     MarkdownModule.forRoot(),
     NgbModule,
@@ -166,8 +151,6 @@ registerLocaleData(localeEs);
     Ng5SliderModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    PipesModule,
-    ReactiveFormsModule,
     OrderServiceRoutingModule,
     ScrollingModule,
     SharedModule,

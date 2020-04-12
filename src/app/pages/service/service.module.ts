@@ -1,7 +1,4 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
 // COMPONENTS
 import { AddUserServiceComponent } from './components/adduserservice/adduserservice.component';
@@ -9,10 +6,6 @@ import { ProjectCategorieListComponent } from './dialog/project-categorie-list/p
 import { ProjectTypeListComponent } from './dialog/project-type-list/project-type-list.component';
 import { RemoveUserComponent } from './components/removeuser/removeuser.component';
 import { ServiceComponent } from './service-list/service.component';
-
-// DIRECTIVES
-import { DirectiveModule } from 'src/app/directives/directive.module';
-
 
 // DIALOG
 import { AddServiceComponent } from './dialog/addservice/addservice.component';
@@ -31,12 +24,10 @@ import { UserComponent } from './dialog/user/user.component';
 // MODULES
 import { AngularSplitModule } from 'angular-split';
 import { CalendarModule } from 'primeng/calendar';
-import { CoreModule } from '../../core.module';
 import { MatProgressButtonsModule } from 'mat-progress-buttons';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgxMatSelectSearchModule } from 'ngx-mat-select-search';
 import { OwlDateTimeModule, OwlNativeDateTimeModule } from 'ng-pick-datetime';
-import { PipesModule } from '../../pipes/pipes.module';
 import { SharedModule } from '../../components/shared/shared.module';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { ViewModule } from '../../components/views/view.module';
@@ -49,18 +40,11 @@ import { ServiceRoutingModule } from './service.routing';
   imports: [
     AngularSplitModule.forRoot(),
     CalendarModule,
-    CommonModule,
-    CoreModule,
-    DirectiveModule,
-    FormsModule,
-    HttpClientModule,
     MatProgressButtonsModule,
     NgSelectModule,
     NgxMatSelectSearchModule,
     OwlDateTimeModule,
     OwlNativeDateTimeModule,
-    PipesModule,
-    ReactiveFormsModule,
     ServiceRoutingModule,
     SharedModule,
     ScrollingModule,

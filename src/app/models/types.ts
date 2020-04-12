@@ -338,6 +338,7 @@ export class Order  {
 
 constructor(
 public id: number,
+public order_id: number,
 public assigned_to: any,
 public team_id: any,
 public cc_number: any,

@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 
 // COMPONENTS
-import { ViewProjectOrderComponent } from './components/viewprojectorder/viewprojectorder.component';
+import { MonitorListComponent } from './components/monitor-list/monitor-list.component';
 
 // Guards
 import { AuthguardService } from '../../services/authguard.service';
@@ -15,8 +15,8 @@ const pagesRoutes: Routes = [
         children: [
             {
                 path: ':id',
-                component: ViewProjectOrderComponent,
-                data: { path: 'projectorder', titulo: 'OCA Global - ODIS Project Order', subtitle: 'Project Order', descripcion: 'OCA Global - ODIS Project Services Managment' }
+                component: MonitorListComponent,
+                data: { path: 'monitor', titulo: 'OCA Global - ODIS Monitoring Project Order', subtitle: 'Monitoring Project Order', descripcion: 'OCA Global - ODIS Monitoring Project Order Managment' }
             },
         ]
     }
@@ -27,4 +27,4 @@ const pagesRoutes: Routes = [
     exports: [RouterModule],
     providers: []
   })
-  export class ProjectOrderRoutingModule { }
+  export class MonitorRoutingModule { }

@@ -1,0 +1,11 @@
+<div class="container-fluid p-4" *ngIf="loadingService.loading$ | async">
+<div class="row animated fadeIn">
+    <div class="col-12">
+      <div class="row animated fadeIn justify-content-md-center" >
+      <div class="col col-lg-2">
+          <mat-spinner  mode="indeterminate" [strokeWidth]="1" [diameter]="17" *ngIf="loadingService.loading$ | async" ></mat-spinner>
+      </div>
+      </div>
+    </div>
+</div>
+</div>

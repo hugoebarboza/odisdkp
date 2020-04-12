@@ -1,12 +1,7 @@
 import { NgModule } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { HttpClientModule } from '@angular/common/http';
 
 // MODULES
-import { CoreModule } from '../../core.module';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { PipesModule } from 'src/app/pipes/pipes.module';
 import { SharedModule } from 'src/app/components/shared/shared.module';
 
 // COMPONENTS
@@ -27,13 +22,7 @@ import { UsuariosRoutingModule } from './usuarios.routing';
 
 @NgModule({
   imports: [
-    CommonModule,
-    CoreModule,
-    FormsModule,
-    HttpClientModule,
     NgSelectModule,
-    ReactiveFormsModule,
-    PipesModule,
     SharedModule,
     UsuariosRoutingModule,
   ],
