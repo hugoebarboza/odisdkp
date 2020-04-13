@@ -13,6 +13,7 @@ import { AppState } from 'src/app/app.reducers';
 import { LoginAction } from 'src/app/contador.actions';
 
 
+
 @Component({
   selector: 'app-menu',
   templateUrl: './menu.component.html',
@@ -20,9 +21,11 @@ import { LoginAction } from 'src/app/contador.actions';
 })
 export class MenuComponent implements OnInit, OnDestroy {
 
+
+  proyectos: any;
+
   identity: any;
   path: string;
-  proyectos: any;
   projectid = 0;
   projectselected = 0;
   selected = 0;
@@ -56,7 +59,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.proyectos = this._userService.getProyectos();
     this.RefreshMenu = new EventEmitter();
 
-
     this._router.events.pipe(
       filter(event => event instanceof NavigationEnd)
       ).subscribe(() => {
@@ -69,34 +71,6 @@ export class MenuComponent implements OnInit, OnDestroy {
 
       });
 
-    /*
-    this.label.getDataRoute().subscribe(data => {
-      this.path = data.path;
-      if (this.path === 'calendar') {
-        // this.selected = 0;
-        // this.projectselected = this.id;
-      }
-
-      if (this.path === 'users') {
-        // this.selected = 0;
-        // this.projectselected = this.id;
-      }
-
-      if (this.path === 'project') {
-        // this.selected = 0;
-        // this.projectselected = this.id;
-      }
-
-      if (this.path === 'order') {
-        // this.selected = this.id;
-        // this.projectselected = 0;
-      }
-
-      if (this.path === 'service') {
-        // this.selected = this.id;
-        // this.projectselected = 0;
-      }
-    });*/
   }
 
   ngOnInit() {

@@ -85,8 +85,9 @@ export class MonitorListComponent implements OnInit {
                             } else {
                               this.router.navigateByUrl('/notfound');
                             }
+                          } else {
+                            this.router.navigateByUrl('/notfound');
                           }
-
                         }),
                         takeUntil(this.destroy),
                         shareReplay(),

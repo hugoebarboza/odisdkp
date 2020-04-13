@@ -18,7 +18,7 @@ export class LoadingCompletedService {
         const obs = obs$.pipe(
             tap(),
             map(params => params),
-            finalize(() => this.loadingOff())
+            finalize(() => { this.loadingOff(); } ),
           );
 
           return obs;

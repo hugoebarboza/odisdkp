@@ -13,7 +13,7 @@ import { LoginAction, ResetAction } from 'src/app/contador.actions';
 import { ResetUserAction } from 'src/app/stores/auth/auth.actions';
 
 // MODELS
-import { Departamento, Proyecto, User } from 'src/app/models/types';
+import { Departamento, User } from 'src/app/models/types';
 
 // GLOBAL
 import { GLOBAL } from '../global';
@@ -36,7 +36,7 @@ export class UserService  {
     public idaccount: any;
     public identity: any;
     public token: any;
-    public proyectos: Array<Proyecto>;
+    public proyectos: any;
     public region: any;
     public usuario: any;
     public headers: HttpHeaders = undefined;

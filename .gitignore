@@ -5,6 +5,8 @@
 /tmp
 /out-tsc
 
+# enviroments
+/environments
 
 
 # dependencies
