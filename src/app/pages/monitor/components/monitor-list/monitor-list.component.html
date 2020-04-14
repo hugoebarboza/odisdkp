@@ -20,6 +20,40 @@
 
 <app-loading-completed></app-loading-completed>
 
+<ng-container *ngIf="this.monitorStore.monitor | async as list;">
+  Length: {{list.length}}
+  <div >
+      <h2>HEROESSSS</h2>
+      <ul >
+        <li *ngFor="let data of this.monitorStore.monitor | async"  >
+          AAA
+          <a [routerLink]="['/hero', data.order_id]">
+            <span >{{ data.order_id }}</span>{{ data.order_id }}
+          </a>
+        </li>
+      </ul>
+  </div>
+</ng-container>
+
+
+<!---
+<ng-container *ngIf="this.monitorStore.activities | async as list; else nodata">
+  Length: {{list.length}}
+  <div *ngIf="list.length > 0">
+      <h2>HEROESSSS</h2>
+      <ul >
+        <li *ngFor="let data of this.monitorStore.activities | async"  >
+          AAA
+          <a [routerLink]="['/hero', data.order_id]">
+            <span >{{ data.order_id }}</span>{{ data.order_id }}
+          </a>
+        </li>
+      </ul>
+  </div>
+</ng-container>
+---->
+
+<!---
 <ng-container *ngIf="activity$ | async as list; else nodata">
   Length: {{list.length}}
   <div *ngIf="list.length > 0">
@@ -34,6 +68,23 @@
       </ul>
   </div>
 </ng-container>
+---->
+
+<!---
+<section id="main">
+  <label for="toggle-all">Mark all as complete</label>
+  <ul id="todo-list">
+      <li *ngFor=" let todo of monitorStore.todos | async" >
+          <div class="view">
+              <input class="toggle" type="checkbox" >
+              <label>{{todo.order_id}}</label>
+              <button class="destroy" ></button>
+          </div>
+      </li>
+  </ul>
+</section>
+---->
+
 
 <ng-template #nodata>
   <div class="main">

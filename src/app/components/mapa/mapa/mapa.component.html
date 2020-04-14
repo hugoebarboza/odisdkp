@@ -117,6 +117,21 @@
 							<strong>{{userordenes.estatus}}</strong>
 						</agm-info-window>	  	
 					</agm-marker>
+					<agm-marker *ngFor="let userequipos of userequipomarcadores"
+					[markerClickable]="true"
+					[iconUrl]="userequipos.icon"
+					[latitude]="userequipos.lat" 
+					[longitude]="userequipos.lng">
+						<agm-info-window>      
+							<strong>{{userequipos.titulo}}</strong>
+							<p>
+							{{userequipos.subtitulo}}
+							</p>
+							{{userequipos.direccion}}
+							<br>
+							{{userequipos.create_at}}
+						</agm-info-window>	  	
+					</agm-marker>
 					<agm-direction 
 						*ngIf="datadirections" 
 						[origin]="datadirections.destination" 
@@ -235,6 +250,19 @@
 											</div>            
 										</div>			
 										<p></p>
+									</mat-select>
+								</mat-form-field>
+							</td>
+						</tr>
+						<tr>
+							<td width="50%"><strong>Equipos:</strong></td>
+							<td width="50%">
+								<mat-form-field class="geo-select-width">
+									<mat-select [formControl]="equiposCtrl" #singleSelect placeholder="Seleccione" [(value)]="selectedColumnEquipos.fieldValue" (selectionChange)="loaduserequipos(this.project_id, selectedColumnEquipos.fieldValue)">
+										<ngx-mat-select-search [formControl]="equiposFilterCtrl"></ngx-mat-select-search>
+										<mat-option *ngFor="let team of filteredEquipos | async" [value]="team.id">
+										{{team.descripcion}}
+										</mat-option>
 									</mat-select>
 								</mat-form-field>
 							</td>

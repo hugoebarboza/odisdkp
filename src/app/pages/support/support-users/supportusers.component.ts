@@ -6,7 +6,7 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFirestore, AngularFirestoreCollection} from '@angular/fire/firestore';
 
 import { Observable, concat, of, Subject } from 'rxjs';
-import { map, debounceTime, distinctUntilChanged, tap, switchMap, catchError } from 'rxjs/operators';
+import { map, debounceTime, distinctUntilChanged, tap, switchMap, catchError, takeUntil } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { UserFirebase } from 'src/app/models/types';
 import Swal from 'sweetalert2';
@@ -18,6 +18,7 @@ import Swal from 'sweetalert2';
 })
 export class SupportUsersComponent implements OnInit {
 
+  destroy = new Subject();
   isLoading = true;
   identity: any;
   title: string;
@@ -47,7 +48,11 @@ export class SupportUsersComponent implements OnInit {
       this.identity = this._userService.getIdentity();
       this.label.getDataRoute().subscribe(data => {
       this.title = data.subtitle;
-      this.firebaseAuth.authState.subscribe(
+      this.firebaseAuth.authState
+      .pipe(
+        takeUntil(this.destroy),
+      )
+      .subscribe(
         (auth) => {
           if (auth) {
             this.userFirebase = auth;

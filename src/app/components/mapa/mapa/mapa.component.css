@@ -292,3 +292,11 @@ a:focus {
   outline: none !important;
   border: none;
 }
+
+::ng-deep .cdk-overlay-container {
+  z-index: 9999 !important;
+}
+
+::ng-deep .swal2-container {
+  z-index: 99999 !important;
+}

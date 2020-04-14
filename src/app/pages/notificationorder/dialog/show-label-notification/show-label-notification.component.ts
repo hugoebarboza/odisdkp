@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { timer } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
 import { MatProgressButtonOptions } from 'mat-progress-buttons';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 
 // FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -16,6 +18,7 @@ import { CdfService, CustomformService, UserService } from 'src/app/services/ser
 import { UserFirebase } from 'src/app/models/types';
 
 
+
 @Component({
   selector: 'app-show-label-notification',
   templateUrl: './show-label-notification.component.html',
@@ -25,6 +28,7 @@ import { UserFirebase } from 'src/app/models/types';
 export class ShowLabelNotificationComponent  {
 
   destinatario = [];
+  destroy = new Subject();
   identity: any;
   isLoading: boolean;
   notification: any = [];
@@ -71,7 +75,11 @@ export class ShowLabelNotificationComponent  {
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

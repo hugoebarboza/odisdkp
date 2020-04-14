@@ -4,6 +4,8 @@ import { Observable } from 'rxjs/Observable';
 import { finalize } from 'rxjs/operators';
 import { ToastrService } from 'ngx-toastr';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 
 // FIREBASE
 import { AngularFirestore } from '@angular/fire/firestore';
@@ -33,15 +35,16 @@ import { UserService } from 'src/app/services/service.index';
 export class UploadTaskComponent implements OnInit {
 
   @Input() file: File;
-  @Input() project_id : number;
-  @Input() service_id : number;
+  @Input() project_id: number;
+  @Input() service_id: number;
 
 
   CARPETA_ARCHIVOS: any;
   created: any;
-  error:string;
+  destroy = new Subject();
+  error: string;
   identity: any;
-  type:any;
+  type: any;
   task: AngularFireUploadTask;
 
   percentage: Observable<number>;
@@ -56,23 +59,25 @@ export class UploadTaskComponent implements OnInit {
     private _userService: UserService,
     private afs: AngularFirestore,
     private firebaseAuth: AngularFireAuth,
-    private storage: AngularFireStorage, 
-    // private db: AngularFirestore, 
-    private toasterService: ToastrService, 
+    private storage: AngularFireStorage,
+    // private db: AngularFirestore,
+    private toasterService: ToastrService,
     public snackBar: MatSnackBar,
-    ) 
-    { 
+    ) {
       this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:MM'));
       this.identity = this._userService.getIdentity();
       this.error = 'Archivo no valido.';
 
-      this.firebaseAuth.authState.subscribe(
+      this.firebaseAuth.authState
+      .pipe(
+        takeUntil(this.destroy),
+      )
+      .subscribe(
         (auth) => {
-          if(auth){
+          if (auth) {
             this.userFirebase = auth;
           }
       });
-  
     }
 
   ngOnInit() {

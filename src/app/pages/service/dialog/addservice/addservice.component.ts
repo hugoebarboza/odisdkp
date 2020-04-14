@@ -4,7 +4,8 @@ import { Router } from '@angular/router';
 import { FormControl, Validators, NgForm } from '@angular/forms';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { Subscription } from 'rxjs/Subscription';
-
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 
 import { AngularFireAuth } from '@angular/fire/auth';
 
@@ -36,20 +37,20 @@ import { AppState } from 'src/app/app.reducers';
 import { LoginAction } from 'src/app/contador.actions';
 
 
-
-
 @Component({
   selector: 'app-addservice',
   templateUrl: './addservice.component.html',
-  styleUrls: ['./addservice.component.css']  
+  styleUrls: ['./addservice.component.css']
 })
 export class AddServiceComponent implements OnInit, OnDestroy {
+
   title = 'Agregar Proyecto';
   comunas: Comuna[] = [];
   customers: Customer [] = [];
   created: FormControl;
   destinatario = [];
   destinatarios = [];
+  destroy = new Subject();
   en: any;
 
   lastInsertedId: number;
@@ -113,7 +114,11 @@ export class AddServiceComponent implements OnInit, OnDestroy {
       clear: 'Borrar'
     };
 
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

@@ -1,10 +1,10 @@
 import { Component, OnInit, Input, OnChanges } from '@angular/core';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import * as _moment from 'moment';
+import { map, takeUntil } from 'rxjs/operators';
 import { UserService } from 'src/app/services/service.index';
 import { UserFirebase } from 'src/app/models/types';
 import { FormGroup, Validators, FormControl } from '@angular/forms';
+import { Subject } from 'rxjs/Subject';
 
 
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -14,6 +14,7 @@ import { AngularFirestoreCollection, AngularFirestore } from '@angular/fire/fire
 import Swal from 'sweetalert2';
 
 // MOMENT
+import * as _moment from 'moment';
 const moment = _moment;
 
 @Component({
@@ -24,18 +25,19 @@ const moment = _moment;
 export class CategorysettingsComponent implements OnInit, OnChanges {
 
   @Input() data: any;
+
+  destroy = new Subject();
   identity: any;
   userFirebase: UserFirebase;
-
   public categoria$: Observable<any[]>;
   private categoriaCollection: AngularFirestoreCollection<any>;
-  isLoading: boolean = false;
+  isLoading = false;
   indexitem: number;
-  isLoadingDelete: boolean = false;
-  isLoadingSave: boolean = false;
-  editando: boolean = false;
+  isLoadingDelete = false;
+  isLoadingSave = false;
+  editando = false;
   forma: FormGroup;
-  show:boolean = false;
+  show = false;
 
   constructor(
     private _afs: AngularFirestore,
@@ -60,7 +62,11 @@ export class CategorysettingsComponent implements OnInit, OnChanges {
     });
 
     this.identity = this._userService.getIdentity();
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

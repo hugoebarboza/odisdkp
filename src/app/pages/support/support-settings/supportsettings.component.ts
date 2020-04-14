@@ -5,7 +5,7 @@ import { UserService } from 'src/app/services/service.index';
 
 import { UserFirebase } from 'src/app/models/types';
 import { Observable, concat, of, Subject } from 'rxjs';
-import { map, distinctUntilChanged, tap, switchMap, catchError, debounceTime } from 'rxjs/operators';
+import { map, distinctUntilChanged, tap, switchMap, catchError, debounceTime, takeUntil } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import Swal from 'sweetalert2';
@@ -22,6 +22,7 @@ const moment = _moment;
 })
 export class SupportsettingsComponent implements OnInit, OnDestroy {
 
+  destroy = new Subject();
   identity: any;
   isLoading = true;
   userFirebase: UserFirebase;
@@ -46,7 +47,11 @@ export class SupportsettingsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.identity = this._userService.getIdentity();
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

@@ -23,7 +23,7 @@ import {
 import { ToastrService } from 'ngx-toastr';
 
 // SERVICES
-import { MapaService, OrderserviceService, ProjectsService, UserService, CustomformService } from 'src/app/services/service.index';
+import { MapaService, OrderserviceService, ProjectsService, UserService, CustomformService, DataService } from 'src/app/services/service.index';
 
 // CLASSES
 import { Marcador } from '../../../classes/marcador.class';
@@ -43,6 +43,11 @@ import { EditshapeComponent } from '../dialog/editshape/editshape.component';
 interface User {
   id: number;
   name: string;
+}
+
+interface Equipos {
+  id: number;
+  descripcion: string;
 }
 
 interface Time {
@@ -121,6 +126,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
   usertrackingmarcadores: Marcador[] = [];
   directionsmarcadores: Marcador[] = [];
   userordenesmarcadores: Marcador[] = [];
+  userequipomarcadores: Marcador[] = [];
   usertrackingadvancemarcadores: Marcador[] = [];
   serviceestatus: ServiceEstatus[] = [];
   latitude: number;
@@ -162,6 +168,12 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     columnValue: ''
   };
 
+  selectedColumnEquipos = {
+    fieldValue: '',
+    criteria: '',
+    columnValue: ''
+  };
+
   selectedColumnnEstatus = {
     fieldValue: '',
     criteria: '',
@@ -186,6 +198,8 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
   public userMultiFilterCtrl: FormControl = new FormControl();
   public ordenesCtrl: FormControl = new FormControl();
   public ordenesFilterCtrl: FormControl = new FormControl();
+  public equiposCtrl: FormControl = new FormControl();
+  public equiposFilterCtrl: FormControl = new FormControl();
   private user = new Array();
   public userAdvanceCtrl: FormControl = new FormControl();
   public userAdvanceMultiFilterCtrl: FormControl = new FormControl();
@@ -194,6 +208,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
   public filteredUserOrdenes: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
   public filteredUserMulti: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
   public filteredUserAdvanceMulti: ReplaySubject<User[]> = new ReplaySubject<User[]>(1);
+  public filteredEquipos: ReplaySubject<Equipos[]> = new ReplaySubject<Equipos[]>(1);
   private _onDestroy = new Subject<void>();
 
   @ViewChild('drawer', { static: true }) drawer;
@@ -207,6 +222,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
   myaddress: number;
   categoria = [];
   roles = [];
+  equipos = new Array();
 
   // GOOGLE MAP POLIGONOS
   drawingManager: any;
@@ -214,6 +230,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
   public context_ = this;
 
   constructor(
+    public dataService: DataService,
     private _dataService: OrderserviceService,
     private _mapaService: MapaService,
     public _customForm: CustomformService,
@@ -245,13 +262,16 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     this.usermarcadores = [];
     this.usertrackingmarcadores = [];
     this.userordenesmarcadores = [];
+    this.userequipomarcadores = [];
     this.selectedColumnnOrdenes.fieldValue = '';
     this.selectedColumnnEstatus.fieldValue = '';
     this.selectedColumnnAdvance.fieldValue = '';
+    this.selectedColumnEquipos.fieldValue = '';
     this.selectedColumnnDate.columnValueDesde = '';
     this.message = '';
     this.userCtrl.reset();
     this.ordenesCtrl.reset();
+    this.equiposCtrl.reset();
     this.userAdvanceCtrl.reset();
     this.loadInfo();
     this.loadServiceEstatus();
@@ -269,6 +289,11 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
       .pipe(takeUntil(this._onDestroy))
       .subscribe(() => {
         this.filterUsersAdvance();
+      });
+    this.equiposFilterCtrl.valueChanges
+      .pipe(takeUntil(this._onDestroy))
+      .subscribe(() => {
+        this.filteredUserTeam();
       });
     this.mapsAPILoader.load().then(() => {
       this.setCurrentLocation();
@@ -582,7 +607,11 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                         // this.getAtributo(this.servicetype);
                         that.toasterService.success('Figura eliminada exitosamente', 'Exito', {timeOut: 4000, closeButton: true, });
                         const arratPo = that.categoria[index]['poligonos'];
-                        that.categoria[index]['poligonos'] = arratPo.splice(i, 1);
+                        if (arratPo.length === 1) {
+                          that.categoria[index]['poligonos'] = [];
+                        } else {
+                          that.categoria[index]['poligonos'] = arratPo.splice(i, 1);
+                        }
                         // this.isLoading = false;
                         polygon.setMap(null);
                         infobutton.setMap(null);
@@ -805,7 +834,11 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                         // this.getAtributo(this.servicetype);
                         that.toasterService.success('Figura eliminada exitosamente', 'Exito', {timeOut: 4000, closeButton: true, });
                         const arratPo = that.categoria[index]['poligonos'];
-                        that.categoria[index]['poligonos'] = arratPo.splice(i, 1);
+                        if (arratPo.length === 1) {
+                          that.categoria[index]['poligonos'] = [];
+                        } else {
+                          that.categoria[index]['poligonos'] = arratPo.splice(i, 1);
+                        }
                         // this.isLoading = false;
                         polygon.setMap(null);
                         infobutton.setMap(null);
@@ -971,28 +1004,32 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
               });
               dialogRef.afterClosed().subscribe(result => {
                 if (result) {
-                  console.log(result);
-                  for (let x = 0; x < that.categoria.length; x++) {
-                    const categoria_ = that.categoria[x];
-                    if (categoria_.id === result.id_categoria) {
-                      newshape.setMap(null);
-                      infobutton.setMap(null);
-                      // console.log('PASOOOO');
-                      if (that.categoria[x]['poligonos']) {
-                        // console.log('PASOOOO 111');
-                        const poligonos = that.categoria[x]['poligonos'];
-                        poligonos.push(result);
-                        that.categoria[x]['poligonos'] = poligonos;
-                        that.createPoligonoInsert(x, result.id);
-                      } else {
-                        // console.log('PASOOOO 2222');
-                        that.categoria[x]['poligonos'] = [result];
-                        that.createPoligonoInsert(x, result.id);
+                  if (that.categoria.length > 0) {
+                    for (let x = 0; x < that.categoria.length; x++) {
+                      const categoria_ = that.categoria[x];
+                      if (categoria_.id === result.id_categoria) {
+                        newshape.setMap(null);
+                        infobutton.setMap(null);
+                        // console.log('PASOOOO');
+                        if (that.categoria[x]['poligonos']) {
+                          // console.log('PASOOOO 111');
+                          const poligonos = that.categoria[x]['poligonos'];
+                          poligonos.push(result);
+                          that.categoria[x]['poligonos'] = poligonos;
+                          that.createPoligonoInsert(x, result.id);
+                        } else {
+                          // console.log('PASOOOO 2222');
+                          that.categoria[x]['poligonos'] = [result];
+                          that.createPoligonoInsert(x, result.id);
+                        }
+                        break;
                       }
-                      break;
                     }
+                  } else {
+                    newshape.setMap(null);
+                    infobutton.setMap(null);
+                    that.getCategory();
                   }
-                  console.log(that.categoria);
                 }
               });
 
@@ -1089,16 +1126,19 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     this.usermarcadores = [];
     this.usertrackingmarcadores = [];
     this.userordenesmarcadores = [];
+    this.userequipomarcadores = [];
     this.wayspoints = [];
     this.datadirections.origin = '';
     this.datadirections.destination = '';
     this.selectedColumnnOrdenes.fieldValue = '';
     this.selectedColumnnEstatus.fieldValue = '';
     this.selectedColumnnAdvance.fieldValue = '';
+    this.selectedColumnEquipos.fieldValue = '';
     this.selectedColumnnDate.columnValueDesde = '';
     this.message = '';
     this.userCtrl.reset();
     this.ordenesCtrl.reset();
+    this.equiposCtrl.reset();
     this.userAdvanceCtrl.reset();
     // this.userMultiFilterCtrl.reset();
     // this.ordenesFilterCtrl.reset();
@@ -1112,12 +1152,14 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
   reset() {
     this.userCtrl.reset();
     this.ordenesCtrl.reset();
+    this.equiposCtrl.reset();
     this.userAdvanceCtrl.reset();
     // this.userMultiFilterCtrl.reset();
     // this.ordenesFilterCtrl.reset();
     this.selectedColumnnOrdenes.fieldValue = '';
     this.selectedColumnnEstatus.fieldValue = '';
     this.selectedColumnnAdvance.fieldValue = '';
+    this.selectedColumnEquipos.fieldValue = '';
     this.selectedColumnnDate.columnValueDesde = '';
   }
 
@@ -1136,6 +1178,25 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     // filter the banks
     this.filteredUserOrdenes.next(
       this.user.filter(user => user.name.toLowerCase().indexOf(search) > -1)
+    );
+  }
+
+
+  private filteredUserTeam() {
+    if (!this.equipos) {
+      return;
+    }
+    // get the search keyword
+    let search = this.ordenesFilterCtrl.value;
+    if (!search) {
+      this.filteredEquipos.next(this.equipos.slice());
+      return;
+    } else {
+      search = search.toLowerCase();
+    }
+    // filter the banks
+    this.filteredEquipos.next(
+      this.equipos.filter(team => team.descripcion.toLowerCase().indexOf(search) > -1)
     );
   }
 
@@ -1188,6 +1249,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                      this.loadproject(this.project_id);
                      this.loaduser(this.project_id);
                      this.loadusergeoreference(this.project_id);
+                     this.getEquipos(this.project_id);
                      this.isLoadingResults = false;
                     } else {
                      this.country_id = 0;
@@ -1350,8 +1412,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                   for (let i = 0; i < this.usuarios.length; i++) {
                     if (this.usuarios[i]['latitud'] && this.usuarios[i]['longitud']) {
                       this.titulo = String('Ubicación');
-                      // this.subtitulo = String(this.usuarios[i]['role'] + ': ' + this.usuarios[i]['usuario']);
-                      this.subtitulo = String('Usuario: ' + this.usuarios[i]['usuario']);
+                      this.subtitulo = String(this.usuarios[i]['role'] + ': ' + this.usuarios[i]['usuario']);
                       this.latitude = Number (this.usuarios[i]['latitud']);
                       this.longitude = Number (this.usuarios[i]['longitud']);
                       this.direccion = String('Dirección: ' + this.usuarios[i]['direccion']);
@@ -1515,7 +1576,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
         }
 
         if (this.directionsmarcadores[i].lat && this.directionsmarcadores[i].lng && !banderafirst) {
-          this.datadirections.origin = this.directionsmarcadores[i].lat + ',' + this.directionsmarcadores[i].lng;
+          this.datadirections.origin = this.directionsmarcadores[i].lat +','+ this.directionsmarcadores[i].lng;
           banderafirst = true;
         }
         j = j - 1;
@@ -1528,6 +1589,23 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
         // this.GoogleApi(this.datadirections);
       }
     }
+  }
+
+  getEquipos(id) {
+    this.dataService.getEquipos(id, this.token.token).then(
+      (res: any) => {
+        res.subscribe(
+          (some) => {
+            // console.log(some);
+            this.equipos = some['datos'];
+            this.filteredEquipos.next(this.equipos.slice());
+          },
+          (error) => {
+            console.log(<any>error);
+          }
+        );
+      }
+    );
   }
 
   opencategoria() {
@@ -1591,12 +1669,71 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
+  async loaduserequipos(projectid: number, teamid: number) {
+    this.isLoadingResults = true;
+    if (projectid > 0 && teamid > 0 ) {
+      this.renderMap = false;
+      this.marcadores = [];
+      this.usermarcadores = [];
+      this.userordenesmarcadores = [];
+      this.userequipomarcadores = [];
+      this.usertrackingadvancemarcadores = [];
+      this.selectedColumnnEstatus.fieldValue = '';
+      this.selectedColumnnDate.columnValueDesde = '';
+      this.userAdvanceCtrl.reset();
+      this.userAdvanceMultiFilterCtrl.reset();
+      this.messageadvance = '';
+      this.wayspoints = [];
+      this.datadirections.origin = '';
+      this.datadirections.destination = '';
+
+      const response: any = await this._customForm.getTeamGeoreference(this.token.token, projectid, teamid);
+      // console.log(response);
+      if (response && response.status && response.status === 'success') {
+        // console.log(response.datos);
+        const usuarios: any = response.datos;
+        for (let i = 0; i < usuarios.length; i++) {
+          if (usuarios[i]['latitud'] && usuarios[i]['longitud']) {
+            // console.log('PASOO ' + i);
+            const titulo = String('Ubicación');
+            const subtitulo = String(usuarios[i]['role'] + ': ' + usuarios[i]['usuario']);
+            const latitude = Number (usuarios[i]['latitud']);
+            const longitude = Number (usuarios[i]['longitud']);
+            const direccion = String('Dirección: ' + usuarios[i]['direccion']);
+            const create_at = String('Creado el: ' + usuarios[i]['create_at']);
+            const update_at = '';
+            const estatus = '';
+            const create_by = '';
+            const update_by = '';
+            // this.label = String(i);
+            const label = 0;
+            const icon = './assets/img/' + usuarios[i]['role_id'] + '.png';
+            // this.icon = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+            const userMarcador = new Marcador(latitude, longitude, titulo, subtitulo, label, icon, direccion, create_at, update_at, create_by, update_by, estatus);
+            this.userequipomarcadores.push(userMarcador);
+            this.cdf.detectChanges();
+          }
+        }
+        this.isLoadingResults = false;
+        this.renderMap = true;
+        this.message = 'success';
+      } else {
+        this.userequipomarcadores = [];
+        this.isLoadingResults = false;
+        this.renderMap = true;
+        this.message = 'error';
+      }
+
+    }
+  }
+
   public loaduserordenes(projectid: number, userid: number) {
     this.isLoadingResults = true;
     if (projectid > 0 && userid > 0 ) {
       this.renderMap = false;
       this.marcadores = [];
       this.usermarcadores = [];
+      this.userequipomarcadores = [];
       this.usertrackingadvancemarcadores = [];
       this.selectedColumnnEstatus.fieldValue = '';
       this.selectedColumnnDate.columnValueDesde = '';
@@ -1668,10 +1805,12 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     this.isLoadingResults = true;
     this.renderMap = false;
     this.marcadores = [];
+    this.userequipomarcadores = [];
     this.usertrackingmarcadores = [];
     this.usertrackingadvancemarcadores = [];
     this.userordenesmarcadores = [];
     this.selectedColumnnOrdenes.fieldValue = '';
+    this.selectedColumnEquipos.fieldValue = '';
     this.selectedColumnnDate.columnValueDesde = '';
     this.wayspoints = [];
     this.datadirections.origin = '';
@@ -1682,6 +1821,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     this.messageadvance = '';
     this.userCtrl.reset();
     this.ordenesCtrl.reset();
+    this.equiposCtrl.reset();
 
       this._proyectoService.getProjectOrder(this.token.token, projectid, this.termino, this.date, this.status, this.id, this.servicetype).then(
         (res: any) => {
@@ -1746,15 +1886,18 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
       this.usermarcadores = [];
       this.usertrackingmarcadores = [];
       this.userordenesmarcadores = [];
+      this.userequipomarcadores = [];
       this.usertrackingadvancemarcadores = [];
       this.wayspoints = [];
       this.selectedColumnnOrdenes.fieldValue = '';
       this.selectedColumnnEstatus.fieldValue = '';
+      this.selectedColumnEquipos.fieldValue = '';
       this.datadirections.origin = '';
       this.datadirections.destination = '';
       this.message = '';
       this.userCtrl.reset();
       this.ordenesCtrl.reset();
+      this.equiposCtrl.reset();
       this.userMultiFilterCtrl.reset();
       this.ordenesFilterCtrl.reset();
 
@@ -1793,7 +1936,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
                   for (let i = 0; i < this.usuariostracking.length; i++) {
                     if (this.usuariostracking[i]['latitud'] && this.usuariostracking[i]['longitud']) {
                       this.titulo = String('Ubicación');
-                      this.subtitulo = String('Usuario: ' + this.usuariostracking[i]['usuario']);
+                      this.subtitulo = String('Usuario: '+ this.usuariostracking[i]['usuario']);
                       this.latitude = Number (this.usuariostracking[i]['latitud']);
                       this.longitude = Number (this.usuariostracking[i]['longitud']);
                       this.create_at = String('Creado el: '+ this.usuariostracking[i]['create_at']);
@@ -1839,12 +1982,12 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
 
   public obtainInfowindow(window: InfoWindow) {
     this.infoWindow = window;
-    console.log(this.infoWindow);
+    // console.log(this.infoWindow);
   }
 
   public change(event: any) {
-      this.wayspoints = event.request.waypoints;
-      console.log(this.wayspoints);
+    this.wayspoints = event.request.waypoints;
+    // console.log(this.wayspoints);
   }
 
   handledrawer(): void {
@@ -1858,6 +2001,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
     this.message = '';
     this.userCtrl.reset();
     this.ordenesCtrl.reset();
+    this.equiposCtrl.reset();
     // this.userMultiFilterCtrl.reset();
     // this.ordenesFilterCtrl.reset();
   }
@@ -1871,6 +2015,7 @@ export class MapaComponent implements OnInit, OnChanges, OnDestroy {
   resetUserFilters() {
     this.userCtrl.reset();
     this.ordenesCtrl.reset();
+    this.equiposCtrl.reset();
     this.userMultiFilterCtrl.reset();
     this.ordenesFilterCtrl.reset();
   }

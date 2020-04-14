@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
 import { FileItem, UserFirebase } from 'src/app/models/types';
 import { defer, combineLatest, Observable, Subject, concat } from 'rxjs';
 import { of } from 'rxjs/observable/of';
-import { distinctUntilChanged, tap, switchMap, catchError, debounceTime, map } from 'rxjs/operators';
+import { distinctUntilChanged, tap, switchMap, catchError, debounceTime, map, takeUntil } from 'rxjs/operators';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 import Swal from 'sweetalert2';
@@ -30,6 +30,7 @@ export class ShowcaseComponent implements OnInit {
   @ViewChild( CdkVirtualScrollViewport,  { static: false } ) viewport: CdkVirtualScrollViewport;
 
   datacase: any;
+  destroy = new Subject();
   identity: any;
   array_usersInfo = [];
   userinput = new Subject<string>();
@@ -98,7 +99,11 @@ export class ShowcaseComponent implements OnInit {
       this.page = 1;
       this.pageSize = 2;
 
-      this.firebaseAuth.authState.subscribe(
+      this.firebaseAuth.authState
+      .pipe(
+        takeUntil(this.destroy),
+      )
+      .subscribe(
         (auth) => {
           if (auth) {
             this.userFirebase = auth;

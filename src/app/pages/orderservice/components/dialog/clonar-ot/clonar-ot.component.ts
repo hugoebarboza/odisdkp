@@ -3,7 +3,9 @@ import { Router } from '@angular/router';
 import { FormControl, Validators} from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { shareReplay, tap } from 'rxjs/operators';
+import { shareReplay, tap, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+
 
 import Swal from 'sweetalert2';
 // FIREBASE
@@ -28,6 +30,7 @@ import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 
 export class ClonarOtComponent implements OnInit, OnDestroy  {
 
   active: Boolean = true;
+  destroy = new Subject();
   title: string;
   identity;
   created: FormControl;
@@ -105,7 +108,11 @@ export class ClonarOtComponent implements OnInit, OnDestroy  {
     this.role = this._userService.identity.role;
     this.serviceid = this.infodata.service_id;
 
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { ToastrService } from 'ngx-toastr';
 import { defer, combineLatest, Observable, Subject, concat } from 'rxjs';
-import { distinctUntilChanged, tap, switchMap, catchError, debounceTime, map } from 'rxjs/operators';
+import { distinctUntilChanged, tap, switchMap, catchError, debounceTime, map, takeUntil } from 'rxjs/operators';
 import { of } from 'rxjs/observable/of';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import Swal from 'sweetalert2';
@@ -42,6 +42,7 @@ export class ViewCaseComponent  {
   private comentariosCollection: AngularFirestoreCollection<any>;
   data: any;
   datacase: any;
+  destroy = new Subject();
   public documentos$: Observable<any[]>;
   private documentosCollection: AngularFirestoreCollection<any>;
   id: any;
@@ -81,7 +82,11 @@ export class ViewCaseComponent  {
       this.title = data.subtitle;
     });
 
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

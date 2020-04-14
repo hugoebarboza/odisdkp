@@ -5,8 +5,8 @@ import { defer, combineLatest } from 'rxjs';
 import { Subscription } from 'rxjs/Subscription';
 import { Observable } from 'rxjs/Observable';
 import { of } from 'rxjs/observable/of';
-import { tap, switchMap, map } from 'rxjs/operators';
-
+import { tap, switchMap, map, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 
 import Swal from 'sweetalert2';
 
@@ -56,6 +56,7 @@ import { CargaImagenesService, CdfService, CountriesService, OrderserviceService
 // UTILITY
 import { CdkVirtualScrollViewport } from '@angular/cdk/scrolling';
 
+
 export interface Item { id: any; comment: string; created: any; identity: string; }
 
 export interface Users {
@@ -88,6 +89,7 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
   public created: FormControl;
   public customer: Customer[] = [];
   public descriptionidUx = '';
+  destroy = new Subject();
   formComentar: FormGroup;
   public idUx: any;
   public identity: any;
@@ -185,7 +187,11 @@ export class ViewProjectDetailComponent implements OnInit, OnDestroy, OnChanges 
     this.role = 5; // USUARIOS INSPECTORES
 
 
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

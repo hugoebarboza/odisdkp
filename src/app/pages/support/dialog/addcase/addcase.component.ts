@@ -4,7 +4,7 @@ import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { FileItem } from 'src/app/models/types';
 import { Observable, Subject, defer } from 'rxjs';
 import { FormGroup, Validators, FormControl} from '@angular/forms';
-import { switchMap, map, combineLatest } from 'rxjs/operators';
+import { switchMap, map, combineLatest, takeUntil } from 'rxjs/operators';
 
 // FIREBASE
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
@@ -38,6 +38,7 @@ import { CargaImagenesService, CdfService, UserService } from 'src/app/services/
 
 export class AddcaseComponent implements OnInit {
 
+  destroy = new Subject();
   identity: any;
   isLoading = false;
   forma: FormGroup;
@@ -107,7 +108,11 @@ export class AddcaseComponent implements OnInit {
   ) {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

@@ -3,6 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Subscription } from 'rxjs/Subscription';
 import { timer } from 'rxjs';
 import { ToastrService } from 'ngx-toastr';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+
 
 import Swal from 'sweetalert2';
 
@@ -28,6 +31,7 @@ const moment = _moment;
 export class SendOrderByEmailComponent implements OnInit, OnDestroy {
 
   destinatario = [];
+  destroy = new Subject();
   email_responsable_obra: string;
   emailbody = 'Orden de Trabajo compartida por correo.';
   id: number;
@@ -64,7 +68,11 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
     this.proyectos = this._userService.getProyectos();
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;
@@ -240,7 +248,7 @@ export class SendOrderByEmailComponent implements OnInit, OnDestroy {
           (some: any) => {
             this.tipoServicio = some['datos'];
             if (this.tipoServicio) {
-              this.service_type = this.filterServiceType()
+              this.service_type = this.filterServiceType();
             }
           },
           (error: any) => {

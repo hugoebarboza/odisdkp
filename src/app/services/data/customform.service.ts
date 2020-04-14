@@ -244,6 +244,13 @@ export class CustomformService {
 
   }
 
+  getTeamGeoreference(token: string, project_id: number, team_id: number ) {
+    if (!token) {
+       return;
+    }
+    return this.getQuery('project/' + project_id + '/team/' + team_id + '/georeference', token);
+  }
+
   showMapFigura(id: number, token: any) {
     if (!token || !id) {
       return;

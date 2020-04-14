@@ -1,14 +1,17 @@
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs/Observable';
+import { User } from 'src/app/models/types';
+import { FormControl } from '@angular/forms';
 
 import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { AngularFireAuth } from '@angular/fire/auth';
+
+// Add the Firebase services that you want to use
 import * as firebase from 'firebase/app';
+import 'firebase/auth';
 import 'firebase/performance';
 
-import { Observable } from 'rxjs/Observable';
-import { User } from 'src/app/models/types';
-import { FormControl } from '@angular/forms';
 
 // MOMENT
 import * as _moment from 'moment';
@@ -31,9 +34,8 @@ export class AuthService {
     private firebaseAuth: AngularFireAuth,
   ) {
     this.created =  new FormControl(moment().format('YYYY[-]MM[-]DD HH:mm:ss'));
-    this.user = this.firebaseAuth.authState;
-
-    // firebase.auth().signOut();
+    // this.user = this.firebaseAuth.authState;
+    this.user = this.firebaseAuth.user;
 
     /*
     this.firebaseAuth.authState.subscribe((auth) => {

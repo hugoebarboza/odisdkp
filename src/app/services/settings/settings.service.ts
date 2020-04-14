@@ -54,6 +54,26 @@ export class SettingsService {
   }
 
 
+  async getProject(index: number) {
+
+    if (!index) {
+      return;
+    }
+
+    if (index) {
+      const project = await JSON.parse(localStorage.getItem('proyectos')).find(data => data.id === +index);
+      if (project !== 'undefined' && project !== null && project) {
+        return project;
+      } else {
+        this._router.navigateByUrl('/notfound');
+      }
+    } else {
+      this._router.navigateByUrl('/notfound');
+    }
+
+  }
+
+
 }
 
 interface Ajustes {

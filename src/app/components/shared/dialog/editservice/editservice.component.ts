@@ -5,6 +5,8 @@ import { Subscription } from 'rxjs/Subscription';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 
 import Swal from 'sweetalert2';
 
@@ -32,6 +34,8 @@ const moment = _moment;
 import { CdfService, CountriesService, OrderserviceService, ProjectsService, UserService } from 'src/app/services/service.index';
 
 
+
+
 @Component({
   selector: 'app-editservice',
   templateUrl: './editservice.component.html',
@@ -57,7 +61,7 @@ export class EditServiceComponent implements OnInit, OnDestroy {
   public label: boolean;
   public loading = true;
 
-  /** 
+  /**
   public new_accept_edpdate: any;
   public new_assigned_date_touser1: any;
   public new_assigned_date_touser2: any;
@@ -88,11 +92,12 @@ export class EditServiceComponent implements OnInit, OnDestroy {
   public users: User[] = [];
   public users_ito: User[] = [];
   public user_informador: any;
-  public user_responsable:any;
+  public user_responsable: any;
   public user_itocivil_assigned_to: any;
   public user_itoelec_assigned_to: any;
   public subscription: Subscription;
   route = '';
+  destroy = new Subject();
   public token: any;
   userFirebase: UserFirebase;
 
@@ -124,7 +129,11 @@ export class EditServiceComponent implements OnInit, OnDestroy {
       clear: 'Borrar'
     };
 
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

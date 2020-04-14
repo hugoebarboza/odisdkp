@@ -5,8 +5,8 @@ import { ToastrService } from 'ngx-toastr';
 import { Subscription } from 'rxjs/Subscription';
 import { defer, combineLatest, Observable} from 'rxjs';
 import { of } from 'rxjs/observable/of';
-
-import { tap, switchMap, map } from 'rxjs/operators';
+import { tap, switchMap, map, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 
 import Swal from 'sweetalert2';
 
@@ -22,7 +22,6 @@ import { CargaImagenesService, CdfService, OrderserviceService, UserService, Zip
 
 
 import * as _moment from 'moment';
-
 const moment = _moment;
 
 
@@ -39,6 +38,7 @@ export class AddJobComponent implements OnInit, OnDestroy {
   comentarios$: Observable<any[]>;
   private comentariosCollection: AngularFirestoreCollection<any>;
   destinatarios = [];
+  destroy = new Subject();
 
   kpi = 0;
   serviceid = 0;
@@ -108,7 +108,11 @@ export class AddJobComponent implements OnInit, OnDestroy {
     this.serviceid = this.data.service_id;
     // console.log(this.data);
     // console.log(this.path);
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

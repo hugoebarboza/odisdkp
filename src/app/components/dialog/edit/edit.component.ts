@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { FormControl, Validators, NgForm} from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { shareReplay, tap } from 'rxjs/operators';
+import { shareReplay, tap, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 
 import Swal from 'sweetalert2';
 
@@ -20,6 +21,7 @@ import { CdfService, OrderserviceService, ProjectsService, UserService, Customer
 
 // MODELS
 import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
+
 
 @Component({
   selector: 'app-edit',
@@ -74,6 +76,7 @@ export class EditComponent implements OnInit, OnDestroy {
   role: number;
   route: String = '';
   subscription: Subscription;
+  destroy = new Subject();
   userFirebase: UserFirebase;
 
   formControl = new FormControl('', [
@@ -109,7 +112,11 @@ export class EditComponent implements OnInit, OnDestroy {
     this.role = this._userService.identity.role;
     this.serviceid = this.infodata.service_id;
 
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+     )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

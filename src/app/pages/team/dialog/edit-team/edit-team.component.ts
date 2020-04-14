@@ -3,6 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+
 
 import Swal from 'sweetalert2';
 
@@ -17,7 +20,6 @@ import { AngularFireAuth } from '@angular/fire/auth';
 import { CustomerService, UserService } from 'src/app/services/service.index';
 
 
-
 @Component({
   selector: 'app-edit-team',
   templateUrl: './edit-team.component.html',
@@ -25,6 +27,7 @@ import { CustomerService, UserService } from 'src/app/services/service.index';
 })
 export class EditTeamComponent implements OnInit, OnDestroy {
 
+  destroy = new Subject();
   isLoading: boolean;
   isLoadingData: boolean;
   team: Team;
@@ -57,7 +60,11 @@ export class EditTeamComponent implements OnInit, OnDestroy {
     this.project_id = this.data.team.project_id;
     this.proyectos = this._userService.getProyectos();
     this.token = this._userService.getToken();
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

@@ -2,12 +2,14 @@ import { Component, OnInit, Input } from '@angular/core';
 import { MatSlideToggleChange } from '@angular/material/slide-toggle';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
+import { map, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
+
 
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { AngularFireAuth } from '@angular/fire/auth';
 
-//MODELS
+// MODELS
 import { UserFirebase } from 'src/app/models/types';
 
 import * as _moment from 'moment';
@@ -16,7 +18,7 @@ const moment = _moment;
 import { ToastrService } from 'ngx-toastr';
 
 
-@Component({  
+@Component({
   selector: 'app-reportkpi',
   templateUrl: './reportkpi.component.html',
   styleUrls: ['./reportkpi.component.css']
@@ -27,7 +29,7 @@ export class ReportkpiComponent implements OnInit {
   @Input() project_id: number;
   @Input() service_id: number;
   @Input() servicetype_id: number;
-  nuevoboo: boolean = false;
+  nuevoboo = false;
   userFirebase: UserFirebase;
   ruta: string;
   porcentaje = '0%';
@@ -35,6 +37,7 @@ export class ReportkpiComponent implements OnInit {
   public porcentaje$: Observable<any[]>;
   private porcentajeCollection: AngularFirestoreCollection<any>;
   startOfMonth: string;
+  destroy = new Subject();
   endOfMonth: string;
 
   constructor(
@@ -42,7 +45,11 @@ export class ReportkpiComponent implements OnInit {
     private _afs: AngularFirestore,
     private toasterService: ToastrService
   ) {
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;
@@ -58,7 +65,6 @@ export class ReportkpiComponent implements OnInit {
       newporcentaje: new FormControl (null, [Validators.required])
     });
     this.ruta = 'kpi/projects/' + this.project_id + '/' + this.service_id + '/' + this.servicetype_id + '/';
-    //console.log(this.ruta);
     this.mostarporcentaje();
   }
 
@@ -78,7 +84,6 @@ export class ReportkpiComponent implements OnInit {
       })
     ).subscribe( (collection: any[]) => {
 
-        //console.log(collection);
         const count = Object.keys(collection).length;
         if (count === 0) {
         } else {

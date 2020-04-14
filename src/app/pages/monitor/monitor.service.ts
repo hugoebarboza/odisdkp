@@ -54,10 +54,7 @@ export class MonitorBackendService {
         return;
       }
 
-        const url = this.url;
-        const query = 'project/' + id + '/order';
-        const href = url + query;
-        const requestUrl = href;
+        const requestUrl = this.url + 'project/' + id + '/order';
 
         const httpOptions = {
             headers: new HttpHeaders({

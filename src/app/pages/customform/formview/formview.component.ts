@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { STEPPER_GLOBAL_OPTIONS} from '@angular/cdk/stepper';
 import { Observable, of, Subject, concat, defer } from 'rxjs';
 import { FormGroup, Validators, FormControl} from '@angular/forms';
-import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map, combineLatest } from 'rxjs/operators';
+import { debounceTime, distinctUntilChanged, tap, switchMap, catchError, map, combineLatest, takeUntil } from 'rxjs/operators';
 
 // FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -37,6 +37,7 @@ import { Router } from '@angular/router';
 })
 export class FormviewComponent implements OnInit {
 
+  destroy = new Subject();
   identity: any;
   isLoading = false;
   forma: FormGroup;
@@ -105,7 +106,11 @@ export class FormviewComponent implements OnInit {
 
     this.identity = this._userService.getIdentity();
     this.token = this._userService.getToken();
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

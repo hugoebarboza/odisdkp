@@ -1,7 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
-import { map } from 'rxjs/operators';
-import * as _moment from 'moment';
+import { map, takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 import { UserService } from 'src/app/services/service.index';
 
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -12,6 +12,7 @@ import { UserFirebase } from 'src/app/models/types';
 import Swal from 'sweetalert2';
 
 // MOMENT
+import * as _moment from 'moment';
 const moment = _moment;
 
 @Component({
@@ -22,9 +23,10 @@ const moment = _moment;
 export class TypesettingsComponent implements OnInit {
 
   @Input() id: string;
+
+  destroy = new Subject();
   identity: any;
   userFirebase: UserFirebase;
-
   public tipo$: Observable<any[]>;
   private tipoCollection: AngularFirestoreCollection<any>;
   isLoading = false;
@@ -50,7 +52,11 @@ export class TypesettingsComponent implements OnInit {
   ngOnInit() {
 
     this.identity = this._userService.getIdentity();
-    this.firebaseAuth.authState.subscribe(
+    this.firebaseAuth.authState
+    .pipe(
+      takeUntil(this.destroy),
+    )
+    .subscribe(
       (auth) => {
         if (auth) {
           this.userFirebase = auth;

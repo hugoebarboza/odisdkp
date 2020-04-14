@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs/Subscription';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs/Subject';
 
 // FIREBASE
 import { AngularFireAuth } from '@angular/fire/auth';
@@ -17,6 +19,7 @@ import { CdfService, DataService, OrderserviceService, ProjectsService, UserServ
 // MODELS
 import { Order, Service, ServiceType, ServiceEstatus, User, UserFirebase } from 'src/app/models/types';
 import Swal from 'sweetalert2';
+
 
 interface ObjectServiceType {
   id: number;
@@ -82,6 +85,8 @@ export class AddComponent implements OnInit, OnDestroy {
 
   formControl = new FormControl('', [Validators.required]);
 
+  destroy = new Subject();
+
   constructor(
     private _cdf: CdfService,
     public _dataService: DataService,
@@ -103,12 +108,16 @@ export class AddComponent implements OnInit, OnDestroy {
     this.token = this._userService.getToken();
     this.role = 5; // USUARIOS INSPECTORES
 
-    this.firebaseAuth.authState.subscribe(
-      (auth) => {
-        if (auth) {
-          this.userFirebase = auth;
-        }
-    });
+    this.firebaseAuth.authState
+                     .pipe(
+                      takeUntil(this.destroy),
+                     )
+                     .subscribe(
+                        (auth) => {
+                          if (auth) {
+                            this.userFirebase = auth;
+                          }
+                      });
 
     this.route = this._route.url.split('?')[0];
 
@@ -157,6 +166,7 @@ export class AddComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy() {
+    this.destroy.next(null);
     // console.log('La página se va a cerrar');
     if (this.subscription) {
       this.subscription.unsubscribe();
