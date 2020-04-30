@@ -56,7 +56,7 @@
     "firebase": "^7.0.0",
     "hammerjs": "^2.0.8",
     "html2canvas": "^1.0.0-rc.5",
-    "jquery": "^3.4.1",
+    "jquery": "^3.5.0",
     "jspdf": "^1.5.3",
     "jspdf-autotable": "^3.2.4",
     "jspdf-customfonts": "0.0.4",
